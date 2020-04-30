@@ -50,9 +50,12 @@ class Item(NameableArtefact):
             raise TypeError("isPartial attribute has to be of the type bool")
 
     @scheme.setter
-    def scheme(self,value):
-        if value.__class__.__name__ == self._schemeType or value is None:
-            self._scheme=value
+    def scheme(self,value): #TODO unappend item from the scheme if the item is already appended to one.
+        if value is None:
+            self._scheme = value
+        elif value.__class__.__name__ == self._schemeType:
+            self._scheme = value
+            value.append(self)
         else:
             raise TypeError(f"The scheme object has to be of the type {self._schemeType}")
 
@@ -60,16 +63,17 @@ class Item(NameableArtefact):
     def parent(self, value):
         if value is None:
             self._parent = value
-        elif value.__class__.__name__ == self._schemeType :
+        elif value.__class__ == self.__class__ :
             value.addChild(self)
             self._parent = value
         else:
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
 
     def addChild(self, value):
-        if value.__class__.__name__ == self._schemeType or value is None:
+        if value.__class__ == self.__class__:
             if value not in self._childs:
                 self._childs.append(value)
+                value.parent = self
         else:
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
 
@@ -103,10 +107,12 @@ class ItemScheme(MaintainableArtefact):
         return self._items
    
     def append(self, value):
-        if isinstance(value, self._itemType):
-            self._items.append(value)
+        if isinstance(value, globals()[self._itemType]):
+            if value not in self._items:
+                self._items.append(value)
+                value.scheme = self
         else:
-            raise TypeError(f"The object has to be of the type {self._itemType.__name__}")
+            raise TypeError(f"The object has to be of the type {self._itemType}")
 
     def toXml(self):
         xml=super().toXml()
@@ -124,7 +130,7 @@ class ConceptScheme(ItemScheme):
                 version: str = None, validFrom: datetime = None, validTo: datetime= None,
                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
                     structureUrl: str = None, maintainer = None,
-                items: List[Item] = None):
+                items: List[Item] = []):
 
         super(ConceptScheme, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                         name = name, description = description,
@@ -144,7 +150,7 @@ class CodeList(ItemScheme):
                 version: str = None, validFrom: datetime = None, validTo: datetime= None,
                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
                     structureUrl: str = None, maintainer = None,
-                items: List[Item] = None):
+                items: List[Item] = []):
 
         super(CodeList, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                         name = name, description = description,
@@ -163,7 +169,7 @@ class AgencyList(ItemScheme):
                 version: str = None, validFrom: datetime = None, validTo: datetime= None,
                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
                     structureUrl: str = None, maintainer = None,
-                items: List[Item] = None):
+                items: List[Item] = []):
 
         super(AgencyList, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                         name = name, description = description,
@@ -205,8 +211,18 @@ class Agency(Item):
 
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                     name: InternationalString = None, description: InternationalString = None,
-                    isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs: List[Item] = []):
+                    isPartial: bool = None, scheme: ItemScheme = None):
         
         super(Agency, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                     name = name, description = description,
-                                    isPartial = isPartial, scheme = scheme, parent = parent, childs = childs)
+                                    isPartial = isPartial, scheme = scheme)
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter 
+    def parent(self, value):
+        pass
+    def addChild(self, value):
+        pass
