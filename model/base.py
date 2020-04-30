@@ -314,15 +314,12 @@ class VersionableArtefact(NameableArtefact):
 
         return xml
 
-class Agency(NameableArtefact):
-    pass
-
 class MaintainableArtefact(VersionableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                 name: InternationalString = None, description: InternationalString = None,
                 version: str = None, validFrom: datetime = None, validTo: datetime= None,
                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
-                    structureUrl: str = None, agency: Agency = None):
+                    structureUrl: str = None, maintainer = None):
 
         super(MaintainableArtefact, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                                 name = name, description = description,
@@ -332,7 +329,7 @@ class MaintainableArtefact(VersionableArtefact):
         self.isExternalReference = isExternalReference
         self.serviceUrl = serviceUrl
         self.structureUrl = structureUrl
-        self.agency = agency
+        self.maintainer = maintainer
 
     @property
     def isFinal(self):
@@ -351,8 +348,8 @@ class MaintainableArtefact(VersionableArtefact):
         return self._structureUrl
 
     @property
-    def agency(self):
-        return self._agency
+    def maintainer(self):
+        return self._maintainer
 
     @isFinal.setter
     def isFinal(self, value):
@@ -382,12 +379,12 @@ class MaintainableArtefact(VersionableArtefact):
         else:
             raise ValueError("The attribute structureUrl should be of the str type")
 
-    @agency.setter #TOBECHECKED. HOW TO IMPORT IT FROM ANOTHER MODULE?
-    def agency(self, value):
-        if isinstance(value, Agency) or value is None:
-            self._agency = value
+    @maintainer.setter 
+    def maintainer(self, value):
+        if value.__class__.__name__ == "Agency" or value is None:
+            self._maintainer = value
         else:
-            raise TypeError("The agency has to be an instance of Agency")
+            raise TypeError("The maintainer has to be an instance of Agency")
 
     @property   
     def urn(self):
@@ -407,6 +404,3 @@ class MaintainableArtefact(VersionableArtefact):
         xml.attrib["isFinal"]="false" if self.final != True else "true"
 
         return xml
-
-
-
