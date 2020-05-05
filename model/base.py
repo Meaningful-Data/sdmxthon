@@ -8,6 +8,8 @@
 from datetime import date, datetime
 from lxml import etree
 from typing import List, Dict
+import utils
+import warnings
 
 class LocalisedString(object):
     def __init__(self, locale:str, label:str):
@@ -18,6 +20,11 @@ class LocalisedString(object):
         self.label=label
         self.locale=locale
     
+    @classmethod
+    def fromXml(cls, elem: etree.Element):
+        locString = cls(label = elem.text, locale = elem.get(utils.qName("xml", "lang")))
+        return locString
+
     def __str__(self):
         return f"{self.locale} - {self.label}"
 
@@ -42,7 +49,17 @@ class InternationalString(object):
         else:
             self._localisedStrings.append(localisedString)
             self._localisedStringsDict[localisedString.locale] = localisedString.label
-    
+
+    @classmethod
+    def fromXml(cls, elems: List[etree.Element]):
+        if elems != []:
+            InternationalString = cls()
+
+            for ls in elems:
+                InternationalString.addLocalisedString(LocalisedString.fromXml(ls))
+            
+            return InternationalString
+
     def getLocalisedString(self, locale: str):
         if locale in self._localisedStringsDict:
             return self._localisedStringsDict[locale]
@@ -86,28 +103,19 @@ class Annotation(object):
 
     @id.setter 
     def id(self, value):
-        self._id = str(value)
+        self._id = utils.stringSetter(value)
 
     @title.setter 
     def title(self, value):
-        if not isinstance(value, str) and value is not None:
-            raise TypeError("Title should be a string")
-        else:
-            self._title = value
+        self._title = utils.stringSetter(value)
 
     @type.setter 
     def type(self, value):
-        if not isinstance(value, str) and value is not None:
-            raise TypeError("Type should be a string")
-        else:
-            self._type = value
+        self._type = utils.stringSetter(value)
 
     @url.setter 
     def url(self, value):
-        if not isinstance(value, str) and value is not None:
-            raise TypeError("URL should be a string")
-        else:
-            self._url = value
+        self._url = utils.stringSetter(value)
     
     @text.setter 
     def text(self, value):
@@ -154,14 +162,11 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @id.setter
     def id(self, value):
-        self._id = str(value)
+        self._id = utils.stringSetter(value)
     
     @uri.setter
     def uri(self, value):
-        if isinstance(value, str) or value is None:
-            self._uri = value
-        else:
-            raise ValueError("The uri has to be a string")
+        self._uri = utils.stringSetter(value)
     
     @property
     def urn(self):
@@ -260,45 +265,27 @@ class VersionableArtefact(NameableArtefact):
 
     @version.setter 
     def version(self, value):
-        self._version = str(value)
+        self._version = utils.stringSetter(value)
 
     @validFrom.setter 
     def validFrom(self, value):
-        if isinstance(value, datetime) or value is None:
-            self._validFrom=value
-        else:
-            raise TypeError("valid from has to be a date or datetime object")
+        self._validFrom = utils.dateSetter(value)
     
     @validTo.setter 
     def validTo(self, value):
-        if isinstance(value, datetime) or value is None:
-            self._validTo=value
-        else:
-            raise TypeError("valid to has to be a date or datetime object")
+        self._validTo = utils.dateSetter(value)
 
     def setValidFromString(self, date: str, format_: str = "%Y-%m-%d"):
-        try:
-            self._validFrom = datetime.strptime(date, format_)
-        except:
-            raise ValueError(f"Wrong date string format. The format {format_} should be followed")
+        self._validFrom = utils.setDateFromString(date, format_)
     
     def setValidToString(self, date: str, format_: str = "%Y-%m-%d"):
-        try:
-            self._validTo = datetime.strptime(date, format_)
-        except:
-            raise ValueError(f"Wrong date string format. The format {format_} should be followed")
+        self._validTo = utils.setDateFromString(date, format_)
 
     def getValidFromString(self,  format_: str = "%Y-%m-%d"):
-        if self.validFrom is None:
-            return ""
-        else:
-            return datetime.strftime(self.validFrom, format_)
+        return utils.getDateString(self.validFrom, format_)
 
     def getValidToString(self,  format_: str = "%Y-%m-%d"):
-        if self.validTo is None:
-            return ""
-        else:
-            return datetime.strftime(self.validTo, format_)
+        return utils.getDateString(self.validTo, format_)
 
     @property   
     def urn(self):
@@ -351,33 +338,22 @@ class MaintainableArtefact(VersionableArtefact):
     def maintainer(self):
         return self._maintainer
 
+
     @isFinal.setter
     def isFinal(self, value):
-        if isinstance(value, bool) or value is None:
-            self._isFinal = value
-        else:
-            raise ValueError("The attribute isFinal should be of the bool type")
+        self._isFinal = utils.boolSetter(value)
 
     @isExternalReference.setter
     def isExternalReference(self, value):
-        if isinstance(value, bool) or value is None:
-            self._isExternalReference = value
-        else:
-            raise ValueError("The attribute isExternalReference should be of the bool type")
+        self._isExternalReference = utils.boolSetter(value)
 
     @serviceUrl.setter
     def serviceUrl(self, value):
-        if isinstance(value, str) or value is None:
-            self._serviceUrl = value
-        else:
-            raise ValueError("The attribute serviceUrl should be of the str type")
+        self._serviceUrl = utils.stringSetter(value)
     
     @structureUrl.setter
     def structureUrl(self, value):
-        if isinstance(value, str) or value is None:
-            self._structureUrl = value
-        else:
-            raise ValueError("The attribute structureUrl should be of the str type")
+        self._structureUrl = utils.stringSetter(value)
 
     @maintainer.setter 
     def maintainer(self, value):
@@ -389,10 +365,18 @@ class MaintainableArtefact(VersionableArtefact):
     @property   
     def urn(self):
         try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self._qName.split('}')[1]}={self.agency.id}:{self.id}({self.version})" #TOBECHECKED
+            urnType = self._urnType
+            tag = etree.QName(self._qName).localname
+            agencyId =  self.maintainer.id
+            
+            urn = f"urn:sdmx:org.sdmx.infomodel.{urnType}.{tag}={agencyId}:{self.id}({self.version})" #TOBECHECKED
         except:
             urn = ""
         return urn
+
+    # @property
+    # def agencyId(self):
+    #     return self.maintainer.id if self.maintainer is not None else self._agencyId
 
     def toXml(self):
         xml=super().toXml()

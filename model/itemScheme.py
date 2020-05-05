@@ -1,6 +1,9 @@
 from model.base import NameableArtefact, MaintainableArtefact, Annotation, InternationalString 
 from typing import List, Dict
 from datetime import datetime
+import utils 
+from lxml.etree import QName
+
 
 class Item(NameableArtefact):
     #TODO Make sure that an item scheme doesn't contain twice the same object (identified by urn) and that an item does not have twice the same item as child
@@ -44,10 +47,7 @@ class Item(NameableArtefact):
 
     @isPartial.setter
     def isPartial(self, value):
-        if isinstance(value, bool) or value is None:
-            self._isPartial = value
-        else:
-            raise TypeError("isPartial attribute has to be of the type bool")
+        self._isPartial = utils.boolSetter(value)
 
     @scheme.setter
     def scheme(self,value): #TODO unappend item from the scheme if the item is already appended to one.
@@ -98,7 +98,7 @@ class ItemScheme(MaintainableArtefact):
                                         version = version, validFrom = validFrom, validTo = validTo,
                                         isFinal = isFinal, isExternalReference = isExternalReference, 
                                             serviceUrl = serviceUrl, structureUrl = structureUrl, maintainer = maintainer)
-        self._items = []
+        self._items = {}
         for i in items:
             self.append(i)
         
@@ -108,8 +108,8 @@ class ItemScheme(MaintainableArtefact):
    
     def append(self, value):
         if isinstance(value, globals()[self._itemType]):
-            if value not in self._items:
-                self._items.append(value)
+            if value.urn not in self._items:
+                self._items[value.urn] == value
                 value.scheme = self
         else:
             raise TypeError(f"The object has to be of the type {self._itemType}")
@@ -119,6 +119,44 @@ class ItemScheme(MaintainableArtefact):
         for i in self.items:
             xml.append(i.toXml())
         return xml
+
+    @classmethod
+    def fromXml(cls, elem):
+        classMapping = {
+            "AgencyScheme": AgencyList,
+            "Codelist": CodeList,
+            "ConceptScheme": ConceptScheme
+        }
+
+        #1. Instantiate correct class
+        itemSchemeTag = QName(elem.tag).localname
+        itemScheme = classMapping[itemSchemeTag]()
+
+        #2. Get and instantiate maintainer
+        maintainerId = elem.get("agencyID")
+        maintainer = Agency(id_ = maintainerId)
+        itemScheme.maintainer = maintainer
+
+        #3. Get other attributes
+        itemScheme.isExternalRefernce = elem.get("isExternalReference")
+        itemScheme.id = elem.get("id")
+        itemScheme.isFinal = elem.get("isFinal")
+        itemScheme.version = elem.get("version")
+
+        #4. Get Names
+        nameElems = elem.findall(utils.qName("com", "Name"))
+        intString = InternationalString.fromXml(nameElems)
+        itemScheme.name = intString
+
+        #5. Get descriptions
+        descriptionElems = elem.findall(utils.qName("com", "Description"))
+        intString = InternationalString.fromXml(descriptionElems)
+        itemScheme.description = intString
+
+        #6. Get items
+        
+
+        return itemScheme
 
 class ConceptScheme(ItemScheme):    
     _itemType = "Concept"
@@ -159,10 +197,26 @@ class CodeList(ItemScheme):
                                             serviceUrl = serviceUrl, structureUrl = structureUrl, maintainer = maintainer,
                                         items = items)
 
-class AgencyList(ItemScheme):
+class OrganisationScheme(ItemScheme):
+    """Abstract class. Used for structure messages"""
+    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
+            name: InternationalString = None, description: InternationalString = None,
+            version: str = None, validFrom: datetime = None, validTo: datetime= None,
+            isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
+                structureUrl: str = None, maintainer = None,
+            items: List[Item] = []):
+
+        super(OrganisationScheme, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                        name = name, description = description,
+                                        version = version, validFrom = validFrom, validTo = validTo,
+                                        isFinal = isFinal, isExternalReference = isExternalReference, 
+                                            serviceUrl = serviceUrl, structureUrl = structureUrl, maintainer = maintainer,
+                                        items = items)
+
+class AgencyList(OrganisationScheme):
     _itemType = "Agency"
-    _urnType="base"
-    _qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}AgencyScheme"
+    _urnType = "base"
+    _qName = utils.qName("str", "AgencyScheme")
 
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                 name: InternationalString = None, description: InternationalString = None,
@@ -217,12 +271,3 @@ class Agency(Item):
                                     name = name, description = description,
                                     isPartial = isPartial, scheme = scheme)
 
-    @property
-    def parent(self):
-        return self._parent
-
-    @parent.setter 
-    def parent(self, value):
-        pass
-    def addChild(self, value):
-        pass

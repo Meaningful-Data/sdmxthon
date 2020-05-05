@@ -1,6 +1,6 @@
 import json
 from lxml import etree
-from .abstract import *
+from .base import *
 from .itemScheme import Concept, CodeList, ConceptScheme
 
 class DataStructureDefinition(MaintainableArtefact):
@@ -87,7 +87,7 @@ class DataStructureDefinition(MaintainableArtefact):
         xml.append(dsdComponents)
         return xml
 
-    def generateVtlJson(self, path):
+    def toVtlJson(self, path):
         dataTypesMapping={
             "String":"String",
             "ObservationalTimePeriod":"Date",

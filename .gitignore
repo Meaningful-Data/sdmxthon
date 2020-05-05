@@ -2,3 +2,4 @@
 model/__pycache__/
 tests/__pycache__/
 IRIS/
+__pycache__/

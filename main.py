@@ -1,17 +1,9 @@
-from model import itemScheme
-from datetime import datetime
-
-conceptParent = itemScheme.Concept()
-conceptChild = itemScheme.Concept()
-code = itemScheme.Code()
+from model import message
+from pathlib import Path
 
 
-a = conceptChild.__class__
-b = conceptParent.__class__
+testsFolder  = Path().absolute() / "tests" / "resources_structureMessage"
 
-c = a == b
+mes = message.Message().fromXml(str(testsFolder / "IMF_ECOFIN_DSD.xml"))
 
-conceptChild.parent = conceptParent
-
-
-a = conceptChild
+print(mes.header)

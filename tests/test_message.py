@@ -1,0 +1,1 @@
+#TODO: Setters and attributes checking
