@@ -90,8 +90,8 @@ class ConceptSchemeCase(unittest.TestCase):
 
         
     def test_constructor(self):
-        concept1 = itemScheme.Concept()
-        concept2 = itemScheme.Concept()
+        concept1 = itemScheme.Concept(id_="test1")
+        concept2 = itemScheme.Concept(id_="test2")
         conceptScheme = itemScheme.ConceptScheme(id_ = "id1",
                                             uri = "uri",
                                             annotations = [self.annotation],
@@ -120,22 +120,22 @@ class ConceptSchemeCase(unittest.TestCase):
         self.assertEqual(conceptScheme.serviceUrl, "ServiceURL", "ConceptScheme serviceUrl not correctly initiated")
         self.assertEqual(conceptScheme.structureUrl, "StructureURK", "ConceptScheme structureUrl not correctly initiated")
         self.assertEqual(conceptScheme.maintainer, None, "ConceptScheme maintainer not correctly initiated")
-        self.assertEqual(conceptScheme.items, [concept1, concept2], "ConceptScheme items not correctly initiated")
+        self.assertEqual(conceptScheme.items, {"test1": concept1, "test2": concept2}, "ConceptScheme items not correctly initiated")
 
         conceptScheme = itemScheme.ConceptScheme()
         self.assertEqual(conceptScheme.annotations, [], "ConceptScheme not correctly initiated without arguments")
     
     def test_append(self):
         conceptScheme = itemScheme.ConceptScheme()
-        concept1 = itemScheme.Concept()
+        concept1 = itemScheme.Concept(id_="test")
         code = itemScheme.Code()
 
         conceptScheme.append(concept1)
-        self.assertEqual(conceptScheme.items, [concept1], "Error appending a concept to a concept scheme")
+        self.assertEqual(conceptScheme.items, {"test": concept1}, f"Error appending a concept to a concept scheme {conceptScheme.items}")
         self.assertEqual(concept1.scheme, conceptScheme, "Error appending a concept to a concept scheme. The property scheme of the concept has not changed")
 
         conceptScheme.append(concept1)
-        self.assertEqual(conceptScheme.items, [concept1], "Error, the same concept appended twice to a concept scheme")
+        self.assertEqual(conceptScheme.items,  {"test": concept1}, "Error, the same concept appended twice to a concept scheme")
 
         with self.assertRaises(TypeError):
             conceptScheme.append(code)
@@ -152,8 +152,8 @@ class CodeListCase(unittest.TestCase):
                                         text = self.i_string)
         
     def test_constructor(self):
-        code1 = itemScheme.Code()
-        code2 = itemScheme.Code()
+        code1 = itemScheme.Code(id_="test1")
+        code2 = itemScheme.Code(id_="test2")
         codeList = itemScheme.CodeList(id_ = "id1",
                                             uri = "uri",
                                             annotations = [self.annotation],
@@ -182,22 +182,22 @@ class CodeListCase(unittest.TestCase):
         self.assertEqual(codeList.serviceUrl, "ServiceURL", "CodeList serviceUrl not correctly initiated")
         self.assertEqual(codeList.structureUrl, "StructureURK", "CodeList structureUrl not correctly initiated")
         self.assertEqual(codeList.maintainer, None, "CodeList maintainer not correctly initiated")
-        self.assertEqual(codeList.items, [code1, code2], "CodeList items not correctly initiated")
+        self.assertEqual(codeList.items, {"test1": code1, "test2": code2}, "CodeList items not correctly initiated")
 
         codeList = itemScheme.CodeList()
         self.assertEqual(codeList.annotations, [], "CodeList not correctly initiated without arguments")
     
     def test_append(self):
         codeList = itemScheme.CodeList()
-        code = itemScheme.Code()
+        code = itemScheme.Code(id_="test")
         concept = itemScheme.Concept()
 
         codeList.append(code)
-        self.assertEqual(codeList.items, [code], "Error appending a code to a codelist")
+        self.assertEqual(codeList.items, {"test": code} , "Error appending a code to a codelist")
         self.assertEqual(code.scheme, codeList, "Error appending a code to a codelist. The property scheme of the code has not changed")
 
         codeList.append(code)
-        self.assertEqual(codeList.items, [code], "Error, the same code appended twice to a codelist")
+        self.assertEqual(codeList.items, {"test": code}, "Error, the same code appended twice to a codelist")
 
         with self.assertRaises(TypeError):
             codeList.append(concept)
@@ -214,8 +214,8 @@ class AgencyListCase(unittest.TestCase):
                                         text = self.i_string)
         
     def test_constructor(self):
-        agency1 = itemScheme.Agency()
-        agency2 = itemScheme.Agency()
+        agency1 = itemScheme.Agency(id_="test1")
+        agency2 = itemScheme.Agency(id_="test2")
         agencyList = itemScheme.AgencyList(id_ = "id1",
                                             uri = "uri",
                                             annotations = [self.annotation],
@@ -244,22 +244,22 @@ class AgencyListCase(unittest.TestCase):
         self.assertEqual(agencyList.serviceUrl, "ServiceURL", "AgencyList serviceUrl not correctly initiated")
         self.assertEqual(agencyList.structureUrl, "StructureURK", "AgencyList structureUrl not correctly initiated")
         self.assertEqual(agencyList.maintainer, None, "AgencyList maintainer not correctly initiated")
-        self.assertEqual(agencyList.items, [agency1, agency2], "AgencyList items not correctly initiated")
+        self.assertEqual(agencyList.items, {"test1": agency1, "test2": agency2}, "AgencyList items not correctly initiated")
 
         agencyList = itemScheme.AgencyList()
         self.assertEqual(agencyList.annotations, [], "AgencyList not correctly initiated without arguments")
     
     def test_append(self):
         agencyList = itemScheme.AgencyList()
-        agency = itemScheme.Agency()
+        agency = itemScheme.Agency(id_="test")
         concept = itemScheme.Concept()
 
         agencyList.append(agency)
-        self.assertEqual(agencyList.items, [agency], "Error appending an agency to an agency list")
+        self.assertEqual(agencyList.items, {"test": agency}, "Error appending an agency to an agency list")
         self.assertEqual(agency.scheme, agencyList, "Error appending an agency to an agency list. The property scheme of the agency has not changed")
 
         agencyList.append(agency)
-        self.assertEqual(agencyList.items, [agency], "Error, the same agency appended twice to an agency list")
+        self.assertEqual(agencyList.items, {"test": agency}, "Error, the same agency appended twice to an agency list")
 
         with self.assertRaises(TypeError):
             agencyList.append(concept)

@@ -2,7 +2,8 @@ from model.base import NameableArtefact, MaintainableArtefact, Annotation, Inter
 from typing import List, Dict
 from datetime import datetime
 import utils 
-from lxml.etree import QName
+from lxml.etree import QName, Element
+import warnings
 
 
 class Item(NameableArtefact):
@@ -77,9 +78,19 @@ class Item(NameableArtefact):
         else:
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
 
-    @property
-    def urn(self):
-        return f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self._qName.split('}')[1]}={self.parent.urn.split('=')[1]}.{self.id}" 
+
+    @classmethod
+    def fromXml(cls, elem: Element, classType):
+
+        item = classType()
+        item.id = elem.get("id")
+        item.uri = elem.get("uri")
+        
+        name, description = utils.getNameAndDescription(elem)
+        item.name = name
+        item.description = description
+
+        return item
 
 class ItemScheme(MaintainableArtefact):
     _itemType = None
@@ -108,8 +119,10 @@ class ItemScheme(MaintainableArtefact):
    
     def append(self, value):
         if isinstance(value, globals()[self._itemType]):
-            if value.urn not in self._items:
-                self._items[value.urn] == value
+            if value.id is None:
+                warnings.warn("Item not added because it did not have id")
+            if value.id not in self._items:
+                self._items[value.id] = value
                 value.scheme = self
         else:
             raise TypeError(f"The object has to be of the type {self._itemType}")
@@ -143,18 +156,18 @@ class ItemScheme(MaintainableArtefact):
         itemScheme.isFinal = elem.get("isFinal")
         itemScheme.version = elem.get("version")
 
-        #4. Get Names
-        nameElems = elem.findall(utils.qName("com", "Name"))
-        intString = InternationalString.fromXml(nameElems)
-        itemScheme.name = intString
+        #4. Get Name and description
+        name, description = utils.getNameAndDescription(elem)
+        itemScheme.name = name
+        itemScheme.description = description
 
-        #5. Get descriptions
-        descriptionElems = elem.findall(utils.qName("com", "Description"))
-        intString = InternationalString.fromXml(descriptionElems)
-        itemScheme.description = intString
-
-        #6. Get items
+        #5. Get items
+        items = elem.findall(utils.qName("str", itemScheme._itemType))
         
+        for i in items:
+            itemScheme.append(Item.fromXml(i, globals()[itemScheme._itemType]))
+
+
 
         return itemScheme
 
@@ -271,3 +284,14 @@ class Agency(Item):
                                     name = name, description = description,
                                     isPartial = isPartial, scheme = scheme)
 
+
+    @property
+    def urn(self):
+        try:
+            if self.scheme.maintainer.id == "SDMX":
+                urn = f"urn:sdmx:org.sdmx.infomodel.base.Agency={self.id}"
+            else:
+                urn = f"urn:sdmx:org.sdmx.infomodel.base.Agency={self.scheme.maintainer.id}.{self.id}"
+        except:
+            urn = ""
+        return urn

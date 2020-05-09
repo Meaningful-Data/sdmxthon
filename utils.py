@@ -1,5 +1,5 @@
 from datetime import datetime
-from lxml.etree import QName
+from lxml import etree
 import warnings
 
 #
@@ -74,7 +74,7 @@ NS = {
 
 def qName(ns, name):
     """Return a fully-qualified tag *name* in namespace *ns*."""
-    return QName(NS[ns], name)
+    return etree.QName(NS[ns], name)
 
 #
 #Bool mapper
@@ -85,3 +85,20 @@ boolMapper = {
     "false": False,
     None: None
 }
+
+#
+#Get international strings
+#
+
+def getNameAndDescription(elem: etree.Element):
+    from model.base import InternationalString
+    
+    #1. Get Names
+    nameElems = elem.findall(qName("com", "Name"))
+    name = InternationalString.fromXml(nameElems)
+
+    #2. Get descriptions
+    descriptionElems = elem.findall(qName("com", "Description"))
+    description = InternationalString.fromXml(descriptionElems)
+
+    return name, description

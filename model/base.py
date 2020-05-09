@@ -8,7 +8,8 @@
 from datetime import date, datetime
 from lxml import etree
 from typing import List, Dict
-import utils
+from utils import (qName, stringSetter, dateSetter, setDateFromString, 
+                   getDateString, boolSetter)
 import warnings
 
 class LocalisedString(object):
@@ -22,7 +23,7 @@ class LocalisedString(object):
     
     @classmethod
     def fromXml(cls, elem: etree.Element):
-        locString = cls(label = elem.text, locale = elem.get(utils.qName("xml", "lang")))
+        locString = cls(label = elem.text, locale = elem.get(qName("xml", "lang")))
         return locString
 
     def __str__(self):
@@ -69,6 +70,9 @@ class InternationalString(object):
     def getLocales(self):
         return set(self._localisedStringsDict.keys())
 
+    def __getitem__(self, key):
+        return self._localisedStringsDict[key]
+
     def __str__(self):
         return str(self._localisedStringsDict)
 
@@ -103,19 +107,19 @@ class Annotation(object):
 
     @id.setter 
     def id(self, value):
-        self._id = utils.stringSetter(value)
+        self._id = stringSetter(value)
 
     @title.setter 
     def title(self, value):
-        self._title = utils.stringSetter(value)
+        self._title = stringSetter(value)
 
     @type.setter 
     def type(self, value):
-        self._type = utils.stringSetter(value)
+        self._type = stringSetter(value)
 
     @url.setter 
     def url(self, value):
-        self._url = utils.stringSetter(value)
+        self._url = stringSetter(value)
     
     @text.setter 
     def text(self, value):
@@ -162,16 +166,17 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @id.setter
     def id(self, value):
-        self._id = utils.stringSetter(value)
+        self._id = stringSetter(value)
     
     @uri.setter
     def uri(self, value):
-        self._uri = utils.stringSetter(value)
+        self._uri = stringSetter(value)
     
     @property
     def urn(self):
+       
         try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self._qName.split('}')[1]}={self.id}" #TOBECHECKED
+            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{etree.QName(self._qName).localname}={self.id}" #TOBECHECKED
         except:
             urn = ""
         return urn
@@ -265,27 +270,27 @@ class VersionableArtefact(NameableArtefact):
 
     @version.setter 
     def version(self, value):
-        self._version = utils.stringSetter(value)
+        self._version = stringSetter(value)
 
     @validFrom.setter 
     def validFrom(self, value):
-        self._validFrom = utils.dateSetter(value)
+        self._validFrom = dateSetter(value)
     
     @validTo.setter 
     def validTo(self, value):
-        self._validTo = utils.dateSetter(value)
+        self._validTo = dateSetter(value)
 
     def setValidFromString(self, date: str, format_: str = "%Y-%m-%d"):
-        self._validFrom = utils.setDateFromString(date, format_)
+        self._validFrom = setDateFromString(date, format_)
     
     def setValidToString(self, date: str, format_: str = "%Y-%m-%d"):
-        self._validTo = utils.setDateFromString(date, format_)
+        self._validTo = setDateFromString(date, format_)
 
     def getValidFromString(self,  format_: str = "%Y-%m-%d"):
-        return utils.getDateString(self.validFrom, format_)
+        return getDateString(self.validFrom, format_)
 
     def getValidToString(self,  format_: str = "%Y-%m-%d"):
-        return utils.getDateString(self.validTo, format_)
+        return getDateString(self.validTo, format_)
 
     @property   
     def urn(self):
@@ -341,19 +346,19 @@ class MaintainableArtefact(VersionableArtefact):
 
     @isFinal.setter
     def isFinal(self, value):
-        self._isFinal = utils.boolSetter(value)
+        self._isFinal = boolSetter(value)
 
     @isExternalReference.setter
     def isExternalReference(self, value):
-        self._isExternalReference = utils.boolSetter(value)
+        self._isExternalReference = boolSetter(value)
 
     @serviceUrl.setter
     def serviceUrl(self, value):
-        self._serviceUrl = utils.stringSetter(value)
+        self._serviceUrl = stringSetter(value)
     
     @structureUrl.setter
     def structureUrl(self, value):
-        self._structureUrl = utils.stringSetter(value)
+        self._structureUrl = stringSetter(value)
 
     @maintainer.setter 
     def maintainer(self, value):

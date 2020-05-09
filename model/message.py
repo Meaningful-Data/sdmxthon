@@ -11,12 +11,12 @@ import warnings
 
 
 class Header():
-    def __init__(self, id: str = None, test: str = None, senderId:str = None, 
-                        receiverId:str = None, reportingBegin: datetime = None, 
-                        reportingEnd:datetime = None):
-        self.id = id
+    def __init__(self, id_: str = None, test: bool = None, prepared: datetime = None, 
+                 senderId:str = None, receiverId:str = None, 
+                 reportingBegin: datetime = None, reportingEnd:datetime = None):
+        self.id_ = id
         self.test = test
-        self.prepared = datetime.now()
+        self.prepared = prepared
         self.senderId = senderId 
         self.receiverId = receiverId
 
@@ -58,7 +58,7 @@ class Header():
 
     @test.setter
     def test(self, value):
-        self._test = utils.stringSetter(value)
+        self._test = utils.boolSetter(value)
 
     @prepared.setter 
     def prepared(self, value):
@@ -81,9 +81,12 @@ class Header():
         self._reportingEnd = utils.dateSetter(value)
 
     def setPreparedFromString(self, date: str, format_: str = "%Y-%m-%d"):
-        self._validFrom = utils.setDateFromString(date, format_)
+        self._prepared = utils.setDateFromString(date, format_)
 
     def setReportingBeginFromString(self, date: str, format_: str = "%Y-%m-%d"):
+        self._reportingBegin = utils.setDateFromString(date, format_)
+
+    def setReportingEndFromString(self, date: str, format_: str = "%Y-%m-%d"):
         self._reportingEnd = utils.setDateFromString(date, format_)
 
     def getPreparedString(self,  format_: str = "%Y-%m-%d"):
@@ -157,9 +160,9 @@ class Header():
             
             header.test = elem.find(utils.qName("mes", "Test")).text
             
-            #Different timedate formats used by different provides. All of them have in common the date and time (from char 0 to 18)
+            #Different timedate formats used by different providers. All of them have in common the date and time (from char 0 to 19)
             try:
-                header.setPreparedFromString(elem.find(utils.qName("mes", "Prepared")).text[:18], "%Y-%m-%dT%H:%M:%S")
+                header.setPreparedFromString(elem.find(utils.qName("mes", "Prepared")).text[:19], "%Y-%m-%dT%H:%M:%S")
             except:
                 warnings.warn(f"Not able to parse prepared date. Value received: {elem.find(utils.qName('mes', 'Prepared')).text}")
             
@@ -364,14 +367,6 @@ class StructureMessage(Message):
 
     def addOrganisationScheme(self, organisationScheme: OrganisationScheme):
         utils.addToMessage(organisationScheme, OrganisationScheme, self._organisationSchemes)
-        # if isinstance(codeList, CodeList):
-        #     if codeList.urn in self._codeLists:
-        #         warnings.warn(f"The codelist {self.urn} already exists in the message")
-        #     else:
-        #         self._codeLists[codeList.urn] = codeList                
-        # else:
-        #     raise ValueError(f"Object of CodelistClass required. {type(codeList)} received")
-
 
     def parseSpecific(self, tree):
 
