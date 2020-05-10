@@ -174,7 +174,6 @@ class IdentifiableArtefact(AnnotableArtefact):
     
     @property
     def urn(self):
-       
         try:
             urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{etree.QName(self._qName).localname}={self.id}" #TOBECHECKED
         except:

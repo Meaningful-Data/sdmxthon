@@ -79,6 +79,15 @@ class Item(NameableArtefact):
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
 
 
+    @property
+    def urn(self):
+        try:
+            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self.__class__.__name__}={self.scheme.maintainer.id}:{self.scheme.id}({self.scheme.version}).{self.id}"
+        except:
+            urn = ""
+        return urn
+
+
     @classmethod
     def fromXml(cls, elem: Element, classType):
 
@@ -164,8 +173,12 @@ class ItemScheme(MaintainableArtefact):
         #5. Get items
         items = elem.findall(utils.qName("str", itemScheme._itemType))
         
-        for i in items:
-            itemScheme.append(Item.fromXml(i, globals()[itemScheme._itemType]))
+        if itemSchemeTag == "ConceptScheme":
+            for i in items:
+                itemScheme.append(Concept.fromXml(i, globals()[itemScheme._itemType]))
+        else:
+            for i in items:
+                itemScheme.append(Item.fromXml(i, globals()[itemScheme._itemType]))
 
 
 
@@ -246,17 +259,56 @@ class AgencyList(OrganisationScheme):
                                         items = items)
 
 class Concept(Item):
+    
     _schemeType = "ConceptScheme"
     _urnType="conceptscheme"
     _qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concept"
 
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                     name: InternationalString = None, description: InternationalString = None,
-                    isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs: List[Item] = []):
+                    isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs: List[Item] = [],
+                    coreRepresentation = None):
         
+
         super(Concept, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                     name = name, description = description,
                                     isPartial = isPartial, scheme = scheme, parent = parent, childs = childs)
+
+        self.coreRepresentation = coreRepresentation
+        self._ref = None #Attribute for storing the references to codelists.
+
+    @property
+    def coreRepresentation(self):
+        return self._coreRepresentation
+
+    @coreRepresentation.setter
+    def coreRepresentation(self, value):
+        from model.structure import Representation
+        self._coreRepresentation = utils.genericSetter(value, Representation)
+
+
+    @classmethod
+    def fromXml(cls, elem: Element, classType):
+        from model.structure import Representation
+
+        #TODO implement extended facets
+
+        #1. Initialize the generic fromXml applicable to all items
+        concept = Item.fromXml(elem, classType) 
+        #2. Add core representation
+        representation = elem.find(utils.qName("str", "CoreRepresentation"))
+
+        if representation is not None:
+            lr = Representation()
+            enumeration = representation.find(utils.qName("str", "Enumeration"))
+            
+            if enumeration is not None:
+                lr._codeListReference = utils.getReferences(enumeration)
+                concept.coreRepresentation = lr
+
+
+        
+        return concept
 
 class Code(Item):
     _schemeType = "CodeList"
@@ -273,8 +325,8 @@ class Code(Item):
 
 class Agency(Item):
     _schemeType = "AgencyList"
-    _urnType="base"
-    _qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Agency"
+    _urnType = "base"
+    _qName = utils.qName("str", "Agency")
 
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                     name: InternationalString = None, description: InternationalString = None,
@@ -286,7 +338,7 @@ class Agency(Item):
 
 
     @property
-    def urn(self):
+    def urn(self): #TOBECHECKED: What is the logic behind?
         try:
             if self.scheme.maintainer.id == "SDMX":
                 urn = f"urn:sdmx:org.sdmx.infomodel.base.Agency={self.id}"

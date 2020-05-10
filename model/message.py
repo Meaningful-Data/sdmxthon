@@ -322,13 +322,15 @@ class Message():
 
 class StructureMessage(Message):
     def __init__(self, header=None, codeLists: List[CodeList] = [], 
-                conceptSchemes: List[ConceptScheme] = [], organisationSchemes: List[OrganisationScheme] = []):
+                conceptSchemes: List[ConceptScheme] = [], organisationSchemes: List[OrganisationScheme] = [],
+                dsds: List[DataStructureDefinition] = []):
         
         super(StructureMessage, self).__init__(header)
         
         self._codeLists = {}
         self._conceptSchemes = {}
         self._organisationSchemes = {}
+        self._dsds = {}
 
         for c in codeLists:
             self.addCodelist(c)
@@ -336,15 +338,16 @@ class StructureMessage(Message):
         for c in conceptSchemes:
             self.addConceptScheme(c)
 
-        for c in organisationSchemes:
-            self.addOrganisationScheme(c)
+        for o in organisationSchemes:
+            self.addOrganisationScheme(o)
+
+        for d in dsds:
+            self.addDsd(d)
 
 
         # categoryScheme: Dict[str, CategoryScheme] = categoryScheme
         # constraint: DictLike[str, ContentConstraint] = DictLike()
-        # dataflow: DictLike[str, DataflowDefinition] = DictLike()
-        # structure: DictLike[str, DataStructureDefinition] = DictLike()
-        
+        # dataflow: DictLike[str, DataflowDefinition] = DictLike()        
         # provisionagreement: DictLike[str, ProvisionAgreement] = DictLike()
 
     @property
@@ -359,6 +362,10 @@ class StructureMessage(Message):
     def organisationSchemes(self):
         return self._organisationSchemes
 
+    @property
+    def dsds(self):
+        return self._dsds
+
     def addCodeList(self, codeList: CodeList):
         utils.addToMessage(codeList, CodeList, self._codeLists)
 
@@ -367,6 +374,9 @@ class StructureMessage(Message):
 
     def addOrganisationScheme(self, organisationScheme: OrganisationScheme):
         utils.addToMessage(organisationScheme, OrganisationScheme, self._organisationSchemes)
+
+    def addDsd(self, dsd: DataStructureDefinition):
+        utils.addToMessage(dsd, DataStructureDefinition, self._dsds)
 
     def parseSpecific(self, tree):
 
@@ -399,6 +409,15 @@ class StructureMessage(Message):
             for cS in conceptSchemes:
                 conceptScheme = ConceptScheme.fromXml(cS)
                 self.addConceptScheme(conceptScheme)
+
+        #4. DataStructureDefinitions
+        dsds = bodyElement.find(utils.qName("str", "DataStructures"))
+        if dsds is not None: 
+            dsds = dsds.findall(utils.qName("str", "DataStructure"))
+
+            for d in dsds:
+                dsd = DataStructureDefinition.fromXml(d)
+                self.addDsd(dsd)
 
 class DataMessage(Message):
     def __init__(self):

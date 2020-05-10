@@ -1,30 +1,481 @@
 import json
 from lxml import etree
 from .base import *
-from .itemScheme import Concept, CodeList, ConceptScheme
+from .itemScheme import Concept, CodeList, ConceptScheme, Agency
+import utils
+from typing import List, Dict, Union
+from model import dataTypes
+import warnings
+
+class Facet():
+    def __init__(self, facetType:str = None, facetValue:str = None, facetValueType:str = None):
+        self.facetType = facetType
+        self.facetValue = facetValue
+        self.facetValueType = facetValueType
+ 
+    @property
+    def facetType(self):
+        return self._facetType
+
+    @property
+    def facetValue(self):
+        return self._facetValue
+
+    @property
+    def facetValueType(self):
+        return self._facetValueType
+
+    @facetType.setter 
+    def facetType(self, value):
+        if isinstance(value, str)  or value is None:
+            if value in dataTypes.FacetType or value is None:
+                self._facetType = value
+            else:
+                raise ValueError(f"The facet type {value} is not recognised")
+        else:
+            raise ValueError("Facet type should be of the str type")
+
+    @facetValue.setter
+    def facetValue(self, value):
+        self._facetValue = utils.stringSetter(value)
+
+    @facetValueType.setter 
+    def facetValueType(self, value):
+        if isinstance(value, str)  or value is None:
+            if value in dataTypes.FacetValueType or value is None:
+                self._facetValueType = value
+            else:
+                raise ValueError(f"The facet value type {value} is not recognised")
+        else:
+            raise ValueError("Facet value type should be of the str type")
+
+class Representation():
+    #TODO: Method to get the objects from the reference
+    def __init__(self, concept: Concept = None, facets: list() = [], 
+                    codeList: CodeList = None, conceptScheme: ConceptScheme = None):
+        self.concept = concept
+        self.codeList = codeList
+        self.conceptScheme = conceptScheme
+
+        for f in facets:
+            self.addFacet(f)
+
+        self._conceptReference = None
+        self._codeListReference = None
+        self._conceptSchemeReference = None
+
+
+
+    @property
+    def concept(self):
+        return self._concept
+    @property
+    def facets(self):
+        return self._facets
+    @property
+    def codeList(self):
+        return self._codeList
+    @property
+    def conceptScheme(self):
+        return self._conceptScheme
+
+    @concept.setter
+    def concept(self, value):
+        self._concept = utils.genericSetter(value, Concept)
+
+    @codeList.setter
+    def codeList(self, value):
+        self._codeList = utils.genericSetter(value, CodeList)
+
+    @conceptScheme.setter
+    def conceptScheme(self, value):
+        self._conceptScheme = utils.genericSetter(value, ConceptScheme)
+
+    def addFacet(self, value):
+        if isinstance(value, Facet):
+            self._components.append(value)
+        else:
+            raise TypeError(f"The object has to be of the type Facet")
+       
+class Component(IdentifiableArtefact):
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  localRepresentation: Representation = None, componentList = None):
+    
+        super(Component, self).__init__(id_ = id_, uri = uri, annotations= annotations)
+    
+        self.localRepresentation = localRepresentation
+        self.componentList = componentList
+        self._conceptIdentityRef = None
+    
+
+    @property
+    def localRepresentation(self):
+        return self._localRepresentation
+
+    @property
+    def componentList(self):
+        return self._componentList
+
+    @localRepresentation.setter 
+    def localRepresentation(self, value):
+        self._localRepresentation = utils.genericSetter(value, Representation)
+
+    @componentList.setter
+    def componentList(self, value):
+        self._componentList = utils.genericSetter(value, ComponentList)
+
+    @property
+    def urn(self):
+        try:
+            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.{self.__class__.__name__}={self.componentList.dsd.maintainer.id}:{self.componentList.dsd.id}({self.componentList.dsd.version}).{self.id}"
+        except:
+            urn = ""
+        return urn
+
+
+    def toXml(self):
+        xml=super().toXml()
+        if self.__class__==Dimension:
+            xml.attrib["position"]=str(self.position)
+        if self.__class__==Attribute:
+            xml.attrib["assignmentStatus"]="Conditional" #Hard coded
+        
+        if self.localRepresentation.concept is not None:
+            concept=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptIdentity")
+            attrib={
+                "agencyID":"RBI", ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
+                "class":"Concept",
+                "id":self.representation.concept.id,
+                "maintainableParentID":"RBI_CONCEPTS",##Hardcoded
+                "maintainableParentVersion":"1.0",
+                "package":"conceptscheme"
+            }
+            
+            ref=etree.Element("Ref", attrib=attrib)
+
+            concept.append(ref)
+            xml.append(concept)
+
+        localRep=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}LocalRepresentation")
+        if self.representation.codeList is not None:
+            enum=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Enumeration")
+            
+            attrib={
+                "agencyID":"RBI", ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
+                "class":"Codelist",
+                "id":self.representation.codeList.id,
+                "package":"codelist",
+                "version":"1.0"
+            }
+            
+            ref=etree.Element("Ref", attrib=attrib)
+
+            enum.append(ref)
+            localRep.append(enum)
+        elif self.id=="TIME_PERIOD":
+            localRep.append(etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat", attrib={"textType":"GregorianDay"})) #Harcoded! What's the link with facets?
+        else:
+            localRep.append(etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat", attrib={"textType":"String"})) #Harcoded! What's the link with facets?
+
+        xml.append(localRep)
+
+
+        if self.__class__==Attribute: #Hard coded
+            attachment=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}AttributeRelationship")
+            pm=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}PrimaryMeasure")
+            pm.append(etree.Element("Ref", attrib={"id":"OBS_VALUE"}))
+            attachment.append(pm)
+            xml.append(attachment)
+
+
+        return xml
+
+    @classmethod
+    def fromXml(cls, elem):
+        #1. Instantiate the right class
+        componentType = etree.QName(elem).localname
+
+        inst = globals()[componentType]()
+        
+        #2. Get common attributes
+        inst.id = elem.get("id")
+
+        #3. Get references
+        #3.1 Get concept identity
+        conceptIdentity = elem.find(utils.qName("str","ConceptIdentity"))
+        if conceptIdentity is None:
+            raise ValueError("Component {inst.id} does not have a ConceptIdentity")
+
+        inst._conceptIdentityRef = utils.getReferences(conceptIdentity)
+        
+        #3.2 Get local representation. TODO get facets
+        localRepresentation = elem.find(utils.qName("str","LocalRepresentation"))
+        if localRepresentation is not None:
+            lr = Representation()
+            enumeration = localRepresentation.find(utils.qName("str", "Enumeration"))
+
+            if enumeration is not None:
+                lr._codeListReference = utils.getReferences(enumeration)
+                inst.localRepresentation = lr
+        
+        #4. Get position for dimension
+        if isinstance(inst, Dimension):
+            inst.position = elem.get("position")
+        
+        #5. Get usageStatus  and  realatedTo for attribute
+        if isinstance(inst, Attribute):
+            inst.usageStatus = elem.get("assignmentStatus")
+
+            relationship = elem.find(utils.qName("str", "AttributeRelationship"))
+            if relationship is not None: 
+                if relationship.find(utils.qName("str","PrimaryMeasure")) is not None:
+                    inst.relatedTo = "PrimaryMeasure"
+                else:
+                    warnings.warn(f"Relationship for attribute {inst.id} could not be extracted")
+
+        return inst
+
+class Dimension(Component):
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "Dimension")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  localRepresentation: Representation = None,
+                  position:int = None):
+    
+        super(Dimension, self).__init__(id_ = id_, uri = uri, annotations= annotations, localRepresentation = localRepresentation)
+    
+        self.position = position
+
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, value):
+        self._position = utils.intSetter(value)
+
+class MeasureDimension(Dimension):
+    _qName = utils.qName("str", "MeasureDimension")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  localRepresentation: Representation = None,
+                  position:int = None):
+    
+        super(MeasureDimension, self).__init__(id_ = id_, uri = uri, annotations= annotations, 
+                                                localRepresentation = localRepresentation, position = position)
+
+class TimeDimension(Dimension):
+    _qName = utils.qName("str", "TimeDimension")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  localRepresentation: Representation = None,
+                  position:int = None):
+    
+        super(TimeDimension, self).__init__(id_ = id_, uri = uri, annotations= annotations, 
+                                                localRepresentation = localRepresentation, position = position)
+
+class Attribute(Component):
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "Attribute")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  localRepresentation: Representation = None,
+                  usageStatus:str = None, relatedTo = None):
+    
+        super(Attribute, self).__init__(id_ = id_, uri = uri, annotations= annotations, localRepresentation = localRepresentation)
+
+        self.usageStatus = relatedTo
+        self.relatedTo = None
+
+    
+    @property
+    def usageStatus(self):
+        return self._usageStatus
+
+    @property
+    def relatedTo(self):
+        return self._relatedTo
+    
+    @usageStatus.setter 
+    def usageStatus(self,value):
+        if value in ["Mandatory", "Conditional"] or value is None:
+            self._usageStatus=value
+        else:
+            raise ValueError("The value for usageStatus has to be 'mandatory' or 'conditional'")
+
+    @relatedTo.setter 
+    def relatedTo(self,value):
+        if value is None: 
+            self._relatedTo="NoSpecifiedRelationship"
+        elif value == "PrimaryMeasure" or isinstance(value, GroupDimensionDescriptor) or isinstance(value, Dimension):
+            self._relatedTo=value
+        else:
+            raise ValueError("The value for related To has to be None, 'PrimaryMeasure' an object of the GroupDimensionDescriptor class or an object of the DimensionClass")       
+
+    @property
+    def urn(self):
+        try:
+            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute={self.componentList.dsd.maintainer.id}:{self.componentList.dsd.id}({self.componentList.dsd.version}).{self.id}"
+        except:
+            urn = ""
+        return urn
+
+class PrimaryMeasure(Component):
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "PrimaryMeasure")
+    
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  localRepresentation: Representation = None):
+    
+        super(PrimaryMeasure, self).__init__(id_ = id_, uri = uri, annotations= annotations, localRepresentation = localRepresentation)
+
+class ComponentList(IdentifiableArtefact):
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  components: Dict = [], dsd = None):
+    
+        super(ComponentList, self).__init__(id_ = id_, uri = uri, annotations= annotations)
+
+        self._components={}
+        for c in components:
+            self.addComponent(c)
+    
+    @property
+    def components(self):
+        return self._components
+
+    @property
+    def dsd(self):
+        return self._dsd
+
+    @dsd.setter
+    def dsd(self, value):
+        self._dsd = utils.genericSetter(value, DataStructureDefinition)
+
+    def addComponent(self, value):
+        if isinstance(value, self._componentType):
+            value.componentList = self
+            self._components[value.id] = value
+        else:
+            raise TypeError(f"The object has to be of the type {self._componentType.__name__}, {value.__class__.__name__} provided")
+
+
+    @property
+    def urn(self):
+        try:
+            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.{self.__class__.__name__}={self.dsd.maintainer.id}:{self.dsd.id}({self.dsd.version}).{self.id}"
+        except:
+            urn = ""
+        return urn
+
+    def __len__(self):
+        return len(self.components)
+
+    def __getitem__(self, value):
+        return self.components[value]
+
+    def toXml(self):
+        xml=super().toXml()
+        for c in self.components:
+            xml.append(c.toXml())
+
+        return xml
+
+    @classmethod
+    def fromXml(cls, elem: etree._Element):
+        #1. Instantiate the right class
+        componentListType = etree.QName(elem).localname
+
+        objectsMapping={
+            "DimensionList": DimensionDescriptor,
+            "AttributeList": AttributeDescriptor,
+            "MeasureList": MeasureDescriptor,
+            "GroupDimensionList": GroupDimensionDescriptor
+        }
+
+        inst = objectsMapping[componentListType]()
+        
+        #2. Get id (only attribute)
+        inst.id = elem.get("id")
+
+        #3. get components
+        components = elem.getchildren()
+        for c in components:
+            inst.addComponent(Component.fromXml(c))
+
+        return inst
+
+class DimensionDescriptor(ComponentList):
+    _componentType = Dimension
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "DimensionList")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  components: List[Component] = []):
+    
+        super(DimensionDescriptor, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                                    components = components)
+
+class AttributeDescriptor(ComponentList):
+    _componentType = Attribute
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "AttributeList")
+    
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  components: List[Component] = []):
+    
+        super(AttributeDescriptor, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                                    components = components)
+
+class MeasureDescriptor(ComponentList):
+    _componentType = PrimaryMeasure
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "MeasureList")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  components: List[Component] = []):
+    
+        super(MeasureDescriptor, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                                    components = components)
+
+class GroupDimensionDescriptor(ComponentList):
+    _componentType = Dimension
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "Group")
+
+    def __init__(self, id_: str = None, uri: str = None, annotations:  List[Annotation] = [], 
+                  components: List[Component] = []):
+    
+        super(GroupDimensionDescriptor, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                                    components = components)
 
 class DataStructureDefinition(MaintainableArtefact):
-    # def __init___(self, urn=None, url=None, id=None, name=None, description=None,  annotations=[], version=None, validFrom=None, validTo=None,
-    #             final=None, isExternalReference=None, serviceUrl=None, structureUrl=None, isPartial=None, items=[]):
-    def __init__(self):
 
-        self._dimensionDescriptor=None
-        self._measureDescriptor=None
-        self._attributeDescriptor=None
-        self._groupDimensionDescriptor=None
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "DataStructure")
+    
+    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
+            name: InternationalString = None, description: InternationalString = None,
+            version: str = None, validFrom: datetime = None, validTo: datetime= None,
+            isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
+                structureUrl: str = None, maintainer = None, 
+            dimensionDescriptor: DimensionDescriptor = None, measureDescriptor: MeasureDescriptor = None, 
+                attributeDescriptor: AttributeDescriptor = None, groupDimensionDescriptor: GroupDimensionDescriptor = None):
+
+        super(DataStructureDefinition, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                    name = name, description = description,
+                                    version = version, validFrom = validFrom, validTo = validTo,
+                                    isFinal = isFinal, isExternalReference = isExternalReference, 
+                                        serviceUrl = serviceUrl, structureUrl = structureUrl, maintainer = maintainer)
+    
+        self.dimensionDescriptor = dimensionDescriptor
+        self.measureDescriptor = measureDescriptor
+        self.attributeDescriptor = attributeDescriptor
+        self.groupDimensionDescriptor = groupDimensionDescriptor
 
         self._urnType="datastructure"
         self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructure"
 
-        self._name=None
-        self._description=None
-        
-        self.final=None
-        self.isExternalReference=None
-        self.serviceUrl=None
-        self.structureUrl=None
-
-        super().__init__()
 
     @property
     def dimensionDescriptor(self):
@@ -39,42 +490,41 @@ class DataStructureDefinition(MaintainableArtefact):
     def groupDimensionDescriptor(self):
         return self._groupDimensionDescriptor
 
+    @property
+    def dimensionCodes(self):
+        return [k for k in self.dimensionDescriptor.components]
+
+    @property
+    def attributeCodes(self):
+        return [k for k in self.attributeDescriptor.components]
+
+    @property
+    def measureCode(self):
+        return list(self.measureDescriptor.components.keys())[0]
+
     @dimensionDescriptor.setter
     def dimensionDescriptor(self,value):
-        if value is None:
-            pass
-        elif type(value)==DimensionDescriptor:
-            self._dimensionDescriptor=value
-        else:
-            raise TypeError("The dimensionDescriptor has to be an instance of the DimensionDescriptor class")
+        self._dimensionDescriptor = utils.genericSetter(value, DimensionDescriptor)
+        if value is not None:
+            value.dsd = self 
     
     @measureDescriptor.setter
     def measureDescriptor(self,value):
-        if value is None:
-            pass
-        elif type(value)==MeasureDescriptor:
-            self._measureDescriptor=value
-        else:
-            raise TypeError("The measureDescriptor has to be an instance of the MeasureDescriptor class")
+        self._measureDescriptor = utils.genericSetter(value, MeasureDescriptor)
+        if value is not None:
+            value.dsd = self 
 
     @attributeDescriptor.setter
     def attributeDescriptor(self,value):
-        if value is None:
-            pass
-        elif type(value)==AttributeDescriptor:
-            self._attributeDescriptor=value
-        else:
-            raise TypeError("The attributeDescritpor has to be an instance of the AttributeDescriptor class")
+        self._attributeDescriptor = utils.genericSetter(value, AttributeDescriptor)
+        if value is not None:
+            value.dsd = self 
 
     @groupDimensionDescriptor.setter
     def groupDimensionDescriptor(self,value):
-        if value is None:
-            pass
-        elif type(value)==GroupDimensionDescriptor:
-            self._groupDimensionDescriptor=value
-        else:
-            raise TypeError("The groupDimensionDescriptor has to be an instance of the GroupDimensionDescriptor class")
-
+        self._groupDimensionDescriptor = utils.genericSetter(value, GroupDimensionDescriptor)
+        if value is not None:
+            value.dsd = self 
 
     def toXml(self):
         xml = super().toXml()
@@ -129,432 +579,82 @@ class DataStructureDefinition(MaintainableArtefact):
         return rslt
 
     @classmethod 
-    def fromXml(cls, structureElement):
-        if type(structureElement)!=etree._Element:
+    def fromXml(cls, elem: etree._Element):
+        if not isinstance(elem, etree._Element):
             raise ValueError("The input has to be an lxml etree element")
-        else:
 
-            #Change this to get the agency!
-            self._agencyId=structureElement.get("agencyID")
-            
-            self._id=structureElement.get("id")
-            self._version=structureElement.get("version")
-            self._uri=structureElement.get("uri")
-            self._urn=structureElement.get("urn")
+        #1. Instantiate class
+        dsd = cls()
 
-            self._names={}
-            
-            for n in structureElement.findall("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common}Name"):
-                self._names[n.get("{http://www.w3.org/XML/1998/namespace}lang")] =n.text
-            #More attributes to be done!
+        #2. Get and instantiate maintainer
+        maintainerId = elem.get("agencyID")
+        maintainer = Agency(id_ = maintainerId)
+        dsd.maintainer = maintainer
 
-            dataStructureComponents=structureElement.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructureComponents") 
+        #3. Get other attributes
+        dsd.id = elem.get("id")
+        dsd.version = elem.get("version")
+        dsd.uri = elem.get("uri")
+        dsd.isExternalRefernce = elem.get("isExternalReference")
+        dsd.isFinal = elem.get("isFinal")
 
-            self._dimensionList=ComponentList(dataStructureComponents.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DimensionList"))
-            self._measureList=ComponentList(dataStructureComponents.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}MeasureList"))
-            attributeList=dataStructureComponents.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}AttributeList")
-            if attributeList is not None:
-                self._attributeList=ComponentList(attributeList)
-            
-            groupDimensionList=dataStructureComponents.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}GroupDimensionList")
-            if groupDimensionList is not None:
-                self._groupDimensionList=ComponentList(groupDimensionList)
+        #4. Get Name and description
+        name, description = utils.getNameAndDescription(elem)
+        dsd.name = name
+        dsd.description = description
 
-class ComponentList(IdentifiableArtefact):
-    def __init__(self):
-        self._components=[]
-        super().__init__()
-    
-    @property
-    def components(self):
-        return self._components
+        #5. Get components
+        dataStructureComponents = elem.find(utils.qName("str", "DataStructureComponents")) 
 
-    def addComponent(self, component):
-        if component is None:
-            pass
-        elif type(component)==self._componentType:
-            self._components.append(component)
-        else:
-            raise TypeError("The component has to be an instance of the class {}".format(self._componentType))
-
-    def toXml(self):
-        xml=super().toXml()
-        for c in self.components:
-            xml.append(c.toXml())
-
-        return xml
-
-
-
+        #5.1 Get dimensions
+        dimensionList = dataStructureComponents.find(utils.qName("str", "DimensionList"))
+        dsd.dimensionDescriptor = DimensionDescriptor.fromXml(dimensionList)
         
-
-    # def __init__(self, componentListElement=None):
-    #     if componentListElement is None:
-    #         self._componentListType=None
-    #         self._id=None
-    #         self._urn=None
-    #         self._components=[]
-    #     elif type(componentListElement)==etree._Element:
-    #         self._parse(componentListElement)
-    #     else:
-    #         raise ValueError("The input has to be an lxml etree element")
-    # def _parse(self, componentListElement):
-    #     self._componentListType=componentListElement.tag.split("}")[1]
-    #     self._id=componentListElement.get("id")
-    #     self._urn=componentListElement.get("urn")
-    #     self._components=[]
-
-    #     objectsMapping={
-    #         "DimensionList":Dimension,
-    #         "AttributeList":Attribute,
-    #         "MeasureList":Measure
-    #     }
-    #     obj=objectsMapping[self.componentListType]
-    #     #What happens with GroupDimensionLists?
-
-    #     for c in  componentListElement.getchildren():
-    #         self._components.append(obj(c))
-
-class DimensionDescriptor(ComponentList):
-    def __init__(self):
-        self._componentType=Dimension
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DimensionList"
-        super().__init__()
-
-class AttributeDescriptor(ComponentList):
-    def __init__(self):
-        self._componentType=Attribute
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}AttributeList"
-        super().__init__()
-
-class MeasureDescriptor(ComponentList):
-    def __init__(self):
-        self._componentType=PrimaryMeasure
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}MeasureList"
-        super().__init__()
-
-class GroupDimensionDescriptor(ComponentList):
-    def __init__(self):
-        self._componentType=Dimension
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Group"
-        super().__init__()
-
-class Component(IdentifiableArtefact):
-    def __init__(self):
-        self._representation=None
-        super().__init__()
-
-    @property
-    def representation(self):
-        return self._representation
-    @representation.setter 
-    def representation(self, value):
-        if value is None:
-            pass
-        elif type(value)==Representation:
-            self._representation=value
-        else:
-            raise TypeError("The representation has to be an instance of the representation class")
-
-    def toXml(self):
-        xml=super().toXml()
-        if self.__class__==Dimension:
-            xml.attrib["position"]=str(self.position)
-        if self.__class__==Attribute:
-            xml.attrib["assignmentStatus"]="Conditional" #Hard coded
-
-
+        #5.2 Get measure
+        measureList = dataStructureComponents.find(utils.qName("str", "MeasureList"))
+        dsd.measureDescriptor = MeasureDescriptor.fromXml(measureList)
         
-        if self.representation.concept is not None:
-            concept=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptIdentity")
-            attrib={
-                "agencyID":"RBI", ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
-                "class":"Concept",
-                "id":self.representation.concept.id,
-                "maintainableParentID":"RBI_CONCEPTS",##Hardcoded
-                "maintainableParentVersion":"1.0",
-                "package":"conceptscheme"
-            }
-            
-            ref=etree.Element("Ref", attrib=attrib)
-
-            concept.append(ref)
-            xml.append(concept)
-
-        localRep=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}LocalRepresentation")
-        if self.representation.codeList is not None:
-            enum=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Enumeration")
-            
-            attrib={
-                "agencyID":"RBI", ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
-                "class":"Codelist",
-                "id":self.representation.codeList.id,
-                "package":"codelist",
-                "version":"1.0"
-            }
-            
-            ref=etree.Element("Ref", attrib=attrib)
-
-            enum.append(ref)
-            localRep.append(enum)
-        elif self.id=="TIME_PERIOD":
-            localRep.append(etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat", attrib={"textType":"GregorianDay"})) #Harcoded! What's the link with facets?
-        else:
-            localRep.append(etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat", attrib={"textType":"String"})) #Harcoded! What's the link with facets?
-
-        xml.append(localRep)
-
-
-        if self.__class__==Attribute: #Hard coded
-            attachment=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}AttributeRelationship")
-            pm=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}PrimaryMeasure")
-            pm.append(etree.Element("Ref", attrib={"id":"OBS_VALUE"}))
-            attachment.append(pm)
-            xml.append(attachment)
-
-
-        return xml
-
-class Representation():
-    def __init__(self):
-        self._concept=None
-        self._facets=[]
-        self._codeList=None
-        self._conceptScheme=None
-
-
-    @property
-    def concept(self):
-        return self._concept
-    @property
-    def facets(self):
-        return self._facets
-    @property
-    def codeList(self):
-        return self._codeList
-    @property
-    def conceptScheme(self):
-        return self._conceptScheme
-
-    @concept.setter
-    def concept(self, value):
-        if value is None:
-            pass
-        elif type(value)==Concept:
-            self._concept=value
-        else:
-            raise TypeError("The concept has to be an instance of the Concept class")        
-
-    @codeList.setter
-    def codeList(self, value):
-        if value is None:
-            pass
-        elif type(value)==CodeList:
-            self._codeList=value
-        else:
-            raise TypeError("The codelist has to be an instance of the CodeList class")     
-
-    @conceptScheme.setter
-    def conceptScheme(self, value):
-        if value is None:
-            pass
-        elif type(value)==ConceptScheme:
-            self._conceptScheme=value
-        else:
-            raise TypeError("The conceptScheme has to be an instance of the ConceptScheme class")
-
-    def addFacet(self, value):
-        if value is None:
-            pass
-        elif type(value)==Facet:
-            self._facets.append(value)
-        else:
-            raise TypeError("Facets have to be an instance of the Facet class")      
-
-    # @property
-    # def conceptIdentity(self):
-    #     return self._conceptIdentity
-    # @property
-    # def localRepresentation(self):
-    #     return self._localRepresentation
-
-    # def __init__(self, componentElement=None):
-    #     if componentElement is None:
-    #         self._id=None
-    #         self._urn=None
-    #     elif type(componentElement)==etree._Element:
-    #         self._parse(componentElement)
-    #     else:
-    #         raise ValueError("The input has to be an lxml etree element")
-    # def _parse(self, componentElement):
-    #     pass
-    
-    # def __repr__(self):
-    #     return "<{} - id={}>".format(self.__class__.__name__, self.id)
-
-    # def _setConceptIdentity(self, componentElement):
-    #     conceptIdentity=componentElement.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptIdentity").getchildren()[0]
-    #     self._conceptIdentity=conceptIdentity.attrib
-    
-    # def _setLocalRepresentation(self, componentElement):
-    #     self._localRepresentation={}
-    #     localRepresentation=componentElement.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}LocalRepresentation")
+        #5.3 Get attributes
+        attributeList = dataStructureComponents.find(utils.qName("str", "AttributeList"))
+        if attributeList is not None:
+            dsd.attributeDescriptor = AttributeDescriptor.fromXml(attributeList)
         
-    #     enumeration =localRepresentation.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Enumeration")
-    #     if enumeration is not None:
-    #         self._localRepresentation["type"]="enumerated"
-    #         self._localRepresentation["values"]=enumeration.getchildren()[0].attrib
-    #         self._localRepresentation["dataType"]=localRepresentation.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}EnumerationFormat").get("textType")
-    #     else:
-    #         self._localRepresentation["type"]="non-enumerated"
-    #         self._localRepresentation["dataType"]=localRepresentation.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat").get("textType")
+        #5.4 Get group dimensions
+        groupDimensionList = dataStructureComponents.find(utils.qName("str", "GroupDimensionList"))
+        if groupDimensionList is not None:
+            dsd.groupDimensionDescriptor = GroupDimensionDescriptor.fromXml(groupDimensionList)
 
-
-    # @property
-    # def id(self):
-    #     return self._id
-    # @property
-    # def urn(self):
-    #     return self._urn 
-
-class Facet():
-    def __init__(self):
-        self.facetType=None
-        self.facetValue=None
-        self.facetValueType=None
-
-class Dimension(Component):
-    def __init__(self):
-        self.position=None
-        self._dimensionType=None
-        self._urnType="datastructure"
-        # self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Dimension"
-
-
-
-        super().__init__()
-
-    
-    @property
-    def _qName(self):
-        if self.dimensionType=="TimeDimension":
-            return "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TimeDimension"
-        else:
-            return "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Dimension"
-
-    
-    @property
-    def dimensionType(self):
-        return self._dimensionType
-
-    @dimensionType.setter 
-    def dimensionType(self, value):
-        if value is None: 
-            pass
-        elif value in ["Dimension", "MeasureDimension", "TimeDimension"]:
-            self._dimensionType=value
-        else:
-            raise ValueError("The value for dimension type has to be Dimension, MeasureDimension or TimeDimension")
-
-
-    # def _parse(self, componentElement):
-    #     self._id=componentElement.get("id")
-    #     self._urn=componentElement.get("urn")
-    #     self._position=int(componentElement.get("position"))
-    #     self._dimensionType=componentElement.tag.split("}")[1]
-
-    #     self._setConceptIdentity(componentElement)
-    #     self._setLocalRepresentation(componentElement)
-
-class Attribute(Component):
-    def __init__(self):
-        self.usageStatus=None
-        self.relatedTo=None
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Attribute"
-        super().__init__()
-
-    # def _parse(self, componentElement):
-    #     self._id=componentElement.get("id")
-    #     self._urn=componentElement.get("urn")
-    #     self._assignmentStatus=componentElement.get("assignmentStatus")
-
-    #     self._setConceptIdentity(componentElement)
-    #     self._setLocalRepresentation(componentElement)
-    
-    @property
-    def usageStatus(self):
-        return self._usageStatus
-    @usageStatus.setter 
-    def usageStatus(self,value):
-        if value is None: 
-            pass
-        elif value in ["mandatory", "conditional"]:
-            self._usageStatus=value
-        else:
-            raise ValueError("The value for usageStatushas to be mandatory or conditional")
-
-    @property
-    def relatedTo(self):
-        return self._relatedTo
-    @relatedTo.setter 
-    def relatedTo(self,value):
-        if value is None: 
-            self._relatedTo="NoSpecifiedRelationship"
-        elif value == "PrimaryMeasureRelationship" :
-            self._relatedTo=value
-        elif type(value)==GroupDimensionDescriptor:
-            self._relatedTo=value 
-        elif type(value)==Dimension:
-            self._relatedTo=value
-        else:
-            raise ValueError("The value for related To has to be None, 'PrimaryMeasureRelationship' an object of the GroupDimensionDescriptor class or an object of the DimensionClass")       
-
-class PrimaryMeasure(Component):
-    def __init__(self):
-        self.usageStatus=None
-        self.relatedTo=None
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}PrimaryMeasure"
-        super().__init__()
-    # def _parse(self, componentElement):
-    #     self._id=componentElement.get("id")
-    #     self._urn=componentElement.get("urn")
-
-    #     self._setConceptIdentity(componentElement)
-    #     self._setLocalRepresentation(componentElement)
+        return dsd
 
 class DataFlowDefinition(MaintainableArtefact):
-    def __init__(self):
-        self.structure=None
-        self._urnType="datastructure"
-        self._qName="{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Dataflow"
 
-        self._name=None
-        self._description=None
-        
-        self.final=None
-        self.isExternalReference=None
-        self.serviceUrl=None
-        self.structureUrl=None
+    _urnType = "datastructure"
+    _qName = utils.qName("str", "Dataflow")
 
-        super().__init__()
+    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
+            name: InternationalString = None, description: InternationalString = None,
+            version: str = None, validFrom: datetime = None, validTo: datetime= None,
+            isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
+                structureUrl: str = None, maintainer = None, 
+            structure:DataStructureDefinition = None):
+
+        super(DataFlowDefinition, self).__init__(id_ = id_, uri = uri, annotations= annotations,
+                                    name = name, description = description,
+                                    version = version, validFrom = validFrom, validTo = validTo,
+                                    isFinal = isFinal, isExternalReference = isExternalReference, 
+                                        serviceUrl = serviceUrl, structureUrl = structureUrl, maintainer = maintainer)
+
+    
+        self.structure = structure
 
     @property
     def structure(self):
         return self._structure
+    
     @structure.setter 
     def structure(self, value):
-        if value is None:
-            pass
-        elif type(value)==DataStructureDefinition:
-            self._structure=value 
-        else:
-            raise TypeError("the structure has to be an instance of the DataStructureDefinition class")
+        self._structure = utils.genericSetter(value , DataStructureDefinition)
+
 
     def toXml(self):
         xml=super().toXml()

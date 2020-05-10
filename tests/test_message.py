@@ -33,8 +33,6 @@ class EcbOrgschmeTestCase(unittest.TestCase):
         self.assertEqual(self.mes.organisationSchemes[urn2].urn, urn2, "The urn is not correctly generated")
         
         #Testing name
-        nameECB = base.InternationalString([base.LocalisedString("en", "Agencies")])
-        nameSDMX = base.InternationalString([base.LocalisedString("en", "SDMX Agency Scheme")])
         self.assertEqual(len(self.mes.organisationSchemes[urn1].name.localisedStrings), 1)
         self.assertEqual(len(self.mes.organisationSchemes[urn2].name.localisedStrings), 1)
 

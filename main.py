@@ -1,28 +1,18 @@
 from model import message, base, itemScheme
+from ECU import dataset
 from pathlib import Path
 
 
-# testsFolder  = Path().absolute() / "tests" / "resources_structureMessage"
+# fl  = Path().absolute() / "ECU" / "IRIS" / "R017_ALE.csv"
 
-# mes = message.Message().fromXml(str(testsFolder / "IMF_ECOFIN_DSD.xml"))
+# ds = dataset.Dataset.fromCsv(str(fl))
 
-# print(mes.header)
+# print(ds.dsds)
 
 
-ls_en = base.LocalisedString(locale="en", label="test string")
-ls_es = base.LocalisedString(locale="es", label="String de prueba")
-i_string = base.InternationalString([ls_en, ls_es])
-annotation = base.Annotation(id_ = "AnnotationIDtest", 
-                                title = "Test title", 
-                                type_ = "Test type",
-                                url = "Test url", 
-                                text = i_string)
+fl  = Path().absolute() / "tests" /"resources_structureMessage" /  "RBI_ALE.xml"
+fl  = Path().absolute() / "tests" /"resources_structureMessage" /  "BSI_amounts.xml"
 
-agencyList = itemScheme.AgencyList()
-agency = itemScheme.Agency()
-concept = itemScheme.Concept()
+mes = message.Message().fromXml(str(fl))
 
-agencyList.append(agency)
-assert(agencyList.items == [agency], "Error appending an agency to an agency list")
-
-        # self.assertEqual(agency.scheme, agencyList, "Error appending an agency to an agency list. The property scheme of the agency has not changed")
+print(mes.dsds["urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS.XTD:AMOUNTS(1.0)"].dimensionCodes)

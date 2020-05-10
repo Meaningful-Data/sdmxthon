@@ -33,6 +33,8 @@ def stringSetter(value: str):
 def dateSetter(value: datetime):
     if isinstance(value, datetime) or value is None:
         return value
+    elif isinstance(value, str):
+        return setDateFromString(value)
     else:
         raise TypeError("Type should be datetime or date")
 
@@ -46,6 +48,12 @@ def boolSetter(value: bool):
     else:
         raise ValueError("Type should be bool")
 
+def genericSetter(value, clss):
+    if isinstance(value, clss) or value is None:
+        return value
+    else:
+        raise TypeError(f"The value has to be an instance of the {clss.__name__} class. {type(value)} passed")
+    
 def addToMessage(value, requiredClass, container):
     if isinstance(value, requiredClass):
         if value.urn in container:
@@ -54,6 +62,15 @@ def addToMessage(value, requiredClass, container):
             container[value.urn] = value
     else:
         raise ValueError(f"Object of {requiredClass.__name__} Class required. {type(value)} received")
+
+def intSetter(value: int):
+    if isinstance(value, int) or value is None:
+        return value
+    else:
+        try:
+            return int(value)
+        except:
+            raise ValueError("Type shoudl be int")
 
 #
 # Qnames manager
@@ -102,3 +119,26 @@ def getNameAndDescription(elem: etree.Element):
     description = InternationalString.fromXml(descriptionElems)
 
     return name, description
+
+#
+#Get references
+#
+
+def getReferences(elem):
+    if elem is None:
+        return None
+    else: 
+        ref = elem.find("Ref")
+        if ref is None:
+            raise TypeError("The file contains a reference without Ref tag")
+
+        
+        
+        return {
+            "id_" : ref.get("id"), 
+            "version" : ref.get("version"), 
+            "agencyId" : ref.get("agencyID"),
+            "maintainableParentId" : ref.get("maintainableParentID"),
+            "package" : ref.get("package"),
+            "maintainableParentVersion" : ref.get("maintainableParentVersion")
+            }
