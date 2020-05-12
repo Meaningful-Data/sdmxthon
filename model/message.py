@@ -13,17 +13,21 @@ import warnings
 class Header():
     def __init__(self, id_: str = None, test: bool = None, prepared: datetime = None, 
                  senderId:str = None, receiverId:str = None, 
-                 reportingBegin: datetime = None, reportingEnd:datetime = None):
-        self.id_ = id
+                 reportingBegin: datetime = None, reportingEnd:datetime = None,
+                 structures: DataStructureDefinition = []):
+        self.id = id_
         self.test = test
         self.prepared = prepared
         self.senderId = senderId 
         self.receiverId = receiverId
 
-        # self.structure=structure
         self.reportingBegin=reportingBegin.strftime('%Y-%m-%dT%H:%M:%S') if reportingBegin is not None else None
         self.reportingEnd=reportingEnd.strftime('%Y-%m-%dT%H:%M:%S') if reportingEnd is not None else None
     
+        self._structures = []
+        for s in structures:
+            self.addStructure(s)
+
     @property
     def id(self):
         return self._id 
@@ -52,6 +56,10 @@ class Header():
     def reportingEnd(self):
         return self._reportingEnd
     
+    @property
+    def structures(self):
+        return self._structures
+
     @id.setter
     def id(self, value):
         self._id = utils.stringSetter(value)
@@ -80,6 +88,13 @@ class Header():
     def reportingEnd(self, value):
         self._reportingEnd = utils.dateSetter(value)
 
+    #TODO: Add to dimensionAtObservation to the header
+    def addStructure(self, value):
+        if isinstance(value, DataStructureDefinition):
+            self._structures.append(value)
+        else:
+            raise TypeError(f"DataStructureDefinition object expected, {value.__class__.__name__} passed")
+
     def setPreparedFromString(self, date: str, format_: str = "%Y-%m-%d"):
         self._prepared = utils.setDateFromString(date, format_)
 
@@ -103,50 +118,51 @@ class Header():
         return f"<SdmxHeader id={self.id}, test={self.test}, prepared={self.getPreparedString()}, sender={self.senderId}>"
 
     def toXml(self):
-        header= etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Header")
+        header= etree.Element(utils.qName("mes", "Header"))
         
-        idNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ID")
+        idNode=etree.Element(utils.qName("mes", "ID"))
         idNode.text=self.id
         header.append(idNode)
 
-        testNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Test")
-        testNode.text="false" if self.id != True else "true"
+        testNode=etree.Element(utils.qName("mes", "Test"))
+        testNode.text="true" if self.test else "false"
         header.append(testNode)
 
-        preparedNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Prepared")
-        preparedNode.text=self.prepared
+        preparedNode=etree.Element(utils.qName("mes", "Prepared"))
+        preparedNode.text=self.getPreparedString()
         header.append(preparedNode)
 
-        senderNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Sender")
+        senderNode=etree.Element(utils.qName("mes", "Sender"))
         senderNode.attrib["id"]=self.senderId
         header.append(senderNode)
 
-        receiverNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Receiver")
+        receiverNode=etree.Element(utils.qName("mes", "Receiver"))
         receiverNode.attrib["id"]=self.receiverId if self.receiverId is not None else "not_supplied"
         header.append(receiverNode)
 
-        if self.structure is not None:
-            structureNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Structure")
-            structureNode.attrib["structureID"]=self.structure["id"]
-            if "dimensionAtObservation" in self.structure:
-                structureNode.attrib["dimensionAtObservation"]=self.structure["dimensionAtObservation"]
+        for s in self.structures:
+            structureNode = etree.Element(utils.qName("mes", "Structure"))
+            structureNode.attrib["structureID"] = s.id
+            structureNode.attrib["dimensionAtObservation"] = "AllDimensions" #TODO: Implement other options
+
+            strNode = etree.Element(utils.qName("com", "Structure"))
             
-            strNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common}Structure")
-            refNode=etree.Element("Ref", attrib={"agencyID":"RBI", "id": self.structure["id"], "version":"1.0"})
+            refNode = etree.Element("Ref", attrib={"agencyID":s.maintainer.id, "id": s.id, "version":s.version})
+            
             strNode.append(refNode)
-            
             structureNode.append(strNode)
             
             header.append(structureNode)
+            
 
         if self.reportingBegin is not None:
-            repNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ReportingBegin")
-            repNode.text=self.reportingBegin
+            repNode=etree.Element(utils.qName("mes", "ReportingBegin"))
+            repNode.text=self.getReportingBeginString()
             header.append(repNode)
 
         if self.reportingEnd is not None:
-            repNode=etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ReportingEnd")
-            repNode.text=self.reportingEnd
+            repNode=etree.Element(utils.qName("mes", "ReportingEnd"))
+            repNode.text=self.getReportingEndString()
             header.append(repNode)
 
         return header
@@ -199,103 +215,6 @@ class Message():
             self._header=value
         else:
             raise TypeError("The header has to be an instance of the Header class")
-    
-    # def addPayloadElement(self, key, elements):
-    #     #Validations to be added!
-    #     if key not in self.payload:
-    #         self._payload[key]={}   
-        
-    #     for e in elements:
-    #         self._payload[key][e.id]=e
-
-    def toXml(self, fullPath=None):
-        #Root element
-        if self.messageType=="Structure":
-            nsmap={
-                "xsi":"http://www.w3.org/2001/XMLSchema-instance",
-                "xml":"http://www.w3.org/XML/1998/namespace",
-                "mes":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
-                "str":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure",
-                "com":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
-            }
-            schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"      
-
-        elif self.messageType=="GenericData":
-            nsmap={
-                "xsi":"http://www.w3.org/2001/XMLSchema-instance",
-                # "xml":"http://www.w3.org/XML/1998/namespace",
-                "message":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
-                "generic":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
-                "common":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
-            }
-            schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"      
-
-        # elif self.messageType=="StructureSpecificData":
-        #     nsmap={
-        #         "xsi":"http://www.w3.org/2001/XMLSchema-instance",
-        #         # "xml":"http://www.w3.org/XML/1998/namespace",
-        #         "message":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
-        #         "data":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific",
-        #         "common":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
-                
-        #     }
-        #     schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"            
-
-        root = etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}" + self.messageType, nsmap=nsmap)
-        
-        root.attrib["{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"]=schemaLocation
-
-        #Header
-        root.append(self.header.toXml())
-
-        #Payload for Structure messages
-        if self.messageType=="Structure":
-
-            structures=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Structures")   
-            
-            if "AgencyScheme" in self.payload:
-                organisationSchemes=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}OrganisationSchemes")
-                for i in self.payload["AgencyScheme"]:
-                    organisationSchemes.append(self.payload["AgencyScheme"][i].toXml())
-                structures.append(organisationSchemes)
-
-            if "ConceptScheme" in self.payload:
-                conceptSchemes=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concepts")
-                for i in self.payload["ConceptScheme"]:
-                    conceptSchemes.append(self.payload["ConceptScheme"][i].toXml())
-                structures.append(conceptSchemes)
-
-            if "CodeList" in self.payload:
-                codelists=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Codelists")
-                for i in self.payload["CodeList"]:
-                    codelists.append(self.payload["CodeList"][i].toXml())
-                structures.append(codelists)
-
-            if "DataFlow" in self.payload:
-                dataFlows=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Dataflows")
-                for i in self.payload["DataFlow"]:
-                    dataFlows.append(self.payload["DataFlow"][i].toXml())
-                structures.append(dataFlows)
-
-            if "DataStructure" in self.payload:
-                dsds=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructures")
-                for i in self.payload["DataStructure"]:
-                    dsds.append(self.payload["DataStructure"][i].toXml())
-                structures.append(dsds)
-
-        elif self.messageType=="GenericData":
-            #Payload for dataset message
-            if "DataSet" in self.payload:
-                for d in self.payload["DataSet"]:
-                    root.append(self.payload["DataSet"][d].toXml())
-                
-
-        if fullPath is not None:
-            tree=etree.ElementTree(root)
-            tree.write(fullPath, pretty_print=True, xml_declaration=True,   encoding="utf-8")
-
-
-        return root
 
     @staticmethod
     def fromXml(fullPath):
@@ -321,7 +240,7 @@ class Message():
         return message
 
 class StructureMessage(Message):
-    def __init__(self, header=None, codeLists: List[CodeList] = [], 
+    def __init__(self, header = None, codeLists: List[CodeList] = [], 
                 conceptSchemes: List[ConceptScheme] = [], organisationSchemes: List[OrganisationScheme] = [],
                 dsds: List[DataStructureDefinition] = []):
         
@@ -419,29 +338,125 @@ class StructureMessage(Message):
                 dsd = DataStructureDefinition.fromXml(d)
                 self.addDsd(dsd)
 
+    def toXml(self, fullPath:str = None):
+
+        #1. Root element
+        nsmap={
+            "xsi":"http://www.w3.org/2001/XMLSchema-instance",
+            "xml":"http://www.w3.org/XML/1998/namespace",
+            "mes":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+            "str":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure",
+            "com":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+        }
+        schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd" 
+
+        root = etree.Element(utils.qName("mes", "Structure"), nsmap=nsmap)
+        root.attrib["{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"]=schemaLocation
+
+        #2. Add header
+        root.append(self.header.toXml())
+
+        #Payload for Structure messages
+        if self.messageType=="Structure":
+
+            structures=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Structures")   
+            
+            if "AgencyScheme" in self.payload:
+                organisationSchemes=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}OrganisationSchemes")
+                for i in self.payload["AgencyScheme"]:
+                    organisationSchemes.append(self.payload["AgencyScheme"][i].toXml())
+                structures.append(organisationSchemes)
+
+            if "ConceptScheme" in self.payload:
+                conceptSchemes=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concepts")
+                for i in self.payload["ConceptScheme"]:
+                    conceptSchemes.append(self.payload["ConceptScheme"][i].toXml())
+                structures.append(conceptSchemes)
+
+            if "CodeList" in self.payload:
+                codelists=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Codelists")
+                for i in self.payload["CodeList"]:
+                    codelists.append(self.payload["CodeList"][i].toXml())
+                structures.append(codelists)
+
+            if "DataFlow" in self.payload:
+                dataFlows=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Dataflows")
+                for i in self.payload["DataFlow"]:
+                    dataFlows.append(self.payload["DataFlow"][i].toXml())
+                structures.append(dataFlows)
+
+            if "DataStructure" in self.payload:
+                dsds=etree.SubElement(root, "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructures")
+                for i in self.payload["DataStructure"]:
+                    dsds.append(self.payload["DataStructure"][i].toXml())
+                structures.append(dsds)
+
+        elif self.messageType=="GenericData":
+            #Payload for dataset message
+            if "DataSet" in self.payload:
+                for d in self.payload["DataSet"]:
+                    root.append(self.payload["DataSet"][d].toXml())
+                
+
+        if fullPath is not None:
+            tree=etree.ElementTree(root)
+            tree.write(fullPath, pretty_print=True, xml_declaration=True,   encoding="utf-8")
+
 class DataMessage(Message):
-    def __init__(self):
-        data: List[DataSet] = []
-        #: :class:`.DataflowDefinition` that contains the data.
-        dataflow: DataflowDefinition = None #DataflowDefinition()
-        #: The "dimension at observation level".
-        observation_dimension: Union[_AllDimensions, DimensionComponent,
-                                 List[DimensionComponent]] = None
 
-    # Convenience access
+    def __init__(self, header=None, 
+                  dataSets:List = [], dataFlow = None, observationDimension = None):
+        
+        super(DataMessage, self).__init__(header)
+
+        self._dataSets = []
+
+        for d in dataSets:
+            self.addDataSet(d)
+        # self.dataFlow = dataFlow
+        # self.observationDimension = observationDimension
+    
     @property
-    def structure(self):
-        """DataStructureDefinition used in the :attr:`dataflow`."""
-        return self.dataflow.structure
+    def dataSets(self):
+        return self._dataSets
 
-    def fromXml(self):
-        message._header=Header(headerElement,"GenericData")
+    def addDataSet(self, value):
+        if isinstance(value, DataSet):
+            self._dataSets.append(value)
+        else:
+            raise TypeError(f"Dataset object expected, {value.__class__.__name__} passed")
 
-        bodyElement=tree.find("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}DataSet")
-        message._body["dataSet"]=DataSet(bodyElement, self.header.structure["dimensionAtObservation"])
-         
+
+
 class GenericDataMessage(DataMessage):
-    pass
+    def toXml(self, fullPath:str = None):
+
+        #1. Root element
+        nsmap={
+            "xsi":"http://www.w3.org/2001/XMLSchema-instance",
+            # "xml":"http://www.w3.org/XML/1998/namespace",
+            "message":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+            "generic":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic",
+            "common":"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+        }
+        schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"      
+
+        root = etree.Element(utils.qName("mes", "GenericData"), nsmap=nsmap)        
+        root.attrib["{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"] = schemaLocation
+
+        #2. Header
+        if self.header is None:
+            raise ValueError("The message does not have a header. Header is required for generating XML")
+        root.append(self.header.toXml())
+
+ 
+        #3. Datasets
+        for d in self.dataSets:
+            root.append(d.toXml())
+
+        if fullPath is not None:
+            tree=etree.ElementTree(root)
+            tree.write(fullPath, pretty_print=True, xml_declaration=True,   encoding="utf-8")
 
 class StructureSpecificDataMessage(DataMessage):
     pass

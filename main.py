@@ -3,11 +3,7 @@ from ECU import dataset
 from pathlib import Path
 
 
-# fl  = Path().absolute() / "ECU" / "IRIS" / "R017_ALE.csv"
 
-# ds = dataset.Dataset.fromCsv(str(fl))
-
-# print(ds.dsds)
 
 
 fl  = Path().absolute() / "tests" /"resources_structureMessage" /  "RBI_ALE.xml"

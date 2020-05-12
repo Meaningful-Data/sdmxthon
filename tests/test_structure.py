@@ -14,9 +14,9 @@ class RBI_ALE(unittest.TestCase):
         self.mes = message.Message().fromXml(str(STRUCTURE_MESSAGES / "RBI_ALE.xml"))
         
     def test_header(self):
-        self.assertEqual(self.mes.header.id, "IDREF26c6ae83-e98a-4f7b-8e5f-283d429bc7aa", "Wrong message ID")
+        self.assertEqual(self.mes.header.id, "IDREFdea3c385-f916-47c0-9069-fadf911dcd0e", "Wrong message ID")
         self.assertEqual(self.mes.header.test, False, "Wrong test attibute")
-        self.assertEqual(self.mes.header.prepared, datetime(2020, 4, 30, 9, 7, 15), "Wrong prepared attibute")
+        self.assertEqual(self.mes.header.prepared, datetime(2020, 5, 11, 15, 20, 22), "Wrong prepared attibute")
         self.assertEqual(self.mes.header.senderId, "Unknown", "Wrong senderId attibute")
         self.assertEqual(self.mes.header.receiverId, "not_supplied", "Wrong receiverId attibute")
 
@@ -38,7 +38,7 @@ class RBI_ALE(unittest.TestCase):
 
 
         #Testing items
-        self.assertEqual(len(self.mes.codeLists[urn].items), 4)
+        self.assertEqual(len(self.mes.codeLists[urn].items), 5)
 
         urnCode  = "urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_ADD_DET(1.0).AGGGL"
         self.assertEqual(self.mes.codeLists[urn].items["AGGGL"].id, "AGGGL")
@@ -63,7 +63,7 @@ class RBI_ALE(unittest.TestCase):
 
 
         #Testing items
-        self.assertEqual(len(self.mes.conceptSchemes[urn].items), 465)
+        self.assertEqual(len(self.mes.conceptSchemes[urn].items), 467)
 
         urnConcept  = "urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=RBI:RBI_SCM(1.0).Acc_Type"
         self.assertEqual(self.mes.conceptSchemes[urn].items["Acc_Type"].id, "Acc_Type")
