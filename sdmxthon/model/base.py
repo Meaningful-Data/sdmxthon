@@ -24,7 +24,6 @@ class LocalisedString(object):
         label: Label of the string
         locale: The geographic locale of the string
     """
-
     def __init__(self, locale:str = None, label:str = None):
         """Inits LocalisedString with optional attributes."""
 
