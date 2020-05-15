@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from model import base
+from sdmxthon.model import base
 
 class LocalisedStringTestCase(unittest.TestCase):
     def test_constructor(self):
@@ -10,12 +10,12 @@ class LocalisedStringTestCase(unittest.TestCase):
 
     def test_locale_non_string(self):
         with self.assertRaises(TypeError):
-            base.LocalisedString(locale = 5, label = "test string")
+            base.LocalisedString(locale = datetime(), label = "test string")
             
 
     def test_label_non_string(self):
         with self.assertRaises(TypeError):
-            base.LocalisedString(locale = "en", label = 5)
+            base.LocalisedString(locale = "en", label = datetime())
 
 class InternationalStringTestCase(unittest.TestCase):
     def setUp(self):
@@ -36,7 +36,7 @@ class InternationalStringTestCase(unittest.TestCase):
         self.assertEqual(i_string.localisedStrings, [self.ls_es], "InternationalString addLocalisedString method not working")
 
     def test_getLocalisedString(self):
-        self.assertEqual(self.i_string.getLocalisedString("en"), "test string", "InternationalString getLocalisedString method not working")
+        self.assertEqual(self.i_string["en"], "test string", "InternationalString getLocalisedString method not working")
 
     def test_getLocales(self):
         self.assertEqual(self.i_string.getLocales(), {"es", "en"}, "InternationalString getLocales method not working")

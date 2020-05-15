@@ -2,7 +2,7 @@
 
 import unittest
 from datetime import datetime
-from model import message, base
+from sdmxthon.model import message, base
 from pathlib import Path
 
 STRUCTURE_MESSAGES = Path().absolute() / "tests" /"resources_structureMessage"

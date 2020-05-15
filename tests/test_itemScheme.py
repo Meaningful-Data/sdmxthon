@@ -2,7 +2,7 @@
 
 import unittest
 from datetime import datetime
-from model import itemScheme, base
+from sdmxthon.model import itemScheme, base
 
 class ItemSchemeTestCase(unittest.TestCase):
     def setUp(self):

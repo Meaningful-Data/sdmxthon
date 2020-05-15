@@ -1,40 +1,91 @@
-"""
-    SDMX Information Model (SDMX-IM).
+"""SDMX Base pacakage.
 
-    This module implements the base structures in the SDMX IM
+Please refer to the package in the SDMX Information Model
+
 """
 
 
 from datetime import date, datetime
 from lxml import etree
 from typing import List, Dict
-from utils import (qName, stringSetter, dateSetter, setDateFromString, 
-                   getDateString, boolSetter)
+from sdmxthon.utils import (qName, stringSetter, dateSetter, setDateFromString, 
+                   getDateString, boolSetter, genericSetter)
 import warnings
 
 class LocalisedString(object):
-    def __init__(self, locale:str, label:str):
-        if not isinstance(label,str):
-            raise TypeError("Label should be a string")
-        if not isinstance(locale,str):
-            raise TypeError("Locale should be a string")
+    """LocalisedString class.
+
+        The Localised String supports the representation
+        of text in one locale (locale is similar to language but
+        includes geographic variations such as Canadian
+        French, US English etc.). 
+
+    Attributes:
+        label: Label of the string
+        locale: The geographic locale of the string
+    """
+    
+    def __init__(self, locale:str = None, label:str = None):
+        """Inits LocalisedString with optional attributes."""
+
         self.label=label
         self.locale=locale
     
+    @property
+    def locale(self):
+        return self._locale
+
+    @property
+    def label(self):
+        return self._label
+
+    @locale.setter
+    def locale(self, value):
+        self._locale = stringSetter(value)
+
+    @label.setter
+    def label(self, value):
+        self._label = stringSetter(value)
+
+
     @classmethod
-    def fromXml(cls, elem: etree.Element):
+    def fromXml(cls, elem: etree._Element):
+        """Instantiates the object from lxml element.
+
+        Receives an etree Element and instantiates the localises string
+
+        Args:
+            elem: an etree Element of the localised string
+
+        Returns:
+            A LocalisedString instance corresponding to the XML
+
+        """
+        
         locString = cls(label = elem.text, locale = elem.get(qName("xml", "lang")))
+        
         return locString
 
     def __str__(self):
         return f"{self.locale} - {self.label}"
 
 class InternationalString(object):
-    """
-        SDMX-IM InternationalString.
+    """InternationalString class.
+
+        The International String is a collection of Localised
+        Strings and supports the representation of text in
+        multiple locales. 
+
+    Attributes:
+        localisedStrings: List with all the localised strings belonging to the InternationalString
+        localisedStringsDict: Convenience access to the localised strings. Dict[locale:label]
+
+    Index:
+        A locale in the index returns the label
     """
 
-    def __init__(self, localisedStrings: list = []):
+    def __init__(self, localisedStrings: List[LocalisedString] = []):
+        """Inits InternationalString with optional attributes."""
         self._localisedStrings=[]
         self._localisedStringsDict = {}
         for l in localisedStrings:
@@ -44,6 +95,10 @@ class InternationalString(object):
     def localisedStrings(self):
         return self._localisedStrings
     
+    @property
+    def localisedStringsDict(self):
+        return self._localisedStringsDict
+
     def addLocalisedString(self, localisedString:LocalisedString):
         if not isinstance(localisedString,LocalisedString):
             raise TypeError("International strings can only get localised strings as arguments")
@@ -60,12 +115,6 @@ class InternationalString(object):
                 InternationalString.addLocalisedString(LocalisedString.fromXml(ls))
             
             return InternationalString
-
-    def getLocalisedString(self, locale: str):
-        if locale in self._localisedStringsDict:
-            return self._localisedStringsDict[locale]
-        else:
-            return ""
     
     def getLocales(self):
         return set(self._localisedStringsDict.keys())
@@ -123,10 +172,7 @@ class Annotation(object):
     
     @text.setter 
     def text(self, value):
-        if not isinstance(value, InternationalString) and value is not None:
-            raise TypeError("Text should be a LocalisedString")
-        else:
-            self._text = value
+        self._text = genericSetter(value, InternationalString)
 
 class AnnotableArtefact(object):
     def __init__(self, annotations: List[Annotation] = []):
