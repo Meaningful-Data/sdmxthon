@@ -1,10 +1,10 @@
 from lxml import etree
 from datetime import datetime, date
 
-from .itemScheme import (CodeList, ConceptScheme, OrganisationScheme, AgencyList)
-from .structure import DataStructureDefinition
-from .dataSet import DataSet
-import utils
+from sdmxthon.model.itemScheme import (CodeList, ConceptScheme, OrganisationScheme, AgencyList)
+from sdmxthon.model.structure import DataStructureDefinition
+from sdmxthon.model.dataSet import DataSet
+from sdmxthon import utils
 from typing import List, Dict
 
 import warnings
@@ -198,16 +198,11 @@ class Header():
 class Message():
     def __init__(self, header=None): 
 
-        self.header = header
-        # self._payload={}
-        
+        self.header = header        
 
     @property
     def header(self):
         return self._header
-    # @property
-    # def payload(self):
-    #     return self._payload
 
     @header.setter
     def header(self, value):
@@ -339,6 +334,7 @@ class StructureMessage(Message):
                 self.addDsd(dsd)
 
     def toXml(self, fullPath:str = None):
+        #TODO: Review
 
         #1. Root element
         nsmap={
@@ -425,8 +421,6 @@ class DataMessage(Message):
             self._dataSets.append(value)
         else:
             raise TypeError(f"Dataset object expected, {value.__class__.__name__} passed")
-
-
 
 class GenericDataMessage(DataMessage):
     def toXml(self, fullPath:str = None):

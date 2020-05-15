@@ -1,10 +1,10 @@
 import json
 from lxml import etree
-from .base import *
-from .itemScheme import Concept, CodeList, ConceptScheme, Agency
-import utils
+from sdmxthon.model.base import *
+from sdmxthon.model.itemScheme import Concept, CodeList, ConceptScheme, Agency
+from sdmxthon import utils
 from typing import List, Dict, Union
-from model import dataTypes
+from sdmxthon.model import dataTypes
 import warnings
 
 class Facet():

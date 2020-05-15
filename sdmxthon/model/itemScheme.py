@@ -1,7 +1,7 @@
-from model.base import NameableArtefact, MaintainableArtefact, Annotation, InternationalString 
+from sdmxthon.model.base import NameableArtefact, MaintainableArtefact, Annotation, InternationalString 
 from typing import List, Dict
 from datetime import datetime
-import utils 
+from sdmxthon import utils 
 from lxml.etree import QName, Element
 import warnings
 
@@ -283,13 +283,13 @@ class Concept(Item):
 
     @coreRepresentation.setter
     def coreRepresentation(self, value):
-        from model.structure import Representation
+        from sdmxthon.model.structure import Representation
         self._coreRepresentation = utils.genericSetter(value, Representation)
 
 
     @classmethod
     def fromXml(cls, elem: Element, classType):
-        from model.structure import Representation
+        from sdmxthon.model.structure import Representation
 
         #TODO implement extended facets
 

@@ -72,6 +72,7 @@ def intSetter(value: int):
         except:
             raise ValueError("Type shoudl be int")
 
+
 #
 # Qnames manager
 #
@@ -108,7 +109,7 @@ boolMapper = {
 #
 
 def getNameAndDescription(elem: etree.Element):
-    from model.base import InternationalString
+    from sdmxthon.model.base import InternationalString
     
     #1. Get Names
     nameElems = elem.findall(qName("com", "Name"))
