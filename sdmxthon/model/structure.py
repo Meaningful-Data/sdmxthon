@@ -578,6 +578,21 @@ class DataStructureDefinition(MaintainableArtefact):
             json.dump(rslt, fp)
         return rslt
 
+    def referenceToXml(self):
+        """Creates a lxml Element for providing Ref.
+
+        Returns:
+            Am lxml Element
+        """
+        ref = etree.Element("Ref")
+        
+        ref.attrib["agencyId"] = self.agencyId
+        ref.attrib["id"] = self.id
+        ref.attrib["version"] = self.version
+        ref.attrib["class"] = "DataStructure"
+
+        return ref
+
     @classmethod 
     def fromXml(cls, elem: etree._Element):
         if not isinstance(elem, etree._Element):
@@ -674,3 +689,18 @@ class DataFlowDefinition(MaintainableArtefact):
         structure.append(ref)
         xml.append(structure)
         return xml 
+
+    def referenceToXml(self):
+        """Creates a lxml Element for providing Ref.
+
+        Returns:
+            Am lxml Element
+        """
+        ref = etree.Element("Ref")
+        
+        ref.attrib["agencyId"] = self.agencyId
+        ref.attrib["id"] = self.id
+        ref.attrib["version"] = self.version
+        ref.attrib["class"] = "DataFlow"
+
+        return ref

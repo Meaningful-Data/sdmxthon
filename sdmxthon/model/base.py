@@ -69,6 +69,23 @@ class LocalisedString(object):
         
         return locString
 
+    def toXml(self, tag:str):
+        """Generates the lxml element.
+
+        Args:
+            tag: The tag for the element
+
+        Returns:
+            An lxls.etree._Element
+        """
+
+        elem = etree.Element(tag)
+        elem.attrib["xml:lang"] = self.locale
+        elem.text = self.language
+
+        return elem
+
+
     def __str__(self):
         return f"{self.locale} - {self.label}"
 
@@ -118,7 +135,7 @@ class InternationalString(object):
                 InternationalString.addLocalisedString(LocalisedString.fromXml(ls))
             
             return InternationalString
-    
+
     def getLocales(self):
         return set(self._localisedStringsDict.keys())
 
@@ -215,7 +232,7 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @id.setter
     def id(self, value):
-        self._id = stringSetter(value)
+        self._id = stringSetter(value, "[A-Za-z0-9_@$\-]+")
     
     @uri.setter
     def uri(self, value):
@@ -420,23 +437,23 @@ class MaintainableArtefact(VersionableArtefact):
         try:
             urnType = self._urnType
             tag = etree.QName(self._qName).localname
-            agencyId =  self.maintainer.id
+            agencyId =  self.agencyId
             
             urn = f"urn:sdmx:org.sdmx.infomodel.{urnType}.{tag}={agencyId}:{self.id}({self.version})" #TOBECHECKED
         except:
             urn = ""
         return urn
 
-    # @property
-    # def agencyId(self):
-    #     return self.maintainer.id if self.maintainer is not None else self._agencyId
+    @property
+    def agencyId(self):
+        return self.maintainer.id if self.maintainer is not None else self._agencyId
 
     def toXml(self):
         xml=super().toXml()
         if self.__class__.__name__=="AgencyList":
             xml.attrib["agencyID"]="SDMX"   
         else:
-            xml.attrib["agencyID"]=self.agency.id
+            xml.attrib["agencyID"]=self.agencyId
         xml.attrib["isExternalReference"]="false" if self.isExternalReference != True else "true"
         xml.attrib["isFinal"]="false" if self.final != True else "true"
 

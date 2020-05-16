@@ -1,12 +1,14 @@
 from datetime import datetime
 from lxml import etree
 import warnings
+import re
+from typing import List, Dict
 
 #
 # Convienence setters and getters
 #
 
-def setDateFromString(value: str, format_:str = "%Y-%m-%d"):
+def setDateFromString(value: str, format_:str = "%Y-%m-%dT%H:%M:%S"):
     try:
         dt = datetime.strptime(value, format_)
     except:
@@ -20,9 +22,39 @@ def getDateString(date: str,  format_: str = "%Y-%m-%d"):
     else:
         return datetime.strftime(date, format_)
 
-def stringSetter(value: str):
+def stringSetter(value: str, pattern: str = None, enumeration:List[str] = None):
+    """Generic function validating strings for setters
+
+    Checks that the input is a string or integer.
+    If it is a string, and a pattern is passed, checks that the pattern
+    is respected.
+
+    Args:
+        value: The value to be validated.
+        pattern: A regex pattern to be validated
+        enumeration: A list with valid strings
+
+    Returns:
+        The validated string
+
+    Raises:
+        ValueError: If the value violates any of the conditions.
+    """
+    
     if isinstance(value, str):
-        return value
+        if pattern is not None:
+            regex = re.compile(pattern, re.I)
+            if regex.match(value):
+                return value
+            else:
+                raise ValueError(f"Error setting the string. Pattern '{pattern}' not respected")
+        elif enumeration is not None:
+            if value in enumeration:
+                return value
+            else:
+                raise ValueError(f"Error setting the string. Enumeration {str(enumeration)} not respected")
+        else:
+            return value
     elif isinstance(value, int):
         return str(value) 
     elif value is None:

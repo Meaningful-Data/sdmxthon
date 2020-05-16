@@ -1,11 +1,7 @@
-"""
-    Adapted from PandasSDMX
-"""
-
 from enum import Enum
 
 
-ActionType = Enum('ActionType', 'delete replace append information', type=str)
+ActionType = ['Delete, Replace, Append, Information']
 
 UsageStatus = Enum('UsageStatus', 'mandatory conditional')
 
