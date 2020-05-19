@@ -5,3 +5,4 @@ IRIS/
 __pycache__/
 sdmxthon.egg-info/
 build/
+ecu/

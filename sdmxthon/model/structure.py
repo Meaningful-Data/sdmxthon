@@ -586,7 +586,7 @@ class DataStructureDefinition(MaintainableArtefact):
         """
         ref = etree.Element("Ref")
         
-        ref.attrib["agencyId"] = self.agencyId
+        ref.attrib["agencyID"] = self.agencyId
         ref.attrib["id"] = self.id
         ref.attrib["version"] = self.version
         ref.attrib["class"] = "DataStructure"

@@ -287,7 +287,7 @@ class NameableArtefact(IdentifiableArtefact):
             self._description = value
 
     def toXml(self):
-        xml = super(IdentifiableArtefact, self).toXml()
+        xml = super(NameableArtefact, self).toXml()
 
         if self.name is not None and self.name.localisedStrings!=[]:
             for l in self.name.localisedStrings:
@@ -313,7 +313,7 @@ class NameableArtefact(IdentifiableArtefact):
 class VersionableArtefact(NameableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                     name: InternationalString = None, description: InternationalString = None,
-                    version: str = None, validFrom: datetime = None, validTo: datetime= None):
+                    version: str = "1.0", validFrom: datetime = None, validTo: datetime= None):
 
         super(VersionableArtefact, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                                   name = name, description = description)
@@ -335,7 +335,7 @@ class VersionableArtefact(NameableArtefact):
 
     @version.setter 
     def version(self, value):
-        self._version = stringSetter(value)
+        self._version = stringSetter(value, pattern="[0-9]+(\.[0-9]+)*")
 
     @validFrom.setter 
     def validFrom(self, value):
@@ -375,7 +375,7 @@ class MaintainableArtefact(VersionableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                 name: InternationalString = None, description: InternationalString = None,
                 version: str = None, validFrom: datetime = None, validTo: datetime= None,
-                isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
+                isFinal: bool = False, isExternalReference: bool = False, serviceUrl: str = None, 
                     structureUrl: str = None, maintainer = None):
 
         super(MaintainableArtefact, self).__init__(id_ = id_, uri = uri, annotations= annotations,
@@ -455,6 +455,6 @@ class MaintainableArtefact(VersionableArtefact):
         else:
             xml.attrib["agencyID"]=self.agencyId
         xml.attrib["isExternalReference"]="false" if self.isExternalReference != True else "true"
-        xml.attrib["isFinal"]="false" if self.final != True else "true"
+        xml.attrib["isFinal"]="false" if self.isFinal != True else "true"
 
         return xml

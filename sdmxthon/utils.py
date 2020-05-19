@@ -72,7 +72,7 @@ def dateSetter(value: datetime):
 
 def boolSetter(value: bool):
     if isinstance(value, bool) or value is None:
-        return bool(value)
+        return value
     elif value == "false":
         return False
     elif value == "true":
