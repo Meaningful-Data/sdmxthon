@@ -987,7 +987,7 @@ class GenericDataMessage(DataMessage):
         super(GenericDataMessage, self).__init__(header = header, 
                 dataSets = dataSets, footer = footer)
 
-    def toXml(self, fullPath:str = None):
+    def toXml(self, fullPath:str = None, pretty_print = False):
 
         #1. Root element
         nsmap={
@@ -1012,12 +1012,12 @@ class GenericDataMessage(DataMessage):
         for d in self.dataSets:
             root.append(d.toXml(
                 action = self.header.datasetAction,
-                dimensionAtObservation = self.header.structures[d.dsd.id].dimensionAtObservation
+                dimensionAtObservation = self.header.structures[d.reference.id].dimensionAtObservation
             ))
 
         if fullPath is not None:
             tree=etree.ElementTree(root)
-            tree.write(fullPath, xml_declaration=True,   encoding="utf-8")
+            tree.write(fullPath, xml_declaration=True,   encoding="utf-8", pretty_print = pretty_print)
 
         return tree
 
@@ -1035,7 +1035,7 @@ class StructureSpecificDataMessage(DataMessage):
         super(StructureSpecificDataMessage, self).__init__(header = header, 
                 dataSets = dataSets, footer = footer)
 
-    def toXml(self, fullPath:str = None):
+    def toXml(self, fullPath:str = None, pretty_print = False):
 
         #1. Root element
         nsmap={
@@ -1071,6 +1071,6 @@ class StructureSpecificDataMessage(DataMessage):
 
         if fullPath is not None:
             tree=etree.ElementTree(root)
-            tree.write(fullPath, xml_declaration=True,   encoding="utf-8")
+            tree.write(fullPath, xml_declaration=True,   encoding="utf-8", pretty_print = pretty_print)
 
         return tree

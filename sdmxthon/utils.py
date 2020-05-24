@@ -175,3 +175,14 @@ def getReferences(elem):
             "package" : ref.get("package"),
             "maintainableParentVersion" : ref.get("maintainableParentVersion")
             }
+
+def lxmlElementsEqual(e1, e2):
+    """
+        Checks if two lxml Elements are equal, in the sense that they have the same tag, attributes...
+    """
+    if e1.tag != e2.tag: return False
+    if e1.text != e2.text: return False
+    if e1.tail != e2.tail: return False
+    if e1.attrib != e2.attrib: return False
+    if len(e1) != len(e2): return False
+    return all(lxmlElementsEqual(c1, c2) for c1, c2 in zip(e1, e2))
