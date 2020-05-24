@@ -69,6 +69,23 @@ class LocalisedString(object):
         
         return locString
 
+    def toXml(self, tag:str):
+        """Generates the lxml element.
+
+        Args:
+            tag: The tag for the element
+
+        Returns:
+            An lxls.etree._Element
+        """
+
+        elem = etree.Element(tag)
+        elem.attrib["xml:lang"] = self.locale
+        elem.text = self.language
+
+        return elem
+
+
     def __str__(self):
         return f"{self.locale} - {self.label}"
 
@@ -118,7 +135,7 @@ class InternationalString(object):
                 InternationalString.addLocalisedString(LocalisedString.fromXml(ls))
             
             return InternationalString
-    
+
     def getLocales(self):
         return set(self._localisedStringsDict.keys())
 
@@ -215,7 +232,7 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @id.setter
     def id(self, value):
-        self._id = stringSetter(value)
+        self._id = stringSetter(value, "[A-Za-z0-9_@$\-]+")
     
     @uri.setter
     def uri(self, value):
@@ -270,7 +287,7 @@ class NameableArtefact(IdentifiableArtefact):
             self._description = value
 
     def toXml(self):
-        xml = super(IdentifiableArtefact, self).toXml()
+        xml = super(NameableArtefact, self).toXml()
 
         if self.name is not None and self.name.localisedStrings!=[]:
             for l in self.name.localisedStrings:
@@ -296,7 +313,7 @@ class NameableArtefact(IdentifiableArtefact):
 class VersionableArtefact(NameableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                     name: InternationalString = None, description: InternationalString = None,
-                    version: str = None, validFrom: datetime = None, validTo: datetime= None):
+                    version: str = "1.0", validFrom: datetime = None, validTo: datetime= None):
 
         super(VersionableArtefact, self).__init__(id_ = id_, uri = uri, annotations= annotations,
                                                   name = name, description = description)
@@ -318,7 +335,7 @@ class VersionableArtefact(NameableArtefact):
 
     @version.setter 
     def version(self, value):
-        self._version = stringSetter(value)
+        self._version = stringSetter(value, pattern="[0-9]+(\.[0-9]+)*")
 
     @validFrom.setter 
     def validFrom(self, value):
@@ -358,7 +375,7 @@ class MaintainableArtefact(VersionableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [], 
                 name: InternationalString = None, description: InternationalString = None,
                 version: str = None, validFrom: datetime = None, validTo: datetime= None,
-                isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None, 
+                isFinal: bool = False, isExternalReference: bool = False, serviceUrl: str = None, 
                     structureUrl: str = None, maintainer = None):
 
         super(MaintainableArtefact, self).__init__(id_ = id_, uri = uri, annotations= annotations,
@@ -420,24 +437,24 @@ class MaintainableArtefact(VersionableArtefact):
         try:
             urnType = self._urnType
             tag = etree.QName(self._qName).localname
-            agencyId =  self.maintainer.id
+            agencyId =  self.agencyId
             
             urn = f"urn:sdmx:org.sdmx.infomodel.{urnType}.{tag}={agencyId}:{self.id}({self.version})" #TOBECHECKED
         except:
             urn = ""
         return urn
 
-    # @property
-    # def agencyId(self):
-    #     return self.maintainer.id if self.maintainer is not None else self._agencyId
+    @property
+    def agencyId(self):
+        return self.maintainer.id if self.maintainer is not None else self._agencyId
 
     def toXml(self):
         xml=super().toXml()
         if self.__class__.__name__=="AgencyList":
             xml.attrib["agencyID"]="SDMX"   
         else:
-            xml.attrib["agencyID"]=self.agency.id
+            xml.attrib["agencyID"]=self.agencyId
         xml.attrib["isExternalReference"]="false" if self.isExternalReference != True else "true"
-        xml.attrib["isFinal"]="false" if self.final != True else "true"
+        xml.attrib["isFinal"]="false" if self.isFinal != True else "true"
 
         return xml

@@ -258,6 +258,14 @@ class AgencyList(OrganisationScheme):
                                             serviceUrl = serviceUrl, structureUrl = structureUrl, maintainer = maintainer,
                                         items = items)
 
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        self._id = utils.stringSetter(value, "[A-Za-z][A-Za-z0-9_\-]*(\.[A-Za-z][A-Za-z0-9_\-]*)*")
+
 class Concept(Item):
     
     _schemeType = "ConceptScheme"

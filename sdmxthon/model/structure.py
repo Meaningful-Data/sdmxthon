@@ -226,10 +226,13 @@ class Component(IdentifiableArtefact):
         if isinstance(inst, Attribute):
             inst.usageStatus = elem.get("assignmentStatus")
 
+            #TODO: Get attributes relationships to dimensions or dimension groups
             relationship = elem.find(utils.qName("str", "AttributeRelationship"))
             if relationship is not None: 
                 if relationship.find(utils.qName("str","PrimaryMeasure")) is not None:
                     inst.relatedTo = "PrimaryMeasure"
+                elif relationship.find(utils.qName("str","None")) is not None:
+                    inst.relatedTo = "NoSpecifiedRelationship"
                 else:
                     warnings.warn(f"Relationship for attribute {inst.id} could not be extracted")
 
@@ -307,8 +310,8 @@ class Attribute(Component):
     @relatedTo.setter 
     def relatedTo(self,value):
         if value is None: 
-            self._relatedTo="NoSpecifiedRelationship"
-        elif value == "PrimaryMeasure" or isinstance(value, GroupDimensionDescriptor) or isinstance(value, Dimension):
+            self._relatedTo = "NoSpecifiedRelationship"
+        elif value == "PrimaryMeasure" or value == "NoSpecifiedRelationship" or isinstance(value, GroupDimensionDescriptor) or isinstance(value, Dimension):
             self._relatedTo=value
         else:
             raise ValueError("The value for related To has to be None, 'PrimaryMeasure' an object of the GroupDimensionDescriptor class or an object of the DimensionClass")       
@@ -496,7 +499,28 @@ class DataStructureDefinition(MaintainableArtefact):
 
     @property
     def attributeCodes(self):
-        return [k for k in self.attributeDescriptor.components]
+        if self.attributeDescriptor is not None:
+            return [k for k in self.attributeDescriptor.components]
+        else:
+            return []
+
+    @property
+    def datasetAttributeCodes(self):
+        rslt = []
+        if self.attributeDescriptor is not None:
+            for k in self.attributeDescriptor.components:
+                if self.attributeDescriptor[k].relatedTo == "NoSpecifiedRelationship":
+                    rslt.append(k)
+        return rslt
+
+    @property
+    def observationAttributeCodes(self):
+        rslt = []
+        if self.attributeDescriptor is not None:
+            for k in self.attributeDescriptor.components:
+                if self.attributeDescriptor[k].relatedTo == "PrimaryMeasure":
+                    rslt.append(k)
+        return rslt
 
     @property
     def measureCode(self):
@@ -577,6 +601,21 @@ class DataStructureDefinition(MaintainableArtefact):
         with open(path, 'w') as fp:
             json.dump(rslt, fp)
         return rslt
+
+    def referenceToXml(self):
+        """Creates a lxml Element for providing Ref.
+
+        Returns:
+            Am lxml Element
+        """
+        ref = etree.Element("Ref")
+        
+        ref.attrib["agencyID"] = self.agencyId
+        ref.attrib["id"] = self.id
+        ref.attrib["version"] = self.version
+        ref.attrib["class"] = "DataStructure"
+
+        return ref
 
     @classmethod 
     def fromXml(cls, elem: etree._Element):
@@ -674,3 +713,18 @@ class DataFlowDefinition(MaintainableArtefact):
         structure.append(ref)
         xml.append(structure)
         return xml 
+
+    def referenceToXml(self):
+        """Creates a lxml Element for providing Ref.
+
+        Returns:
+            Am lxml Element
+        """
+        ref = etree.Element("Ref")
+        
+        ref.attrib["agencyId"] = self.agencyId
+        ref.attrib["id"] = self.id
+        ref.attrib["version"] = self.version
+        ref.attrib["class"] = "DataFlow"
+
+        return ref
