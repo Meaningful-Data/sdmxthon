@@ -1,8 +1,4 @@
-﻿.vscode/
-model/__pycache__/
-tests/__pycache__/
-IRIS/
-__pycache__/
-sdmxthon.egg-info/
-build/
-ecu/
+﻿*.pyc
+.idea
+dist
+.settings

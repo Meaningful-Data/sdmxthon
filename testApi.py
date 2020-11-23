@@ -1,6 +1,6 @@
 import logging
 
-from SDMXThon import DatasetType
+from SDMXThon import DatasetType, datasetListToXML
 from SDMXThon import xmlToDatasetList, headerCreation, generate_message
 
 pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
@@ -68,7 +68,7 @@ def main():
                      dataset_type=DatasetType.StructureDataSet, validate_data=False)
 
 
-
+"""
 
     # SDMX Generic to DataSet to SDMX Structure
     dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
@@ -76,16 +76,14 @@ def main():
     header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
     datasetListToXML(dataset_list, pathToMetadataFile, pathSaveToStructure2, header,
                      dataset_type=DatasetType.StructureDataSet, validate_data=False)
-    datasetListToJSON(dataset_list, pathSavetoJSON)
-
-    """
+    # datasetListToJSON(dataset_list, pathSavetoJSON)
     # Passing path to file
     dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
 
-    header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
-    message = generate_message(dataset_list, pathToMetadataFile, header, DatasetType.StructureDataSet,
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
+    message = generate_message(dataset_list, pathToMetadataFile, header, DatasetType.GenericDataSet,
                                validate_data=False)
-
+    print(message)
     # Passing metadata file already opened
     f = open(pathToMetadataFile, 'rb')
     dataset_list = xmlToDatasetList(pathSaveToStructure, f, DatasetType.StructureDataSet)
