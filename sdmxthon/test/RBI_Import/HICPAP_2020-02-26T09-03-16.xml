@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mes:RegistryInterface xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xmlns:xml="http://www.w3.org/XML/1998/namespace"
+                       xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+                       xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+                       xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+                       xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+    <mes:Header>
+        <mes:ID>IREF792109</mes:ID>
+        <mes:Test>false</mes:Test>
+        <mes:Prepared>2020-07-17T09:46:56Z</mes:Prepared>
+        <mes:Sender id="SDMX"/>
+        <mes:Receiver id="not_supplied"/>
+    </mes:Header>
+    <mes:SubmitStructureRequest action="Information">
+        <str:Structures>
+            <str:DataStructures>
+                <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ESTAT:HICPAP(2.0)"
+                                   isExternalReference="false" agencyID="ESTAT" id="HICPAP" isFinal="true"
+                                   version="2.0">
+                    <com:Name xml:lang="en">HICP AP DSD</com:Name>
+                    <str:DataStructureComponents>
+                        <str:DimensionList
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=ESTAT:HICPAP(2.0).DimensionDescriptor"
+                                id="DimensionDescriptor">
+                            <str:Dimension
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HICPAP(2.0).FREQ"
+                                    id="FREQ" position="1">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="FREQ" class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="SDMX" id="CL_FREQ" version="2.0"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                            </str:Dimension>
+                            <str:Dimension
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HICPAP(2.0).REF_AREA"
+                                    id="REF_AREA" position="2">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="REF_AREA"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="IMF" id="CL_AREA" version="1.9"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                            </str:Dimension>
+                            <str:Dimension
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HICPAP(2.0).IND_TYPE"
+                                    id="IND_TYPE" position="3">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="IND_TYPE"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="ESTAT" id="CL_IND_TYPE" version="1.1"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                            </str:Dimension>
+                            <str:Dimension
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HICPAP(2.0).IDX_TYPE"
+                                    id="IDX_TYPE" position="4">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="IDX_TYPE"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="ESTAT" id="CL_IDX_TYPE" version="1.0"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                            </str:Dimension>
+                            <str:Dimension
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HICPAP(2.0).ITEM"
+                                    id="ITEM" position="5">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="ITEM" class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="ESTAT" id="CL_ITEM_PRICE" version="1.1"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                            </str:Dimension>
+                            <str:TimeDimension
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=ESTAT:HICPAP(2.0).TIME_PERIOD"
+                                    id="TIME_PERIOD" position="6">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="TIME_PERIOD"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat textType="ObservationalTimePeriod"/>
+                                </str:LocalRepresentation>
+                            </str:TimeDimension>
+                        </str:DimensionList>
+                        <str:AttributeList
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=ESTAT:HICPAP(2.0).AttributeDescriptor"
+                                id="AttributeDescriptor">
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).DISS_ORG"
+                                    assignmentStatus="Conditional" id="DISS_ORG">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="DISS_ORG"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="IMF" id="CL_ORGANISATION" version="1.7"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:Dimension>
+                                        <Ref id="FREQ"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="REF_AREA"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IND_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IDX_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="ITEM"/>
+                                    </str:Dimension>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).COMPILING_ORG"
+                                    assignmentStatus="Conditional" id="COMPILING_ORG">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="COMPILING_ORG"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="IMF" id="CL_ORGANISATION" version="1.7"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:Dimension>
+                                        <Ref id="FREQ"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="REF_AREA"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IND_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IDX_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="ITEM"/>
+                                    </str:Dimension>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).TIME_FORMAT"
+                                    assignmentStatus="Conditional" id="TIME_FORMAT">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="TIME_FORMAT"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="SDMX" id="CL_TIME_FORMAT" version="1.0"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:Dimension>
+                                        <Ref id="FREQ"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="REF_AREA"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IND_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IDX_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="ITEM"/>
+                                    </str:Dimension>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).OBS_STATUS"
+                                    assignmentStatus="Conditional" id="OBS_STATUS">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="OBS_STATUS"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="ESTAT" id="CL_OBS_STATUS" version="2.2"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:PrimaryMeasure>
+                                        <Ref id="OBS_VALUE"/>
+                                    </str:PrimaryMeasure>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).DECIMALS"
+                                    assignmentStatus="Mandatory" id="DECIMALS">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="DECIMALS"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat isSequence="false" textType="Integer"/>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:PrimaryMeasure>
+                                        <Ref id="OBS_VALUE"/>
+                                    </str:PrimaryMeasure>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).CONF_STATUS"
+                                    assignmentStatus="Conditional" id="CONF_STATUS">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="CONF_STATUS"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="SDMX" id="CL_CONF_STATUS" version="1.2"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:PrimaryMeasure>
+                                        <Ref id="OBS_VALUE"/>
+                                    </str:PrimaryMeasure>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).COMMENT_TS"
+                                    assignmentStatus="Conditional" id="COMMENT_TS">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="COMMENT_TS"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat textType="String" maxLength="1050"/>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:Dimension>
+                                        <Ref id="FREQ"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="REF_AREA"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IND_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IDX_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="ITEM"/>
+                                    </str:Dimension>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).TITLE"
+                                    assignmentStatus="Conditional" id="TITLE">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="TITLE" class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat textType="String" maxLength="200"/>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:Dimension>
+                                        <Ref id="FREQ"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="REF_AREA"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IND_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IDX_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="ITEM"/>
+                                    </str:Dimension>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).DATA_COMP"
+                                    assignmentStatus="Conditional" id="DATA_COMP">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="DATA_COMP"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat textType="String" maxLength="4000"/>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:Dimension>
+                                        <Ref id="FREQ"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="REF_AREA"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IND_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="IDX_TYPE"/>
+                                    </str:Dimension>
+                                    <str:Dimension>
+                                        <Ref id="ITEM"/>
+                                    </str:Dimension>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).COMMENT_OBS"
+                                    assignmentStatus="Conditional" id="COMMENT_OBS">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="COMMENT_OBS"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat textType="String" maxLength="4000"/>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:PrimaryMeasure>
+                                        <Ref id="OBS_VALUE"/>
+                                    </str:PrimaryMeasure>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                            <str:Attribute
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HICPAP(2.0).COMMENT_DSET"
+                                    assignmentStatus="Conditional" id="COMMENT_DSET">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="COMMENT_DSET"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:TextFormat textType="String" maxLength="1050"/>
+                                </str:LocalRepresentation>
+                                <str:AttributeRelationship>
+                                    <str:None/>
+                                </str:AttributeRelationship>
+                            </str:Attribute>
+                        </str:AttributeList>
+                        <str:MeasureList
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=ESTAT:HICPAP(2.0).MeasureDescriptor"
+                                id="MeasureDescriptor">
+                            <str:PrimaryMeasure
+                                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=ESTAT:HICPAP(2.0).OBS_VALUE"
+                                    id="OBS_VALUE">
+                                <str:ConceptIdentity>
+                                    <Ref maintainableParentID="CS_PRICE" package="conceptscheme"
+                                         maintainableParentVersion="1.1" agencyID="ESTAT" id="OBS_VALUE"
+                                         class="Concept"/>
+                                </str:ConceptIdentity>
+                                <str:LocalRepresentation>
+                                    <str:Enumeration>
+                                        <Ref package="codelist" agencyID="ESTAT" id="CL_VALUE_AP" version="1.0"
+                                             class="Codelist"/>
+                                    </str:Enumeration>
+                                    <str:EnumerationFormat minLength="3" textType="String" maxLength="3"/>
+                                </str:LocalRepresentation>
+                            </str:PrimaryMeasure>
+                        </str:MeasureList>
+                    </str:DataStructureComponents>
+                </str:DataStructure>
+            </str:DataStructures>
+        </str:Structures>
+    </mes:SubmitStructureRequest>
+</mes:RegistryInterface>

@@ -1,0 +1,1870 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<message:StructureSpecificData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                               xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+                               xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"
+                               xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+                               xmlns:ASSETS_EX_LNA_SLR="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:ASSETS_EX_LNA_SLR(1.0):ObsLevelDim:AllDimensions"
+                               xmlns:INV_GVT="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:INV_GVT(1.0):ObsLevelDim:AllDimensions"
+                               xmlns:LNA="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:LNA(1.0):ObsLevelDim:AllDimensions"
+                               xmlns:CPTL_RSRV="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:CPTL_RSRV(1.0):ObsLevelDim:AllDimensions"
+                               xmlns:DEPOSITS="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:DEPOSITS(1.0):ObsLevelDim:AllDimensions"
+                               xmlns:BORROWINGS="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:BORROWINGS(1.0):ObsLevelDim:AllDimensions"
+                               xmlns:OTH_LIAB="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:OTH_LIAB(1.0):ObsLevelDim:AllDimensions"
+>
+    <message:Header>
+        <message:ID>new_test</message:ID>
+        <message:Test>false</message:Test>
+        <message:Prepared>2020-09-10 12:00:00</message:Prepared>
+        <message:Sender id="Unknown"/>
+        <message:Receiver id="not_supplied"/>
+        <message:Structure structureID="ASSETS_EX_LNA_SLR"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:ASSETS_EX_LNA_SLR(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="ASSETS_EX_LNA_SLR" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="INV_GVT"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:INV_GVT(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="INV_GVT" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="LNA"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:LNA(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="LNA" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="CPTL_RSRV"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:CPTL_RSRV(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="CPTL_RSRV" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="DEPOSITS"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:DEPOSITS(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="DEPOSITS" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="BORROWINGS"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:BORROWINGS(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="BORROWINGS" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="OTH_LIAB"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:OTH_LIAB(1.0):ObsLevelDim:AllDimensions"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="OTH_LIAB" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+    </message:Header>
+    <data:DataSet FREQ="Q" DEPENDENCY_TYPE="INDEPENDENT" AUDST="AUDITED" xsi:type="ASSETS_EX_LNA_SLR:DataSet"
+                  structureRef="ASSETS_EX_LNA_SLR" action="Replace">
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="CF_CASHONHAND" Area_Operation="DOM_OP"
+             INPUT="N_A" DMID="S7" TIME_PERIOD="2019-Q2" OBS_VALUE="2366.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="CF_CASHONHAND" Area_Operation="DOM_OP"
+             INPUT="N_A" DMID="S8" TIME_PERIOD="2019-Q2" OBS_VALUE="2216.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="CF_CASHONHAND" Area_Operation="OVR_OP"
+             INPUT="N_A" DMID="S9" TIME_PERIOD="2019-Q2" OBS_VALUE="2404.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="CF_CASHONHAND" Area_Operation="OVR_OP"
+             INPUT="N_A" DMID="S10" TIME_PERIOD="2019-Q2" OBS_VALUE="2254.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="CF_CASHONHAND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S11" TIME_PERIOD="2019-Q2" OBS_VALUE="2443.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="CF_CASHONHAND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S12" TIME_PERIOD="2019-Q2" OBS_VALUE="2293.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="CF_DEPWITHRBI" Area_Operation="DOM_OP"
+             INPUT="N_A" DMID="S13" TIME_PERIOD="2019-Q2" OBS_VALUE="2380.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="CF_DEPWITHRBI" Area_Operation="DOM_OP"
+             INPUT="N_A" DMID="S14" TIME_PERIOD="2019-Q2" OBS_VALUE="2230.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="CF_DEPWITHRBI" Area_Operation="OVR_OP"
+             INPUT="N_A" DMID="S15" TIME_PERIOD="2019-Q2" OBS_VALUE="2419.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="CF_DEPWITHRBI" Area_Operation="OVR_OP"
+             INPUT="N_A" DMID="S16" TIME_PERIOD="2019-Q2" OBS_VALUE="2269.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="CF_DEPWITHRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S17" TIME_PERIOD="2019-Q2" OBS_VALUE="2458.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="CF_DEPWITHRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S18" TIME_PERIOD="2019-Q2" OBS_VALUE="2308.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_CA" Area_Operation="DOM_OP"
+             INPUT="N_A" DMID="S25" TIME_PERIOD="2019-Q2" OBS_VALUE="2395.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_CA" Area_Operation="DOM_OP"
+             INPUT="N_A" DMID="S26" TIME_PERIOD="2019-Q2" OBS_VALUE="2245.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_CA" Area_Operation="OVR_OP"
+             INPUT="N_A" DMID="S27" TIME_PERIOD="2019-Q2" OBS_VALUE="2434.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S28" TIME_PERIOD="2019-Q2" OBS_VALUE="2284.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="C1" TIME_PERIOD="2019-Q2" OBS_VALUE="2472.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S29" TIME_PERIOD="2019-Q2" OBS_VALUE="2322.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_MONEYMARKET"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S30" TIME_PERIOD="2019-Q2" OBS_VALUE="2410.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_MONEYMARKET"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S31" TIME_PERIOD="2019-Q2" OBS_VALUE="2260.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_MONEYMARKET"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S32" TIME_PERIOD="2019-Q2" OBS_VALUE="2448.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_MONEYMARKET"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S33" TIME_PERIOD="2019-Q2" OBS_VALUE="2298.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_MONEYMARKET"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S34" TIME_PERIOD="2019-Q2" OBS_VALUE="2487.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_MONEYMARKET"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S35" TIME_PERIOD="2019-Q2" OBS_VALUE="2337.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S36" TIME_PERIOD="2019-Q2" OBS_VALUE="2424.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S37" TIME_PERIOD="2019-Q2" OBS_VALUE="2274.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S38" TIME_PERIOD="2019-Q2" OBS_VALUE="2463.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S39" TIME_PERIOD="2019-Q2" OBS_VALUE="2313.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S40" TIME_PERIOD="2019-Q2" OBS_VALUE="2502.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S41" TIME_PERIOD="2019-Q2" OBS_VALUE="2352.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S42" TIME_PERIOD="2019-Q2" OBS_VALUE="2439.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S43" TIME_PERIOD="2019-Q2" OBS_VALUE="2289.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S44" TIME_PERIOD="2019-Q2" OBS_VALUE="2478.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S45" TIME_PERIOD="2019-Q2" OBS_VALUE="2328.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMBANKS_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S46" TIME_PERIOD="2019-Q2" OBS_VALUE="2517.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMBANKS_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S47" TIME_PERIOD="2019-Q2" OBS_VALUE="2367.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S54" TIME_PERIOD="2019-Q2" OBS_VALUE="1454.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S55" TIME_PERIOD="2019-Q2" OBS_VALUE="1304.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S56" TIME_PERIOD="2019-Q2" OBS_VALUE="1493.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S57" TIME_PERIOD="2019-Q2" OBS_VALUE="1343.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S58" TIME_PERIOD="2019-Q2" OBS_VALUE="1531.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S59" TIME_PERIOD="2019-Q2" OBS_VALUE="1381.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CCP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S60" TIME_PERIOD="2019-Q2" OBS_VALUE="1469.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CCP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S61" TIME_PERIOD="2019-Q2" OBS_VALUE="1319.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CCP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S62" TIME_PERIOD="2019-Q2" OBS_VALUE="1507.83"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CCP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S63" TIME_PERIOD="2019-Q2" OBS_VALUE="1357.83"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CCP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S64" TIME_PERIOD="2019-Q2" OBS_VALUE="1546.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CCP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S65" TIME_PERIOD="2019-Q2" OBS_VALUE="1396.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CL15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S66" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CL15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S67" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CL15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S68" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CL15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S69" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CL15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S70" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CL15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S71" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CB15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S72" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CB15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S73" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CB15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S74" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CB15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S75" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMFICCP_CB15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S76" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMFICCP_CB15D" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S77" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S84" TIME_PERIOD="2019-Q2" OBS_VALUE="2483.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S85" TIME_PERIOD="2019-Q2" OBS_VALUE="2333.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S86" TIME_PERIOD="2019-Q2" OBS_VALUE="2522.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S87" TIME_PERIOD="2019-Q2" OBS_VALUE="2372.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_CA" Area_Operation="OVR_OP"
+             INPUT="N_A" DMID="C2" TIME_PERIOD="2019-Q2" OBS_VALUE="2561.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_CA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S88" TIME_PERIOD="2019-Q2" OBS_VALUE="2411.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S89" TIME_PERIOD="2019-Q2" OBS_VALUE="2498.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S90" TIME_PERIOD="2019-Q2" OBS_VALUE="2348.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S91" TIME_PERIOD="2019-Q2" OBS_VALUE="2537.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S92" TIME_PERIOD="2019-Q2" OBS_VALUE="2387.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S93" TIME_PERIOD="2019-Q2" OBS_VALUE="2575.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_FD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S94" TIME_PERIOD="2019-Q2" OBS_VALUE="2425.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S95" TIME_PERIOD="2019-Q2" OBS_VALUE="2513.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S96" TIME_PERIOD="2019-Q2" OBS_VALUE="2363.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S97" TIME_PERIOD="2019-Q2" OBS_VALUE="2551.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S98" TIME_PERIOD="2019-Q2" OBS_VALUE="2401.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRBANK_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S99" TIME_PERIOD="2019-Q2" OBS_VALUE="2590.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRBANK_LNA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S100" TIME_PERIOD="2019-Q2" OBS_VALUE="2440.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRFI_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S101" TIME_PERIOD="2019-Q2" OBS_VALUE="2528.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRFI_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S102" TIME_PERIOD="2019-Q2" OBS_VALUE="2378.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRFI_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S103" TIME_PERIOD="2019-Q2" OBS_VALUE="2566.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRFI_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S104" TIME_PERIOD="2019-Q2" OBS_VALUE="2416.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="DUEFRMOVRFI_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S105" TIME_PERIOD="2019-Q2" OBS_VALUE="2605.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="DUEFRMOVRFI_FI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S106" TIME_PERIOD="2019-Q2" OBS_VALUE="2455.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_GOIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S128" TIME_PERIOD="2019-Q2" OBS_VALUE="2601.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_GOIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S129" TIME_PERIOD="2019-Q2" OBS_VALUE="2451.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_GOIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S130" TIME_PERIOD="2019-Q2" OBS_VALUE="2640.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_GOIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S131" TIME_PERIOD="2019-Q2" OBS_VALUE="2490.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_GOIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S132" TIME_PERIOD="2019-Q2" OBS_VALUE="2679"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_GOIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S133" TIME_PERIOD="2019-Q2" OBS_VALUE="2529"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_BANKFIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S134" TIME_PERIOD="2019-Q2" OBS_VALUE="2616.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_BANKFIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S135" TIME_PERIOD="2019-Q2" OBS_VALUE="2466.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_BANKFIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S136" TIME_PERIOD="2019-Q2" OBS_VALUE="2655.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_BANKFIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S137" TIME_PERIOD="2019-Q2" OBS_VALUE="2505.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_BANKFIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S138" TIME_PERIOD="2019-Q2" OBS_VALUE="2693.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_BANKFIBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S139" TIME_PERIOD="2019-Q2" OBS_VALUE="2543.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_PSUBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S140" TIME_PERIOD="2019-Q2" OBS_VALUE="2631.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_PSUBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S141" TIME_PERIOD="2019-Q2" OBS_VALUE="2481.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_PSUBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S142" TIME_PERIOD="2019-Q2" OBS_VALUE="2669.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_PSUBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S143" TIME_PERIOD="2019-Q2" OBS_VALUE="2519.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_PSUBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S144" TIME_PERIOD="2019-Q2" OBS_VALUE="2708.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_PSUBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S145" TIME_PERIOD="2019-Q2" OBS_VALUE="2558.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_INFRABOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S146" TIME_PERIOD="2019-Q2" OBS_VALUE="2645.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_INFRABOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S147" TIME_PERIOD="2019-Q2" OBS_VALUE="2495.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_INFRABOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S148" TIME_PERIOD="2019-Q2" OBS_VALUE="2684.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_INFRABOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S149" TIME_PERIOD="2019-Q2" OBS_VALUE="2534.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_INFRABOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S150" TIME_PERIOD="2019-Q2" OBS_VALUE="2723.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_INFRABOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S151" TIME_PERIOD="2019-Q2" OBS_VALUE="2573.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_VCF" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S152" TIME_PERIOD="2019-Q2" OBS_VALUE="2660.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_VCF" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S153" TIME_PERIOD="2019-Q2" OBS_VALUE="2510.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_VCF" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S154" TIME_PERIOD="2019-Q2" OBS_VALUE="2699.19"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_VCF" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S155" TIME_PERIOD="2019-Q2" OBS_VALUE="2549.19"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_VCF" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S156" TIME_PERIOD="2019-Q2" OBS_VALUE="2737.88"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_VCF" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S157" TIME_PERIOD="2019-Q2" OBS_VALUE="2587.88"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_MORT"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S164" TIME_PERIOD="2019-Q2" OBS_VALUE="2675.22"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_MORT"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S165" TIME_PERIOD="2019-Q2" OBS_VALUE="2525.22"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_MORT"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S166" TIME_PERIOD="2019-Q2" OBS_VALUE="2713.91"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_MORT"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S167" TIME_PERIOD="2019-Q2" OBS_VALUE="2563.91"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_MORT"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S168" TIME_PERIOD="2019-Q2" OBS_VALUE="2752.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_MORT"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S169" TIME_PERIOD="2019-Q2" OBS_VALUE="2602.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_ARC"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S170" TIME_PERIOD="2019-Q2" OBS_VALUE="2689.94"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_ARC"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S171" TIME_PERIOD="2019-Q2" OBS_VALUE="2539.94"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_ARC"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S172" TIME_PERIOD="2019-Q2" OBS_VALUE="2728.63"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_ARC"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S173" TIME_PERIOD="2019-Q2" OBS_VALUE="2578.63"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_ARC"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S174" TIME_PERIOD="2019-Q2" OBS_VALUE="2767.32"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_ARC"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S175" TIME_PERIOD="2019-Q2" OBS_VALUE="2617.32"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_OTH"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S176" TIME_PERIOD="2019-Q2" OBS_VALUE="2704.66"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_OTH"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S177" TIME_PERIOD="2019-Q2" OBS_VALUE="2554.66"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_OTH"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S178" TIME_PERIOD="2019-Q2" OBS_VALUE="2743.35"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_OTH"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S179" TIME_PERIOD="2019-Q2" OBS_VALUE="2593.35"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_OTH"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S180" TIME_PERIOD="2019-Q2" OBS_VALUE="2782.04"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_ASSETBACKED_OTH"
+             Area_Operation="GL_OP" INPUT="N_A" DMID="S181" TIME_PERIOD="2019-Q2" OBS_VALUE="2632.04"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_NBFCBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S182" TIME_PERIOD="2019-Q2" OBS_VALUE="2719.38"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_NBFCBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S183" TIME_PERIOD="2019-Q2" OBS_VALUE="2569.38"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_NBFCBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S184" TIME_PERIOD="2019-Q2" OBS_VALUE="2758.07"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_NBFCBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S185" TIME_PERIOD="2019-Q2" OBS_VALUE="2608.07"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_NBFCBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S186" TIME_PERIOD="2019-Q2" OBS_VALUE="2796.76"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_NBFCBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S187" TIME_PERIOD="2019-Q2" OBS_VALUE="2646.76"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_OTHCORPBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S188" TIME_PERIOD="2019-Q2" OBS_VALUE="2734.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_OTHCORPBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S189" TIME_PERIOD="2019-Q2" OBS_VALUE="2584.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_OTHCORPBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S190" TIME_PERIOD="2019-Q2" OBS_VALUE="2772.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_OTHCORPBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S191" TIME_PERIOD="2019-Q2" OBS_VALUE="2622.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_OTHCORPBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S192" TIME_PERIOD="2019-Q2" OBS_VALUE="2811.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_OTHCORPBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S193" TIME_PERIOD="2019-Q2" OBS_VALUE="2661.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_CD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S194" TIME_PERIOD="2019-Q2" OBS_VALUE="2748.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_CD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S195" TIME_PERIOD="2019-Q2" OBS_VALUE="2598.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_CD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S196" TIME_PERIOD="2019-Q2" OBS_VALUE="2787.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_CD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S197" TIME_PERIOD="2019-Q2" OBS_VALUE="2637.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_CD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S198" TIME_PERIOD="2019-Q2" OBS_VALUE="2826.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_CD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S199" TIME_PERIOD="2019-Q2" OBS_VALUE="2676.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_CP" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S200" TIME_PERIOD="2019-Q2" OBS_VALUE="2763.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_CP" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S201" TIME_PERIOD="2019-Q2" OBS_VALUE="2613.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_CP" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S202" TIME_PERIOD="2019-Q2" OBS_VALUE="2802.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_CP" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S203" TIME_PERIOD="2019-Q2" OBS_VALUE="2652.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_CP" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S204" TIME_PERIOD="2019-Q2" OBS_VALUE="2840.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_CP" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S205" TIME_PERIOD="2019-Q2" OBS_VALUE="2690.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S206" TIME_PERIOD="2019-Q2" OBS_VALUE="2778.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S207" TIME_PERIOD="2019-Q2" OBS_VALUE="2628.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S208" TIME_PERIOD="2019-Q2" OBS_VALUE="2816.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S209" TIME_PERIOD="2019-Q2" OBS_VALUE="2666.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S210" TIME_PERIOD="2019-Q2" OBS_VALUE="2855.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S211" TIME_PERIOD="2019-Q2" OBS_VALUE="2705.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_OTHDOM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S212" TIME_PERIOD="2019-Q2" OBS_VALUE="2792.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_OTHDOM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S213" TIME_PERIOD="2019-Q2" OBS_VALUE="2642.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_OTHDOM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S214" TIME_PERIOD="2019-Q2" OBS_VALUE="2831.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_OTHDOM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S215" TIME_PERIOD="2019-Q2" OBS_VALUE="2681.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_OTHDOM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S216" TIME_PERIOD="2019-Q2" OBS_VALUE="2870.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_OTHDOM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S217" TIME_PERIOD="2019-Q2" OBS_VALUE="2720.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_FOREIGNBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S218" TIME_PERIOD="2019-Q2" OBS_VALUE="2807.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_FOREIGNBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S219" TIME_PERIOD="2019-Q2" OBS_VALUE="2657.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_FOREIGNBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S220" TIME_PERIOD="2019-Q2" OBS_VALUE="2846.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_FOREIGNBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S221" TIME_PERIOD="2019-Q2" OBS_VALUE="2696.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHDEBT_FOREIGNBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S222" TIME_PERIOD="2019-Q2" OBS_VALUE="2885.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHDEBT_FOREIGNBOND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S223" TIME_PERIOD="2019-Q2" OBS_VALUE="2735.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_PSU" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S230" TIME_PERIOD="2019-Q2" OBS_VALUE="2822.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_PSU" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S231" TIME_PERIOD="2019-Q2" OBS_VALUE="2672.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_PSU" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S232" TIME_PERIOD="2019-Q2" OBS_VALUE="2861.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_PSU" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S233" TIME_PERIOD="2019-Q2" OBS_VALUE="2711.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_PSU" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S234" TIME_PERIOD="2019-Q2" OBS_VALUE="2899.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_PSU" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S235" TIME_PERIOD="2019-Q2" OBS_VALUE="2749.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_OTHCORP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S236" TIME_PERIOD="2019-Q2" OBS_VALUE="2837.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_OTHCORP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S237" TIME_PERIOD="2019-Q2" OBS_VALUE="2687.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_OTHCORP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S238" TIME_PERIOD="2019-Q2" OBS_VALUE="2875.83"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_OTHCORP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S239" TIME_PERIOD="2019-Q2" OBS_VALUE="2725.83"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_OTHCORP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S240" TIME_PERIOD="2019-Q2" OBS_VALUE="2914.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_OTHCORP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S241" TIME_PERIOD="2019-Q2" OBS_VALUE="2764.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S242" TIME_PERIOD="2019-Q2" OBS_VALUE="2851.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S243" TIME_PERIOD="2019-Q2" OBS_VALUE="2701.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S244" TIME_PERIOD="2019-Q2" OBS_VALUE="2890.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S245" TIME_PERIOD="2019-Q2" OBS_VALUE="2740.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S246" TIME_PERIOD="2019-Q2" OBS_VALUE="2929.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_MF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S247" TIME_PERIOD="2019-Q2" OBS_VALUE="2779.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_VCF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S248" TIME_PERIOD="2019-Q2" OBS_VALUE="2866.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_VCF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S249" TIME_PERIOD="2019-Q2" OBS_VALUE="2716.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_VCF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S250" TIME_PERIOD="2019-Q2" OBS_VALUE="2905.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_VCF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S251" TIME_PERIOD="2019-Q2" OBS_VALUE="2755.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_VCF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S252" TIME_PERIOD="2019-Q2" OBS_VALUE="2943.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_VCF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S253" TIME_PERIOD="2019-Q2" OBS_VALUE="2793.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_NBFC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S254" TIME_PERIOD="2019-Q2" OBS_VALUE="2881.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_NBFC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S255" TIME_PERIOD="2019-Q2" OBS_VALUE="2731.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_NBFC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S256" TIME_PERIOD="2019-Q2" OBS_VALUE="2919.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_NBFC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S257" TIME_PERIOD="2019-Q2" OBS_VALUE="2769.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_SHARE_NBFC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S258" TIME_PERIOD="2019-Q2" OBS_VALUE="2958.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_SHARE_NBFC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S259" TIME_PERIOD="2019-Q2" OBS_VALUE="2808.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S260" TIME_PERIOD="2019-Q2" OBS_VALUE="2896.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S261" TIME_PERIOD="2019-Q2" OBS_VALUE="2746.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S262" TIME_PERIOD="2019-Q2" OBS_VALUE="2934.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S263" TIME_PERIOD="2019-Q2" OBS_VALUE="2784.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S264" TIME_PERIOD="2019-Q2" OBS_VALUE="2973.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S265" TIME_PERIOD="2019-Q2" OBS_VALUE="2823.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PREF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S266" TIME_PERIOD="2019-Q2" OBS_VALUE="2910.74"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PREF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S267" TIME_PERIOD="2019-Q2" OBS_VALUE="2760.74"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PREF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S268" TIME_PERIOD="2019-Q2" OBS_VALUE="2949.43"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PREF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S269" TIME_PERIOD="2019-Q2" OBS_VALUE="2799.43"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PREF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S270" TIME_PERIOD="2019-Q2" OBS_VALUE="2988.12"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PREF" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S271" TIME_PERIOD="2019-Q2" OBS_VALUE="2838.12"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FPIDEBT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S278" TIME_PERIOD="2019-Q2" OBS_VALUE="2925.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FPIDEBT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S279" TIME_PERIOD="2019-Q2" OBS_VALUE="2775.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FPIDEBT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S280" TIME_PERIOD="2019-Q2" OBS_VALUE="2964.15"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FPIDEBT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S281" TIME_PERIOD="2019-Q2" OBS_VALUE="2814.15"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FPIDEBT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S282" TIME_PERIOD="2019-Q2" OBS_VALUE="3002.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FPIDEBT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S283" TIME_PERIOD="2019-Q2" OBS_VALUE="2852.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FPIOTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S284" TIME_PERIOD="2019-Q2" OBS_VALUE="2940.18"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FPIOTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S285" TIME_PERIOD="2019-Q2" OBS_VALUE="2790.18"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FPIOTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S286" TIME_PERIOD="2019-Q2" OBS_VALUE="2978.87"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FPIOTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S287" TIME_PERIOD="2019-Q2" OBS_VALUE="2828.87"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FPIOTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S288" TIME_PERIOD="2019-Q2" OBS_VALUE="3017.56"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FPIOTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S289" TIME_PERIOD="2019-Q2" OBS_VALUE="2867.56"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_FIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S296" TIME_PERIOD="2019-Q2" OBS_VALUE="2954.9"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_FIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S297" TIME_PERIOD="2019-Q2" OBS_VALUE="2804.9"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_FIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S298" TIME_PERIOD="2019-Q2" OBS_VALUE="2993.59"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_FIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S299" TIME_PERIOD="2019-Q2" OBS_VALUE="2843.59"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_FIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S300" TIME_PERIOD="2019-Q2" OBS_VALUE="3032.28"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_FIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S301" TIME_PERIOD="2019-Q2" OBS_VALUE="2882.28"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_NONFIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S302" TIME_PERIOD="2019-Q2" OBS_VALUE="2969.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_NONFIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S303" TIME_PERIOD="2019-Q2" OBS_VALUE="2819.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_NONFIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S304" TIME_PERIOD="2019-Q2" OBS_VALUE="3008.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_NONFIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S305" TIME_PERIOD="2019-Q2" OBS_VALUE="2858.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_NONFIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S306" TIME_PERIOD="2019-Q2" OBS_VALUE="3047"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_NONFIN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S307" TIME_PERIOD="2019-Q2" OBS_VALUE="2897"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_JVIND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S308" TIME_PERIOD="2019-Q2" OBS_VALUE="2984.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_JVIND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S309" TIME_PERIOD="2019-Q2" OBS_VALUE="2834.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_JVIND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S310" TIME_PERIOD="2019-Q2" OBS_VALUE="3023.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_JVIND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S311" TIME_PERIOD="2019-Q2" OBS_VALUE="2873.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_JVIND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S312" TIME_PERIOD="2019-Q2" OBS_VALUE="3061.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_JVIND" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S313" TIME_PERIOD="2019-Q2" OBS_VALUE="2911.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_JVOVER" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S314" TIME_PERIOD="2019-Q2" OBS_VALUE="2999.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_JVOVER" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S315" TIME_PERIOD="2019-Q2" OBS_VALUE="2849.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_JVOVER" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S316" TIME_PERIOD="2019-Q2" OBS_VALUE="3037.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_JVOVER" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S317" TIME_PERIOD="2019-Q2" OBS_VALUE="2887.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_JVOVER" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S318" TIME_PERIOD="2019-Q2" OBS_VALUE="3076.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_JVOVER" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S319" TIME_PERIOD="2019-Q2" OBS_VALUE="2926.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_OTH" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S320" TIME_PERIOD="2019-Q2" OBS_VALUE="3013.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_OTH" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S321" TIME_PERIOD="2019-Q2" OBS_VALUE="2863.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_OTH" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S322" TIME_PERIOD="2019-Q2" OBS_VALUE="3052.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_OTH" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S323" TIME_PERIOD="2019-Q2" OBS_VALUE="2902.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="EQU_PART_OTH" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S324" TIME_PERIOD="2019-Q2" OBS_VALUE="3091.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="EQU_PART_OTH" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S325" TIME_PERIOD="2019-Q2" OBS_VALUE="2941.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVCRTLOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S380" TIME_PERIOD="2019-Q2" OBS_VALUE="3102.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVCRTLOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S381" TIME_PERIOD="2019-Q2" OBS_VALUE="2952.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVCRTLOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S382" TIME_PERIOD="2019-Q2" OBS_VALUE="3140.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVCRTLOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S383" TIME_PERIOD="2019-Q2" OBS_VALUE="2990.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVCRTLOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S384" TIME_PERIOD="2019-Q2" OBS_VALUE="3179.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVCRTLOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S385" TIME_PERIOD="2019-Q2" OBS_VALUE="3029.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_DICGCECGC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S386" TIME_PERIOD="2019-Q2" OBS_VALUE="3116.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_DICGCECGC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S387" TIME_PERIOD="2019-Q2" OBS_VALUE="2966.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_DICGCECGC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S388" TIME_PERIOD="2019-Q2" OBS_VALUE="3155.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_DICGCECGC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S389" TIME_PERIOD="2019-Q2" OBS_VALUE="3005.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_DICGCECGC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S390" TIME_PERIOD="2019-Q2" OBS_VALUE="3194.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_DICGCECGC" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S391" TIME_PERIOD="2019-Q2" OBS_VALUE="3044.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PRTPYSUS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S392" TIME_PERIOD="2019-Q2" OBS_VALUE="3131.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PRTPYSUS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S393" TIME_PERIOD="2019-Q2" OBS_VALUE="2981.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PRTPYSUS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S394" TIME_PERIOD="2019-Q2" OBS_VALUE="3170.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PRTPYSUS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S395" TIME_PERIOD="2019-Q2" OBS_VALUE="3020.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PRTPYSUS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S396" TIME_PERIOD="2019-Q2" OBS_VALUE="3208.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PRTPYSUS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S397" TIME_PERIOD="2019-Q2" OBS_VALUE="3058.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_SUNDRY" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S398" TIME_PERIOD="2019-Q2" OBS_VALUE="3146.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_SUNDRY" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S399" TIME_PERIOD="2019-Q2" OBS_VALUE="2996.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_SUNDRY" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S400" TIME_PERIOD="2019-Q2" OBS_VALUE="3184.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_SUNDRY" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S401" TIME_PERIOD="2019-Q2" OBS_VALUE="3034.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_SUNDRY" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S402" TIME_PERIOD="2019-Q2" OBS_VALUE="3223.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_SUNDRY" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S403" TIME_PERIOD="2019-Q2" OBS_VALUE="3073.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_FLOATPROV" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S404" TIME_PERIOD="2019-Q2" OBS_VALUE="3160.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_FLOATPROV" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S405" TIME_PERIOD="2019-Q2" OBS_VALUE="3010.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_FLOATPROV" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S406" TIME_PERIOD="2019-Q2" OBS_VALUE="3199.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_FLOATPROV" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S407" TIME_PERIOD="2019-Q2" OBS_VALUE="3049.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_FLOATPROV" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S408" TIME_PERIOD="2019-Q2" OBS_VALUE="3238.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_FLOATPROV" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S409" TIME_PERIOD="2019-Q2" OBS_VALUE="3088.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVRESTRUCNPA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S410" TIME_PERIOD="2019-Q2" OBS_VALUE="3175.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVRESTRUCNPA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S411" TIME_PERIOD="2019-Q2" OBS_VALUE="3025.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVRESTRUCNPA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S412" TIME_PERIOD="2019-Q2" OBS_VALUE="3214.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVRESTRUCNPA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S413" TIME_PERIOD="2019-Q2" OBS_VALUE="3064.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVRESTRUCNPA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S414" TIME_PERIOD="2019-Q2" OBS_VALUE="3253.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVRESTRUCNPA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S415" TIME_PERIOD="2019-Q2" OBS_VALUE="3103.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="gdfg" DMID="S422" TIME_PERIOD="2019-Q2" OBS_VALUE="3190.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="gdfg" DMID="S423" TIME_PERIOD="2019-Q2" OBS_VALUE="3040.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="gdfg" DMID="S424" TIME_PERIOD="2019-Q2" OBS_VALUE="3229.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="gdfg" DMID="S425" TIME_PERIOD="2019-Q2" OBS_VALUE="3079.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="gdfg" DMID="S426" TIME_PERIOD="2019-Q2" OBS_VALUE="3267.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="gdfg" DMID="S427" TIME_PERIOD="2019-Q2" OBS_VALUE="3117.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="yuy" DMID="S422" TIME_PERIOD="2019-Q2" OBS_VALUE="3205.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="yuy" DMID="S423" TIME_PERIOD="2019-Q2" OBS_VALUE="3055.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="yuy" DMID="S424" TIME_PERIOD="2019-Q2" OBS_VALUE="3243.83"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="yuy" DMID="S425" TIME_PERIOD="2019-Q2" OBS_VALUE="3093.83"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="yuy" DMID="S426" TIME_PERIOD="2019-Q2" OBS_VALUE="3282.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTHNETTINGNPA" Area_Operation="GL_OP"
+             INPUT="yuy" DMID="S427" TIME_PERIOD="2019-Q2" OBS_VALUE="3132.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVRESTRUCSTD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S428" TIME_PERIOD="2019-Q2" OBS_VALUE="3219.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVRESTRUCSTD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S429" TIME_PERIOD="2019-Q2" OBS_VALUE="3069.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVRESTRUCSTD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S430" TIME_PERIOD="2019-Q2" OBS_VALUE="3258.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVRESTRUCSTD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S431" TIME_PERIOD="2019-Q2" OBS_VALUE="3108.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_PROVRESTRUCSTD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S432" TIME_PERIOD="2019-Q2" OBS_VALUE="3297.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_PROVRESTRUCSTD" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S433" TIME_PERIOD="2019-Q2" OBS_VALUE="3147.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="hjghjhgj" DMID="S440" TIME_PERIOD="2019-Q2" OBS_VALUE="3234.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="hjghjhgj" DMID="S441" TIME_PERIOD="2019-Q2" OBS_VALUE="3084.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="hjghjhgj" DMID="S442" TIME_PERIOD="2019-Q2" OBS_VALUE="3273.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="hjghjhgj" DMID="S443" TIME_PERIOD="2019-Q2" OBS_VALUE="3123.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="hjghjhgj" DMID="S444" TIME_PERIOD="2019-Q2" OBS_VALUE="3311.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="hjghjhgj" DMID="S445" TIME_PERIOD="2019-Q2" OBS_VALUE="3161.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="mjmj" DMID="S440" TIME_PERIOD="2019-Q2" OBS_VALUE="3249.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="mjmj" DMID="S441" TIME_PERIOD="2019-Q2" OBS_VALUE="3099.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="mjmj" DMID="S442" TIME_PERIOD="2019-Q2" OBS_VALUE="3287.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="mjmj" DMID="S443" TIME_PERIOD="2019-Q2" OBS_VALUE="3137.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="mjmj" DMID="S444" TIME_PERIOD="2019-Q2" OBS_VALUE="3326.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="NETTING_OTH" Area_Operation="GL_OP"
+             INPUT="mjmj" DMID="S445" TIME_PERIOD="2019-Q2" OBS_VALUE="3176.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_INT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S458" TIME_PERIOD="2019-Q2" OBS_VALUE="3264.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_INT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S459" TIME_PERIOD="2019-Q2" OBS_VALUE="3114.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_INT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S460" TIME_PERIOD="2019-Q2" OBS_VALUE="3302.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_INT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S461" TIME_PERIOD="2019-Q2" OBS_VALUE="3152.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_INT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S462" TIME_PERIOD="2019-Q2" OBS_VALUE="3341.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_INT" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S463" TIME_PERIOD="2019-Q2" OBS_VALUE="3191.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ADVTAX" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S464" TIME_PERIOD="2019-Q2" OBS_VALUE="3278.74"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ADVTAX" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S465" TIME_PERIOD="2019-Q2" OBS_VALUE="3128.74"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ADVTAX" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S466" TIME_PERIOD="2019-Q2" OBS_VALUE="3317.43"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ADVTAX" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S467" TIME_PERIOD="2019-Q2" OBS_VALUE="3167.43"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ADVTAX" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S468" TIME_PERIOD="2019-Q2" OBS_VALUE="3356.12"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ADVTAX" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S469" TIME_PERIOD="2019-Q2" OBS_VALUE="3206.12"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_DUEFROMRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S470" TIME_PERIOD="2019-Q2" OBS_VALUE="3293.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_DUEFROMRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S471" TIME_PERIOD="2019-Q2" OBS_VALUE="3143.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_DUEFROMRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S472" TIME_PERIOD="2019-Q2" OBS_VALUE="3332.15"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_DUEFROMRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S473" TIME_PERIOD="2019-Q2" OBS_VALUE="3182.15"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_DUEFROMRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S474" TIME_PERIOD="2019-Q2" OBS_VALUE="3370.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_DUEFROMRBI" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S475" TIME_PERIOD="2019-Q2" OBS_VALUE="3220.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_IBA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S476" TIME_PERIOD="2019-Q2" OBS_VALUE="3308.18"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_IBA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S477" TIME_PERIOD="2019-Q2" OBS_VALUE="3158.18"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_IBA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S478" TIME_PERIOD="2019-Q2" OBS_VALUE="3346.87"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_IBA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S479" TIME_PERIOD="2019-Q2" OBS_VALUE="3196.87"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_IBA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S480" TIME_PERIOD="2019-Q2" OBS_VALUE="3385.56"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_IBA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S481" TIME_PERIOD="2019-Q2" OBS_VALUE="3235.56"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_DUEFROMOVERPARENT" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S482" TIME_PERIOD="2019-Q2" OBS_VALUE="3322.9"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_DUEFROMOVERPARENT" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S483" TIME_PERIOD="2019-Q2" OBS_VALUE="3172.9"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_DUEFROMOVERPARENT" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S484" TIME_PERIOD="2019-Q2" OBS_VALUE="3361.59"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_DUEFROMOVERPARENT" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S485" TIME_PERIOD="2019-Q2" OBS_VALUE="3211.59"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_DUEFROMOVERPARENT" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S486" TIME_PERIOD="2019-Q2" OBS_VALUE="3400.28"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_DUEFROMOVERPARENT" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S487" TIME_PERIOD="2019-Q2" OBS_VALUE="3250.28"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHSD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S488" TIME_PERIOD="2019-Q2" OBS_VALUE="3337.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHSD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S489" TIME_PERIOD="2019-Q2" OBS_VALUE="3187.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHSD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S490" TIME_PERIOD="2019-Q2" OBS_VALUE="3376.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHSD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S491" TIME_PERIOD="2019-Q2" OBS_VALUE="3226.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTHSD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S492" TIME_PERIOD="2019-Q2" OBS_VALUE="3415"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTHSD" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S493" TIME_PERIOD="2019-Q2" OBS_VALUE="3265"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_LOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S500" TIME_PERIOD="2019-Q2" OBS_VALUE="3352.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_LOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S501" TIME_PERIOD="2019-Q2" OBS_VALUE="3202.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_LOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S502" TIME_PERIOD="2019-Q2" OBS_VALUE="3391.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_LOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S503" TIME_PERIOD="2019-Q2" OBS_VALUE="3241.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_LOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S504" TIME_PERIOD="2019-Q2" OBS_VALUE="3429.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_LOSS" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S505" TIME_PERIOD="2019-Q2" OBS_VALUE="3279.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_DEFTAX" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S506" TIME_PERIOD="2019-Q2" OBS_VALUE="3367.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_DEFTAX" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S507" TIME_PERIOD="2019-Q2" OBS_VALUE="3217.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_DEFTAX" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S508" TIME_PERIOD="2019-Q2" OBS_VALUE="3405.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_DEFTAX" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S509" TIME_PERIOD="2019-Q2" OBS_VALUE="3255.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_DEFTAX" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S510" TIME_PERIOD="2019-Q2" OBS_VALUE="3444.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_DEFTAX" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S511" TIME_PERIOD="2019-Q2" OBS_VALUE="3294.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_NBA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S512" TIME_PERIOD="2019-Q2" OBS_VALUE="3381.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_NBA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S513" TIME_PERIOD="2019-Q2" OBS_VALUE="3231.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_NBA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S514" TIME_PERIOD="2019-Q2" OBS_VALUE="3420.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_NBA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S515" TIME_PERIOD="2019-Q2" OBS_VALUE="3270.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_NBA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S516" TIME_PERIOD="2019-Q2" OBS_VALUE="3459.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_NBA" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S517" TIME_PERIOD="2019-Q2" OBS_VALUE="3309.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_MTM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S518" TIME_PERIOD="2019-Q2" OBS_VALUE="2396.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_MTM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S519" TIME_PERIOD="2019-Q2" OBS_VALUE="2246.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_MTM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S520" TIME_PERIOD="2019-Q2" OBS_VALUE="2435.19"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_MTM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S521" TIME_PERIOD="2019-Q2" OBS_VALUE="2285.19"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_MTM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S522" TIME_PERIOD="2019-Q2" OBS_VALUE="2473.88"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_MTM" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S523" TIME_PERIOD="2019-Q2" OBS_VALUE="2323.88"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_DEP_PSL" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S524" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_DEP_PSL" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S525" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_DEP_PSL" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S526" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_DEP_PSL" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S527" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_OTH_DEP_PSL" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S528" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_OTH_DEP_PSL" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S529" TIME_PERIOD="2019-Q2" OBS_VALUE="1000"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP" INPUT="rtygh"
+             DMID="S536" TIME_PERIOD="2019-Q2" OBS_VALUE="3411.22"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP" INPUT="rtygh"
+             DMID="S537" TIME_PERIOD="2019-Q2" OBS_VALUE="3261.22"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP" INPUT="rtygh"
+             DMID="S538" TIME_PERIOD="2019-Q2" OBS_VALUE="3449.91"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP" INPUT="rtygh"
+             DMID="S539" TIME_PERIOD="2019-Q2" OBS_VALUE="3299.91"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP" INPUT="rtygh"
+             DMID="S540" TIME_PERIOD="2019-Q2" OBS_VALUE="3488.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP" INPUT="rtygh"
+             DMID="S541" TIME_PERIOD="2019-Q2" OBS_VALUE="3338.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP"
+             INPUT="uyretete" DMID="S536" TIME_PERIOD="2019-Q2" OBS_VALUE="3425.94"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP"
+             INPUT="uyretete" DMID="S537" TIME_PERIOD="2019-Q2" OBS_VALUE="3275.94"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP"
+             INPUT="uyretete" DMID="S538" TIME_PERIOD="2019-Q2" OBS_VALUE="3464.63"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP"
+             INPUT="uyretete" DMID="S539" TIME_PERIOD="2019-Q2" OBS_VALUE="3314.63"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP"
+             INPUT="uyretete" DMID="S540" TIME_PERIOD="2019-Q2" OBS_VALUE="3503.32"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="OTH_ANY" Area_Operation="GL_OP"
+             INPUT="uyretete" DMID="S541" TIME_PERIOD="2019-Q2" OBS_VALUE="3353.32"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FUND_OVER_CAP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S548" TIME_PERIOD="2019-Q2" OBS_VALUE="3440.66"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FUND_OVER_CAP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S549" TIME_PERIOD="2019-Q2" OBS_VALUE="3290.66"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FUND_OVER_CAP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S550" TIME_PERIOD="2019-Q2" OBS_VALUE="3479.35"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FUND_OVER_CAP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S551" TIME_PERIOD="2019-Q2" OBS_VALUE="3329.35"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FUND_OVER_CAP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S552" TIME_PERIOD="2019-Q2" OBS_VALUE="3518.04"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FUND_OVER_CAP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S553" TIME_PERIOD="2019-Q2" OBS_VALUE="3368.04"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FUND_OVER_DEP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S554" TIME_PERIOD="2019-Q2" OBS_VALUE="3455.38"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FUND_OVER_DEP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S555" TIME_PERIOD="2019-Q2" OBS_VALUE="3305.38"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FUND_OVER_DEP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S556" TIME_PERIOD="2019-Q2" OBS_VALUE="3494.07"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FUND_OVER_DEP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S557" TIME_PERIOD="2019-Q2" OBS_VALUE="3344.07"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FUND_OVER_DEP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S558" TIME_PERIOD="2019-Q2" OBS_VALUE="3532.76"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FUND_OVER_DEP" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S559" TIME_PERIOD="2019-Q2" OBS_VALUE="3382.76"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FIXED_PREMISE" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S566" TIME_PERIOD="2019-Q2" OBS_VALUE="3470.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FIXED_PREMISE" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S567" TIME_PERIOD="2019-Q2" OBS_VALUE="3320.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FIXED_PREMISE" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S568" TIME_PERIOD="2019-Q2" OBS_VALUE="3508.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FIXED_PREMISE" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S569" TIME_PERIOD="2019-Q2" OBS_VALUE="3358.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FIXED_PREMISE" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S570" TIME_PERIOD="2019-Q2" OBS_VALUE="3547.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FIXED_PREMISE" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S571" TIME_PERIOD="2019-Q2" OBS_VALUE="3397.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FIXED_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S572" TIME_PERIOD="2019-Q2" OBS_VALUE="3444.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FIXED_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S573" TIME_PERIOD="2019-Q2" OBS_VALUE="3334.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FIXED_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S574" TIME_PERIOD="2019-Q2" OBS_VALUE="3523.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FIXED_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S575" TIME_PERIOD="2019-Q2" OBS_VALUE="3373.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="FIXED_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S576" TIME_PERIOD="2019-Q2" OBS_VALUE="3562.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="FIXED_OTH" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S577" TIME_PERIOD="2019-Q2" OBS_VALUE="3412.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="INTGA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S578" TIME_PERIOD="2019-Q2" OBS_VALUE="228250.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="INTGA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S579" TIME_PERIOD="2019-Q2" OBS_VALUE="53689.14"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="INTGA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S580" TIME_PERIOD="2019-Q2" OBS_VALUE="203518.52"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="INTGA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S581" TIME_PERIOD="2019-Q2" OBS_VALUE="92022.56"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="INTGA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S582" TIME_PERIOD="2019-Q2" OBS_VALUE="278118.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="INTGA" Area_Operation="GL_OP" INPUT="N_A"
+             DMID="S583" TIME_PERIOD="2019-Q2" OBS_VALUE="92641.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="MEMO_INT_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S590" TIME_PERIOD="2019-Q2" OBS_VALUE="3514.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="MEMO_INT_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S591" TIME_PERIOD="2019-Q2" OBS_VALUE="3364.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="MEMO_INT_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S592" TIME_PERIOD="2019-Q2" OBS_VALUE="3552.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="MEMO_INT_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S593" TIME_PERIOD="2019-Q2" OBS_VALUE="3402.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="MEMO_INT_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S594" TIME_PERIOD="2019-Q2" OBS_VALUE="3591.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="MEMO_INT_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S595" TIME_PERIOD="2019-Q2" OBS_VALUE="3441.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="MEMO_OTH_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S596" TIME_PERIOD="2019-Q2" OBS_VALUE="3528.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="MEMO_OTH_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S597" TIME_PERIOD="2019-Q2" OBS_VALUE="3378.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="MEMO_OTH_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S598" TIME_PERIOD="2019-Q2" OBS_VALUE="3567.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="MEMO_OTH_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S599" TIME_PERIOD="2019-Q2" OBS_VALUE="3417.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Asset_Ex_LNA="MEMO_OTH_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S600" TIME_PERIOD="2019-Q2" OBS_VALUE="3606.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Asset_Ex_LNA="MEMO_OTH_EARN" Area_Operation="GL_OP"
+             INPUT="N_A" DMID="S601" TIME_PERIOD="2019-Q2" OBS_VALUE="3456.36"/>
+    </data:DataSet>
+    <data:DataSet AUDST="AUDITED" DEPENDENCY_TYPE="INDEPENDENT" FREQ="Q" xsi:type="INV_GVT:DataSet"
+                  structureRef="INV_GVT" action="Replace">
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="GOI_TB" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S110"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2586.9"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="GOI_TB" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S111"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2581.43"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="GOI_TB" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S112"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2620.12"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="DGSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S113"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2557.46"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="DGSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S114"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2596.15"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="DGSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S115"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2634.84"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="SGSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S116"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2572.18"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="SGSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S117"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2610.87"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="SGSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S118"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2649.56"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="OTHAPSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S119"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2586.9"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="OTHAPSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S120"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2625.59"/>
+        <Obs Currency="INR" COMMENT="" RA_LIST="N_A" Portfolio_Type="N_A" Particulars="N_A" NAME="N_A"
+             Measure_Type="TOTAL" G_Instr="OTHAPSEC" Asset_Qual_Class="N_A" Area_Operation="GL_OP" DMID="S121"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="2664.28"/>
+    </data:DataSet>
+    <data:DataSet AUDST="AUDITED" FREQ="Q" DEPENDENCY_TYPE="INDEPENDENT" xsi:type="LNA:DataSet" structureRef="LNA"
+                  action="Replace">
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBBPD" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S332" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="33828.5"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBBPD" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S333" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="31878.5"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBBPD" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S334" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="43967.19"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBBPD" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S335" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="32917.19"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBBPD" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S336" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="53905.88"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBBPD" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S337" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="32955.88"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBDL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S338" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3043.22"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBDL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S339" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2893.22"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBDL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S340" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3081.91"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBDL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S341" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2931.91"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBDL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S342" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3120.6"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBDL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S343" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2970.6"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBTL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S344" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3057.94"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBTL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S345" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2907.94"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBTL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S346" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3096.63"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBTL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S347" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2946.63"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBTL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S348" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3135.32"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBTL" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S349" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2985.32"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBI" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A" Area_Operation="GL_OP"
+             DMID="S350" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3072.66"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBI" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A" Area_Operation="GL_OP"
+             DMID="S351" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2922.66"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBI" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A" Area_Operation="GL_OP"
+             DMID="S352" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3111.35"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBI" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A" Area_Operation="GL_OP"
+             DMID="S353" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2961.35"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBI" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A" Area_Operation="GL_OP"
+             DMID="S354" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3150.04"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBI" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A" Area_Operation="GL_OP"
+             DMID="S355" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3000.04"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBBR" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S356" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3087.38"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBBR" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S357" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2937.38"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBBR" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S358" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3126.07"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBBR" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S359" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="2976.07"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOTAL"
+             Loan_Type="NBBR" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S360" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3164.76"/>
+        <Obs Currency="INR" COMMENT="" TYPE_OF_EXPOSURE="N_A" SECUNSEC="N_A" NAME="N_A" Measure_Type="TOWHF"
+             Loan_Type="NBBR" DIRNAME="N_A" Bank_Type="N_A" Asset_Qual_Class="N_A" ASSET_CAT="N_A"
+             Area_Operation="GL_OP" DMID="S361" Time_Prd="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="3014.76"/>
+    </data:DataSet>
+    <data:DataSet FREQ="Q" AUDST="AUDITED" DEPENDENCY_TYPE="INDEPENDENT" xsi:type="CPTL_RSRV:DataSet"
+                  structureRef="CPTL_RSRV" action="Replace">
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL" Cptl_Rsrv="CAP"
+             Area_Operation="GL_OP" DMID="S608" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="145550"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF" Cptl_Rsrv="CAP"
+             Area_Operation="GL_OP" DMID="S609" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="40"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL" Cptl_Rsrv="CAP"
+             Area_Operation="GL_OP" DMID="S610" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="130450"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF" Cptl_Rsrv="CAP"
+             Area_Operation="GL_OP" DMID="S611" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="40"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL" Cptl_Rsrv="CAP"
+             Area_Operation="GL_OP" DMID="S612" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="214486"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF" Cptl_Rsrv="CAP"
+             Area_Operation="GL_OP" DMID="S613" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2" OBS_VALUE="40"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="PNCPS" Area_Operation="GL_OP" DMID="S614" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3558.42"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="PNCPS" Area_Operation="GL_OP" DMID="S615" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3408.42"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="PNCPS" Area_Operation="GL_OP" DMID="S616" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3597.11"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="PNCPS" Area_Operation="GL_OP" DMID="S617" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3447.11"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="PNCPS" Area_Operation="GL_OP" DMID="S618" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3635.8"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="PNCPS" Area_Operation="GL_OP" DMID="S619" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3485.8"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_SHAREPREM" Area_Operation="GL_OP" DMID="S626" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3573.14"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_SHAREPREM" Area_Operation="GL_OP" DMID="S627" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3423.14"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_SHAREPREM" Area_Operation="GL_OP" DMID="S628" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3611.83"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_SHAREPREM" Area_Operation="GL_OP" DMID="S629" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3461.83"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_SHAREPREM" Area_Operation="GL_OP" DMID="S630" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3650.52"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_SHAREPREM" Area_Operation="GL_OP" DMID="S631" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3500.52"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_STATU" Area_Operation="GL_OP" DMID="S632" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3587.86"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_STATU" Area_Operation="GL_OP" DMID="S633" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3626.55"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_STATU" Area_Operation="GL_OP" DMID="S634" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3476.55"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_STATU" Area_Operation="GL_OP" DMID="S635" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3665.24"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_STATU" Area_Operation="GL_OP" DMID="S636" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3515.24"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_GEN" Area_Operation="GL_OP" DMID="S637" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3602.58"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_GEN" Area_Operation="GL_OP" DMID="S638" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3641.27"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_GEN" Area_Operation="GL_OP" DMID="S639" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3491.27"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_GEN" Area_Operation="GL_OP" DMID="S640" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3679.96"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_GEN" Area_Operation="GL_OP" DMID="S641" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3529.96"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_SPCL" Area_Operation="GL_OP" DMID="S642" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3617.3"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_SPCL" Area_Operation="GL_OP" DMID="S643" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3655.99"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_SPCL" Area_Operation="GL_OP" DMID="S644" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3505.99"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_SPCL" Area_Operation="GL_OP" DMID="S645" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3694.68"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_SPCL" Area_Operation="GL_OP" DMID="S646" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3544.68"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_CAP" Area_Operation="GL_OP" DMID="S647" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3632.02"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_CAP" Area_Operation="GL_OP" DMID="S648" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3670.71"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_CAP" Area_Operation="GL_OP" DMID="S649" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3520.71"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_CAP" Area_Operation="GL_OP" DMID="S650" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3709.4"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_CAP" Area_Operation="GL_OP" DMID="S651" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3559.4"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_REV" Area_Operation="GL_OP" DMID="S652" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3646.74"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_REV" Area_Operation="GL_OP" DMID="S653" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3685.43"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_REV" Area_Operation="GL_OP" DMID="S654" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3535.43"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_REV" Area_Operation="GL_OP" DMID="S655" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3724.12"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_REV" Area_Operation="GL_OP" DMID="S656" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3574.12"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_FLUC" Area_Operation="GL_OP" DMID="S657" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3661.46"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_FLUC" Area_Operation="GL_OP" DMID="S658" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3700.15"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_FLUC" Area_Operation="GL_OP" DMID="S659" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3550.15"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_DIS_FLUC" Area_Operation="GL_OP" DMID="S660" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3738.84"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_DIS_FLUC" Area_Operation="GL_OP" DMID="S661" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3588.84"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RVL_RSRV_PROP" Area_Operation="GL_OP" DMID="S667" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3676.18"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RVL_RSRV_PROP" Area_Operation="GL_OP" DMID="S668" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3714.87"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RVL_RSRV_PROP" Area_Operation="GL_OP" DMID="S669" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3564.87"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RVL_RSRV_PROP" Area_Operation="GL_OP" DMID="S670" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3753.56"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RVL_RSRV_PROP" Area_Operation="GL_OP" DMID="S671" INPUT="N_A" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3603.56"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RVL_RSRV_FIN" Area_Operation="GL_OP" DMID="S672" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3690.9"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RVL_RSRV_FIN" Area_Operation="GL_OP" DMID="S673" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3729.59"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RVL_RSRV_FIN" Area_Operation="GL_OP" DMID="S674" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3579.59"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RVL_RSRV_FIN" Area_Operation="GL_OP" DMID="S675" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3768.28"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RVL_RSRV_FIN" Area_Operation="GL_OP" DMID="S676" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3618.28"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="SRPLS" Area_Operation="GL_OP" DMID="S677" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3705.62"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="SRPLS" Area_Operation="GL_OP" DMID="S678" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3744.31"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="SRPLS" Area_Operation="GL_OP" DMID="S679" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3594.31"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="SRPLS" Area_Operation="GL_OP" DMID="S680" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3783"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="SRPLS" Area_Operation="GL_OP" DMID="S681" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3633"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="ACCU_LOSS" Area_Operation="GL_OP" DMID="S682" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3720.34"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="ACCU_LOSS" Area_Operation="GL_OP" DMID="S683" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3570.34"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="ACCU_LOSS" Area_Operation="GL_OP" DMID="S684" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3759.03"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="ACCU_LOSS" Area_Operation="GL_OP" DMID="S685" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3609.03"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="ACCU_LOSS" Area_Operation="GL_OP" DMID="S686" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3797.72"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="ACCU_LOSS" Area_Operation="GL_OP" DMID="S687" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3647.72"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OP_SRPLS_CY" Area_Operation="GL_OP" DMID="S688" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3735.06"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OP_SRPLS_CY" Area_Operation="GL_OP" DMID="S689" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3585.06"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OP_SRPLS_CY" Area_Operation="GL_OP" DMID="S690" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3773.75"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OP_SRPLS_CY" Area_Operation="GL_OP" DMID="S691" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3623.75"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OP_SRPLS_CY" Area_Operation="GL_OP" DMID="S692" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3812.44"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OP_SRPLS_CY" Area_Operation="GL_OP" DMID="S693" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3662.44"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OP_DEFICT_CY" Area_Operation="GL_OP" DMID="S694" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3749.78"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OP_DEFICT_CY" Area_Operation="GL_OP" DMID="S695" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3599.78"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OP_DEFICT_CY" Area_Operation="GL_OP" DMID="S696" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3788.47"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OP_DEFICT_CY" Area_Operation="GL_OP" DMID="S697" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3638.47"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OP_DEFICT_CY" Area_Operation="GL_OP" DMID="S698" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3827.16"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OP_DEFICT_CY" Area_Operation="GL_OP" DMID="S699" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3677.16"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_UNDIS" Area_Operation="GL_OP" DMID="S700" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3764.5"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_UNDIS" Area_Operation="GL_OP" DMID="S701" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3803.19"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_UNDIS" Area_Operation="GL_OP" DMID="S702" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3653.19"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="RSRV_UNDIS" Area_Operation="GL_OP" DMID="S703" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3841.88"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="RSRV_UNDIS" Area_Operation="GL_OP" DMID="S704" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3691.88"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="GEN_PROV" Area_Operation="GL_OP" DMID="S705" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3779.22"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="GEN_PROV" Area_Operation="GL_OP" DMID="S706" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3817.91"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="GEN_PROV" Area_Operation="GL_OP" DMID="S707" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3667.91"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="GEN_PROV" Area_Operation="GL_OP" DMID="S708" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3856.6"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="GEN_PROV" Area_Operation="GL_OP" DMID="S709" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3706.6"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S716" INPUT="rwerbvcvbvc" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3793.94"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S717" INPUT="rwerbvcvbvc" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3643.94"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S718" INPUT="rwerbvcvbvc" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3832.63"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S719" INPUT="rwerbvcvbvc" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3682.63"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S720" INPUT="rwerbvcvbvc" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3871.32"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S721" INPUT="rwerbvcvbvc" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3721.32"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S716" INPUT="yututyutyu" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3808.66"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S717" INPUT="yututyutyu" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3658.66"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S718" INPUT="yututyutyu" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3847.35"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S719" INPUT="yututyutyu" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3697.35"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S720" INPUT="yututyutyu" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3886.04"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="OTH_INSTRU" Area_Operation="GL_OP" DMID="S721" INPUT="yututyutyu" CAP_DET="N_A"
+             TIME_PERIOD="2019-Q2" OBS_VALUE="3736.04"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="CAP_INFU" Area_Operation="GL_OP" DMID="S734" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3823.38"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="CAP_INFU" Area_Operation="GL_OP" DMID="S735" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3673.38"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="CAP_INFU" Area_Operation="GL_OP" DMID="S736" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3862.07"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="CAP_INFU" Area_Operation="GL_OP" DMID="S737" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3712.07"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOTAL"
+             Cptl_Rsrv="CAP_INFU" Area_Operation="GL_OP" DMID="S738" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3900.76"/>
+        <Obs COMMENT="" Currency="INR" Reserve_Amount="N_A" Ownership_Summary="N_A" Measure_Type="TOWHF"
+             Cptl_Rsrv="CAP_INFU" Area_Operation="GL_OP" DMID="S739" INPUT="N_A" CAP_DET="N_A" TIME_PERIOD="2019-Q2"
+             OBS_VALUE="3750.76"/>
+    </data:DataSet>
+    <data:DataSet FREQ="Q" DEPENDENCY_TYPE="INDEPENDENT" AUDST="AUDITED" xsi:type="DEPOSITS:DataSet"
+                  structureRef="DEPOSITS" action="Replace">
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_CA"
+             Area_Operation="GL_OP" DMID="S758" TIME_PERIOD="2019-Q2" OBS_VALUE="3838.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_CA"
+             Area_Operation="GL_OP" DMID="S759" TIME_PERIOD="2019-Q2" OBS_VALUE="3688.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_CA"
+             Area_Operation="GL_OP" DMID="S760" TIME_PERIOD="2019-Q2" OBS_VALUE="3876.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_CA"
+             Area_Operation="GL_OP" DMID="S761" TIME_PERIOD="2019-Q2" OBS_VALUE="3726.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_CA"
+             Area_Operation="GL_OP" DMID="S762" TIME_PERIOD="2019-Q2" OBS_VALUE="3915.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_CA"
+             Area_Operation="GL_OP" DMID="S763" TIME_PERIOD="2019-Q2" OBS_VALUE="3765.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1L"
+             Area_Operation="GL_OP" DMID="S770" TIME_PERIOD="2019-Q2" OBS_VALUE="3852.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1L"
+             Area_Operation="GL_OP" DMID="S771" TIME_PERIOD="2019-Q2" OBS_VALUE="3702.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1L"
+             Area_Operation="GL_OP" DMID="S772" TIME_PERIOD="2019-Q2" OBS_VALUE="3891.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1L"
+             Area_Operation="GL_OP" DMID="S773" TIME_PERIOD="2019-Q2" OBS_VALUE="3741.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1L"
+             Area_Operation="GL_OP" DMID="S774" TIME_PERIOD="2019-Q2" OBS_VALUE="3930.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1L"
+             Area_Operation="GL_OP" DMID="S775" TIME_PERIOD="2019-Q2" OBS_VALUE="3780.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1LO"
+             Area_Operation="GL_OP" DMID="S776" TIME_PERIOD="2019-Q2" OBS_VALUE="3867.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1LO"
+             Area_Operation="GL_OP" DMID="S777" TIME_PERIOD="2019-Q2" OBS_VALUE="3717.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1LO"
+             Area_Operation="GL_OP" DMID="S778" TIME_PERIOD="2019-Q2" OBS_VALUE="3906.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1LO"
+             Area_Operation="GL_OP" DMID="S779" TIME_PERIOD="2019-Q2" OBS_VALUE="3756.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1LO"
+             Area_Operation="GL_OP" DMID="S780" TIME_PERIOD="2019-Q2" OBS_VALUE="3944.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_SA_1LO"
+             Area_Operation="GL_OP" DMID="S781" TIME_PERIOD="2019-Q2" OBS_VALUE="3794.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_FD"
+             Area_Operation="GL_OP" DMID="S782" TIME_PERIOD="2019-Q2" OBS_VALUE="19558.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_FD"
+             Area_Operation="GL_OP" DMID="S783" TIME_PERIOD="2019-Q2" OBS_VALUE="18808.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_FD"
+             Area_Operation="GL_OP" DMID="S784" TIME_PERIOD="2019-Q2" OBS_VALUE="19751.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_FD"
+             Area_Operation="GL_OP" DMID="S785" TIME_PERIOD="2019-Q2" OBS_VALUE="19001.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_RES_FD"
+             Area_Operation="GL_OP" DMID="S786" TIME_PERIOD="2019-Q2" OBS_VALUE="19945.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_RES_FD"
+             Area_Operation="GL_OP" DMID="S787" TIME_PERIOD="2019-Q2" OBS_VALUE="19195.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_NRES_CASA"
+             Area_Operation="GL_OP" DMID="S794" TIME_PERIOD="2019-Q2" OBS_VALUE="3955.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_NRES_CASA"
+             Area_Operation="GL_OP" DMID="S795" TIME_PERIOD="2019-Q2" OBS_VALUE="3805.86"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_NRES_CASA"
+             Area_Operation="GL_OP" DMID="S796" TIME_PERIOD="2019-Q2" OBS_VALUE="3994.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_NRES_CASA"
+             Area_Operation="GL_OP" DMID="S797" TIME_PERIOD="2019-Q2" OBS_VALUE="3844.55"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_NRES_CASA"
+             Area_Operation="GL_OP" DMID="S798" TIME_PERIOD="2019-Q2" OBS_VALUE="4033.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_NRES_CASA"
+             Area_Operation="GL_OP" DMID="S799" TIME_PERIOD="2019-Q2" OBS_VALUE="3883.24"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_NRES_FD"
+             Area_Operation="GL_OP" DMID="S800" TIME_PERIOD="2019-Q2" OBS_VALUE="3970.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_NRES_FD"
+             Area_Operation="GL_OP" DMID="S801" TIME_PERIOD="2019-Q2" OBS_VALUE="3820.58"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_NRES_FD"
+             Area_Operation="GL_OP" DMID="S802" TIME_PERIOD="2019-Q2" OBS_VALUE="4009.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_NRES_FD"
+             Area_Operation="GL_OP" DMID="S803" TIME_PERIOD="2019-Q2" OBS_VALUE="3859.27"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CUST_NRES_FD"
+             Area_Operation="GL_OP" DMID="S804" TIME_PERIOD="2019-Q2" OBS_VALUE="4047.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CUST_NRES_FD"
+             Area_Operation="GL_OP" DMID="S805" TIME_PERIOD="2019-Q2" OBS_VALUE="3897.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_IND_DD"
+             Area_Operation="GL_OP" DMID="S818" TIME_PERIOD="2019-Q2" OBS_VALUE="3985.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_IND_DD"
+             Area_Operation="GL_OP" DMID="S819" TIME_PERIOD="2019-Q2" OBS_VALUE="3835.3"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_IND_DD"
+             Area_Operation="GL_OP" DMID="S820" TIME_PERIOD="2019-Q2" OBS_VALUE="4023.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_IND_DD"
+             Area_Operation="GL_OP" DMID="S821" TIME_PERIOD="2019-Q2" OBS_VALUE="3873.99"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_IND_DD"
+             Area_Operation="GL_OP" DMID="S822" TIME_PERIOD="2019-Q2" OBS_VALUE="4062.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_IND_DD"
+             Area_Operation="GL_OP" DMID="S823" TIME_PERIOD="2019-Q2" OBS_VALUE="3912.68"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_IND_FD"
+             Area_Operation="GL_OP" DMID="S824" TIME_PERIOD="2019-Q2" OBS_VALUE="4000.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_IND_FD"
+             Area_Operation="GL_OP" DMID="S825" TIME_PERIOD="2019-Q2" OBS_VALUE="3850.02"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_IND_FD"
+             Area_Operation="GL_OP" DMID="S826" TIME_PERIOD="2019-Q2" OBS_VALUE="4038.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_IND_FD"
+             Area_Operation="GL_OP" DMID="S827" TIME_PERIOD="2019-Q2" OBS_VALUE="3888.71"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_IND_FD"
+             Area_Operation="GL_OP" DMID="S828" TIME_PERIOD="2019-Q2" OBS_VALUE="4077.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_IND_FD"
+             Area_Operation="GL_OP" DMID="S829" TIME_PERIOD="2019-Q2" OBS_VALUE="3927.4"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_OVR_DD"
+             Area_Operation="GL_OP" DMID="S836" TIME_PERIOD="2019-Q2" OBS_VALUE="4014.74"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_OVR_DD"
+             Area_Operation="GL_OP" DMID="S837" TIME_PERIOD="2019-Q2" OBS_VALUE="3864.74"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_OVR_DD"
+             Area_Operation="GL_OP" DMID="S838" TIME_PERIOD="2019-Q2" OBS_VALUE="4053.43"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_OVR_DD"
+             Area_Operation="GL_OP" DMID="S839" TIME_PERIOD="2019-Q2" OBS_VALUE="3903.43"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_OVR_DD"
+             Area_Operation="GL_OP" DMID="S840" TIME_PERIOD="2019-Q2" OBS_VALUE="4092.12"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_OVR_DD"
+             Area_Operation="GL_OP" DMID="S841" TIME_PERIOD="2019-Q2" OBS_VALUE="3942.12"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_OVR_FD"
+             Area_Operation="GL_OP" DMID="S842" TIME_PERIOD="2019-Q2" OBS_VALUE="4029.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_OVR_FD"
+             Area_Operation="GL_OP" DMID="S843" TIME_PERIOD="2019-Q2" OBS_VALUE="3879.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_OVR_FD"
+             Area_Operation="GL_OP" DMID="S844" TIME_PERIOD="2019-Q2" OBS_VALUE="4068.15"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_OVR_FD"
+             Area_Operation="GL_OP" DMID="S845" TIME_PERIOD="2019-Q2" OBS_VALUE="3918.15"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="BANK_OVR_FD"
+             Area_Operation="GL_OP" DMID="S846" TIME_PERIOD="2019-Q2" OBS_VALUE="4106.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="BANK_OVR_FD"
+             Area_Operation="GL_OP" DMID="S847" TIME_PERIOD="2019-Q2" OBS_VALUE="3956.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CERT_DEP"
+             Area_Operation="GL_OP" DMID="S848" TIME_PERIOD="2019-Q2" OBS_VALUE="8103.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CERT_DEP"
+             Area_Operation="GL_OP" DMID="S849" TIME_PERIOD="2019-Q2" OBS_VALUE="7803.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CERT_DEP"
+             Area_Operation="GL_OP" DMID="S850" TIME_PERIOD="2019-Q2" OBS_VALUE="8180.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CERT_DEP"
+             Area_Operation="GL_OP" DMID="S851" TIME_PERIOD="2019-Q2" OBS_VALUE="7880.46"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="CERT_DEP"
+             Area_Operation="GL_OP" DMID="S852" TIME_PERIOD="2019-Q2" OBS_VALUE="8257.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="CERT_DEP"
+             Area_Operation="GL_OP" DMID="S853" TIME_PERIOD="2019-Q2" OBS_VALUE="7957.84"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="OVRBRANCH_CAP"
+             Area_Operation="GL_OP" DMID="S860" TIME_PERIOD="2019-Q2" OBS_VALUE="4073.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="OVRBRANCH_CAP"
+             Area_Operation="GL_OP" DMID="S861" TIME_PERIOD="2019-Q2" OBS_VALUE="3923.62"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="OVRBRANCH_CAP"
+             Area_Operation="GL_OP" DMID="S862" TIME_PERIOD="2019-Q2" OBS_VALUE="4112.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="OVRBRANCH_CAP"
+             Area_Operation="GL_OP" DMID="S863" TIME_PERIOD="2019-Q2" OBS_VALUE="3962.31"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="OVRBRANCH_CAP"
+             Area_Operation="GL_OP" DMID="S864" TIME_PERIOD="2019-Q2" OBS_VALUE="4151"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="OVRBRANCH_CAP"
+             Area_Operation="GL_OP" DMID="S865" TIME_PERIOD="2019-Q2" OBS_VALUE="4001"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="OVRBRANCH_DEP"
+             Area_Operation="GL_OP" DMID="S866" TIME_PERIOD="2019-Q2" OBS_VALUE="4088.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="OVRBRANCH_DEP"
+             Area_Operation="GL_OP" DMID="S867" TIME_PERIOD="2019-Q2" OBS_VALUE="3938.34"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="OVRBRANCH_DEP"
+             Area_Operation="GL_OP" DMID="S868" TIME_PERIOD="2019-Q2" OBS_VALUE="4127.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="OVRBRANCH_DEP"
+             Area_Operation="GL_OP" DMID="S869" TIME_PERIOD="2019-Q2" OBS_VALUE="3977.03"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="OVRBRANCH_DEP"
+             Area_Operation="GL_OP" DMID="S870" TIME_PERIOD="2019-Q2" OBS_VALUE="4165.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="OVRBRANCH_DEP"
+             Area_Operation="GL_OP" DMID="S871" TIME_PERIOD="2019-Q2" OBS_VALUE="4015.72"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="MBDEP" Area_Operation="GL_OP"
+             DMID="S1130" TIME_PERIOD="2019-Q2" OBS_VALUE="10252.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="MBDEP" Area_Operation="GL_OP"
+             DMID="S1131" TIME_PERIOD="2019-Q2" OBS_VALUE="6202.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="MBDEP" Area_Operation="GL_OP"
+             DMID="S1132" TIME_PERIOD="2019-Q2" OBS_VALUE="10252.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="MBDEP" Area_Operation="GL_OP"
+             DMID="S1133" TIME_PERIOD="2019-Q2" OBS_VALUE="6202.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" Inst_Type="N_A" Deposit_Type="MBDEP" Area_Operation="GL_OP"
+             DMID="S1134" TIME_PERIOD="2019-Q2" OBS_VALUE="2341.96"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" Inst_Type="N_A" Deposit_Type="MBDEP" Area_Operation="GL_OP"
+             DMID="S1135" TIME_PERIOD="2019-Q2" OBS_VALUE="291.96"/>
+    </data:DataSet>
+    <data:DataSet FREQ="Q" DEPENDENCY_TYPE="INDEPENDENT" AUDST="AUDITED" xsi:type="BORROWINGS:DataSet"
+                  structureRef="BORROWINGS" action="Replace">
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_MONEYMARKET"
+             Area_Operation="GL_OP" DMID="S884" TIME_PERIOD="2019-Q2" OBS_VALUE="4103.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_MONEYMARKET"
+             Area_Operation="GL_OP" DMID="S885" TIME_PERIOD="2019-Q2" OBS_VALUE="3953.06"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_MONEYMARKET"
+             Area_Operation="GL_OP" DMID="S886" TIME_PERIOD="2019-Q2" OBS_VALUE="4141.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_MONEYMARKET"
+             Area_Operation="GL_OP" DMID="S887" TIME_PERIOD="2019-Q2" OBS_VALUE="3991.75"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_MONEYMARKET"
+             Area_Operation="GL_OP" DMID="S888" TIME_PERIOD="2019-Q2" OBS_VALUE="4180.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_MONEYMARKET"
+             Area_Operation="GL_OP" DMID="S889" TIME_PERIOD="2019-Q2" OBS_VALUE="4030.44"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_RBI"
+             Area_Operation="GL_OP" DMID="S890" TIME_PERIOD="2019-Q2" OBS_VALUE="4117.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_RBI"
+             Area_Operation="GL_OP" DMID="S891" TIME_PERIOD="2019-Q2" OBS_VALUE="3967.78"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_RBI"
+             Area_Operation="GL_OP" DMID="S892" TIME_PERIOD="2019-Q2" OBS_VALUE="4156.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_RBI"
+             Area_Operation="GL_OP" DMID="S893" TIME_PERIOD="2019-Q2" OBS_VALUE="4006.47"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_RBI"
+             Area_Operation="GL_OP" DMID="S894" TIME_PERIOD="2019-Q2" OBS_VALUE="4195.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_RBI"
+             Area_Operation="GL_OP" DMID="S895" TIME_PERIOD="2019-Q2" OBS_VALUE="4045.16"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDBANKS"
+             Area_Operation="GL_OP" DMID="S896" TIME_PERIOD="2019-Q2" OBS_VALUE="4132.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDBANKS"
+             Area_Operation="GL_OP" DMID="S897" TIME_PERIOD="2019-Q2" OBS_VALUE="3982.5"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDBANKS"
+             Area_Operation="GL_OP" DMID="S898" TIME_PERIOD="2019-Q2" OBS_VALUE="4171.19"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDBANKS"
+             Area_Operation="GL_OP" DMID="S899" TIME_PERIOD="2019-Q2" OBS_VALUE="4021.19"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDBANKS"
+             Area_Operation="GL_OP" DMID="S900" TIME_PERIOD="2019-Q2" OBS_VALUE="4209.88"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDBANKS"
+             Area_Operation="GL_OP" DMID="S901" TIME_PERIOD="2019-Q2" OBS_VALUE="4059.88"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDCCP"
+             Area_Operation="GL_OP" DMID="S902" TIME_PERIOD="2019-Q2" OBS_VALUE="4147.22"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDCCP"
+             Area_Operation="GL_OP" DMID="S903" TIME_PERIOD="2019-Q2" OBS_VALUE="3997.22"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDCCP"
+             Area_Operation="GL_OP" DMID="S904" TIME_PERIOD="2019-Q2" OBS_VALUE="4185.91"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDCCP"
+             Area_Operation="GL_OP" DMID="S905" TIME_PERIOD="2019-Q2" OBS_VALUE="4035.91"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDCCP"
+             Area_Operation="GL_OP" DMID="S906" TIME_PERIOD="2019-Q2" OBS_VALUE="4224.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDCCP"
+             Area_Operation="GL_OP" DMID="S907" TIME_PERIOD="2019-Q2" OBS_VALUE="4074.6"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDFI"
+             Area_Operation="GL_OP" DMID="S908" TIME_PERIOD="2019-Q2" OBS_VALUE="4161.94"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDFI"
+             Area_Operation="GL_OP" DMID="S909" TIME_PERIOD="2019-Q2" OBS_VALUE="4011.94"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDFI"
+             Area_Operation="GL_OP" DMID="S910" TIME_PERIOD="2019-Q2" OBS_VALUE="4200.63"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDFI"
+             Area_Operation="GL_OP" DMID="S911" TIME_PERIOD="2019-Q2" OBS_VALUE="4050.63"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDFI"
+             Area_Operation="GL_OP" DMID="S912" TIME_PERIOD="2019-Q2" OBS_VALUE="4239.32"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_INDFI"
+             Area_Operation="GL_OP" DMID="S913" TIME_PERIOD="2019-Q2" OBS_VALUE="4089.32"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRBANKS"
+             Area_Operation="GL_OP" DMID="S914" TIME_PERIOD="2019-Q2" OBS_VALUE="4176.66"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRBANKS"
+             Area_Operation="GL_OP" DMID="S915" TIME_PERIOD="2019-Q2" OBS_VALUE="4026.66"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRBANKS"
+             Area_Operation="GL_OP" DMID="S916" TIME_PERIOD="2019-Q2" OBS_VALUE="4215.35"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRBANKS"
+             Area_Operation="GL_OP" DMID="S917" TIME_PERIOD="2019-Q2" OBS_VALUE="4065.35"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRBANKS"
+             Area_Operation="GL_OP" DMID="S918" TIME_PERIOD="2019-Q2" OBS_VALUE="4254.04"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRBANKS"
+             Area_Operation="GL_OP" DMID="S919" TIME_PERIOD="2019-Q2" OBS_VALUE="4104.04"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRFI"
+             Area_Operation="GL_OP" DMID="S920" TIME_PERIOD="2019-Q2" OBS_VALUE="4191.38"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRFI"
+             Area_Operation="GL_OP" DMID="S921" TIME_PERIOD="2019-Q2" OBS_VALUE="4041.38"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRFI"
+             Area_Operation="GL_OP" DMID="S922" TIME_PERIOD="2019-Q2" OBS_VALUE="4230.07"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRFI"
+             Area_Operation="GL_OP" DMID="S923" TIME_PERIOD="2019-Q2" OBS_VALUE="4080.07"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRFI"
+             Area_Operation="GL_OP" DMID="S924" TIME_PERIOD="2019-Q2" OBS_VALUE="4268.76"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CI_OVRFI"
+             Area_Operation="GL_OP" DMID="S925" TIME_PERIOD="2019-Q2" OBS_VALUE="4118.76"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_BOND"
+             Area_Operation="GL_OP" DMID="S932" TIME_PERIOD="2019-Q2" OBS_VALUE="4206.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_BOND"
+             Area_Operation="GL_OP" DMID="S933" TIME_PERIOD="2019-Q2" OBS_VALUE="4056.1"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_BOND"
+             Area_Operation="GL_OP" DMID="S934" TIME_PERIOD="2019-Q2" OBS_VALUE="4244.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_BOND"
+             Area_Operation="GL_OP" DMID="S935" TIME_PERIOD="2019-Q2" OBS_VALUE="4094.79"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_BOND"
+             Area_Operation="GL_OP" DMID="S936" TIME_PERIOD="2019-Q2" OBS_VALUE="4283.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_BOND"
+             Area_Operation="GL_OP" DMID="S937" TIME_PERIOD="2019-Q2" OBS_VALUE="4133.48"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_DEBTPAPER"
+             Area_Operation="GL_OP" DMID="S938" TIME_PERIOD="2019-Q2" OBS_VALUE="4220.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_DEBTPAPER"
+             Area_Operation="GL_OP" DMID="S939" TIME_PERIOD="2019-Q2" OBS_VALUE="4070.82"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_DEBTPAPER"
+             Area_Operation="GL_OP" DMID="S940" TIME_PERIOD="2019-Q2" OBS_VALUE="4259.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_DEBTPAPER"
+             Area_Operation="GL_OP" DMID="S941" TIME_PERIOD="2019-Q2" OBS_VALUE="4109.51"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_DEBTPAPER"
+             Area_Operation="GL_OP" DMID="S942" TIME_PERIOD="2019-Q2" OBS_VALUE="4298.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="BOR_CM_DEBTPAPER"
+             Area_Operation="GL_OP" DMID="S943" TIME_PERIOD="2019-Q2" OBS_VALUE="4148.2"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_DUE5YR"
+             Area_Operation="GL_OP" DMID="S950" TIME_PERIOD="2019-Q2" OBS_VALUE="4235.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_DUE5YR"
+             Area_Operation="GL_OP" DMID="S951" TIME_PERIOD="2019-Q2" OBS_VALUE="4085.54"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_DUE5YR"
+             Area_Operation="GL_OP" DMID="S952" TIME_PERIOD="2019-Q2" OBS_VALUE="4274.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_DUE5YR"
+             Area_Operation="GL_OP" DMID="S953" TIME_PERIOD="2019-Q2" OBS_VALUE="4124.23"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_DUE5YR"
+             Area_Operation="GL_OP" DMID="S954" TIME_PERIOD="2019-Q2" OBS_VALUE="4312.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_DUE5YR"
+             Area_Operation="GL_OP" DMID="S955" TIME_PERIOD="2019-Q2" OBS_VALUE="4162.92"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_OTH"
+             Area_Operation="GL_OP" DMID="S956" TIME_PERIOD="2019-Q2" OBS_VALUE="4250.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_OTH"
+             Area_Operation="GL_OP" DMID="S957" TIME_PERIOD="2019-Q2" OBS_VALUE="4100.26"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_OTH"
+             Area_Operation="GL_OP" DMID="S958" TIME_PERIOD="2019-Q2" OBS_VALUE="4288.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_OTH"
+             Area_Operation="GL_OP" DMID="S959" TIME_PERIOD="2019-Q2" OBS_VALUE="4138.95"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_OTH"
+             Area_Operation="GL_OP" DMID="S960" TIME_PERIOD="2019-Q2" OBS_VALUE="4327.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="SUBORDDEBT_OTH"
+             Area_Operation="GL_OP" DMID="S961" TIME_PERIOD="2019-Q2" OBS_VALUE="4177.64"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMBONDS"
+             Area_Operation="GL_OP" DMID="S962" TIME_PERIOD="2019-Q2" OBS_VALUE="4264.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMBONDS"
+             Area_Operation="GL_OP" DMID="S963" TIME_PERIOD="2019-Q2" OBS_VALUE="4114.98"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMBONDS"
+             Area_Operation="GL_OP" DMID="S964" TIME_PERIOD="2019-Q2" OBS_VALUE="4303.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMBONDS"
+             Area_Operation="GL_OP" DMID="S965" TIME_PERIOD="2019-Q2" OBS_VALUE="4153.67"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMBONDS"
+             Area_Operation="GL_OP" DMID="S966" TIME_PERIOD="2019-Q2" OBS_VALUE="4342.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMBONDS"
+             Area_Operation="GL_OP" DMID="S967" TIME_PERIOD="2019-Q2" OBS_VALUE="4192.36"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMLOANS"
+             Area_Operation="GL_OP" DMID="S968" TIME_PERIOD="2019-Q2" OBS_VALUE="4279.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMLOANS"
+             Area_Operation="GL_OP" DMID="S969" TIME_PERIOD="2019-Q2" OBS_VALUE="4129.7"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMLOANS"
+             Area_Operation="GL_OP" DMID="S970" TIME_PERIOD="2019-Q2" OBS_VALUE="4318.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMLOANS"
+             Area_Operation="GL_OP" DMID="S971" TIME_PERIOD="2019-Q2" OBS_VALUE="4168.39"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMLOANS"
+             Area_Operation="GL_OP" DMID="S972" TIME_PERIOD="2019-Q2" OBS_VALUE="4357.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="LONGTERMLOANS"
+             Area_Operation="GL_OP" DMID="S973" TIME_PERIOD="2019-Q2" OBS_VALUE="4207.08"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="HYBRIDCAP"
+             Area_Operation="GL_OP" DMID="S974" TIME_PERIOD="2019-Q2" OBS_VALUE="4294.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="HYBRIDCAP"
+             Area_Operation="GL_OP" DMID="S975" TIME_PERIOD="2019-Q2" OBS_VALUE="4144.42"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="HYBRIDCAP"
+             Area_Operation="GL_OP" DMID="S976" TIME_PERIOD="2019-Q2" OBS_VALUE="4333.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="HYBRIDCAP"
+             Area_Operation="GL_OP" DMID="S977" TIME_PERIOD="2019-Q2" OBS_VALUE="4183.11"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOTAL" INPUT="N_A" DATE="N_A" Borrowing_Type="HYBRIDCAP"
+             Area_Operation="GL_OP" DMID="S978" TIME_PERIOD="2019-Q2" OBS_VALUE="4371.8"/>
+        <Obs COMMENT="" Currency="INR" Measure_Type="TOWHF" INPUT="N_A" DATE="N_A" Borrowing_Type="HYBRIDCAP"
+             Area_Operation="GL_OP" DMID="S979" TIME_PERIOD="2019-Q2" OBS_VALUE="4221.8"/>
+    </data:DataSet>
+    <data:DataSet FREQ="Q" DEPENDENCY_TYPE="INDEPENDENT" AUDST="AUDITED" xsi:type="OTH_LIAB:DataSet"
+                  structureRef="OTH_LIAB" action="Replace">
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_INT" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S986" TIME_PERIOD="2019-Q2" OBS_VALUE="4309.14"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_INT" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S987" TIME_PERIOD="2019-Q2" OBS_VALUE="4159.14"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_INT" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S988" TIME_PERIOD="2019-Q2" OBS_VALUE="4347.83"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_INT" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S989" TIME_PERIOD="2019-Q2" OBS_VALUE="4197.83"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_INT" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S990" TIME_PERIOD="2019-Q2" OBS_VALUE="4386.52"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_INT" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S991" TIME_PERIOD="2019-Q2" OBS_VALUE="4236.52"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_PROVTAX" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S992" TIME_PERIOD="2019-Q2" OBS_VALUE="4323.86"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_PROVTAX" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S993" TIME_PERIOD="2019-Q2" OBS_VALUE="4173.86"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_PROVTAX" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S994" TIME_PERIOD="2019-Q2" OBS_VALUE="4362.55"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_PROVTAX" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S995" TIME_PERIOD="2019-Q2" OBS_VALUE="4212.55"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_PROVTAX" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S996" TIME_PERIOD="2019-Q2" OBS_VALUE="4401.24"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_PROVTAX" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S997" TIME_PERIOD="2019-Q2" OBS_VALUE="4251.24"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_IBA" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S998" TIME_PERIOD="2019-Q2" OBS_VALUE="4338.58"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_IBA" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S999" TIME_PERIOD="2019-Q2" OBS_VALUE="4188.58"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_IBA" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1000" TIME_PERIOD="2019-Q2" OBS_VALUE="4377.27"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_IBA" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1001" TIME_PERIOD="2019-Q2" OBS_VALUE="4227.27"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_IBA" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1002" TIME_PERIOD="2019-Q2" OBS_VALUE="4415.96"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_IBA" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1003" TIME_PERIOD="2019-Q2" OBS_VALUE="4265.96"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="BILLS" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1004" TIME_PERIOD="2019-Q2" OBS_VALUE="4353.3"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="BILLS" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1005" TIME_PERIOD="2019-Q2" OBS_VALUE="4203.3"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="BILLS" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1006" TIME_PERIOD="2019-Q2" OBS_VALUE="4391.99"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="BILLS" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1007" TIME_PERIOD="2019-Q2" OBS_VALUE="4241.99"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="BILLS" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1008" TIME_PERIOD="2019-Q2" OBS_VALUE="4430.68"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="BILLS" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1009" TIME_PERIOD="2019-Q2" OBS_VALUE="4280.68"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_SRPLS" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1016" TIME_PERIOD="2019-Q2" OBS_VALUE="4368.02"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_SRPLS" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1017" TIME_PERIOD="2019-Q2" OBS_VALUE="4218.02"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_SRPLS" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1018" TIME_PERIOD="2019-Q2" OBS_VALUE="4406.71"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_SRPLS" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1019" TIME_PERIOD="2019-Q2" OBS_VALUE="4256.71"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_SRPLS" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1020" TIME_PERIOD="2019-Q2" OBS_VALUE="4445.4"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_SRPLS" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1021" TIME_PERIOD="2019-Q2" OBS_VALUE="4295.4"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_DEFTAX" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1022" TIME_PERIOD="2019-Q2" OBS_VALUE="4382.74"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_DEFTAX" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1023" TIME_PERIOD="2019-Q2" OBS_VALUE="4232.74"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_DEFTAX" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1024" TIME_PERIOD="2019-Q2" OBS_VALUE="4421.43"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_DEFTAX" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1025" TIME_PERIOD="2019-Q2" OBS_VALUE="4271.43"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_DEFTAX" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1026" TIME_PERIOD="2019-Q2" OBS_VALUE="4460.12"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_DEFTAX" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1027" TIME_PERIOD="2019-Q2" OBS_VALUE="4310.12"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_MTM" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1028" TIME_PERIOD="2019-Q2" OBS_VALUE="4397.46"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_MTM" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1029" TIME_PERIOD="2019-Q2" OBS_VALUE="4247.46"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_MTM" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1030" TIME_PERIOD="2019-Q2" OBS_VALUE="4436.15"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_MTM" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1031" TIME_PERIOD="2019-Q2" OBS_VALUE="4286.15"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_MTM" Measure_Type="TOTAL" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1032" TIME_PERIOD="2019-Q2" OBS_VALUE="4474.84"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_MTM" Measure_Type="TOWHF" INPUT="N_A"
+             Area_Operation="GL_OP" DMID="S1033" TIME_PERIOD="2019-Q2" OBS_VALUE="4324.84"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOTAL" INPUT="ytu"
+             Area_Operation="GL_OP" DMID="S1040" TIME_PERIOD="2019-Q2" OBS_VALUE="4412.18"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOWHF" INPUT="ytu"
+             Area_Operation="GL_OP" DMID="S1041" TIME_PERIOD="2019-Q2" OBS_VALUE="4262.18"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOTAL" INPUT="ytu"
+             Area_Operation="GL_OP" DMID="S1042" TIME_PERIOD="2019-Q2" OBS_VALUE="4450.87"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOWHF" INPUT="ytu"
+             Area_Operation="GL_OP" DMID="S1043" TIME_PERIOD="2019-Q2" OBS_VALUE="4300.87"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOTAL" INPUT="ytu"
+             Area_Operation="GL_OP" DMID="S1044" TIME_PERIOD="2019-Q2" OBS_VALUE="4489.56"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOWHF" INPUT="ytu"
+             Area_Operation="GL_OP" DMID="S1045" TIME_PERIOD="2019-Q2" OBS_VALUE="4339.56"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOTAL" INPUT="bnmbm"
+             Area_Operation="GL_OP" DMID="S1040" TIME_PERIOD="2019-Q2" OBS_VALUE="4426.9"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOWHF" INPUT="bnmbm"
+             Area_Operation="GL_OP" DMID="S1041" TIME_PERIOD="2019-Q2" OBS_VALUE="4276.9"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOTAL" INPUT="bnmbm"
+             Area_Operation="GL_OP" DMID="S1042" TIME_PERIOD="2019-Q2" OBS_VALUE="4465.59"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOWHF" INPUT="bnmbm"
+             Area_Operation="GL_OP" DMID="S1043" TIME_PERIOD="2019-Q2" OBS_VALUE="4315.59"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOTAL" INPUT="bnmbm"
+             Area_Operation="GL_OP" DMID="S1044" TIME_PERIOD="2019-Q2" OBS_VALUE="4504.28"/>
+        <Obs COMMENT="" Currency="INR" Other_Liability_Type="OLIAB_AOTH" Measure_Type="TOWHF" INPUT="bnmbm"
+             Area_Operation="GL_OP" DMID="S1045" TIME_PERIOD="2019-Q2" OBS_VALUE="4354.28"/>
+    </data:DataSet>
+</message:StructureSpecificData>

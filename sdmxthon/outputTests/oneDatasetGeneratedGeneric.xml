@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<message:GenericData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+                     xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"
+                     xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+                     xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+    <message:Header>
+        <message:ID>test</message:ID>
+        <message:Test>false</message:Test>
+        <message:Prepared>2020-09-10T12:00:00</message:Prepared>
+        <message:Sender id="Unknown"/>
+        <message:Receiver id="not_supplied"/>
+        <message:Structure structureID="AALOE" dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="AALOE" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+    </message:Header>
+    <message:DataSet structureRef="AALOE" setID="AALOE" action="Replace" validFromDate="2020-05-25T11:58:50">
+        <generic:Attributes>
+            <generic:Value id="FREQ" value="Q"/>
+            <generic:Value id="DEPENDENCY_TYPE" value="INDEPENDENT"/>
+            <generic:Value id="AUDST" value="AUDITED"/>
+        </generic:Attributes>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2935"/>
+                <generic:Value id="Entry_Type" value="ADEBIT"/>
+                <generic:Value id="RECO_PER" value="M6M12"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10586.97"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2936"/>
+                <generic:Value id="Entry_Type" value="CREDIT"/>
+                <generic:Value id="RECO_PER" value="M6M12"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="157"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2937"/>
+                <generic:Value id="Entry_Type" value="ACREDIT"/>
+                <generic:Value id="RECO_PER" value="M6M12"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10598.92"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2938"/>
+                <generic:Value id="Entry_Type" value="DEBIT"/>
+                <generic:Value id="RECO_PER" value="Y1Y2"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="134"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2939"/>
+                <generic:Value id="Entry_Type" value="ADEBIT"/>
+                <generic:Value id="RECO_PER" value="Y1Y2"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10601.69"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2940"/>
+                <generic:Value id="Entry_Type" value="CREDIT"/>
+                <generic:Value id="RECO_PER" value="Y1Y2"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="162"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2941"/>
+                <generic:Value id="Entry_Type" value="ACREDIT"/>
+                <generic:Value id="RECO_PER" value="Y1Y2"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10613.64"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2942"/>
+                <generic:Value id="Entry_Type" value="DEBIT"/>
+                <generic:Value id="RECO_PER" value="Y2Y3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="139"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2943"/>
+                <generic:Value id="Entry_Type" value="ADEBIT"/>
+                <generic:Value id="RECO_PER" value="Y2Y3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10616.41"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2944"/>
+                <generic:Value id="Entry_Type" value="CREDIT"/>
+                <generic:Value id="RECO_PER" value="Y2Y3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="167"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2945"/>
+                <generic:Value id="Entry_Type" value="ACREDIT"/>
+                <generic:Value id="RECO_PER" value="Y2Y3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10628.36"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2946"/>
+                <generic:Value id="Entry_Type" value="DEBIT"/>
+                <generic:Value id="RECO_PER" value="OY3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="144"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2947"/>
+                <generic:Value id="Entry_Type" value="ADEBIT"/>
+                <generic:Value id="RECO_PER" value="OY3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10631.13"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2948"/>
+                <generic:Value id="Entry_Type" value="CREDIT"/>
+                <generic:Value id="RECO_PER" value="OY3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="172"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value=""/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2949"/>
+                <generic:Value id="Entry_Type" value="ACREDIT"/>
+                <generic:Value id="RECO_PER" value="OY3"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10643.08"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="DMID" value="S2950"/>
+                <generic:Value id="Entry_Type" value="N_A"/>
+                <generic:Value id="RECO_PER" value="N_A"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="Measure_Type" value="LOPROIBA"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10548.35"/>
+            <generic:Attributes>
+                <generic:Value id="Currency" value="INR"/>
+                <generic:Value id="COMMENT" value=""/>
+            </generic:Attributes>
+        </generic:Obs>
+    </message:DataSet>
+</message:GenericData>

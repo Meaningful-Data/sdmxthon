@@ -6,8 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-lxml = "*"
-pandas = "*"
+lxml = { version = "4.6.1", index = "pypi" }
+pandas = { version = "0.25.1", index = "pypi" }
+numpy = { version = "1.19.3", index = "pypi" }
 
 [requires]
-python_version = "3.7"
+python_version = "*"

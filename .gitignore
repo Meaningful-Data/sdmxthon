@@ -1,4 +1,4 @@
-.vscode/
+﻿.vscode/
 model/__pycache__/
 tests/__pycache__/
 IRIS/

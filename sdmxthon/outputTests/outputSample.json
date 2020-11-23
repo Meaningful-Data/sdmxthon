@@ -1,0 +1,26 @@
+[
+  {
+    "structureRef": {
+      "code": "ASSETS_EX_LNA_SLR",
+      "version": "1.0",
+      "agencyID": "RBI"
+    },
+    "attached_attributes": {
+      "FREQ": "Q",
+      "DEPENDENCY_TYPE": "INDEPENDENT",
+      "AUDST": "AUDITED"
+    },
+    "obs": [
+      {
+        "COMMENT": "N_A",
+        "Currency": "INR",
+        "Measure_Type": "TOTAL",
+        "Asset_Ex_LNA": "CF_CASHONHAND",
+        "Area_Operation": "DOM_OP",
+        "INPUT": "N_A",
+        "DMID": "S7",
+        "TIME_PERIOD": "2019-Q2"
+      }
+    ]
+  }
+]

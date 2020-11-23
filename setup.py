@@ -1,22 +1,32 @@
-import setuptools
+from distutils.core import setup
 
-with open("README.rst", "r") as fh:
-    long_description = fh.read()
-
-setuptools.setup(
-    name="sdmxthon",
-    version="0.0.3",
-    author="meaningfulData",
-    author_email="info@meaningfuldata.eu",
-    description="An SDMX library",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
-    packages=setuptools.find_packages(),
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+setup(
+    name='SDMXThon',
+    packages=['SDMXThon'],
+    package_data={
+        'SDMXThon': ['*.py', 'common/*.py', 'data/*.py', 'message/*.py', 'metadata/*.py', 'query/*.py', 'registry/*.py',
+                     'structure/*.py', 'test/*.py', 'utils/*.py']},
+    version='0.0.5.4',
+    license='MIT',
+    description='Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation',
+    author='Ruben Cardoso/Javier Hernandez',
+    author_email='javier.hernandez@meaningfuldata.eu',
+    url='https://github.com/RubensHouse/sdmxthon',
+    download_url='',
+    keywords=['SDMX', 'Pandas', 'Validation'],
+    install_requires=[
+        'lxml',
+        'pandas',
+        'numpy'
     ],
-    python_requires='>=3.7',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Topic :: Software Development',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9'
+    ],
 )
