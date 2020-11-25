@@ -1,7 +1,8 @@
 import logging
 
-from SDMXThon import DatasetType, datasetListToXML
-from SDMXThon import xmlToDatasetList, headerCreation, generate_message
+from lxml import etree
+
+from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
 pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
@@ -68,8 +69,8 @@ def main():
                      dataset_type=DatasetType.StructureDataSet, validate_data=False)
 
 
-"""
-
+    """
+    """
     # SDMX Generic to DataSet to SDMX Structure
     dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
 
@@ -77,6 +78,8 @@ def main():
     datasetListToXML(dataset_list, pathToMetadataFile, pathSaveToStructure2, header,
                      dataset_type=DatasetType.StructureDataSet, validate_data=False)
     # datasetListToJSON(dataset_list, pathSavetoJSON)
+    """
+    """
     # Passing path to file
     dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
 
@@ -91,7 +94,13 @@ def main():
     f.seek(0)
     message = generate_message(dataset_list, f, header, DatasetType.StructureDataSet, validate_data=False)
     print(message)
+    """
+    root = etree.parse(pathToMetadataFile)
+    codelists = get_codelist_model(root)
+    concepts = get_concept_schemes(root, codelists)
+    dsds = get_DSDs(root, concepts, codelists)
 
+    print(dsds)
 
 if __name__ == '__main__':
     main()

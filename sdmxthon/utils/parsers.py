@@ -1,5 +1,6 @@
 import copy
 import logging
+from typing import Dict
 
 from SDMXThon.common.generic import GenericDataStructureType
 from SDMXThon.common.references import DataflowReferenceType
@@ -7,6 +8,10 @@ from SDMXThon.common.refs import DataflowRefType
 from SDMXThon.data.generic import DataSetType as GenericDataSetType
 from SDMXThon.data.generic import ValuesType, ObsOnlyType, ComponentValueType, ObsValueType
 from SDMXThon.message.generic import GenericDataType, StructureSpecificDataType
+from SDMXThon.model.itemScheme import Code, CodeList, Agency, ConceptScheme, Concept
+from SDMXThon.model.structure import DataStructureDefinition, DimensionDescriptor, MeasureDescriptor, \
+    AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension
+from SDMXThon.model.structure import Representation
 from SDMXThon.structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
     SeriesType as Series
 from SDMXThon.utils.enums import DatasetType
@@ -290,6 +295,331 @@ def get_codelist(root):
             codelist_ids[result_.attrib['id']] = enums
 
     return codelist_ids
+
+
+def id_creator(agencyID, id, version):
+    return f"{agencyID}:{id}({version})"
+
+
+def get_codelist_model(root):
+    expression = "/mes:Structure/mes:Structures/str:Codelists/str:Codelist"
+    result = root.xpath(expression,
+                        namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    if result is not None:
+        codelists: Dict = {}
+        for element in result:
+            cl = CodeList(id_=element.attrib['id'],
+                          uri=element.attrib['urn'],
+                          isExternalReference=element.attrib['isExternalReference'],
+                          maintainer=Agency(id_=element.attrib['agencyID']),
+                          isFinal=element.attrib['isFinal'],
+                          version=element.attrib['version']
+                          )
+            expression = "./com:Name/text()"
+            name = element.xpath(expression,
+                                 namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+            if len(name) > 0:
+                cl.name = name[0]
+
+            expression = "./str:Code"
+            codes = element.xpath(expression,
+                                  namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+            for code in codes:
+                cd = Code(id_=code.attrib['id'], uri=code.attrib['urn'])
+                expression = "./com:Name/text()"
+                name = code.xpath(expression,
+                                  namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+                if len(name) > 0:
+                    cd.name = name[0]
+
+                expression = "./com:Description/text()"
+                desc = code.xpath(expression,
+                                  namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+                if len(desc) > 0:
+                    cd.description = desc[0]
+                cl.append(cd)
+            identifier = id_creator(cl.maintainer.id, cl.id, cl.version)
+
+            codelists[identifier] = cl
+        return codelists
+    else:
+        return []
+
+
+def get_concept_schemes(root, codelists=None):
+    expression = "/mes:Structure/mes:Structures/str:Concepts/str:ConceptScheme"
+    result = root.xpath(expression,
+                        namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    if result is not None:
+        schemes: Dict = {}
+        for element in result:
+            sch = ConceptScheme(id_=element.attrib['id'],
+                                uri=element.attrib['urn'],
+                                isExternalReference=element.attrib['isExternalReference'],
+                                maintainer=Agency(id_=element.attrib['agencyID']),
+                                isFinal=element.attrib['isFinal'],
+                                version=element.attrib['version']
+                                )
+            expression = "./com:Name/text()"
+            name = element.xpath(expression,
+                                 namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+            if len(name) > 0:
+                sch.name = name[0]
+
+            expression = "./str:Concept"
+            concepts = element.xpath(expression,
+                                     namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+            for concept in concepts:
+                cd = Concept(id_=concept.attrib['id'], uri=concept.attrib['urn'])
+                expression = "./com:Name/text()"
+                name = concept.xpath(expression,
+                                     namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+                if len(name) > 0:
+                    cd.name = name[0]
+
+                expression = "./str:CoreRepresentation/str:Enumeration/Ref"
+                cr = concept.xpath(expression,
+                                   namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                if len(cr) == 1:
+                    attrib = cr[0].attrib
+                    if attrib['package'] == 'codelist' and attrib['class'] == 'Codelist':
+                        id_ = id_creator(attrib['agencyID'], attrib['id'], attrib['version'])
+                        if codelists is not None:
+                            cd.coreRepresentation = Representation(codeList=codelists[id_])
+                sch.append(cd)
+            identifier = id_creator(sch.maintainer.id, sch.id, sch.version)
+            schemes[identifier] = sch
+        return schemes
+    else:
+        return []
+
+
+def get_DSDs(root, concepts=None, codelists=None):
+    expression = "/mes:Structure/mes:Structures/str:DataStructures/str:DataStructure"
+    result = root.xpath(expression,
+                        namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    if result is not None:
+        dsds: Dict = {}
+        for element in result:
+            dsd = DataStructureDefinition(id_=element.attrib['id'],
+                                          uri=element.attrib['urn'],
+                                          isExternalReference=element.attrib['isExternalReference'],
+                                          maintainer=Agency(id_=element.attrib['agencyID']),
+                                          isFinal=element.attrib['isFinal'],
+                                          version=element.attrib['version']
+                                          )
+            expression = "./com:Name/text()"
+            name = element.xpath(expression,
+                                 namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+            if len(name) > 0:
+                dsd.name = name[0]
+
+            # Add Dimensions
+            expression = "./str:DataStructureComponents/str:DimensionList"
+            dimensionElement = element.xpath(expression,
+                                             namespaces={
+                                                 'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+            if len(dimensionElement) == 1:
+                dd = DimensionDescriptor(id_=dimensionElement[0].attrib['id'], uri=dimensionElement[0].attrib['urn'])
+                expression = "./str:DataStructureComponents/str:DimensionList/str:Dimension"
+                dimensions = element.xpath(expression,
+                                           namespaces={
+                                               'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                # Add Dimensions to Dimension Descriptor
+                for record in dimensions:
+                    dim = Dimension(id_=record.attrib['id'], uri=record.attrib['urn'],
+                                    position=record.attrib['position'])
+                    if concepts is not None and codelists is not None:
+                        expression = "./str:ConceptIdentity/Ref"
+                        ref = record.xpath(expression,
+                                           namespaces={
+                                               'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                        if len(ref) == 1:
+                            attrib_cs = ref[0].attrib
+                            cs_id = id_creator(attrib_cs['agencyID'], attrib_cs['maintainableParentID'],
+                                               attrib_cs['maintainableParentVersion'])
+                            if cs_id in concepts.keys():
+                                cs = concepts[cs_id]
+                                con = cs.items[attrib_cs['id']]
+                            else:
+                                # TODO Error message no concept scheme in scheme list (validate_metadata)
+                                cs = None
+                                con = None
+                        else:
+                            # TODO Error message no concept scheme found in DataStructureDefinition (validate_metadata)
+                            cs = None
+                            con = None
+                        expression = "./str:LocalRepresentation/str:Enumeration/Ref"
+                        ref = record.xpath(expression,
+                                           namespaces={
+                                               'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                        if len(ref) == 1:
+                            attrib_cl = ref[0].attrib
+                            cl_id = id_creator(attrib_cl['agencyID'], attrib_cl['id'],
+                                               attrib_cl['version'])
+                            if cl_id in codelists.keys():
+                                cl = codelists[cl_id]
+                            else:
+                                # TODO Error message no codelist found in codelist list (validate_metadata)
+                                cl = None
+                        else:
+                            # TODO Error message no codelist found in DataStructureDefinition (validate_metadata)
+                            cl = None
+                        rep = Representation(codeList=cl, conceptScheme=cs, concept=con)
+                        dim.localRepresentation = rep
+                    dd.addComponent(dim)
+
+                # Add TimeDimension to DimensionDescriptor
+                expression = "./str:DataStructureComponents/str:DimensionList/str:Dimension"
+                time_dimensions = element.xpath(expression,
+                                                namespaces={
+                                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                for record in time_dimensions:
+                    td = TimeDimension(id_=record.attrib['id'], uri=record.attrib['urn'],
+                                       position=record.attrib['position'])
+                    expression = "./str:ConceptIdentity/Ref"
+                    ref = record.xpath(expression,
+                                       namespaces={
+                                           'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                    if len(ref) == 1:
+                        attrib_cs = ref[0].attrib
+                        cs_id = id_creator(attrib_cs['agencyID'], attrib_cs['maintainableParentID'],
+                                           attrib_cs['maintainableParentVersion'])
+                        if cs_id in concepts.keys():
+                            cs = concepts[cs_id]
+                            con = cs.items[attrib_cs['id']]
+                        else:
+                            # TODO Error message no concept scheme in scheme list (validate_metadata)
+                            cs = None
+                            con = None
+                    else:
+                        # TODO Error message no concept scheme found in file (validate_metadata)
+                        cs = None
+                        con = None
+                    expression = "./str:LocalRepresentation/str:Enumeration/Ref"
+                    ref = record.xpath(expression,
+                                       namespaces={
+                                           'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                    if len(ref) == 1:
+                        attrib_cl = ref[0].attrib
+                        cl_id = id_creator(attrib_cl['agencyID'], attrib_cl['id'],
+                                           attrib_cl['version'])
+                        if cl_id in codelists.keys():
+                            cl = codelists[cl_id]
+                        else:
+                            # TODO Error message no codelist found in codelist list (validate_metadata)
+                            cl = None
+                    else:
+                        # TODO Error message no codelist found in file (validate_metadata)
+                        cl = None
+                    rep = Representation(codeList=cl, conceptScheme=cs, concept=con)
+                    td.localRepresentation = rep
+                    dd.addComponent(td)
+                dsd.dimensionDescriptor = dd
+
+            # Add Attributes
+            expression = "./str:DataStructureComponents/str:AttributeList"
+            attributeElement = element.xpath(expression,
+                                             namespaces={
+                                                 'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+            if len(attributeElement) == 1:
+                ad = AttributeDescriptor(id_=attributeElement[0].attrib['id'], uri=attributeElement[0].attrib['urn'])
+                expression = "./str:DataStructureComponents/str:AttributeList/str:Attribute"
+                attributes = element.xpath(expression,
+                                           namespaces={
+                                               'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                # Add Attributes to Attribute Descriptor
+                for record in attributes:
+                    att = Attribute(id_=record.attrib['id'], uri=record.attrib['urn'])
+                    expression = "./str:ConceptIdentity/Ref"
+                    ref = record.xpath(expression,
+                                       namespaces={
+                                           'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                    if len(ref) == 1:
+                        attrib_cs = ref[0].attrib
+                        cs_id = id_creator(attrib_cs['agencyID'], attrib_cs['maintainableParentID'],
+                                           attrib_cs['maintainableParentVersion'])
+                        if cs_id in concepts.keys():
+                            cs = concepts[cs_id]
+                            con = cs.items[attrib_cs['id']]
+                            if con.coreRepresentation is not None:
+                                cl = con.coreRepresentation.codeList
+                            else:
+                                cl = None
+                        else:
+                            # TODO Error message no concept scheme in scheme list (validate_metadata)
+                            cs = None
+                            con = None
+                            cl = None
+                    else:
+                        # TODO Error message no concept scheme found in DataStructureDefinition (validate_metadata)
+                        cs = None
+                        con = None
+                        cl = None
+
+                    # TODO Attribute Relationship
+
+                    rep = Representation(conceptScheme=cs, concept=con, codeList=cl)
+                    att.localRepresentation = rep
+                    ad.addComponent(att)
+                dsd.attributeDescriptor = ad
+
+            # Add Measures
+            expression = "./str:DataStructureComponents/str:MeasureList"
+            measureElement = element.xpath(expression,
+                                           namespaces={
+                                               'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+            if len(measureElement) == 1:
+                md = MeasureDescriptor(id_=measureElement[0].attrib['id'], uri=measureElement[0].attrib['urn'])
+                expression = "./str:DataStructureComponents/str:MeasureList/str:PrimaryMeasure"
+                measures = element.xpath(expression,
+                                         namespaces={
+                                             'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                # Add Measure to Measure Descriptor
+                for record in measures:
+                    meas = PrimaryMeasure(id_=record.attrib['id'], uri=record.attrib['urn'])
+                    expression = "./str:ConceptIdentity/Ref"
+                    ref = record.xpath(expression,
+                                       namespaces={
+                                           'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                    if len(ref) == 1:
+                        attrib_cs = ref[0].attrib
+                        cs_id = id_creator(attrib_cs['agencyID'], attrib_cs['maintainableParentID'],
+                                           attrib_cs['maintainableParentVersion'])
+                        if cs_id in concepts.keys():
+                            cs = concepts[cs_id]
+                            con = cs.items[attrib_cs['id']]
+                            if con.coreRepresentation is not None:
+                                cl = con.coreRepresentation.codeList
+                            else:
+                                cl = None
+                        else:
+                            # TODO Error message no concept scheme in scheme list (validate_metadata)
+                            cs = None
+                            con = None
+                            cl = None
+                    else:
+                        # TODO Error message no concept scheme found in DataStructureDefinition (validate_metadata)
+                        cs = None
+                        con = None
+                        cl = None
+
+                    rep = Representation(conceptScheme=cs, concept=con, codeList=cl)
+                    meas.localRepresentation = rep
+                    md.addComponent(meas)
+                dsd.measureDescriptor = md
+
+            identifier = id_creator(dsd.maintainer.id, dsd.id, dsd.version)
+            dsds[identifier] = dsd
+        return dsds
+    else:
+        return []
 
 
 def get_attr_enums(root, dataset_id):
