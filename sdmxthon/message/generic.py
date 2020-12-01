@@ -1,5 +1,6 @@
+from SDMXThon.common.annotations import TextType
 from SDMXThon.common.generic import GenericDataStructureType
-from SDMXThon.common.references import DataProviderReferenceType
+from SDMXThon.common.references import DataProviderReferenceType, DataStructureReferenceType
 from SDMXThon.data.generic import DataSetType as GenericDataSet
 from SDMXThon.message.footer import FooterType
 from SDMXThon.structure.specificbase import DataSetType as StructureDataSet
@@ -987,6 +988,11 @@ class BaseHeaderType(DataParser):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._structure.append(obj_)
             obj_.original_tag_name_ = '_structure'
+        elif nodeName_ == 'Structure':
+            obj_ = DataStructureReferenceType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._structure.append(obj_)
+            obj_.original_tag_name_ = 'Structure'
         elif nodeName_ == 'DataProvider':
             obj_ = DataProviderReferenceType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)

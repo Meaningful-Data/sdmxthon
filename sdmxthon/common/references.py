@@ -181,6 +181,18 @@ class DataStructureReferenceType(StructureReferenceBaseType):
             value_ = self.gds_validate_string(value_, node, 'URN')
             self._urn = value_
             self._urn_nsprefix_ = child_.prefix
+        elif nodeName_ == 'Structure':
+            obj_ = DataStructureRefType.factory(parent_object_=self)
+            expression = './Ref'
+            ref = child_.xpath(expression)
+            if len(ref) == 1:
+                obj_.set_agencyID(ref[0].attrib['agencyID'])
+                obj_.set_id(ref[0].attrib['id'])
+                obj_.set_version(ref[0].attrib['version'])
+                obj_.set_class(ref[0].attrib['class'])
+            self._ref = obj_
+            obj_.original_tag_name_ = 'Ref'
+
         # end class DataStructureReferenceType
 
 

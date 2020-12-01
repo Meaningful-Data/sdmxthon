@@ -2,6 +2,7 @@ import copy
 import logging
 from typing import Dict
 
+from SDMXThon import DataSet
 from SDMXThon.common.generic import GenericDataStructureType
 from SDMXThon.common.references import DataflowReferenceType
 from SDMXThon.common.refs import DataflowRefType
@@ -575,6 +576,8 @@ def create_attribute_data(dsd, attribute_descriptor, concepts, codelists, measur
 
         if len(list_related) == 1:
             att.relatedTo = list_related[0]
+        elif len(list_related) == 0:
+            att.relatedTo = None
         else:
             att.relatedTo = list_related
 
@@ -798,6 +801,30 @@ def get_structure(root, dataset_id, agency_id):
     return structure
 
 
+def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datasetType: DatasetType):
+    structure = GenericDataStructureType()
+    structure.original_tag_name_ = "Structure"
+    structure.set_ns_def_("message")
+    structure.set_structureID(dsd.id)
+    if datasetType == DatasetType.StructureDataSet:
+        structure.set_namespace(dsd.uri)
+    else:
+        structure.set_namespace(None)
+    structure.set_dimensionAtObservation(dataset.dataset_attributes.get('dimensionAtObservation'))
+    structure_usage = DataflowReferenceType()
+    structure_usage.original_tag_name_ = "Structure"
+    structure_usage.set_ns_def_("common")
+    ref = DataflowRefType()
+    ref.original_tag_name_ = "Ref"
+    ref.set_id(dsd.id)
+    ref.set_agencyID(dsd.agencyId)
+    ref.set_version(dsd.version)
+    ref.set_class("DataStructure")
+    structure_usage.set_Ref(ref)
+    structure.set_Structure(structure_usage)
+    return structure
+
+
 def get_version(root, dataset_id):
     expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
     record = root.xpath(expression, name=dataset_id,
@@ -838,6 +865,58 @@ def parse_obs_generic(data_frame, root, structure_ref, validate_data=False):
             if element in series_list_keys:
                 if (aux != '' or aux is not None) and validate_data:
                     if element in attr_enums and not validate_observation_value(aux, element, codelist, structure_ref):
+                        return None
+                elif aux == '' or aux is None:
+                    aux = "N_A"
+
+                attr_value = ComponentValueType()
+                attr_value.original_tag_name_ = "Value"
+                attr_value.set_id(element)
+                attr_value.set_value(aux)
+                obs_key.add_Value(attr_value)
+            elif element in obs_attributes_keys and element.upper() != "OBS_VALUE":
+                attr_value = ComponentValueType()
+                attr_value.original_tag_name_ = "Value"
+                attr_value.set_id(element)
+                attr_value.set_value(aux)
+                obs_attr.add_Value(attr_value)
+            elif element.upper() == "OBS_VALUE":
+                value = ObsValueType()
+                value.original_tag_name_ = "ObsValue"
+                value._namespace_prefix = "generic"
+                value.set_value(aux)
+                obs_.set_ObsValue(value)
+
+        obs_.set_ObsKey(obs_key)
+        obs_.set_Attributes(obs_attr)
+        observation_list.append(obs_)
+
+    return observation_list
+
+
+def parse_obs_generic_from_dsd(data_frame, dsd: DataStructureDefinition, validate_data=False):
+    obs_attributes_keys = dsd.datasetAttributeCodes
+    series_list_keys = dsd.dimensionCodes
+    list_keys = data_frame.keys()
+    observation_list = []
+    iterations = len(data_frame)
+
+    logger.debug("Iterations for dataset %s: %d (Generic)" % (dsd.id, iterations))
+    for row in range(iterations):
+        obs_ = ObsOnlyType()
+        obs_.original_tag_name_ = "Obs"
+        obs_key = ValuesType()
+        obs_key.original_tag_name_ = "ObsKey"
+        obs_attr = ValuesType()
+        obs_attr.original_tag_name_ = "Attributes"
+        df = data_frame.iloc[row, :]
+        for element in list_keys:
+            aux = df[element]
+
+            if element in series_list_keys:
+                if (aux != '' or aux is not None) and validate_data:
+                    if element in dsd.dimensionCodes and not validate_observation_value_from_dsd(aux, element, dsd):
+                        # TODO Value not found in Codelist (validate_data)
                         return None
                 elif aux == '' or aux is None:
                     aux = "N_A"
@@ -931,10 +1010,77 @@ def parse_obs_structure(data_frame, root, structure_ref, validate_data=False):
     return observation_list
 
 
-def generate_message(dataset_list, path_to_metadata, header, dataset_type, validate_data=False):
+def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition, validate_data=False):
+    obs_attributes_keys = dsd.attributeCodes
+    obs_attributes = {}
+    for e in obs_attributes_keys:
+        if e not in dsd.datasetAttributeCodes:
+            obs_attributes[e] = ''
+    series_list_keys = dsd.dimensionCodes
+    series_attributes = {}
+    for e in series_list_keys:
+        series_attributes[e] = ''
+    list_keys = data_frame.keys()
+    observation_list = []
+    iterations = len(data_frame)
+    logger.debug("Iterations for dataset %s: %d (Structure)" % (dsd.id, iterations))
+
+    for row in range(iterations):
+
+        obs = Observation()
+        series = Series()
+        df = data_frame.iloc[row, :]
+
+        if 'OBS_VALUE' in list_keys:
+            obs_value = df['OBS_VALUE']
+            obs.set_OBS_VALUE(obs_value)
+
+        if 'TIME_PERIOD' in list_keys:
+            obs_time_period = df['TIME_PERIOD']
+            obs.set_TIME_PERIOD(obs_time_period)
+
+        if 'REPORTING_YEAR_START_DAY' in list_keys:
+            obs_reporting_year_start_day = df['REPORTING_YEAR_START_DAY']
+            obs.set_REPORTING_YEAR_START_DAY(obs_reporting_year_start_day)
+
+        obs_list_keys = obs_attributes.keys()
+
+        for element in obs_list_keys:
+            if element in df.keys():
+                aux = df[element]
+                if (aux != '' or aux is not None) and validate_data:
+                    if element in dsd.dimensionCodes and not validate_observation_value_from_dsd(aux, element, dsd):
+                        # TODO Value not found in Codelist (validate_data)
+                        return None
+                elif aux == '' or aux is None:
+                    aux = "N_A"
+
+                obs_attributes[element] = aux
+
+        if len(series_attributes) > 0:
+            series_list_keys = series_attributes.keys()
+            for element in series_list_keys:
+                if element in list_keys:
+                    aux = df[element]
+                    if aux == '' or aux is None:
+                        aux = "N_A"
+
+                    obs_attributes[element] = aux
+                else:
+                    obs_attributes[element] = 'N_A'
+
+            # do = id_data.reindex(columns=series_list_keys)
+
+        obs.set_anyAttributes_(obs_attributes.copy())
+        series.set_anyAttributes_(series_attributes)
+        observation_list.append(obs)
+
+    return observation_list
+
+
+def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data=False):
     message = None
     all_dataset_valid = True
-    root = etree.parse(path_to_metadata)
     structures = []
 
     if dataset_type == DatasetType.GenericDataSet:
@@ -943,10 +1089,11 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
         message = StructureSpecificDataType()
 
     for element in dataset_list:
+        dsd: DataStructureDefinition = dsd_dict[id_creator(element.agencyID, element.code, element.version)]
         data_set = None
         obs_list = None
         if validate_data:
-            wrong_attributes = validate_dataset_attributes(root, element)
+            wrong_attributes = validate_dataset_attributes_from_dsd(dsd, element)
             if len(wrong_attributes.get("missing_attributes")) > 0 or len(
                     wrong_attributes.get("spared_attributes")) > 0:
                 all_dataset_valid = False
@@ -956,7 +1103,8 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
         dataset_attr.original_tag_name_ = "Attributes"
         if dataset_type == DatasetType.GenericDataSet:
             data_set = GenericDataSetType()
-            obs_list = parse_obs_generic(element.obs, root, element.code, validate_data)
+            # obs_list = parse_obs_generic(element.obs, root, element.code, validate_data)
+            obs_list = parse_obs_generic_from_dsd(element.obs, dsd, validate_data)
             if obs_list == None:
                 return None
             for key, value in element.attached_attributes.items():
@@ -969,11 +1117,12 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
 
         elif dataset_type == DatasetType.StructureDataSet:
             data_set = StructureDataSetType()
-            obs_list = parse_obs_structure(element.obs, root, element.code, validate_data)
+            # obs_list = parse_obs_structure(element.obs, root, element.code, validate_data)
+            obs_list = parse_obs_structure_from_dsd(element.obs, dsd, validate_data)
             if obs_list == None:
                 return None
             dataset_attr = copy.deepcopy(element.attached_attributes)
-            dataset_attr['xsi:dim_type'] = element.code + ":DataSet"
+            dataset_attr['xsi:type'] = element.code + ":DataSet"
             data_set.set_anyAttributes_(dataset_attr)
 
         data_set._obs = obs_list
@@ -991,11 +1140,11 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
         data_set.set_setID(element.code)
         data_set.set_action(element.dataset_attributes.get('action'))
 
-        structure = get_structure(root, element.code, element.agencyID)
-        structure.set_dimensionAtObservation(element.dataset_attributes.get('dimensionAtObservation'))
-
-        if dataset_type == DatasetType.GenericDataSet:
-            structure.set_namespace(None)
+        # structure = get_structure(root, element.code, element.agencyID)
+        # structure.set_dimensionAtObservation(element.dataset_attributes.get('dimensionAtObservation'))
+        # if dataset_type == DatasetType.GenericDataSet:
+        #    structure.set_namespace(None)
+        structure = get_structure_from_dsd(dsd, element, dataset_type)
 
         structures.append(structure)
         message.add_DataSet(data_set)
@@ -1026,6 +1175,22 @@ def validate_dataset_attributes(root, dataset):
     return wrong_attributes
 
 
+def validate_dataset_attributes_from_dsd(dsd, dataset):
+    dataset_keys = dsd.datasetAttributeCodes
+    attached_keys = dataset.attached_attributes.keys()
+    wrong_attributes = {"missing_attributes": [], "spared_attributes": []}
+
+    for key in dataset_keys:
+        if key not in attached_keys:
+            wrong_attributes.get("missing_attributes").append(key)
+
+    for key in attached_keys:
+        if key not in dataset_keys:
+            wrong_attributes.get("spared_attributes").append(key)
+
+    return wrong_attributes
+
+
 def validate_observation_value(value, attribute, codelist, setID):
     validate = True
 
@@ -1034,6 +1199,15 @@ def validate_observation_value(value, attribute, codelist, setID):
         print('Invalid value %s in column %s for dataset %s' % (value, attribute, setID))
 
     return validate
+
+
+def validate_observation_value_from_dsd(value, key, dsd):
+    codelist = dsd.dimensionDescriptor.components[key].localRepresentation.codelist
+
+    if codelist is None:
+        return True
+    else:
+        return value in codelist.items.keys()
 
 
 def add_elements_to_dict(dict1: dict, dict2: dict, updateElementsFromDict2=True):
