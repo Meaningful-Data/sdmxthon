@@ -1202,7 +1202,8 @@ def validate_observation_value(value, attribute, codelist, setID):
 
 
 def validate_observation_value_from_dsd(value, key, dsd):
-    codelist = dsd.dimensionDescriptor.components[key].localRepresentation.codelist
+    # Getting the codelist from that element
+    codelist = dsd.dimensionDescriptor.components[key].localRepresentation.codeList
 
     if codelist is None:
         return True
