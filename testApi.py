@@ -1,10 +1,10 @@
 import logging
-import pickle
 import sys
 
 from lxml import etree
 
-from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs, set_dsds_checked_to_false
+from SDMXThon import xmlToDatasetList, headerCreation, DatasetType, datasetListToXML
+from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
 pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
@@ -13,10 +13,10 @@ pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
 pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 
 pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
-pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGen.xml'
+pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
-pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTest.xml'
+pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTestDSD.xml'
 
 pathSavetoJSON = 'SDMXThon/outputTests/output.json'
 # create logger
@@ -76,7 +76,7 @@ def main():
     """
     """
     # SDMX Generic to DataSet to SDMX Structure
-    dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
+    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
 
     header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
     datasetListToXML(dataset_list, pathToMetadataFile, pathSaveToStructure2, header,
@@ -98,8 +98,6 @@ def main():
     f.seek(0)
     message = generate_message(dataset_list, f, header, DatasetType.StructureDataSet, validate_data=False)
     print(message)
-    """
-    """
     logger.debug('Start metadata loading')
     sdmx = etree.parse(pathToSDMXCodelist)
     codelists = get_codelist_model(sdmx)
@@ -107,12 +105,14 @@ def main():
     root = etree.parse(pathToMetadataFile)
     codelists = add_elements_to_dict(codelists, get_codelist_model(root), updateElementsFromDict2=True)
     """
+
+    # Testing DSDS
+    """
     root = etree.parse(pathToMetadataFile)
     codelists = get_codelist_model(root)
     logger.debug('Codelists loaded')
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
-
     test_dsds = dsds.copy()
     # True
     print(test_dsds == dsds)
@@ -134,7 +134,7 @@ def main():
     # False
     print(new_dsds == test_dsds)
 
-    """
+    
     logger.debug('Data Structure Definitions loaded')
     logger.debug('Inicio')
     print('DSDS: %d' % get_size(dsds))
@@ -145,7 +145,20 @@ def main():
     codelists, concepts = delete_unused_codelists(codelists, concepts, dsds)
     print('concepts: %d' % get_size(concepts))
     print('codelists: %d' % get_size(codelists))
-"""
+    """
+
+    root = etree.parse(pathToMetadataFile)
+    codelists = get_codelist_model(root)
+    logger.debug('Codelists loaded')
+    concepts = get_concept_schemes(root, codelists)
+    dsds = get_DSDs(root, concepts, codelists)
+
+    # Testing creating message with dsds
+    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
+
+    header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
+    datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
+                     dataset_type=DatasetType.GenericDataSet, validate_data=False)
 
 
 def get_size(obj, seen=None):

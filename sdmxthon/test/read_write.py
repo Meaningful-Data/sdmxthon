@@ -9,11 +9,11 @@ from io import StringIO
 
 import pandas as pd
 
-from SDMXThon.common.dataSet import DataSet
-from SDMXThon.message.generic import GenericDataType, StructureSpecificDataType
-from SDMXThon.utils.enums import DatasetType
-from SDMXThon.utils.parsers import get_dataset_attributes, get_agency_id, get_version
-from SDMXThon.utils.xml_base import GdsCollector_, get_required_ns_prefix_defs, parsexml_, makeWarnings
+from ..common.dataSet import DataSet
+from ..message.generic import GenericDataType, StructureSpecificDataType
+from ..utils.enums import DatasetType
+from ..utils.parsers import id_creator
+from ..utils.xml_base import GdsCollector_, get_required_ns_prefix_defs, parsexml_, makeWarnings
 
 try:
     from lxml import etree as etree_, etree
@@ -55,7 +55,7 @@ def load_AllDimensions(inFileName, print_warnings=True, datasetType=DatasetType.
 
 
 def save_AllDimensions(message, path='', print_warnings=True):
-    if path == '':
+    if path != '':
         f = open(path, "w")
         message.export(f, 0, pretty_print=True, has_parent=False)
         gds_collector = message.gds_collector_
@@ -68,11 +68,18 @@ def save_AllDimensions(message, path='', print_warnings=True):
         return f
 
 
-def sdmxStrToPandas(xmlObj, path_to_metadata, index='DMID') -> []:
+def sdmxStrToPandas(xmlObj, dsd_dict, index='DMID') -> []:
     dataSetList = []
-    root = etree.parse(path_to_metadata)
+    refs_data = {}
+
+    for i in xmlObj.Header._structure:
+        refs_data[i.gds_element_tree_node_.attrib['structureID']] = id_creator(i._ref._agencyID, i._ref._id,
+                                                                               i._ref._version)
+
     for e in xmlObj.DataSet:
-        attached_attributes_keys = get_dataset_attributes(root, e._structureRef).keys()
+        dsd = dsd_dict[refs_data[e._structureRef]]
+        attached_attributes_keys = dsd.datasetAttributeCodes
+
         dataset_attributes_keys = ['reportingBegin', 'reportingEnd', 'dataExtractionDate', 'validFrom',
                                    'validTo', 'publicationYear', 'publicationPeriod']
         item = DataSet()
@@ -80,8 +87,8 @@ def sdmxStrToPandas(xmlObj, path_to_metadata, index='DMID') -> []:
 
         # Setting structureRef attributes
         item.code = e._structureRef
-        item.version = get_version(root, item.code)
-        item.agencyID = str(get_agency_id(root))
+        item.version = dsd.version
+        item.agencyID = dsd.agencyId
 
         # Default Attributes
         item.dataset_attributes['reportingBegin'] = None
@@ -121,20 +128,25 @@ def sdmxStrToPandas(xmlObj, path_to_metadata, index='DMID') -> []:
     return dataSetList
 
 
-def sdmxGenToPandas(xmlObj, path_to_metadata, index="DMID") -> []:
+def sdmxGenToPandas(xmlObj, dsd_dict, index="DMID") -> []:
     dataSetList = []
-    root = etree.parse(path_to_metadata)
+    refs_data = {}
+
+    for i in xmlObj.Header._structure:
+        refs_data[i.gds_element_tree_node_.attrib['structureID']] = id_creator(i._ref._agencyID, i._ref._id,
+                                                                               i._ref._version)
     for e in xmlObj.DataSet:
+        dsd = dsd_dict[refs_data[e._structureRef]]
         item = DataSet()
         obsDict = {}
 
         item.code = e._structureRef
 
-        attached_attributes_keys = get_dataset_attributes(root, e._structureRef).keys()
+        attached_attributes_keys = dsd.datasetAttributeCodes
 
         # Default Attributes
-        item.version = get_version(root, item.code)
-        item.agencyID = str(get_agency_id(root))
+        item.version = dsd.version
+        item.agencyID = dsd.agencyId
 
         item.dataset_attributes['reportingBegin'] = e._reportingBeginDate
         item.dataset_attributes['reportingEnd'] = e._reportingEndDate

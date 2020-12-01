@@ -16,7 +16,7 @@ logger = logging.getLogger("logging_tryout2")
 logger.setLevel(logging.DEBUG)
 
 
-def xmlToDatasetList(path_to_xml, path_to_metadata, dataset_type=None) -> []:
+def xmlToDatasetList(path_to_xml, dsds, dataset_type=None) -> []:
     datasetList = list()
 
     objStructure = load_AllDimensions(path_to_xml, dataset_type)
@@ -24,35 +24,35 @@ def xmlToDatasetList(path_to_xml, path_to_metadata, dataset_type=None) -> []:
     logger.debug("XML loaded")
 
     if dataset_type == DatasetType.GenericDataSet:
-        datasetList = sdmxGenToPandas(objStructure, path_to_metadata)
+        datasetList = sdmxGenToPandas(objStructure, dsds)
     elif dataset_type == DatasetType.StructureDataSet:
-        datasetList = sdmxStrToPandas(objStructure, path_to_metadata)
+        datasetList = sdmxStrToPandas(objStructure, dsds)
 
     return datasetList
 
 
-def datasetListToXML(datasetList, path_to_metadata, pathsaveTo, header, dataset_type=DatasetType.StructureDataSet,
+def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet,
                      validate_data=False):
-    message = generate_message(datasetList, path_to_metadata, header, dataset_type, validate_data)
+    message = generate_message(datasetList, dsd_dict, header, dataset_type, validate_data)
     if message == None:
         return None
     message = _filterFillingINF(message)
     message = _messageSort(message)
-    save_AllDimensions(message, pathsaveTo)
-
-
-def datasetToXML(dataset, pathToMetadataFile, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet):
-    logger.debug("Lectura mensaje")
-    message = generate_message([dataset], pathToMetadataFile, header, dataset_type)
-
-    message = _filterFillingINF(message)
-    message = _messageSort(message)
-    logger.debug("Inicio escritura")
     if pathSaveTo == '':
         return save_AllDimensions(message, pathSaveTo)
     else:
         save_AllDimensions(message, pathSaveTo)
-    logger.debug("Fin escritura\n")
+
+
+def datasetToXML(dataset, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet):
+    message = generate_message([dataset], dsd_dict, header, dataset_type)
+
+    message = _filterFillingINF(message)
+    message = _messageSort(message)
+    if pathSaveTo == '':
+        return save_AllDimensions(message, pathSaveTo)
+    else:
+        save_AllDimensions(message, pathSaveTo)
 
 
 def datasetListToJSON(dataset_list, path_to_file='') -> dict:
