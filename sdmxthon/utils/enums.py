@@ -11,7 +11,7 @@ class ActionType(str, Enum):
     data or metadata set level applies to the entire data set for which it
     is given. Note that the actions indicated in the Message Header are
     optional, and used to summarize specific actions indicated with this
-    data type for all registry interactions. The "Informational" value is
+    data dim_type for all registry interactions. The "Informational" value is
     used when the message contains information in response to a query,
     rather than being used to invoke a maintenance activity."""
     APPEND = 'Append'  # Append - this is an incremental update for an existing data/metadata set or the provision of new data or documentation (attribute values) formerly absent. If any of the supplied data or metadata is already present, it will not replace that data or metadata. This corresponds to the "Update" value found in version 1.0 of the SDMX Technical Standards.
@@ -248,9 +248,9 @@ class DataType(str, Enum):
     DOUBLE = 'Double'  # A numeric datatype corresponding to W3C XML Schema's xs:double datatype.
     BOOLEAN = 'Boolean'  # A datatype corresponding to W3C XML Schema's xs:boolean datatype.
     _uri = 'URI'  # A datatype corresponding to W3C XML Schema's xs:anyURI datatype.
-    COUNT = 'Count'  # A simple incrementing Integer type. The isSequence facet must be set to true, and the interval facet must be set to "1".
-    INCLUSIVE_VALUE_RANGE = 'InclusiveValueRange'  # This value indicates that the startValue and endValue attributes provide the inclusive boundaries of a numeric range of type xs:decimal.
-    EXCLUSIVE_VALUE_RANGE = 'ExclusiveValueRange'  # This value indicates that the startValue and endValue attributes provide the exclusive boundaries of a numeric range, of type xs:decimal.
+    COUNT = 'Count'  # A simple incrementing Integer dim_type. The isSequence facet must be set to true, and the interval facet must be set to "1".
+    INCLUSIVE_VALUE_RANGE = 'InclusiveValueRange'  # This value indicates that the startValue and endValue attributes provide the inclusive boundaries of a numeric range of dim_type xs:decimal.
+    EXCLUSIVE_VALUE_RANGE = 'ExclusiveValueRange'  # This value indicates that the startValue and endValue attributes provide the exclusive boundaries of a numeric range, of dim_type xs:decimal.
     INCREMENTAL = 'Incremental'  # This value indicates that the value increments according to the value provided in the interval facet, and has a true value for the isSequence facet.
     OBSERVATIONAL_TIME_PERIOD = 'ObservationalTimePeriod'  # Observational time periods are the superset of all time periods in SDMX. It is the union of the standard time periods (i.e. Gregorian time periods, the reporting time periods, and date time) and a time range.
     STANDARD_TIME_PERIOD = 'StandardTimePeriod'  # Standard time periods is a superset of distinct time period in SDMX. It is the union of the basic time periods (i.e. the Gregorian time periods and date time) and the reporting time periods.
@@ -501,7 +501,7 @@ class ObsDimensionsCodeType(str, Enum):
 
 
 class ObservationActionCodeType(str, Enum):
-    """ObservationActionCodeType enumerates the type of observations to be
+    """ObservationActionCodeType enumerates the dim_type of observations to be
     returned."""
     ACTIVE = 'Active'  # Active observations, regardless of when they were added or updated will be returned.
     ADDED = 'Added'  # Only newly added observations will be returned.
@@ -586,7 +586,7 @@ class SimpleCodeDataType(str, Enum):
 class SimpleDataType(str, Enum):
     """SimpleDataType restricts BasicComponentDataType to specify the allowable
     data types for a data structure definition component. The XHTML
-    representation is removed as a possible type."""
+    representation is removed as a possible dim_type."""
     STRING = 'String'
     ALPHA = 'Alpha'
     ALPHA_NUMERIC = 'AlphaNumeric'

@@ -140,7 +140,7 @@ def main():
     logger.debug("Empieza guardar fichero csv structure")
     datasetList = sdmxStructureToPandas(structure_message)
     for e in datasetList:
-        filename = e.attrib['xsi:type'].split(':', 1)[0]
+        filename = e.attrib['xsi:dim_type'].split(':', 1)[0]
         e.df.to_csv('ecu/IRIS/CSVTest/Structure/' + filename + ".csv", index=False, header=True)
     logger.debug("Finaliza csv structure")
 

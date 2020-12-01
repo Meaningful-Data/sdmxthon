@@ -1,0 +1,300 @@
+{
+  "$schema": "",
+  "$id": "SDMX Datasets array",
+  "type": "array",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": [],
+  "examples": [
+    [
+      {
+        "structureRef": {
+          "code": "AALOE",
+          "version": "1.0",
+          "agencyID": "RBI"
+        },
+        "dataset_attributes": {
+          "reportingBegin": null,
+          "reportingEnd": null,
+          "dataExtractionDate": "2020-11-23T11:12:52",
+          "validFrom": null,
+          "validTo": null,
+          "publicationYear": null,
+          "publicationPeriod": null,
+          "action": "Replace",
+          "setId": "AALOE",
+          "dimensionAtObservation": "AllDimensions"
+        },
+        "attached_attributes": {
+          "FREQ": "Q",
+          "DEPENDENCY_TYPE": "INDEPENDENT",
+          "AUDST": "AUDITED"
+        },
+        "obs": []
+      }
+    ]
+  ],
+  "additionalItems": true,
+  "items": {
+    "$id": "#/items",
+    "anyOf": [
+      {
+        "$id": "#/items/anyOf/0",
+        "type": "object",
+        "title": "The first anyOf schema",
+        "description": "AnyOF instance to validate the subschemas",
+        "default": null,
+        "examples": [
+          {
+            "structureRef": {
+              "code": "AALOE",
+              "version": "1.0",
+              "agencyID": "RBI"
+            },
+            "dataset_attributes": {
+              "reportingBegin": null,
+              "reportingEnd": null,
+              "dataExtractionDate": "2020-11-23T11:12:52",
+              "validFrom": null,
+              "validTo": null,
+              "publicationYear": null,
+              "publicationPeriod": null,
+              "action": "Replace",
+              "setId": "AALOE",
+              "dimensionAtObservation": "AllDimensions"
+            },
+            "attached_attributes": {
+              "FREQ": "Q",
+              "DEPENDENCY_TYPE": "INDEPENDENT",
+              "AUDST": "AUDITED"
+            },
+            "obs": []
+          }
+        ],
+        "required": [
+          "structureRef",
+          "attached_attributes",
+          "obs"
+        ],
+        "properties": {
+          "structureRef": {
+            "$id": "#/items/anyOf/0/properties/structureRef",
+            "type": "object",
+            "title": "The structureRef schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+              {
+                "code": "AALOE",
+                "version": "1.0",
+                "agencyID": "RBI"
+              }
+            ],
+            "required": [
+              "code",
+              "version",
+              "agencyID"
+            ],
+            "properties": {
+              "code": {
+                "$id": "#/items/anyOf/0/properties/structureRef/properties/code",
+                "type": "string",
+                "title": "The code schema",
+                "description": "Code extracted from DataSet ID",
+                "default": "",
+                "examples": [
+                  "AALOE"
+                ]
+              },
+              "version": {
+                "$id": "#/items/anyOf/0/properties/structureRef/properties/version",
+                "type": "string",
+                "title": "The version schema",
+                "description": "Version of the Dataset",
+                "default": "1.0",
+                "examples": [
+                  "1.0"
+                ]
+              },
+              "agencyID": {
+                "$id": "#/items/anyOf/0/properties/structureRef/properties/agencyID",
+                "type": "string",
+                "title": "The agencyID schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "RBI",
+                "examples": [
+                  "RBI"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "dataset_attributes": {
+            "$id": "#/items/anyOf/0/properties/dataset_attributes",
+            "type": "object",
+            "title": "The dataset_attributes schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": null,
+            "examples": [
+              {
+                "reportingBegin": null,
+                "reportingEnd": null,
+                "dataExtractionDate": "2020-11-23T11:12:52",
+                "validFrom": null,
+                "validTo": null,
+                "publicationYear": null,
+                "publicationPeriod": null,
+                "action": "Replace",
+                "setId": "AALOE",
+                "dimensionAtObservation": "AllDimensions"
+              }
+            ],
+            "required": [
+              "reportingBegin",
+              "reportingEnd",
+              "dataExtractionDate",
+              "validFrom",
+              "validTo",
+              "publicationYear",
+              "publicationPeriod",
+              "action",
+              "setId",
+              "dimensionAtObservation"
+            ],
+            "properties": {
+              "reportingBegin": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/reportingBegin",
+                "type": "string",
+                "title": "The reportingBegin schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  "2020-11-23T11:12:52"
+                ]
+              },
+              "reportingEnd": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/reportingEnd",
+                "type": "string",
+                "title": "The reportingEnd schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  "2020-11-23T11:12:52"
+                ]
+              },
+              "dataExtractionDate": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/dataExtractionDate",
+                "type": "string",
+                "title": "The dataExtractionDate schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  "2020-11-23T11:12:52"
+                ]
+              },
+              "validFrom": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/validFrom",
+                "type": "string",
+                "title": "The validFrom schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  null
+                ]
+              },
+              "validTo": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/validTo",
+                "type": "string",
+                "title": "The validTo schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  null
+                ]
+              },
+              "publicationYear": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/publicationYear",
+                "type": "null",
+                "title": "The publicationYear schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  null
+                ]
+              },
+              "publicationPeriod": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/publicationPeriod",
+                "type": "string",
+                "title": "The publicationPeriod schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": null,
+                "examples": [
+                  null
+                ]
+              },
+              "action": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/action",
+                "type": "string",
+                "title": "The action schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "Replace",
+                "examples": [
+                  "Replace",
+                  "Append"
+                ]
+              },
+              "setId": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/setId",
+                "type": "string",
+                "title": "The setId schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "",
+                "examples": [
+                  "AALOE"
+                ]
+              },
+              "dimensionAtObservation": {
+                "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/dimensionAtObservation",
+                "type": "string",
+                "title": "The dimensionAtObservation schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "AllDimensions",
+                "examples": [
+                  "AllDimensions",
+                  "TIME_PERIOD"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "attached_attributes": {
+            "$id": "#/items/anyOf/0/properties/attached_attributes",
+            "type": "object",
+            "title": "The attached_attributes schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+              {
+                "FREQ": "Q",
+                "DEPENDENCY_TYPE": "INDEPENDENT",
+                "AUDST": "AUDITED"
+              }
+            ],
+            "additionalProperties": true
+          },
+          "obs": {
+            "$id": "#/items/anyOf/0/properties/obs",
+            "type": "array",
+            "title": "The obs schema",
+            "description": "Schema for pandas DataFrame objects",
+            "default": [],
+            "examples": [
+              []
+            ],
+            "additionalItems": true
+          }
+        }
+      }
+    ]
+  }
+}

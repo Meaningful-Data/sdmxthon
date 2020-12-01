@@ -139,7 +139,7 @@ ClassToNode = {
 }
 
 RenameMappings_ = {
-    "{http://www.w3.org/2001/XMLSchema-instance}type": "Type",
+    "{http://www.w3.org/2001/XMLSchema-instance}dim_type": "Type",
     "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic}GroupType": "GroupType9",
     "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}DataSetType": "DataSetType10",
     "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}GroupType": "GroupType11",

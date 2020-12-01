@@ -31,6 +31,17 @@ class Item(NameableArtefact):
         for c in childs:
             self.addChild(c)
 
+    def __eq__(self, other):
+        print("Item")
+        if isinstance(other, Item):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._isPartial == other._isPartial)
+        else:
+            return False
+
     @property
     def isPartial(self):
         return self._isPartial
@@ -122,6 +133,25 @@ class ItemScheme(MaintainableArtefact):
         for i in items:
             self.append(i)
 
+    def __eq__(self, other):
+        if isinstance(other, ItemScheme):
+            print("Item Scheme")
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._version == other._version and
+                    self._validFrom == other._validFrom and
+                    self._validTo == other._validTo and
+                    self._isFinal == other._isFinal and
+                    self._isExternalReference == other._isExternalReference and
+                    self._serviceUrl == other._serviceUrl and
+                    self._structureUrl == other._structureUrl and
+                    self._maintainer == other._maintainer and
+                    self._items == other._items)
+        else:
+            return False
+
     @property
     def items(self):
         return self._items
@@ -195,6 +225,16 @@ class Code(Item):
                                    name=name, description=description,
                                    isPartial=isPartial, scheme=scheme, parent=parent, childs=childs)
 
+    def __eq__(self, other):
+        if isinstance(other, Code):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._isPartial == other._isPartial)
+        else:
+            return False
+
 
 class Agency(Item):
     _schemeType = "AgencyList"
@@ -208,6 +248,16 @@ class Agency(Item):
         super(Agency, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                      name=name, description=description,
                                      isPartial=isPartial, scheme=scheme)
+
+    def __eq__(self, other):
+        if isinstance(other, Agency):
+            return (self._id == other._id and
+                    self._uri == other._uri and
+                    self._name == other._name and
+                    self._description == other._description and
+                    self._isPartial == other._isPartial)
+        else:
+            return False
 
     @property
     def urn(self):  # TOBECHECKED: What is the logic behind?
@@ -239,6 +289,30 @@ class ConceptScheme(ItemScheme):
                                             serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
                                             items=items)
 
+        self._checked = False
+
+    def __eq__(self, other):
+        if isinstance(other, ConceptScheme):
+            if not self._checked:
+                self._checked = True
+                return (self._id == other._id and
+                        self.uri == other.uri and
+                        self.name == other.name and
+                        self._description == other._description and
+                        self._version == other._version and
+                        self._validFrom == other._validFrom and
+                        self._validTo == other._validTo and
+                        self._isFinal == other._isFinal and
+                        self._isExternalReference == other._isExternalReference and
+                        self._serviceUrl == other._serviceUrl and
+                        self._structureUrl == other._structureUrl and
+                        self._maintainer == other._maintainer and
+                        self._items == other._items)
+            else:
+                return True
+        else:
+            return False
+
 
 class CodeList(ItemScheme):
     _itemType = "Code"
@@ -257,6 +331,29 @@ class CodeList(ItemScheme):
                                        isFinal=isFinal, isExternalReference=isExternalReference,
                                        serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
                                        items=items)
+        self._checked = False
+
+    def __eq__(self, other):
+        if isinstance(other, CodeList):
+            if not self._checked:
+                self._checked = True
+                return (self._id == other._id and
+                        self.uri == other.uri and
+                        self.name == other.name and
+                        self._description == other._description and
+                        self._version == other._version and
+                        self._validFrom == other._validFrom and
+                        self._validTo == other._validTo and
+                        self._isFinal == other._isFinal and
+                        self._isExternalReference == other._isExternalReference and
+                        self._serviceUrl == other._serviceUrl and
+                        self._structureUrl == other._structureUrl and
+                        self._maintainer == other._maintainer and
+                        self._items == other._items)
+            else:
+                return True
+        else:
+            return False
 
 
 class OrganisationScheme(ItemScheme):
@@ -276,6 +373,24 @@ class OrganisationScheme(ItemScheme):
                                                  maintainer=maintainer,
                                                  items=items)
 
+    def __eq__(self, other):
+        if isinstance(other, OrganisationScheme):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._version == other._version and
+                    self._validFrom == other._validFrom and
+                    self._validTo == other._validTo and
+                    self._isFinal == other._isFinal and
+                    self._isExternalReference == other._isExternalReference and
+                    self._serviceUrl == other._serviceUrl and
+                    self._structureUrl == other._structureUrl and
+                    self._maintainer == other._maintainer and
+                    self._items == other._items)
+        else:
+            return False
+
 
 class AgencyList(OrganisationScheme):
     _itemType = "Agency"
@@ -294,6 +409,24 @@ class AgencyList(OrganisationScheme):
                                          isFinal=isFinal, isExternalReference=isExternalReference,
                                          serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
                                          items=items)
+
+    def __eq__(self, other):
+        if isinstance(other, AgencyList):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._version == other._version and
+                    self._validFrom == other._validFrom and
+                    self._validTo == other._validTo and
+                    self._isFinal == other._isFinal and
+                    self._isExternalReference == other._isExternalReference and
+                    self._serviceUrl == other._serviceUrl and
+                    self._structureUrl == other._structureUrl and
+                    self._maintainer == other._maintainer and
+                    self._items == other._items)
+        else:
+            return False
 
     @property
     def id(self):
@@ -320,6 +453,17 @@ class Concept(Item):
 
         self.coreRepresentation = coreRepresentation
         self._ref = None  # Attribute for storing the references to codelists.
+
+    def __eq__(self, other):
+        if isinstance(other, Concept):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._isPartial == other._isPartial and
+                    self._coreRepresentation == other._coreRepresentation)
+        else:
+            return False
 
     @property
     def coreRepresentation(self):

@@ -70,7 +70,7 @@ class BaseValueType(DataParser):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate type NCNameIDType
+            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
 
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
@@ -136,7 +136,7 @@ class ObsValueType(BaseValueType):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate type NCNameIDType
+            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
 
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
@@ -201,7 +201,7 @@ class ComponentValueType(BaseValueType):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate type NCNameIDType
+            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
             already_processed.add('value')
@@ -211,7 +211,7 @@ class ComponentValueType(BaseValueType):
 
 class ValuesType(DataParser):
     """ValuesType is a general structure which contains a collection of data
-    structure definition component values. This type is used to provide
+    structure definition component values. This dim_type is used to provide
     both key and attribute collection values."""
     __hash__ = DataParser.__hash__
     subclass = None
@@ -292,7 +292,7 @@ class GroupType(AnnotableType):
     identification of group is provided. It is expected that a system which
     is processing this will relate that identifier to the key sets defined
     in the constraint and apply the values provided for the attributes
-    appropriately.The type attribute holds the identifier assigned to the
+    appropriately.The dim_type attribute holds the identifier assigned to the
     group in the data structure definition for which attribute values are
     being provided."""
     __hash__ = AnnotableType.__hash__
@@ -347,7 +347,7 @@ class GroupType(AnnotableType):
     def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='GroupType'):
         if self._type_ is not None and 'type_' not in already_processed:
             already_processed.add('type_')
-            outfile.write(' type=%s' % (quote_attrib(self._type_),))
+            outfile.write(' dim_type=%s' % (quote_attrib(self._type_),))
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.GroupKey is not None:
@@ -362,11 +362,11 @@ class GroupType(AnnotableType):
             self._Attributes.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('type', node)
-        if value is not None and 'type' not in already_processed:
-            already_processed.add('type')
+        value = find_attr_value_('dim_type', node)
+        if value is not None and 'dim_type' not in already_processed:
+            already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate type IDType
+            self.validate_id_type(self._type_)  # validate dim_type IDType
         super(GroupType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
@@ -910,14 +910,14 @@ class DataSetType(AnnotableType):
         self._publicationPeriod = publicationPeriod
 
     def validate_ActionType(self, value):
-        # Validate type common:ActionType, a restriction on xs:NMTOKEN.
+        # Validate dim_type common:ActionType, a restriction on xs:NMTOKEN.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
             value = value
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
@@ -1065,28 +1065,28 @@ class DataSetType(AnnotableType):
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
             self._setID = value
-            self.validate_id_type(self._setID)  # validate type IDType
+            self.validate_id_type(self._setID)  # validate dim_type IDType
 
         value = find_attr_value_('action', node)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
             self._action = value
-            self.validate_ActionType(self._action)  # validate type ActionType
+            self.validate_ActionType(self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', node)
 
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
             self._reportingBeginDate = value
-            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate type BasicTimePeriodType
+            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('reportingEndDate', node)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
             self._reportingEndDate = value
-            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate type BasicTimePeriodType
+            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('validFromDate', node)
 
@@ -1117,7 +1117,7 @@ class DataSetType(AnnotableType):
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
             self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate type ObservationalTimePeriodType
+                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
 
         super(DataSetType, self).build_attributes(node, attrs, already_processed)
 

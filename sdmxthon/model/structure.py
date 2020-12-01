@@ -32,9 +32,9 @@ class Facet:
             if value in FacetType or value is None:
                 self._facetType = value
             else:
-                raise ValueError(f"The facet type {value} is not recognised")
+                raise ValueError(f"The facet dim_type {value} is not recognised")
         else:
-            raise ValueError("Facet type should be of the str type")
+            raise ValueError("Facet dim_type should be of the str dim_type")
 
     @facetValue.setter
     def facetValue(self, value):
@@ -46,14 +46,14 @@ class Facet:
             if value in FacetValueType or value is None:
                 self._facetValueType = value
             else:
-                raise ValueError(f"The facet value type {value} is not recognised")
+                raise ValueError(f"The facet value dim_type {value} is not recognised")
         else:
-            raise ValueError("Facet value type should be of the str type")
+            raise ValueError("Facet value dim_type should be of the str dim_type")
 
 
 class Representation:
     # TODO: Method to get the objects from the reference
-    def __init__(self, concept: Concept = None, facets: list() = [],
+    def __init__(self, concept: Concept = None, facets=[],
                  codeList: CodeList = None, conceptScheme: ConceptScheme = None):
         self.concept = concept
         self.codeList = codeList
@@ -65,6 +65,17 @@ class Representation:
         self._conceptReference = None
         self._codeListReference = None
         self._conceptSchemeReference = None
+
+    def __eq__(self, other):
+        if isinstance(other, Representation):
+            return (self._concept == other._concept and
+                    self._codeList == other._codeList and
+                    self._conceptScheme == other._conceptScheme and
+                    self._conceptReference == other._conceptReference and
+                    self._codeListReference == other._codeListReference and
+                    self._conceptSchemeReference == other._conceptReference)
+        else:
+            return False
 
     @property
     def concept(self):
@@ -98,7 +109,7 @@ class Representation:
         if isinstance(value, Facet):
             self._components.append(value)
         else:
-            raise TypeError(f"The object has to be of the type Facet")
+            raise TypeError(f"The object has to be of the dim_type Facet")
 
 
 class Component(IdentifiableArtefact):
@@ -110,6 +121,16 @@ class Component(IdentifiableArtefact):
         self.localRepresentation = localRepresentation
         self.componentList = componentList
         self._conceptIdentityRef = None
+
+    def __eq__(self, other):
+        if isinstance(other, Component):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._localRepresentation == other._localRepresentation and
+                    self._conceptIdentityRef == other._conceptIdentityRef)
+        else:
+            return False
 
     @property
     def localRepresentation(self):
@@ -257,6 +278,16 @@ class Dimension(Component):
 
         self.position = position
 
+    def __eq__(self, other):
+        if isinstance(other, Dimension):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._localRepresentation == other._localRepresentation and
+                    self._position == other._position)
+        else:
+            return False
+
     @property
     def position(self):
         return self._position
@@ -275,6 +306,15 @@ class MeasureDimension(Dimension):
         super(MeasureDimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                localRepresentation=localRepresentation, position=position)
 
+    def __eq__(self, other):
+        if isinstance(other, MeasureDimension):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._localRepresentation == other._localRepresentation and
+                    self._position == other._position)
+        else:
+            return False
 
 class TimeDimension(Dimension):
     _qName = qName("str", "TimeDimension")
@@ -285,6 +325,15 @@ class TimeDimension(Dimension):
         super(TimeDimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                             localRepresentation=localRepresentation, position=position)
 
+    def __eq__(self, other):
+        if isinstance(other, TimeDimension):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._localRepresentation == other._localRepresentation and
+                    self._position == other._position)
+        else:
+            return False
 
 class Attribute(Component):
     _urnType = "datastructure"
@@ -300,6 +349,17 @@ class Attribute(Component):
         self.usageStatus = usageStatus
         self.relatedTo = relatedTo
 
+    def __eq__(self, other):
+        if isinstance(other, Attribute):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._localRepresentation == other._localRepresentation and
+                    self._usageStatus == other._usageStatus and
+                    self._relatedTo == other._relatedTo)
+        else:
+            return False
+
     @property
     def usageStatus(self):
         return self._usageStatus
@@ -313,19 +373,20 @@ class Attribute(Component):
         if value in ["Mandatory", "Conditional"] or value is None:
             self._usageStatus = value
         else:
-            raise ValueError("The value for usageStatus has to be 'mandatory' or 'conditional'")
+            raise ValueError("The value for usageStatus has to be 'Mandatory' or 'Conditional'")
 
     @relatedTo.setter
     def relatedTo(self, value):
         if value is None:
             self._relatedTo = "NoSpecifiedRelationship"
-        elif value == "PrimaryMeasure" or value == "NoSpecifiedRelationship" or isinstance(value,
-                                                                                           GroupDimensionDescriptor) or isinstance(
-            value, Dimension):
+        elif (isinstance(value, PrimaryMeasure) or (value == "NoSpecifiedRelationship") or
+              isinstance(value, GroupDimensionDescriptor) or isinstance(value, Dimension) or
+              all(isinstance(n, (PrimaryMeasure, Dimension)) for n in value)):
             self._relatedTo = value
         else:
             raise ValueError(
-                "The value for related To has to be None, 'PrimaryMeasure' an object of the GroupDimensionDescriptor class or an object of the DimensionClass")
+                "The value for related To has to be None, the object of the GroupDimensionDescriptor "
+                "class or an object of the DimensionClass or an object of the PrimaryMeasure class")
 
     @property
     def urn(self):
@@ -345,6 +406,15 @@ class PrimaryMeasure(Component):
         super(PrimaryMeasure, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                              localRepresentation=localRepresentation)
 
+    def __eq__(self, other):
+        if isinstance(other, PrimaryMeasure):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._localRepresentation == other._localRepresentation)
+        else:
+            return False
+
 
 class ComponentList(IdentifiableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
@@ -355,6 +425,15 @@ class ComponentList(IdentifiableArtefact):
         self._components = {}
         for c in components:
             self.addComponent(c)
+
+    def __eq__(self, other):
+        if isinstance(other, ComponentList):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._components == other._components)
+        else:
+            return False
 
     @property
     def components(self):
@@ -374,7 +453,7 @@ class ComponentList(IdentifiableArtefact):
             self._components[value.id] = value
         else:
             raise TypeError(
-                f"The object has to be of the type {self._componentType.__name__}, {value.__class__.__name__} provided")
+                f"The object has to be of the dim_type {self._componentType.__name__}, {value.__class__.__name__} provided")
 
     @property
     def urn(self):
@@ -432,6 +511,15 @@ class DimensionDescriptor(ComponentList):
         super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   components=components)
 
+    def __eq__(self, other):
+        if isinstance(other, DimensionDescriptor):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._components == other._components)
+        else:
+            return False
+
 
 class AttributeDescriptor(ComponentList):
     _componentType = Attribute
@@ -443,6 +531,15 @@ class AttributeDescriptor(ComponentList):
         super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   components=components)
 
+    def __eq__(self, other):
+        if isinstance(other, AttributeDescriptor):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._components == other._components)
+        else:
+            return False
+
 
 class MeasureDescriptor(ComponentList):
     _componentType = PrimaryMeasure
@@ -453,6 +550,15 @@ class MeasureDescriptor(ComponentList):
                  components: List[PrimaryMeasure] = []):
         super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                 components=components)
+
+    def __eq__(self, other):
+        if isinstance(other, MeasureDescriptor):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self._annotations == other._annotations and
+                    self._components == other._components)
+        else:
+            return False
 
 
 class GroupDimensionDescriptor(ComponentList):
@@ -493,6 +599,26 @@ class DataStructureDefinition(MaintainableArtefact):
 
         self._urnType = "datastructure"
         self._qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructure"
+
+    def __eq__(self, other):
+        if isinstance(other, DataStructureDefinition):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._version == other._version and
+                    self._validFrom == other._validFrom and
+                    self._validTo == other._validTo and
+                    self._isFinal == other._isFinal and
+                    self._isExternalReference == other._isExternalReference and
+                    self._serviceUrl == other._serviceUrl and
+                    self._structureUrl == other._structureUrl and
+                    self._maintainer == other._maintainer and
+                    self._dimensionDescriptor == other._dimensionDescriptor and
+                    self._attributeDescriptor == other._attributeDescriptor and
+                    self._measureDescriptor == other._measureDescriptor)
+        else:
+            return False
 
     @property
     def dimensionDescriptor(self):
@@ -593,7 +719,7 @@ class DataStructureDefinition(MaintainableArtefact):
 
             component["name"] = c.id
             component["role"] = "Identifier"
-            component["type"] = dataTypesMapping[c.localRepresentation["dataType"]]
+            component["dim_type"] = dataTypesMapping[c.localRepresentation["dataType"]]
             component["isNull"] = False
 
             components.append(component)
@@ -602,7 +728,7 @@ class DataStructureDefinition(MaintainableArtefact):
 
             component["name"] = c.id
             component["role"] = "Attribute"
-            component["type"] = dataTypesMapping[c.localRepresentation["dataType"]]
+            component["dim_type"] = dataTypesMapping[c.localRepresentation["dataType"]]
             component["isNull"] = True  # We should use the assignmentStatus
             components.append(component)
         for c in self.measureList.components:
@@ -610,7 +736,7 @@ class DataStructureDefinition(MaintainableArtefact):
 
             component["name"] = c.id
             component["role"] = "Measure"
-            component["type"] = dataTypesMapping[c.localRepresentation["dataType"]]
+            component["dim_type"] = dataTypesMapping[c.localRepresentation["dataType"]]
             component["isNull"] = True
             components.append(component)
 

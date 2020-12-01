@@ -53,15 +53,15 @@ class TextType(DataParser):
             outfile.write(' xml:_lang=%s' % (
                 self.gds_encode(self.gds_format_string(quote_attrib(self._lang), input_name='_lang')),))
 
-        if self._extension_type_ is not None and 'xsi:type' not in already_processed:
-            already_processed.add('xsi:type')
+        if self._extension_type_ is not None and 'xsi:dim_type' not in already_processed:
+            already_processed.add('xsi:dim_type')
             outfile.write('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
 
             if ":" not in self._extension_type_:
                 imported_ns_type_prefix_ = ClassToPrefix.get(self._extension_type_, '')
-                outfile.write(' xsi:type="%s%s"' % (imported_ns_type_prefix_, self._extension_type_))
+                outfile.write(' xsi:dim_type="%s%s"' % (imported_ns_type_prefix_, self._extension_type_))
             else:
-                outfile.write(' xsi:type="%s"' % self._extension_type_)
+                outfile.write(' xsi:dim_type="%s"' % self._extension_type_)
 
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('_lang', node)
@@ -70,10 +70,10 @@ class TextType(DataParser):
             already_processed.add('_lang')
             self._lang = value
 
-        value = find_attr_value_('xsi:type', node)
+        value = find_attr_value_('xsi:dim_type', node)
 
-        if value is not None and 'xsi:type' not in already_processed:
-            already_processed.add('xsi:type')
+        if value is not None and 'xsi:dim_type' not in already_processed:
+            already_processed.add('xsi:dim_type')
             self._extension_type_ = value
 
 
@@ -82,7 +82,7 @@ class TextType(DataParser):
 class AnnotationType(DataParser):
     """_annotationType provides for non-documentation notes and annotations to
     be embedded in data and structure messages. It provides optional fields
-    for providing a title, a type description, a URI, and the text of the
+    for providing a title, a dim_type description, a URI, and the text of the
     annotation.The id attribute provides a non-standard identification of
     an annotation. It can be used to disambiguate annotations."""
     __hash__ = DataParser.__hash__
@@ -310,8 +310,8 @@ class AnnotationsType(DataParser):
 # end class AnnotationsType
 
 class AnnotableType(DataParser):
-    """AnnotableType is an abstract base type used for all annotable artefacts.
-    Any type that provides for annotations should extend this type."""
+    """AnnotableType is an abstract base dim_type used for all annotable artefacts.
+    Any dim_type that provides for annotations should extend this dim_type."""
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = None
