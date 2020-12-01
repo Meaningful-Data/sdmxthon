@@ -158,7 +158,7 @@ def main():
 
     header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
     datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
-                     dataset_type=DatasetType.GenericDataSet, validate_data=False)
+                     dataset_type=DatasetType.GenericDataSet, validate_data=True)
 
 
 def get_size(obj, seen=None):
