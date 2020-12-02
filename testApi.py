@@ -12,7 +12,8 @@ pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
 pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 
-pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
+# pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
+pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
@@ -147,17 +148,18 @@ def main():
     print('codelists: %d' % get_size(codelists))
     """
 
+    logger.debug('Inicio')
     root = etree.parse(pathToMetadataFile)
     codelists = get_codelist_model(root)
-    logger.debug('Codelists loaded')
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
+    logger.debug('DSD loaded')
 
     # Testing creating message with dsds
-    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
-
-    header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
-    datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
+    dataset_list = xmlToDatasetList(pathSaveToGeneric, dsds, DatasetType.GenericDataSet)
+    logger.debug('End reading')
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
+    datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
                      dataset_type=DatasetType.GenericDataSet, validate_data=True)
 
 

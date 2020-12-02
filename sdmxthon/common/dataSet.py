@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 
 
 class DataSet:
@@ -23,6 +23,6 @@ class DataSet:
             self.attached_attributes = attached_attributes.copy()
 
         if obs is None:
-            self.obs = pandas.DataFrame()
+            self.obs = pd.DataFrame()
         else:
             self.obs = obs.copy()

@@ -4,29 +4,27 @@ from datetime import date
 
 import pandas as pd
 
-from SDMXThon.common.dataSet import DataSet
-from SDMXThon.message.generic import GenericDataHeaderType, PartyType, SenderType, StructureSpecificDataHeaderType
-from SDMXThon.test.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToPandas, \
+from .common.dataSet import DataSet
+from .message.generic import GenericDataHeaderType, PartyType, SenderType, StructureSpecificDataHeaderType
+from .utils.enums import DatasetType
+from .utils.parsers import generate_message
+from .utils.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToPandas, \
     sdmxStrToPandas
-from SDMXThon.utils.enums import DatasetType
-from SDMXThon.utils.parsers import generate_message
 
 # create logger
 logger = logging.getLogger("logging_tryout2")
 logger.setLevel(logging.DEBUG)
 
 
-def xmlToDatasetList(path_to_xml, dsds, dataset_type=None) -> []:
+def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
     datasetList = list()
 
     objStructure = load_AllDimensions(path_to_xml, dataset_type)
 
-    logger.debug("XML loaded")
-
     if dataset_type == DatasetType.GenericDataSet:
-        datasetList = sdmxGenToPandas(objStructure, dsds)
+        datasetList = sdmxGenToPandas(objStructure, dsd_dict)
     elif dataset_type == DatasetType.StructureDataSet:
-        datasetList = sdmxStrToPandas(objStructure, dsds)
+        datasetList = sdmxStrToPandas(objStructure, dsd_dict)
 
     return datasetList
 
@@ -36,8 +34,6 @@ def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=Dat
     message = generate_message(datasetList, dsd_dict, header, dataset_type, validate_data)
     if message == None:
         return None
-    message = _filterFillingINF(message)
-    message = _messageSort(message)
     if pathSaveTo == '':
         return save_AllDimensions(message, pathSaveTo)
     else:
@@ -47,15 +43,13 @@ def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=Dat
 def datasetToXML(dataset, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet):
     message = generate_message([dataset], dsd_dict, header, dataset_type)
 
-    message = _filterFillingINF(message)
-    message = _messageSort(message)
     if pathSaveTo == '':
         return save_AllDimensions(message, pathSaveTo)
     else:
         save_AllDimensions(message, pathSaveTo)
 
 
-def datasetListToJSON(dataset_list, path_to_file='') -> dict:
+def datasetListToJSON(dataset_list, path_to_file='') -> list:
     listElements = []
     for e in dataset_list:
         element = {}
@@ -75,11 +69,11 @@ def datasetListToJSON(dataset_list, path_to_file='') -> dict:
     return listElements
 
 
-def JSONFileToDatasetList(path_to_json):
+def JSONFileToDatasetList(path_to_json) -> list:
     dataset_list = list()
     f = open(path_to_json, "r")
     parsed = json.loads(f.read())
-    for e in parsed.values():
+    for e in parsed:
         dataset_list.append(DataSetCreator(code=e.get('structureRef').get('code'),
                                            version=e.get('structureRef').get('version'),
                                            agencyID=e.get('structureRef').get('agencyID'),
@@ -89,10 +83,10 @@ def JSONFileToDatasetList(path_to_json):
     return dataset_list
 
 
-def JSONToDatasetList(json_list):
+def JSONToDatasetList(json_list) -> list:
     dataset_list = list()
     parsed = json.loads(json.dumps(json_list, ensure_ascii=False, indent=2))
-    for e in parsed.values():
+    for e in parsed:
         dataset_list.append(DataSetCreator(code=e.get('structureRef').get('code'),
                                            version=e.get('structureRef').get('version'),
                                            agencyID=e.get('structureRef').get('agencyID'),
@@ -152,11 +146,11 @@ def _dataSetListSort(dataset_list):
 
 
 def DataSetCreator(code, version, agencyID, dataset_attributes=None, attached_attributes=None,
-                   obs=None) -> DataSet:
+                   obs=None):
     if dataset_attributes is None or dataset_attributes == {}:
         dataset_attributes = {"reportingBegin": None,
                               "reportingEnd": None,
-                              "dataExtractionDate": date.now(),
+                              "dataExtractionDate": date.today(),
                               "validFrom": None,
                               "validTo": None,
                               "publicationYear": None,

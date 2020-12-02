@@ -1,6 +1,6 @@
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_
-from SDMXThon.utils.mappings import ClassToPrefix
-from SDMXThon.utils.xml_base import find_attr_value_, _cast, showIndent, quote_xml, quote_attrib
+from ..utils.data_parser import DataParser, UseCapturedNS_
+from ..utils.mappings import ClassToPrefix
+from ..utils.xml_base import find_attr_value_, _cast, showIndent, quote_xml, quote_attrib
 
 
 class TextType(DataParser):
@@ -14,7 +14,7 @@ class TextType(DataParser):
     superclass = None
 
     def __init__(self, lang='en', value_of=None, extension_type=None, gds_collector_=None, **kwargs_):
-        super(TextType, self).__init__(None, None, gds_collector_)
+        super(TextType, self).__init__(None, gds_collector_)
         self._namespace_prefix = ''
         self._lang = _cast(None, lang)
         self._lang_nsprefix_ = None
@@ -91,7 +91,7 @@ class AnnotationType(DataParser):
 
     def __init__(self, idx=None, annotation_title=None, annotation_type_member=None, annotation_URL=None,
                  AnnotationText=None, gds_collector_=None, **kwargs_):
-        super(AnnotationType, self).__init__(None, None, gds_collector_)
+        super(AnnotationType, self).__init__(None, gds_collector_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
@@ -250,7 +250,7 @@ class AnnotationsType(DataParser):
     superclass = None
 
     def __init__(self, Annotation=None, gds_collector_=None, **kwargs_):
-        super(AnnotationsType, self).__init__(None, None, gds_collector_)
+        super(AnnotationsType, self).__init__(None, gds_collector_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None

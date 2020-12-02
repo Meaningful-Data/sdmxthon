@@ -1,11 +1,11 @@
 import copy
 
-from SDMXThon.common.annotations import AnnotableType
-from SDMXThon.common.references import DataProviderReferenceType
-from SDMXThon.utils.data_parser import DataParser
-from SDMXThon.utils.data_parser import Validate_simpletypes_
-from SDMXThon.utils.generateds import datetime_
-from SDMXThon.utils.xml_base import _cast, BaseStrType_, quote_attrib, find_attr_value_, encode_str_2_3
+from ..common.annotations import AnnotableType
+from ..common.references import DataProviderReferenceType
+from ..utils.data_parser import DataParser
+from ..utils.data_parser import Validate_simpletypes_
+from ..utils.generateds import datetime_
+from ..utils.xml_base import _cast, BaseStrType_, quote_attrib, find_attr_value_, encode_str_2_3
 
 
 class BaseValueType(DataParser):

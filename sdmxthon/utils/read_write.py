@@ -1,8 +1,3 @@
-"""
-Created on 15 jul. 2020
-
-@author: ruben
-"""
 import logging
 from datetime import datetime
 from io import StringIO
@@ -30,6 +25,8 @@ logger.setLevel(logging.DEBUG)
 
 
 def load_AllDimensions(inFileName, print_warnings=True, datasetType=DatasetType.GenericDataSet):
+    # TODO Check if the message has been loaded correctly
+
     global CapturedNsmap_
     gds_collector = GdsCollector_()
 
@@ -43,7 +40,7 @@ def load_AllDimensions(inFileName, print_warnings=True, datasetType=DatasetType.
         rootTag = 'StructureSpecificData'
         rootClass = StructureSpecificDataType
     else:
-        return
+        return None
     rootObj = rootClass.factory()
     rootObj.original_tag_name_ = rootTag
     rootObj.build(rootNode, gds_collector_=gds_collector)
@@ -138,7 +135,6 @@ def sdmxGenToPandas(xmlObj, dsd_dict, index="DMID") -> []:
     for e in xmlObj.DataSet:
         dsd = dsd_dict[refs_data[e._structureRef]]
         item = DataSet()
-        obsDict = {}
 
         item.code = e._structureRef
 
@@ -158,6 +154,8 @@ def sdmxGenToPandas(xmlObj, dsd_dict, index="DMID") -> []:
 
         item.dataset_attributes['action'] = e._action
         item.dataset_attributes['setId'] = e._structureRef
+        item.dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
+
         if e._Attributes is not None:
             for i in e._Attributes.Value:
                 key = i.gds_element_tree_node_.attrib.get('id')
@@ -196,6 +194,7 @@ def sdmxGenToPandas(xmlObj, dsd_dict, index="DMID") -> []:
 
             item.obs = pd.DataFrame.from_dict(series)
         elif len(e._obs) > 0:
+            obsDict = {}
             for j in e._obs:
                 for k in j._Attributes.Value:
                     key = k._id
@@ -219,7 +218,7 @@ def sdmxGenToPandas(xmlObj, dsd_dict, index="DMID") -> []:
                         else:
                             obsDict[key] = [value]
 
-            item.obs = pd.DataFrame.from_dict(obsDict)
+            item.obs = pd.DataFrame.from_dict(obsDict.copy())
         dataSetList.append(item)
 
     return dataSetList

@@ -1,6 +1,6 @@
-from SDMXThon.common.messagetypes import CodedStatusMessageType
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
-from SDMXThon.utils.xml_base import quote_attrib, find_attr_value_, encode_str_2_3
+from ..common.messagetypes import CodedStatusMessageType
+from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
+from ..utils.xml_base import quote_attrib, find_attr_value_, encode_str_2_3
 
 
 class FooterType(DataParser):

@@ -15,7 +15,11 @@ SDMXThon\data\generic.py
 SDMXThon\message\__init__.py
 SDMXThon\message\footer.py
 SDMXThon\message\generic.py
-SDMXThon\metadata\__init__.py
+SDMXThon\model\base.py
+SDMXThon\model\dataTypes.py
+SDMXThon\model\itemScheme.py
+SDMXThon\model\structure.py
+SDMXThon\model\utils.py
 SDMXThon\query\__init__.py
 SDMXThon\registry\__init__.py
 SDMXThon\structure\__init__.py

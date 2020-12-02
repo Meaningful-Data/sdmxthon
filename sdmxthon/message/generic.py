@@ -1,13 +1,13 @@
-from SDMXThon.common.annotations import TextType
-from SDMXThon.common.generic import GenericDataStructureType
-from SDMXThon.common.references import DataProviderReferenceType, DataStructureReferenceType
-from SDMXThon.data.generic import DataSetType as GenericDataSet
-from SDMXThon.message.footer import FooterType
-from SDMXThon.structure.specificbase import DataSetType as StructureDataSet
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
-from SDMXThon.utils.generateds import datetime_
-from SDMXThon.utils.mappings import ClassToPrefix
-from SDMXThon.utils.xml_base import BaseStrType_, encode_str_2_3, showIndent, quote_xml, find_attr_value_, _cast, \
+from .footer import FooterType
+from ..common.annotations import TextType
+from ..common.generic import GenericDataStructureType
+from ..common.references import DataProviderReferenceType, DataStructureReferenceType
+from ..data.generic import DataSetType as GenericDataSet
+from ..structure.specificbase import DataSetType as StructureDataSet
+from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
+from ..utils.generateds import datetime_
+from ..utils.mappings import ClassToPrefix
+from ..utils.xml_base import BaseStrType_, encode_str_2_3, showIndent, quote_xml, find_attr_value_, _cast, \
     quote_attrib, GdsCollector_
 
 

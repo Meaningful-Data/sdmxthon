@@ -1,11 +1,9 @@
 import json
-import warnings
-from typing import Dict
 
 from .base import *
 from .dataTypes import FacetType, FacetValueType
-from .itemScheme import Concept, CodeList, ConceptScheme, Agency
-from .utils import genericSetter, qName, getReferences, intSetter, getNameAndDescription, stringSetter
+from .itemScheme import Concept, CodeList, ConceptScheme
+from .utils import genericSetter, qName, intSetter, stringSetter
 
 
 class Facet:
@@ -53,14 +51,16 @@ class Facet:
 
 class Representation:
     # TODO: Method to get the objects from the reference
-    def __init__(self, concept: Concept = None, facets=[],
+    def __init__(self, concept: Concept = None, facets=None,
                  codeList: CodeList = None, conceptScheme: ConceptScheme = None):
+        if facets is None:
+            facets = []
+        for f in facets:
+            self.addFacet(f)
+        self._components = []
         self.concept = concept
         self.codeList = codeList
         self.conceptScheme = conceptScheme
-
-        for f in facets:
-            self.addFacet(f)
 
         self._conceptReference = None
         self._codeListReference = None
@@ -83,7 +83,11 @@ class Representation:
 
     @property
     def facets(self):
-        return self._facets
+        facets = []
+        for e in self._components:
+            if isinstance(e, Facet):
+                facets.append(e)
+        return facets
 
     @property
     def codeList(self):
@@ -113,9 +117,11 @@ class Representation:
 
 
 class Component(IdentifiableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  localRepresentation: Representation = None, componentList=None):
 
+        if annotations is None:
+            annotations = []
         super(Component, self).__init__(id_=id_, uri=uri, annotations=annotations)
 
         self.localRepresentation = localRepresentation
@@ -151,128 +157,23 @@ class Component(IdentifiableArtefact):
     @property
     def urn(self):
         try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.{self.__class__.__name__}={self.componentList.dsd.maintainer.id}:{self.componentList.dsd.id}({self.componentList.dsd.version}).{self.id}"
+            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.{self.__class__.__name__}=" \
+                  f"{self.componentList.dsd.maintainer.id}:{self.componentList.dsd.id}" \
+                  f"({self.componentList.dsd.version}).{self.id}"
         except:
             urn = ""
         return urn
-
-    def toXml(self):
-        xml = super().toXml()
-        if self.__class__ == Dimension:
-            xml.attrib["position"] = str(self.position)
-        if self.__class__ == Attribute:
-            xml.attrib["assignmentStatus"] = "Conditional"  # Hard coded
-
-        if self.localRepresentation.concept is not None:
-            concept = etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptIdentity")
-            attrib = {
-                "agencyID": "RBI",
-                ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
-                "class": "Concept",
-                "id": self.representation.concept.id,
-                "maintainableParentID": "RBI_CONCEPTS",  ##Hardcoded
-                "maintainableParentVersion": "1.0",
-                "package": "conceptscheme"
-            }
-
-            ref = etree.Element("Ref", attrib=attrib)
-
-            concept.append(ref)
-            xml.append(concept)
-
-        localRep = etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}LocalRepresentation")
-        if self.representation.codeList is not None:
-            enum = etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Enumeration")
-
-            attrib = {
-                "agencyID": "RBI",
-                ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
-                "class": "Codelist",
-                "id": self.representation.codeList.id,
-                "package": "codelist",
-                "version": "1.0"
-            }
-
-            ref = etree.Element("Ref", attrib=attrib)
-
-            enum.append(ref)
-            localRep.append(enum)
-        elif self.id == "TIME_PERIOD":
-            localRep.append(etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat",
-                                          attrib={
-                                              "textType": "GregorianDay"}))  # Harcoded! What's the link with facets?
-        else:
-            localRep.append(etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat",
-                                          attrib={"textType": "String"}))  # Harcoded! What's the link with facets?
-
-        xml.append(localRep)
-
-        if self.__class__ == Attribute:  # Hard coded
-            attachment = etree.Element(
-                "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}AttributeRelationship")
-            pm = etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}PrimaryMeasure")
-            pm.append(etree.Element("Ref", attrib={"id": "OBS_VALUE"}))
-            attachment.append(pm)
-            xml.append(attachment)
-
-        return xml
-
-    @classmethod
-    def fromXml(cls, elem):
-        # 1. Instantiate the right class
-        componentType = etree.QName(elem).localname
-
-        inst = globals()[componentType]()
-
-        # 2. Get common attributes
-        inst.id = elem.get("id")
-
-        # 3. Get references
-        # 3.1 Get concept identity
-        conceptIdentity = elem.find(qName("str", "ConceptIdentity"))
-        if conceptIdentity is None:
-            raise ValueError("Component {inst.id} does not have a ConceptIdentity")
-
-        inst._conceptIdentityRef = getReferences(conceptIdentity)
-
-        # 3.2 Get local representation. TODO get facets
-        localRepresentation = elem.find(qName("str", "LocalRepresentation"))
-        if localRepresentation is not None:
-            lr = Representation()
-            enumeration = localRepresentation.find(qName("str", "Enumeration"))
-
-            if enumeration is not None:
-                lr._codeListReference = getReferences(enumeration)
-                inst.localRepresentation = lr
-
-        # 4. Get position for dimension
-        if isinstance(inst, Dimension):
-            inst.position = elem.get("position")
-
-        # 5. Get usageStatus  and  realatedTo for attribute
-        if isinstance(inst, Attribute):
-            inst.usageStatus = elem.get("assignmentStatus")
-
-            # TODO: Get attributes relationships to dimensions or dimension groups
-            relationship = elem.find(qName("str", "AttributeRelationship"))
-            if relationship is not None:
-                if relationship.find(qName("str", "PrimaryMeasure")) is not None:
-                    inst.relatedTo = "PrimaryMeasure"
-                elif relationship.find(qName("str", "None")) is not None:
-                    inst.relatedTo = "NoSpecifiedRelationship"
-                else:
-                    warnings.warn(f"Relationship for attribute {inst.id} could not be extracted")
-
-        return inst
 
 
 class Dimension(Component):
     _urnType = "datastructure"
     _qName = qName("str", "Dimension")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
+        if annotations is None:
+            annotations = []
         super(Dimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                         localRepresentation=localRepresentation)
 
@@ -300,9 +201,11 @@ class Dimension(Component):
 class MeasureDimension(Dimension):
     _qName = qName("str", "MeasureDimension")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
+        if annotations is None:
+            annotations = []
         super(MeasureDimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                localRepresentation=localRepresentation, position=position)
 
@@ -316,12 +219,15 @@ class MeasureDimension(Dimension):
         else:
             return False
 
+
 class TimeDimension(Dimension):
     _qName = qName("str", "TimeDimension")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
+        if annotations is None:
+            annotations = []
         super(TimeDimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                             localRepresentation=localRepresentation, position=position)
 
@@ -335,14 +241,16 @@ class TimeDimension(Dimension):
         else:
             return False
 
+
 class Attribute(Component):
     _urnType = "datastructure"
     _qName = qName("str", "Attribute")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  usageStatus: str = None, relatedTo=None):
-
+        if annotations is None:
+            annotations = []
         super(Attribute, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                         localRepresentation=localRepresentation)
 
@@ -391,7 +299,8 @@ class Attribute(Component):
     @property
     def urn(self):
         try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute={self.componentList.dsd.maintainer.id}:{self.componentList.dsd.id}({self.componentList.dsd.version}).{self.id}"
+            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute={self.componentList.dsd.maintainer.id}:" \
+                  f"{self.componentList.dsd.id}({self.componentList.dsd.version}).{self.id}"
         except:
             urn = ""
         return urn
@@ -401,8 +310,11 @@ class PrimaryMeasure(Component):
     _urnType = "datastructure"
     _qName = qName("str", "PrimaryMeasure")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  localRepresentation: Representation = None):
+
+        if annotations is None:
+            annotations = []
         super(PrimaryMeasure, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                              localRepresentation=localRepresentation)
 
@@ -417,11 +329,14 @@ class PrimaryMeasure(Component):
 
 
 class ComponentList(IdentifiableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
-                 components: Dict = [], dsd=None):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+                 components=None):
 
+        if annotations is None:
+            annotations = []
+        if components is None:
+            components = []
         super(ComponentList, self).__init__(id_=id_, uri=uri, annotations=annotations)
-
         self._components = {}
         for c in components:
             self.addComponent(c)
@@ -439,6 +354,7 @@ class ComponentList(IdentifiableArtefact):
     def components(self):
         return self._components
 
+    """
     @property
     def dsd(self):
         return self._dsd
@@ -446,15 +362,18 @@ class ComponentList(IdentifiableArtefact):
     @dsd.setter
     def dsd(self, value):
         self._dsd = genericSetter(value, DataStructureDefinition)
+    """
 
     def addComponent(self, value):
-        if isinstance(value, self._componentType):
+        if isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
             value.componentList = self
             self._components[value.id] = value
         else:
             raise TypeError(
-                f"The object has to be of the dim_type {self._componentType.__name__}, {value.__class__.__name__} provided")
+                f"The object has to be of the dim_type [Dimension, Attribute, PrimaryMeasure], "
+                f"{value.__class__.__name__} provided")
 
+    """
     @property
     def urn(self):
         try:
@@ -462,6 +381,7 @@ class ComponentList(IdentifiableArtefact):
         except:
             urn = ""
         return urn
+    """
 
     def __len__(self):
         return len(self.components)
@@ -469,45 +389,19 @@ class ComponentList(IdentifiableArtefact):
     def __getitem__(self, value):
         return self.components[value]
 
-    def toXml(self):
-        xml = super().toXml()
-        for c in self.components:
-            xml.append(c.toXml())
-
-        return xml
-
-    @classmethod
-    def fromXml(cls, elem: etree._Element):
-        # 1. Instantiate the right class
-        componentListType = etree.QName(elem).localname
-
-        objectsMapping = {
-            "DimensionList": DimensionDescriptor,
-            "AttributeList": AttributeDescriptor,
-            "MeasureList": MeasureDescriptor,
-            "GroupDimensionList": GroupDimensionDescriptor
-        }
-
-        inst = objectsMapping[componentListType]()
-
-        # 2. Get id (only attribute)
-        inst.id = elem.get("id")
-
-        # 3. get components
-        components = elem.getchildren()
-        for c in components:
-            inst.addComponent(Component.fromXml(c))
-
-        return inst
-
 
 class DimensionDescriptor(ComponentList):
     _componentType = Dimension
     _urnType = "datastructure"
     _qName = qName("str", "DimensionList")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
-                 components: List[Dimension] = []):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+                 components=None):
+
+        if annotations is None:
+            annotations = []
+        if components is None:
+            components = []
         super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   components=components)
 
@@ -526,8 +420,13 @@ class AttributeDescriptor(ComponentList):
     _urnType = "datastructure"
     _qName = qName("str", "AttributeList")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
-                 components: List[Attribute] = []):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+                 components=None):
+        if components is None:
+            components = []
+        if annotations is None:
+            annotations = []
+
         super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   components=components)
 
@@ -546,8 +445,13 @@ class MeasureDescriptor(ComponentList):
     _urnType = "datastructure"
     _qName = qName("str", "MeasureList")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
-                 components: List[PrimaryMeasure] = []):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+                 components=None):
+
+        if components is None:
+            components = []
+        if annotations is None:
+            annotations = []
         super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                 components=components)
 
@@ -566,8 +470,12 @@ class GroupDimensionDescriptor(ComponentList):
     _urnType = "datastructure"
     _qName = qName("str", "Group")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
-                 components: List[Dimension] = []):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+                 components=None):
+        if components is None:
+            components = []
+        if annotations is None:
+            annotations = []
         super(GroupDimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                        components=components)
 
@@ -576,7 +484,7 @@ class DataStructureDefinition(MaintainableArtefact):
     _urnType = "datastructure"
     _qName = qName("str", "DataStructure")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -585,6 +493,8 @@ class DataStructureDefinition(MaintainableArtefact):
                  attributeDescriptor: AttributeDescriptor = None,
                  groupDimensionDescriptor: GroupDimensionDescriptor = None):
 
+        if annotations is None:
+            annotations = []
         super(DataStructureDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                       name=name, description=description,
                                                       version=version, validFrom=validFrom, validTo=validTo,
@@ -693,18 +603,6 @@ class DataStructureDefinition(MaintainableArtefact):
         if value is not None:
             value.dsd = self
 
-    def toXml(self):
-        xml = super().toXml()
-        dsdComponents = etree.SubElement(xml,
-                                         "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructureComponents")
-
-        dsdComponents.append(self.dimensionDescriptor.toXml())
-        dsdComponents.append(self.attributeDescriptor.toXml())
-        dsdComponents.append(self.measureDescriptor.toXml())
-
-        xml.append(dsdComponents)
-        return xml
-
     def toVtlJson(self, path):
         dataTypesMapping = {
             "String": "String",
@@ -714,30 +612,20 @@ class DataStructureDefinition(MaintainableArtefact):
 
         datasetName = self.id
         components = []
-        for c in self.dimensionList.components:
-            component = {}
-
-            component["name"] = c.id
-            component["role"] = "Identifier"
-            component["dim_type"] = dataTypesMapping[c.localRepresentation["dataType"]]
-            component["isNull"] = False
+        for c in self.dimensionDescriptor.components:
+            component = {"name": c.id, "role": "Identifier",
+                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": False}
 
             components.append(component)
-        for c in self.attributeList.components:
-            component = {}
+        for c in self.attributeDescriptor.components:
+            component = {"name": c.id, "role": "Attribute",
+                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": True}
 
-            component["name"] = c.id
-            component["role"] = "Attribute"
-            component["dim_type"] = dataTypesMapping[c.localRepresentation["dataType"]]
-            component["isNull"] = True  # We should use the assignmentStatus
             components.append(component)
-        for c in self.measureList.components:
-            component = {}
+        for c in self.measureDescriptor.components:
+            component = {"name": c.id, "role": "Measure",
+                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": True}
 
-            component["name"] = c.id
-            component["role"] = "Measure"
-            component["dim_type"] = dataTypesMapping[c.localRepresentation["dataType"]]
-            component["isNull"] = True
             components.append(component)
 
         rslt = {"DataSet": {"name": datasetName, "DataStructure": components}}
@@ -745,87 +633,25 @@ class DataStructureDefinition(MaintainableArtefact):
             json.dump(rslt, fp)
         return rslt
 
-    def referenceToXml(self):
-        """Creates a lxml Element for providing Ref.
-
-        Returns:
-            Am lxml Element
-        """
-        ref = etree.Element("Ref")
-
-        ref.attrib["agencyID"] = self.agencyId
-        ref.attrib["id"] = self.id
-        ref.attrib["version"] = self.version
-        ref.attrib["class"] = "DataStructure"
-
-        return ref
-
-    @classmethod
-    def fromXml(cls, elem: etree._Element):
-        if not isinstance(elem, etree._Element):
-            raise ValueError("The input has to be an lxml etree element")
-
-        # 1. Instantiate class
-        dsd = cls()
-
-        # 2. Get and instantiate maintainer
-        maintainerId = elem.get("agencyID")
-        maintainer = Agency(id_=maintainerId)
-        dsd.maintainer = maintainer
-
-        # 3. Get other attributes
-        dsd.id = elem.get("id")
-        dsd.version = elem.get("version")
-        dsd.uri = elem.get("uri")
-        dsd.isExternalRefernce = elem.get("isExternalReference")
-        dsd.isFinal = elem.get("isFinal")
-
-        # 4. Get Name and description
-        name, description = getNameAndDescription(elem)
-        dsd.name = name
-        dsd.description = description
-
-        # 5. Get components
-        dataStructureComponents = elem.find(qName("str", "DataStructureComponents"))
-
-        # 5.1 Get dimensions
-        dimensionList = dataStructureComponents.find(qName("str", "DimensionList"))
-        dsd.dimensionDescriptor = DimensionDescriptor.fromXml(dimensionList)
-
-        # 5.2 Get measure
-        measureList = dataStructureComponents.find(qName("str", "MeasureList"))
-        dsd.measureDescriptor = MeasureDescriptor.fromXml(measureList)
-
-        # 5.3 Get attributes
-        attributeList = dataStructureComponents.find(qName("str", "AttributeList"))
-        if attributeList is not None:
-            dsd.attributeDescriptor = AttributeDescriptor.fromXml(attributeList)
-
-        # 5.4 Get group dimensions
-        groupDimensionList = dataStructureComponents.find(qName("str", "GroupDimensionList"))
-        if groupDimensionList is not None:
-            dsd.groupDimensionDescriptor = GroupDimensionDescriptor.fromXml(groupDimensionList)
-
-        return dsd
-
 
 class DataFlowDefinition(MaintainableArtefact):
     _urnType = "datastructure"
     _qName = qName("str", "Dataflow")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  structure: DataStructureDefinition = None):
+        if annotations is None:
+            annotations = []
         super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                  name=name, description=description,
                                                  version=version, validFrom=validFrom, validTo=validTo,
                                                  isFinal=isFinal, isExternalReference=isExternalReference,
                                                  serviceUrl=serviceUrl, structureUrl=structureUrl,
                                                  maintainer=maintainer)
-
         self.structure = structure
 
     @property
@@ -835,38 +661,3 @@ class DataFlowDefinition(MaintainableArtefact):
     @structure.setter
     def structure(self, value):
         self._structure = genericSetter(value, DataStructureDefinition)
-
-    def toXml(self):
-        xml = super().toXml()
-
-        structure = etree.Element("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Structure")
-
-        attrib = {
-            "agencyID": "RBI",
-            ##Hardcoded! For solving it, just add the scheme object to the concept (i.e. the concept scheme should be an attribute of concept)
-            "class": "DataStructure",
-            "id": self.structure.id,
-            "package": "datastructure",
-            "version": "1.0"
-        }
-
-        ref = etree.Element("Ref", attrib=attrib)
-
-        structure.append(ref)
-        xml.append(structure)
-        return xml
-
-    def referenceToXml(self):
-        """Creates a lxml Element for providing Ref.
-
-        Returns:
-            Am lxml Element
-        """
-        ref = etree.Element("Ref")
-
-        ref.attrib["agencyId"] = self.agencyId
-        ref.attrib["id"] = self.id
-        ref.attrib["version"] = self.version
-        ref.attrib["class"] = "DataFlow"
-
-        return ref

@@ -166,10 +166,7 @@ def parseLiteral(inFileName, silence=False, print_warnings=True):
         sys.stdout.write(')\n')
 
     makeWarnings(print_warnings, gds_collector)
-
-"""
-
-
+    
 def get_all_obs_attributes(root):
     find_dataset_attr = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure/mes:AttributeList"
     record = root.xpath(find_dataset_attr,
@@ -191,7 +188,7 @@ def get_all_obs_attributes(root):
         attribute_list = list(set(aux))
 
     return attribute_list
-
+    
 
 def get_all_series_attributes(root):
     expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure/mes:DataStructureComponents/mes:DimensionList/mes:Dimension/@id"
@@ -206,7 +203,6 @@ def get_all_series_attributes(root):
         attribute_list = list(set(aux))
 
     return attribute_list
-
 
 def get_all_dataset_attributes(root):
     find_dataset_attr = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure/mes:AttributeList"
@@ -226,8 +222,7 @@ def get_all_dataset_attributes(root):
         attribute_list = list(set(aux))
 
     return attribute_list
-
-
+    
 def get_obs_attributes(root, dataset_id):
     find_dataset_attr = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents/mes:AttributeList/mes:Attribute[./mes:AttributeRelationship/mes:PrimaryMeasure/Ref/@id='OBS_VALUE']/mes:ConceptIdentity/Ref/@id"
     record = root.xpath(find_dataset_attr, name=dataset_id,
@@ -240,8 +235,7 @@ def get_obs_attributes(root, dataset_id):
         attribute_list[record_] = ''
 
     return attribute_list
-
-
+    
 def get_series_attributes(root, dataset_id):
     expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents/mes:DimensionList/mes:Dimension/@id"
     record = root.xpath(expression, name=dataset_id,
@@ -264,8 +258,22 @@ def get_series_attributes(root, dataset_id):
             attribute_list[record_] = ''
 
     return attribute_list
+    
 
 
+def get_version(root, dataset_id):
+    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
+    record = root.xpath(expression, name=dataset_id,
+                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+    if (len(record) > 0):
+        urn_aux = record[0]
+        aux = urn_aux.split("(", 1)[1]
+        version = aux.split(")", 1)[0]
+    else:
+        version = "1.0"
+    return version
+    
 def get_dataset_attributes(root, dataset_id):
     find_dataset_attr = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents/mes:AttributeList/mes:Attribute[count(./mes:AttributeRelationship/mes:None) > 0]/mes:ConceptIdentity/Ref/@id"
     record = root.xpath(find_dataset_attr, name=dataset_id,
@@ -296,6 +304,258 @@ def get_codelist(root):
             codelist_ids[result_.attrib['id']] = enums
 
     return codelist_ids
+
+
+
+def parse_obs_generic(data_frame, root, structure_ref, validate_data=False):
+    obs_attributes_keys = get_obs_attributes(root, structure_ref).keys()
+    series_list_keys = list(get_series_attributes(root, structure_ref).keys())
+    list_keys = data_frame.keys()
+    observation_list = []
+    iterations = len(data_frame)
+
+    if validate_data:
+        attr_enums = get_attr_enums(root, structure_ref).keys()
+        codelist = get_codelist(root)
+
+    logger.debug("Iterations for dataset %s: %d (Generic)" % (structure_ref, iterations))
+    for row in range(iterations):
+        obs_ = ObsOnlyType()
+        obs_.original_tag_name_ = "Obs"
+        obs_key = ValuesType()
+        obs_key.original_tag_name_ = "ObsKey"
+        obs_attr = ValuesType()
+        obs_attr.original_tag_name_ = "Attributes"
+        df = data_frame.iloc[row, :]
+        for element in list_keys:
+            aux = df[element]
+
+            if element in series_list_keys:
+                if (aux != '' or aux is not None) and validate_data:
+                    if element in attr_enums and not validate_observation_value(aux, element, codelist, structure_ref):
+                        return None
+                elif aux == '' or aux is None:
+                    aux = "N_A"
+
+                attr_value = ComponentValueType()
+                attr_value.original_tag_name_ = "Value"
+                attr_value.set_id(element)
+                attr_value.set_value(aux)
+                obs_key.add_Value(attr_value)
+            elif element in obs_attributes_keys and element.upper() != "OBS_VALUE":
+                attr_value = ComponentValueType()
+                attr_value.original_tag_name_ = "Value"
+                attr_value.set_id(element)
+                attr_value.set_value(aux)
+                obs_attr.add_Value(attr_value)
+            elif element.upper() == "OBS_VALUE":
+                value = ObsValueType()
+                value.original_tag_name_ = "ObsValue"
+                value._namespace_prefix = "generic"
+                value.set_value(aux)
+                obs_.set_ObsValue(value)
+
+        obs_.set_ObsKey(obs_key)
+        obs_.set_Attributes(obs_attr)
+        observation_list.append(obs_)
+
+    return observation_list
+
+
+
+def parse_obs_structure(data_frame, root, structure_ref, validate_data=False):
+    obs_attributes = get_obs_attributes(root, structure_ref)
+    series_attributes = get_series_attributes(root, structure_ref)
+    list_keys = data_frame.keys()
+    observation_list = []
+    iterations = len(data_frame)
+    logger.debug("Iterations for dataset %s: %d (Structure)" % (structure_ref, iterations))
+
+    if validate_data:
+        attr_enums = get_attr_enums(root, structure_ref).keys()
+        codelist = get_codelist(root)
+
+    for row in range(iterations):
+
+        obs = Observation()
+        series = Series()
+        df = data_frame.iloc[row, :]
+
+        if 'OBS_VALUE' in list_keys:
+            obs_value = df['OBS_VALUE']
+            obs.set_OBS_VALUE(obs_value)
+
+        if 'TIME_PERIOD' in list_keys:
+            obs_time_period = df['TIME_PERIOD']
+            obs.set_TIME_PERIOD(obs_time_period)
+
+        if 'REPORTING_YEAR_START_DAY' in list_keys:
+            obs_reporting_year_start_day = df['REPORTING_YEAR_START_DAY']
+            obs.set_REPORTING_YEAR_START_DAY(obs_reporting_year_start_day)
+
+        obs_list_keys = obs_attributes.keys()
+
+        for element in obs_list_keys:
+            if element in df.keys():
+                aux = df[element]
+                if (aux != '' or aux is not None) and validate_data:
+                    if element in attr_enums and not validate_observation_value(aux, element, codelist, structure_ref):
+                        return None
+                elif aux == '' or aux is None:
+                    aux = "N_A"
+
+                obs_attributes[element] = aux
+
+        if len(series_attributes) > 0:
+            series_list_keys = series_attributes.keys()
+            for element in series_list_keys:
+                if element in list_keys:
+                    aux = df[element]
+                    if aux == '' or aux is None:
+                        aux = "N_A"
+
+                    obs_attributes[element] = aux
+                else:
+                    obs_attributes[element] = 'N_A'
+
+            # do = id_data.reindex(columns=series_list_keys)
+
+        obs.set_anyAttributes_(obs_attributes.copy())
+        series.set_anyAttributes_(series_attributes)
+        observation_list.append(obs)
+
+    return observation_list
+    
+
+
+def validate_observation_value(value, attribute, codelist, setID):
+    validate = True
+
+    if not is_valid_enum_value("CL_" + attribute, value, codelist):
+        validate = False
+        print('Invalid value %s in column %s for dataset %s' % (value, attribute, setID))
+
+    return validate
+    
+
+
+def get_attr_enums(root, dataset_id):
+    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents//*[count(./mes:LocalRepresentation/mes:Enumeration) > 0]/@id"
+    result = root.xpath(expression, name=dataset_id,
+                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    codelist_ids = {}
+    if result is not None:
+        for result_ in result:
+            expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents//*[@id=$subname]/mes:LocalRepresentation/mes:Enumeration/Ref/@id"
+            enum = root.xpath(expression, name=dataset_id, subname=result_,
+                              namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                          'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+            codelist_ids[result_] = enum[0]
+
+    return codelist_ids
+
+
+def is_enum(attr_name: str, attr_enums: dict):
+    value = None
+    if attr_name in attr_enums:
+        value = attr_enums[attr_name]
+
+    return value
+
+def is_valid_enum_value(enum_name: str, enum_value: str, codelist: dict):
+    valid_value = False
+
+    if enum_name is not None:
+        if enum_name in codelist:
+            values = codelist[enum_name]
+            if enum_value in values:
+                valid_value = True
+
+    return valid_value
+
+
+def get_node_data_structure(root, id):
+    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]"
+    record = root.xpath(expression, name=id,
+                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    return record
+
+
+def get_agency_id(root):
+    expression = "/str:Structure/str:Structures/mes:Codelists/mes:Codelist[@agencyID != ''][1]/@agencyID"
+    record = root.xpath(expression,
+                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    if len(record) is 0:
+        return None
+    else:
+        return record[0]
+
+
+def get_urn_header(root, datasets_ids):
+    dataset_namespaces = "\n"
+    for id in datasets_ids:
+        expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
+        record = root.xpath(expression, name=id,
+                            namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                        'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+        dataset_namespaces += 'xmlns:' + id + '="' + record[0] + ':ObsLevelDim:AllDimensions"\n'
+
+    return dataset_namespaces
+
+
+def get_structure(root, dataset_id, agency_id):
+    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
+    record = root.xpath(expression, name=dataset_id,
+                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+    urn_aux = record[0]
+    urn = urn_aux + ':ObsLevelDim:AllDimensions'
+    aux = urn_aux.split("(", 1)[1]
+    version = aux.split(")", 1)[0]
+    structure = GenericDataStructureType()
+    structure.original_tag_name_ = "Structure"
+    structure.set_ns_def_("message")
+    structure.set_structureID(dataset_id)
+    structure.set_namespace(urn)
+    structure.set_dimensionAtObservation("AllDimensions")
+    structure_usage = DataflowReferenceType()
+    structure_usage.original_tag_name_ = "Structure"
+    structure_usage.set_ns_def_("common")
+    ref = DataflowRefType()
+    ref.original_tag_name_ = "Ref"
+    ref.set_id(dataset_id)
+    ref.set_agencyID(agency_id)
+    ref.set_version(version)
+    ref.set_class("DataStructure")
+    structure_usage.set_Ref(ref)
+    structure.set_Structure(structure_usage)
+    return structure
+
+def validate_dataset_attributes(root, dataset):
+    dataset_attributes = get_dataset_attributes(root, dataset.code)
+    attached_attributes = dataset.attached_attributes
+    dataset_keys = dataset_attributes.keys()
+    attached_keys = attached_attributes.keys()
+    wrong_attributes = {"missing_attributes": [], "spared_attributes": []}
+
+    for key in dataset_keys:
+        if key not in attached_keys:
+            wrong_attributes.get("missing_attributes").append(key)
+
+    for key in attached_keys:
+        if key not in dataset_keys:
+            wrong_attributes.get("spared_attributes").append(key)
+
+    return wrong_attributes
+
+"""
 
 
 def id_creator(agencyID, id, version):
@@ -700,107 +960,6 @@ def get_DSDs(root, concepts=None, codelists=None):
     return dsds
 
 
-def get_attr_enums(root, dataset_id):
-    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents//*[count(./mes:LocalRepresentation/mes:Enumeration) > 0]/@id"
-    result = root.xpath(expression, name=dataset_id,
-                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-
-    codelist_ids = {}
-    if result is not None:
-        for result_ in result:
-            expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/mes:DataStructureComponents//*[@id=$subname]/mes:LocalRepresentation/mes:Enumeration/Ref/@id"
-            enum = root.xpath(expression, name=dataset_id, subname=result_,
-                              namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                          'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-
-            codelist_ids[result_] = enum[0]
-
-    return codelist_ids
-
-
-def is_enum(attr_name: str, attr_enums: dict):
-    value = None
-    if attr_name in attr_enums:
-        value = attr_enums[attr_name]
-
-    return value
-
-
-def is_valid_enum_value(enum_name: str, enum_value: str, codelist: dict):
-    valid_value = False
-
-    if enum_name is not None:
-        if enum_name in codelist:
-            values = codelist[enum_name]
-            if enum_value in values:
-                valid_value = True
-
-    return valid_value
-
-
-def get_node_data_structure(root, id):
-    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]"
-    record = root.xpath(expression, name=id,
-                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-
-    return record
-
-
-def get_agency_id(root):
-    expression = "/str:Structure/str:Structures/mes:Codelists/mes:Codelist[@agencyID != ''][1]/@agencyID"
-    record = root.xpath(expression,
-                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-
-    if len(record) is 0:
-        return None
-    else:
-        return record[0]
-
-
-def get_urn_header(root, datasets_ids):
-    dataset_namespaces = "\n"
-    for id in datasets_ids:
-        expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
-        record = root.xpath(expression, name=id,
-                            namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                        'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-        dataset_namespaces += 'xmlns:' + id + '="' + record[0] + ':ObsLevelDim:AllDimensions"\n'
-
-    return dataset_namespaces
-
-
-def get_structure(root, dataset_id, agency_id):
-    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
-    record = root.xpath(expression, name=dataset_id,
-                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-    urn_aux = record[0]
-    urn = urn_aux + ':ObsLevelDim:AllDimensions'
-    aux = urn_aux.split("(", 1)[1]
-    version = aux.split(")", 1)[0]
-    structure = GenericDataStructureType()
-    structure.original_tag_name_ = "Structure"
-    structure.set_ns_def_("message")
-    structure.set_structureID(dataset_id)
-    structure.set_namespace(urn)
-    structure.set_dimensionAtObservation("AllDimensions")
-    structure_usage = DataflowReferenceType()
-    structure_usage.original_tag_name_ = "Structure"
-    structure_usage.set_ns_def_("common")
-    ref = DataflowRefType()
-    ref.original_tag_name_ = "Ref"
-    ref.set_id(dataset_id)
-    ref.set_agencyID(agency_id)
-    ref.set_version(version)
-    ref.set_class("DataStructure")
-    structure_usage.set_Ref(ref)
-    structure.set_Structure(structure_usage)
-    return structure
-
-
 def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datasetType: DatasetType):
     structure = GenericDataStructureType()
     structure.original_tag_name_ = "Structure"
@@ -825,77 +984,8 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datas
     return structure
 
 
-def get_version(root, dataset_id):
-    expression = "/str:Structure/str:Structures/mes:DataStructures/mes:DataStructure[@id=$name]/@urn"
-    record = root.xpath(expression, name=dataset_id,
-                        namespaces={'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
-                                    'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-    if (len(record) > 0):
-        urn_aux = record[0]
-        aux = urn_aux.split("(", 1)[1]
-        version = aux.split(")", 1)[0]
-    else:
-        version = "1.0"
-    return version
-
-
-def parse_obs_generic(data_frame, root, structure_ref, validate_data=False):
-    obs_attributes_keys = get_obs_attributes(root, structure_ref).keys()
-    series_list_keys = list(get_series_attributes(root, structure_ref).keys())
-    list_keys = data_frame.keys()
-    observation_list = []
-    iterations = len(data_frame)
-
-    if validate_data:
-        attr_enums = get_attr_enums(root, structure_ref).keys()
-        codelist = get_codelist(root)
-
-    logger.debug("Iterations for dataset %s: %d (Generic)" % (structure_ref, iterations))
-    for row in range(iterations):
-        obs_ = ObsOnlyType()
-        obs_.original_tag_name_ = "Obs"
-        obs_key = ValuesType()
-        obs_key.original_tag_name_ = "ObsKey"
-        obs_attr = ValuesType()
-        obs_attr.original_tag_name_ = "Attributes"
-        df = data_frame.iloc[row, :]
-        for element in list_keys:
-            aux = df[element]
-
-            if element in series_list_keys:
-                if (aux != '' or aux is not None) and validate_data:
-                    if element in attr_enums and not validate_observation_value(aux, element, codelist, structure_ref):
-                        return None
-                elif aux == '' or aux is None:
-                    aux = "N_A"
-
-                attr_value = ComponentValueType()
-                attr_value.original_tag_name_ = "Value"
-                attr_value.set_id(element)
-                attr_value.set_value(aux)
-                obs_key.add_Value(attr_value)
-            elif element in obs_attributes_keys and element.upper() != "OBS_VALUE":
-                attr_value = ComponentValueType()
-                attr_value.original_tag_name_ = "Value"
-                attr_value.set_id(element)
-                attr_value.set_value(aux)
-                obs_attr.add_Value(attr_value)
-            elif element.upper() == "OBS_VALUE":
-                value = ObsValueType()
-                value.original_tag_name_ = "ObsValue"
-                value._namespace_prefix = "generic"
-                value.set_value(aux)
-                obs_.set_ObsValue(value)
-
-        obs_.set_ObsKey(obs_key)
-        obs_.set_Attributes(obs_attr)
-        observation_list.append(obs_)
-
-    return observation_list
-
-
 def parse_obs_generic_from_dsd(data_frame, dsd: DataStructureDefinition, validate_data=False):
-    obs_attributes_keys = dsd.datasetAttributeCodes
+    obs_attributes_keys = dsd.attributeCodes
     series_list_keys = dsd.dimensionCodes
     list_keys = data_frame.keys()
     observation_list = []
@@ -942,70 +1032,6 @@ def parse_obs_generic_from_dsd(data_frame, dsd: DataStructureDefinition, validat
         obs_.set_ObsKey(obs_key)
         obs_.set_Attributes(obs_attr)
         observation_list.append(obs_)
-
-    return observation_list
-
-
-def parse_obs_structure(data_frame, root, structure_ref, validate_data=False):
-    obs_attributes = get_obs_attributes(root, structure_ref)
-    series_attributes = get_series_attributes(root, structure_ref)
-    list_keys = data_frame.keys()
-    observation_list = []
-    iterations = len(data_frame)
-    logger.debug("Iterations for dataset %s: %d (Structure)" % (structure_ref, iterations))
-
-    if validate_data:
-        attr_enums = get_attr_enums(root, structure_ref).keys()
-        codelist = get_codelist(root)
-
-    for row in range(iterations):
-
-        obs = Observation()
-        series = Series()
-        df = data_frame.iloc[row, :]
-
-        if 'OBS_VALUE' in list_keys:
-            obs_value = df['OBS_VALUE']
-            obs.set_OBS_VALUE(obs_value)
-
-        if 'TIME_PERIOD' in list_keys:
-            obs_time_period = df['TIME_PERIOD']
-            obs.set_TIME_PERIOD(obs_time_period)
-
-        if 'REPORTING_YEAR_START_DAY' in list_keys:
-            obs_reporting_year_start_day = df['REPORTING_YEAR_START_DAY']
-            obs.set_REPORTING_YEAR_START_DAY(obs_reporting_year_start_day)
-
-        obs_list_keys = obs_attributes.keys()
-
-        for element in obs_list_keys:
-            if element in df.keys():
-                aux = df[element]
-                if (aux != '' or aux is not None) and validate_data:
-                    if element in attr_enums and not validate_observation_value(aux, element, codelist, structure_ref):
-                        return None
-                elif aux == '' or aux is None:
-                    aux = "N_A"
-
-                obs_attributes[element] = aux
-
-        if len(series_attributes) > 0:
-            series_list_keys = series_attributes.keys()
-            for element in series_list_keys:
-                if element in list_keys:
-                    aux = df[element]
-                    if aux == '' or aux is None:
-                        aux = "N_A"
-
-                    obs_attributes[element] = aux
-                else:
-                    obs_attributes[element] = 'N_A'
-
-            # do = id_data.reindex(columns=series_list_keys)
-
-        obs.set_anyAttributes_(obs_attributes.copy())
-        series.set_anyAttributes_(series_attributes)
-        observation_list.append(obs)
 
     return observation_list
 
@@ -1157,24 +1183,6 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
     return message
 
 
-def validate_dataset_attributes(root, dataset):
-    dataset_attributes = get_dataset_attributes(root, dataset.code)
-    attached_attributes = dataset.attached_attributes
-    dataset_keys = dataset_attributes.keys()
-    attached_keys = attached_attributes.keys()
-    wrong_attributes = {"missing_attributes": [], "spared_attributes": []}
-
-    for key in dataset_keys:
-        if key not in attached_keys:
-            wrong_attributes.get("missing_attributes").append(key)
-
-    for key in attached_keys:
-        if key not in dataset_keys:
-            wrong_attributes.get("spared_attributes").append(key)
-
-    return wrong_attributes
-
-
 def validate_dataset_attributes_from_dsd(dsd, dataset):
     dataset_keys = dsd.datasetAttributeCodes
     attached_keys = dataset.attached_attributes.keys()
@@ -1189,16 +1197,6 @@ def validate_dataset_attributes_from_dsd(dsd, dataset):
             wrong_attributes.get("spared_attributes").append(key)
 
     return wrong_attributes
-
-
-def validate_observation_value(value, attribute, codelist, setID):
-    validate = True
-
-    if not is_valid_enum_value("CL_" + attribute, value, codelist):
-        validate = False
-        print('Invalid value %s in column %s for dataset %s' % (value, attribute, setID))
-
-    return validate
 
 
 def validate_observation_value_from_dsd(value, key, dsd):

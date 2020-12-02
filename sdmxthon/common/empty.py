@@ -1,3 +1,4 @@
+'''
 from SDMXThon.utils.data_parser import DataParser
 
 
@@ -664,3 +665,4 @@ class Transition(EmptyType):
     def __init__(self, gds_collector_=None, **kwargs_):
         super(Transition, self).__init__(gds_collector_, **kwargs_)
         self._name = 'Transition'
+'''

@@ -1,7 +1,7 @@
-from SDMXThon.common.references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
+from .references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
     DataflowReferenceType
-from SDMXThon.utils.data_parser import DataParser
-from SDMXThon.utils.xml_base import _cast, quote_attrib, find_attr_value_, raise_parse_error
+from ..utils.data_parser import DataParser
+from ..utils.xml_base import _cast, quote_attrib, find_attr_value_, raise_parse_error
 
 
 class PayloadStructureType(DataParser):

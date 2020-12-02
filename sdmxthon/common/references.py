@@ -1,6 +1,6 @@
-from SDMXThon.common.refs import ProvisionAgreementRefType, DataflowRefType, DataStructureRefType, DataProviderRefType
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_
-from SDMXThon.utils.xml_base import showIndent, quote_xml
+from .refs import ProvisionAgreementRefType, DataflowRefType, DataStructureRefType, DataProviderRefType
+from ..utils.data_parser import DataParser, UseCapturedNS_
+from ..utils.xml_base import showIndent, quote_xml
 
 
 class ReferenceType(DataParser):

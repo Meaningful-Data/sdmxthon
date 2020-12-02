@@ -1,5 +1,5 @@
-from SDMXThon.utils.data_parser import DataParser, Validate_simpletypes_
-from SDMXThon.utils.xml_base import _cast, find_attr_value_, quote_attrib, encode_str_2_3, raise_parse_error
+from ..utils.data_parser import DataParser, Validate_simpletypes_
+from ..utils.xml_base import _cast, find_attr_value_, quote_attrib, encode_str_2_3, raise_parse_error
 
 
 class RefBaseType(DataParser):

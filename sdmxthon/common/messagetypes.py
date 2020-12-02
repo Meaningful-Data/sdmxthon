@@ -1,6 +1,6 @@
-from SDMXThon.common.annotations import TextType
-from SDMXThon.utils.data_parser import DataParser
-from SDMXThon.utils.xml_base import _cast, quote_attrib, find_attr_value_
+from .annotations import TextType
+from ..utils.data_parser import DataParser
+from ..utils.xml_base import _cast, quote_attrib, find_attr_value_
 
 
 class StatusMessageType(DataParser):
@@ -16,7 +16,7 @@ class StatusMessageType(DataParser):
     superclass = None
 
     def __init__(self, code=None, Text=None, gds_collector_=None, **kwargs_):
-        super(StatusMessageType, self).__init__(None, None, gds_collector_)
+        super(StatusMessageType, self).__init__(None, gds_collector_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
