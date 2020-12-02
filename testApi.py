@@ -1,9 +1,9 @@
 import logging
+import pickle
 import sys
 
 from lxml import etree
 
-from SDMXThon import xmlToDatasetList, headerCreation, DatasetType, datasetListToXML
 from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
@@ -155,13 +155,20 @@ def main():
     dsds = get_DSDs(root, concepts, codelists)
     logger.debug('DSD loaded')
 
+    serial = pickle.dumps(dsds)
+
+    f = open('SDMXThon/metadataTests/dsds.pickle', "wb")
+    f.write(serial)
+    f.close()
+
+    """
     # Testing creating message with dsds
     dataset_list = xmlToDatasetList(pathSaveToGeneric, dsds, DatasetType.GenericDataSet)
     logger.debug('End reading')
     header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
     datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
                      dataset_type=DatasetType.GenericDataSet, validate_data=True)
-
+    """
 
 def get_size(obj, seen=None):
     """Recursively finds size of objects"""
