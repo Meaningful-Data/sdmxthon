@@ -1,6 +1,6 @@
 {
-  "$schema": "",
-  "$id": "SDMX Datasets array",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
   "type": "array",
   "title": "The root schema",
   "description": "The root schema comprises the entire JSON document.",
@@ -9,7 +9,7 @@
     [
       {
         "structureRef": {
-          "code": "AALOE",
+          "code": "BORROWINGS",
           "version": "1.0",
           "agencyID": "RBI"
         },
@@ -22,7 +22,7 @@
           "publicationYear": null,
           "publicationPeriod": null,
           "action": "Replace",
-          "setId": "AALOE",
+          "setId": "BORROWINGS",
           "dimensionAtObservation": "AllDimensions"
         },
         "attached_attributes": {
@@ -30,11 +30,23 @@
           "DEPENDENCY_TYPE": "INDEPENDENT",
           "AUDST": "AUDITED"
         },
-        "obs": []
+        "obs": [
+          {
+            "COMMENT": "N_A",
+            "Currency": "INR",
+            "Measure_Type": "TOTAL",
+            "INPUT": "N_A",
+            "DATE": "N_A",
+            "Borrowing_Type": "BOR_CI_MONEYMARKET",
+            "Area_Operation": "GL_OP",
+            "DMID": "S884",
+            "TIME_PERIOD": "2019-Q2"
+          }
+        ]
       }
     ]
   ],
-  "additionalItems": true,
+  "additionalItems": false,
   "items": {
     "$id": "#/items",
     "anyOf": [
@@ -42,12 +54,12 @@
         "$id": "#/items/anyOf/0",
         "type": "object",
         "title": "The first anyOf schema",
-        "description": "AnyOF instance to validate the subschemas",
-        "default": null,
+        "description": "An explanation about the purpose of this instance.",
+        "default": {},
         "examples": [
           {
             "structureRef": {
-              "code": "AALOE",
+              "code": "BORROWINGS",
               "version": "1.0",
               "agencyID": "RBI"
             },
@@ -60,7 +72,7 @@
               "publicationYear": null,
               "publicationPeriod": null,
               "action": "Replace",
-              "setId": "AALOE",
+              "setId": "BORROWINGS",
               "dimensionAtObservation": "AllDimensions"
             },
             "attached_attributes": {
@@ -68,11 +80,24 @@
               "DEPENDENCY_TYPE": "INDEPENDENT",
               "AUDST": "AUDITED"
             },
-            "obs": []
+            "obs": [
+              {
+                "COMMENT": "N_A",
+                "Currency": "INR",
+                "Measure_Type": "TOTAL",
+                "INPUT": "N_A",
+                "DATE": "N_A",
+                "Borrowing_Type": "BOR_CI_MONEYMARKET",
+                "Area_Operation": "GL_OP",
+                "DMID": "S884",
+                "TIME_PERIOD": "2019-Q2"
+              }
+            ]
           }
         ],
         "required": [
           "structureRef",
+          "dataset_attributes",
           "attached_attributes",
           "obs"
         ],
@@ -85,7 +110,7 @@
             "default": {},
             "examples": [
               {
-                "code": "AALOE",
+                "code": "BORROWINGS",
                 "version": "1.0",
                 "agencyID": "RBI"
               }
@@ -100,18 +125,18 @@
                 "$id": "#/items/anyOf/0/properties/structureRef/properties/code",
                 "type": "string",
                 "title": "The code schema",
-                "description": "Code extracted from DataSet ID",
+                "description": "An explanation about the purpose of this instance.",
                 "default": "",
                 "examples": [
-                  "AALOE"
+                  "BORROWINGS"
                 ]
               },
               "version": {
                 "$id": "#/items/anyOf/0/properties/structureRef/properties/version",
                 "type": "string",
                 "title": "The version schema",
-                "description": "Version of the Dataset",
-                "default": "1.0",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "",
                 "examples": [
                   "1.0"
                 ]
@@ -121,20 +146,20 @@
                 "type": "string",
                 "title": "The agencyID schema",
                 "description": "An explanation about the purpose of this instance.",
-                "default": "RBI",
+                "default": "",
                 "examples": [
                   "RBI"
                 ]
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "dataset_attributes": {
             "$id": "#/items/anyOf/0/properties/dataset_attributes",
             "type": "object",
             "title": "The dataset_attributes schema",
             "description": "An explanation about the purpose of this instance.",
-            "default": null,
+            "default": {},
             "examples": [
               {
                 "reportingBegin": null,
@@ -145,56 +170,58 @@
                 "publicationYear": null,
                 "publicationPeriod": null,
                 "action": "Replace",
-                "setId": "AALOE",
+                "setId": "BORROWINGS",
                 "dimensionAtObservation": "AllDimensions"
               }
             ],
             "required": [
-              "reportingBegin",
-              "reportingEnd",
-              "dataExtractionDate",
-              "validFrom",
-              "validTo",
-              "publicationYear",
-              "publicationPeriod",
-              "action",
-              "setId",
-              "dimensionAtObservation"
             ],
             "properties": {
               "reportingBegin": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/reportingBegin",
-                "type": "string",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The reportingBegin schema",
                 "description": "An explanation about the purpose of this instance.",
                 "default": null,
                 "examples": [
-                  "2020-11-23T11:12:52"
+                  null
                 ]
               },
               "reportingEnd": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/reportingEnd",
-                "type": "string",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The reportingEnd schema",
                 "description": "An explanation about the purpose of this instance.",
                 "default": null,
                 "examples": [
-                  "2020-11-23T11:12:52"
+                  null
                 ]
               },
               "dataExtractionDate": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/dataExtractionDate",
-                "type": "string",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The dataExtractionDate schema",
                 "description": "An explanation about the purpose of this instance.",
-                "default": null,
+                "default": "",
                 "examples": [
                   "2020-11-23T11:12:52"
                 ]
               },
               "validFrom": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/validFrom",
-                "type": "string",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The validFrom schema",
                 "description": "An explanation about the purpose of this instance.",
                 "default": null,
@@ -204,7 +231,10 @@
               },
               "validTo": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/validTo",
-                "type": "string",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The validTo schema",
                 "description": "An explanation about the purpose of this instance.",
                 "default": null,
@@ -214,7 +244,10 @@
               },
               "publicationYear": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/publicationYear",
-                "type": "null",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The publicationYear schema",
                 "description": "An explanation about the purpose of this instance.",
                 "default": null,
@@ -224,7 +257,10 @@
               },
               "publicationPeriod": {
                 "$id": "#/items/anyOf/0/properties/dataset_attributes/properties/publicationPeriod",
-                "type": "string",
+                "type": [
+                  "null",
+                  "string"
+                ],
                 "title": "The publicationPeriod schema",
                 "description": "An explanation about the purpose of this instance.",
                 "default": null,
@@ -237,10 +273,9 @@
                 "type": "string",
                 "title": "The action schema",
                 "description": "An explanation about the purpose of this instance.",
-                "default": "Replace",
+                "default": "",
                 "examples": [
-                  "Replace",
-                  "Append"
+                  "Replace"
                 ]
               },
               "setId": {
@@ -250,7 +285,7 @@
                 "description": "An explanation about the purpose of this instance.",
                 "default": "",
                 "examples": [
-                  "AALOE"
+                  "BORROWINGS"
                 ]
               },
               "dimensionAtObservation": {
@@ -260,12 +295,11 @@
                 "description": "An explanation about the purpose of this instance.",
                 "default": "AllDimensions",
                 "examples": [
-                  "AllDimensions",
-                  "TIME_PERIOD"
+                  "AllDimensions"
                 ]
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "attached_attributes": {
             "$id": "#/items/anyOf/0/properties/attached_attributes",
@@ -280,20 +314,67 @@
                 "AUDST": "AUDITED"
               }
             ],
+            "required": [
+            ],
+            "properties": {
+            },
             "additionalProperties": true
           },
           "obs": {
             "$id": "#/items/anyOf/0/properties/obs",
             "type": "array",
             "title": "The obs schema",
-            "description": "Schema for pandas DataFrame objects",
+            "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
-              []
+              [
+                {
+                  "COMMENT": "N_A",
+                  "Currency": "INR",
+                  "Measure_Type": "TOTAL",
+                  "INPUT": "N_A",
+                  "DATE": "N_A",
+                  "Borrowing_Type": "BOR_CI_MONEYMARKET",
+                  "Area_Operation": "GL_OP",
+                  "DMID": "S884",
+                  "TIME_PERIOD": "2019-Q2"
+                }
+              ]
             ],
-            "additionalItems": true
+            "additionalItems": true,
+            "items": {
+              "$id": "#/items/anyOf/0/properties/obs/items",
+              "anyOf": [
+                {
+                  "$id": "#/items/anyOf/0/properties/obs/items/anyOf/0",
+                  "type": "object",
+                  "title": "The first anyOf schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": {},
+                  "examples": [
+                    {
+                      "COMMENT": "N_A",
+                      "Currency": "INR",
+                      "Measure_Type": "TOTAL",
+                      "INPUT": "N_A",
+                      "DATE": "N_A",
+                      "Borrowing_Type": "BOR_CI_MONEYMARKET",
+                      "Area_Operation": "GL_OP",
+                      "DMID": "S884",
+                      "TIME_PERIOD": "2019-Q2"
+                    }
+                  ],
+                  "required": [
+                  ],
+                  "properties": {
+                  },
+                  "additionalProperties": true
+                }
+              ]
+            }
           }
-        }
+        },
+        "additionalProperties": false
       }
     ]
   }

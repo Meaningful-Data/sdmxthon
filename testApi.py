@@ -154,8 +154,16 @@ def main():
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
     logger.debug('DSD loaded')
+    logger.debug('Starting serializing')
+    obj_list = []
+    for e in dsds.values():
+        # obj = DBObj(e.id, e.agencyId, e.version, pickle.dumps(e))
+        obj_list.append(pickle.dumps(e))
 
+    logger.debug('Finish serializing')
+    logger.debug('Starting serializing list')
     serial = pickle.dumps(dsds)
+    logger.debug('Finish serializing list')
 
     f = open('SDMXThon/metadataTests/dsds.pickle', "wb")
     f.write(serial)
@@ -189,6 +197,15 @@ def get_size(obj, seen=None):
     elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
         size += sum([get_size(i, seen) for i in obj])
     return size
+
+
+class DBObj:
+
+    def __init__(self, id, aid, ver, ser):
+        self.id = id
+        self.aid = aid
+        self.ver = ver
+        self.ser = ser
 
 
 if __name__ == '__main__':

@@ -606,7 +606,7 @@ def get_codelist_model(root):
             codelists[identifier] = cl
         return codelists
     else:
-        return []
+        return None
 
 
 def get_concept_schemes(root, codelists=None):
@@ -660,7 +660,7 @@ def get_concept_schemes(root, codelists=None):
             schemes[identifier] = sch
         return schemes
     else:
-        return []
+        return None
 
 
 def create_dimension_data(dsd, dimension_descriptor, concepts, codelists, dim_type='Dimension'):

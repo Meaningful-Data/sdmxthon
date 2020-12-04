@@ -69,10 +69,9 @@ def datasetListToJSON(dataset_list, path_to_file='') -> list:
     return listElements
 
 
-def JSONFileToDatasetList(path_to_json) -> list:
+def JSONFileToDatasetList(json_file) -> list:
     dataset_list = list()
-    f = open(path_to_json, "r")
-    parsed = json.loads(f.read())
+    parsed = json.loads(json_file.read())
     for e in parsed:
         dataset_list.append(DataSetCreator(code=e.get('structureRef').get('code'),
                                            version=e.get('structureRef').get('version'),
@@ -154,7 +153,14 @@ def DataSetCreator(code, version, agencyID, dataset_attributes=None, attached_at
                               "validFrom": None,
                               "validTo": None,
                               "publicationYear": None,
-                              "publicationPeriod": None}
+                              "publicationPeriod": None,
+                              "action": "Replace",
+                              "setId": code,
+                              "dimensionAtObservation": "AllDimensions"
+                              }
+
+    else:
+        check_DA_keys(dataset_attributes, code)
 
     if isinstance(obs, pd.DataFrame):
         item = DataSet(code=code, version=version, agencyID=agencyID,
@@ -168,6 +174,28 @@ def DataSetCreator(code, version, agencyID, dataset_attributes=None, attached_at
         return None
 
     return item
+
+
+def check_DA_keys(attributes: dict, code):
+    keys = ["reportingBegin", "reportingEnd", "dataExtractionDate", "validFrom", "validTo", "publicationYear",
+            "publicationPeriod", "action", "setId", "dimensionAtObservation"]
+
+    for spared_key in attributes.keys():
+        if spared_key not in keys:
+            attributes.pop(spared_key)
+
+    for k in keys:
+        if k not in attributes.keys():
+            if k == "dataExtractionDate":
+                attributes[k] = date.today()
+            elif k == "action":
+                attributes[k] = "Replace"
+            elif k == "setId":
+                attributes[k] = code
+            elif k == "dimensionAtObservation":
+                attributes[k] = "AllDimensions"
+            else:
+                attributes[k] = None
 
 
 def headerCreation(id_: str, test: bool = False,
