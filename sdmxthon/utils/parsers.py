@@ -4,11 +4,12 @@ import logging
 from SDMXThon.common.generic import GenericDataStructureType
 from SDMXThon.common.references import DataflowReferenceType
 from SDMXThon.common.refs import DataflowRefType
-from SDMXThon.data.generic import DataSetType as GenericDataSetType
+from SDMXThon.data.generic import DataSetType as GenericDataSetType, \
+    TimeSeriesDataSetType as GenericTimeSeriesDataSetType
 from SDMXThon.data.generic import ValuesType, ObsOnlyType, ComponentValueType, ObsValueType
 from SDMXThon.message.generic import GenericDataType, StructureSpecificDataType
 from SDMXThon.structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
-    SeriesType as Series
+    SeriesType as Series, TimeSeriesDataSetType as StructureTimeSeriesDataSetType
 from SDMXThon.utils.enums import DatasetType
 
 try:
@@ -549,8 +550,12 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
 
         dataset_attr = ValuesType()
         dataset_attr.original_tag_name_ = "Attributes"
-        if dataset_type == DatasetType.GenericDataSet:
-            data_set = GenericDataSetType()
+        if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+            if dataset_type == DatasetType.GenericDataSet:
+                data_set = GenericDataSetType()
+            else:
+                data_set = GenericTimeSeriesDataSetType()
+
             obs_list = parse_obs_generic(element.obs, root, element.code, validate_data)
             if obs_list == None:
                 return None
@@ -562,8 +567,12 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
                 dataset_attr.add_Value(attr_value)
                 data_set.set_Attributes(dataset_attr)
 
-        elif dataset_type == DatasetType.StructureDataSet:
-            data_set = StructureDataSetType()
+        elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
+            if dataset_type == DatasetType.StructureDataSet:
+                data_set = StructureDataSetType()
+            else:
+                data_set = StructureTimeSeriesDataSetType()
+
             obs_list = parse_obs_structure(element.obs, root, element.code, validate_data)
             if obs_list == None:
                 return None
@@ -589,7 +598,7 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
         structure = get_structure(root, element.code, element.agencyID)
         structure.set_dimensionAtObservation(element.dataset_attributes.get('dimensionAtObservation'))
 
-        if dataset_type == DatasetType.GenericDataSet:
+        if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
             structure.set_namespace(None)
 
         structures.append(structure)

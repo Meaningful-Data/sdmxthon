@@ -783,3 +783,5 @@ class WildCardValueType(str, Enum):
 class DatasetType(IntEnum):
     GenericDataSet = 1
     StructureDataSet = 2
+    GenericTimeSeriesDataSet = 3
+    StructureTimeSeriesDataSet = 4
