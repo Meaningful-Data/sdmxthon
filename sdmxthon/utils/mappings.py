@@ -101,7 +101,6 @@ ClassToNode = {
     'ReportingTaxonomyWhereType': 'ReportingTaxonomyWhere',
     'ReportingYearStartDayType': 'ReportingYearStartDay',
     'MaintainableWhereType': 'StructuralMetadataWhere',
-    'StructureType': 'Structure',
     'StructureSetQueryType': 'StructureSetQuery',
     'StructureSetWhereType': 'StructureSetWhere',
     'StructureSpecificDataType': 'StructureSpecificData',
@@ -126,16 +125,19 @@ ClassToNode = {
     'TimeDimensionWhereType': 'TimeDimensionWhere',
     'TimePeriodValueType': 'TimeValue',
     'SimpleValueType': 'Value',
-    'StructureSpecificDataHeaderType': 'Header',
-    'StructureDataSetType': 'DataSet',
+    'ValuesType': "Attributes",
     'ObsType': 'Obs',
     'SeriesType': 'Series',
     'SenderType': 'Sender',
     'PartyType': 'Receiver',
-    'DataSetType': 'DataSet',
+    'StructureType': 'Structure',
     'GenericDataStructureType': 'Structure',
-    'ValuesType': "Attributes",
-    'GenericDataHeaderType': 'Header'
+    'DataSetType': 'DataSet',
+    'StructureDataSetType': 'DataSet',
+    'StructureSpecificDataHeaderType': 'Header',
+    'GenericDataHeaderType': 'Header',
+    'GenericTimeSeriesDataHeaderType': 'Header',
+    'StructureSpecificTimeSeriesDataHeaderType': 'Header'
 }
 
 RenameMappings_ = {
@@ -200,7 +202,9 @@ RenameMappings_ = {
 
 GenerateDSNamespaceDefs = {
     'GenericDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
+    'StructureDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'GenericTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'StructureTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
 }
 
 ClassToPrefix = {

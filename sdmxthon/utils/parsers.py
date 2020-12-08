@@ -532,9 +532,9 @@ def generate_message(dataset_list, path_to_metadata, header, dataset_type, valid
     root = etree.parse(path_to_metadata)
     structures = []
 
-    if dataset_type == DatasetType.GenericDataSet:
+    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         message = GenericDataType()
-    elif dataset_type == DatasetType.StructureDataSet:
+    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
         message = StructureSpecificDataType()
 
     for element in dataset_list:
