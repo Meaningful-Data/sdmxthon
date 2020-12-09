@@ -1,5 +1,4 @@
 import logging
-import pickle
 import sys
 
 from lxml import etree
@@ -154,22 +153,17 @@ def main():
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
     logger.debug('DSD loaded')
-    logger.debug('Starting serializing')
-    obj_list = []
-    for e in dsds.values():
-        # obj = DBObj(e.id, e.agencyId, e.version, pickle.dumps(e))
-        obj_list.append(pickle.dumps(e))
-
+    """
     logger.debug('Finish serializing')
     logger.debug('Starting serializing list')
-    serial = pickle.dumps(dsds)
+    serial = pickle.dump(f,dsds)
     logger.debug('Finish serializing list')
 
     f = open('SDMXThon/metadataTests/dsds.pickle', "wb")
     f.write(serial)
     f.close()
 
-    """
+    
     # Testing creating message with dsds
     dataset_list = xmlToDatasetList(pathSaveToGeneric, dsds, DatasetType.GenericDataSet)
     logger.debug('End reading')

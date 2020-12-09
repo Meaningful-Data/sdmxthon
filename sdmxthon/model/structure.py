@@ -50,7 +50,6 @@ class Facet:
 
 
 class Representation:
-    # TODO: Method to get the objects from the reference
     def __init__(self, concept: Concept = None, facets=None,
                  codeList: CodeList = None, conceptScheme: ConceptScheme = None):
         if facets is None:

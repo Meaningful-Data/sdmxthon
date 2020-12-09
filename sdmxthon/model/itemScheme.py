@@ -6,9 +6,6 @@ from .utils import boolSetter, qName, stringSetter, genericSetter
 
 
 class Item(NameableArtefact):
-    # TODO Make sure that an item scheme doesn't contain twice the same object (identified by urn)
-    #  and that an item does not have twice the same item as child
-
     _schemeType = None
     _urnType = None
     _qName = None
@@ -25,12 +22,20 @@ class Item(NameableArtefact):
                                    name=name, description=description)
         self.isPartial = isPartial
 
+        if scheme is not None:
+            self._unique_scheme = True
         self.scheme = scheme
+
         self.parent = parent
 
         self._childs = []
+        urnList = []
         for c in childs:
-            self.addChild(c)
+            if c.urn not in urnList:
+                urnList.append(c.urn)
+                self.addChild(c)
+            else:
+                raise ValueError('Item cannot have two childs with same URN')
 
     def __eq__(self, other):
         if isinstance(other, Item):
@@ -63,12 +68,19 @@ class Item(NameableArtefact):
         self._isPartial = boolSetter(value)
 
     @scheme.setter
-    def scheme(self, value):  # TODO unappend item from the scheme if the item is already appended to one.
+    def scheme(self, value):
         if value is None:
+            if self._scheme is not None:
+                del self._scheme._items[self.id]
             self._scheme = value
         elif value.__class__.__name__ == self._schemeType:
-            self._scheme = value
-            value.append(self)
+            if not self._unique_scheme:
+                self._scheme = value
+                value.append(self)
+                self._unique_scheme = True
+            else:
+                del self._scheme._items[self.id]
+                self._scheme = None
         else:
             raise TypeError(f"The scheme object has to be of the type {self._schemeType}")
 
@@ -120,8 +132,14 @@ class ItemScheme(MaintainableArtefact):
                                          serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer)
         if items is not None:
             self._items = {}
+            urnList = []
             for i in items:
-                self.append(i)
+                # self.append(i)
+                if i.urn not in urnList:
+                    urnList.append(i.urn)
+                    self.append(i)
+                else:
+                    raise ValueError('Item Scheme cannot have two items with same URN')
 
     def __eq__(self, other):
         if isinstance(other, ItemScheme):
