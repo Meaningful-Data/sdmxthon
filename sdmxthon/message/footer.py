@@ -1,6 +1,6 @@
-from SDMXThon.common.messagetypes import CodedStatusMessageType
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
-from SDMXThon.utils.xml_base import quote_attrib, find_attr_value_, encode_str_2_3
+from ..common.messagetypes import CodedStatusMessageType
+from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
+from ..utils.xml_base import quote_attrib, find_attr_value_, encode_str_2_3
 
 
 class FooterType(DataParser):
@@ -92,14 +92,14 @@ class FooterMessageType(CodedStatusMessageType):
         self.severity = severity
 
     def validate_SeverityCodeType(self, value):
-        # Validate type SeverityCodeType, a restriction on xs:string.
+        # Validate dim_type SeverityCodeType, a restriction on xs:string.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
             value = value
             enumerations = ['Error', 'Warning', 'Information']
@@ -127,6 +127,6 @@ class FooterMessageType(CodedStatusMessageType):
         if value is not None and 'severity' not in already_processed:
             already_processed.add('severity')
             self.severity = value
-            self.validate_SeverityCodeType(self.severity)  # validate type SeverityCodeType
+            self.validate_SeverityCodeType(self.severity)  # validate dim_type SeverityCodeType
         super(FooterMessageType, self).build_attributes(node, attrs, already_processed)
 # end class FooterMessageType

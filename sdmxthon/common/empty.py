@@ -1,8 +1,9 @@
+'''
 from SDMXThon.utils.data_parser import DataParser
 
 
 class EmptyType(DataParser):
-    """EmptyType is an empty complex type for elements where the presence of
+    """EmptyType is an empty complex dim_type for elements where the presence of
     the tag indicates all that is necessary."""
     __hash__ = DataParser.__hash__
     subclass = None
@@ -664,3 +665,4 @@ class Transition(EmptyType):
     def __init__(self, gds_collector_=None, **kwargs_):
         super(Transition, self).__init__(gds_collector_, **kwargs_)
         self._name = 'Transition'
+'''

@@ -1,9 +1,21 @@
 [
   {
     "structureRef": {
-      "code": "ASSETS_EX_LNA_SLR",
+      "code": "BORROWINGS",
       "version": "1.0",
       "agencyID": "RBI"
+    },
+    "dataset_attributes": {
+      "reportingBegin": null,
+      "reportingEnd": null,
+      "dataExtractionDate": "2020-11-23T11:12:52",
+      "validFrom": null,
+      "validTo": null,
+      "publicationYear": null,
+      "publicationPeriod": null,
+      "action": "Replace",
+      "setId": "BORROWINGS",
+      "dimensionAtObservation": "AllDimensions"
     },
     "attached_attributes": {
       "FREQ": "Q",
@@ -15,10 +27,55 @@
         "COMMENT": "N_A",
         "Currency": "INR",
         "Measure_Type": "TOTAL",
-        "Asset_Ex_LNA": "CF_CASHONHAND",
-        "Area_Operation": "DOM_OP",
         "INPUT": "N_A",
-        "DMID": "S7",
+        "DATE": "N_A",
+        "Borrowing_Type": "BOR_CI_MONEYMARKET",
+        "Area_Operation": "GL_OP",
+        "DMID": "S884",
+        "TIME_PERIOD": "2019-Q2"
+      }
+    ]
+  },
+  {
+    "structureRef": {
+      "code": "AALOE",
+      "version": "1.0",
+      "agencyID": "RBI"
+    },
+    "attached_attributes": {
+      "FREQ": "Q",
+      "DEPENDENCY_TYPE": "INDEPENDENT",
+      "AUDST": "AUDITED"
+    },
+    "obs": [
+      {
+        "COMMENT": "N_A",
+        "Currency": "N_A",
+        "RECO_PER": "M6M12",
+        "Measure_Type": "N_A",
+        "Entry_Type": "DEBIT",
+        "Area_Operation": "GL_OP",
+        "DMID": "S2934",
+        "TIME_PERIOD": "2019-Q2"
+      },
+      {
+        "COMMENT": "N_A",
+        "Currency": "INR",
+        "RECO_PER": "M6M12",
+        "Measure_Type": "N_A",
+        "Entry_Type": "ADEBIT",
+        "Area_Operation": "GL_OP",
+        "DMID": "S2935",
+        "TIME_PERIOD": "2019-Q2"
+      },
+      {
+        "COMMENT": "N_A",
+        "Currency": "N_A",
+        "RECO_PER": "M6M12",
+        "Measure_Type": "N_A",
+        "Entry_Type": "CREDIT",
+        "Area_Operation": "GL_OP",
+        "DMID": "S2936",
         "TIME_PERIOD": "2019-Q2"
       }
     ]
