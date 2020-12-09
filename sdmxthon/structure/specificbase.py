@@ -1086,3 +1086,116 @@ class DataSetType(AnnotableType):
             self._obs.append(obj_)
             obj_.original_tagname_ = 'Obs'
         super(DataSetType, self).build_children(child_, node, nodeName_, True)
+
+
+class TimeSeriesDataSetType(DataSetType):
+    """TimeSeriesDataSetType is the abstract type which defines the base
+    structure for any data structure definition specific time series based
+    data set. A derived data set type will be created that is specific to a
+    data structure definition. Unlike the base format, only one variation
+    of this is allowed for a data structure definition. This variation is
+    the time dimension as the observation dimension. Data is organised into
+    a collection of time series. Because this derivation is achieved using
+    restriction, data sets conforming to this type will inherently conform
+    to the base data set structure as well. In fact, data structure
+    specific here will be identical to data in the base data set when the
+    time dimension is the observation dimension, even for the derived data
+    set types. This means that the data contained in this structure can be
+    processed in exactly the same manner as the base structure. The same
+    rules for derivation as the base data set type apply to this
+    specialized data set."""
+    __hash__ = DataSetType.__hash__
+    subclass = None
+    superclass = DataSetType
+
+    def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None, structureRef=None, setID=None, action=None,
+                 reportingBeginDate=None, reportingEndDate=None, validFromDate=None, validToDate=None,
+                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Series=None, Obs=None,
+                 gds_collector_=None, **kwargs_):
+        super(TimeSeriesDataSetType, self).__init__(Annotations, REPORTING_YEAR_START_DAY, structureRef, setID, action,
+                                                    reportingBeginDate, reportingEndDate, validFromDate, validToDate,
+                                                    publicationYear, publicationPeriod, DataProvider, Group, Series,
+                                                    Obs,
+                                                    gds_collector_, **kwargs_)
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return TimeSeriesDataSetType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def validate_BasicTimePeriodType(self, value):
+        # Validate type common:BasicTimePeriodType, a restriction on None.
+        pass
+
+    def validate_ObservationalTimePeriodType(self, value):
+        # Validate type common:ObservationalTimePeriodType, a restriction on None.
+        pass
+
+
+class TimeSeriesType(SeriesType):
+    """TimeSeriesType defines an abstract structure which is used to group a
+    collection of observations which have a key in common, organised by
+    time. The key for a series is every dimension defined in the data
+    structure definition, save the time dimension. In addition to
+    observations, values can be provided for attributes which are
+    associated with the dimensions which make up this series key (so long
+    as the attributes do not specify a group attachment or also have an
+    relationship with the time dimension). It is possible for the series to
+    contain only observations or only attribute values, or both. The same
+    rules for derivation as the base series type apply to this specialized
+    series."""
+
+    __hash__ = AnnotableType.__hash__
+    subclass = None
+    superclass = AnnotableType
+
+    def __init__(self, Annotations=None, TIME_PERIOD=None, Obs=None, gds_collector_=None,
+                 **kwargs_):
+        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Obs, gds_collector_, **kwargs_)
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return TimeSeriesType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def get_REPORTING_YEAR_START_DAY(self):
+        return self._reporting_year_start_day
+
+    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
+        self._reporting_year_start_day = None
+
+
+class TimeSeriesObsType(ObsType):
+    """TimeSeriesObsType defines the abstract structure of a time series
+    observation. The observation must be provided a value for the time
+    dimension. This time value should disambiguate the observation within
+    the series in which it is defined (i.e. there should not be another
+    observation with the same time value). The observation can contain an
+    observed value and/or attribute values. The same rules for derivation
+    as the base observation type apply to this specialized observation.The
+    TIME_PERIOD attribute is an explicit attribute for the time dimension.
+    This is declared in the base schema since it has a fixed identifier and
+    representation. Since this data is structured to be time series only,
+    this attribute is always required. If the time dimension specifies a
+    more specific representation of time the derived type will restrict the
+    type definition to the appropriate type."""
+    __hash__ = ObsType.__hash__
+    subclass = None
+    superclass = ObsType
+
+    def __init__(self, Annotations=None, type_=None, REPORTING_YEAR_START_DAY=None, OBS_VALUE=None,
+                 gds_collector_=None, **kwargs_):
+        super(TimeSeriesObsType, self).__init__(Annotations, type_, None, REPORTING_YEAR_START_DAY, OBS_VALUE,
+                                                gds_collector_, **kwargs_)
+
+    def get_TIME_PERIOD(self):
+        return self.TIME_PERIOD
+
+    def set_TIME_PERIOD(self, TIME_PERIOD):
+        self._time_period = None
+
+    def validate_ObservationalTimePeriodType(self, value):
+        # Validate type common:ObservationalTimePeriodType, a restriction on None.
+        pass

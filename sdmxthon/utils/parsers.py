@@ -6,7 +6,8 @@ from SDMXThon import DataSet
 from SDMXThon.common.generic import GenericDataStructureType
 from SDMXThon.common.references import DataflowReferenceType
 from SDMXThon.common.refs import DataflowRefType
-from SDMXThon.data.generic import DataSetType as GenericDataSetType
+from SDMXThon.data.generic import DataSetType as GenericDataSetType, \
+    TimeSeriesDataSetType as GenericTimeSeriesDataSetType
 from SDMXThon.data.generic import ValuesType, ObsOnlyType, ComponentValueType, ObsValueType
 from SDMXThon.message.generic import GenericDataType, StructureSpecificDataType
 from SDMXThon.model.itemScheme import Code, CodeList, Agency, ConceptScheme, Concept
@@ -14,7 +15,7 @@ from SDMXThon.model.structure import DataStructureDefinition, DimensionDescripto
     AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension
 from SDMXThon.model.structure import Representation
 from SDMXThon.structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
-    SeriesType as Series
+    SeriesType as Series, TimeSeriesDataSetType as StructureTimeSeriesDataSetType
 from SDMXThon.utils.enums import DatasetType
 
 try:
@@ -1109,9 +1110,9 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
     all_dataset_valid = True
     structures = []
 
-    if dataset_type == DatasetType.GenericDataSet:
+    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         message = GenericDataType()
-    elif dataset_type == DatasetType.StructureDataSet:
+    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
         message = StructureSpecificDataType()
 
     for element in dataset_list:

@@ -1362,4 +1362,231 @@ class StructureSpecificDataType(MessageType):
             self.Footer = obj_
             obj_.original_tag_name_ = 'Footer'
 
+
 # end class StructureSpecificDataType
+
+
+class GenericTimeSeriesDataType(GenericDataType):
+    """GenericDataType defines the contents of a generic data message."""
+    __hash__ = GenericDataType.__hash__
+    subclass = None
+    superclass = GenericDataType
+
+    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
+        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:None="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific"  xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"  xmlns:footer="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer" '
+        self._name = 'GenericTimeSeriesDataType'
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return GenericTimeSeriesDataType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def get_DataSet(self):
+        return self.DataSet
+
+    def set_DataSet(self, DataSet):
+        self.DataSet = DataSet
+
+    def add_DataSet(self, value):
+        self.DataSet.append(value)
+
+    def insert_DataSet_at(self, index, value):
+        self.DataSet.insert(index, value)
+
+    def replace_DataSet_at(self, index, value):
+        self.DataSet[index] = value
+
+    def has_content_(self):
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
+                                                                                        self).has_content_()):
+            return True
+        else:
+            return False
+
+    def export_attributes_as_dict(self, valid_fields: list) -> list:
+        data = []
+        for DataSet_ in self.DataSet:
+            parent_dict = {}
+            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+
+        return data
+
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+        if self.Header is not None:
+            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        for DataSet_ in self.DataSet:
+            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        if self.Footer is not None:
+            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Header':
+            obj_ = GenericTimeSeriesDataHeaderType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Header = obj_
+            obj_.original_tagname_ = 'Header'
+        elif nodeName_ == 'DataSet':
+            obj_ = GenericTimeSeriesDataSet.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.DataSet.append(obj_)
+            obj_.original_tag_name_ = 'DataSet'
+        elif nodeName_ == 'Footer':
+            obj_ = FooterType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Footer = obj_
+            obj_.original_tag_name_ = 'Footer'
+
+
+class GenericTimeSeriesDataHeaderType(GenericDataHeaderType):
+    """GenericTimeSeriesDataHeaderType defines the header structure for a time
+    series only generic data message."""
+    __hash__ = GenericDataHeaderType.__hash__
+    subclass = None
+    superclass = GenericDataHeaderType
+
+    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
+                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
+                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name, Structure,
+                                                              DataProvider, DataSetAction, DataSetID, Extracted,
+                                                              ReportingBegin, ReportingEnd, EmbargoDate, Source,
+                                                              gds_collector_, **kwargs_)
+        self._name = 'GenericTimeSeriesDataHeaderType'
+
+    def factory(*args_, **kwargs_):
+        return GenericTimeSeriesDataHeaderType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def validate_HeaderTimeType(self, value):
+        pass
+
+    def validate_ObservationalTimePeriodType(self, value):
+        pass
+
+
+class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
+    """StructureSpecificTimeSeriesDataType defines the structure of the
+    structure specific time series data message."""
+
+    __hash__ = StructureSpecificDataType.__hash__
+    subclass = None
+    superclass = StructureSpecificDataType
+
+    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_,
+                                                                  **kwargs_)
+
+        if DataSet is None:
+            self.DataSet = []
+        else:
+            self.DataSet = DataSet
+
+        self.DataSet_nsprefix_ = None
+        self._name = 'StructureSpecificTimeSeriesDataType'
+
+        if gds_collector_ is not None:
+            self.gds_collector_ = gds_collector_
+        else:
+            self.gds_collector_ = GdsCollector_()
+
+    def factory(*args_, **kwargs_):
+        return StructureSpecificDataType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def get_DataSet(self):
+        return self.DataSet
+
+    def set_DataSet(self, DataSet):
+        self.DataSet = DataSet
+
+    def add_DataSet(self, value):
+        self.DataSet.append(value)
+
+    def insert_DataSet_at(self, index, value):
+        self.DataSet.insert(index, value)
+
+    def replace_DataSet_at(self, index, value):
+        self.DataSet[index] = value
+
+    def has_content_(self):
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
+                                                                                        self).has_content_()):
+            return True
+        else:
+            return False
+
+    def export_attributes_as_dict(self, valid_fields: list) -> list:
+        data = []
+        for DataSet_ in self.DataSet:
+            parent_dict = {}
+            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+
+        return data
+
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+        if self.Header is not None:
+            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        for DataSet_ in self.DataSet:
+            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        if self.Footer is not None:
+            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Header':
+            obj_ = StructureSpecificTimeSeriesDataHeaderType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Header = obj_
+            obj_.original_tagname_ = 'Header'
+        elif nodeName_ == 'DataSet':
+            obj_ = StructureTimeSeriesDataSet.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.DataSet.append(obj_)
+            obj_.original_tag_name_ = 'DataSet'
+        elif nodeName_ == 'Footer':
+            obj_ = FooterType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Footer = obj_
+            obj_.original_tag_name_ = 'Footer'
+
+
+# end class StructureSpecificDataType
+
+
+class StructureSpecificTimeSeriesDataHeaderType(StructureSpecificDataHeaderType):
+    """StructureSpecificTimeSeriesDataHeaderType defines the header structure
+    for a time series only structure specific data message."""
+    __hash__ = StructureSpecificDataHeaderType.__hash__
+    subclass = None
+    superclass = StructureSpecificDataHeaderType
+
+    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
+                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
+                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificTimeSeriesDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name,
+                                                                        Structure, DataProvider, DataSetAction,
+                                                                        DataSetID,
+                                                                        Extracted, ReportingBegin, ReportingEnd,
+                                                                        EmbargoDate,
+                                                                        Source, gds_collector_, **kwargs_)
+        self._name = 'StructureSpecificTimeSeriesDataHeaderType'
+
+    def factory(*args_, **kwargs_):
+        return StructureSpecificTimeSeriesDataHeaderType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def validate_HeaderTimeType(self, value):
+        result = True
+        return result
+
+    def validate_ObservationalTimePeriodType(self, value):
+        result = True
+        return result

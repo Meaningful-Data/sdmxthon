@@ -26,9 +26,9 @@ class BaseValueType(DataParser):
         self.gds_element_tree_node_ = None
         self.original_tag_name_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
-        self._id = None
+        self._id = idx
         self._id_nsprefix_ = None
-        self._value = None
+        self._value = value
         self._value_nsprefix_ = None
         self._namespace_def = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
         self._namespace_prefix = 'data'
@@ -1149,3 +1149,83 @@ class DataSetType(AnnotableType):
             obj_.original_tagname_ = 'Obs'
         super(DataSetType, self).build_children(child_, node, nodeName_, True)
 # end class DataSetType
+
+
+class TimeSeriesDataSetType(DataSetType):
+    """TimeSeriesDataSetType is a derivation of the base DataSetType of the
+    generic format the restricts the data set to only allow for grouped
+    observations where the dimension at the observation level is the time
+    dimension of the data structure definition. This means that unlike the
+    base data set structure, there can be no un-grouped observations.
+    Because this derivation is achieved using restriction, data sets
+    conforming to this type will inherently conform to the base data set
+    structure as well. In fact, data structured here will be identical to
+    data in the base data set when the time dimension is the observation
+    dimension. This means that the data contained in this structure can be
+    processed in exactly the same manner as the base structure."""
+    __hash__ = GeneratedsSuper.__hash__
+    subclass = None
+    superclass = DataSetType
+
+    def __init__(self, Annotations=None, structureRef=None, setID=None, action=None, reportingBeginDate=None,
+                 reportingEndDate=None, validFromDate=None, validToDate=None, publicationYear=None,
+                 publicationPeriod=None, DataProvider=None, Attributes=None, Group=None, Series=None, Obs=None,
+                 gds_collector_=None, **kwargs_):
+        super(TimeSeriesDataSetType, self).__init__(Annotations, structureRef, setID, action, reportingBeginDate,
+                 reportingEndDate, validFromDate, validToDate, publicationYear,
+                 publicationPeriod, DataProvider, Attributes, Group, Series, Obs,
+                 gds_collector_, **kwargs_)
+
+
+class TimeSeriesType(SeriesType):
+    """TimeSeriesType defines a structure which is used to group a collection
+    of observations which have a key in common, organised by time. The key
+    for a series is every dimension defined in the data structure
+    definition, save the time dimension. In addition to observations,
+    values can be provided for attributes which are associated with the
+    dimensions which make up this series key (so long as the attributes do
+    not specify a group attachment or also have an relationship with the
+    time dimension). It is possible for the series to contain only
+    observations or only attribute values, or both."""
+    __hash__ = SeriesType.__hash__
+    subclass = None
+    superclass = SeriesType
+
+    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None, Obs=None, gds_collector_=None, **kwargs_):
+        super(TimeSeriesType, self).__init__(Annotations, SeriesKey, Attributes, Obs, gds_collector_, **kwargs_)
+
+
+class TimeSeriesObsType(ObsType):
+    """TimeSeriesObsType defines the structure of a time series observation.
+    The observation must be provided a value for the time dimension. This
+    time value should disambiguate the observation within the series in
+    which it is defined (i.e. there should not be another observation with
+    the same time value). The observation can contain an observed value
+    and/or attribute values."""
+    __hash__ = ObsType.__hash__
+    subclass = None
+    superclass = ObsType
+
+
+class TimeValueType(BaseValueType):
+    """TimeValueType is a derivation of the BaseValueType which is used to
+    provide a value for the time dimension. Since the identifier for the
+    time dimension is fixed, the component reference for this structure is
+    fixed. Note that this means that it is not necessary to provide a value
+    in an instance as the fixed value will be provided in the post
+    validation information set."""
+    __hash__ = BaseValueType.__hash__
+    subclass = None
+    superclass = BaseValueType
+
+    def __init__(self, idx=None, value=None, gds_collector_=None, **kwargs_):
+        super(TimeSeriesType, self).__init__(idx, value, gds_collector_, **kwargs_)
+
+    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='TimeValueType'):
+        if self.id != "TIME_PERIOD" and 'id' not in already_processed:
+            already_processed.add('id')
+            outfile.write(' id=%s' % (quote_attrib(self.id), ))
+
+        if self.value is not None and 'value' not in already_processed:
+            already_processed.add('value')
+            outfile.write(' value=%s' % (quote_attrib(self.value), ))
