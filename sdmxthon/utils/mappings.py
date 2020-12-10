@@ -1,3 +1,4 @@
+
 ClassToNode = {
     'AgencyType': 'Agency',
     'AnnotationsType': 'Annotations',
@@ -137,7 +138,8 @@ ClassToNode = {
     'StructureSpecificDataHeaderType': 'Header',
     'GenericDataHeaderType': 'Header',
     'GenericTimeSeriesDataHeaderType': 'Header',
-    'StructureSpecificTimeSeriesDataHeaderType': 'Header'
+    'StructureSpecificTimeSeriesDataHeaderType': 'Header',
+    'TimeSeriesDataSetType': 'DataSet'
 }
 
 RenameMappings_ = {
@@ -346,8 +348,3 @@ ClassToPrefix = {
     'ValuesType': "Attributes",
     'GenericDataHeaderType': 'message'
 }
-
-__all__ = [
-    "ClassToNode",
-    "RenameMappings_"
-]

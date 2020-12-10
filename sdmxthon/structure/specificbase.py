@@ -533,7 +533,7 @@ class SeriesType(AnnotableType):
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True):
@@ -955,17 +955,17 @@ class DataSetType(AnnotableType):
 
         for Group_ in self._group:
             parent_data = copy.deepcopy(parent_dict)
-            Group_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Group_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Series_ in self._Series:
             parent_data = copy.deepcopy(parent_dict)
-            Series_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Series_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True):

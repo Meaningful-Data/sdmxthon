@@ -5,10 +5,11 @@ from datetime import date
 import pandas as pd
 
 from .common.dataSet import DataSet
-from .message.generic import GenericDataHeaderType, PartyType, SenderType, StructureSpecificDataHeaderType
+from .message.generic import GenericDataHeaderType, PartyType, SenderType, StructureSpecificDataHeaderType, \
+    GenericTimeSeriesDataHeaderType, StructureSpecificTimeSeriesDataHeaderType
 from .utils.enums import DatasetType
 from .utils.parsers import generate_message
-from .utils.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToPandas, \
+from .utils.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToDataSet, \
     sdmxStrToPandas
 
 # create logger
@@ -21,9 +22,9 @@ def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
 
     objStructure = load_AllDimensions(path_to_xml, dataset_type)
 
-    if dataset_type == DatasetType.GenericDataSet:
-        datasetList = sdmxGenToPandas(objStructure, dsd_dict)
-    elif dataset_type == DatasetType.StructureDataSet:
+    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+        datasetList = sdmxGenToDataSet(objStructure, dsd_dict)
+    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
         datasetList = sdmxStrToPandas(objStructure, dsd_dict)
 
     return datasetList
@@ -206,6 +207,10 @@ def headerCreation(id_: str, test: bool = False,
         header = GenericDataHeaderType()
     elif dataset_type == DatasetType.StructureDataSet:
         header = StructureSpecificDataHeaderType()
+    elif dataset_type == DatasetType.GenericTimeSeriesDataSet:
+        header = GenericTimeSeriesDataHeaderType()
+    elif dataset_type == DatasetType.StructureTimeSeriesDataSet:
+        header = StructureSpecificTimeSeriesDataHeaderType()
     else:
         return None
 

@@ -198,13 +198,13 @@ class PayloadStructureType(DataParser):
             parent_dict.update({'structureURL': self._structureURL})
 
         if self._provisionAgrement is not None:
-            self._provisionAgrement.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._provisionAgrement.export_attributes_as_dict(parent_dict, )
 
         if self._structureUsage is not None:
-            self._structureUsage.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._structureUsage.export_attributes_as_dict(parent_dict, )
 
         if self._structure is not None:
-            self._structure.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._structure.export_attributes_as_dict(parent_dict, )
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self._provisionAgrement is not None:

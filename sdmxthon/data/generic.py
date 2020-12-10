@@ -94,8 +94,8 @@ class ObsValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, idx=None, value=None, gds_collector_=None, **kwargs_):
-        super(ObsValueType, self).__init__(id, value, **kwargs_)
+    def __init__(self, idx=None, value=None, **kwargs_):
+        super(ObsValueType, self).__init__(idx, value, **kwargs_)
         self._name = 'ObsValueType'
 
     def factory(*args_, **kwargs_):
@@ -155,8 +155,8 @@ class ComponentValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, id=None, value=None, gds_collector_=None, **kwargs_):
-        super(ComponentValueType, self).__init__(id, value, gds_collector_, **kwargs_)
+    def __init__(self, id_=None, value=None, gds_collector_=None, **kwargs_):
+        super(ComponentValueType, self).__init__(id_, value, gds_collector_, **kwargs_)
         self._name = 'ComponentValueType'
         self._namespace_prefix = 'generic'
 
@@ -168,8 +168,8 @@ class ComponentValueType(BaseValueType):
     def get_id(self):
         return self._id
 
-    def set_id(self, id):
-        self._id = id
+    def set_id(self, id_):
+        self._id = id_
 
     def get_value(self):
         return self._value
@@ -266,7 +266,7 @@ class ValuesType(DataParser):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         for Value_ in self.Value:
-            Value_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            Value_.export_attributes_as_dict(parent_dict, )
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         for Value_ in self.Value:
@@ -351,9 +351,9 @@ class GroupType(AnnotableType):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.GroupKey is not None:
-            self.GroupKey.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.GroupKey.export_attributes_as_dict(parent_dict, )
         if self._Attributes is not None:
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.GroupKey is not None:
@@ -461,18 +461,19 @@ class SeriesType(AnnotableType):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.SeriesKey is not None:
-            self.SeriesKey.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.SeriesKey.export_attributes_as_dict(parent_dict, )
 
         if self._Attributes is not None:
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        super(SeriesType, self).export_children(outfile, level, pretty_print=pretty_print)
+        # TODO Check origin of parameter child_
+        super(SeriesType, self).export_children(child_=None, outfile=outfile, level=level, pretty_print=pretty_print)
         if self.SeriesKey is not None:
             self.SeriesKey.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -565,13 +566,13 @@ class ObsOnlyType(AnnotableType):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.ObsKey is not None and self.ObsKey.has_content_():
-            self.ObsKey.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.ObsKey.export_attributes_as_dict(parent_dict, )
 
         if self.ObsValue is not None:
-            self.ObsValue.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.ObsValue.export_attributes_as_dict(parent_dict, )
 
         if self._Attributes is not None and self._Attributes.has_content_():
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
     def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='ObsOnlyType'):
         super(ObsOnlyType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
@@ -678,7 +679,7 @@ class ObsType(AnnotableType):
         super(ObsType, self).export_attributes(outfile, level, already_processed, namespace_prefix_, name_='ObsType')
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        super(ObsType, self).export_children(outfile, level, pretty_print=pretty_print)
+        super(ObsType, self).export_children(child_=None, outfile=outfile, level=level, pretty_print=pretty_print)
 
         if self.ObsDimension is not None:
             self.ObsDimension.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
@@ -1016,25 +1017,25 @@ class DataSetType(AnnotableType):
 
         if self._dataProvider is not None:
             parent_data = copy.deepcopy(parent_dict)
-            self._dataProvider.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._dataProvider.export_attributes_as_dict(parent_dict, )
             data.append(parent_data)
 
         if self._Attributes is not None:
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
         for Group_ in self._group:
             parent_data = copy.deepcopy(parent_dict)
-            Group_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Group_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Series_ in self._Series:
             parent_data = copy.deepcopy(parent_dict)
-            Series_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Series_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
@@ -1148,6 +1149,16 @@ class DataSetType(AnnotableType):
             self._obs.append(obj_)
             obj_.original_tagname_ = 'Obs'
         super(DataSetType, self).build_children(child_, node, nodeName_, True)
+
+    def validate_BasicTimePeriodType(self, date):
+        # TODO Anything to validate here??? (BasicTimePeriod)
+        return True
+
+    def validate_ObservationalTimePeriodType(self, date):
+        # TODO Anything to validate here??? (Observational Time Period)
+        pass
+
+
 # end class DataSetType
 
 
@@ -1163,7 +1174,7 @@ class TimeSeriesDataSetType(DataSetType):
     data in the base data set when the time dimension is the observation
     dimension. This means that the data contained in this structure can be
     processed in exactly the same manner as the base structure."""
-    __hash__ = GeneratedsSuper.__hash__
+    __hash__ = DataSetType.__hash__
     subclass = None
     superclass = DataSetType
 
@@ -1172,9 +1183,9 @@ class TimeSeriesDataSetType(DataSetType):
                  publicationPeriod=None, DataProvider=None, Attributes=None, Group=None, Series=None, Obs=None,
                  gds_collector_=None, **kwargs_):
         super(TimeSeriesDataSetType, self).__init__(Annotations, structureRef, setID, action, reportingBeginDate,
-                 reportingEndDate, validFromDate, validToDate, publicationYear,
-                 publicationPeriod, DataProvider, Attributes, Group, Series, Obs,
-                 gds_collector_, **kwargs_)
+                                                    reportingEndDate, validFromDate, validToDate, publicationYear,
+                                                    publicationPeriod, DataProvider, Attributes, Group, Series, Obs,
+                                                    gds_collector_, **kwargs_)
 
 
 class TimeSeriesType(SeriesType):
@@ -1218,14 +1229,14 @@ class TimeValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, idx=None, value=None, gds_collector_=None, **kwargs_):
-        super(TimeSeriesType, self).__init__(idx, value, gds_collector_, **kwargs_)
+    def __init__(self, idx=None, value=None, **kwargs_):
+        super(BaseValueType, self).__init__(idx, value, **kwargs_)
 
     def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='TimeValueType'):
-        if self.id != "TIME_PERIOD" and 'id' not in already_processed:
+        if self._id != "TIME_PERIOD" and 'id' not in already_processed:
             already_processed.add('id')
-            outfile.write(' id=%s' % (quote_attrib(self.id), ))
+            outfile.write(' id=%s' % (quote_attrib(self._id),))
 
-        if self.value is not None and 'value' not in already_processed:
+        if self._value is not None and 'value' not in already_processed:
             already_processed.add('value')
-            outfile.write(' value=%s' % (quote_attrib(self.value), ))
+            outfile.write(' value=%s' % (quote_attrib(self._value),))

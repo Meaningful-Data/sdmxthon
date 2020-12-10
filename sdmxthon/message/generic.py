@@ -2,8 +2,10 @@ from .footer import FooterType
 from ..common.annotations import TextType
 from ..common.generic import GenericDataStructureType
 from ..common.references import DataProviderReferenceType, DataStructureReferenceType
-from ..data.generic import DataSetType as GenericDataSet
-from ..structure.specificbase import DataSetType as StructureDataSet
+from ..data.generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
+from ..structure.specificbase import DataSetType as StructureDataSet, \
+    TimeSeriesDataSetType as StructureTimeSeriesDataSet
+
 from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
 from ..utils.generateds import datetime_
 from ..utils.mappings import ClassToPrefix
@@ -223,22 +225,18 @@ class ContactType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         for Name_ in self._Name:
-            namespaceprefix_ = self._name_nsprefix_ + ':' if (UseCapturedNS_ and self._name_nsprefix_) else ''
             Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
         for Department_ in self._department:
-            namespaceprefix_ = self._department_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._department_nsprefix_) else ''
             Department_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
         for Role_ in self._role:
-            namespaceprefix_ = self._role_nsprefix_ + ':' if (UseCapturedNS_ and self._role_nsprefix_) else ''
             Role_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
         for Telephone_ in self._telephone:
@@ -345,13 +343,13 @@ class PartyType(DataParser):
     subclass = None
     superclass = None
 
-    def __init__(self, id=None, Name=None, Contact=None, extensiontype_=None, gds_collector_=None, **kwargs_):
+    def __init__(self, id_=None, Name=None, Contact=None, extensiontype_=None, gds_collector_=None, **kwargs_):
         super(PartyType, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
-        self._id = _cast(None, id)
+        self._id = _cast(None, id_)
         self._id_nsprefix_ = None
 
         if Name is None:
@@ -409,8 +407,8 @@ class PartyType(DataParser):
     def get_id(self):
         return self._id
 
-    def set_id(self, id):
-        self._id = id
+    def set_id(self, id_):
+        self._id = id_
 
     def get_extensiontype_(self):
         return self._extensiontype_
@@ -444,7 +442,7 @@ class PartyType(DataParser):
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         pass
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         for Name_ in self._Name:
             Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -485,8 +483,8 @@ class SenderType(PartyType):
     subclass = None
     superclass = PartyType
 
-    def __init__(self, id=None, Name=None, Contact=None, Timezone=None, gds_collector_=None, **kwargs_):
-        super(SenderType, self).__init__(id, Name, Contact, gds_collector_, **kwargs_)
+    def __init__(self, id_=None, Name=None, Contact=None, Timezone=None, gds_collector_=None, **kwargs_):
+        super(SenderType, self).__init__(id_, Name, Contact, gds_collector_, **kwargs_)
         self.Timezone = Timezone
         self.validate_TimezoneType(self.Timezone)
         self.Timezone_nsprefix_ = None
@@ -512,7 +510,8 @@ class SenderType(PartyType):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                                                                                                      "lineno": lineno,
+                                                                                                      })
                 return False
             if not self.gds_validate_simple_patterns(
                     self.validate_TimezoneType_patterns_, value):
@@ -536,7 +535,7 @@ class SenderType(PartyType):
         super(SenderType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
                                                   name_='SenderType')
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         super(SenderType, self).export_children(outfile, level, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
@@ -857,7 +856,7 @@ class BaseHeaderType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -882,20 +881,14 @@ class BaseHeaderType(DataParser):
                 self.gds_encode(self.gds_format_string(quote_xml(self._Prepared), input_name='Prepared')),
                 namespaceprefix_, eol_))
         if self._Sender is not None:
-            namespaceprefix_ = self._Sender_nsprefix_ + ':' if (UseCapturedNS_ and self._Sender_nsprefix_) else ''
             self._Sender.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         for Receiver_ in self._Receiver:
-            namespaceprefix_ = self._Receiver_nsprefix_ + ':' if (UseCapturedNS_ and self._Receiver_nsprefix_) else ''
             Receiver_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         for Name_ in self._Name:
-            namespaceprefix_ = self._name_nsprefix_ + ':' if (UseCapturedNS_ and self._name_nsprefix_) else ''
             Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         for Structure_ in self._structure:
-            namespaceprefix_ = self._structure_nsprefix_ + ':' if (UseCapturedNS_ and self._structure_nsprefix_) else ''
             Structure_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         if self._dataProvider is not None:
-            namespaceprefix_ = self._dataProvider_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._dataProvider_nsprefix_) else ''
             self._dataProvider.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         if self._DataSetAction is not None:
             namespaceprefix_ = self.DataSetAction_nsprefix_ + ':' if (
@@ -1088,6 +1081,7 @@ class MessageType(DataParser):
 
     def __init__(self, Header=None, anytypeobjs_=None, Footer=None, gds_collector_=None, **kwargs_):
         super(MessageType, self).__init__(gds_collector_, **kwargs_)
+        self._anytypeobjs_ = None
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
@@ -1144,7 +1138,7 @@ class MessageType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         if self.Footer is not None:
@@ -1202,15 +1196,15 @@ class GenericDataType(MessageType):
         else:
             return False
 
-    def export_attributes_as_dict(self, valid_fields: list) -> list:
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
         for DataSet_ in self.DataSet:
             parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -1321,21 +1315,21 @@ class StructureSpecificDataType(MessageType):
         self.DataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(MessageType,
                                                                                         self).has_content_()):
             return True
         else:
             return False
 
-    def export_attributes_as_dict(self, valid_fields: list) -> list:
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
         for DataSet_ in self.DataSet:
             parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -1405,15 +1399,15 @@ class GenericTimeSeriesDataType(GenericDataType):
         else:
             return False
 
-    def export_attributes_as_dict(self, valid_fields: list) -> list:
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
         for DataSet_ in self.DataSet:
             parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -1515,21 +1509,21 @@ class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
         self.DataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(StructureSpecificDataType,
                                                                                         self).has_content_()):
             return True
         else:
             return False
 
-    def export_attributes_as_dict(self, valid_fields: list) -> list:
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
         for DataSet_ in self.DataSet:
             parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 

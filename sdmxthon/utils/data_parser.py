@@ -292,3 +292,6 @@ class DataParser(GenerateSuper):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         pass
+
+    def build_children(self, child, node, node_name_, gds_collector_):
+        pass

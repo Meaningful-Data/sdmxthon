@@ -3,17 +3,22 @@ import sys
 
 from lxml import etree
 
+from SDMXThon import datasetListToXML, headerCreation, xmlToDatasetList, DatasetType
 from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
 pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/ECB_SHS6_metadata.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
+pathToMetadataTimeSeries = 'SDMXThon/test/TimeSeries/metadata_ecb.xml'
 pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 
 # pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
+pathTimeSeriesGen = 'SDMXThon/test/TimeSeries/test_ecb_gen.xml'
+pathTimeSeriesSpe = 'SDMXThon/test/TimeSeries/test_ecb_xs.xml'
+pathTimeSeriesGenTest = 'SDMXThon/outputTests/time_gen.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
 pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTestDSD.xml'
@@ -148,7 +153,7 @@ def main():
     """
 
     logger.debug('Inicio')
-    root = etree.parse(pathToMetadataFile)
+    root = etree.parse(pathToMetadataTimeSeries)
     codelists = get_codelist_model(root)
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
@@ -156,21 +161,19 @@ def main():
     """
     logger.debug('Finish serializing')
     logger.debug('Starting serializing list')
-    serial = pickle.dump(f,dsds)
+    serial = pickle.dumps(dsds)
     logger.debug('Finish serializing list')
 
-    f = open('SDMXThon/metadataTests/dsds.pickle', "wb")
-    f.write(serial)
-    f.close()
-
-    
-    # Testing creating message with dsds
-    dataset_list = xmlToDatasetList(pathSaveToGeneric, dsds, DatasetType.GenericDataSet)
-    logger.debug('End reading')
-    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
-    datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
-                     dataset_type=DatasetType.GenericDataSet, validate_data=True)
+    with open('SDMXThon/metadataTests/dsds.pickle', "wb") as f:
+        f.write(serial)
     """
+    # Testing creating message with dsds
+    dataset_list = xmlToDatasetList(pathTimeSeriesGen, dsds, DatasetType.GenericTimeSeriesDataSet)
+    logger.debug('End reading')
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericTimeSeriesDataSet)
+    datasetListToXML(dataset_list, dsds, pathTimeSeriesGenTest, header,
+                     dataset_type=DatasetType.GenericTimeSeriesDataSet, validate_data=True)
+
 
 def get_size(obj, seen=None):
     """Recursively finds size of objects"""
@@ -191,15 +194,6 @@ def get_size(obj, seen=None):
     elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
         size += sum([get_size(i, seen) for i in obj])
     return size
-
-
-class DBObj:
-
-    def __init__(self, id, aid, ver, ser):
-        self.id = id
-        self.aid = aid
-        self.ver = ver
-        self.ser = ser
 
 
 if __name__ == '__main__':

@@ -2,21 +2,21 @@ import copy
 import logging
 from typing import Dict
 
-from SDMXThon import DataSet
-from SDMXThon.common.generic import GenericDataStructureType
 from SDMXThon.common.references import DataflowReferenceType
-from SDMXThon.common.refs import DataflowRefType
-from SDMXThon.data.generic import DataSetType as GenericDataSetType, \
+from .enums import DatasetType
+from ..common.dataSet import DataSet
+from ..common.generic import GenericDataStructureType
+from ..common.refs import DataflowRefType
+from ..data.generic import DataSetType as GenericDataSetType, \
     TimeSeriesDataSetType as GenericTimeSeriesDataSetType
-from SDMXThon.data.generic import ValuesType, ObsOnlyType, ComponentValueType, ObsValueType
-from SDMXThon.message.generic import GenericDataType, StructureSpecificDataType
-from SDMXThon.model.itemScheme import Code, CodeList, Agency, ConceptScheme, Concept
-from SDMXThon.model.structure import DataStructureDefinition, DimensionDescriptor, MeasureDescriptor, \
+from ..data.generic import ValuesType, ObsOnlyType, ComponentValueType, ObsValueType
+from ..message.generic import GenericDataType, StructureSpecificDataType
+from ..model.itemScheme import Code, CodeList, Agency, ConceptScheme, Concept
+from ..model.structure import DataStructureDefinition, DimensionDescriptor, MeasureDescriptor, \
     AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension
-from SDMXThon.model.structure import Representation
-from SDMXThon.structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
+from ..model.structure import Representation
+from ..structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
     SeriesType as Series, TimeSeriesDataSetType as StructureTimeSeriesDataSetType
-from SDMXThon.utils.enums import DatasetType
 
 try:
     from lxml import etree as etree_, etree
@@ -930,6 +930,9 @@ def get_DSDs(root, concepts=None, codelists=None):
                                        codelists=codelists, dim_type='TimeDimension')
 
             dsd.dimensionDescriptor = dd
+        else:
+            # TODO Missing dimension list on DSD (validate_metadata)
+            continue
 
         # Add Measures
         expression = "./str:DataStructureComponents/str:MeasureList"
@@ -941,6 +944,9 @@ def get_DSDs(root, concepts=None, codelists=None):
 
             create_measures_data(dsd=element, measure_descriptor=md, concepts=concepts, codelists=codelists)
             dsd.measureDescriptor = md
+        else:
+            # TODO Missing measure list on DSD (validate_metadata)
+            continue
 
         # Add Attributes
         expression = "./str:DataStructureComponents/str:AttributeList"
@@ -955,6 +961,9 @@ def get_DSDs(root, concepts=None, codelists=None):
                                            concepts=concepts, codelists=codelists, dimension_descriptor=dd)
 
             dsd.attributeDescriptor = ad
+        else:
+            # TODO Missing attribute list on DSD (validate_metadata)
+            continue
 
         identifier = id_creator(dsd.maintainer.id, dsd.id, dsd.version)
         dsds[identifier] = dsd
@@ -966,7 +975,7 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datas
     structure.original_tag_name_ = "Structure"
     structure.set_ns_def_("message")
     structure.set_structureID(dsd.id)
-    if datasetType == DatasetType.StructureDataSet:
+    if datasetType == DatasetType.StructureDataSet or datasetType == DatasetType.StructureTimeSeriesDataSet:
         structure.set_namespace(dsd.uri)
     else:
         structure.set_namespace(None)
@@ -1128,9 +1137,11 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
 
         dataset_attr = ValuesType()
         dataset_attr.original_tag_name_ = "Attributes"
-        if dataset_type == DatasetType.GenericDataSet:
-            data_set = GenericDataSetType()
-            # obs_list = parse_obs_generic(element.obs, root, element.code, validate_data)
+        if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+            if dataset_type == DatasetType.GenericTimeSeriesDataSet:
+                data_set = GenericTimeSeriesDataSetType()
+            else:
+                data_set = GenericDataSetType()
             obs_list = parse_obs_generic_from_dsd(element.obs, dsd, validate_data)
             if obs_list == None:
                 return None
@@ -1142,9 +1153,11 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
                 dataset_attr.add_Value(attr_value)
                 data_set.set_Attributes(dataset_attr)
 
-        elif dataset_type == DatasetType.StructureDataSet:
-            data_set = StructureDataSetType()
-            # obs_list = parse_obs_structure(element.obs, root, element.code, validate_data)
+        elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
+            if dataset_type == DatasetType.StructureTimeSeriesDataSet:
+                data_set = StructureTimeSeriesDataSetType()
+            else:
+                data_set = StructureDataSetType()
             obs_list = parse_obs_structure_from_dsd(element.obs, dsd, validate_data)
             if obs_list == None:
                 return None
@@ -1167,10 +1180,6 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
         data_set.set_setID(element.code)
         data_set.set_action(element.dataset_attributes.get('action'))
 
-        # structure = get_structure(root, element.code, element.agencyID)
-        # structure.set_dimensionAtObservation(element.dataset_attributes.get('dimensionAtObservation'))
-        # if dataset_type == DatasetType.GenericDataSet:
-        #    structure.set_namespace(None)
         structure = get_structure_from_dsd(dsd, element, dataset_type)
 
         structures.append(structure)
