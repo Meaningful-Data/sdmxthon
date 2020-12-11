@@ -1,11 +1,11 @@
 import copy
 
-from SDMXThon.common.annotations import AnnotableType
-from SDMXThon.common.references import DataProviderReferenceType
-from SDMXThon.utils.data_parser import DataParser
-from SDMXThon.utils.data_parser import Validate_simpletypes_
-from SDMXThon.utils.generateds import datetime_
-from SDMXThon.utils.xml_base import _cast, BaseStrType_, quote_attrib, find_attr_value_, encode_str_2_3
+from ..common.annotations import AnnotableType
+from ..common.references import DataProviderReferenceType
+from ..utils.data_parser import DataParser
+from ..utils.data_parser import Validate_simpletypes_
+from ..utils.generateds import datetime_
+from ..utils.xml_base import _cast, BaseStrType_, quote_attrib, find_attr_value_, encode_str_2_3
 
 
 class BaseValueType(DataParser):
@@ -26,9 +26,9 @@ class BaseValueType(DataParser):
         self.gds_element_tree_node_ = None
         self.original_tag_name_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
-        self._id = None
+        self._id = idx
         self._id_nsprefix_ = None
-        self._value = None
+        self._value = value
         self._value_nsprefix_ = None
         self._namespace_def = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
         self._namespace_prefix = 'data'
@@ -70,7 +70,7 @@ class BaseValueType(DataParser):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate type NCNameIDType
+            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
 
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
@@ -94,8 +94,8 @@ class ObsValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, idx=None, value=None, gds_collector_=None, **kwargs_):
-        super(ObsValueType, self).__init__(id, value, **kwargs_)
+    def __init__(self, idx=None, value=None, **kwargs_):
+        super(ObsValueType, self).__init__(idx, value, **kwargs_)
         self._name = 'ObsValueType'
 
     def factory(*args_, **kwargs_):
@@ -136,7 +136,7 @@ class ObsValueType(BaseValueType):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate type NCNameIDType
+            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
 
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
@@ -155,8 +155,8 @@ class ComponentValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, id=None, value=None, gds_collector_=None, **kwargs_):
-        super(ComponentValueType, self).__init__(id, value, gds_collector_, **kwargs_)
+    def __init__(self, id_=None, value=None, gds_collector_=None, **kwargs_):
+        super(ComponentValueType, self).__init__(id_, value, gds_collector_, **kwargs_)
         self._name = 'ComponentValueType'
         self._namespace_prefix = 'generic'
 
@@ -168,8 +168,8 @@ class ComponentValueType(BaseValueType):
     def get_id(self):
         return self._id
 
-    def set_id(self, id):
-        self._id = id
+    def set_id(self, id_):
+        self._id = id_
 
     def get_value(self):
         return self._value
@@ -201,7 +201,7 @@ class ComponentValueType(BaseValueType):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate type NCNameIDType
+            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
             already_processed.add('value')
@@ -211,7 +211,7 @@ class ComponentValueType(BaseValueType):
 
 class ValuesType(DataParser):
     """ValuesType is a general structure which contains a collection of data
-    structure definition component values. This type is used to provide
+    structure definition component values. This dim_type is used to provide
     both key and attribute collection values."""
     __hash__ = DataParser.__hash__
     subclass = None
@@ -266,7 +266,7 @@ class ValuesType(DataParser):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         for Value_ in self.Value:
-            Value_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            Value_.export_attributes_as_dict(parent_dict, )
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         for Value_ in self.Value:
@@ -292,7 +292,7 @@ class GroupType(AnnotableType):
     identification of group is provided. It is expected that a system which
     is processing this will relate that identifier to the key sets defined
     in the constraint and apply the values provided for the attributes
-    appropriately.The type attribute holds the identifier assigned to the
+    appropriately.The dim_type attribute holds the identifier assigned to the
     group in the data structure definition for which attribute values are
     being provided."""
     __hash__ = AnnotableType.__hash__
@@ -347,13 +347,13 @@ class GroupType(AnnotableType):
     def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='GroupType'):
         if self._type_ is not None and 'type_' not in already_processed:
             already_processed.add('type_')
-            outfile.write(' type=%s' % (quote_attrib(self._type_),))
+            outfile.write(' dim_type=%s' % (quote_attrib(self._type_),))
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.GroupKey is not None:
-            self.GroupKey.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.GroupKey.export_attributes_as_dict(parent_dict, )
         if self._Attributes is not None:
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.GroupKey is not None:
@@ -362,11 +362,11 @@ class GroupType(AnnotableType):
             self._Attributes.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('type', node)
-        if value is not None and 'type' not in already_processed:
-            already_processed.add('type')
+        value = find_attr_value_('dim_type', node)
+        if value is not None and 'dim_type' not in already_processed:
+            already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate type IDType
+            self.validate_id_type(self._type_)  # validate dim_type IDType
         super(GroupType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
@@ -461,18 +461,19 @@ class SeriesType(AnnotableType):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.SeriesKey is not None:
-            self.SeriesKey.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.SeriesKey.export_attributes_as_dict(parent_dict, )
 
         if self._Attributes is not None:
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        super(SeriesType, self).export_children(outfile, level, pretty_print=pretty_print)
+        # TODO Check origin of parameter child_
+        super(SeriesType, self).export_children(child_=None, outfile=outfile, level=level, pretty_print=pretty_print)
         if self.SeriesKey is not None:
             self.SeriesKey.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -565,13 +566,13 @@ class ObsOnlyType(AnnotableType):
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self.ObsKey is not None and self.ObsKey.has_content_():
-            self.ObsKey.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.ObsKey.export_attributes_as_dict(parent_dict, )
 
         if self.ObsValue is not None:
-            self.ObsValue.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self.ObsValue.export_attributes_as_dict(parent_dict, )
 
         if self._Attributes is not None and self._Attributes.has_content_():
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
     def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='ObsOnlyType'):
         super(ObsOnlyType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
@@ -678,7 +679,7 @@ class ObsType(AnnotableType):
         super(ObsType, self).export_attributes(outfile, level, already_processed, namespace_prefix_, name_='ObsType')
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        super(ObsType, self).export_children(outfile, level, pretty_print=pretty_print)
+        super(ObsType, self).export_children(child_=None, outfile=outfile, level=level, pretty_print=pretty_print)
 
         if self.ObsDimension is not None:
             self.ObsDimension.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
@@ -910,14 +911,14 @@ class DataSetType(AnnotableType):
         self._publicationPeriod = publicationPeriod
 
     def validate_ActionType(self, value):
-        # Validate type common:ActionType, a restriction on xs:NMTOKEN.
+        # Validate dim_type common:ActionType, a restriction on xs:NMTOKEN.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
             value = value
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
@@ -1016,25 +1017,25 @@ class DataSetType(AnnotableType):
 
         if self._dataProvider is not None:
             parent_data = copy.deepcopy(parent_dict)
-            self._dataProvider.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._dataProvider.export_attributes_as_dict(parent_dict, )
             data.append(parent_data)
 
         if self._Attributes is not None:
-            self._Attributes.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._Attributes.export_attributes_as_dict(parent_dict, )
 
         for Group_ in self._group:
             parent_data = copy.deepcopy(parent_dict)
-            Group_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Group_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Series_ in self._Series:
             parent_data = copy.deepcopy(parent_dict)
-            Series_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Series_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
@@ -1065,28 +1066,28 @@ class DataSetType(AnnotableType):
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
             self._setID = value
-            self.validate_id_type(self._setID)  # validate type IDType
+            self.validate_id_type(self._setID)  # validate dim_type IDType
 
         value = find_attr_value_('action', node)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
             self._action = value
-            self.validate_ActionType(self._action)  # validate type ActionType
+            self.validate_ActionType(self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', node)
 
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
             self._reportingBeginDate = value
-            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate type BasicTimePeriodType
+            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('reportingEndDate', node)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
             self._reportingEndDate = value
-            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate type BasicTimePeriodType
+            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('validFromDate', node)
 
@@ -1117,7 +1118,7 @@ class DataSetType(AnnotableType):
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
             self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate type ObservationalTimePeriodType
+                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
 
         super(DataSetType, self).build_attributes(node, attrs, already_processed)
 
@@ -1148,4 +1149,94 @@ class DataSetType(AnnotableType):
             self._obs.append(obj_)
             obj_.original_tagname_ = 'Obs'
         super(DataSetType, self).build_children(child_, node, nodeName_, True)
+
+    def validate_BasicTimePeriodType(self, date):
+        # TODO Anything to validate here??? (BasicTimePeriod)
+        return True
+
+    def validate_ObservationalTimePeriodType(self, date):
+        # TODO Anything to validate here??? (Observational Time Period)
+        pass
+
+
 # end class DataSetType
+
+
+class TimeSeriesDataSetType(DataSetType):
+    """TimeSeriesDataSetType is a derivation of the base DataSetType of the
+    generic format the restricts the data set to only allow for grouped
+    observations where the dimension at the observation level is the time
+    dimension of the data structure definition. This means that unlike the
+    base data set structure, there can be no un-grouped observations.
+    Because this derivation is achieved using restriction, data sets
+    conforming to this type will inherently conform to the base data set
+    structure as well. In fact, data structured here will be identical to
+    data in the base data set when the time dimension is the observation
+    dimension. This means that the data contained in this structure can be
+    processed in exactly the same manner as the base structure."""
+    __hash__ = DataSetType.__hash__
+    subclass = None
+    superclass = DataSetType
+
+    def __init__(self, Annotations=None, structureRef=None, setID=None, action=None, reportingBeginDate=None,
+                 reportingEndDate=None, validFromDate=None, validToDate=None, publicationYear=None,
+                 publicationPeriod=None, DataProvider=None, Attributes=None, Group=None, Series=None, Obs=None,
+                 gds_collector_=None, **kwargs_):
+        super(TimeSeriesDataSetType, self).__init__(Annotations, structureRef, setID, action, reportingBeginDate,
+                                                    reportingEndDate, validFromDate, validToDate, publicationYear,
+                                                    publicationPeriod, DataProvider, Attributes, Group, Series, Obs,
+                                                    gds_collector_, **kwargs_)
+
+
+class TimeSeriesType(SeriesType):
+    """TimeSeriesType defines a structure which is used to group a collection
+    of observations which have a key in common, organised by time. The key
+    for a series is every dimension defined in the data structure
+    definition, save the time dimension. In addition to observations,
+    values can be provided for attributes which are associated with the
+    dimensions which make up this series key (so long as the attributes do
+    not specify a group attachment or also have an relationship with the
+    time dimension). It is possible for the series to contain only
+    observations or only attribute values, or both."""
+    __hash__ = SeriesType.__hash__
+    subclass = None
+    superclass = SeriesType
+
+    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None, Obs=None, gds_collector_=None, **kwargs_):
+        super(TimeSeriesType, self).__init__(Annotations, SeriesKey, Attributes, Obs, gds_collector_, **kwargs_)
+
+
+class TimeSeriesObsType(ObsType):
+    """TimeSeriesObsType defines the structure of a time series observation.
+    The observation must be provided a value for the time dimension. This
+    time value should disambiguate the observation within the series in
+    which it is defined (i.e. there should not be another observation with
+    the same time value). The observation can contain an observed value
+    and/or attribute values."""
+    __hash__ = ObsType.__hash__
+    subclass = None
+    superclass = ObsType
+
+
+class TimeValueType(BaseValueType):
+    """TimeValueType is a derivation of the BaseValueType which is used to
+    provide a value for the time dimension. Since the identifier for the
+    time dimension is fixed, the component reference for this structure is
+    fixed. Note that this means that it is not necessary to provide a value
+    in an instance as the fixed value will be provided in the post
+    validation information set."""
+    __hash__ = BaseValueType.__hash__
+    subclass = None
+    superclass = BaseValueType
+
+    def __init__(self, idx=None, value=None, **kwargs_):
+        super(BaseValueType, self).__init__(idx, value, **kwargs_)
+
+    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='TimeValueType'):
+        if self._id != "TIME_PERIOD" and 'id' not in already_processed:
+            already_processed.add('id')
+            outfile.write(' id=%s' % (quote_attrib(self._id),))
+
+        if self._value is not None and 'value' not in already_processed:
+            already_processed.add('value')
+            outfile.write(' value=%s' % (quote_attrib(self._value),))

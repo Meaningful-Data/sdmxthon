@@ -1,10 +1,10 @@
-from SDMXThon.common.refs import ProvisionAgreementRefType, DataflowRefType, DataStructureRefType, DataProviderRefType
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_
-from SDMXThon.utils.xml_base import showIndent, quote_xml
+from .refs import ProvisionAgreementRefType, DataflowRefType, DataStructureRefType, DataProviderRefType
+from ..utils.data_parser import DataParser, UseCapturedNS_
+from ..utils.xml_base import showIndent, quote_xml
 
 
 class ReferenceType(DataParser):
-    """ReferenceType is an abstract base type. It is used as the basis for all
+    """ReferenceType is an abstract base dim_type. It is used as the basis for all
     references, to all for a top level generic object reference that can be
     substituted with an explicit reference to any object. Any reference can
     consist of a Ref (which contains all required reference fields
@@ -79,10 +79,10 @@ class ReferenceType(DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Ref':
-            type_name_ = child_.attrib.get('{http://www.w3.org/2001/XMLSchema-instance}type')
+            type_name_ = child_.attrib.get('{http://www.w3.org/2001/XMLSchema-instance}dim_type')
 
             if type_name_ is None:
-                type_name_ = child_.attrib.get('type')
+                type_name_ = child_.attrib.get('dim_type')
 
             if type_name_ is not None:
                 type_names_ = type_name_.split(':')
@@ -111,7 +111,7 @@ class ReferenceType(DataParser):
 # end class ReferenceType
 
 class MaintainableReferenceBaseType(ReferenceType):
-    """MaintainableReferenceBaseType is an abstract base type for referencing a
+    """MaintainableReferenceBaseType is an abstract base dim_type for referencing a
     maintainable object. It consists of a URN and/or a complete set of
     reference fields; agency, id, and version."""
     __hash__ = ReferenceType.__hash__
@@ -131,7 +131,7 @@ class MaintainableReferenceBaseType(ReferenceType):
 # end class MaintainableReferenceBaseType
 
 class StructureReferenceBaseType(MaintainableReferenceBaseType):
-    """StructureReferneceBaseType is a specific type of MaintainableReference
+    """StructureReferneceBaseType is a specific dim_type of MaintainableReference
     that is used for referencing structure definitions. It consists of a
     URN and/or a complete set of reference fields; agency, id, and
     version."""
@@ -152,7 +152,7 @@ class StructureReferenceBaseType(MaintainableReferenceBaseType):
 # end class StructureReferenceBaseType
 
 class DataStructureReferenceType(StructureReferenceBaseType):
-    """DataStructureReferenceType is a type for referencing a data structure
+    """DataStructureReferenceType is a dim_type for referencing a data structure
     definition object. It consists of a URN and/or a complete set of
     reference fields."""
     __hash__ = StructureReferenceBaseType.__hash__
@@ -181,11 +181,33 @@ class DataStructureReferenceType(StructureReferenceBaseType):
             value_ = self.gds_validate_string(value_, node, 'URN')
             self._urn = value_
             self._urn_nsprefix_ = child_.prefix
+        elif nodeName_ == 'Structure' or nodeName_ == 'StructureUsage':
+            obj_ = DataStructureRefType.factory(parent_object_=self)
+            expression = './Ref'
+            ref = child_.xpath(expression)
+            if len(ref) == 1:
+                obj_.set_agencyID(ref[0].attrib['agencyID'])
+                obj_.set_id(ref[0].attrib['id'])
+                obj_.set_version(ref[0].attrib['version'])
+                if 'class' in ref[0].attrib.keys():
+                    obj_.set_class(ref[0].attrib['class'])
+            elif len(ref) == 0:
+                expression = './URN'
+                record = child_.xpath(expression)
+                if len(record) == 1:
+                    urn_aux = record[0].text
+                    aux = urn_aux.split("=", 1)[1]
+                    obj_.set_version(aux.split("(", 1)[1][:-1])
+                    obj_.set_agencyID(aux.split(":", 1)[0])
+                    obj_.set_id(aux.split(":", 1)[1].split("(", 1)[0])
+            self._ref = obj_
+            obj_.original_tag_name_ = 'Ref'
+
         # end class DataStructureReferenceType
 
 
 class StructureUsageReferenceBaseType(MaintainableReferenceBaseType):
-    """StructureUsageReferenceBaseType is a specific type of
+    """StructureUsageReferenceBaseType is a specific dim_type of
     MaintainableReference that is used for referencing structure usages. It
     consists of a URN and/or a complete set of reference fields; agency,
     id, and version."""
@@ -206,7 +228,7 @@ class StructureUsageReferenceBaseType(MaintainableReferenceBaseType):
 # end class StructureUsageReferenceBaseType
 
 class DataflowReferenceType(StructureUsageReferenceBaseType):
-    """DataflowReferenceType is a type for referencing a dataflow object. It
+    """DataflowReferenceType is a dim_type for referencing a dataflow object. It
     consists of a URN and/or a complete set of reference fields."""
     __hash__ = StructureUsageReferenceBaseType.__hash__
     subclass = None
@@ -240,7 +262,7 @@ class DataflowReferenceType(StructureUsageReferenceBaseType):
 
 
 class ProvisionAgreementReferenceType(MaintainableReferenceBaseType):
-    """ProvisionAgreementReferenceType is a type for referencing a provision
+    """ProvisionAgreementReferenceType is a dim_type for referencing a provision
     agreement. It consists of a URN and/or a complete set of reference
     fields."""
     __hash__ = MaintainableReferenceBaseType.__hash__
@@ -274,7 +296,7 @@ class ProvisionAgreementReferenceType(MaintainableReferenceBaseType):
 
 
 class ChildObjectReferenceType(ReferenceType):
-    """ChildObjectReferenceType is an abstract base type used for referencing a
+    """ChildObjectReferenceType is an abstract base dim_type used for referencing a
     particular object defined directly within a maintainable object. It
     consists of a URN and/or a complete set of reference fields; agency,
     maintainable id (maintainableParentID), maintainable version
@@ -297,7 +319,7 @@ class ChildObjectReferenceType(ReferenceType):
 # end class ChildObjectReferenceType
 
 class ItemReferenceType(ChildObjectReferenceType):
-    """ItemReferenceType is an abstract base type used for referencing a
+    """ItemReferenceType is an abstract base dim_type used for referencing a
     particular item within an item scheme. Note that this reference also
     has the ability to reference items contained within other items inside
     of the item scheme. It consists of a URN and/or a complete set of
@@ -321,8 +343,8 @@ class ItemReferenceType(ChildObjectReferenceType):
 # end class ItemReferenceType
 
 class OrganisationReferenceBaseType(ItemReferenceType):
-    """OrganisationReferenceBaseType is a type for referencing any organisation
-    object, regardless of its type. It consists of a URN and/or a complete
+    """OrganisationReferenceBaseType is a dim_type for referencing any organisation
+    object, regardless of its dim_type. It consists of a URN and/or a complete
     set of reference fields."""
     __hash__ = ItemReferenceType.__hash__
     subclass = None
@@ -341,7 +363,7 @@ class OrganisationReferenceBaseType(ItemReferenceType):
 # end class OrganisationReferenceBaseType
 
 class DataProviderReferenceType(OrganisationReferenceBaseType):
-    """DataProviderReferenceType is a type for referencing a data provider. It
+    """DataProviderReferenceType is a dim_type for referencing a data provider. It
     consists of a URN and/or a complete set of reference fields."""
     __hash__ = OrganisationReferenceBaseType.__hash__
     subclass = None

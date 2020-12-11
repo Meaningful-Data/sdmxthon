@@ -128,15 +128,15 @@ class DataParser(GenerateSuper):
         pass
 
     def validate_nested_NC_name_id_type(self, value):
-        # Validate type NestedNCNameIDType, a restriction on NestedIDType.
+        # Validate dim_type NestedNCNameIDType, a restriction on NestedIDType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             if not self.gds_validate_simple_patterns(self.__validate_NestedNCNameIDType_patterns, value):
@@ -147,15 +147,15 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_id_type(self, value):
-        # Validate type IDType, a restriction on NestedIDType.
+        # Validate dim_type IDType, a restriction on NestedIDType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             if not self.gds_validate_simple_patterns(self.__validate_IDType_patterns, value):
@@ -166,15 +166,15 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_version_type(self, value):
-        # Validate type VersionType, a restriction on xs:string.
+        # Validate dim_type VersionType, a restriction on xs:string.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             if not self.gds_validate_simple_patterns(self.__validate_VersionType_patterns, value):
@@ -185,15 +185,15 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_nested_id_type(self, value):
-        # Validate type NestedIDType, a restriction on xs:string.
+        # Validate dim_type NestedIDType, a restriction on xs:string.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             if not self.gds_validate_simple_patterns(self.__validate_NestedIDType_patterns, value):
@@ -204,15 +204,15 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_NC_name_id_type(self, value):
-        # Validate type common:NCNameIDType, a restriction on IDType.
+        # Validate dim_type common:NCNameIDType, a restriction on IDType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             if not self.gds_validate_simple_patterns(self.__validate_NCNameIDType_patterns, value):
@@ -223,14 +223,15 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type ObjectTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 line_number = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(line_number)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                       "line_number": line_number, })
+                    'Value "%(value)s"%(line_number)s is not of the correct base simple dim_type (str)' % {
+                        "value": value,
+                        "line_number": line_number, })
                 result = False
 
             value = value
@@ -260,14 +261,14 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type PackageTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
 
             value = value
@@ -290,4 +291,7 @@ class DataParser(GenerateSuper):
         pass
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
+        pass
+
+    def build_children(self, child, node, node_name_, gds_collector_):
         pass

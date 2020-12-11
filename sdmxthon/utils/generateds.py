@@ -530,7 +530,7 @@ class GenerateSuper(object):
         class_obj1 = default_class
 
         if 'xsi' in node.nsmap:
-            class_name = node.get('{%s}type' % node.nsmap['xsi'])
+            class_name = node.get('{%s}dim_type' % node.nsmap['xsi'])
             if class_name is not None:
                 names = class_name.split(':')
                 if len(names) == 2:

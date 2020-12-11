@@ -1,11 +1,11 @@
-from SDMXThon.common.references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
+from .references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
     DataflowReferenceType
-from SDMXThon.utils.data_parser import DataParser
-from SDMXThon.utils.xml_base import _cast, quote_attrib, find_attr_value_, raise_parse_error
+from ..utils.data_parser import DataParser
+from ..utils.xml_base import _cast, quote_attrib, find_attr_value_, raise_parse_error
 
 
 class PayloadStructureType(DataParser):
-    """PayloadStructureType is an abstract base type used to define the
+    """PayloadStructureType is an abstract base dim_type used to define the
     structural information for data or metadata sets. A reference to the
     structure is provided (either explicitly or through a reference to a
     structure usage).The structureID attribute uniquely identifies the
@@ -127,7 +127,7 @@ class PayloadStructureType(DataParser):
         self._structureURL = structureURL
 
     def validate_ObservationDimensionType(self, value):
-        # Validate type ObservationDimensionType, a restriction on None.
+        # Validate dim_type ObservationDimensionType, a restriction on None.
         pass
 
     def has_content_(self):
@@ -198,13 +198,13 @@ class PayloadStructureType(DataParser):
             parent_dict.update({'structureURL': self._structureURL})
 
         if self._provisionAgrement is not None:
-            self._provisionAgrement.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._provisionAgrement.export_attributes_as_dict(parent_dict, )
 
         if self._structureUsage is not None:
-            self._structureUsage.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._structureUsage.export_attributes_as_dict(parent_dict, )
 
         if self._structure is not None:
-            self._structure.export_attributes_as_dict(parent_dict, data, valid_fields)
+            self._structure.export_attributes_as_dict(parent_dict, )
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self._provisionAgrement is not None:
@@ -241,7 +241,7 @@ class PayloadStructureType(DataParser):
             already_processed.add('dimensionAtObservation')
             self._dimensionAtObservation = value
             self.validate_ObservationDimensionType(
-                self._dimensionAtObservation)  # validate type ObservationDimensionType
+                self._dimensionAtObservation)  # validate dim_type ObservationDimensionType
 
         value = find_attr_value_('explicitMeasures', node)
 
@@ -289,7 +289,7 @@ class PayloadStructureType(DataParser):
 # end class PayloadStructureType
 
 class DataStructureType(PayloadStructureType):
-    """DataStructureType is an abstract base type the forms the basis for the
+    """DataStructureType is an abstract base dim_type the forms the basis for the
     structural information for a data set."""
     __hash__ = DataParser.__hash__
     subclass = None
@@ -339,7 +339,7 @@ class GenericDataStructureType(DataStructureType):
     factory = staticmethod(factory)
 
     def validate_ObservationDimensionType(self, value):
-        # Validate type ObservationDimensionType, a restriction on None.
+        # Validate dim_type ObservationDimensionType, a restriction on None.
         pass
 
     def export_attributes(self, outfile, level, already_processed, namespace_prefix_='',

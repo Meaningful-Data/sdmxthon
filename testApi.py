@@ -1,19 +1,28 @@
 import logging
+import sys
 
-from SDMXThon import DatasetType, datasetListToXML
-from SDMXThon import xmlToDatasetList, headerCreation, generate_message
+from lxml import etree
 
-pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
+from SDMXThon import datasetListToXML, headerCreation, xmlToDatasetList, DatasetType
+from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
+
+pathToDataFile = 'SDMXThon/test/RBI_Import/gen_AllDimensions.xml'
 pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
-# pathToMetadataFile = 'SDMXThon/outputTests/DSD_demo_pjan_metadata.xml'
+# pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/ECB_SHS6_metadata.xml'
+# pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
+pathToMetadataTimeSeries = 'SDMXThon/test/TimeSeries/metadata_ecb.xml'
+pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 
-pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
-pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGen.xml'
+# pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
+pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
+pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
+pathTimeSeriesGen = 'SDMXThon/test/TimeSeries/test_ecb_gen.xml'
+pathTimeSeriesGenTest = 'SDMXThon/outputTests/time_gen.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
-pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTest.xml'
+pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTestDSD.xml'
 
-pathSavetoJSON = 'SDMXThon/outputTests/output.json'
+pathSavetoJSON = 'SDMXThon/outputTests/sample.json'
 # create logger
 logger = logging.getLogger("logging_tryout2")
 logger.setLevel(logging.DEBUG)
@@ -68,15 +77,17 @@ def main():
                      dataset_type=DatasetType.StructureDataSet, validate_data=False)
 
 
-"""
-
+    """
+    """
     # SDMX Generic to DataSet to SDMX Structure
-    dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
+    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
 
     header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
     datasetListToXML(dataset_list, pathToMetadataFile, pathSaveToStructure2, header,
                      dataset_type=DatasetType.StructureDataSet, validate_data=False)
     # datasetListToJSON(dataset_list, pathSavetoJSON)
+    """
+    """
     # Passing path to file
     dataset_list = xmlToDatasetList(pathSaveToStructure, pathToMetadataFile, DatasetType.StructureDataSet)
 
@@ -91,6 +102,97 @@ def main():
     f.seek(0)
     message = generate_message(dataset_list, f, header, DatasetType.StructureDataSet, validate_data=False)
     print(message)
+    logger.debug('Start metadata loading')
+    sdmx = etree.parse(pathToSDMXCodelist)
+    codelists = get_codelist_model(sdmx)
+    logger.debug('File parsed')
+    root = etree.parse(pathToMetadataFile)
+    codelists = add_elements_to_dict(codelists, get_codelist_model(root), updateElementsFromDict2=True)
+    """
+
+    # Testing DSDS
+    """
+    root = etree.parse(pathToMetadataFile)
+    codelists = get_codelist_model(root)
+    logger.debug('Codelists loaded')
+    concepts = get_concept_schemes(root, codelists)
+    dsds = get_DSDs(root, concepts, codelists)
+    test_dsds = dsds.copy()
+    # True
+    print(test_dsds == dsds)
+
+    logger.debug('Dump')
+    serial = pickle.dumps(dsds)
+    logger.debug('Load')
+    new_dsds = pickle.loads(serial)
+    logger.debug('End Load')
+    # True
+    set_dsds_checked_to_false(new_dsds)
+    set_dsds_checked_to_false(test_dsds)
+    print(new_dsds == test_dsds)
+    logger.debug('Fin comprobacion iguales')
+    new_dsds['RBI:AALOE(1.0)'].dimensionDescriptor.components[
+        'Area_Operation'].localRepresentation.codeList._name = 'BLABLABLA'
+    set_dsds_checked_to_false(new_dsds)
+    set_dsds_checked_to_false(test_dsds)
+    # False
+    print(new_dsds == test_dsds)
+
+    
+    logger.debug('Data Structure Definitions loaded')
+    logger.debug('Inicio')
+    print('DSDS: %d' % get_size(dsds))
+    logger.debug('Fin')
+
+    print('concepts: %d' % get_size(concepts))
+    print('codelists: %d' % get_size(codelists))
+    codelists, concepts = delete_unused_codelists(codelists, concepts, dsds)
+    print('concepts: %d' % get_size(concepts))
+    print('codelists: %d' % get_size(codelists))
+    """
+
+    logger.debug('Inicio')
+    root = etree.parse(pathToMetadataFile)
+    codelists = get_codelist_model(root)
+    concepts = get_concept_schemes(root, codelists)
+    dsds = get_DSDs(root, concepts, codelists)
+    logger.debug('DSD loaded')
+    """
+    logger.debug('Finish serializing')
+    logger.debug('Starting serializing list')
+    serial = pickle.dumps(dsds)
+    logger.debug('Finish serializing list')
+
+    with open('SDMXThon/metadataTests/dsds.pickle', "wb") as f:
+        f.write(serial)
+    """
+    # Testing creating message with dsds
+    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
+    logger.debug('End reading')
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
+    datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
+                     dataset_type=DatasetType.GenericDataSet, validate_data=False)
+
+
+def get_size(obj, seen=None):
+    """Recursively finds size of objects"""
+    size = sys.getsizeof(obj)
+    if seen is None:
+        seen = set()
+    obj_id = id(obj)
+    if obj_id in seen:
+        return 0
+    # Important mark as seen *before* entering recursion to gracefully handle
+    # self-referential objects
+    seen.add(obj_id)
+    if isinstance(obj, dict):
+        size += sum([get_size(v, seen) for v in obj.values()])
+        size += sum([get_size(k, seen) for k in obj.keys()])
+    elif hasattr(obj, '__dict__'):
+        size += get_size(obj.__dict__, seen)
+    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+        size += sum([get_size(i, seen) for i in obj])
+    return size
 
 
 if __name__ == '__main__':

@@ -1,12 +1,15 @@
-from SDMXThon.common.generic import GenericDataStructureType
-from SDMXThon.common.references import DataProviderReferenceType
-from SDMXThon.data.generic import DataSetType as GenericDataSet
-from SDMXThon.message.footer import FooterType
-from SDMXThon.structure.specificbase import DataSetType as StructureDataSet
-from SDMXThon.utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
-from SDMXThon.utils.generateds import datetime_
-from SDMXThon.utils.mappings import ClassToPrefix
-from SDMXThon.utils.xml_base import BaseStrType_, encode_str_2_3, showIndent, quote_xml, find_attr_value_, _cast, \
+from .footer import FooterType
+from ..common.annotations import TextType
+from ..common.generic import GenericDataStructureType
+from ..common.references import DataProviderReferenceType, DataStructureReferenceType
+from ..data.generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
+from ..structure.specificbase import DataSetType as StructureDataSet, \
+    TimeSeriesDataSetType as StructureTimeSeriesDataSet
+
+from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
+from ..utils.generateds import datetime_
+from ..utils.mappings import ClassToPrefix
+from ..utils.xml_base import BaseStrType_, encode_str_2_3, showIndent, quote_xml, find_attr_value_, _cast, \
     quote_attrib, GdsCollector_
 
 
@@ -222,22 +225,18 @@ class ContactType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         for Name_ in self._Name:
-            namespaceprefix_ = self._name_nsprefix_ + ':' if (UseCapturedNS_ and self._name_nsprefix_) else ''
             Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
         for Department_ in self._department:
-            namespaceprefix_ = self._department_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._department_nsprefix_) else ''
             Department_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
         for Role_ in self._role:
-            namespaceprefix_ = self._role_nsprefix_ + ':' if (UseCapturedNS_ and self._role_nsprefix_) else ''
             Role_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
         for Telephone_ in self._telephone:
@@ -344,13 +343,13 @@ class PartyType(DataParser):
     subclass = None
     superclass = None
 
-    def __init__(self, id=None, Name=None, Contact=None, extensiontype_=None, gds_collector_=None, **kwargs_):
+    def __init__(self, id_=None, Name=None, Contact=None, extensiontype_=None, gds_collector_=None, **kwargs_):
         super(PartyType, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
-        self._id = _cast(None, id)
+        self._id = _cast(None, id_)
         self._id_nsprefix_ = None
 
         if Name is None:
@@ -408,8 +407,8 @@ class PartyType(DataParser):
     def get_id(self):
         return self._id
 
-    def set_id(self, id):
-        self._id = id
+    def set_id(self, id_):
+        self._id = id_
 
     def get_extensiontype_(self):
         return self._extensiontype_
@@ -431,19 +430,19 @@ class PartyType(DataParser):
             already_processed.add('id')
             outfile.write(' id=%s' % (quote_attrib(self._id),))
 
-        if self._extensiontype_ is not None and 'xsi:type' not in already_processed:
-            already_processed.add('xsi:type')
+        if self._extensiontype_ is not None and 'xsi:dim_type' not in already_processed:
+            already_processed.add('xsi:dim_type')
             outfile.write(' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
             if ":" not in self._extensiontype_:
                 imported_ns_type_prefix_ = ClassToPrefix.get(self._extensiontype_, '')
-                outfile.write(' xsi:type="%s%s"' % (imported_ns_type_prefix_, self._extensiontype_))
+                outfile.write(' xsi:dim_type="%s%s"' % (imported_ns_type_prefix_, self._extensiontype_))
             else:
-                outfile.write(' xsi:type="%s"' % self._extensiontype_)
+                outfile.write(' xsi:dim_type="%s"' % self._extensiontype_)
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         pass
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         for Name_ in self._Name:
             Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -455,10 +454,10 @@ class PartyType(DataParser):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_id_type(self._id)  # validate type IDType
-        value = find_attr_value_('xsi:type', node)
-        if value is not None and 'xsi:type' not in already_processed:
-            already_processed.add('xsi:type')
+            self.validate_id_type(self._id)  # validate dim_type IDType
+        value = find_attr_value_('xsi:dim_type', node)
+        if value is not None and 'xsi:dim_type' not in already_processed:
+            already_processed.add('xsi:dim_type')
             self._extensiontype_ = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
@@ -484,8 +483,8 @@ class SenderType(PartyType):
     subclass = None
     superclass = PartyType
 
-    def __init__(self, id=None, Name=None, Contact=None, Timezone=None, gds_collector_=None, **kwargs_):
-        super(SenderType, self).__init__(id, Name, Contact, gds_collector_, **kwargs_)
+    def __init__(self, id_=None, Name=None, Contact=None, Timezone=None, gds_collector_=None, **kwargs_):
+        super(SenderType, self).__init__(id_, Name, Contact, gds_collector_, **kwargs_)
         self.Timezone = Timezone
         self.validate_TimezoneType(self.Timezone)
         self.Timezone_nsprefix_ = None
@@ -505,13 +504,14 @@ class SenderType(PartyType):
 
     def validate_TimezoneType(self, value):
         result = True
-        # Validate type TimezoneType, a restriction on xs:string.
+        # Validate dim_type TimezoneType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno,
+                                                                                                      })
                 return False
             if not self.gds_validate_simple_patterns(
                     self.validate_TimezoneType_patterns_, value):
@@ -535,7 +535,7 @@ class SenderType(PartyType):
         super(SenderType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
                                                   name_='SenderType')
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         super(SenderType, self).export_children(outfile, level, pretty_print=pretty_print)
         if pretty_print:
             eol_ = '\n'
@@ -559,7 +559,7 @@ class SenderType(PartyType):
             value_ = self.gds_validate_string(value_, node, 'Timezone')
             self.Timezone = value_
             self.Timezone_nsprefix_ = child_.prefix
-            # validate type TimezoneType
+            # validate dim_type TimezoneType
             self.validate_TimezoneType(self.Timezone)
         super(SenderType, self).build_children(child_, node, nodeName_, True)
 
@@ -567,7 +567,7 @@ class SenderType(PartyType):
 # end class SenderType
 
 class BaseHeaderType(DataParser):
-    """BaseHeaderType in an abstract base type that defines the basis for all
+    """BaseHeaderType in an abstract base dim_type that defines the basis for all
     message headers. Specific message formats will refine this"""
     __hash__ = DataParser.__hash__
     subclass = None
@@ -807,19 +807,19 @@ class BaseHeaderType(DataParser):
 
     def validate_HeaderTimeType(self, value):
         result = True
-        # Validate type HeaderTimeType, a restriction on None.
+        # Validate dim_type HeaderTimeType, a restriction on None.
         pass
         return result
 
     def validate_ActionType(self, value):
         result = True
-        # Validate type ActionType, a restriction on xs:NMTOKEN.
+        # Validate dim_type ActionType, a restriction on xs:NMTOKEN.
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
             value = value
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
@@ -856,7 +856,7 @@ class BaseHeaderType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -881,20 +881,14 @@ class BaseHeaderType(DataParser):
                 self.gds_encode(self.gds_format_string(quote_xml(self._Prepared), input_name='Prepared')),
                 namespaceprefix_, eol_))
         if self._Sender is not None:
-            namespaceprefix_ = self._Sender_nsprefix_ + ':' if (UseCapturedNS_ and self._Sender_nsprefix_) else ''
             self._Sender.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         for Receiver_ in self._Receiver:
-            namespaceprefix_ = self._Receiver_nsprefix_ + ':' if (UseCapturedNS_ and self._Receiver_nsprefix_) else ''
             Receiver_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         for Name_ in self._Name:
-            namespaceprefix_ = self._name_nsprefix_ + ':' if (UseCapturedNS_ and self._name_nsprefix_) else ''
             Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         for Structure_ in self._structure:
-            namespaceprefix_ = self._structure_nsprefix_ + ':' if (UseCapturedNS_ and self._structure_nsprefix_) else ''
             Structure_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         if self._dataProvider is not None:
-            namespaceprefix_ = self._dataProvider_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._dataProvider_nsprefix_) else ''
             self._dataProvider.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         if self._DataSetAction is not None:
             namespaceprefix_ = self.DataSetAction_nsprefix_ + ':' if (
@@ -949,7 +943,7 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_validate_string(value_, node, 'ID')
             self._ID = value_
             self._ID_nsprefix_ = child_.prefix
-            # validate type IDType
+            # validate dim_type IDType
             self.validate_id_type(self._ID)
         elif nodeName_ == 'Test':
             sval_ = child_.text
@@ -963,7 +957,7 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_validate_string(value_, node, 'Prepared')
             self._Prepared = value_
             self._Prepared_nsprefix_ = child_.prefix
-            # validate type HeaderTimeType
+            # validate dim_type HeaderTimeType
             self.validate_HeaderTimeType(self._Prepared)
         elif nodeName_ == 'Sender':
             obj_ = SenderType.factory(parent_object_=self)
@@ -987,6 +981,11 @@ class BaseHeaderType(DataParser):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._structure.append(obj_)
             obj_.original_tag_name_ = '_structure'
+        elif nodeName_ == 'Structure':
+            obj_ = DataStructureReferenceType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._structure.append(obj_)
+            obj_.original_tag_name_ = 'Structure'
         elif nodeName_ == 'DataProvider':
             obj_ = DataProviderReferenceType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -998,7 +997,7 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_validate_string(value_, node, 'DataSetAction')
             self._DataSetAction = value_
             self.DataSetAction_nsprefix_ = child_.prefix
-            # validate type ActionType
+            # validate dim_type ActionType
             self.validate_ActionType(self._DataSetAction)
         elif nodeName_ == 'DataSetID':
             value_ = child_.text
@@ -1006,7 +1005,7 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_validate_string(value_, node, 'DataSetID')
             self._DataSetID.append(value_)
             self._DataSetID_nsprefix_ = child_.prefix
-            # validate type IDType
+            # validate dim_type IDType
             self.validate_id_type(self._DataSetID[-1])
         elif nodeName_ == 'Extracted':
             sval_ = child_.text
@@ -1019,7 +1018,7 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_validate_string(value_, node, 'ReportingBegin')
             self._ReportingBegin = value_
             self._ReportingBegin_nsprefix_ = child_.prefix
-            # validate type ObservationalTimePeriodType
+            # validate dim_type ObservationalTimePeriodType
             self.validate_ObservationalTimePeriodType(self._ReportingBegin)
         elif nodeName_ == 'ReportingEnd':
             value_ = child_.text
@@ -1027,7 +1026,7 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_validate_string(value_, node, 'ReportingEnd')
             self._ReportingEnd = value_
             self._ReportingEnd_nsprefix_ = child_.prefix
-            # validate type ObservationalTimePeriodType
+            # validate dim_type ObservationalTimePeriodType
             self.validate_ObservationalTimePeriodType(self._ReportingEnd)
         elif nodeName_ == 'EmbargoDate':
             sval_ = child_.text
@@ -1071,7 +1070,7 @@ class GenericDataHeaderType(BaseHeaderType):
 # end class GenericDataHeaderType
 
 class MessageType(DataParser):
-    """MessageType is an abstract type which is used by all of the messages, to
+    """MessageType is an abstract dim_type which is used by all of the messages, to
     allow inheritance of common features. Every message consists of a
     mandatory header, followed by optional payload (which may occur
     multiple times), and finally an optional footer section for conveying
@@ -1082,6 +1081,7 @@ class MessageType(DataParser):
 
     def __init__(self, Header=None, anytypeobjs_=None, Footer=None, gds_collector_=None, **kwargs_):
         super(MessageType, self).__init__(gds_collector_, **kwargs_)
+        self._anytypeobjs_ = None
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
@@ -1138,7 +1138,7 @@ class MessageType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
         if self.Footer is not None:
@@ -1196,15 +1196,15 @@ class GenericDataType(MessageType):
         else:
             return False
 
-    def export_attributes_as_dict(self, valid_fields: list) -> list:
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
         for DataSet_ in self.DataSet:
             parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -1268,9 +1268,9 @@ class StructureSpecificDataHeaderType(BaseHeaderType):
 
 class StructureSpecificDataType(MessageType):
     """StructureSpecificDataType defines the structure of the structure
-    specific data message. Note that the data set payload type is abstract,
-    and therefore it will have to be assigned a type in an instance. This
-    type must be derived from the base type referenced. This base type
+    specific data message. Note that the data set payload dim_type is abstract,
+    and therefore it will have to be assigned a dim_type in an instance. This
+    dim_type must be derived from the base dim_type referenced. This base dim_type
     defines a general structure which can be followed to allow for generic
     processing of the data even if the exact details of the data structure
     specific format are not known."""
@@ -1315,21 +1315,21 @@ class StructureSpecificDataType(MessageType):
         self.DataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(MessageType,
                                                                                         self).has_content_()):
             return True
         else:
             return False
 
-    def export_attributes_as_dict(self, valid_fields: list) -> list:
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
         for DataSet_ in self.DataSet:
             parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, data, valid_fields)
+            DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
         if self.Header is not None:
             self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
@@ -1356,4 +1356,231 @@ class StructureSpecificDataType(MessageType):
             self.Footer = obj_
             obj_.original_tag_name_ = 'Footer'
 
+
 # end class StructureSpecificDataType
+
+
+class GenericTimeSeriesDataType(GenericDataType):
+    """GenericDataType defines the contents of a generic data message."""
+    __hash__ = GenericDataType.__hash__
+    subclass = None
+    superclass = GenericDataType
+
+    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
+        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:None="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific"  xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"  xmlns:footer="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer" '
+        self._name = 'GenericTimeSeriesDataType'
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return GenericTimeSeriesDataType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def get_DataSet(self):
+        return self.DataSet
+
+    def set_DataSet(self, DataSet):
+        self.DataSet = DataSet
+
+    def add_DataSet(self, value):
+        self.DataSet.append(value)
+
+    def insert_DataSet_at(self, index, value):
+        self.DataSet.insert(index, value)
+
+    def replace_DataSet_at(self, index, value):
+        self.DataSet[index] = value
+
+    def has_content_(self):
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
+                                                                                        self).has_content_()):
+            return True
+        else:
+            return False
+
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
+        data = []
+        for DataSet_ in self.DataSet:
+            parent_dict = {}
+            DataSet_.export_attributes_as_dict(parent_dict, )
+
+        return data
+
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
+        if self.Header is not None:
+            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        for DataSet_ in self.DataSet:
+            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        if self.Footer is not None:
+            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Header':
+            obj_ = GenericTimeSeriesDataHeaderType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Header = obj_
+            obj_.original_tagname_ = 'Header'
+        elif nodeName_ == 'DataSet':
+            obj_ = GenericTimeSeriesDataSet.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.DataSet.append(obj_)
+            obj_.original_tag_name_ = 'DataSet'
+        elif nodeName_ == 'Footer':
+            obj_ = FooterType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Footer = obj_
+            obj_.original_tag_name_ = 'Footer'
+
+
+class GenericTimeSeriesDataHeaderType(GenericDataHeaderType):
+    """GenericTimeSeriesDataHeaderType defines the header structure for a time
+    series only generic data message."""
+    __hash__ = GenericDataHeaderType.__hash__
+    subclass = None
+    superclass = GenericDataHeaderType
+
+    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
+                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
+                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name, Structure,
+                                                              DataProvider, DataSetAction, DataSetID, Extracted,
+                                                              ReportingBegin, ReportingEnd, EmbargoDate, Source,
+                                                              gds_collector_, **kwargs_)
+        self._name = 'GenericTimeSeriesDataHeaderType'
+
+    def factory(*args_, **kwargs_):
+        return GenericTimeSeriesDataHeaderType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def validate_HeaderTimeType(self, value):
+        pass
+
+    def validate_ObservationalTimePeriodType(self, value):
+        pass
+
+
+class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
+    """StructureSpecificTimeSeriesDataType defines the structure of the
+    structure specific time series data message."""
+
+    __hash__ = StructureSpecificDataType.__hash__
+    subclass = None
+    superclass = StructureSpecificDataType
+
+    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_,
+                                                                  **kwargs_)
+
+        if DataSet is None:
+            self.DataSet = []
+        else:
+            self.DataSet = DataSet
+
+        self.DataSet_nsprefix_ = None
+        self._name = 'StructureSpecificTimeSeriesDataType'
+
+        if gds_collector_ is not None:
+            self.gds_collector_ = gds_collector_
+        else:
+            self.gds_collector_ = GdsCollector_()
+
+    def factory(*args_, **kwargs_):
+        return StructureSpecificDataType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def get_DataSet(self):
+        return self.DataSet
+
+    def set_DataSet(self, DataSet):
+        self.DataSet = DataSet
+
+    def add_DataSet(self, value):
+        self.DataSet.append(value)
+
+    def insert_DataSet_at(self, index, value):
+        self.DataSet.insert(index, value)
+
+    def replace_DataSet_at(self, index, value):
+        self.DataSet[index] = value
+
+    def has_content_(self):
+        if (self.Header is not None or self.DataSet or self.Footer is not None or super(StructureSpecificDataType,
+                                                                                        self).has_content_()):
+            return True
+        else:
+            return False
+
+    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
+        data = []
+        for DataSet_ in self.DataSet:
+            parent_dict = {}
+            DataSet_.export_attributes_as_dict(parent_dict, )
+
+        return data
+
+    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
+        if self.Header is not None:
+            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        for DataSet_ in self.DataSet:
+            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+        if self.Footer is not None:
+            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Header':
+            obj_ = StructureSpecificTimeSeriesDataHeaderType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Header = obj_
+            obj_.original_tagname_ = 'Header'
+        elif nodeName_ == 'DataSet':
+            obj_ = StructureTimeSeriesDataSet.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.DataSet.append(obj_)
+            obj_.original_tag_name_ = 'DataSet'
+        elif nodeName_ == 'Footer':
+            obj_ = FooterType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.Footer = obj_
+            obj_.original_tag_name_ = 'Footer'
+
+
+# end class StructureSpecificDataType
+
+
+class StructureSpecificTimeSeriesDataHeaderType(StructureSpecificDataHeaderType):
+    """StructureSpecificTimeSeriesDataHeaderType defines the header structure
+    for a time series only structure specific data message."""
+    __hash__ = StructureSpecificDataHeaderType.__hash__
+    subclass = None
+    superclass = StructureSpecificDataHeaderType
+
+    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
+                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
+                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificTimeSeriesDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name,
+                                                                        Structure, DataProvider, DataSetAction,
+                                                                        DataSetID,
+                                                                        Extracted, ReportingBegin, ReportingEnd,
+                                                                        EmbargoDate,
+                                                                        Source, gds_collector_, **kwargs_)
+        self._name = 'StructureSpecificTimeSeriesDataHeaderType'
+
+    def factory(*args_, **kwargs_):
+        return StructureSpecificTimeSeriesDataHeaderType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def validate_HeaderTimeType(self, value):
+        result = True
+        return result
+
+    def validate_ObservationalTimePeriodType(self, value):
+        result = True
+        return result

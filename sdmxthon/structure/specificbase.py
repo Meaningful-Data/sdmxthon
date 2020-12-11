@@ -9,7 +9,7 @@ from SDMXThon.utils.xml_base import _cast, BaseStrType_, quote_attrib, find_attr
 
 
 class ObsType(AnnotableType):
-    """ObsType is the abstract type which defines the structure of a grouped or
+    """ObsType is the abstract dim_type which defines the structure of a grouped or
     un-grouped observation. The observation must be provided a key, which
     is either a value for the dimension which is declared to be at the
     observation level if the observation is grouped, or a full set of
@@ -18,20 +18,20 @@ class ObsType(AnnotableType):
     within the context in which it is defined (e.g. there should not be
     another observation with the same dimension value in a series). The
     observation can contain an observed value and/or attribute values.
-    Data structure definition schemas will drive a type or types based on this
+    Data structure definition schemas will drive a dim_type or types based on this
     that is specific to the data structure definition and the variation of
     the format being expressed in the schema. The dimension value(s) which
     make up the key and the attribute values associated with the key
     dimension(s) or the primary measure will be represented with XML
     attributes. This is specified in the content model with the declaration
-    of anyAttributes in the "local" namespace. The derived observation type
+    of anyAttributes in the "local" namespace. The derived observation dim_type
     will refine this structure so that the attributes are explicit. The XML
     attributes will be given a name based on the attribute's identifier.
     These XML attributes will be unqualified (meaning they do not have a
     namespace associated with them). The dimension XML attribute(s) will be
     required while the attribute XML attributes will be optional. To allow
     for generic processing, it is required that the only unqualified XML
-    attributes in the derived observation type be for the observation
+    attributes in the derived observation dim_type be for the observation
     dimension(s) and attributes declared in the data structure definition.
     If additional attributes are required, these should be qualified with a
     namespace so that a generic application can easily distinguish them as
@@ -44,20 +44,20 @@ class ObsType(AnnotableType):
     specific to each measure, which is to say that the representation of
     the primary measure (i.e. the observed value) will be restricted to
     that which is specified by the specific measure.
-    The type attribute is used when the derived format requires that explicit
-    measure be used. In this case, the derived type based on the measure
+    The dim_type attribute is used when the derived format requires that explicit
+    measure be used. In this case, the derived dim_type based on the measure
     will fix this value to be the identification of the measure concept.
     This will not be required, but since it is fixed it will be available
     in the post validation information set which will allow for generic
     processing of the data. If explicit measures are not used, then the
-    derived type will prohibit the use of this attribute.The TIME_PERIOD
+    derived dim_type will prohibit the use of this attribute.The TIME_PERIOD
     attribute is an explicit attribute for the time dimension. This is
     declared in the base schema since it has a fixed identifier and
-    representation. The derived series type will either require or prohibit
+    representation. The derived series dim_type will either require or prohibit
     this attribute, depending on whether time is the observation dimension.
     If the time dimension specifies a more specific representation of time
-    the derived type will restrict the type definition to the appropriate
-    type.The REPORTING_YEAR_START_DAY attribute is an explict attribute for
+    the derived dim_type will restrict the dim_type definition to the appropriate
+    dim_type.The REPORTING_YEAR_START_DAY attribute is an explict attribute for
     the reporting year start day, which provides context to the time
     dimension when its value contains a reporting period (e.g. 2010-Q1).
     This attribute is used to state the month and day that the reporting
@@ -65,7 +65,7 @@ class ObsType(AnnotableType):
     value provided in this attribute, all reporting period values will be
     assumed to be based on a reporting year start day of January 1. This is
     declared in the base schema since it has a fixed identifier and
-    representation. The derived observation type may either require or
+    representation. The derived observation dim_type may either require or
     prohibit this attribute, depending on whether the data structure
     declared the reporting year start day attribute and if so, the
     attribute relationship and assignment status assigned to it.The
@@ -73,10 +73,10 @@ class ObsType(AnnotableType):
     which is intended to hold the value for the observation. This is
     declared in the base schema since it has a fixed identifier. This
     attribute is un-typed, since the representation of the observed value
-    can vary widely. Derived types will restrict this to be a type based on
+    can vary widely. Derived types will restrict this to be a dim_type based on
     the representation of the primary measure. In the case that an explicit
-    measure is used, the derived type for a given measure might further
-    restrict the type of the primary measure to be more specific to the
+    measure is used, the derived dim_type for a given measure might further
+    restrict the dim_type of the primary measure to be more specific to the
     core representation for the measure concept. Note that it is required
     that in the case of multiple measures being used, that the
     representation of the primary measure is broad enough to handle the
@@ -148,7 +148,7 @@ class ObsType(AnnotableType):
 
         if self._type_ is not None and 'type_' not in already_processed:
             already_processed.add('type_')
-            outfile.write(' xsi:type=%s' % (quote_attrib(self._type_),))
+            outfile.write(' xsi:dim_type=%s' % (quote_attrib(self._type_),))
 
         if self._time_period is not None and 'TIME_PERIOD' not in already_processed:
             already_processed.add('TIME_PERIOD')
@@ -183,18 +183,19 @@ class ObsType(AnnotableType):
                 parent_dict.update({key: self._anyAttributes_[key]})
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('type', node)
-        if value is not None and 'type' not in already_processed:
-            already_processed.add('type')
+        value = find_attr_value_('dim_type', node)
+        if value is not None and 'dim_type' not in already_processed:
+            already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate type IDType
+            self.validate_id_type(self._type_)  # validate dim_type IDType
 
         value = find_attr_value_('TIME_PERIOD', node)
 
         if value is not None and 'TIME_PERIOD' not in already_processed:
             already_processed.add('TIME_PERIOD')
             self._time_period = value
-            self.validate_ObservationalTimePeriodType(self._time_period)  # validate type ObservationalTimePeriodType
+            self.validate_ObservationalTimePeriodType(
+                self._time_period)  # validate dim_type ObservationalTimePeriodType
 
         value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
 
@@ -220,7 +221,7 @@ class ObsType(AnnotableType):
 
 
 class GroupType(AnnotableType):
-    """GroupType is the abstract type which defines a structure which is used
+    """GroupType is the abstract dim_type which defines a structure which is used
     to communicate attribute values for a group defined in a data structure
     definition. The group can consist of either a subset of the dimensions
     defined by the data structure definition, or an association to an
@@ -235,19 +236,19 @@ class GroupType(AnnotableType):
     values which make up the key (if applicable) and the attribute values
     associated with the group will be represented with XML attributes. This
     is specified in the content model with the declaration of anyAttributes
-    in the "local" namespace. The derived group type will refine this
+    in the "local" namespace. The derived group dim_type will refine this
     structure so that the attributes are explicit. The XML attributes will
     be given a name based on the attribute's identifier. These XML
     attributes will be unqualified (meaning they do not have a namespace
     associated with them). The dimension XML attributes will be required
     while the attribute XML attributes will be optional. To allow for
     generic processing, it is required that the only unqualified XML
-    attributes in the derived group type be for the group dimensions and
+    attributes in the derived group dim_type be for the group dimensions and
     attributes declared in the data structure definition. If additional
     attributes are required, these should be qualified with a namespace so
     that a generic application can easily distinguish them as not being
     meant to represent a data structure definition dimension or attribute.
-    The type attribute reference the identifier of the group as defined in the
+    The dim_type attribute reference the identifier of the group as defined in the
     data structure definition. This is optional, but derived group types
     will provide a fixed value for this so that it always available in the
     post validation information set. This allows the group to be processed
@@ -340,7 +341,7 @@ class GroupType(AnnotableType):
 
         if self._type_ is not None and 'type_' not in already_processed:
             already_processed.add('type_')
-            outfile.write(' type=%s' % (quote_attrib(self._type_),))
+            outfile.write(' dim_type=%s' % (quote_attrib(self._type_),))
 
         if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
             already_processed.add('REPORTING_YEAR_START_DAY')
@@ -360,12 +361,12 @@ class GroupType(AnnotableType):
             parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('type', node)
+        value = find_attr_value_('dim_type', node)
 
-        if value is not None and 'type' not in already_processed:
-            already_processed.add('type')
+        if value is not None and 'dim_type' not in already_processed:
+            already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate type IDType
+            self.validate_id_type(self._type_)  # validate dim_type IDType
 
         value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
 
@@ -385,7 +386,7 @@ class GroupType(AnnotableType):
 
 
 class SeriesType(AnnotableType):
-    """SeriesType is the abstract type which defines a structure which is used
+    """SeriesType is the abstract dim_type which defines a structure which is used
     to group a collection of observations which have a key in common. The
     key for a series is every dimension defined in the data structure
     definition, save the dimension declared to be at the observation level
@@ -395,31 +396,31 @@ class SeriesType(AnnotableType):
     attachment or also have an relationship with the observation
     dimension). It is possible for the series to contain only observations
     or only attribute values, or both.
-    Data structure definition schemas will drive a type based on this that is
+    Data structure definition schemas will drive a dim_type based on this that is
     specific to the data structure definition and the variation of the
     format being expressed in the schema. Both the dimension values which
     make up the key and the attribute values associated with the key
     dimensions will be represented with XML attributes. This is specified
     in the content model with the declaration of anyAttributes in the
-    "local" namespace. The derived series type will refine this structure
+    "local" namespace. The derived series dim_type will refine this structure
     so that the attributes are explicit. The XML attributes will be given a
     name based on the attribute's identifier. These XML attributes will be
     unqualified (meaning they do not have a namespace associated with
     them). The dimension XML attributes will be required while the
     attribute XML attributes will be optional. To allow for generic
     processing, it is required that the only unqualified XML attributes in
-    the derived group type be for the series dimensions and attributes
+    the derived group dim_type be for the series dimensions and attributes
     declared in the data structure definition. If additional attributes are
     required, these should be qualified with a namespace so that a generic
     application can easily distinguish them as not being meant to represent
     a data structure definition dimension or attribute.
     The TIME_PERIOD attribute is an explict attribute for the time dimension.
     This is declared in the base schema since it has a fixed identifier and
-    representation. The derived series type will either require or prohibit
+    representation. The derived series dim_type will either require or prohibit
     this attribute, depending on whether time is the observation dimension.
     If the time dimension specifies a more specific representation of time
-    the derived type will restrict the type definition to the appropriate
-    type.The REPORTING_YEAR_START_DAY attribute is an explict attribute for
+    the derived dim_type will restrict the dim_type definition to the appropriate
+    dim_type.The REPORTING_YEAR_START_DAY attribute is an explict attribute for
     the reporting year start day, which provides context to the time
     dimension when its value contains a reporting period (e.g. 2010-Q1).
     This attribute is used to state the month and day that the reporting
@@ -427,7 +428,7 @@ class SeriesType(AnnotableType):
     value provided in this attribute, all reporting period values will be
     assumed to be based on a reporting year start day of January 1. This is
     declared in the base schema since it has a fixed identifier and
-    representation. The derived series type may either require or prohibit
+    representation. The derived series dim_type may either require or prohibit
     this attribute, depending on whether the data structure declared the
     reporting year start day attribute and if so, the attribute
     relationship and assignment status assigned to it."""
@@ -532,7 +533,7 @@ class SeriesType(AnnotableType):
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True):
@@ -545,7 +546,8 @@ class SeriesType(AnnotableType):
         if value is not None and 'TIME_PERIOD' not in already_processed:
             already_processed.add('TIME_PERIOD')
             self._time_period = value
-            self.validate_ObservationalTimePeriodType(self._time_period)  # validate type ObservationalTimePeriodType
+            self.validate_ObservationalTimePeriodType(
+                self._time_period)  # validate dim_type ObservationalTimePeriodType
 
         value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
 
@@ -574,16 +576,16 @@ class SeriesType(AnnotableType):
 # end class SeriesType
 
 class DataSetType(AnnotableType):
-    """DataSetType is the abstract type which defines the base structure for
+    """DataSetType is the abstract dim_type which defines the base structure for
     any data structure definition specific data set. A derived data set
-    type will be created that is specific to a data structure definition
+    dim_type will be created that is specific to a data structure definition
     and the details of the organisation of the data (i.e. which dimension
     is the observation dimension and whether explicit measures should be
     used). Data is organised into either a collection of series (grouped
     observations) or a collection of un-grouped observations. The derived
-    data set type will restrict this choice to be either grouped or un-
+    data set dim_type will restrict this choice to be either grouped or un-
     grouped observations. If this dimension is "AllDimensions" then the
-    derived data set type must consist of a collection of un-grouped
+    derived data set dim_type must consist of a collection of un-grouped
     observations; otherwise the data set will contain a collection of
     series with the observations in the series disambiguated by the
     specified dimension at the observation level. This data set is capable
@@ -596,7 +598,7 @@ class DataSetType(AnnotableType):
     data or only documentation, then it is possible that another series
     with the same key might exist, but with not with the same purpose (i.e.
     to provide data or documentation) as the first series.
-    This base type is designed such that derived types can be processed in a
+    This base dim_type is designed such that derived types can be processed in a
     generic manner; it assures that data structure definition specific data
     will have a consistent structure. The group, series, and observation
     elements are unqualified, meaning that they are not qualified with a
@@ -608,14 +610,14 @@ class DataSetType(AnnotableType):
     The data set can contain values for attributes which do not have an
     attribute relationship with any data structure definition components.
     These attribute values will exist in XML attributes in this element
-    based on this type (DataSet). This is specified in the content model
+    based on this dim_type (DataSet). This is specified in the content model
     with the declaration of anyAttributes in the "local" namespace. The
-    derived data set type will refine this structure so that the attributes
+    derived data set dim_type will refine this structure so that the attributes
     are explicit. The XML attributes will be given a name based on the
     attribute's identifier. These XML attributes will be unqualified
     (meaning they do not have a namespace associated with them). To allow
     for generic processing, it is required that the only unqualified XML
-    attributes in the derived data set type (outside of the standard data
+    attributes in the derived data set dim_type (outside of the standard data
     set attributes) be for attributes declared in the data structure
     definition. If additional attributes are required, these should be
     qualified with a namespace so that a generic application can easily
@@ -629,7 +631,7 @@ class DataSetType(AnnotableType):
     provided in this attribute, all reporting period values will be assumed
     to be based on a reporting year start day of January 1. This is
     declared in the base schema since it has a fixed identifier and
-    representation. The derived data set type may either require or
+    representation. The derived data set dim_type may either require or
     prohibit this attribute, depending on whether the data structure
     declared the reporting year start day attribute and if so, the
     attribute relationship and assignment status assigned to it."""
@@ -824,15 +826,15 @@ class DataSetType(AnnotableType):
         self._anyAttributes_ = anyAttributes_
 
     def validate_ActionType(self, value):
-        # Validate type common:ActionType, a restriction on xs:NMTOKEN.
+        # Validate dim_type common:ActionType, a restriction on xs:NMTOKEN.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -847,11 +849,11 @@ class DataSetType(AnnotableType):
         return result
 
     def validate_BasicTimePeriodType(self, value):
-        # Validate type common:BasicTimePeriodType, a restriction on None.
+        # Validate dim_type common:BasicTimePeriodType, a restriction on None.
         pass
 
     def validate_ObservationalTimePeriodType(self, value):
-        # Validate type common:ObservationalTimePeriodType, a restriction on None.
+        # Validate dim_type common:ObservationalTimePeriodType, a restriction on None.
         pass
 
     def has_content_(self):
@@ -953,17 +955,17 @@ class DataSetType(AnnotableType):
 
         for Group_ in self._group:
             parent_data = copy.deepcopy(parent_dict)
-            Group_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Group_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Series_ in self._Series:
             parent_data = copy.deepcopy(parent_dict)
-            Series_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Series_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
         for Obs_ in self._obs:
             parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, data, valid_fields)
+            Obs_.export_attributes_as_dict(parent_data, )
             data.append(parent_data)
 
     def export_children(self, outfile, level, pretty_print=True, has_parent=True):
@@ -997,28 +999,28 @@ class DataSetType(AnnotableType):
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
             self._setID = value
-            self.validate_id_type(self._setID)  # validate type IDType
+            self.validate_id_type(self._setID)  # validate dim_type IDType
 
         value = find_attr_value_('action', node)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
             self._action = value
-            self.validate_ActionType(self._action)  # validate type ActionType
+            self.validate_ActionType(self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', node)
 
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
             self._reportingBeginDate = value
-            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate type BasicTimePeriodType
+            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('reportingEndDate', node)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
             self._reportingEndDate = value
-            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate type BasicTimePeriodType
+            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('validFromDate', node)
 
@@ -1050,7 +1052,7 @@ class DataSetType(AnnotableType):
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
             self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate type ObservationalTimePeriodType
+                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
 
         self._anyAttributes_ = {}
         Tag_pattern_ = re_.compile(r'({.*})?(.*)')
@@ -1058,8 +1060,8 @@ class DataSetType(AnnotableType):
         for name, value in attrs.items():
             real_name = Tag_pattern_.match(name).groups()[-1]
             if real_name not in already_processed:
-                if real_name == "type":
-                    real_name = "xsi:type"
+                if real_name == "dim_type":
+                    real_name = "xsi:dim_type"
                 self._anyAttributes_[real_name] = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
@@ -1084,3 +1086,116 @@ class DataSetType(AnnotableType):
             self._obs.append(obj_)
             obj_.original_tagname_ = 'Obs'
         super(DataSetType, self).build_children(child_, node, nodeName_, True)
+
+
+class TimeSeriesDataSetType(DataSetType):
+    """TimeSeriesDataSetType is the abstract type which defines the base
+    structure for any data structure definition specific time series based
+    data set. A derived data set type will be created that is specific to a
+    data structure definition. Unlike the base format, only one variation
+    of this is allowed for a data structure definition. This variation is
+    the time dimension as the observation dimension. Data is organised into
+    a collection of time series. Because this derivation is achieved using
+    restriction, data sets conforming to this type will inherently conform
+    to the base data set structure as well. In fact, data structure
+    specific here will be identical to data in the base data set when the
+    time dimension is the observation dimension, even for the derived data
+    set types. This means that the data contained in this structure can be
+    processed in exactly the same manner as the base structure. The same
+    rules for derivation as the base data set type apply to this
+    specialized data set."""
+    __hash__ = DataSetType.__hash__
+    subclass = None
+    superclass = DataSetType
+
+    def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None, structureRef=None, setID=None, action=None,
+                 reportingBeginDate=None, reportingEndDate=None, validFromDate=None, validToDate=None,
+                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Series=None, Obs=None,
+                 gds_collector_=None, **kwargs_):
+        super(TimeSeriesDataSetType, self).__init__(Annotations, REPORTING_YEAR_START_DAY, structureRef, setID, action,
+                                                    reportingBeginDate, reportingEndDate, validFromDate, validToDate,
+                                                    publicationYear, publicationPeriod, DataProvider, Group, Series,
+                                                    Obs,
+                                                    gds_collector_, **kwargs_)
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return TimeSeriesDataSetType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def validate_BasicTimePeriodType(self, value):
+        # Validate type common:BasicTimePeriodType, a restriction on None.
+        pass
+
+    def validate_ObservationalTimePeriodType(self, value):
+        # Validate type common:ObservationalTimePeriodType, a restriction on None.
+        pass
+
+
+class TimeSeriesType(SeriesType):
+    """TimeSeriesType defines an abstract structure which is used to group a
+    collection of observations which have a key in common, organised by
+    time. The key for a series is every dimension defined in the data
+    structure definition, save the time dimension. In addition to
+    observations, values can be provided for attributes which are
+    associated with the dimensions which make up this series key (so long
+    as the attributes do not specify a group attachment or also have an
+    relationship with the time dimension). It is possible for the series to
+    contain only observations or only attribute values, or both. The same
+    rules for derivation as the base series type apply to this specialized
+    series."""
+
+    __hash__ = AnnotableType.__hash__
+    subclass = None
+    superclass = AnnotableType
+
+    def __init__(self, Annotations=None, TIME_PERIOD=None, Obs=None, gds_collector_=None,
+                 **kwargs_):
+        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Obs, gds_collector_, **kwargs_)
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return TimeSeriesType(*args_, **kwargs_)
+
+    factory = staticmethod(factory)
+
+    def get_REPORTING_YEAR_START_DAY(self):
+        return self._reporting_year_start_day
+
+    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
+        self._reporting_year_start_day = None
+
+
+class TimeSeriesObsType(ObsType):
+    """TimeSeriesObsType defines the abstract structure of a time series
+    observation. The observation must be provided a value for the time
+    dimension. This time value should disambiguate the observation within
+    the series in which it is defined (i.e. there should not be another
+    observation with the same time value). The observation can contain an
+    observed value and/or attribute values. The same rules for derivation
+    as the base observation type apply to this specialized observation.The
+    TIME_PERIOD attribute is an explicit attribute for the time dimension.
+    This is declared in the base schema since it has a fixed identifier and
+    representation. Since this data is structured to be time series only,
+    this attribute is always required. If the time dimension specifies a
+    more specific representation of time the derived type will restrict the
+    type definition to the appropriate type."""
+    __hash__ = ObsType.__hash__
+    subclass = None
+    superclass = ObsType
+
+    def __init__(self, Annotations=None, type_=None, REPORTING_YEAR_START_DAY=None, OBS_VALUE=None,
+                 gds_collector_=None, **kwargs_):
+        super(TimeSeriesObsType, self).__init__(Annotations, type_, None, REPORTING_YEAR_START_DAY, OBS_VALUE,
+                                                gds_collector_, **kwargs_)
+
+    def get_TIME_PERIOD(self):
+        return self.TIME_PERIOD
+
+    def set_TIME_PERIOD(self, TIME_PERIOD):
+        self._time_period = None
+
+    def validate_ObservationalTimePeriodType(self, value):
+        # Validate type common:ObservationalTimePeriodType, a restriction on None.
+        pass

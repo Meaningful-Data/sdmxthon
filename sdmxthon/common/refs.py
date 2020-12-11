@@ -1,14 +1,14 @@
-from SDMXThon.utils.data_parser import DataParser, Validate_simpletypes_
-from SDMXThon.utils.xml_base import _cast, find_attr_value_, quote_attrib, encode_str_2_3, raise_parse_error
+from ..utils.data_parser import DataParser, Validate_simpletypes_
+from ..utils.xml_base import _cast, find_attr_value_, quote_attrib, encode_str_2_3, raise_parse_error
 
 
 class RefBaseType(DataParser):
-    """RefBaseType is an abstract base type the defines the basis for any set
+    """RefBaseType is an abstract base dim_type the defines the basis for any set
     of complete reference fields. This should be refined by derived types
     so that only the necessary fields are available and required as
     necessary. This can be used for both full and local references (when
     some of the values are implied from another context). A local reference
-    is indicated with the local attribute. The values in this type
+    is indicated with the local attribute. The values in this dim_type
     correspond directly to the components of the URN structure, and thus
     can be used to compose a URN when the local attribute value is false.
     As this is the case, any reference components which are not part of the
@@ -46,13 +46,13 @@ class RefBaseType(DataParser):
     the values.The class attribute indicates the class name of the object
     being referenced. This attribute allows any reference to be processed
     generically from this definition. References derived from this should
-    fix the value of this attribute to indicate the type of object that is
+    fix the value of this attribute to indicate the dim_type of object that is
     being referenced, or in the case that a reference which allows specific
     types of fields, the representation should be sub-setted to the
     appropriate values.The package attribute indicates the package name for
     the object being referenced. This attribute allows any reference to be
     processed generically from this definition. References derived from
-    this should fix the value of this attribute to indicate the type of
+    this should fix the value of this attribute to indicate the dim_type of
     object that is being referenced, or in the case that a reference which
     allows specific types of fields, the representation should be sub-
     setted to the appropriate values."""
@@ -150,15 +150,15 @@ class RefBaseType(DataParser):
         self._package = package
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type ObjectTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -188,15 +188,15 @@ class RefBaseType(DataParser):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type PackageTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -290,37 +290,37 @@ class RefBaseType(DataParser):
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
             self._agencyID = value
-            self.validate_nested_NC_name_id_type(self._agencyID)  # validate type NestedNCNameIDType
+            self.validate_nested_NC_name_id_type(self._agencyID)  # validate dim_type NestedNCNameIDType
 
         value = find_attr_value_('maintainableParentID', node)
         if value is not None and 'maintainableParentID' not in already_processed:
             already_processed.add('maintainableParentID')
             self._maintainableParentID = value
-            self.validate_id_type(self._maintainableParentID)  # validate type IDType
+            self.validate_id_type(self._maintainableParentID)  # validate dim_type IDType
 
         value = find_attr_value_('maintainableParentVersion', node)
         if value is not None and 'maintainableParentVersion' not in already_processed:
             already_processed.add('maintainableParentVersion')
             self._maintainableParentVersion = value
-            self.validate_version_type(self._maintainableParentVersion)  # validate type VersionType
+            self.validate_version_type(self._maintainableParentVersion)  # validate dim_type VersionType
 
         value = find_attr_value_('containerID', node)
         if value is not None and 'containerID' not in already_processed:
             already_processed.add('containerID')
             self._containerID = value
-            self.validate_nested_id_type(self._containerID)  # validate type NestedIDType
+            self.validate_nested_id_type(self._containerID)  # validate dim_type NestedIDType
 
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_nested_id_type(self._id)  # validate type NestedIDType
+            self.validate_nested_id_type(self._id)  # validate dim_type NestedIDType
 
         value = find_attr_value_('version', node)
         if value is not None and 'version' not in already_processed:
             already_processed.add('version')
             self._version = value
-            self.validate_version_type(self._version)  # validate type VersionType
+            self.validate_version_type(self._version)  # validate dim_type VersionType
 
         value = find_attr_value_('local', node)
         if value is not None and 'local' not in already_processed:
@@ -336,19 +336,19 @@ class RefBaseType(DataParser):
         if value is not None and 'class' not in already_processed:
             already_processed.add('class')
             self._class_ = value
-            self.validate_object_type_code_list_type(self._class_)  # validate type ObjectTypeCodelistType
+            self.validate_object_type_code_list_type(self._class_)  # validate dim_type ObjectTypeCodelistType
 
         value = find_attr_value_('package', node)
         if value is not None and 'package' not in already_processed:
             already_processed.add('package')
             self._package = value
-            self.validate_package_type_code_list_type(self._package)  # validate type PackageTypeCodelistType
+            self.validate_package_type_code_list_type(self._package)  # validate dim_type PackageTypeCodelistType
 
 
 # end class RefBaseType
 
 class MaintainableRefBaseType(RefBaseType):
-    """MaintainableRefBaseType is an abstract base type for referencing a
+    """MaintainableRefBaseType is an abstract base dim_type for referencing a
     maintainable object."""
     __hash__ = RefBaseType.__hash__
     subclass = None
@@ -367,15 +367,15 @@ class MaintainableRefBaseType(RefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type MaintainableTypeCodelistType, a restriction on ObjectTypeCodelistType.
+        # Validate dim_type MaintainableTypeCodelistType, a restriction on ObjectTypeCodelistType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
 
             value = value
@@ -395,15 +395,15 @@ class MaintainableRefBaseType(RefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type PackageTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
 
             value = value
@@ -421,7 +421,7 @@ class MaintainableRefBaseType(RefBaseType):
 
 
 class StructureOrUsageRefBaseType(MaintainableRefBaseType):
-    """StructureOrUsageRefBaseType is an abstract base type for referencing a
+    """StructureOrUsageRefBaseType is an abstract base dim_type for referencing a
     structure or structure usage."""
     __hash__ = MaintainableRefBaseType.__hash__
     subclass = None
@@ -440,15 +440,15 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type StructureOrUsageTypeCodelistType, a restriction on MaintainableTypeCodelistType.
+        # Validate dim_type StructureOrUsageTypeCodelistType, a restriction on MaintainableTypeCodelistType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
 
             value = value
@@ -464,15 +464,15 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
+        # Validate dim_type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
 
             value = value
@@ -491,7 +491,7 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
 # end class StructureOrUsageRefBaseType
 
 class StructureRefBaseType(StructureOrUsageRefBaseType):
-    """StructureRefBaseType is an abstract base type for referencing a
+    """StructureRefBaseType is an abstract base dim_type for referencing a
     structure."""
     __hash__ = StructureOrUsageRefBaseType.__hash__
     subclass = None
@@ -531,14 +531,14 @@ class DataStructureRefType(StructureRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type StructureTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
+        # Validate dim_type StructureTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -554,14 +554,14 @@ class DataStructureRefType(StructureRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
+        # Validate dim_type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -580,7 +580,7 @@ class DataStructureRefType(StructureRefBaseType):
 # end class DataStructureRefType
 
 class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
-    """StructureUsageRefBaseType is an abstract base type for referencing a
+    """StructureUsageRefBaseType is an abstract base dim_type for referencing a
     structure usage."""
     __hash__ = StructureOrUsageRefBaseType.__hash__
     subclass = None
@@ -599,14 +599,14 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type StructureUsageTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
+        # Validate dim_type StructureUsageTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
             value = value
 
@@ -621,14 +621,14 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
+        # Validate dim_type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 result = False
 
             value = value
@@ -664,14 +664,14 @@ class DataflowRefType(StructureUsageRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type StructureUsageTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
+        # Validate dim_type StructureUsageTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -687,14 +687,14 @@ class DataflowRefType(StructureUsageRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
+        # Validate dim_type StructurePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -731,14 +731,14 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type MaintainableTypeCodelistType, a restriction on ObjectTypeCodelistType.
+        # Validate dim_type MaintainableTypeCodelistType, a restriction on ObjectTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -758,14 +758,14 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type PackageTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -785,7 +785,7 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
 # end class ProvisionAgreementRefType
 
 class ChildObjectRefBaseType(RefBaseType):
-    """ChildObjectRefBaseType is an abstract base type for referencing any
+    """ChildObjectRefBaseType is an abstract base dim_type for referencing any
     child object defined directly within a maintainable object."""
     __hash__ = RefBaseType.__hash__
     subclass = None
@@ -804,14 +804,14 @@ class ChildObjectRefBaseType(RefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type ObjectTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -840,14 +840,14 @@ class ChildObjectRefBaseType(RefBaseType):
             return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type PackageTypeCodelistType, a restriction on xs:string.
+        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -867,7 +867,7 @@ class ChildObjectRefBaseType(RefBaseType):
 # end class ChildObjectRefBaseType
 
 class ItemRefBaseType(ChildObjectRefBaseType):
-    """ItemRefBaseType is an abstract base type for referencing an item within
+    """ItemRefBaseType is an abstract base dim_type for referencing an item within
     an item scheme.The maintainableParentID references the item scheme in
     which the item being referenced is defined.The
     maintainableParentVersion attribute references the version of the item
@@ -890,14 +890,14 @@ class ItemRefBaseType(ChildObjectRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type ItemTypeCodelistType, a restriction on ObjectTypeCodelistType.
+        # Validate dim_type ItemTypeCodelistType, a restriction on ObjectTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -914,14 +914,14 @@ class ItemRefBaseType(ChildObjectRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type ItemSchemePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
+        # Validate dim_type ItemSchemePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -939,7 +939,7 @@ class ItemRefBaseType(ChildObjectRefBaseType):
 
 
 class OrganisationRefBaseType(ItemRefBaseType):
-    """OrganisationRefBaseType is an abstract base type which references an
+    """OrganisationRefBaseType is an abstract base dim_type which references an
     organisation from within a organisation scheme. Reference fields are
     required for both the scheme and the organisation.The
     maintainableParentID references the organisation scheme in which the
@@ -963,15 +963,15 @@ class OrganisationRefBaseType(ItemRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type OrganisationTypeCodelistType, a restriction on ItemTypeCodelistType.
+        # Validate dim_type OrganisationTypeCodelistType, a restriction on ItemTypeCodelistType.
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -987,14 +987,14 @@ class OrganisationRefBaseType(ItemRefBaseType):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate type ItemSchemePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
+        # Validate dim_type ItemSchemePackageTypeCodelistType, a restriction on PackageTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
@@ -1031,14 +1031,14 @@ class DataProviderRefType(OrganisationRefBaseType):
     factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
-        # Validate type OrganisationTypeCodelistType, a restriction on ItemTypeCodelistType.
+        # Validate dim_type OrganisationTypeCodelistType, a restriction on ItemTypeCodelistType.
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple type (str)' % {"value": value,
-                                                                                                  "lineno": lineno, })
+                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
+                                                                                                      "lineno": lineno, })
                 return False
 
             value = value
