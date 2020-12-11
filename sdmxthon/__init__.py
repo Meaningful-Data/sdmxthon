@@ -32,6 +32,8 @@ def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
 
 def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet,
                      validate_data=False):
+    if len(datasetList) == 0:
+        return None
     message = generate_message(datasetList, dsd_dict, header, dataset_type, validate_data)
     if message == None:
         return None

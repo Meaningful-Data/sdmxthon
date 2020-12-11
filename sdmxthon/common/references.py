@@ -181,7 +181,7 @@ class DataStructureReferenceType(StructureReferenceBaseType):
             value_ = self.gds_validate_string(value_, node, 'URN')
             self._urn = value_
             self._urn_nsprefix_ = child_.prefix
-        elif nodeName_ == 'Structure':
+        elif nodeName_ == 'Structure' or nodeName_ == 'StructureUsage':
             obj_ = DataStructureRefType.factory(parent_object_=self)
             expression = './Ref'
             ref = child_.xpath(expression)
@@ -189,7 +189,17 @@ class DataStructureReferenceType(StructureReferenceBaseType):
                 obj_.set_agencyID(ref[0].attrib['agencyID'])
                 obj_.set_id(ref[0].attrib['id'])
                 obj_.set_version(ref[0].attrib['version'])
-                obj_.set_class(ref[0].attrib['class'])
+                if 'class' in ref[0].attrib.keys():
+                    obj_.set_class(ref[0].attrib['class'])
+            elif len(ref) == 0:
+                expression = './URN'
+                record = child_.xpath(expression)
+                if len(record) == 1:
+                    urn_aux = record[0].text
+                    aux = urn_aux.split("=", 1)[1]
+                    obj_.set_version(aux.split("(", 1)[1][:-1])
+                    obj_.set_agencyID(aux.split(":", 1)[0])
+                    obj_.set_id(aux.split(":", 1)[1].split("(", 1)[0])
             self._ref = obj_
             obj_.original_tag_name_ = 'Ref'
 

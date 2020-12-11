@@ -6,7 +6,7 @@ from lxml import etree
 from SDMXThon import datasetListToXML, headerCreation, xmlToDatasetList, DatasetType
 from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
-pathToDataFile = 'SDMXThon/test/ecu/IRIS/R017_ALE.csv'
+pathToDataFile = 'SDMXThon/test/RBI_Import/gen_AllDimensions.xml'
 pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/ECB_SHS6_metadata.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
@@ -17,13 +17,12 @@ pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
 pathTimeSeriesGen = 'SDMXThon/test/TimeSeries/test_ecb_gen.xml'
-pathTimeSeriesSpe = 'SDMXThon/test/TimeSeries/test_ecb_xs.xml'
 pathTimeSeriesGenTest = 'SDMXThon/outputTests/time_gen.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
 pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTestDSD.xml'
 
-pathSavetoJSON = 'SDMXThon/outputTests/output.json'
+pathSavetoJSON = 'SDMXThon/outputTests/sample.json'
 # create logger
 logger = logging.getLogger("logging_tryout2")
 logger.setLevel(logging.DEBUG)
@@ -153,7 +152,7 @@ def main():
     """
 
     logger.debug('Inicio')
-    root = etree.parse(pathToMetadataTimeSeries)
+    root = etree.parse(pathToMetadataFile)
     codelists = get_codelist_model(root)
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
@@ -168,11 +167,11 @@ def main():
         f.write(serial)
     """
     # Testing creating message with dsds
-    dataset_list = xmlToDatasetList(pathTimeSeriesGen, dsds, DatasetType.GenericTimeSeriesDataSet)
+    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
     logger.debug('End reading')
-    header = headerCreation(id_='test', dataset_type=DatasetType.GenericTimeSeriesDataSet)
-    datasetListToXML(dataset_list, dsds, pathTimeSeriesGenTest, header,
-                     dataset_type=DatasetType.GenericTimeSeriesDataSet, validate_data=True)
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
+    datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
+                     dataset_type=DatasetType.GenericDataSet, validate_data=False)
 
 
 def get_size(obj, seen=None):

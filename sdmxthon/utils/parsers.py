@@ -2,6 +2,8 @@ import copy
 import logging
 from typing import Dict
 
+import numpy as np
+
 from SDMXThon.common.references import DataflowReferenceType
 from .enums import DatasetType
 from ..common.dataSet import DataSet
@@ -979,7 +981,10 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datas
         structure.set_namespace(dsd.uri)
     else:
         structure.set_namespace(None)
-    structure.set_dimensionAtObservation(dataset.dataset_attributes.get('dimensionAtObservation'))
+    if datasetType == DatasetType.GenericDataSet or datasetType == DatasetType.StructureDataSet:
+        structure.set_dimensionAtObservation("AllDimensions")
+    else:
+        structure.set_dimensionAtObservation(dataset.dataset_attributes.get('dimensionAtObservation'))
     structure_usage = DataflowReferenceType()
     structure_usage.original_tag_name_ = "Structure"
     structure_usage.set_ns_def_("common")
@@ -1012,6 +1017,9 @@ def parse_obs_generic_from_dsd(data_frame, dsd: DataStructureDefinition, validat
         df = data_frame.iloc[row, :]
         for element in list_keys:
             aux = df[element]
+
+            if aux is np.nan:
+                continue
 
             if element in series_list_keys:
                 if (aux != '' or aux is not None) and validate_data:
@@ -1084,6 +1092,8 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition, valid
         for element in obs_list_keys:
             if element in df.keys():
                 aux = df[element]
+                if aux is np.nan:
+                    continue
                 if (aux != '' or aux is not None) and validate_data:
                     if element in dsd.dimensionCodes and not validate_observation_value_from_dsd(aux, element, dsd):
                         # TODO Value not found in Codelist (validate_data)
@@ -1098,7 +1108,7 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition, valid
             for element in series_list_keys:
                 if element in list_keys:
                     aux = df[element]
-                    if aux == '' or aux is None:
+                    if aux == '' or aux is None or aux is np.nan:
                         aux = "N_A"
 
                     obs_attributes[element] = aux
@@ -1119,15 +1129,18 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
     all_dataset_valid = True
     structures = []
 
+
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         message = GenericDataType()
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
         message = StructureSpecificDataType()
 
     for element in dataset_list:
-        dsd: DataStructureDefinition = dsd_dict[id_creator(element.agencyID, element.code, element.version)]
+        dsd: DataStructureDefinition = dsd_dict[
+            id_creator(element.agencyID, element.dataset_attributes.get('setId'), element.version)]
         data_set = None
         obs_list = None
+
         if validate_data:
             wrong_attributes = validate_dataset_attributes_from_dsd(dsd, element)
             if len(wrong_attributes.get("missing_attributes")) > 0 or len(
@@ -1140,6 +1153,7 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type, validate_data
         if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
             if dataset_type == DatasetType.GenericTimeSeriesDataSet:
                 data_set = GenericTimeSeriesDataSetType()
+
             else:
                 data_set = GenericDataSetType()
             obs_list = parse_obs_generic_from_dsd(element.obs, dsd, validate_data)

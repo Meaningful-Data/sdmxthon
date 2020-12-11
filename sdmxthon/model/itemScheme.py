@@ -24,6 +24,8 @@ class Item(NameableArtefact):
 
         if scheme is not None:
             self._unique_scheme = True
+        else:
+            self._unique_scheme = False
         self.scheme = scheme
 
         self.parent = parent
@@ -70,8 +72,6 @@ class Item(NameableArtefact):
     @scheme.setter
     def scheme(self, value):
         if value is None:
-            if self._scheme is not None:
-                del self._scheme._items[self.id]
             self._scheme = value
         elif value.__class__.__name__ == self._schemeType:
             if not self._unique_scheme:
