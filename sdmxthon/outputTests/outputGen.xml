@@ -70,11 +70,6 @@
                 <Ref agencyID="RBI" id="LNA" version="1.0" class="DataStructure"/>
             </common:Structure>
         </message:Structure>
-        <message:Structure structureID="LNA" dimensionAtObservation="AllDimensions">
-            <common:Structure>
-                <Ref agencyID="RBI" id="LNA" version="1.0" class="DataStructure"/>
-            </common:Structure>
-        </message:Structure>
         <message:Structure structureID="LOUE" dimensionAtObservation="AllDimensions">
             <common:Structure>
                 <Ref agencyID="RBI" id="LOUE" version="1.0" class="DataStructure"/>

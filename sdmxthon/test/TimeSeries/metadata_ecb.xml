@@ -13,42 +13,6 @@
         <mes:Receiver id="not_supplied"/>
     </mes:Header>
     <mes:Structures>
-        <str:OrganisationSchemes>
-            <str:AgencyScheme urn="urn:sdmx:org.sdmx.infomodel.base.AgencyScheme=SDMX:AGENCIES(1.0)"
-                              isExternalReference="false" agencyID="SDMX" id="AGENCIES" isFinal="false" version="1.0">
-                <com:Name xml:lang="en">SDMX Agency Scheme</com:Name>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=SDMX" id="SDMX">
-                    <com:Name xml:lang="en">SDMX</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=ECB" id="ECB">
-                    <com:Name xml:lang="en">European Central Bank</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=BIS" id="BIS">
-                    <com:Name xml:lang="en">Bank for International Settlements</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=IMF" id="IMF">
-                    <com:Name xml:lang="en">International Monetary Fund</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=ESTAT" id="ESTAT">
-                    <com:Name xml:lang="en">Eurostat</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=EUROSTAT" id="EUROSTAT">
-                    <com:Name xml:lang="en">Eurostat</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=OECD" id="OECD">
-                    <com:Name xml:lang="en">Organisation for Economic Co-operation and Development</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=DE_BBK" id="DE_BBK">
-                    <com:Name xml:lang="en">Bundesbank</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=OECD2" id="OECD2">
-                    <com:Name xml:lang="en">Organisation for Economic Co-operation and Development (PULL)</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=IMF2" id="IMF2">
-                    <com:Name xml:lang="en">International Monetary Fund (PULL)</com:Name>
-                </str:Agency>
-            </str:AgencyScheme>
-        </str:OrganisationSchemes>
         <str:Codelists>
             <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ECB:CL_ADJUSTMENT(1.0)"
                           isExternalReference="false" agencyID="ECB" id="CL_ADJUSTMENT" isFinal="false" version="1.0">

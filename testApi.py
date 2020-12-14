@@ -10,16 +10,15 @@ pathToDataFile = 'SDMXThon/test/RBI_Import/gen_AllDimensions.xml'
 pathToMetadataFile = 'SDMXThon/test/ecu/IRIS/RBI_DSD(1.0)_20052020.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/ECB_SHS6_metadata.xml'
 # pathToMetadataFile = 'SDMXThon/metadataTests/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
-pathToMetadataTimeSeries = 'SDMXThon/test/TimeSeries/metadata_ecb.xml'
-pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
+pathToMetadataTimeSeries = 'SDMXThon/test/TimeSeries/metadata_antonio.xml'
+pathToIssueAntonio = 'SDMXThon/test/TimeSeries/test_antonio.xml'
+# pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 
 # pathSaveToGeneric = 'SDMXThon/test/ecu/IRIS/gen_DMID.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
 pathTimeSeriesGen = 'SDMXThon/test/TimeSeries/test_ecb_gen.xml'
-pathTimeSeriesSpe = 'SDMXThon/test/TimeSeries/test_ecb_xs.xml'
 pathTimeSeriesGenTest = 'SDMXThon/outputTests/time_gen.xml'
-pathTimeSeriesSpeTest = 'SDMXThon/outputTests/time_xs.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
 pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTestDSD.xml'
@@ -41,6 +40,7 @@ ch.setFormatter(formatter)
 
 # add ch to logger
 logger.addHandler(ch)
+
 
 def main():
     """
@@ -168,10 +168,10 @@ def main():
         f.write(serial)
     """
     # Testing creating message with dsds
-    dataset_list = xmlToDatasetList(pathTimeSeriesSpe, dsds, dataset_type=DatasetType.StructureTimeSeriesDataSet)
+    dataset_list = xmlToDatasetList(pathToIssueAntonio, dsds, DatasetType.GenericTimeSeriesDataSet)
     logger.debug('End reading')
     header = headerCreation(id_='test', dataset_type=DatasetType.GenericTimeSeriesDataSet)
-    datasetListToXML(dataset_list, dsds, pathTimeSeriesGenTest, header,
+    datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
                      dataset_type=DatasetType.GenericTimeSeriesDataSet)
 
 
