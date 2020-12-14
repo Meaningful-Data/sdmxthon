@@ -1080,7 +1080,7 @@
              OBS_VALUE="2625.59" Currency="INR"/>
         <Obs Particulars="N_A" Area_Operation="GL_OP" DMID="S121" Portfolio_Type="N_A" RA_LIST="N_A"
              Asset_Qual_Class="N_A" G_Instr="OTHAPSEC" Measure_Type="TOTAL" NAME="N_A" TIME_PERIOD="2019-Q2"
-             OBS_VALUE="2664.28" Currency="INR"></Obs>
+             OBS_VALUE="2664.28" Currency="INR"/>
     </message:DataSet>
     <message:DataSet FREQ="Q" AUDST="AUDITED" DEPENDENCY_TYPE="INDEPENDENT" ss:dataScope="DataStructure"
                      xsi:type="ns3:DataSetType" ss:structureRef="RBI_LNA_1_0" validFromDate="2020-05-25T11:58:49"

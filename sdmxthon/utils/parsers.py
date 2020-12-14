@@ -595,17 +595,17 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
                 obs_attributes_codes.append(record.id)
             elif isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
                 attributes_codes.append(record.id)
-
+    logger.debug("Series to parse from DSD %s: %d (Generic)" % (dsd.id, len(obs)))
     for s in obs:
         count = count + 1
         if 'Data' not in s.keys() or 'Series' not in s.keys():
             # TODO Warning series in position %d couldn´t be parsed. Missing Data or Series
             continue
-        series_data = s.get('Series')
-        data_frame = s.get('Data')
+        series_data = s.get('Series').copy()
+        data_frame = s.get('Data').copy()
         list_keys = data_frame.keys()
         iterations = len(data_frame)
-
+        series_ = None
         series_ = SeriesType()
         series_attr = ValuesType()
         series_attr.original_tag_name_ = "Attributes"
@@ -634,7 +634,6 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
 
         series_.set_SeriesKey(series_key)
 
-        logger.debug("Iterations for dataset %s: %d (Generic)" % (dsd.id, iterations))
         for row in range(iterations):
             obs_ = ObsType()
             obs_.original_tag_name_ = "Obs"

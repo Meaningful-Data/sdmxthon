@@ -133,13 +133,14 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
             elif key in dataset_attributes_keys:
                 item.dataset_attributes[key] = value
 
+        obs_attributes_keys = []
+        for record in dsd.attributeDescriptor.components.values():
+            if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
+                obs_attributes_keys.append(record.id)
+
         if len(e._Series) > 0:
             series = {}
             obs = []
-            obs_attributes_keys = []
-            for record in dsd.attributeDescriptor.components.values():
-                if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
-                    obs_attributes_keys.append(record.id)
             for i in e._Series:
                 obs_dict = {}
                 series_key = {}
@@ -162,17 +163,27 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
                             else:
                                 series[o] = [text]
                 check_empty(series)
-                check_length(series)
                 obs_dict['Data'] = pd.DataFrame.from_dict(series)
                 obs.append(obs_dict.copy())
             item.obs = obs
         elif len(e._obs) > 0:
             for i in e._obs:
+                list_keys = []
                 for key, value in i.gds_element_tree_node_.attrib.items():
+                    list_keys.append(key)
                     if key in obsDict.keys():
                         obsDict[key].append(value)
                     else:
                         obsDict[key] = [value]
+
+                for o in obs_attributes_keys:
+                    if o not in list_keys:
+                        text = np.nan
+                        if o in obsDict.keys():
+                            obsDict[o].append(text)
+                        else:
+                            obsDict[o] = [text]
+            check_empty(obsDict)
             item.obs = pd.DataFrame.from_dict(obsDict.copy())
         dataSetList.append(item)
 
@@ -250,7 +261,6 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                     item.attached_attributes[key] = value
 
         if len(e._Series) > 0:
-            series = {}
             obs = []
             obs_attributes_keys = []
             for record in dsd.attributeDescriptor.components.values():
@@ -260,7 +270,7 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
             for i in e._Series:
                 obs_dict = {}
                 series_key = {}
-
+                series = {}
                 if i._Attributes is not None:
                     for m in i._Attributes.Value:
                         key = m.gds_element_tree_node_.attrib.get('id')
@@ -347,9 +357,6 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                 for o in obs_attributes_keys:
                     if o not in list_keys:
                         text = np.nan
-                        if o in dsd.dimensionCodes:
-                            # TODO Warning missing dimension information
-                            print(j)
                         if o in obsDict.keys():
                             obsDict[o].append(text)
                         else:

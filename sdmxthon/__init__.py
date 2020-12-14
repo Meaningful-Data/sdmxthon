@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import date
+from datetime import date, datetime
 
 import pandas as pd
 
@@ -205,7 +205,7 @@ def check_DA_keys(attributes: dict, code):
 
 def headerCreation(id_: str, test: bool = False,
                    senderId: str = "Unknown", receiverId: str = "not_supplied",
-                   datetimeStr='2020-09-10T12:00:00.000',
+                   datetimeStr='',
                    dataset_type=DatasetType.StructureDataSet):
     if dataset_type == DatasetType.GenericDataSet:
         header = GenericDataHeaderType()
@@ -216,11 +216,14 @@ def headerCreation(id_: str, test: bool = False,
     elif dataset_type == DatasetType.StructureTimeSeriesDataSet:
         header = StructureSpecificTimeSeriesDataHeaderType()
     else:
-        return None
+        raise ValueError('Invalid Dataset type')
 
     header.set_ID(id_)
     header.set_Test(header.gds_format_boolean(test))
-    header.set_Prepared(header.gds_parse_datetime(datetimeStr))
+    if datetimeStr == '':
+        header.set_Prepared(datetime.now())
+    else:
+        header.set_Prepared(header.gds_parse_datetime(datetimeStr))
 
     sender = SenderType()
     sender.set_id(senderId)
