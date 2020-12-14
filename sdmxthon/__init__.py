@@ -20,7 +20,10 @@ logger.setLevel(logging.DEBUG)
 def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
     datasetList = list()
 
-    objStructure = load_AllDimensions(path_to_xml, dataset_type)
+    if dataset_type == None:
+        print('dataset type None')
+
+    objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         datasetList = sdmxGenToDataSet(objStructure, dsd_dict)
@@ -30,11 +33,10 @@ def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
     return datasetList
 
 
-def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet,
-                     validate_data=False):
+def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet):
     if len(datasetList) == 0:
         return None
-    message = generate_message(datasetList, dsd_dict, header, dataset_type, validate_data)
+    message = generate_message(datasetList, dsd_dict, header, dataset_type)
     if message == None:
         return None
     if pathSaveTo == '':

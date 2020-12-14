@@ -17,7 +17,9 @@ pathToSDMXCodelist = 'SDMXThon/metadataTests/sampleFiles/SDMXcodelist.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToGeneric2 = 'SDMXThon/outputTests/outputGenTestDSD.xml'
 pathTimeSeriesGen = 'SDMXThon/test/TimeSeries/test_ecb_gen.xml'
+pathTimeSeriesSpe = 'SDMXThon/test/TimeSeries/test_ecb_xs.xml'
 pathTimeSeriesGenTest = 'SDMXThon/outputTests/time_gen.xml'
+pathTimeSeriesSpeTest = 'SDMXThon/outputTests/time_xs.xml'
 
 pathSaveToStructure = 'SDMXThon/outputTests/demo_structure.xml'
 pathSaveToStructure2 = 'SDMXThon/outputTests/outputSpeTestDSD.xml'
@@ -39,7 +41,6 @@ ch.setFormatter(formatter)
 
 # add ch to logger
 logger.addHandler(ch)
-
 
 def main():
     """
@@ -152,7 +153,7 @@ def main():
     """
 
     logger.debug('Inicio')
-    root = etree.parse(pathToMetadataFile)
+    root = etree.parse(pathToMetadataTimeSeries)
     codelists = get_codelist_model(root)
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
@@ -167,11 +168,11 @@ def main():
         f.write(serial)
     """
     # Testing creating message with dsds
-    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
+    dataset_list = xmlToDatasetList(pathTimeSeriesSpe, dsds, dataset_type=DatasetType.StructureTimeSeriesDataSet)
     logger.debug('End reading')
-    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
-    datasetListToXML(dataset_list, dsds, pathSaveToGeneric2, header,
-                     dataset_type=DatasetType.GenericDataSet, validate_data=False)
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericTimeSeriesDataSet)
+    datasetListToXML(dataset_list, dsds, pathTimeSeriesGenTest, header,
+                     dataset_type=DatasetType.GenericTimeSeriesDataSet)
 
 
 def get_size(obj, seen=None):

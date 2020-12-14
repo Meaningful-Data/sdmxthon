@@ -7,6 +7,7 @@ import pandas as pd
 
 from ..common.dataSet import DataSet
 from ..message.generic import GenericDataType, StructureSpecificDataType
+from ..model.structure import PrimaryMeasure
 from ..utils.enums import DatasetType
 from ..utils.parsers import id_creator
 from ..utils.xml_base import GdsCollector_, get_required_ns_prefix_defs, parsexml_, makeWarnings
@@ -34,10 +35,10 @@ def load_AllDimensions(inFileName, print_warnings=True, datasetType=DatasetType.
     parser = None
     doc = parsexml_(inFileName, parser)
     rootNode = doc.getroot()
-    if datasetType == DatasetType.GenericDataSet:
+    if datasetType == DatasetType.GenericDataSet or datasetType == DatasetType.GenericTimeSeriesDataSet:
         rootTag = 'GenericData'
         rootClass = GenericDataType
-    elif datasetType == DatasetType.StructureDataSet:
+    elif datasetType == DatasetType.StructureDataSet or datasetType == DatasetType.StructureTimeSeriesDataSet:
         rootTag = 'StructureSpecificData'
         rootClass = StructureSpecificDataType
     else:
@@ -76,6 +77,7 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
 
     for e in xmlObj.DataSet:
         strRef = e._structureRef
+
         if strRef is None:
             strRef = e.gds_element_tree_node_.attrib[
                 '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}structureRef']
@@ -114,12 +116,12 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
         item.dataset_attributes['setId'] = dsd.id
 
         dimObs = ''
-        """
+
         for j in xmlObj.Header._structure:
             if j.gds_element_tree_node_.attrib['structureID'] == strRef \
                     and j.gds_element_tree_node_.attrib['dimensionAtObservation']:
                 dimObs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
-        """
+
         if dimObs == '':
             item.dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
         else:
@@ -133,23 +135,19 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
 
         if len(e._Series) > 0:
             series = {}
+            obs = []
             obs_attributes_keys = []
-            for record in dsd.attributeCodes:
-                if record not in dsd.dimensionCodes:
-                    obs_attributes_keys.append(record)
+            for record in dsd.attributeDescriptor.components.values():
+                if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
+                    obs_attributes_keys.append(record.id)
             for i in e._Series:
+                obs_dict = {}
                 series_key = {}
                 for key, value in i.gds_element_tree_node_.attrib.items():
                     series_key[key] = value
+                obs_dict['Series'] = series_key
                 for k in i._obs:
                     list_keys = []
-                    for key, value in series_key.items():
-                        list_keys.append(key)
-                        if key in series.keys():
-                            series[key].append(value)
-                        else:
-                            series[key] = [value]
-
                     for key, value in k.gds_element_tree_node_.attrib.items():
                         list_keys.append(key)
                         if key in series.keys():
@@ -163,8 +161,11 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
                                 series[o].append(text)
                             else:
                                 series[o] = [text]
-            check_empty(series)
-            item.obs = pd.DataFrame.from_dict(series)
+                check_empty(series)
+                check_length(series)
+                obs_dict['Data'] = pd.DataFrame.from_dict(series)
+                obs.append(obs_dict.copy())
+            item.obs = obs
         elif len(e._obs) > 0:
             for i in e._obs:
                 for key, value in i.gds_element_tree_node_.attrib.items():
@@ -230,12 +231,12 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
         item.dataset_attributes['action'] = e._action
         item.dataset_attributes['setId'] = dsd.id
         dimObs = ''
-        """
+
         for j in xmlObj.Header._structure:
             if j.gds_element_tree_node_.attrib['structureID'] == e._structureRef and j.gds_element_tree_node_.attrib[
                 'dimensionAtObservation']:
                 dimObs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
-        """
+
         if dimObs == '':
             item.dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
         else:
@@ -250,34 +251,29 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
 
         if len(e._Series) > 0:
             series = {}
+            obs = []
             obs_attributes_keys = []
-            for record in dsd.attributeCodes:
-                if record not in dsd.dimensionCodes:
-                    obs_attributes_keys.append(record)
+            for record in dsd.attributeDescriptor.components.values():
+                if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
+                    obs_attributes_keys.append(record.id)
 
             for i in e._Series:
+                obs_dict = {}
                 series_key = {}
 
                 if i._Attributes is not None:
                     for m in i._Attributes.Value:
                         key = m.gds_element_tree_node_.attrib.get('id')
                         value = m.gds_element_tree_node_.attrib.get('value')
-                        if key in obs_attributes_keys:
-                            series_key[key] = value
+                        series_key[key] = value
 
                 for j in i.SeriesKey.Value:
                     key = j.gds_element_tree_node_.attrib.get('id')
                     value = j.gds_element_tree_node_.attrib.get('value')
                     series_key[key] = value
-
+                obs_dict['Series'] = series_key
                 for k in i._obs:
                     list_keys = []
-                    for key, value in series_key.items():
-                        list_keys.append(key)
-                        if key in series.keys():
-                            series[key].append(value)
-                        else:
-                            series[key] = [value]
 
                     key = item.dataset_attributes['dimensionAtObservation']
                     value = k.ObsDimension.gds_element_tree_node_.attrib.get('value')
@@ -312,7 +308,9 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                             else:
                                 series[o] = [text]
                 check_empty(series)
-            item.obs = pd.DataFrame.from_dict(series)
+                obs_dict['Data'] = pd.DataFrame.from_dict(series)
+                obs.append(obs_dict.copy())
+            item.obs = obs
         elif len(e._obs) > 0:
             obsDict = {}
             obs_attributes_keys = []

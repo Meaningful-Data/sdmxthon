@@ -656,7 +656,7 @@ class DataSetType(AnnotableType):
         self._reportingBeginDate_nsprefix_ = None
         self._reportingEndDate = reportingEndDate
         self._reportingEndDate_nsprefix_ = None
-        self._namespace_prefix = 'data'
+        self._namespace_prefix = 'message'
         self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
         self._name = "DataSetType"
 

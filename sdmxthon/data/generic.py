@@ -412,8 +412,8 @@ class SeriesType(AnnotableType):
         else:
             self._obs = Obs
         self._obs_nsprefix_ = None
-        self._namespacedef = 'xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespaceprefix = 'data'
+        self._namespace_def = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
+        self._namespace_prefix = 'generic'
         self._name = 'SeriesType'
 
     def factory(*args_, **kwargs_):
@@ -637,8 +637,8 @@ class ObsType(AnnotableType):
         self._Attributes = Attributes
         self._Attributes_nsprefix_ = None
         self._name = 'ObsType'
-        self._namespacedef = 'xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespaceprefix = 'data'
+        self._namespacedef = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
+        self._namespaceprefix = 'generic'
         self.original_tagname_ = 'Obs'
 
     def factory(*args_, **kwargs_):
