@@ -1,10 +1,8 @@
 import logging
+import pickle
 import sys
 
-from lxml import etree
-
 from SDMXThon import datasetListToXML, headerCreation, xmlToDatasetList, DatasetType
-from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 # create logger
 logger = logging.getLogger("logging_tryout2")
@@ -33,19 +31,20 @@ pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_200
 
 
 def main():
+    """
     root = etree.parse(pathToMetadataFile)
 
     codelists = get_codelist_model(root)
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
+    """
+    with open(pathDSDS, 'rb') as f:
+        dsds = pickle.loads(f.read())
 
-    # with open(pathDSDS, 'rb') as f:
-    #    dsds = pickle.loads(f.read())
-
-    dataset_list = xmlToDatasetList(pathToDataFile, dsds, DatasetType.GenericDataSet)
-    header = headerCreation(id_='test', dataset_type=DatasetType.StructureDataSet)
-    datasetListToXML(dataset_list, dsds, pathSaveToStructure, header,
-                     dataset_type=DatasetType.StructureDataSet)
+    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
+    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
+    datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
+                     dataset_type=DatasetType.GenericDataSet)
 
 
 def get_size(obj, seen=None):

@@ -13,9 +13,9 @@ from ..utils.parsers import id_creator
 from ..utils.xml_base import GdsCollector_, get_required_ns_prefix_defs, parsexml_, makeWarnings
 
 try:
-    from lxml import etree as etree_, etree
+    from lxml import etree as etree
 except ImportError:
-    from xml.etree import ElementTree as etree_, etree
+    from xml.etree import ElementTree as etree
 
 CapturedNsmap_ = {}
 print_warnings = True
