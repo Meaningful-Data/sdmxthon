@@ -54,7 +54,7 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None) -> dict:
         raise ValueError('Invalid Dataset Type')
 
 
-def getMetadata(pathToMetadata: str) -> dict:
+def getMetadata(pathToMetadata) -> dict:
     root = etree.parse(pathToMetadata)
 
     codelists = get_codelist_model(root)
@@ -126,10 +126,10 @@ def readJSON(pathToJSON, dsds) -> dict:
         dsdid = id_creator(agencyID, code, version)
         if dsdid not in dsds.keys():
             raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
-        datasets[e.code] = DataSetCreator(dsd=dsds[dsdid],
-                                          dataset_attributes=e.get('dataset_attributes'),
-                                          attached_attributes=e.get('attached_attributes'),
-                                          obs=e.get('obs'))
+        datasets[code] = DataSetCreator(dsd=dsds[dsdid],
+                                        dataset_attributes=e.get('dataset_attributes'),
+                                        attached_attributes=e.get('attached_attributes'),
+                                        obs=e.get('obs'))
     return datasets
 
 

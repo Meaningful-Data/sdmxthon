@@ -1,5 +1,6 @@
 import copy
 import logging
+from datetime import datetime
 from typing import Dict
 
 import numpy as np
@@ -750,7 +751,8 @@ def generate_datasets_message(message: Message):
     dataset_type = message.type
 
     header = message.header
-    header.set_Prepared(header.gds_parse_datetime(header.get_Prepared()))
+    if isinstance(header.get_Prepared(), str):
+        header.set_Prepared(datetime.now())
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         messageXML = GenericDataType()

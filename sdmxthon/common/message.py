@@ -3,6 +3,7 @@ from datetime import datetime
 
 from lxml import etree
 
+from SDMXThon.model.structure import DataStructureDefinition
 from .dataSet import DataSet
 from ..message.generic import GenericDataHeaderType, StructureSpecificDataHeaderType, \
     GenericTimeSeriesDataHeaderType, StructureSpecificTimeSeriesDataHeaderType, SenderType, PartyType
@@ -110,7 +111,7 @@ class Message:
 
     def validate(self):
         validations = {}
-        if all(isinstance(n, DataSet) for n in self.payload):
+        if all(isinstance(n, DataSet) for n in self.payload.values()):
             for e in self.payload.values():
                 list_errors = e.semanticValidation()
                 if len(list_errors) > 0:
@@ -128,11 +129,19 @@ class Message:
         from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
         datasets = {}
 
-        root = etree.parse(pathToMetadata)
+        if isinstance(pathToMetadata, str):
+            root = etree.parse(pathToMetadata)
 
-        codelists = get_codelist_model(root)
-        concepts = get_concept_schemes(root, codelists)
-        dsds = get_DSDs(root, concepts, codelists)
+            codelists = get_codelist_model(root)
+            concepts = get_concept_schemes(root, codelists)
+            dsds = get_DSDs(root, concepts, codelists)
+        elif isinstance(pathToMetadata, dict):
+            if all(isinstance(n, DataStructureDefinition) for n in pathToMetadata.values()):
+                dsds = pathToMetadata
+            else:
+                raise ValueError('pathToMetadata must be a DataStructureDefinition dict or a string')
+        else:
+            raise ValueError('pathToMetadata must be a DataStructureDefinition dict or a string')
         if isinstance(pathToJSON, str):
             with open(pathToJSON, 'r') as f:
                 parsed = json.loads(f.read())
