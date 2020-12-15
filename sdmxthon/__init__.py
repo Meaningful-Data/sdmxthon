@@ -3,18 +3,19 @@ import logging
 from datetime import date, datetime
 
 import pandas as pd
+from pandas import DataFrame
 
 from .common.dataSet import DataSet
 from .message.generic import GenericDataHeaderType, PartyType, SenderType, StructureSpecificDataHeaderType, \
     GenericTimeSeriesDataHeaderType, StructureSpecificTimeSeriesDataHeaderType
 from .utils.enums import DatasetType
-from .utils.parsers import generate_message
+from .utils.parsers import generate_message, id_creator, validate_obs, validate_series
 from .utils.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToDataSet, \
     sdmxStrToPandas
 
 # create logger
-logger = logging.getLogger("logging_tryout2")
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger("logger")
+logger.setLevel(logging.WARNING)
 
 
 def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
@@ -235,3 +236,26 @@ def headerCreation(id_: str, test: bool = False,
     header.add_Receiver(receiver)
 
     return header
+
+
+def validateData(dataset_list, dsds):
+    validations = {}
+    for e in dataset_list:
+        dsdid = id_creator(e.agencyID, e.code, e.version)
+        validation_list = []
+        if not dsdid in dsds.keys():
+            logger.warning('Missing %s in dsds' % dsdid)
+            continue
+        if isinstance(e.obs, DataFrame):
+            validate_obs(e.obs, dsds[dsdid], validation_list)
+        elif isinstance(e.obs, dict):
+            validate_series(e.obs, dsds[dsdid], validation_list)
+        else:
+            raise ValueError('Obs for dataset %s is not well formed' % e.code)
+        if len(validation_list) > 0:
+            validations[e.code] = validation_list
+
+    if len(validations) is 0:
+        return None
+    else:
+        return validations

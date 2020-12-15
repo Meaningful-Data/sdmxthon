@@ -2,10 +2,13 @@ import logging
 import pickle
 import sys
 
-from SDMXThon import datasetListToXML, headerCreation, xmlToDatasetList, DatasetType
+from lxml import etree
+
+from SDMXThon import xmlToDatasetList, DatasetType, validateData
+from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 # create logger
-logger = logging.getLogger("logging_tryout2")
+logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
 
 # create console handler and set level to debug
@@ -13,8 +16,8 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
 # create formatter
-formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
-
+# formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
+formatter = logging.Formatter("%(message)s")
 # add formatter to ch
 ch.setFormatter(formatter)
 
@@ -22,7 +25,7 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 pathDSDS = 'SDMXThon/outputTests/metadata/dsds.pickle'
-pathToDataFile = 'SDMXThon/test/BIS/'
+pathToDataFile = 'SDMXThon/test/ecu/IRIS/generic.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToStructure = 'SDMXThon/outputTests/outputSpe.xml'
 pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
@@ -31,20 +34,43 @@ pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_200
 
 
 def main():
-    """
     root = etree.parse(pathToMetadataFile)
 
     codelists = get_codelist_model(root)
     concepts = get_concept_schemes(root, codelists)
     dsds = get_DSDs(root, concepts, codelists)
-    """
+
     with open(pathDSDS, 'rb') as f:
         dsds = pickle.loads(f.read())
 
-    dataset_list = xmlToDatasetList(pathSaveToStructure, dsds, DatasetType.StructureDataSet)
-    header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
-    datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
-                     dataset_type=DatasetType.GenericDataSet)
+    dataset_list = xmlToDatasetList(pathToDataFile, dsds, DatasetType.GenericDataSet)
+
+    validations = validateData(dataset_list, dsds)
+
+    pretty(validations)
+
+    # header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
+
+    """
+    gui = show(dataset_list)
+
+    dataframes = gui.get_dataframes()
+
+    for e in dataset_list:
+        e.obs = dataframes[e.code]
+    """
+
+    # datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
+    #                dataset_type=DatasetType.GenericDataSet)
+
+
+def pretty(d, indent=0):
+    for key, value in d.items():
+        print('\t' * indent + str(key))
+        if isinstance(value, dict):
+            pretty(value, indent + 1)
+        else:
+            print('\t' * (indent + 1) + str(value))
 
 
 def get_size(obj, seen=None):
