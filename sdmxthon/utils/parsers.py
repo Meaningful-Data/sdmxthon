@@ -3,12 +3,13 @@ import logging
 from typing import Dict
 
 import numpy as np
-from pandas import DataFrame
 
 from SDMXThon.common.references import DataflowReferenceType
+from .creators import id_creator
 from .enums import DatasetType
 from ..common.dataSet import DataSet
 from ..common.generic import GenericDataStructureType
+from ..common.message import Message
 from ..common.refs import DataflowRefType
 from ..data.generic import DataSetType as GenericDataSetType, \
     TimeSeriesDataSetType as GenericTimeSeriesDataSetType, SeriesType, ObsType, TimeValueType
@@ -32,10 +33,6 @@ SaveElementTreeNode = True
 
 # create logger
 logger = logging.getLogger("logger")
-
-
-def id_creator(agencyID, id, version):
-    return f"{agencyID}:{id}({version})"
 
 
 def get_codelist_model(root):
@@ -169,11 +166,11 @@ def create_dimension_data(dsd, dimension_descriptor, concepts, codelists, dim_ty
                 cs = concepts[cs_id]
                 con = cs.items[attrib_cs['id']]
             else:
-                # TODO Error message no concept scheme in scheme list (validate_metadata)
+                # TODO Error messageXML no concept scheme in scheme list (validate_metadata)
                 cs = None
                 con = None
         else:
-            # TODO Error message no concept scheme found in DataStructureDefinition (validate_metadata)
+            # TODO Error messageXML no concept scheme found in DataStructureDefinition (validate_metadata)
             cs = None
             con = None
         expression = "./str:LocalRepresentation/str:Enumeration/Ref"
@@ -187,10 +184,10 @@ def create_dimension_data(dsd, dimension_descriptor, concepts, codelists, dim_ty
             if cl_id in codelists.keys():
                 cl = codelists[cl_id]
             else:
-                # TODO Error message no codelist found in codelist list (validate_metadata)
+                # TODO Error messageXML no codelist found in codelist list (validate_metadata)
                 cl = None
         else:
-            # TODO Error message no codelist found in DataStructureDefinition (validate_metadata)
+            # TODO Error messageXML no codelist found in DataStructureDefinition (validate_metadata)
             cl = None
         rep = Representation(codeList=cl, conceptScheme=cs, concept=con)
         dim.localRepresentation = rep
@@ -211,7 +208,7 @@ def extract_ref_data(ref, concepts):
         else:
             cl = None
     else:
-        # TODO Error message no concept scheme in scheme list (validate_metadata)
+        # TODO Error messageXML no concept scheme in scheme list (validate_metadata)
         cs = None
         con = None
         cl = None
@@ -263,7 +260,7 @@ def create_attribute_data(dsd, attribute_descriptor, concepts, codelists, measur
         if len(ref) == 1 and concepts is not None:
             cs, con, cl = extract_ref_data(ref, concepts=concepts)
         else:
-            # TODO Error message no concept scheme found in DataStructureDefinition (validate_metadata)
+            # TODO Error messageXML no concept scheme found in DataStructureDefinition (validate_metadata)
             cs = None
             con = None
             cl = None
@@ -348,12 +345,12 @@ def create_measures_data(dsd, measure_descriptor, concepts, codelists):
                 else:
                     cl = None
             else:
-                # TODO Error message no concept scheme in scheme list (validate_metadata)
+                # TODO Error messageXML no concept scheme in scheme list (validate_metadata)
                 cs = None
                 con = None
                 cl = None
         else:
-            # TODO Error message no concept scheme found in DataStructureDefinition (validate_metadata)
+            # TODO Error messageXML no concept scheme found in DataStructureDefinition (validate_metadata)
             cs = None
             con = None
             cl = None
@@ -449,8 +446,8 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datas
                            allDimensions=True):
     structure = GenericDataStructureType()
     structure.original_tag_name_ = "Structure"
-    structure.set_ns_def_("message")
-    structure.set_structureID(dataset.code)
+    structure.set_ns_def_("messageXML")
+    structure.set_structureID(dataset.structure.id)
     if datasetType == DatasetType.StructureDataSet or datasetType == DatasetType.StructureTimeSeriesDataSet:
         structure.set_namespace(dsd.uri)
     else:
@@ -458,7 +455,7 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset: DataSet, datas
     if allDimensions:
         structure.set_dimensionAtObservation("AllDimensions")
     else:
-        structure.set_dimensionAtObservation(dataset.dataset_attributes.get('dimensionAtObservation'))
+        structure.set_dimensionAtObservation(dataset.datasetAttributes.get('dimensionAtObservation'))
     structure_usage = DataflowReferenceType()
     structure_usage.original_tag_name_ = "Structure"
     structure_usage.set_ns_def_("common")
@@ -746,20 +743,27 @@ def parse_series_structure(obs, dsd, dimensionAtObservation):
     return series_list
 
 
-def generate_message(dataset_list, dsd_dict, header, dataset_type):
-    message = None
+def generate_datasets_message(message: Message):
     structures = []
 
+    # Temporarily storing data on original variables
+    dataset_type = message.type
+
+    header = message.header
+    header.set_Prepared(header.gds_parse_datetime(header.get_Prepared()))
+
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        message = GenericDataType()
+        messageXML = GenericDataType()
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        message = StructureSpecificDataType()
+        messageXML = StructureSpecificDataType()
+    else:
+        raise ValueError('Wrong Dataset Type')
 
-    for element in dataset_list:
-        dsd: DataStructureDefinition = dsd_dict[
-            id_creator(element.agencyID, element.dataset_attributes.get('setId'), element.version)]
+    for element in message.payload.values():
+        element: DataSet
+        dsd: DataStructureDefinition = element.structure
 
-        if element.dataset_attributes.get('dimensionAtObservation') != 'AllDimensions':
+        if element.datasetAttributes.get('dimensionAtObservation') != 'AllDimensions':
             if dataset_type == DatasetType.GenericTimeSeriesDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
                 allDimensions = False
             else:
@@ -780,7 +784,7 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type):
                 if obs_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
                     continue
-                for key, value in element.attached_attributes.items():
+                for key, value in element.attachedAttributes.items():
                     attr_value = ComponentValueType()
                     attr_value.original_tag_name_ = "Value"
                     attr_value.set_id(key)
@@ -794,8 +798,8 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type):
                 if obs_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
                     continue
-                dataset_attr = copy.deepcopy(element.attached_attributes)
-                dataset_attr['xsi:type'] = element.code + ":DataSet"
+                dataset_attr = copy.deepcopy(element.attachedAttributes)
+                dataset_attr['xsi:type'] = element.structure.id + ":DataSet"
                 data_set.set_anyAttributes_(dataset_attr)
 
             data_set._obs = obs_list
@@ -804,11 +808,11 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type):
             if dataset_type == DatasetType.GenericTimeSeriesDataSet:
                 data_set = GenericTimeSeriesDataSetType()
                 series_list = parse_series_generic(element.obs, dsd,
-                                                   element.dataset_attributes.get('dimensionAtObservation'))
+                                                   element.datasetAttributes.get('dimensionAtObservation'))
                 if series_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
                     continue
-                for key, value in element.attached_attributes.items():
+                for key, value in element.attachedAttributes.items():
                     attr_value = ComponentValueType()
                     attr_value.original_tag_name_ = "Value"
                     attr_value.set_id(key)
@@ -819,38 +823,38 @@ def generate_message(dataset_list, dsd_dict, header, dataset_type):
             else:
                 data_set = StructureTimeSeriesDataSetType()
                 series_list = parse_series_structure(element.obs, dsd,
-                                                     element.dataset_attributes.get('dimensionAtObservation'))
+                                                     element.datasetAttributes.get('dimensionAtObservation'))
                 if series_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
                     continue
-                dataset_attr = copy.deepcopy(element.attached_attributes)
-                dataset_attr['xsi:type'] = element.code + ":DataSet"
+                dataset_attr = copy.deepcopy(element.attachedAttributes)
+                dataset_attr['xsi:type'] = element.structure.id + ":DataSet"
                 data_set.set_anyAttributes_(dataset_attr)
 
             data_set.set_Series(series_list)
 
         # StructureRef
-        data_set.set_structureRef(element.code)
+        data_set.set_structureRef(element.structure.id)
 
         # DatasetAttributes
-        data_set.set_reportingBeginDate(element.dataset_attributes.get('reportingBegin'))
-        data_set.set_reportingEndDate(element.dataset_attributes.get('reportingEnd'))
-        data_set.set_validFromDate(element.dataset_attributes.get('validFrom'))
-        data_set.set_validToDate(element.dataset_attributes.get('validTo'))
-        data_set.set_publicationYear(element.dataset_attributes.get('publicationYear'))
-        data_set.set_publicationPeriod(element.dataset_attributes.get('publicationPeriod'))
-        data_set.set_setID(element.code)
-        data_set.set_action(element.dataset_attributes.get('action'))
+        data_set.set_reportingBeginDate(element.datasetAttributes.get('reportingBegin'))
+        data_set.set_reportingEndDate(element.datasetAttributes.get('reportingEnd'))
+        data_set.set_validFromDate(element.datasetAttributes.get('validFrom'))
+        data_set.set_validToDate(element.datasetAttributes.get('validTo'))
+        data_set.set_publicationYear(element.datasetAttributes.get('publicationYear'))
+        data_set.set_publicationPeriod(element.datasetAttributes.get('publicationPeriod'))
+        data_set.set_setID(element.structure.id)
+        data_set.set_action(element.datasetAttributes.get('action'))
 
         structure = get_structure_from_dsd(dsd, element, dataset_type, allDimensions=allDimensions)
 
         structures.append(structure)
-        message.add_DataSet(data_set)
+        messageXML.add_DataSet(data_set)
 
     header.set_Structure(structures)
-    message.set_Header(header)
+    messageXML.set_Header(header)
 
-    return message
+    return messageXML
 
 
 def validate_dataset_attributes_from_dsd(dsd, dataset):
@@ -968,123 +972,3 @@ def set_codelists_checked_to_false(codelists: dict):
 def set_concepts_checked_to_false(concepts: dict):
     for e in concepts.values():
         e._checked = False
-
-
-def get_codelist_values(dsd: DataStructureDefinition) -> dict:
-    data = {}
-
-    for element in dsd.dimensionDescriptor.components.values():
-        if element.localRepresentation.codeList is not None:
-            data[element.id] = element.localRepresentation.codeList.items.keys()
-
-    for record in dsd.attributeDescriptor.components.values():
-        if record.localRepresentation.codeList is not None:
-            data[record.id] = record.localRepresentation.codeList.items.keys()
-
-    return data
-
-
-def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
-    data = []
-
-    for record in dsd.attributeDescriptor.components.values():
-        if record.relatedTo is not None:
-            if isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
-                data.append(record.id)
-
-    return data
-
-
-def validate_obs(data: DataFrame, dsd: DataStructureDefinition, validation_list, mandatory_attributes: list = None):
-    if 'OBS_VALUE' not in data.keys():
-        validation_list.append('SS02: Missing OBS_VALUE for dataset %s' % dsd.id)
-
-    if mandatory_attributes is None:
-        mandatory_attributes = get_mandatory_attributes(dsd)
-
-    codelist_values: dict = get_codelist_values(dsd)
-
-    iterations = len(data)
-
-    for i in dsd.dimensionCodes:
-        if i not in data.keys():
-            validation_list.append('SS01: Missing dimension %s on dataset %s' % (i, dsd.id))
-
-    for j in mandatory_attributes:
-        if j not in data.keys():
-            validation_list.append('SS03: Missing attribute %s on dataset %s' % (j, dsd.id))
-
-    for k in data.keys():
-        df = data[k]
-        if k not in dsd.dimensionCodes and k not in dsd.attributeCodes:
-            continue
-        for row in range(iterations):
-            aux = df[row]
-
-            if aux == np.nan:
-                row_data = ':'.join(map(str, data.loc[row, :].values.tolist()))
-                if k in mandatory_attributes:
-                    validation_list.append(
-                        'SS06: Missing value for attribute %s on row %s for dataset %s' % (k, row_data, dsd.id))
-                elif k in dsd.attributeCodes:
-                    validation_list.append(
-                        'SS04: Missing value for attribute %s on row %s for dataset %s' % (k, row_data, dsd.id))
-                elif k == 'OBS_VALUE':
-                    validation_list.append(
-                        'SS02: Missing value for OBS_VALUE on row %s for dataset %s' % (row_data, dsd.id))
-                else:
-                    validation_list.append(
-                        'SS05: Missing value for dimension %s on row %s for dataset %s' % (k, row_data, dsd.id))
-
-            elif k in codelist_values.keys() and aux not in codelist_values[k]:
-                row_data = ':'.join(map(str, data.loc[row, :].values.tolist()))
-                if k in mandatory_attributes:
-                    validation_list.append('SS06: Wrong value "%s" for attribute %s on row %s for dataset %s' %
-                                           (aux, k, row_data, dsd.id))
-                elif k in dsd.attributeCodes:
-                    validation_list.append('SS04: Wrong value "%s" for attribute %s on row %s for dataset %s' %
-                                           (aux, k, row_data, dsd.id))
-                else:
-                    validation_list.append('SS05: Wrong value "%s" for dimension %s on row %s for dataset %s' %
-                                           (aux, k, row_data, dsd.id))
-
-
-def validate_series(obs: dict, dsd: DataStructureDefinition, validation_list):
-    if 'Series' not in obs.keys():
-        raise ValueError('Missing Series in obs for dataset %s' % dsd.id)
-
-    if 'Data' not in obs.keys():
-        raise ValueError('Missing Data in obs for dataset %s' % dsd.id)
-
-    if not isinstance(obs.get('Data'), DataFrame):
-        raise ValueError('Data of obs for dataset %s is not a pandas DataFrame', dsd.id)
-
-    codelist_values = get_codelist_values(dsd)
-
-    series = obs.get('Series')
-
-    mandatory_attributes = get_mandatory_attributes(dsd)
-
-    for i in dsd.dimensionCodes:
-        if i not in series.keys():
-            validation_list.append('SS01: Missing dimension %s on dataset %s' % (i, dsd.id))
-
-    for j in mandatory_attributes:
-        if j not in series.keys():
-            validation_list.append('SS03: Missing attribute %s on dataset %s' % (j, dsd.id))
-
-    for key, value in series.items():
-        if key not in codelist_values.keys():
-            continue
-        if value not in codelist_values[key]:
-            if key in mandatory_attributes:
-                validation_list.append('SS06: Wrong value "%s" for attribute %s on Series for dataset %s' %
-                                       (value, key, dsd.id))
-            elif key in dsd.attributeCodes:
-                validation_list.append('SS04: Wrong value "%s" for attribute %s on Series for dataset %s' %
-                                       (value, key, dsd.id))
-            else:
-                validation_list.append('SS05: Wrong value "%s" for dimension %s on Series for dataset %s' %
-                                       (value, key, dsd.id))
-
-    validate_obs(obs.get('Data'), dsd, validation_list, mandatory_attributes)

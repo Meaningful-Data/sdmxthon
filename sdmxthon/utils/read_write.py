@@ -8,8 +8,8 @@ import pandas as pd
 from ..common.dataSet import DataSet
 from ..message.generic import GenericDataType, StructureSpecificDataType
 from ..model.structure import PrimaryMeasure
+from ..utils.creators import id_creator
 from ..utils.enums import DatasetType
-from ..utils.parsers import id_creator
 from ..utils.xml_base import GdsCollector_, get_required_ns_prefix_defs, parsexml_, makeWarnings
 
 try:
@@ -67,8 +67,8 @@ def save_AllDimensions(message, path='', print_warnings=True):
         return f
 
 
-def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
-    dataSetList = []
+def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
+    datasets = {}
     refs_data = {}
 
     for i in xmlObj.Header._structure:
@@ -95,25 +95,22 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
 
         dataset_attributes_keys = ['reportingBegin', 'reportingEnd', 'dataExtractionDate', 'validFrom',
                                    'validTo', 'publicationYear', 'publicationPeriod']
-        item = DataSet()
+        item = DataSet(dsd)
         obsDict = {}
 
-        # Setting structureRef attributes
-        item.code = strRef
-        item.version = dsd.version
-        item.agencyID = dsd.agencyId
+        dataset_attributes = {}
 
         # Default Attributes
-        item.dataset_attributes['reportingBegin'] = None
-        item.dataset_attributes['reportingEnd'] = None
-        item.dataset_attributes['dataExtractionDate'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
-        item.dataset_attributes['validFrom'] = None
-        item.dataset_attributes['validTo'] = None
-        item.dataset_attributes['publicationYear'] = None
-        item.dataset_attributes['publicationPeriod'] = None
+        dataset_attributes['reportingBegin'] = None
+        dataset_attributes['reportingEnd'] = None
+        dataset_attributes['dataExtractionDate'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+        dataset_attributes['validFrom'] = None
+        dataset_attributes['validTo'] = None
+        dataset_attributes['publicationYear'] = None
+        dataset_attributes['publicationPeriod'] = None
 
-        item.dataset_attributes['action'] = e._action
-        item.dataset_attributes['setId'] = dsd.id
+        dataset_attributes['action'] = e._action
+        dataset_attributes['setId'] = dsd.id
 
         dimObs = ''
 
@@ -123,15 +120,21 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
                 dimObs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
 
         if dimObs == '':
-            item.dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
+            dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
         else:
-            item.dataset_attributes['dimensionAtObservation'] = dimObs
+            dataset_attributes['dimensionAtObservation'] = dimObs
+
+        item.datasetAttributes = dataset_attributes.copy()
+
+        attached_attributes = {}
 
         for key, value in e.gds_element_tree_node_.attrib.items():
             if key in attached_attributes_keys:
-                item.attached_attributes[key] = value
+                attached_attributes[key] = value
             elif key in dataset_attributes_keys:
-                item.dataset_attributes[key] = value
+                dataset_attributes[key] = value
+
+        item.attachedAttributes = attached_attributes
 
         obs_attributes_keys = []
         for record in dsd.attributeDescriptor.components.values():
@@ -185,9 +188,9 @@ def sdmxStrToPandas(xmlObj, dsd_dict) -> []:
                             obsDict[o] = [text]
             check_empty(obsDict)
             item.obs = pd.DataFrame.from_dict(obsDict.copy())
-        dataSetList.append(item)
+        datasets[dsd.id] = item
 
-    return dataSetList
+    return datasets
 
 
 def check_empty(series: dict):
@@ -210,7 +213,7 @@ def check_length(series: dict):
 
 
 def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
-    dataSetList = []
+    datasets = {}
     refs_data = {}
 
     for i in xmlObj.Header._structure:
@@ -221,26 +224,22 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
             # TODO Warning DSD not found
             continue
         dsd = dsd_dict[refs_data[e._structureRef]]
-        item = DataSet()
-
-        item.code = e._structureRef
+        item = DataSet(dsd)
 
         attached_attributes_keys = dsd.datasetAttributeCodes
 
-        # Default Attributes
-        item.version = dsd.version
-        item.agencyID = dsd.agencyId
+        dataset_attributes = {}
 
-        item.dataset_attributes['reportingBegin'] = e._reportingBeginDate
-        item.dataset_attributes['reportingEnd'] = e._reportingEndDate
-        item.dataset_attributes['dataExtractionDate'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
-        item.dataset_attributes['validFrom'] = e._validFromDate
-        item.dataset_attributes['validTo'] = e._validToDate
-        item.dataset_attributes['publicationYear'] = e._publicationYear
-        item.dataset_attributes['publicationPeriod'] = e._publicationPeriod
+        dataset_attributes['reportingBegin'] = e._reportingBeginDate
+        dataset_attributes['reportingEnd'] = e._reportingEndDate
+        dataset_attributes['dataExtractionDate'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+        dataset_attributes['validFrom'] = e._validFromDate
+        dataset_attributes['validTo'] = e._validToDate
+        dataset_attributes['publicationYear'] = e._publicationYear
+        dataset_attributes['publicationPeriod'] = e._publicationPeriod
 
-        item.dataset_attributes['action'] = e._action
-        item.dataset_attributes['setId'] = dsd.id
+        dataset_attributes['action'] = e._action
+        dataset_attributes['setId'] = dsd.id
         dimObs = ''
 
         for j in xmlObj.Header._structure:
@@ -249,16 +248,21 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                 dimObs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
 
         if dimObs == '':
-            item.dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
+            dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
         else:
-            item.dataset_attributes['dimensionAtObservation'] = dimObs
+            dataset_attributes['dimensionAtObservation'] = dimObs
 
+        item.datasetAttributes = dataset_attributes.copy()
+
+        attached_attributes = {}
         if e._Attributes is not None:
             for i in e._Attributes.Value:
                 key = i.gds_element_tree_node_.attrib.get('id')
                 value = i.gds_element_tree_node_.attrib.get('value')
                 if key in attached_attributes_keys:
-                    item.attached_attributes[key] = value
+                    attached_attributes[key] = value
+
+        item.attachedAttributes = attached_attributes.copy()
 
         if len(e._Series) > 0:
             obs = []
@@ -285,7 +289,7 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                 for k in i._obs:
                     list_keys = []
 
-                    key = item.dataset_attributes['dimensionAtObservation']
+                    key = dataset_attributes['dimensionAtObservation']
                     value = k.ObsDimension.gds_element_tree_node_.attrib.get('value')
                     list_keys.append(key)
                     if key in series.keys():
@@ -363,6 +367,6 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                             obsDict[o] = [text]
             check_empty(obsDict)
             item.obs = pd.DataFrame.from_dict(obsDict.copy())
-        dataSetList.append(item)
+        datasets[dsd.id] = item
 
-    return dataSetList
+    return datasets

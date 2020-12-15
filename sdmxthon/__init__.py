@@ -1,260 +1,144 @@
 import json
 import logging
-from datetime import date, datetime
+from typing import Dict
+from zipfile import ZipFile
 
-import pandas as pd
-from pandas import DataFrame
+from lxml import etree
 
 from .common.dataSet import DataSet
-from .message.generic import GenericDataHeaderType, PartyType, SenderType, StructureSpecificDataHeaderType, \
-    GenericTimeSeriesDataHeaderType, StructureSpecificTimeSeriesDataHeaderType
+from .common.message import Message
+from .utils.creators import DataSetCreator
 from .utils.enums import DatasetType
-from .utils.parsers import generate_message, id_creator, validate_obs, validate_series
+from .utils.parsers import generate_datasets_message, id_creator, get_codelist_model, \
+    get_concept_schemes, get_DSDs
 from .utils.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToDataSet, \
-    sdmxStrToPandas
+    sdmxStrToDataset
 
 # create logger
 logger = logging.getLogger("logger")
 logger.setLevel(logging.WARNING)
 
 
-def xmlToDatasetList(path_to_xml, dsd_dict, dataset_type=None) -> list:
-    datasetList = list()
-
+def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
     if dataset_type == None:
-        print('dataset type None')
+        raise ValueError('Dataset type is None')
+    objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
+
+    dsds = getMetadata(pathToMetadata)
+
+    header = objStructure.Header
+
+    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+        datasets = sdmxGenToDataSet(objStructure, dsds)
+    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
+        datasets = sdmxStrToDataset(objStructure, dsds)
+    else:
+        raise ValueError('Invalid Dataset Type')
+
+    return Message(DatasetType.GenericDataSet, datasets, header)
+
+
+def getDatasets(path_to_xml, pathToMetadata, dataset_type=None) -> dict:
+    if dataset_type == None:
+        raise ValueError('Dataset Type is None')
 
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
+    dsds = getMetadata(pathToMetadata)
+
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        datasetList = sdmxGenToDataSet(objStructure, dsd_dict)
+        return sdmxGenToDataSet(objStructure, dsds)
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        datasetList = sdmxStrToPandas(objStructure, dsd_dict)
+        return sdmxStrToDataset(objStructure, dsds)
+    else:
+        raise ValueError('Invalid Dataset Type')
 
-    return datasetList
+
+def getMetadata(pathToMetadata: str) -> dict:
+    root = etree.parse(pathToMetadata)
+
+    codelists = get_codelist_model(root)
+    concepts = get_concept_schemes(root, codelists)
+    return get_DSDs(root, concepts, codelists)
 
 
-def datasetListToXML(datasetList, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet):
-    if len(datasetList) == 0:
-        return None
-    message = generate_message(datasetList, dsd_dict, header, dataset_type)
+def messageToXML(output_path, message):
+    if len(message.payload) == 0:
+        raise ValueError('Datasets must be provided')
+
+    messageXML = generate_datasets_message(message)
     if message == None:
-        return None
-    if pathSaveTo == '':
-        return save_AllDimensions(message, pathSaveTo)
+        raise ValueError('Message could not be parsed')
+    if output_path == '':
+        return save_AllDimensions(messageXML, output_path)
     else:
-        save_AllDimensions(message, pathSaveTo)
+        save_AllDimensions(messageXML, output_path)
 
 
-def datasetToXML(dataset, dsd_dict, pathSaveTo, header, dataset_type=DatasetType.StructureDataSet):
-    message = generate_message([dataset], dsd_dict, header, dataset_type)
+def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
+    list_elements = []
 
-    if pathSaveTo == '':
-        return save_AllDimensions(message, pathSaveTo)
-    else:
-        save_AllDimensions(message, pathSaveTo)
+    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata, dataset_type)
 
-
-def datasetListToJSON(dataset_list, path_to_file='') -> list:
-    listElements = []
-    for e in dataset_list:
-        element = {}
-        result = e.obs.to_json(orient="records")
-        parsed = json.loads(result)
-        element['structureRef'] = {"code": e.code, "version": e.version, "agencyID": e.agencyID}
-        element['dataset_attributes'] = e.dataset_attributes
-        element['attached_attributes'] = e.attached_attributes
-        element['obs'] = parsed.copy()
-        listElements.append(element.copy())
-
-    if path_to_file != '':
-        f = open(path_to_file, "w")
-        f.write(json.dumps(listElements, ensure_ascii=False, indent=2))
-        f.close()
-
-    return listElements
+    for e in datasets.values():
+        list_elements.append(e.toJSON())
+    with open(output_path, 'w') as f:
+        f.write(json.dumps(list_elements, ensure_ascii=False, indent=2))
 
 
-def JSONFileToDatasetList(json_file) -> list:
-    dataset_list = list()
-    parsed = json.loads(json_file.read())
-    for e in parsed:
-        dataset_list.append(DataSetCreator(code=e.get('structureRef').get('code'),
-                                           version=e.get('structureRef').get('version'),
-                                           agencyID=e.get('structureRef').get('agencyID'),
-                                           dataset_attributes=e.get('dataset_attributes'),
-                                           attached_attributes=e.get('attached_attributes'),
-                                           obs=e.get('obs')))
-    return dataset_list
+def xmlToCSV(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
+    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata, dataset_type)
 
-
-def JSONToDatasetList(json_list) -> list:
-    dataset_list = list()
-    parsed = json.loads(json.dumps(json_list, ensure_ascii=False, indent=2))
-    for e in parsed:
-        dataset_list.append(DataSetCreator(code=e.get('structureRef').get('code'),
-                                           version=e.get('structureRef').get('version'),
-                                           agencyID=e.get('structureRef').get('agencyID'),
-                                           dataset_attributes=e.get('dataset_attributes'),
-                                           attached_attributes=e.get('attached_attributes'),
-                                           obs=e.get('obs')))
-    return dataset_list
-
-
-def saveOBSfromDatasetList(format, folder, dataset_list):
-    if format == 'csv':
-        for e in dataset_list:
-            filename = folder + e.code + '.' + format
-            e.obs.to_csv(filename, sep=',', encoding='utf-8', index=False, header=True)
-    elif format == 'sql':
-        for e in dataset_list:
-            e.obs.reset_index().to_sql(e.code)
-    elif format == 'feather':
-        for e in dataset_list:
-            filename = folder + e.code + '.' + format
-            e.obs.to_feather(filename)
-
-
-def _filterFillingINF(message):
-    for e in message.DataSet:
-        if e._structureRef == 'FILINGINF':
-            message.DataSet.remove(e)
-
-    for e in message.Header._structure:
-        if e._structureID == 'FILINGINF':
-            message.Header._structure.remove(e)
-
-    return message
-
-
-def _messageSort(message):
-    message.Header._structure.sort(key=__sortStructureID)
-    message.DataSet.sort(key=__sortStructureRef)
-    return message
-
-
-def __sortStructureRef(e):
-    return e._structureRef
-
-
-def __sortStructureID(e):
-    return e._structureID
-
-
-def __sortCode(e):
-    return e.code
-
-
-def _dataSetListSort(dataset_list):
-    dataset_list.sort(key=__sortCode)
-    return dataset_list
-
-
-def DataSetCreator(code, version, agencyID, dataset_attributes=None, attached_attributes=None,
-                   obs=None):
-    if dataset_attributes is None or dataset_attributes == {}:
-        dataset_attributes = {"reportingBegin": None,
-                              "reportingEnd": None,
-                              "dataExtractionDate": date.today(),
-                              "validFrom": None,
-                              "validTo": None,
-                              "publicationYear": None,
-                              "publicationPeriod": None,
-                              "action": "Replace",
-                              "setId": code,
-                              "dimensionAtObservation": "AllDimensions"
-                              }
+    if '.zip' in output_path:
+        with ZipFile(output_path, 'w') as zipObj:
+            # Add multiple files to the zip
+            for record in datasets.values():
+                zipObj.writestr(record.structure.id + '.csv', data=record.toCSV())
 
     else:
-        check_DA_keys(dataset_attributes, code)
+        if len(datasets) > 1:
+            raise ValueError('Cannot introduce several Datasets in a CSV. Consider using .zip as output path')
+        elif len(datasets) is 1:
+            if '.zip' in output_path:
+                filename = output_path.split('.')[0]
+                output_path = filename + '.csv'
+            # Getting first value
+            values_view = datasets.values()
+            value_iterator = iter(values_view)
+            dset = next(value_iterator)
 
-    if isinstance(obs, pd.DataFrame):
-        item = DataSet(code=code, version=version, agencyID=agencyID,
-                       dataset_attributes=dataset_attributes, attached_attributes=attached_attributes,
-                       obs=obs)
-    elif isinstance(obs, list):
-        item = DataSet(code=code, version=version, agencyID=agencyID,
-                       dataset_attributes=dataset_attributes, attached_attributes=attached_attributes,
-                       obs=pd.DataFrame(obs))
-    else:
-        return None
-
-    return item
-
-
-def check_DA_keys(attributes: dict, code):
-    keys = ["reportingBegin", "reportingEnd", "dataExtractionDate", "validFrom", "validTo", "publicationYear",
-            "publicationPeriod", "action", "setId", "dimensionAtObservation"]
-
-    for spared_key in attributes.keys():
-        if spared_key not in keys:
-            attributes.pop(spared_key)
-
-    for k in keys:
-        if k not in attributes.keys():
-            if k == "dataExtractionDate":
-                attributes[k] = date.today()
-            elif k == "action":
-                attributes[k] = "Replace"
-            elif k == "setId":
-                attributes[k] = code
-            elif k == "dimensionAtObservation":
-                attributes[k] = "AllDimensions"
-            else:
-                attributes[k] = None
-
-
-def headerCreation(id_: str, test: bool = False,
-                   senderId: str = "Unknown", receiverId: str = "not_supplied",
-                   datetimeStr='',
-                   dataset_type=DatasetType.StructureDataSet):
-    if dataset_type == DatasetType.GenericDataSet:
-        header = GenericDataHeaderType()
-    elif dataset_type == DatasetType.StructureDataSet:
-        header = StructureSpecificDataHeaderType()
-    elif dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        header = GenericTimeSeriesDataHeaderType()
-    elif dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        header = StructureSpecificTimeSeriesDataHeaderType()
-    else:
-        raise ValueError('Invalid Dataset type')
-
-    header.set_ID(id_)
-    header.set_Test(header.gds_format_boolean(test))
-    if datetimeStr == '':
-        header.set_Prepared(datetime.now())
-    else:
-        header.set_Prepared(header.gds_parse_datetime(datetimeStr))
-
-    sender = SenderType()
-    sender.set_id(senderId)
-
-    receiver = PartyType()
-    receiver.set_id(receiverId)
-
-    header.set_Sender(sender)
-    header.add_Receiver(receiver)
-
-    return header
-
-
-def validateData(dataset_list, dsds):
-    validations = {}
-    for e in dataset_list:
-        dsdid = id_creator(e.agencyID, e.code, e.version)
-        validation_list = []
-        if not dsdid in dsds.keys():
-            logger.warning('Missing %s in dsds' % dsdid)
-            continue
-        if isinstance(e.obs, DataFrame):
-            validate_obs(e.obs, dsds[dsdid], validation_list)
-        elif isinstance(e.obs, dict):
-            validate_series(e.obs, dsds[dsdid], validation_list)
+            dset.toCSV(output_path)
         else:
-            raise ValueError('Obs for dataset %s is not well formed' % e.code)
-        if len(validation_list) > 0:
-            validations[e.code] = validation_list
+            raise ValueError('No Datasets were parsed')
 
+
+def readJSON(pathToJSON, dsds) -> dict:
+    datasets = {}
+    if isinstance(pathToJSON, str):
+        with open(pathToJSON, 'r') as f:
+            parsed = json.loads(f.read())
+    else:
+        parsed = json.loads(pathToJSON.read())
+    for e in parsed:
+        code = e.get('structureRef').get('code')
+        version = e.get('structureRef').get('version')
+        agencyID = e.get('structureRef').get('agencyID')
+        dsdid = id_creator(agencyID, code, version)
+        if dsdid not in dsds.keys():
+            raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
+        datasets[e.code] = DataSetCreator(dsd=dsds[dsdid],
+                                          dataset_attributes=e.get('dataset_attributes'),
+                                          attached_attributes=e.get('attached_attributes'),
+                                          obs=e.get('obs'))
+    return datasets
+
+
+def validateData(datasets: Dict[str, DataSet]):
+    validations = {}
+    for e in datasets.values():
+        list_errors = e.semanticValidation()
+        if len(list_errors) > 0:
+            validations[e.structure.id] = list_errors
     if len(validations) is 0:
         return None
     else:

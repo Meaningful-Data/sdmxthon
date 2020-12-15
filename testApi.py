@@ -1,13 +1,10 @@
 import logging
-import pickle
 import sys
 
-from lxml import etree
-
-from SDMXThon import xmlToDatasetList, DatasetType, validateData
-from SDMXThon.utils.parsers import get_codelist_model, get_concept_schemes, get_DSDs
+from SDMXThon import DatasetType, readSDMX, messageToXML
 
 # create logger
+
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
 
@@ -30,24 +27,27 @@ pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToStructure = 'SDMXThon/outputTests/outputSpe.xml'
 pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
 pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
+pathToJSON = 'SDMXThon/outputTests/output.json'
+pathToCSV = 'SDMXThon/outputTests/csv.zip'
 pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
 
 
 def main():
-    root = etree.parse(pathToMetadataFile)
+    message = readSDMX(pathSaveToGeneric, pathToMetadataFile, dataset_type=DatasetType.GenericDataSet)
 
-    codelists = get_codelist_model(root)
-    concepts = get_concept_schemes(root, codelists)
-    dsds = get_DSDs(root, concepts, codelists)
+    messageToXML(pathSaveToGeneric, message)
 
-    with open(pathDSDS, 'rb') as f:
-        dsds = pickle.loads(f.read())
+    """
+    datasets = getDatasets(pathToDataFile, pathToMetadataFile, dataset_type=DatasetType.GenericDataSet)
 
-    dataset_list = xmlToDatasetList(pathToDataFile, dsds, DatasetType.GenericDataSet)
+    message = Message(DatasetType.GenericDataSet, datasets)
 
-    validations = validateData(dataset_list, dsds)
+    message.headerCreation(id_='test')
 
-    pretty(validations)
+    xmlToJSON(pathSaveToGeneric, pathToMetadataFile, pathToJSON, dataset_type=DatasetType.GenericDataSet)
+
+    xmlToCSV(pathSaveToGeneric, pathToMetadataFile, pathToCSV, dataset_type=DatasetType.GenericDataSet)
+    """
 
     # header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
 
@@ -59,9 +59,6 @@ def main():
     for e in dataset_list:
         e.obs = dataframes[e.code]
     """
-
-    # datasetListToXML(dataset_list, dsds, pathSaveToGeneric, header,
-    #                dataset_type=DatasetType.GenericDataSet)
 
 
 def pretty(d, indent=0):
