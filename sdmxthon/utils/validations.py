@@ -7,19 +7,25 @@ from ..model.structure import DataStructureDefinition, Dimension
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
     data = {}
 
-    for element in dsd.dimensionDescriptor.components.values():
-        if element.localRepresentation.codeList is not None:
-            data[element.id] = element.localRepresentation.codeList.items.keys()
+    if dsd.dimensionDescriptor.components is not None:
 
-    for record in dsd.attributeDescriptor.components.values():
-        if record.localRepresentation.codeList is not None:
-            data[record.id] = record.localRepresentation.codeList.items.keys()
+        for element in dsd.dimensionDescriptor.components.values():
+            if element.localRepresentation.codeList is not None:
+                data[element.id] = element.localRepresentation.codeList.items.keys()
+
+    if dsd.attributeDescriptor.components is not None:
+        for record in dsd.attributeDescriptor.components.values():
+            if record.localRepresentation.codeList is not None:
+                data[record.id] = record.localRepresentation.codeList.items.keys()
 
     return data
 
 
 def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
     data = []
+
+    if dsd.attributeDescriptor.components is None:
+        return []
 
     for record in dsd.attributeDescriptor.components.values():
         if record.relatedTo is not None:
@@ -81,44 +87,3 @@ def validate_obs(data: DataFrame, dsd: DataStructureDefinition, validation_list,
                 else:
                     validation_list.append('SS05: Wrong value "%s" for dimension %s on row %s for dataset %s' %
                                            (aux, k, row_data, dsd.id))
-
-
-def validate_series(obs: dict, dsd: DataStructureDefinition, validation_list):
-    if 'Series' not in obs.keys():
-        raise ValueError('Missing Series in obs for dataset %s' % dsd.id)
-
-    if 'Data' not in obs.keys():
-        raise ValueError('Missing Data in obs for dataset %s' % dsd.id)
-
-    if not isinstance(obs.get('Data'), DataFrame):
-        raise ValueError('Data of obs for dataset %s is not a pandas DataFrame', dsd.id)
-
-    codelist_values = get_codelist_values(dsd)
-
-    series = obs.get('Series')
-
-    mandatory_attributes = get_mandatory_attributes(dsd)
-
-    for i in dsd.dimensionCodes:
-        if i not in series.keys():
-            validation_list.append('SS01: Missing dimension %s on dataset %s' % (i, dsd.id))
-
-    for j in mandatory_attributes:
-        if j not in series.keys():
-            validation_list.append('SS03: Missing attribute %s on dataset %s' % (j, dsd.id))
-
-    for key, value in series.items():
-        if key not in codelist_values.keys():
-            continue
-        if value not in codelist_values[key]:
-            if key in mandatory_attributes:
-                validation_list.append('SS06: Wrong value "%s" for attribute %s on Series for dataset %s' %
-                                       (value, key, dsd.id))
-            elif key in dsd.attributeCodes:
-                validation_list.append('SS04: Wrong value "%s" for attribute %s on Series for dataset %s' %
-                                       (value, key, dsd.id))
-            else:
-                validation_list.append('SS05: Wrong value "%s" for dimension %s on Series for dataset %s' %
-                                       (value, key, dsd.id))
-
-    validate_obs(obs.get('Data'), dsd, validation_list, mandatory_attributes)

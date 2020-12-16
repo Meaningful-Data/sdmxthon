@@ -77,6 +77,10 @@ class Message:
     def header(self, value):
         self._header = value
 
+    def setDimensionAtObservation(self, dimAtObs):
+        for e in self.payload.values():
+            e.setDimensionAtObservation(dimAtObs)
+
     def headerCreation(self, id_: str, test: bool = False,
                        senderId: str = "Unknown", receiverId: str = "not_supplied",
                        datetimeStr=''):

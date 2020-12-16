@@ -4,7 +4,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from ..model.structure import DataStructureDefinition
-from ..utils.validations import validate_obs, validate_series
+from ..utils.validations import validate_obs
 
 
 class DataSet:
@@ -98,8 +98,12 @@ class DataSet:
         validation_list = []
         if isinstance(self.obs, DataFrame):
             validate_obs(self.obs, self.structure, validation_list)
-        elif isinstance(self.obs, dict):
-            validate_series(self.obs, self.structure, validation_list)
         else:
             raise ValueError('Obs for dataset %s is not well formed' % self.structure.id)
         return validation_list
+
+    def setDimensionAtObservation(self, dimAtObs):
+        if dimAtObs in self.structure.dimensionCodes:
+            self.datasetAttributes['dimensionAtObservation'] = dimAtObs
+        else:
+            raise ValueError('%s is not a dimension of dataset %s' % (dimAtObs, self.structure.id))

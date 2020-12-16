@@ -13,7 +13,7 @@ from ..common.generic import GenericDataStructureType
 from ..common.message import Message
 from ..common.refs import DataflowRefType
 from ..data.generic import DataSetType as GenericDataSetType, \
-    TimeSeriesDataSetType as GenericTimeSeriesDataSetType, SeriesType, ObsType, TimeValueType
+    SeriesType, ObsType, TimeValueType
 from ..data.generic import ValuesType, ObsOnlyType, ComponentValueType, ObsValueType
 from ..message.generic import GenericDataType, StructureSpecificDataType
 from ..model.itemScheme import Code, CodeList, Agency, ConceptScheme, Concept
@@ -21,7 +21,7 @@ from ..model.structure import DataStructureDefinition, DimensionDescriptor, Meas
     AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension
 from ..model.structure import Representation
 from ..structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
-    SeriesType as Series, TimeSeriesDataSetType as StructureTimeSeriesDataSetType
+    SeriesType as Series
 
 try:
     from lxml import etree as etree
@@ -582,8 +582,7 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition):
     return observation_list
 
 
-def parse_series_generic(obs, dsd, dimensionAtObservation):
-    count = 0
+def parse_series_generic(data, dsd, dimensionAtObservation):
     series_list = []
     series_key_codes = dsd.dimensionCodes
     attributes_codes = []
@@ -593,18 +592,37 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
             if isinstance(record.relatedTo, PrimaryMeasure):
                 obs_attributes_codes.append(record.id)
             elif isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
-                attributes_codes.append(record.id)
-    logger.debug("Series to parse from DSD %s: %d (Generic)" % (dsd.id, len(obs)))
-    for s in obs:
-        count = count + 1
-        if 'Data' not in s.keys() or 'Series' not in s.keys():
-            # TODO Warning series in position %d couldn´t be parsed. Missing Data or Series
-            continue
-        series_data = s.get('Series').copy()
-        data_frame = s.get('Data').copy()
-        list_keys = data_frame.keys()
-        iterations = len(data_frame)
-        series_ = None
+                if record.id in data.keys():
+                    attributes_codes.append(record.id)
+
+    all_codes = series_key_codes + attributes_codes
+
+    iterations = len(data)
+    logger.debug("Iterations for dataset %s: %d (Generic)" % (dsd.id, iterations))
+    series_dict = {}
+
+    for row in range(iterations):
+
+        df = data.iloc[row, :]
+        series_key_data = df.loc[all_codes]
+        obs_dict = {}
+
+        obs_dict['OBS_VALUE'] = df['OBS_VALUE']
+        obs_dict[dimensionAtObservation] = df[dimensionAtObservation]
+        for element in obs_attributes_codes:
+            if element in df.keys():
+                aux = df[element]
+                if aux is np.nan:
+                    continue
+
+                obs_dict[element] = aux
+        row_data = ':'.join(map(str, series_key_data.values.tolist()))
+        if row_data in series_dict.keys():
+            series_dict[row_data].get('Data').append(obs_dict)
+        else:
+            series_dict[row_data] = {'Key': series_key_data, 'Data': [obs_dict]}
+
+    for i in series_dict.values():
         series_ = SeriesType()
         series_attr = ValuesType()
         series_attr.original_tag_name_ = "Attributes"
@@ -612,9 +630,12 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
         series_key = ValuesType()
         series_key.original_tag_name_ = "SeriesKey"
 
+        key = i.get('Key').to_dict()
+        data = i.get('Data')
+
         for attr in attributes_codes:
-            if attr in series_data.keys():
-                aux = series_data.get(attr)
+            if attr in key.keys():
+                aux = key.get(attr)
                 attr_value = ComponentValueType()
                 attr_value.original_tag_name_ = "Value"
                 attr_value.set_id(attr)
@@ -622,18 +643,18 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
                 series_attr.add_Value(attr_value)
         series_.set_Attributes(series_attr)
 
-        for key in series_key_codes:
-            if key in series_data.keys():
-                aux = series_data.get(key)
+        for k in series_key_codes:
+            if k in key.keys():
+                aux = key.get(k)
                 key_value = ComponentValueType()
                 key_value.original_tag_name_ = "Value"
-                key_value.set_id(key)
+                key_value.set_id(k)
                 key_value.set_value(aux)
                 series_key.add_Value(key_value)
 
         series_.set_SeriesKey(series_key)
 
-        for row in range(iterations):
+        for obs_data in data:
             obs_ = ObsType()
             obs_.original_tag_name_ = "Obs"
             obs_._namespace_prefix = "generic"
@@ -642,30 +663,25 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
             obs_dim._namespace_prefix = "generic"
             obs_attr = ValuesType()
             obs_attr.original_tag_name_ = "Attributes"
-            df = data_frame.iloc[row, :]
-            for element in list_keys:
-                aux = df[element]
 
-                if aux is np.nan:
-                    continue
-
+            for key_data, value_data in obs_data.items():
                 # ObsAttributes
-                if element in obs_attributes_codes:
+                if key_data in obs_attributes_codes:
                     attr_value = ComponentValueType()
                     attr_value.original_tag_name_ = "Value"
-                    attr_value.set_id(element)
-                    attr_value.set_value(aux)
+                    attr_value.set_id(key_data)
+                    attr_value.set_value(value_data)
                     obs_attr.add_Value(attr_value)
                 # ObsDimension
-                elif element == dimensionAtObservation:
-                    obs_dim.set_id(element)
-                    obs_dim.set_value(aux)
+                elif key_data == dimensionAtObservation:
+                    obs_dim.set_id(key_data)
+                    obs_dim.set_value(value_data)
                 # ObsValue
-                elif element.upper() == "OBS_VALUE":
+                elif key_data.upper() == "OBS_VALUE":
                     value = ObsValueType()
                     value.original_tag_name_ = "ObsValue"
                     value._namespace_prefix = "generic"
-                    value.set_value(aux)
+                    value.set_value(value_data)
                     obs_.set_ObsValue(value)
 
             obs_.set_ObsDimension(obs_dim)
@@ -676,69 +692,58 @@ def parse_series_generic(obs, dsd, dimensionAtObservation):
     return series_list
 
 
-def parse_series_structure(obs, dsd, dimensionAtObservation):
-    count = 0
+def parse_series_structure(data, dsd, dimensionAtObservation):
     series_list = []
     series_key_codes = dsd.dimensionCodes
-    attributes_codes = []
+    series_key_codes.remove(dimensionAtObservation)
     obs_attributes_codes = []
     for record in dsd.attributeDescriptor.components.values():
         if record.relatedTo is not None:
             if isinstance(record.relatedTo, PrimaryMeasure):
                 obs_attributes_codes.append(record.id)
             if isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
-                attributes_codes.append(record.id)
+                if record.id in data.keys():
+                    series_key_codes.append(record.id)
 
-    for s in obs:
-        count = count + 1
-        if 'Data' not in s.keys() or 'Series' not in s.keys():
-            # TODO Warning series in position %d couldn´t be parsed. Missing Data or Series
-            continue
-        series_data = s.get('Series')
-        data_frame = s.get('Data')
+    iterations = len(data)
+    logger.debug("Iterations for dataset %s: %d (Structure)" % (dsd.id, iterations))
+    series_dict = {}
 
+    for row in range(iterations):
+
+        df = data.iloc[row, :]
+        series_key_data = df.loc[series_key_codes]
+        obs_dict = {}
+
+        obs_dict['OBS_VALUE'] = df['OBS_VALUE']
+        obs_dict[dimensionAtObservation] = df[dimensionAtObservation]
+        for element in obs_attributes_codes:
+            if element in df.keys():
+                aux = df[element]
+                if aux is np.nan:
+                    continue
+
+                obs_dict[element] = aux
+        row_data = ':'.join(map(str, series_key_data.values.tolist()))
+        if row_data in series_dict.keys():
+            series_dict[row_data].get('Data').append(obs_dict)
+        else:
+            series_dict[row_data] = {'Key': series_key_data, 'Data': [obs_dict]}
+
+    for i in series_dict.values():
         series = Series()
-        series.set_anyAttributes_(series_data)
-
-        list_keys = data_frame.keys()
-        observation_list = []
-        iterations = len(data_frame)
-        logger.debug("Iterations for dataset %s: %d (Structure)" % (dsd.id, iterations))
-
-        for row in range(iterations):
+        data = i.get('Data')
+        key = i.get('Key').to_dict()
+        series.set_anyAttributes_(key)
+        for obs_data in data:
 
             obs = Observation()
-            df = data_frame.iloc[row, :]
-
-            if 'OBS_VALUE' in list_keys:
-                obs_value = df['OBS_VALUE']
+            if 'OBS_VALUE' in obs_data.keys():
+                obs_value = obs_data.get('OBS_VALUE')
                 obs.set_OBS_VALUE(obs_value)
+                obs_data.pop('OBS_VALUE')
 
-            if 'TIME_PERIOD' in list_keys:
-                obs_time_period = df['TIME_PERIOD']
-                obs.set_TIME_PERIOD(obs_time_period)
-
-            if 'REPORTING_YEAR_START_DAY' in list_keys:
-                obs_reporting_year_start_day = df['REPORTING_YEAR_START_DAY']
-                obs.set_REPORTING_YEAR_START_DAY(obs_reporting_year_start_day)
-
-            obs_attributes = {}
-            for element in obs_attributes_codes:
-                if element in df.keys():
-                    aux = df[element]
-                    if aux is np.nan:
-                        continue
-
-                    obs_attributes[element] = aux
-
-            if len(series_key_codes) > 0:
-                for element in series_key_codes:
-                    if element in list_keys:
-                        aux = df[element]
-
-                        obs_attributes[element] = aux
-
-            obs.set_anyAttributes_(obs_attributes.copy())
+            obs.set_anyAttributes_(obs_data.copy())
             series.add_Obs(obs)
         series_list.append(series)
     return series_list
@@ -765,18 +770,8 @@ def generate_datasets_message(message: Message):
         element: DataSet
         dsd: DataStructureDefinition = element.structure
 
-        if element.datasetAttributes.get('dimensionAtObservation') != 'AllDimensions':
-            if dataset_type == DatasetType.GenericTimeSeriesDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-                allDimensions = False
-            else:
-                # TODO Warning dataset_type is not TimeSeries but dimensionAtObservation is not AllDimensions
-                continue
-        else:
-            if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.StructureDataSet:
-                allDimensions = True
-            else:
-                # TODO Warning dataset_type is TimeSeries but dimensionAtObservation is AllDimensions
-                continue
+        allDimensions = element.datasetAttributes.get('dimensionAtObservation') == 'AllDimensions'
+
         dataset_attr = ValuesType()
         dataset_attr.original_tag_name_ = "Attributes"
         if allDimensions:
@@ -807,8 +802,8 @@ def generate_datasets_message(message: Message):
             data_set._obs = obs_list
 
         else:
-            if dataset_type == DatasetType.GenericTimeSeriesDataSet:
-                data_set = GenericTimeSeriesDataSetType()
+            if dataset_type == DatasetType.GenericDataSet:
+                data_set = GenericDataSetType()
                 series_list = parse_series_generic(element.obs, dsd,
                                                    element.datasetAttributes.get('dimensionAtObservation'))
                 if series_list == None:
@@ -823,7 +818,7 @@ def generate_datasets_message(message: Message):
                     data_set.set_Attributes(dataset_attr)
 
             else:
-                data_set = StructureTimeSeriesDataSetType()
+                data_set = StructureDataSetType()
                 series_list = parse_series_structure(element.obs, dsd,
                                                      element.datasetAttributes.get('dimensionAtObservation'))
                 if series_list == None:
