@@ -1,7 +1,7 @@
 import logging
 
 # create logger
-from SDMXThon import DatasetType, readSDMX
+from SDMXThon import DatasetType, xmlToJSON
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -28,16 +28,14 @@ pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
 pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
 pathToJSON = 'SDMXThon/outputTests/output.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
+
+
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
 
 def main():
-    message = readSDMX(pathToDataFile, pathToMetadataFile, dataset_type=DatasetType.StructureDataSet)
-
-    # datasets = getDatasets(pathToDataFile, pathToMetadataFile, dataset_type=DatasetType.StructureDataSet)
-    # message = Message(DatasetType.GenericDataSet, datasets)
-
-    # xmlToJSON(pathSaveToGeneric, pathToMetadataFile, pathToJSON, dataset_type=DatasetType.GenericDataSet)
+    xmlToJSON(pathSaveToStructure, pathToMetadataFile, pathToJSON, dataset_type=DatasetType.StructureDataSet)
 
     # xmlToCSV(pathSaveToGeneric, pathToMetadataFile, pathToCSV, dataset_type=DatasetType.GenericDataSet)
 
@@ -48,7 +46,7 @@ gui = show(dataset_list)
 dataframes = gui.get_dataframes()
 
 for e in dataset_list:
-    e.obs = dataframes[e.code]
+    e.data = dataframes[e.code]
 """
 
 if __name__ == '__main__':

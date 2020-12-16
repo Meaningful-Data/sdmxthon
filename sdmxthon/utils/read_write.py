@@ -168,7 +168,7 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
                             else:
                                 series[o] = [text]
             check_empty(series)
-            item.obs = pd.DataFrame.from_dict(series)
+            item.data = pd.DataFrame.from_dict(series)
         elif len(e._obs) > 0:
             for i in e._obs:
                 list_keys = []
@@ -187,7 +187,7 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
                         else:
                             obsDict[o] = [text]
             check_empty(obsDict)
-            item.obs = pd.DataFrame.from_dict(obsDict.copy())
+            item.data = pd.DataFrame.from_dict(obsDict.copy())
         datasets[dsd.id] = item
     del xmlObj
     return datasets
@@ -293,14 +293,6 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                         else:
                             series[key] = [value]
 
-                    key = dataset_attributes['dimensionAtObservation']
-                    value = k.ObsDimension.gds_element_tree_node_.attrib.get('value')
-                    list_keys.append(key)
-                    if key in series.keys():
-                        series[key].append(value)
-                    else:
-                        series[key] = [value]
-
                     key = 'OBS_VALUE'
                     value = k.ObsValue.gds_element_tree_node_.attrib.get('value')
                     list_keys.append(key)
@@ -326,7 +318,7 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                             else:
                                 series[o] = [text]
             check_empty(series)
-            item.obs = pd.DataFrame.from_dict(series)
+            item.data = pd.DataFrame.from_dict(series)
         elif len(e._obs) > 0:
             obsDict = {}
             obs_attributes_keys = []
@@ -368,7 +360,7 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                         else:
                             obsDict[o] = [text]
             check_empty(obsDict)
-            item.obs = pd.DataFrame.from_dict(obsDict.copy())
+            item.data = pd.DataFrame.from_dict(obsDict.copy())
         datasets[dsd.id] = item
     del xmlObj
     return datasets

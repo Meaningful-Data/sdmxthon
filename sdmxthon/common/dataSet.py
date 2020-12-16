@@ -12,7 +12,7 @@ class DataSet:
     superclass = None
 
     def __init__(self, structure: DataStructureDefinition, dataset_attributes: dict = None,
-                 attached_attributes: dict = None, obs=None):
+                 attached_attributes: dict = None, data=None):
 
         self._structure = structure
 
@@ -26,10 +26,10 @@ class DataSet:
         else:
             self._attached_attributes = attached_attributes.copy()
 
-        if obs is None:
-            self._obs = pd.DataFrame()
+        if data is None:
+            self._data = pd.DataFrame()
         else:
-            self._obs = obs.copy()
+            self._data = data.copy()
 
     @property
     def structure(self):
@@ -56,24 +56,24 @@ class DataSet:
         self._attached_attributes = value
 
     @property
-    def obs(self):
-        return self._obs
+    def data(self):
+        return self._data
 
-    @obs.setter
-    def obs(self, value):
-        self._obs = value
+    @data.setter
+    def data(self, value):
+        self._data = value
 
     def readCSV(self, pathToCSV: str):
-        self._obs = pd.read_csv(pathToCSV)
+        self._data = pd.read_csv(pathToCSV)
 
     def readJSON(self, pathToJSON: str):
-        self._obs = pd.read_json(pathToJSON, orient='records')
+        self._data = pd.read_json(pathToJSON, orient='records')
 
     def readExcel(self, pathToExcel: str):
-        self._obs = pd.read_excel(pathToExcel)
+        self._data = pd.read_excel(pathToExcel)
 
     def toCSV(self, pathToCSV: str = None):
-        return self.obs.to_csv(pathToCSV, sep=',', encoding='utf-8', index=False, header=True)
+        return self.data.to_csv(pathToCSV, sep=',', encoding='utf-8', index=False, header=True)
 
     def toJSON(self, pathToJSON: str = None):
         element = {}
@@ -83,8 +83,8 @@ class DataSet:
         element['dataset_attributes'] = self.datasetAttributes
         element['attached_attributes'] = self.attachedAttributes
 
-        result = self.obs.to_json(orient="records")
-        element['obs'] = json.loads(result).copy()
+        result = self.data.to_json(orient="records")
+        element['data'] = json.loads(result).copy()
         if pathToJSON is None:
             return element
         else:
@@ -92,12 +92,12 @@ class DataSet:
                 f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
     def toFeather(self, pathToFeather):
-        self.obs.to_feather(pathToFeather)
+        self.data.to_feather(pathToFeather)
 
     def semanticValidation(self):
         validation_list = []
-        if isinstance(self.obs, DataFrame):
-            validate_obs(self.obs, self.structure, validation_list)
+        if isinstance(self.data, DataFrame):
+            validate_obs(self.data, self.structure, validation_list)
         else:
             raise ValueError('Obs for dataset %s is not well formed' % self.structure.id)
         return validation_list

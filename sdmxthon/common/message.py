@@ -161,5 +161,5 @@ class Message:
             datasets[e.code] = DataSetCreator(dsd=dsds[dsdid],
                                               dataset_attributes=e.get('dataset_attributes'),
                                               attached_attributes=e.get('attached_attributes'),
-                                              obs=e.get('obs'))
+                                              data=e.get('data'))
         self.payload = datasets

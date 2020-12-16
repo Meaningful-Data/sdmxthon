@@ -777,7 +777,7 @@ def generate_datasets_message(message: Message):
         if allDimensions:
             if dataset_type == DatasetType.GenericDataSet:
                 data_set = GenericDataSetType()
-                obs_list = parse_obs_generic_from_dsd(element.obs, dsd)
+                obs_list = parse_obs_generic_from_dsd(element.data, dsd)
                 if obs_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
                     continue
@@ -791,7 +791,7 @@ def generate_datasets_message(message: Message):
 
             else:
                 data_set = StructureDataSetType()
-                obs_list = parse_obs_structure_from_dsd(element.obs, dsd)
+                obs_list = parse_obs_structure_from_dsd(element.data, dsd)
                 if obs_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
                     continue
@@ -804,7 +804,7 @@ def generate_datasets_message(message: Message):
         else:
             if dataset_type == DatasetType.GenericDataSet:
                 data_set = GenericDataSetType()
-                series_list = parse_series_generic(element.obs, dsd,
+                series_list = parse_series_generic(element.data, dsd,
                                                    element.datasetAttributes.get('dimensionAtObservation'))
                 if series_list == None:
                     # TODO Warning dataset %s couldn´t be parsed
@@ -819,7 +819,7 @@ def generate_datasets_message(message: Message):
 
             else:
                 data_set = StructureDataSetType()
-                series_list = parse_series_structure(element.obs, dsd,
+                series_list = parse_series_structure(element.data, dsd,
                                                      element.datasetAttributes.get('dimensionAtObservation'))
                 if series_list == None:
                     # TODO Warning dataset %s couldn´t be parsed

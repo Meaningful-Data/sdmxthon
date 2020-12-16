@@ -6,7 +6,7 @@ from ..common.dataSet import DataSet
 
 
 def DataSetCreator(dsd, dataset_attributes=None, attached_attributes=None,
-                   obs=None):
+                   data=None):
     if dataset_attributes is None or dataset_attributes == {}:
         dataset_attributes = {"reportingBegin": None,
                               "reportingEnd": None,
@@ -23,14 +23,14 @@ def DataSetCreator(dsd, dataset_attributes=None, attached_attributes=None,
     else:
         check_DA_keys(dataset_attributes, dsd.id)
 
-    if isinstance(obs, pd.DataFrame):
+    if isinstance(data, pd.DataFrame):
         item = DataSet(structure=dsd,
                        dataset_attributes=dataset_attributes, attached_attributes=attached_attributes,
-                       obs=obs)
-    elif isinstance(obs, list):
+                       data=data)
+    elif isinstance(data, list):
         item = DataSet(structure=dsd,
                        dataset_attributes=dataset_attributes, attached_attributes=attached_attributes,
-                       obs=pd.DataFrame(obs))
+                       data=pd.DataFrame(data))
     else:
         return None
 
