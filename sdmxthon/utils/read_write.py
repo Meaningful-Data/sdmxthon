@@ -143,15 +143,17 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
 
         if len(e._Series) > 0:
             series = {}
-            obs = []
             for i in e._Series:
-                obs_dict = {}
                 series_key = {}
                 for key, value in i.gds_element_tree_node_.attrib.items():
                     series_key[key] = value
-                obs_dict['Series'] = series_key
                 for k in i._obs:
                     list_keys = []
+                    for key, value in series_key.items():
+                        if key in series.keys():
+                            series[key].append(value)
+                        else:
+                            series[key] = [value]
                     for key, value in k.gds_element_tree_node_.attrib.items():
                         list_keys.append(key)
                         if key in series.keys():
@@ -165,10 +167,8 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
                                 series[o].append(text)
                             else:
                                 series[o] = [text]
-                check_empty(series)
-                obs_dict['Data'] = pd.DataFrame.from_dict(series)
-                obs.append(obs_dict.copy())
-            item.obs = obs
+            check_empty(series)
+            item.obs = pd.DataFrame.from_dict(series)
         elif len(e._obs) > 0:
             for i in e._obs:
                 list_keys = []
@@ -189,7 +189,7 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
             check_empty(obsDict)
             item.obs = pd.DataFrame.from_dict(obsDict.copy())
         datasets[dsd.id] = item
-
+    del xmlObj
     return datasets
 
 
@@ -265,16 +265,14 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
         item.attachedAttributes = attached_attributes.copy()
 
         if len(e._Series) > 0:
-            obs = []
             obs_attributes_keys = []
             for record in dsd.attributeDescriptor.components.values():
                 if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
                     obs_attributes_keys.append(record.id)
-
+            series = {}
             for i in e._Series:
-                obs_dict = {}
                 series_key = {}
-                series = {}
+
                 if i._Attributes is not None:
                     for m in i._Attributes.Value:
                         key = m.gds_element_tree_node_.attrib.get('id')
@@ -285,9 +283,15 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                     key = j.gds_element_tree_node_.attrib.get('id')
                     value = j.gds_element_tree_node_.attrib.get('value')
                     series_key[key] = value
-                obs_dict['Series'] = series_key
                 for k in i._obs:
                     list_keys = []
+
+                    for key, value in series_key.items():
+                        list_keys.append(key)
+                        if key in series.keys():
+                            series[key].append(value)
+                        else:
+                            series[key] = [value]
 
                     key = dataset_attributes['dimensionAtObservation']
                     value = k.ObsDimension.gds_element_tree_node_.attrib.get('value')
@@ -321,10 +325,8 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                                 series[o].append(text)
                             else:
                                 series[o] = [text]
-                check_empty(series)
-                obs_dict['Data'] = pd.DataFrame.from_dict(series)
-                obs.append(obs_dict.copy())
-            item.obs = obs
+            check_empty(series)
+            item.obs = pd.DataFrame.from_dict(series)
         elif len(e._obs) > 0:
             obsDict = {}
             obs_attributes_keys = []
@@ -368,5 +370,5 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
             check_empty(obsDict)
             item.obs = pd.DataFrame.from_dict(obsDict.copy())
         datasets[dsd.id] = item
-
+    del xmlObj
     return datasets

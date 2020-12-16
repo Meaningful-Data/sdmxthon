@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from SDMXThon import DatasetType, readSDMX, messageToXML
+from SDMXThon import DatasetType, getDatasets
 
 # create logger
 
@@ -13,8 +13,8 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
 # create formatter
-# formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
-formatter = logging.Formatter("%(message)s")
+formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
+# formatter = logging.Formatter("%(message)s")
 # add formatter to ch
 ch.setFormatter(formatter)
 
@@ -22,32 +22,26 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 pathDSDS = 'SDMXThon/outputTests/metadata/dsds.pickle'
-pathToDataFile = 'SDMXThon/test/ecu/IRIS/generic.xml'
+pathToDataFile = 'SDMXThon/outputTests/BIS_DER.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToStructure = 'SDMXThon/outputTests/outputSpe.xml'
 pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
 pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
 pathToJSON = 'SDMXThon/outputTests/output.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
 
 def main():
-    message = readSDMX(pathSaveToGeneric, pathToMetadataFile, dataset_type=DatasetType.GenericDataSet)
+    # messageToXML(pathSaveToGeneric, message)
 
-    messageToXML(pathSaveToGeneric, message)
+    datasets = getDatasets(pathToDataFile, pathToMetadataFile, dataset_type=DatasetType.StructureDataSet)
 
-    """
-    datasets = getDatasets(pathToDataFile, pathToMetadataFile, dataset_type=DatasetType.GenericDataSet)
+    # message = Message(DatasetType.GenericDataSet, datasets)
 
-    message = Message(DatasetType.GenericDataSet, datasets)
+    # xmlToJSON(pathSaveToGeneric, pathToMetadataFile, pathToJSON, dataset_type=DatasetType.GenericDataSet)
 
-    message.headerCreation(id_='test')
-
-    xmlToJSON(pathSaveToGeneric, pathToMetadataFile, pathToJSON, dataset_type=DatasetType.GenericDataSet)
-
-    xmlToCSV(pathSaveToGeneric, pathToMetadataFile, pathToCSV, dataset_type=DatasetType.GenericDataSet)
-    """
+    # xmlToCSV(pathSaveToGeneric, pathToMetadataFile, pathToCSV, dataset_type=DatasetType.GenericDataSet)
 
     # header = headerCreation(id_='test', dataset_type=DatasetType.GenericDataSet)
 

@@ -44,7 +44,11 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None) -> dict:
 
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
+    logger.debug('XML read')
+
     dsds = getMetadata(pathToMetadata)
+
+    logger.debug('Metadata read')
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         return sdmxGenToDataSet(objStructure, dsds)
