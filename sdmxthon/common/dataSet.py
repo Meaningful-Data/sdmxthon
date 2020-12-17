@@ -1,10 +1,15 @@
 import json
+from datetime import date
 
 import pandas as pd
 from pandas import DataFrame
 
+from ..message.generic import GenericDataType, StructureSpecificDataType
 from ..model.structure import DataStructureDefinition
+from ..utils.dataset_parsing import get_structure_from_dsd, generateDataSetXML, defaultHeader
+from ..utils.enums import DatasetType
 from ..utils.validations import validate_obs
+from ..utils.write import save_file
 
 
 class DataSet:
@@ -17,9 +22,9 @@ class DataSet:
         self._structure = structure
 
         if dataset_attributes is None:
-            self._dataset_attributes = {}
+            self.check_DA_keys({}, structure.id)
         else:
-            self._dataset_attributes = dataset_attributes.copy()
+            self.check_DA_keys(dataset_attributes, structure.id)
 
         if attached_attributes is None:
             self._attached_attributes = {}
@@ -29,7 +34,19 @@ class DataSet:
         if data is None:
             self._data = pd.DataFrame()
         else:
-            self._data = data.copy()
+            if isinstance(data, pd.DataFrame):
+                self.data = data.copy()
+            else:
+                self.data = pd.DataFrame(data)
+
+    def __str__(self):
+        return '<DataSet  - %s>' % self.structure.id
+
+    def __unicode__(self):
+        return '<DataSet  - %s>' % self.structure.id
+
+    def __repr__(self):
+        return '<DataSet  - %s>' % self.structure.id
 
     @property
     def structure(self):
@@ -105,5 +122,59 @@ class DataSet:
     def setDimensionAtObservation(self, dimAtObs):
         if dimAtObs in self.structure.dimensionCodes:
             self.datasetAttributes['dimensionAtObservation'] = dimAtObs
+        elif dimAtObs == 'AllDimensions':
+            self.datasetAttributes['dimensionAtObservation'] = dimAtObs
         else:
             raise ValueError('%s is not a dimension of dataset %s' % (dimAtObs, self.structure.id))
+
+    def check_DA_keys(self, attributes, code):
+        keys = ["reportingBegin", "reportingEnd", "dataExtractionDate", "validFrom", "validTo", "publicationYear",
+                "publicationPeriod", "action", "setId", "dimensionAtObservation"]
+
+        for spared_key in attributes.keys():
+            if spared_key not in keys:
+                attributes.pop(spared_key)
+
+        for k in keys:
+            if k not in attributes.keys():
+                if k == "dataExtractionDate":
+                    attributes[k] = date.today()
+                elif k == "action":
+                    attributes[k] = "Replace"
+                elif k == "setId":
+                    attributes[k] = code
+                elif k == "dimensionAtObservation":
+                    attributes[k] = "AllDimensions"
+                else:
+                    attributes[k] = None
+
+        self.datasetAttributes = attributes.copy()
+
+    def toXML(self, dataset_type: DatasetType = DatasetType.GenericDataSet, outputPath=''):
+
+        structures = []
+
+        header = defaultHeader(dataset_type)
+
+        if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+            messageXML = GenericDataType()
+        elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
+            messageXML = StructureSpecificDataType()
+        else:
+            raise ValueError('Wrong Dataset Type')
+
+        data_set = generateDataSetXML(self, dataset_type)
+
+        messageXML.add_DataSet(data_set)
+
+        allDimensions = self.datasetAttributes.get('dimensionAtObservation') == 'AllDimensions'
+
+        structure = get_structure_from_dsd(self.structure, self, dataset_type, allDimensions=allDimensions)
+
+        structures.append(structure)
+        header.set_Structure(structures)
+        messageXML.set_Header(header)
+        if outputPath != '':
+            save_file(messageXML, outputPath)
+        else:
+            return save_file(messageXML, outputPath)

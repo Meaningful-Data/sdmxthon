@@ -4,16 +4,13 @@ import sys
 from typing import Dict
 from zipfile import ZipFile
 
-from lxml import etree
-
 from .common.dataSet import DataSet
 from .common.message import Message
-from .utils.creators import DataSetCreator
+from .utils.dataset_parsing import getMetadata
 from .utils.enums import DatasetType
-from .utils.parsers import generate_datasets_message, id_creator, get_codelist_model, \
-    get_concept_schemes, get_DSDs
-from .utils.read_write import load_AllDimensions, save_AllDimensions, sdmxGenToDataSet, \
+from .utils.read import load_AllDimensions, sdmxGenToDataSet, \
     sdmxStrToDataset
+from .utils.write import save_file
 
 # create logger
 logger = logging.getLogger("logger")
@@ -37,50 +34,38 @@ def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
     return Message(dataset_type, datasets, header)
 
 
-def getDatasets(path_to_xml, pathToMetadata, dataset_type=None) -> dict:
-    if dataset_type == None:
+def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
+    if dataset_type is None:
         raise ValueError('Dataset Type is None')
 
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
     dsds = getMetadata(pathToMetadata)
 
+    datasets = {}
+
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        return sdmxGenToDataSet(objStructure, dsds)
+        datasets = sdmxGenToDataSet(objStructure, dsds)
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        return sdmxStrToDataset(objStructure, dsds)
+        datasets = sdmxStrToDataset(objStructure, dsds)
     else:
         raise ValueError('Invalid Dataset Type')
 
-
-def getMetadata(pathToMetadata) -> dict:
-    root = etree.parse(pathToMetadata)
-
-    codelists = get_codelist_model(root)
-    concepts = get_concept_schemes(root, codelists)
-    return get_DSDs(root, concepts, codelists)
-
-
-def messageToXML(output_path, message):
-    if len(message.payload) == 0:
-        raise ValueError('Datasets must be provided')
-
-    messageXML = generate_datasets_message(message)
-    if message == None:
-        raise ValueError('Message could not be parsed')
-    if output_path == '':
-        return save_AllDimensions(messageXML, output_path)
+    if len(datasets) == 1:
+        values_view = datasets.values()
+        value_iterator = iter(values_view)
+        first_value = next(value_iterator)
+        return first_value
     else:
-        save_AllDimensions(messageXML, output_path)
+        return datasets
 
 
 def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
     list_elements = []
 
-    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata, dataset_type)
+    dataset = getDatasets(pathToXML, pathToMetadata, dataset_type)
 
-    for e in datasets.values():
-        list_elements.append(e.toJSON())
+    list_elements.append(dataset.toJSON())
     with open(output_path, 'w') as f:
         f.write(json.dumps(list_elements, ensure_ascii=False, indent=2))
 
@@ -125,10 +110,10 @@ def readJSON(pathToJSON, dsds) -> dict:
         dsdid = id_creator(agencyID, code, version)
         if dsdid not in dsds.keys():
             raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
-        datasets[code] = DataSetCreator(dsd=dsds[dsdid],
-                                        dataset_attributes=e.get('dataset_attributes'),
-                                        attached_attributes=e.get('attached_attributes'),
-                                        data=e.get('data'))
+        datasets[code] = DataSet(structure=dsds[dsdid],
+                                 dataset_attributes=e.get('dataset_attributes'),
+                                 attached_attributes=e.get('attached_attributes'),
+                                 data=e.get('data'))
     return datasets
 
 

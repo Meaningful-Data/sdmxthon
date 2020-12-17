@@ -28,7 +28,7 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
         return []
 
     for record in dsd.attributeDescriptor.components.values():
-        if record.relatedTo is not None:
+        if record.relatedTo is not None and record.usageStatus == "Mandatory":
             if isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
                 data.append(record.id)
 

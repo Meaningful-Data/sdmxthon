@@ -1,7 +1,10 @@
 import logging
-
 # create logger
-from SDMXThon import DatasetType, xmlToJSON
+import sqlite3
+
+import pandas as pd
+
+from SDMXThon import DataSet, getMetadata, DatasetType
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -20,34 +23,103 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 pathDSDS = 'SDMXThon/outputTests/metadata/dsds.pickle'
-pathTest = 'SDMXThon/outputTests/test_GEN.xml'
+pathTestGEN = 'SDMXThon/outputTests/test_GEN.xml'
+pathTestGENSer = 'SDMXThon/outputTests/test_GEN_ser.xml'
+pathTestXS = 'SDMXThon/outputTests/test_XS.xml'
+pathTestXSSer = 'SDMXThon/outputTests/test_XS_ser.xml'
 pathToDataFile = 'SDMXThon/outputTests/BIS_DER_test.xml'
 pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
 pathSaveToStructure = 'SDMXThon/outputTests/outputSpe.xml'
 pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
 pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
-pathToJSON = 'SDMXThon/outputTests/output.json'
+pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
+urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
+pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
+pathToData = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
 
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
 
 def main():
-    xmlToJSON(pathSaveToStructure, pathToMetadataFile, pathToJSON, dataset_type=DatasetType.StructureDataSet)
+    """
+    dataset = getDatasets(pathToData, urlMetadata, DatasetType.StructureDataSet)
+    print(dataset)
+    """
+    """ DEMO 2
+    conn = sqlite3.connect(pathToDB)
+    df = pd.read_sql('SELECT * from BIS_DER WHERE DER_TYPE = "A" and DER_RISK = "T";', conn)
 
+    dsds = getMetadata(urlMetadata)
+
+    dataset = DataSet(dsds["BIS:BIS_DER(1.0)"], data=df)
+
+    errors = dataset.semanticValidation()
+
+    print(errors)
+
+    print(df)
+    """
+    """ DEMO 3
+    dataset.toXML(DatasetType.GenericDataSet, pathTest)
+
+    message = Message(DatasetType.GenericDataSet)
+    message.readJSON(pathToJSON, urlMetadata)
+    message.toXML(pathTest)
+    """
+
+    # xmlToJSON(pathToDataFile, urlMetadata, pathToJSON, DatasetType.StructureDataSet)
+    logger.debug('Inicio lectura')
+    conn = sqlite3.connect(pathToDB)
+    df = pd.read_sql('SELECT * from BIS_DER WHERE DER_TYPE = "A" and DER_RISK = "T";', conn)
+
+    dsds = getMetadata(urlMetadata)
+    df['FREQ'] = 'A'
+    dataset = DataSet(dsds["BIS:BIS_DER(1.0)"], data=df)
+
+    logger.debug('Inicio escritura')
+    dataset.setDimensionAtObservation('TIME_PERIOD')
+    dataset.toXML(DatasetType.GenericDataSet, pathTestGENSer)
+    logger.debug('Fin Series Generic')
+
+    dataset.setDimensionAtObservation('AllDimensions')
+    dataset.toXML(DatasetType.GenericDataSet, pathTestGEN)
+    logger.debug('Fin All Generic')
+
+    dataset.setDimensionAtObservation('TIME_PERIOD')
+    dataset.toXML(DatasetType.StructureDataSet, pathTestXSSer)
+    logger.debug('Fin Series Structure')
+
+    dataset.setDimensionAtObservation('AllDimensions')
+    dataset.toXML(DatasetType.StructureDataSet, pathTestXS)
+    logger.debug('Fin All Structure')
+
+    """
+    logger.debug('Start')
+    message = Message(DatasetType.GenericDataSet)
+    message.readJSON(pathToJSON, urlMetadata)
+    logger.debug('Reading JSON')
+
+    message.toXML(pathTestGENSer)
+    logger.debug('Writing to Generic (AllDimensions)')
+
+    message.setDimensionAtObservation('AllDimensions')
+    message.toXML(pathTestGEN)
+    logger.debug('Writing to Generic (TimeSeries)')
+
+    message.type = DatasetType.StructureDataSet
+    message.toXML(pathTestXS)
+    logger.debug('Writing to Structure (AllDimensions)')
+
+
+    message.setDimensionAtObservation('TIME_PERIOD')
+    message.toXML(pathTestXSSer)
+    logger.debug('Writing to Structure (TimeSeries)')
+    """
     # xmlToCSV(pathSaveToGeneric, pathToMetadataFile, pathToCSV, dataset_type=DatasetType.GenericDataSet)
 
-
-"""
-gui = show(dataset_list)
-
-dataframes = gui.get_dataframes()
-
-for e in dataset_list:
-    e.data = dataframes[e.code]
-"""
 
 if __name__ == '__main__':
     main()
