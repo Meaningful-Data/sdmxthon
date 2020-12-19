@@ -1,7 +1,11 @@
+import logging
+
 import numpy as np
 from pandas import DataFrame
 
 from ..model.structure import DataStructureDefinition, Dimension
+
+logger = logging.getLogger("logger")
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
@@ -35,55 +39,79 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
     return data
 
 
-def validate_obs(data: DataFrame, dsd: DataStructureDefinition, validation_list, mandatory_attributes: list = None):
-    if 'OBS_VALUE' not in data.keys():
-        validation_list.append('SS02: Missing OBS_VALUE for dataset %s' % dsd.id)
-
-    if mandatory_attributes is None:
-        mandatory_attributes = get_mandatory_attributes(dsd)
-
+def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
+    mandatory = get_mandatory_attributes(dsd)
     codelist_values: dict = get_codelist_values(dsd)
 
-    iterations = len(data)
+    """
+        Validations stands for the next schema:
+        
+        SS01: Check if all dimensions of a DSD exist in the dataset
+        SS02: Check if  OBS_VALUE exists in the datasets
+        SS03: Check if all mandatory attributes exit in the datasets
+        SS04: Check if an attribute/dimension value that is associated to a Codelist is valid
+        SS05: Check that all dimensions have values for every record of a dataset
+        SS06: Check that all mandatory attributes have values for every record of a dataset
+    """
 
-    for i in dsd.dimensionCodes:
-        if i not in data.keys():
-            validation_list.append('SS01: Missing dimension %s on dataset %s' % (i, dsd.id))
+    list_SS01 = []
+    list_SS02 = []
+    list_SS03 = []
+    list_SS04 = []
+    list_SS05 = []
+    list_SS06 = []
 
-    for j in mandatory_attributes:
-        if j not in data.keys():
-            validation_list.append('SS03: Missing attribute %s on dataset %s' % (j, dsd.id))
+    if 'OBS_VALUE' not in data.keys():
+        list_SS02.append(f'Missing OBS_VALUE for dataset {dsd.id}')
+    else:
+        if data['OBS_VALUE'].isnull().values.any():
+            # list_SS02.append(f'Missing values for OBS_VALUE for dataset {dsd.id}')
+            df = data[data['OBS_VALUE'] == np.nan]
+            list_SS02 += df[:].apply(lambda row: f'Missing value for OBS_VALUE on row {":".join(map(str, row.values))}'
+                                                 f' for dataset {dsd.id}', axis=1).tolist()
 
-    for k in data.keys():
-        df = data[k]
-        if k not in dsd.dimensionCodes and k not in dsd.attributeCodes:
+    for k in dsd.dimensionCodes:
+        if k not in data.keys():
+            list_SS01.append(f'Missing dimension {k} on dataset {dsd.id}')
             continue
-        for row in range(iterations):
-            aux = df[row]
+        values = data[k].unique()
+        for e in values:
+            if e == np.nan or str(e) == 'nan' or str(e) == 'None':
+                # list_SS05.append(f'Missing values for dimension {k} for dataset {dsd.id}')
+                df = data[data[k] == np.nan]
+                list_SS05 += df[:].apply(lambda row: f'Missing value "{e}" for dimension {k} on '
+                                                     f'row {":".join(map(str, row.values))} for dataset {dsd.id}',
+                                         axis=1).tolist()
+            elif k in codelist_values.keys() and str(e) not in codelist_values[k]:
+                list_SS04.append(f'Wrong value "{e}" for dimension {k} for dataset {dsd.id}')
+                df = data[data[k] == e]
+                list_SS04 += df[:].apply(lambda row: f'Wrong value "{e}" for dimension {k} '
+                                                     f'on row {":".join(map(str, row.values))} for dataset {dsd.id}',
+                                         axis=1).tolist()
 
-            if aux == np.nan:
-                row_data = ':'.join(map(str, data.loc[row, :].values.tolist()))
-                if k in mandatory_attributes:
-                    validation_list.append(
-                        'SS06: Missing value for attribute %s on row %s for dataset %s' % (k, row_data, dsd.id))
-                elif k in dsd.attributeCodes:
-                    validation_list.append(
-                        'SS04: Missing value for attribute %s on row %s for dataset %s' % (k, row_data, dsd.id))
-                elif k == 'OBS_VALUE':
-                    validation_list.append(
-                        'SS02: Missing value for OBS_VALUE on row %s for dataset %s' % (row_data, dsd.id))
-                else:
-                    validation_list.append(
-                        'SS05: Missing value for dimension %s on row %s for dataset %s' % (k, row_data, dsd.id))
+    for k in dsd.attributeCodes:
+        if k not in data.keys():
+            if k in mandatory:
+                list_SS03.append(f'Missing attribute {k} on dataset {dsd.id}')
+            continue
+        values = data[k].unique()
+        for e in values:
+            if e is np.nan or e is 'nan' or e is 'None' or e is None:
+                if k in mandatory:
+                    # list_SS06.append(f'Missing values for attribute {k} for dataset {dsd.id}')
+                    df = data[data[k] == np.nan]
+                    list_SS06 += df[:].apply(lambda row: f'Missing value for attribute {k} on row '
+                                                         f'{":".join(map(str, row.values))} for dataset {dsd.id}',
+                                             axis=1).tolist()
+            elif k in codelist_values.keys() and str(e) not in codelist_values[k]:
+                # list_SS04.append(f'Wrong value "{e}" for attribute {k} for dataset {dsd.id}')
+                df = data[data[k] == e]
+                list_SS04 += df[:].apply(lambda row: f'Wrong value "{e}" for attribute {k} '
+                                                     f'on row {":".join(map(str, row.values))} for dataset {dsd.id}',
+                                         axis=1).tolist()
 
-            elif k in codelist_values.keys() and aux not in codelist_values[k]:
-                row_data = ':'.join(map(str, data.loc[row, :].values.tolist()))
-                if k in mandatory_attributes:
-                    validation_list.append('SS06: Wrong value "%s" for attribute %s on row %s for dataset %s' %
-                                           (aux, k, row_data, dsd.id))
-                elif k in dsd.attributeCodes:
-                    validation_list.append('SS04: Wrong value "%s" for attribute %s on row %s for dataset %s' %
-                                           (aux, k, row_data, dsd.id))
-                else:
-                    validation_list.append('SS05: Wrong value "%s" for dimension %s on row %s for dataset %s' %
-                                           (aux, k, row_data, dsd.id))
+    # Dictionary creation with key as each code and value the list of errors related
+    errors = {'SS01': list_SS01, 'SS02': list_SS02, 'SS03': list_SS03, 'SS04': list_SS04, 'SS05': list_SS05,
+              'SS06': list_SS06}
+
+    return errors

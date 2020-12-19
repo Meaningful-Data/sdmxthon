@@ -7,7 +7,7 @@
     <message:Header>
         <message:ID>test</message:ID>
         <message:Test>true</message:Test>
-        <message:Prepared>2020-12-17T17:46:12</message:Prepared>
+        <message:Prepared>2020-12-18T10:33:00</message:Prepared>
         <message:Sender id="Unknown"/>
         <message:Receiver id="Not_supplied"/>
         <message:Structure structureID="BORROWINGS" dimensionAtObservation="AllDimensions">

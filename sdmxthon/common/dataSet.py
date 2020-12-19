@@ -112,12 +112,10 @@ class DataSet:
         self.data.to_feather(pathToFeather)
 
     def semanticValidation(self):
-        validation_list = []
         if isinstance(self.data, DataFrame):
-            validate_obs(self.data, self.structure, validation_list)
+            return validate_obs(self.data, self.structure)
         else:
             raise ValueError('Obs for dataset %s is not well formed' % self.structure.id)
-        return validation_list
 
     def setDimensionAtObservation(self, dimAtObs):
         if dimAtObs in self.structure.dimensionCodes:

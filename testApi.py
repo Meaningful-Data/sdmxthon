@@ -1,10 +1,9 @@
 import logging
-# create logger
 import sqlite3
 
 import pandas as pd
 
-from SDMXThon import DataSet, getMetadata, DatasetType
+from SDMXThon import DataSet, getMetadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -38,6 +37,8 @@ pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_200
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
 pathToData = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
+pathToCSVData = 'SDMXThon/outputTests/BIS_data.csv'
+pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
@@ -48,20 +49,27 @@ def main():
     dataset = getDatasets(pathToData, urlMetadata, DatasetType.StructureDataSet)
     print(dataset)
     """
-    """ DEMO 2
+
+    logger.debug('Start reading')
+    # df = pd.read_csv(pathToCSVData2, dtype=str)
     conn = sqlite3.connect(pathToDB)
-    df = pd.read_sql('SELECT * from BIS_DER WHERE DER_TYPE = "A" and DER_RISK = "T";', conn)
+    df = pd.read_sql('SELECT * from BIS_DER_little', conn)
+    logger.debug('End reading')
 
     dsds = getMetadata(urlMetadata)
 
     dataset = DataSet(dsds["BIS:BIS_DER(1.0)"], data=df)
-
+    logger.debug('Start validation')
     errors = dataset.semanticValidation()
+    logger.debug('End validation')
 
-    print(errors)
+    print(f"SS01: {errors['SS01']}")
+    print(f"SS02: {errors['SS02']}")
+    print(f"SS03: {errors['SS03']}")
+    print(f"SS04: {errors['SS04']}")
+    print(f"SS05: {errors['SS05']}")
+    print(f"SS06: {errors['SS06']}")
 
-    print(df)
-    """
     """ DEMO 3
     dataset.toXML(DatasetType.GenericDataSet, pathTest)
 
@@ -70,20 +78,7 @@ def main():
     message.toXML(pathTest)
     """
 
-    # xmlToJSON(pathToDataFile, urlMetadata, pathToJSON, DatasetType.StructureDataSet)
-    logger.debug('Inicio lectura')
-    conn = sqlite3.connect(pathToDB)
-    df = pd.read_sql('SELECT * from BIS_DER WHERE DER_TYPE = "A" and DER_RISK = "T";', conn)
-
-    dsds = getMetadata(urlMetadata)
-    df['FREQ'] = 'A'
-    dataset = DataSet(dsds["BIS:BIS_DER(1.0)"], data=df)
-
-    logger.debug('Inicio escritura')
-    dataset.setDimensionAtObservation('TIME_PERIOD')
-    dataset.toXML(DatasetType.GenericDataSet, pathTestGENSer)
-    logger.debug('Fin Series Generic')
-
+    """
     dataset.setDimensionAtObservation('AllDimensions')
     dataset.toXML(DatasetType.GenericDataSet, pathTestGEN)
     logger.debug('Fin All Generic')
@@ -95,6 +90,7 @@ def main():
     dataset.setDimensionAtObservation('AllDimensions')
     dataset.toXML(DatasetType.StructureDataSet, pathTestXS)
     logger.debug('Fin All Structure')
+    """
 
     """
     logger.debug('Start')
