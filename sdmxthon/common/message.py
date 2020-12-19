@@ -159,7 +159,7 @@ class Message:
                                      data=e.get('data'))
         self.payload = datasets
 
-    def toXML(self, outputPath):
+    def toXML(self, outputPath=''):
         if len(self.payload) == 0:
             raise ValueError('Datasets must be provided')
 
