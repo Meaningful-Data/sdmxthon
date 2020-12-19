@@ -111,7 +111,18 @@ def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
                                          axis=1).tolist()
 
     # Dictionary creation with key as each code and value the list of errors related
-    errors = {'SS01': list_SS01, 'SS02': list_SS02, 'SS03': list_SS03, 'SS04': list_SS04, 'SS05': list_SS05,
-              'SS06': list_SS06}
+    errors = {}
+    if len(list_SS01) > 0:
+        errors['SS01'] = list_SS01
+    if len(list_SS02) > 0:
+        errors['SS02'] = list_SS02
+    if len(list_SS03) > 0:
+        errors['SS03'] = list_SS03
+    if len(list_SS04) > 0:
+        errors['SS04'] = list_SS04
+    if len(list_SS05) > 0:
+        errors['SS05'] = list_SS05
+    if len(list_SS06) > 0:
+        errors['SS06'] = list_SS06
 
     return errors

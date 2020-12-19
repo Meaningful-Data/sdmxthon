@@ -63,12 +63,7 @@ def main():
     errors = dataset.semanticValidation()
     logger.debug('End validation')
 
-    print(f"SS01: {errors['SS01']}")
-    print(f"SS02: {errors['SS02']}")
-    print(f"SS03: {errors['SS03']}")
-    print(f"SS04: {errors['SS04']}")
-    print(f"SS05: {errors['SS05']}")
-    print(f"SS06: {errors['SS06']}")
+    print(errors)
 
     """ DEMO 3
     dataset.toXML(DatasetType.GenericDataSet, pathTest)
