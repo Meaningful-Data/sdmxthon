@@ -83,7 +83,7 @@ def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
                                                      f'row {":".join(map(str, row.values))} for dataset {dsd.id}',
                                          axis=1).tolist()
             elif k in codelist_values.keys() and str(e) not in codelist_values[k]:
-                list_SS04.append(f'Wrong value "{e}" for dimension {k} for dataset {dsd.id}')
+                # list_SS04.append(f'Wrong value "{e}" for dimension {k} for dataset {dsd.id}')
                 df = data[data[k] == e]
                 list_SS04 += df[:].apply(lambda row: f'Wrong value "{e}" for dimension {k} '
                                                      f'on row {":".join(map(str, row.values))} for dataset {dsd.id}',
