@@ -110,15 +110,10 @@ def parse_obs_generic_from_dsd(data_frame, dsd: DataStructureDefinition):
 
 
 def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition):
-    obs_attributes_keys = dsd.attributeCodes
-    obs_attributes = {}
-    for e in obs_attributes_keys:
+    obs_attributes = []
+    for e in dsd.attributeCodes:
         if e not in dsd.datasetAttributeCodes:
-            obs_attributes[e] = ''
-    series_list_keys = dsd.dimensionCodes
-    series_attributes = {}
-    for e in series_list_keys:
-        series_attributes[e] = ''
+            obs_attributes.append(e)
     list_keys = data_frame.keys()
     observation_list = []
     iterations = len(data_frame)
@@ -126,7 +121,6 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition):
     for row in range(iterations):
 
         obs = Observation()
-        series = Series()
         df = data_frame.iloc[row, :]
 
         if 'OBS_VALUE' in list_keys:
@@ -141,30 +135,21 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition):
             obs_reporting_year_start_day = df['REPORTING_YEAR_START_DAY']
             obs.set_REPORTING_YEAR_START_DAY(obs_reporting_year_start_day)
 
-        obs_list_keys = obs_attributes.keys()
+        dict_obs_attributes = {}
 
-        for element in obs_list_keys:
+        for element in obs_attributes:
             if element in df.keys():
                 aux = df[element]
                 if aux is np.nan:
                     continue
+                dict_obs_attributes[element] = aux
 
-                obs_attributes[element] = aux
-
-        if len(series_attributes) > 0:
-            series_list_keys = series_attributes.keys()
-            for element in series_list_keys:
+            for element in dsd.dimensionCodes:
                 if element in list_keys:
                     aux = df[element]
-                    if aux == '' or aux is None or aux is np.nan:
-                        aux = "N_A"
+                    dict_obs_attributes[element] = aux
 
-                    obs_attributes[element] = aux
-                else:
-                    obs_attributes[element] = 'N_A'
-
-        obs.set_anyAttributes_(obs_attributes.copy())
-        series.set_anyAttributes_(series_attributes)
+        obs.set_anyAttributes_(dict_obs_attributes.copy())
         observation_list.append(obs)
 
     return observation_list

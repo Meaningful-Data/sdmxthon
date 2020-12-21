@@ -3,7 +3,8 @@ import sqlite3
 
 import pandas as pd
 
-from SDMXThon import DataSet, getMetadata
+from SDMXThon import getMetadata
+from SDMXThon.model.structure import DataStructureDefinition, Attribute, PrimaryMeasure
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -36,7 +37,9 @@ pathToCSV = 'SDMXThon/outputTests/csv.zip'
 pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
-pathToData = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
+pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
+pathToData = 'SDMXThon/outputTests/RBI_test.xml'
+pathTest = 'SDMXThon/outputTests/RBI_out_test.xml'
 pathToCSVData = 'SDMXThon/outputTests/BIS_data.csv'
 pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
@@ -51,19 +54,27 @@ def main():
     """
 
     logger.debug('Start reading')
-    # df = pd.read_csv(pathToCSVData2, dtype=str)
     conn = sqlite3.connect(pathToDB)
     df = pd.read_sql('SELECT * from BIS_DER_little', conn)
     logger.debug('End reading')
 
+    df['FREQ'] = 'S'
+
     dsds = getMetadata(urlMetadata)
+    dsd: DataStructureDefinition = dsds["BIS:BIS_DER(1.0)"]
 
-    dataset = DataSet(dsds["BIS:BIS_DER(1.0)"], data=df)
-    logger.debug('Start validation')
-    errors = dataset.semanticValidation()
-    logger.debug('End validation')
+    grouping_keys = dsd.dimensionCodes
+    grouping_keys.remove('TIME_PERIOD')
 
-    print(errors)
+    for e in dsd.attributeDescriptor.components.values():
+        e: Attribute
+        if e.id in df.keys() and e.relatedTo is not None and not isinstance(e.relatedTo, PrimaryMeasure):
+            grouping_keys.append(e.id)
+
+    logger.debug('Start grouping')
+
+    yourdf = df[~df.duplicated(subset=grouping_keys)][grouping_keys].reset_index()
+    logger.debug('End grouping')
 
     """ DEMO 3
     dataset.toXML(DatasetType.GenericDataSet, pathTest)
@@ -109,7 +120,6 @@ def main():
     message.toXML(pathTestXSSer)
     logger.debug('Writing to Structure (TimeSeries)')
     """
-    # xmlToCSV(pathSaveToGeneric, pathToMetadataFile, pathToCSV, dataset_type=DatasetType.GenericDataSet)
 
 
 if __name__ == '__main__':

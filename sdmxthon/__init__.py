@@ -1,5 +1,4 @@
 import json
-import logging
 import sys
 from typing import Dict
 from zipfile import ZipFile
@@ -8,18 +7,15 @@ from .common.dataSet import DataSet
 from .common.message import Message
 from .utils.dataset_parsing import getMetadata
 from .utils.enums import DatasetType
+from .utils.metadata_parsers import id_creator
 from .utils.read import load_AllDimensions, sdmxGenToDataSet, \
     sdmxStrToDataset
 from .utils.write import save_file
 
-# create logger
-logger = logging.getLogger("logger")
-logger.setLevel(logging.WARNING)
-
 
 def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
-    if dataset_type == None:
-        raise ValueError('Dataset type is None')
+    if dataset_type is None:
+        raise ValueError('Dataset type cannot be None')
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
     dsds = getMetadata(pathToMetadata)
 
@@ -36,13 +32,11 @@ def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
 
 def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
     if dataset_type is None:
-        raise ValueError('Dataset Type is None')
+        raise ValueError('Dataset Type cannot be None')
 
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
     dsds = getMetadata(pathToMetadata)
-
-    datasets = {}
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         datasets = sdmxGenToDataSet(objStructure, dsds)
@@ -65,7 +59,11 @@ def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.G
 
     dataset = getDatasets(pathToXML, pathToMetadata, dataset_type)
 
-    list_elements.append(dataset.toJSON())
+    if isinstance(dataset, dict):
+        for e in dataset.values():
+            list_elements.append(e.toJSON())
+    else:
+        list_elements.append(dataset.toJSON())
     with open(output_path, 'w') as f:
         f.write(json.dumps(list_elements, ensure_ascii=False, indent=2))
 
@@ -107,7 +105,7 @@ def readJSON(pathToJSON, dsds) -> dict:
         code = e.get('structureRef').get('code')
         version = e.get('structureRef').get('version')
         agencyID = e.get('structureRef').get('agencyID')
-        dsdid = id_creator(agencyID, code, version)
+        dsdid = f"{agencyID}:{code}({version})"
         if dsdid not in dsds.keys():
             raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
         datasets[code] = DataSet(structure=dsds[dsdid],
