@@ -8,7 +8,8 @@ verify_ssl = true
 [packages]
 lxml = { version = "4.6.1", index = "pypi" }
 pandas = { version = "0.25.1", index = "pypi" }
-numpy = { version = "1.19.3", index = "pypi" }
+numpy = "==1.19.3"
+dask = {extras = ["dataframe"], version = "*"}
 
 [requires]
 python_version = "*"

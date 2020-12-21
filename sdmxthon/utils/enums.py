@@ -780,8 +780,8 @@ class WildCardValueType(str, Enum):
     _ = '%'  # Indicates a wild card value.
 
 
-class DatasetType(IntEnum):
-    GenericDataSet = 1
-    StructureDataSet = 2
-    GenericTimeSeriesDataSet = 3
-    StructureTimeSeriesDataSet = 4
+class DatasetType(Enum):
+    GenericDataSet = 'GenericDataSet'
+    StructureDataSet = 'StructureDataSet'
+    GenericTimeSeriesDataSet = 'GenericTimeSeriesDataSet'
+    StructureTimeSeriesDataSet = 'StructureTimeSeriesDataSet'

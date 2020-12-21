@@ -7,6 +7,7 @@ SDMXThon\common\annotations.py
 SDMXThon\common\dataSet.py
 SDMXThon\common\empty.py
 SDMXThon\common\generic.py
+SDMXThon\common\message.py
 SDMXThon\common\messagetypes.py
 SDMXThon\common\references.py
 SDMXThon\common\refs.py
@@ -27,9 +28,12 @@ SDMXThon\structure\specificbase.py
 SDMXThon\test\__init__.py
 SDMXThon\utils\__init__.py
 SDMXThon\utils\data_parser.py
+SDMXThon\utils\dataset_parsing.py
 SDMXThon\utils\enums.py
 SDMXThon\utils\generateds.py
 SDMXThon\utils\mappings.py
-SDMXThon\utils\parsers.py
-SDMXThon\utils\read_write.py
+SDMXThon\utils\metadata_parsers.py
+SDMXThon\utils\read.py
+SDMXThon\utils\validations.py
+SDMXThon\utils\write.py
 SDMXThon\utils\xml_base.py

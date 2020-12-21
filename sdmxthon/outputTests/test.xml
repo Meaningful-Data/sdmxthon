@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<message:GenericData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+                     xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"
+                     xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+                     xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+    <message:Header>
+        <message:ID>test</message:ID>
+        <message:Test>true</message:Test>
+        <message:Prepared>2020-12-18T10:33:00</message:Prepared>
+        <message:Sender id="Unknown"/>
+        <message:Receiver id="Not_supplied"/>
+        <message:Structure structureID="BORROWINGS" dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="BORROWINGS" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+        <message:Structure structureID="AALOE" dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="AALOE" version="1.0" class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+    </message:Header>
+    <message:DataSet structureRef="BORROWINGS" setID="BORROWINGS" action="Replace">
+        <generic:Attributes>
+            <generic:Value id="FREQ" value="Q"/>
+            <generic:Value id="DEPENDENCY_TYPE" value="INDEPENDENT"/>
+            <generic:Value id="AUDST" value="AUDITED"/>
+        </generic:Attributes>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="Measure_Type" value="TOTAL"/>
+                <generic:Value id="INPUT" value="N_A"/>
+                <generic:Value id="DATE" value="N_A"/>
+                <generic:Value id="Borrowing_Type" value="BOR_CI_MONEYMARKET"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="DMID" value="S884"/>
+                <generic:Value id="TIME_PERIOD" value="2019-Q2"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="4103.06"/>
+            <generic:Attributes>
+                <generic:Value id="COMMENT" value="N_A"/>
+                <generic:Value id="Currency" value="INR"/>
+            </generic:Attributes>
+        </generic:Obs>
+    </message:DataSet>
+    <message:DataSet structureRef="AALOE" setID="AALOE" action="Replace">
+        <generic:Attributes>
+            <generic:Value id="FREQ" value="Q"/>
+            <generic:Value id="DEPENDENCY_TYPE" value="INDEPENDENT"/>
+            <generic:Value id="AUDST" value="AUDITED"/>
+        </generic:Attributes>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="RECO_PER" value="M6M12"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+                <generic:Value id="Entry_Type" value="DEBIT"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="DMID" value="S2934"/>
+                <generic:Value id="TIME_PERIOD" value="2019-Q2"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="129"/>
+            <generic:Attributes>
+                <generic:Value id="COMMENT" value="N_A"/>
+                <generic:Value id="Currency" value="N_A"/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="RECO_PER" value="M6M12"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+                <generic:Value id="Entry_Type" value="ADEBIT"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="DMID" value="S2935"/>
+                <generic:Value id="TIME_PERIOD" value="2019-Q2"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="10586.97"/>
+            <generic:Attributes>
+                <generic:Value id="COMMENT" value="N_A"/>
+                <generic:Value id="Currency" value="INR"/>
+            </generic:Attributes>
+        </generic:Obs>
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="RECO_PER" value="M6M12"/>
+                <generic:Value id="Measure_Type" value="N_A"/>
+                <generic:Value id="Entry_Type" value="CREDIT"/>
+                <generic:Value id="Area_Operation" value="GL_OP"/>
+                <generic:Value id="DMID" value="S2936"/>
+                <generic:Value id="TIME_PERIOD" value="2019-Q2"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="157"/>
+            <generic:Attributes>
+                <generic:Value id="COMMENT" value="N_A"/>
+                <generic:Value id="Currency" value="N_A"/>
+            </generic:Attributes>
+        </generic:Obs>
+    </message:DataSet>
+</message:GenericData>

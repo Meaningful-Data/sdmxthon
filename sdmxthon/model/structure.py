@@ -529,6 +529,15 @@ class DataStructureDefinition(MaintainableArtefact):
         else:
             return False
 
+    def __str__(self):
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+
+    def __unicode__(self):
+        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+
+    def __repr__(self):
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+
     @property
     def dimensionDescriptor(self):
         return self._dimensionDescriptor
