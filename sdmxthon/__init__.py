@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from typing import Dict
 from zipfile import ZipFile
@@ -11,6 +12,8 @@ from .utils.metadata_parsers import id_creator
 from .utils.read import load_AllDimensions, sdmxGenToDataSet, \
     sdmxStrToDataset
 from .utils.write import save_file
+
+logger = logging.getLogger("logger")
 
 
 def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
@@ -37,7 +40,6 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
     dsds = getMetadata(pathToMetadata)
-
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         datasets = sdmxGenToDataSet(objStructure, dsds)
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:

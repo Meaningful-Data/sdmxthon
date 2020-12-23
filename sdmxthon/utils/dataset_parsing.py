@@ -144,10 +144,10 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition):
                     continue
                 dict_obs_attributes[element] = aux
 
-            for element in dsd.dimensionCodes:
-                if element in list_keys:
-                    aux = df[element]
-                    dict_obs_attributes[element] = aux
+        for element in dsd.dimensionCodes:
+            if element in list_keys:
+                aux = df[element]
+                dict_obs_attributes[element] = aux
 
         obs.set_anyAttributes_(dict_obs_attributes.copy())
         observation_list.append(obs)
@@ -158,6 +158,7 @@ def parse_obs_structure_from_dsd(data_frame, dsd: DataStructureDefinition):
 def parse_series_generic(data, dsd, dimensionAtObservation):
     series_list = []
     series_key_codes = dsd.dimensionCodes
+    series_key_codes.remove(dimensionAtObservation)
     attributes_codes = []
     obs_attributes_codes = []
     for record in dsd.attributeDescriptor.components.values():

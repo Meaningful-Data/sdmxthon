@@ -421,9 +421,6 @@ def get_DSDs(root, concepts=None, codelists=None):
                                            concepts=concepts, codelists=codelists, dimension_descriptor=dd)
 
             dsd.attributeDescriptor = ad
-        else:
-            # TODO Missing attribute list on DSD (validate_metadata)
-            continue
 
         identifier = id_creator(dsd.maintainer.id, dsd.id, dsd.version)
         dsds[identifier] = dsd
@@ -444,16 +441,6 @@ def validate_dataset_attributes_from_dsd(dsd, dataset):
             wrong_attributes.get("spared_attributes").append(key)
 
     return wrong_attributes
-
-
-def validate_observation_value_from_dsd(value, key, dsd):
-    # Getting the codelist from that element
-    codelist = dsd.dimensionDescriptor.components[key].localRepresentation.codeList
-
-    if codelist is None:
-        return True
-    else:
-        return value in codelist.items.keys()
 
 
 def add_elements_to_dict(dict1: dict, dict2: dict, updateElementsFromDict2=True):

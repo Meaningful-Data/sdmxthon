@@ -1,10 +1,7 @@
 import logging
-import sqlite3
 
-import pandas as pd
-
-from SDMXThon import getMetadata
-from SDMXThon.model.structure import DataStructureDefinition, Attribute, PrimaryMeasure
+from SDMXThon import DatasetType, getDatasets
+from SDMXThon.utils.new_read import read_Structure
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -48,11 +45,20 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 
 def main():
-    """
+    # datasets = read_Generic(pathTestGENSer, urlMetadata)
+    logger.debug('Start reading old')
     dataset = getDatasets(pathToData, urlMetadata, DatasetType.StructureDataSet)
-    print(dataset)
+    logger.debug('End reading old')
+    logger.debug('Start reading')
+    dataset = read_Structure(pathTestXSSer, urlMetadata)
+    logger.debug('End reading')
+    print(dataset.data)
+    """
+    datasets = getDatasets(pathTestGEN, urlMetadata, DatasetType.GenericDataSet)
+    logger.debug('End reading data old')
     """
 
+    """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
     df = pd.read_sql('SELECT * from BIS_DER_little', conn)
@@ -75,7 +81,7 @@ def main():
 
     yourdf = df[~df.duplicated(subset=grouping_keys)][grouping_keys].reset_index()
     logger.debug('End grouping')
-
+    """
     """ DEMO 3
     dataset.toXML(DatasetType.GenericDataSet, pathTest)
 
@@ -120,7 +126,6 @@ def main():
     message.toXML(pathTestXSSer)
     logger.debug('Writing to Structure (TimeSeries)')
     """
-
 
 if __name__ == '__main__':
     main()
