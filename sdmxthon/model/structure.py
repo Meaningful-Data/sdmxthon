@@ -30,7 +30,7 @@ class Facet:
             if value in FacetType or value is None:
                 self._facetType = value
             else:
-                raise ValueError(f"The facet dim_type {value} is not recognised")
+                raise ValueError(f"The facet {value} is not recognised")
         else:
             raise ValueError("Facet dim_type should be of the str dim_type")
 
@@ -52,11 +52,11 @@ class Facet:
 class Representation:
     def __init__(self, concept: Concept = None, facets=None,
                  codeList: CodeList = None, conceptScheme: ConceptScheme = None):
+        self._components = []
         if facets is None:
             facets = []
         for f in facets:
             self.addFacet(f)
-        self._components = []
         self.concept = concept
         self.codeList = codeList
         self.conceptScheme = conceptScheme
@@ -112,7 +112,7 @@ class Representation:
         if isinstance(value, Facet):
             self._components.append(value)
         else:
-            raise TypeError(f"The object has to be of the dim_type Facet")
+            raise TypeError(f"The object has to be of the Facet")
 
 
 class Component(IdentifiableArtefact):

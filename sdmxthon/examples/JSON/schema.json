@@ -30,7 +30,7 @@
           "DEPENDENCY_TYPE": "INDEPENDENT",
           "AUDST": "AUDITED"
         },
-        "obs": [
+        "data": [
           {
             "COMMENT": "N_A",
             "Currency": "INR",
@@ -80,7 +80,7 @@
               "DEPENDENCY_TYPE": "INDEPENDENT",
               "AUDST": "AUDITED"
             },
-            "obs": [
+            "data": [
               {
                 "COMMENT": "N_A",
                 "Currency": "INR",
@@ -99,7 +99,7 @@
           "structureRef",
           "dataset_attributes",
           "attached_attributes",
-          "obs"
+          "data"
         ],
         "properties": {
           "structureRef": {
@@ -320,10 +320,10 @@
             },
             "additionalProperties": true
           },
-          "obs": {
-            "$id": "#/items/anyOf/0/properties/obs",
+          "data": {
+            "$id": "#/items/anyOf/0/properties/data",
             "type": "array",
-            "title": "The obs schema",
+            "title": "The data schema",
             "description": "An explanation about the purpose of this instance.",
             "default": [],
             "examples": [
@@ -343,10 +343,10 @@
             ],
             "additionalItems": true,
             "items": {
-              "$id": "#/items/anyOf/0/properties/obs/items",
+              "$id": "#/items/anyOf/0/properties/data/items",
               "anyOf": [
                 {
-                  "$id": "#/items/anyOf/0/properties/obs/items/anyOf/0",
+                  "$id": "#/items/anyOf/0/properties/data/items/anyOf/0",
                   "type": "object",
                   "title": "The first anyOf schema",
                   "description": "An explanation about the purpose of this instance.",

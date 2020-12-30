@@ -115,7 +115,7 @@ class DataSet:
         if isinstance(self.data, DataFrame):
             return validate_obs(self.data, self.structure)
         else:
-            raise ValueError('Obs for dataset %s is not well formed' % self.structure.id)
+            raise ValueError('Data for dataset %s is not well formed' % self.structure.id)
 
     def setDimensionAtObservation(self, dimAtObs):
         if dimAtObs in self.structure.dimensionCodes:

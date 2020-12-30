@@ -36,7 +36,8 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
 
     objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
-    dsds = getMetadata(pathToMetadata)
+    dsds, errors = getMetadata(pathToMetadata)
+    print(errors)
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
         datasets = sdmxGenToDataSet(objStructure, dsds)
