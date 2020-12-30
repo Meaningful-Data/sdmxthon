@@ -37,6 +37,7 @@
       }
     ]
   },
+[
   {
     "structureRef": {
       "code": "AALOE",
@@ -60,7 +61,7 @@
       "DEPENDENCY_TYPE": "INDEPENDENT",
       "AUDST": "AUDITED"
     },
-    "obs": [
+    "data": [
       {
         "COMMENT": "N_A",
         "Currency": "N_A",

@@ -1,7 +1,6 @@
 import logging
 
-from SDMXThon import DatasetType, getDatasets
-from SDMXThon.utils.new_read import read_Structure
+from SDMXThon import readJSON, getMetadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -31,12 +30,14 @@ pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
 pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
 pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
-pathToData = 'SDMXThon/outputTests/RBI_test.xml'
-pathTest = 'SDMXThon/outputTests/RBI_out_test.xml'
+pathToData = 'SDMXThon/outputTests/BIS_DER_test.xml'
+pathTest = 'SDMXThon/outputTests/RBI_test.xml'
+patternTest = 'SDMXThon/outputTests/pattern_test.xml'
 pathToCSVData = 'SDMXThon/outputTests/BIS_data.csv'
 pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
@@ -45,14 +46,37 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 
 def main():
-    # datasets = read_Generic(pathTestGENSer, urlMetadata)
-    logger.debug('Start reading old')
-    dataset = getDatasets(pathToData, urlMetadata, DatasetType.StructureDataSet)
-    logger.debug('End reading old')
+    dsds, errors = getMetadata(pathToMetadataFile)
     logger.debug('Start reading')
-    dataset = read_Structure(pathTestXSSer, urlMetadata)
+    datasets = readJSON(pathToJSON, dsds)
     logger.debug('End reading')
-    print(dataset.data)
+
+    """
+    logger.debug('Start reading')
+    dataset = getDatasets(pathTest, pathToMetadataFile, DatasetType.GenericDataSet)
+    logger.debug('End reading')
+
+    logger.debug('Start validations')
+    e = dataset['ASSETS_EX_LNA_SLR']
+    #print(f'-----------{e.structure.id}------------')
+    print(e.data.memory_usage(deep=True))
+    
+    all_codes = e.structure.dimensionCodes + e.structure.attributeCodes
+    data_codes = []
+    for i in all_codes:
+        if i in e.data.keys() and i != 'DMID':
+            data_codes.append(i)
+    
+    
+    e.data[data_codes] = e.data[data_codes].astype("category")
+    e.data[e.structure.measureCode] = e.data[e.structure.measureCode].astype("float32")
+
+
+    #print(e.data['Asset_Ex_LNA'])
+    print(e.data.memory_usage(deep=True))
+    print(e.data['DMID'])
+    logger.debug('End validations')
+    """
     """
     datasets = getDatasets(pathTestGEN, urlMetadata, DatasetType.GenericDataSet)
     logger.debug('End reading data old')
@@ -126,6 +150,7 @@ def main():
     message.toXML(pathTestXSSer)
     logger.debug('Writing to Structure (TimeSeries)')
     """
+
 
 if __name__ == '__main__':
     main()

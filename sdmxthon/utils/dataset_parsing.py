@@ -1,4 +1,5 @@
 import copy
+import logging
 from datetime import datetime
 from urllib.request import urlopen
 
@@ -20,17 +21,25 @@ from ..structure.specificbase import DataSetType as StructureDataSetType, ObsTyp
     SeriesType as Series
 from ..utils.enums import DatasetType
 
+logger = logging.getLogger("logger")
 
-def getMetadata(pathToMetadata) -> dict:
+
+def getMetadata(pathToMetadata):
     if isinstance(pathToMetadata, str) and 'http' in pathToMetadata:
         res = urlopen(pathToMetadata)
         root = etree.parse(res)
     else:
         root = etree.parse(pathToMetadata)
-
     codelists = get_codelist_model(root)
-    concepts = get_concept_schemes(root, codelists)
-    return get_DSDs(root, concepts, codelists)
+    concepts, data = get_concept_schemes(root, codelists)
+    if data is not None:
+        errors = {'MX04': data}
+        dsds, errorsDSD = get_DSDs(root, concepts, codelists)
+        if errorsDSD is not None:
+            errors += errorsDSD
+        return dsds, errors
+    else:
+        return get_DSDs(root, concepts, codelists)
 
 
 def get_structure_from_dsd(dsd: DataStructureDefinition, dataset, datasetType: DatasetType,
@@ -161,13 +170,14 @@ def parse_series_generic(data, dsd, dimensionAtObservation):
     series_key_codes.remove(dimensionAtObservation)
     attributes_codes = []
     obs_attributes_codes = []
-    for record in dsd.attributeDescriptor.components.values():
-        if record.relatedTo is not None:
-            if isinstance(record.relatedTo, PrimaryMeasure):
-                obs_attributes_codes.append(record.id)
-            elif isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
-                if record.id in data.keys():
-                    attributes_codes.append(record.id)
+    if dsd.attributeDescriptor is not None and dsd.attributeDescriptor.components is not None:
+        for record in dsd.attributeDescriptor.components.values():
+            if record.relatedTo is not None:
+                if isinstance(record.relatedTo, PrimaryMeasure):
+                    obs_attributes_codes.append(record.id)
+                elif isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
+                    if record.id in data.keys():
+                        attributes_codes.append(record.id)
 
     all_codes = series_key_codes + attributes_codes
 
@@ -272,13 +282,15 @@ def parse_series_structure(data, dsd, dimensionAtObservation):
     series_key_codes = dsd.dimensionCodes
     series_key_codes.remove(dimensionAtObservation)
     obs_attributes_codes = []
-    for record in dsd.attributeDescriptor.components.values():
-        if record.relatedTo is not None:
-            if isinstance(record.relatedTo, PrimaryMeasure):
-                obs_attributes_codes.append(record.id)
-            if isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
-                if record.id in data.keys():
-                    series_key_codes.append(record.id)
+
+    if dsd.attributeDescriptor is not None and dsd.attributeDescriptor.components is not None:
+        for record in dsd.attributeDescriptor.components.values():
+            if record.relatedTo is not None:
+                if isinstance(record.relatedTo, PrimaryMeasure):
+                    obs_attributes_codes.append(record.id)
+                if isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
+                    if record.id in data.keys():
+                        series_key_codes.append(record.id)
 
     iterations = len(data)
     series_dict = {}
