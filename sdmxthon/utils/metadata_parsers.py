@@ -185,11 +185,11 @@ def extract_ref_data(list_ms03, obj, dsd, ref, concepts):
             con = None
             cl = None
             list_ms03.append(f'Concept {attrib_cs["id"]} not found for {objType} {obj.id} '
-                             f'on dsd '
+                             f'on DSD '
                              f'{id_creator(dsd.attrib["agencyID"], dsd.attrib["id"], dsd.attrib["version"])}')
     else:
         list_ms03.append(f'Concept Scheme {cs_id} not found for {objType} {obj.id} '
-                         f'on dsd '
+                         f'on DSD '
                          f'{id_creator(dsd.attrib["agencyID"], dsd.attrib["id"], dsd.attrib["version"])}')
 
         cs = None
@@ -405,26 +405,26 @@ def create_measures_data(dsd, measure_descriptor, concepts, codelists, list_mx02
 
 def get_DSDs(root, concepts=None, codelists=None):
     errors = {}
-
-    list_ms02 = []
-    list_ms03 = []
-    list_ms04 = []
-    list_ms05 = []
     list_ms06 = []
-    list_mx01 = []
-    list_mx02 = []
-    list_mx03 = []
+    duplicated_dsds = []
 
     expression = "/mes:Structure/mes:Structures/str:DataStructures/str:DataStructure"
     result = root.xpath(expression,
                         namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
                                     'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
     if result is None:
-        errors['MS01'] = ['Not found any DSD in this file']
+        errors['Common'] = {'MS01': 'Not found any DSD in this file'}
         return errors
 
     dsds: Dict = {}
     for element in result:
+        list_ms02 = []
+        list_ms03 = []
+        list_ms04 = []
+        list_ms05 = []
+        list_mx01 = []
+        list_mx02 = []
+        list_mx03 = []
         dsd = DataStructureDefinition(id_=element.attrib['id'],
                                       uri=element.attrib['urn'],
                                       isExternalReference=element.attrib['isExternalReference'],
@@ -505,33 +505,38 @@ def get_DSDs(root, concepts=None, codelists=None):
             dsd.attributeDescriptor = ad
 
         identifier = id_creator(dsd.maintainer.id, dsd.id, dsd.version)
+        dsd_errors = {}
         if identifier in dsds.keys():
             list_ms06.append(f'DSD {identifier} is not unique')
-        dsds[identifier] = dsd
+            duplicated_dsds.append(identifier)
+        else:
+            if len(list_ms02) > 0:
+                dsd_errors['MS02'] = list_ms02
+            if len(list_ms03) > 0:
+                dsd_errors['MS03'] = list_ms03
+            if len(list_ms04) > 0:
+                dsd_errors['MS04'] = list_ms04
+            if len(list_ms05) > 0:
+                dsd_errors['MS05'] = list_ms05
+            if len(list_mx01) > 0:
+                dsd_errors['MX01'] = list_mx01
+            if len(list_mx02) > 0:
+                dsd_errors['MX02'] = list_mx02
+            if len(list_mx03) > 0:
+                dsd_errors['MX03'] = list_mx03
 
-    errors = {}
-    if len(list_ms02) > 0:
-        errors['MS02'] = list_ms02
-    if len(list_ms03) > 0:
-        errors['MS03'] = list_ms03
-    if len(list_ms04) > 0:
-        errors['MS04'] = list_ms04
-    if len(list_ms05) > 0:
-        errors['MS05'] = list_ms05
+            if len(dsd_errors) > 0:
+                errors[identifier] = dsd_errors.copy()
+            else:
+                dsds[identifier] = dsd
+
     if len(list_ms06) > 0:
-        errors['MS06'] = list_ms06
-    if len(list_mx01) > 0:
-        errors['MX01'] = list_mx01
-    if len(list_mx02) > 0:
-        errors['MX02'] = list_mx02
-    if len(list_mx03) > 0:
-        errors['MX03'] = list_mx03
+        errors['Common'] = {'MS06': list_ms06}
+        for e in duplicated_dsds:
+            del dsds[e]
 
     if len(errors) > 0:
-        if len(errors) == 1 and 'MX03' in errors.keys():
-            return dsds, errors
         return dsds, errors
-
     return dsds, None
 
 

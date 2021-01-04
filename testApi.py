@@ -1,6 +1,6 @@
 import logging
 
-from SDMXThon import readJSON, getMetadata
+from SDMXThon import getMetadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -48,9 +48,8 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 def main():
     logger.debug('Start')
     dsds, errors = getMetadata(pathToMetadataFile)
-    logger.debug('Start reading')
-    datasets = readJSON(pathToJSON, dsds)
-    logger.debug('End reading')
+
+    print(dsds)
 
     """
     logger.debug('Start reading')

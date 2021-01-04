@@ -33,7 +33,7 @@ def getMetadata(pathToMetadata):
     codelists = get_codelist_model(root)
     concepts, data = get_concept_schemes(root, codelists)
     if data is not None:
-        errors = {'MX04': data}
+        errors = {'Common': {'MX04': data}}
         dsds, errorsDSD = get_DSDs(root, concepts, codelists)
         if errorsDSD is not None:
             errors += errorsDSD
