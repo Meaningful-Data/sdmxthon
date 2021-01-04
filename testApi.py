@@ -46,6 +46,7 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 
 def main():
+    logger.debug('Start')
     dsds, errors = getMetadata(pathToMetadataFile)
     logger.debug('Start reading')
     datasets = readJSON(pathToJSON, dsds)
