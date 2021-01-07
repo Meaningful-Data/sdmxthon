@@ -1,6 +1,6 @@
 import logging
 
-from SDMXThon import getMetadata
+from SDMXThon import getDatasets, DatasetType
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -46,37 +46,17 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 
 def main():
-    logger.debug('Start')
-    dsds, errors = getMetadata(pathToMetadataFile)
-
-    print(dsds)
-
-    """
     logger.debug('Start reading')
-    dataset = getDatasets(pathTest, pathToMetadataFile, DatasetType.GenericDataSet)
+    datasets = getDatasets(pathTest, pathToMetadataFile, DatasetType.GenericDataSet)
     logger.debug('End reading')
 
+    print(datasets)
+
     logger.debug('Start validations')
-    e = dataset['ASSETS_EX_LNA_SLR']
-    #print(f'-----------{e.structure.id}------------')
-    print(e.data.memory_usage(deep=True))
-    
-    all_codes = e.structure.dimensionCodes + e.structure.attributeCodes
-    data_codes = []
-    for i in all_codes:
-        if i in e.data.keys() and i != 'DMID':
-            data_codes.append(i)
-    
-    
-    e.data[data_codes] = e.data[data_codes].astype("category")
-    e.data[e.structure.measureCode] = e.data[e.structure.measureCode].astype("float32")
-
-
-    #print(e.data['Asset_Ex_LNA'])
-    print(e.data.memory_usage(deep=True))
-    print(e.data['DMID'])
+    for e in datasets.values():
+        print(e.semanticValidation())
     logger.debug('End validations')
-    """
+
     """
     datasets = getDatasets(pathTestGEN, urlMetadata, DatasetType.GenericDataSet)
     logger.debug('End reading data old')

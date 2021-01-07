@@ -62,7 +62,7 @@ def check_facets(facets: list, value, dsd: DataStructureDefinition, obj_id, obj_
                                   f'on {obj_type} {obj_id} in dataset {dsd.id}')
 
             if f.facetType == 'pattern':
-                if re.search(f.facetValue, value) is None:
+                if re.fullmatch(str(f.facetValue).encode('unicode-escape').decode(), value) is None:
                     error_list.append(f'Value {value} is not compliant with {f.facetType} : {f.facetValue} '
                                       f'on {obj_type} {obj_id} in dataset {dsd.id}')
 
@@ -94,6 +94,14 @@ def check_facets(facets: list, value, dsd: DataStructureDefinition, obj_id, obj_
                                   f'in dataset {dsd.id}')
 
     return error_list
+
+
+def parse_datapoint(row, dsd):
+    string = ''
+    for k, v in row.items():
+        if k != 'OBS_VALUE':
+            string += ' (' + str(k) + ' : ' + str(v) + ') '
+    return f'Duplicated data point{string}for dataset {dsd.id}'
 
 
 def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
@@ -196,21 +204,16 @@ def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
                                                      f'on row {":".join(map(str, row.values))} for dataset {dsd.id}',
                                          axis=1).tolist()
 
-    if 'TIME_PERIOD' in data.keys():
-        grouping_keys = []
-        for e in dsd.dimensionCodes:
-            if e in data.keys():
-                grouping_keys.append(e)
+    grouping_keys = []
+    for e in dsd.dimensionCodes:
+        if e in data.keys():
+            grouping_keys.append(e)
 
-        grouping_keys.append('OBS_VALUE')
-        duplicateRowsDF = data[data.duplicated(subset=grouping_keys)]
+    grouping_keys.append('OBS_VALUE')
+    duplicateRowsDF = data[data.duplicated(subset=grouping_keys)][grouping_keys]
 
-        if len(duplicateRowsDF) > 0:
-            list_ss07 += duplicateRowsDF[grouping_keys].apply(lambda row: f'Duplicated value "{row["OBS_VALUE"]}" '
-                                                                          f'on TIME_PERIOD "{row["TIME_PERIOD"]}" '
-                                                                          f'on Series {":".join(map(str, row.values))} '
-                                                                          f'for dataset {dsd.id}',
-                                                              axis=1).tolist()
+    if len(duplicateRowsDF) > 0:
+        list_ss07 += duplicateRowsDF[grouping_keys].apply(lambda row: parse_datapoint(row, dsd), axis=1).tolist()
 
     # Dictionary creation with key as each code and value the list of errors related
     errors = {}

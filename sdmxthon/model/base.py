@@ -1,5 +1,5 @@
 """
-SDMX Base pacakage.
+SDMX Base package.
 
 Please refer to the package in the SDMX Information Model
 
@@ -8,7 +8,7 @@ Please refer to the package in the SDMX Information Model
 from datetime import datetime
 from typing import List
 
-from lxml import etree
+from lxml.etree import _Element, QName
 
 from .utils import (qName, stringSetter, dateSetter, setDateFromString,
                     getDateString, boolSetter, genericSetter)
@@ -50,7 +50,7 @@ class LocalisedString(object):
         self._label = stringSetter(value)
 
     @classmethod
-    def fromXml(cls, elem: etree._Element):
+    def fromXml(cls, elem: _Element):
         """Instantiates the object from lxml element.
 
         Receives an etree Element and instantiates the localises string
@@ -64,12 +64,12 @@ class LocalisedString(object):
         Raises:
             ValueError if the item is not an etree._Element
         """
-        if not isinstance(elem, etree._Element):
+        if not isinstance(elem, _Element):
             raise ValueError(f"etree._Element object required. {type(elem)} passed")
 
-        locString = cls(label=elem.text, locale=elem.get(qName("xml", "lang")))
+        loc_string = cls(label=elem.text, locale=elem.get(qName("xml", "lang")))
 
-        return locString
+        return loc_string
 
 
 class InternationalString(object):
@@ -81,18 +81,21 @@ class InternationalString(object):
 
     Attributes:
         localisedStrings: List with all the localised strings belonging to the InternationalString
-        localisedStringsDict: Convenience access to the localised strings. Dict[locale:label]
+        localisedStrings Dict: Convenience access to the localised strings. Dict[locale:label]
 
     Index:
         A locale in the index returns the label
     """
 
-    def __init__(self, localisedStrings: List[LocalisedString] = []):
+    def __init__(self, localisedStrings: List[LocalisedString] = None):
         """Inits InternationalString with optional attributes."""
-        self._localisedStrings = []
-        self._localisedStringsDict = {}
-        for l in localisedStrings:
-            self.addLocalisedString(l)
+
+        if localisedStrings is None:
+            self._localisedStrings = []
+            self._localisedStringsDict = {}
+        else:
+            for record in localisedStrings:
+                self.addLocalisedString(record)
 
     @property
     def localisedStrings(self):
@@ -110,14 +113,14 @@ class InternationalString(object):
             self._localisedStringsDict[localisedString.locale] = localisedString.label
 
     @classmethod
-    def fromXml(cls, elems: List[etree.Element]):
-        if elems != []:
-            InternationalString = cls()
+    def fromXml(cls, records: List[_Element]):
+        if records:
+            international_string = cls()
 
-            for ls in elems:
-                InternationalString.addLocalisedString(LocalisedString.fromXml(ls))
+            for ls in records:
+                international_string.addLocalisedString(LocalisedString.fromXml(ls))
 
-            return InternationalString
+            return international_string
 
     def getLocales(self):
         return set(self._localisedStringsDict.keys())
@@ -180,15 +183,16 @@ class Annotation(object):
 
 
 class AnnotableArtefact(object):
-    def __init__(self, annotations: List[Annotation] = []):
-        self._annotations = []
+    def __init__(self, annotations: List[Annotation] = None):
 
         if isinstance(annotations, list):
             for a in annotations:
                 self.addAnnotation(a)
+        elif annotations is None:
+            self._annotations = []
         else:
-            raise TypeError(
-                "Annotations passed to Annotable artefacts can only be a list of Annotation objects or a single Annotation")
+            raise TypeError("Annotations passed to Annotable artefacts can only be a list of Annotation objects "
+                            "or a single Annotation")
 
     @property
     def annotations(self):
@@ -202,7 +206,13 @@ class AnnotableArtefact(object):
 
 
 class IdentifiableArtefact(AnnotableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = []):
+    _qName = None
+    _urnType = None
+
+    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None):
+
+        if annotations is None:
+            annotations = []
 
         super(IdentifiableArtefact, self).__init__(annotations=annotations)
 
@@ -219,7 +229,7 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @id.setter
     def id(self, value):
-        self._id = stringSetter(value, "[A-Za-z0-9_@$\-]+")
+        self._id = stringSetter(value, "[A-Za-z0-9_@$-]+")
 
     @uri.setter
     def uri(self, value):
@@ -227,16 +237,20 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @property
     def urn(self):
-        try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{etree.QName(self._qName).localname}={self.id}"  # TOBECHECKED
-        except:
+        if self._urnType is not None and self._qName is not None:
+            # TOBECHECKED
+            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{QName(self._qName).localname}={self.id}"
+        else:
             urn = ""
         return urn
 
 
 class NameableArtefact(IdentifiableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None,
                  name: str = None, description: str = None):
+        if annotations is None:
+            annotations = []
+
         super(NameableArtefact, self).__init__(id_=id_, uri=uri, annotations=annotations)
 
         self.name = name
@@ -260,9 +274,12 @@ class NameableArtefact(IdentifiableArtefact):
 
 
 class VersionableArtefact(NameableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str, uri: str = None, annotations: List[Annotation] = None,
                  name: str = None, description: str = None,
                  version: str = "1.0", validFrom: datetime = None, validTo: datetime = None):
+
+        if annotations is None:
+            annotations = []
 
         super(VersionableArtefact, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   name=name, description=description)
@@ -284,7 +301,7 @@ class VersionableArtefact(NameableArtefact):
 
     @version.setter
     def version(self, value):
-        self._version = stringSetter(value, pattern="[0-9]+(\.[0-9]+)*")
+        self._version = stringSetter(value, pattern="[0-9]+(.[0-9]+)*")
 
     @validFrom.setter
     def validFrom(self, value):
@@ -308,20 +325,22 @@ class VersionableArtefact(NameableArtefact):
 
     @property
     def urn(self):
-        try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self._qName.split('}')[1]}={self.id}({self.version})"  # TOBECHECKED
-        except:
-            urn = ""
+        if self._urnType is not None and self._qName is not None:
+            # TOBECHECKED
+            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self._qName.split('}')[1]}={self.id}({self.version})"
+        else:
+            urn = ''
         return urn
 
 
 class MaintainableArtefact(VersionableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = [],
+    def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None,
                  name: str = None, description: str = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = False, isExternalReference: bool = False, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None):
-
+        if annotations is None:
+            annotations = []
         super(MaintainableArtefact, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                    name=name, description=description,
                                                    version=version, validFrom=validFrom, validTo=validTo)
@@ -377,16 +396,17 @@ class MaintainableArtefact(VersionableArtefact):
 
     @property
     def urn(self):
-        try:
-            urnType = self._urnType
-            tag = etree.QName(self._qName).localname
-            agencyId = self.agencyId
+        if self._urnType is not None and self._qName is not None:
+            urn_type = self._urnType
+            tag = QName(self._qName).localname
 
-            urn = f"urn:sdmx:org.sdmx.infomodel.{urnType}.{tag}={agencyId}:{self.id}({self.version})"  # TOBECHECKED
-        except:
+            # TOBECHECKED
+            urn = f"urn:sdmx:org.sdmx.infomodel.{urn_type}.{tag}={self.agencyId}:{self.id}({self.version})"
+        else:
             urn = ""
         return urn
 
     @property
     def agencyId(self):
-        return self.maintainer.id if self.maintainer is not None else self._agencyId
+        if self.maintainer is not None:
+            return self.maintainer.id

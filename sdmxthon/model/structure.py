@@ -2,6 +2,7 @@ import json
 
 from .base import *
 from .dataTypes import FacetType, FacetValueType
+# from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
 from .itemScheme import Concept, CodeList, ConceptScheme
 from .utils import genericSetter, qName, intSetter, stringSetter
 
@@ -480,16 +481,12 @@ class GroupDimensionDescriptor(ComponentList):
 
 
 class DataStructureDefinition(MaintainableArtefact):
-    _urnType = "datastructure"
-    _qName = qName("str", "DataStructure")
-
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None,
-                 dimensionDescriptor: DimensionDescriptor = None, measureDescriptor: MeasureDescriptor = None,
-                 attributeDescriptor: AttributeDescriptor = None,
+                 structureUrl: str = None, maintainer=None, dimensionDescriptor: DimensionDescriptor = None,
+                 measureDescriptor: MeasureDescriptor = None, attributeDescriptor: AttributeDescriptor = None,
                  groupDimensionDescriptor: GroupDimensionDescriptor = None):
 
         if annotations is None:
@@ -642,30 +639,184 @@ class DataStructureDefinition(MaintainableArtefact):
         return rslt
 
 
-class DataFlowDefinition(MaintainableArtefact):
-    _urnType = "datastructure"
-    _qName = qName("str", "Dataflow")
-
+"""
+class DataStructureDefinition(MaintainableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None,
-                 structure: DataStructureDefinition = None):
+                 structureUrl: str = None, maintainer=None, content: ContentConstraint = None,
+                 attachment: AttachmentConstraint = None, dimensionDescriptor: DimensionDescriptor = None,
+                 measureDescriptor: MeasureDescriptor = None, attributeDescriptor: AttributeDescriptor = None,
+                 groupDimensionDescriptor: GroupDimensionDescriptor = None):
+
         if annotations is None:
             annotations = []
-        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
-                                                 name=name, description=description,
-                                                 version=version, validFrom=validFrom, validTo=validTo,
-                                                 isFinal=isFinal, isExternalReference=isExternalReference,
-                                                 serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                 maintainer=maintainer)
-        self.structure = structure
+        super(DataStructureDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
+                                                      name=name, description=description,
+                                                      version=version, validFrom=validFrom, validTo=validTo,
+                                                      isFinal=isFinal, isExternalReference=isExternalReference,
+                                                      serviceUrl=serviceUrl, structureUrl=structureUrl,
+                                                      maintainer=maintainer)
+
+        if content is not None and attachment is not None:
+            super(DataStructureDefinition, self).__init__(content=content, attachment=attachment)
+            self.content = content
+            self.attachment = attachment
+
+        self.dimensionDescriptor = dimensionDescriptor
+        self.measureDescriptor = measureDescriptor
+        self.attributeDescriptor = attributeDescriptor
+        self.groupDimensionDescriptor = groupDimensionDescriptor
+
+        self._urnType = "datastructure"
+        self._qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructure"
+
+    def __eq__(self, other):
+        if isinstance(other, DataStructureDefinition):
+            return (self._id == other._id and
+                    self.uri == other.uri and
+                    self.name == other.name and
+                    self._description == other._description and
+                    self._version == other._version and
+                    self._validFrom == other._validFrom and
+                    self._validTo == other._validTo and
+                    self._isFinal == other._isFinal and
+                    self._isExternalReference == other._isExternalReference and
+                    self._serviceUrl == other._serviceUrl and
+                    self._structureUrl == other._structureUrl and
+                    self._maintainer == other._maintainer and
+                    self._dimensionDescriptor == other._dimensionDescriptor and
+                    self._attributeDescriptor == other._attributeDescriptor and
+                    self._measureDescriptor == other._measureDescriptor)
+        else:
+            return False
+
+    def __str__(self):
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+
+    def __unicode__(self):
+        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+
+    def __repr__(self):
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
 
     @property
-    def structure(self):
-        return self._structure
+    def dimensionDescriptor(self):
+        return self._dimensionDescriptor
 
-    @structure.setter
-    def structure(self, value):
-        self._structure = genericSetter(value, DataStructureDefinition)
+    @property
+    def measureDescriptor(self):
+        return self._measureDescriptor
+
+    @property
+    def attributeDescriptor(self):
+        return self._attributeDescriptor
+
+    @property
+    def groupDimensionDescriptor(self):
+        return self._groupDimensionDescriptor
+
+    @property
+    def dimensionCodes(self):
+        return [k for k in self.dimensionDescriptor.components]
+
+    @property
+    def attributeCodes(self):
+        if self.attributeDescriptor is not None:
+            return [k for k in self.attributeDescriptor.components]
+        else:
+            return []
+
+    @property
+    def datasetAttributeCodes(self):
+        rslt = []
+        if self.attributeDescriptor is not None:
+            for k in self.attributeDescriptor.components:
+                if self.attributeDescriptor[k].relatedTo == "NoSpecifiedRelationship":
+                    rslt.append(k)
+        return rslt
+
+    @property
+    def observationAttributeCodes(self):
+        rslt = []
+        if self.attributeDescriptor is not None:
+            for k in self.attributeDescriptor.components:
+                if self.attributeDescriptor[k].relatedTo == "PrimaryMeasure":
+                    rslt.append(k)
+        return rslt
+
+    @property
+    def measureCode(self):
+        return list(self.measureDescriptor.components.keys())[0]
+
+    @dimensionDescriptor.setter
+    def dimensionDescriptor(self, value):
+        self._dimensionDescriptor = genericSetter(value, DimensionDescriptor)
+        if value is not None:
+            value.dsd = self
+
+    @measureDescriptor.setter
+    def measureDescriptor(self, value):
+        self._measureDescriptor = genericSetter(value, MeasureDescriptor)
+        if value is not None:
+            value.dsd = self
+
+    @attributeDescriptor.setter
+    def attributeDescriptor(self, value):
+        self._attributeDescriptor = genericSetter(value, AttributeDescriptor)
+        if value is not None:
+            value.dsd = self
+
+    @groupDimensionDescriptor.setter
+    def groupDimensionDescriptor(self, value):
+        self._groupDimensionDescriptor = genericSetter(value, GroupDimensionDescriptor)
+        if value is not None:
+            value.dsd = self
+
+    @property
+    def content(self):
+        return self._content
+
+    @content.setter
+    def content(self, value):
+        self._content = genericSetter(value, ContentConstraint)
+
+    @property
+    def attachment(self):
+        return self._attachment
+
+    @attachment.setter
+    def attachment(self, value):
+        self._attachment = genericSetter(value, AttachmentConstraint)
+
+    def toVtlJson(self, path):
+        dataTypesMapping = {
+            "String": "String",
+            "ObservationalTimePeriod": "Date",
+            "BigInteger": "Integer"
+        }
+
+        datasetName = self.id
+        components = []
+        for c in self.dimensionDescriptor.components:
+            component = {"name": c.id, "role": "Identifier",
+                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": False}
+
+            components.append(component)
+        for c in self.attributeDescriptor.components:
+            component = {"name": c.id, "role": "Attribute",
+                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": True}
+
+            components.append(component)
+        for c in self.measureDescriptor.components:
+            component = {"name": c.id, "role": "Measure",
+                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": True}
+
+            components.append(component)
+
+        rslt = {"DataSet": {"name": datasetName, "DataStructure": components}}
+        with open(path, 'w') as fp:
+            json.dump(rslt, fp)
+        return rslt
+"""

@@ -18,8 +18,11 @@ SDMXThon\message\footer.py
 SDMXThon\message\generic.py
 SDMXThon\model\base.py
 SDMXThon\model\dataTypes.py
+SDMXThon\model\dataflow.py
+SDMXThon\model\extras.py
 SDMXThon\model\itemScheme.py
 SDMXThon\model\structure.py
+SDMXThon\model\timePeriods.py
 SDMXThon\model\utils.py
 SDMXThon\query\__init__.py
 SDMXThon\registry\__init__.py
