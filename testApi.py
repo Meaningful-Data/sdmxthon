@@ -1,6 +1,10 @@
 import logging
+import sqlite3
 
-from SDMXThon import getDatasets, DatasetType
+import pandas as pd
+
+from SDMXThon import DatasetType, getMetadata, DataSet
+from SDMXThon.model.structure import DataStructureDefinition
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -45,47 +49,87 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
 
+def addRowStrToOutfile(row):
+    string = ''
+    for k, v in row.items():
+        string += f'{k}="{v}" '
+    return f'\t\t<Obs {string}>\n'
+
+
 def main():
-    logger.debug('Start reading')
-    datasets = getDatasets(pathTest, pathToMetadataFile, DatasetType.GenericDataSet)
-    logger.debug('End reading')
-
-    print(datasets)
-
-    logger.debug('Start validations')
-    for e in datasets.values():
-        print(e.semanticValidation())
-    logger.debug('End validations')
-
     """
     datasets = getDatasets(pathTestGEN, urlMetadata, DatasetType.GenericDataSet)
     logger.debug('End reading data old')
     """
 
-    """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
-    df = pd.read_sql('SELECT * from BIS_DER_little', conn)
+    df = pd.read_sql('SELECT * from BIS_DER LIMIT 1', conn)
     logger.debug('End reading')
 
-    df['FREQ'] = 'S'
+    df['FREQ'] = 'A'
 
-    dsds = getMetadata(urlMetadata)
+    dsds, errors = getMetadata(urlMetadata)
     dsd: DataStructureDefinition = dsds["BIS:BIS_DER(1.0)"]
 
-    grouping_keys = dsd.dimensionCodes
-    grouping_keys.remove('TIME_PERIOD')
+    attached_attributes = {}
 
-    for e in dsd.attributeDescriptor.components.values():
-        e: Attribute
-        if e.id in df.keys() and e.relatedTo is not None and not isinstance(e.relatedTo, PrimaryMeasure):
-            grouping_keys.append(e.id)
+    for e in df.keys():
+        if e in dsd.datasetAttributeCodes:
+            attached_attributes[e] = df.loc[0, e]
+            del df[e]
+    dimObs = 'TIME_PERIOD'
 
-    logger.debug('Start grouping')
+    prettyprint = True
 
-    yourdf = df[~df.duplicated(subset=grouping_keys)][grouping_keys].reset_index()
-    logger.debug('End grouping')
+    if prettyprint:
+        child1 = '\t'
+        child2 = '\t\t'
+        nl = '\n'
+    else:
+        child1 = child2 = nl = ''
+
+    logger.debug('Start')
+    dataset = DataSet(data=df, structure=dsd, attached_attributes=attached_attributes)
+    dataset.toXML(dataset_type=DatasetType.StructureDataSet, outputPath='test.xml')
+    logger.debug('End')
+
     """
+    del df
+
+    series_codes = []
+    obs_codes = [dimObs]
+    obs_codes.append(dsd.measureCode)
+    for e in dsd.attributeDescriptor.components.values():
+        if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
+            obs_codes.append(e.id)
+    for e in dataset.data.keys():
+        if (e in dsd.dimensionCodes and e != dimObs) or (e in dsd.attributeCodes and e not in obs_codes):
+            series_codes.append(e)
+
+    series_df = dataset.data[~dataset.data.duplicated(series_codes)][series_codes]
+
+    series_df.reset_index(drop=True, inplace=True)
+
+    df1 = pd.DataFrame(np.tile(np.array(obs_codes), len(dataset.data.index))
+                       .reshape(len(dataset.data.index), -1),
+                       index=dataset.data.index,
+                       columns=obs_codes, dtype='str') + '='
+    df2 = '"' + dataset.data[obs_codes].astype('str') + '"'
+    df1 = df1 + df2
+    df1.insert(0, 'head', f'{child2}<Obs')
+    df1.insert(len(df1.keys()), 'end', '/>')
+    obs_str = ''
+    obs_str += df1.to_csv(path_or_buf=None, sep=' ', header=False, index=False, quoting=csv.QUOTE_NONE, escapechar='\\')
+
+    obs_str = obs_str.replace('\\', '')
+    obs_str = f'{nl}'.join(obs_str.splitlines())
+    obs_str.replace(' />', '/>')
+
+    with open('test.xml', 'w') as f:
+        f.write(obs_str)
+    """
+
     """ DEMO 3
     dataset.toXML(DatasetType.GenericDataSet, pathTest)
 

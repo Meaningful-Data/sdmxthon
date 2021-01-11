@@ -1,15 +1,13 @@
 import json
-from datetime import date
+from datetime import date, datetime
 
 import pandas as pd
 from pandas import DataFrame
 
-from ..message.generic import GenericDataType, StructureSpecificDataType
 from ..model.structure import DataStructureDefinition
-from ..utils.dataset_parsing import get_structure_from_dsd, generateDataSetXML, defaultHeader
 from ..utils.enums import DatasetType
 from ..utils.validations import validate_obs
-from ..utils.write import save_file
+from ..utils.write import writer
 
 
 class DataSet:
@@ -80,6 +78,10 @@ class DataSet:
     def data(self, value):
         self._data = value
 
+    @property
+    def dimAtObs(self):
+        return self.datasetAttributes.get('dimensionAtObservation')
+
     def readCSV(self, pathToCSV: str):
         self._data = pd.read_csv(pathToCSV)
 
@@ -148,31 +150,14 @@ class DataSet:
 
         self.datasetAttributes = attributes.copy()
 
-    def toXML(self, dataset_type: DatasetType = DatasetType.GenericDataSet, outputPath=''):
-
-        structures = []
-
-        header = defaultHeader(dataset_type)
-
-        if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-            messageXML = GenericDataType()
-        elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-            messageXML = StructureSpecificDataType()
+    def toXML(self, dataset_type: DatasetType = DatasetType.GenericDataSet, outputPath='', id_='test',
+              test='true',
+              prepared=datetime.now(),
+              sender='Unknown',
+              receiver='Not_supplied'):
+        if outputPath == '':
+            return writer(path=outputPath, dType=dataset_type, dataset=self, id_=id_, test=test,
+                          prepared=prepared, sender=sender, receiver=receiver)
         else:
-            raise ValueError('Wrong Dataset Type')
-
-        data_set = generateDataSetXML(self, dataset_type)
-
-        messageXML.add_DataSet(data_set)
-
-        allDimensions = self.datasetAttributes.get('dimensionAtObservation') == 'AllDimensions'
-
-        structure = get_structure_from_dsd(self.structure, self, dataset_type, allDimensions=allDimensions)
-
-        structures.append(structure)
-        header.set_Structure(structures)
-        messageXML.set_Header(header)
-        if outputPath != '':
-            save_file(messageXML, outputPath)
-        else:
-            return save_file(messageXML, outputPath)
+            writer(path=outputPath, dType=dataset_type, dataset=self, id_=id_, test=test,
+                   prepared=prepared, sender=sender, receiver=receiver)

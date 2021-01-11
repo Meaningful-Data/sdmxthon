@@ -1,16 +1,15 @@
 import json
-from copy import copy
 from datetime import datetime
 
 from SDMXThon.model.structure import DataStructureDefinition
-from .dataSet import DataSet, generateDataSetXML, get_structure_from_dsd
-from ..message.generic import GenericDataType, StructureSpecificDataType, PartyType, SenderType, \
+from .dataSet import DataSet
+from ..message.generic import PartyType, SenderType, \
     StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, StructureSpecificDataHeaderType, \
     GenericDataHeaderType
 from ..utils.dataset_parsing import getMetadata
 from ..utils.enums import DatasetType
 from ..utils.metadata_parsers import id_creator
-from ..utils.write import save_file
+from ..utils.write import writer
 
 
 class Message:
@@ -140,7 +139,7 @@ class Message:
             else:
                 raise ValueError('pathToMetadata must be a DataStructureDefinition dict or a string')
         else:
-            dsds = getMetadata(pathToMetadata)
+            dsds, error = getMetadata(pathToMetadata)
         if isinstance(pathToJSON, str):
             with open(pathToJSON, 'r') as f:
                 parsed = json.loads(f.read())
@@ -159,35 +158,14 @@ class Message:
                                      data=e.get('data'))
         self.payload = datasets
 
-    def toXML(self, outputPath=''):
-        if len(self.payload) == 0:
-            raise ValueError('Datasets must be provided')
-
-        structures = []
-
-        header = copy(self.header)
-
-        if self.type == DatasetType.GenericDataSet or self.type == DatasetType.GenericTimeSeriesDataSet:
-            messageXML = GenericDataType()
-        elif self.type == DatasetType.StructureDataSet or self.type == DatasetType.StructureTimeSeriesDataSet:
-            messageXML = StructureSpecificDataType()
-        else:
-            raise ValueError('Wrong Dataset Type')
-        for e in self.payload.values():
-            data_set = generateDataSetXML(e, self.type)
-
-            messageXML.add_DataSet(data_set)
-
-            allDimensions = e.datasetAttributes.get('dimensionAtObservation') == 'AllDimensions'
-
-            structure = get_structure_from_dsd(e.structure, e, self.type, allDimensions=allDimensions)
-
-            structures.append(structure)
-        header.set_Structure(structures)
-        messageXML.set_Header(header)
-        if messageXML == None:
-            raise ValueError('Message could not be parsed')
+    def toXML(self, outputPath='', id_='test',
+              test='true',
+              prepared=datetime.now(),
+              sender='Unknown',
+              receiver='Not_supplied'):
         if outputPath == '':
-            return save_file(messageXML, outputPath)
+            return writer(path=outputPath, dType=self.type, dataset=self, id_=id_, test=test,
+                          prepared=prepared, sender=sender, receiver=receiver)
         else:
-            save_file(messageXML, outputPath)
+            writer(path=outputPath, dType=self.type, dataset=self, id_=id_, test=test,
+                   prepared=prepared, sender=sender, receiver=receiver)
