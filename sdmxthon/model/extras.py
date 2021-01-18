@@ -1,10 +1,10 @@
 from datetime import datetime, date, timedelta
 
-from SDMXThon.model.base import MaintainableArtefact, InternationalString
-from SDMXThon.model.dataTypes import ConstraintRoleType
-from SDMXThon.model.structure import ComponentList, List, Component
-from SDMXThon.model.timePeriods import ObservationalTimePeriod
-from SDMXThon.model.utils import qName, genericSetter
+from .base import MaintainableArtefact, InternationalString
+from .dataTypes import ConstraintRoleType
+from .structure import ComponentList, List, Component
+from .timePeriods import ObservationalTimePeriod
+from .utils import qName, genericSetter
 
 
 class SelectionValue:

@@ -3,7 +3,7 @@ import sqlite3
 
 import pandas as pd
 
-from SDMXThon import DatasetType, getMetadata, DataSet
+from SDMXThon import getMetadata, DataSet
 from SDMXThon.model.structure import DataStructureDefinition
 
 logger = logging.getLogger("logger")
@@ -34,9 +34,10 @@ pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
 pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
-# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/RBI_DSD(1.0)_20052020.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006.xml'
-urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202101141401030.xml'
+urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
+              '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
 pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
 pathToData = 'SDMXThon/outputTests/BIS_DER_test.xml'
@@ -48,23 +49,19 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
-
-def addRowStrToOutfile(row):
-    string = ''
-    for k, v in row.items():
-        string += f'{k}="{v}" '
-    return f'\t\t<Obs {string}>\n'
-
-
 def main():
     """
     datasets = getDatasets(pathTestGEN, urlMetadata, DatasetType.GenericDataSet)
     logger.debug('End reading data old')
     """
+    """
+    dsds, errors = getMetadata(pathToMetadataFile)
+    logger.debug('End')
+    """
 
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
-    df = pd.read_sql('SELECT * from BIS_DER LIMIT 1', conn)
+    df = pd.read_sql('SELECT * from BIS_DER LIMIT 1000', conn)
     logger.debug('End reading')
 
     df['FREQ'] = 'A'
@@ -72,107 +69,130 @@ def main():
     dsds, errors = getMetadata(urlMetadata)
     dsd: DataStructureDefinition = dsds["BIS:BIS_DER(1.0)"]
 
-    attached_attributes = {}
+    dataset = DataSet(data=df, structure=dsd)
+    logger.debug('Start validation')
+    print(dataset.semanticValidation())
 
-    for e in df.keys():
-        if e in dsd.datasetAttributeCodes:
-            attached_attributes[e] = df.loc[0, e]
-            del df[e]
-    dimObs = 'TIME_PERIOD'
+    logger.debug('End validation')
+
+    """
+    logger.debug('Start reading')
+    conn = sqlite3.connect(pathToDB)
+    df = pd.read_sql('SELECT * from BIS_DER LIMIT 1000', conn).astype('category')
+    df['FREQ'] = 'A'
+    with open('dsd.pickle', 'rb') as f:
+        dsd = pickle.loads(f.read())
+
+    dataset = DataSet(data=df, structure=dsd)
+    logger.debug('Start')
+
+    dimObs = "TIME_PERIOD"
 
     prettyprint = True
+
+    outfile = ''
+
+    df = dataset.data.dropna(axis=1, how="all")
 
     if prettyprint:
         child1 = '\t'
         child2 = '\t\t'
+        child3 = '\t\t\t'
+        child4 = '\t\t\t\t'
+        child5 = '\t\t\t\t\t'
         nl = '\n'
     else:
-        child1 = child2 = nl = ''
+        child1 = child2 = child3 = child4 = child5 = nl = ''
 
-    logger.debug('Start')
-    dataset = DataSet(data=df, structure=dsd, attached_attributes=attached_attributes)
-    dataset.toXML(dataset_type=DatasetType.StructureDataSet, outputPath='test.xml')
+    series_key_codes = []
+    series_att_codes = []
+    obs_att_codes = []
+    for e in dataset.structure.attributeDescriptor.components.values():
+        if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
+            obs_att_codes.append(e.id)
+    for e in dataset.data.keys():
+        if e in dataset.structure.dimensionCodes and e != dimObs:
+            series_key_codes.append(e)
+        elif e in dataset.structure.attributeCodes and e not in obs_att_codes:
+            series_att_codes.append(e)
+
+    obs_value_data = df[dataset.structure.measureCode].astype('str')
+    obs_dim_data = df[dimObs].astype('str')
+
+    del df[dataset.structure.measureCode]
+    del df[dimObs]
+
+    df = df.sort_values(series_key_codes + series_att_codes, axis=0).astype('str')
+    df_series: pd.DataFrame = df[series_key_codes + series_att_codes].drop_duplicates()
+    df_id = f'{child4}<generic:Value id="' + pd.DataFrame(
+        np.tile(np.array(df_series.columns), len(df_series.index)).reshape(len(dataset.data.index), -1),
+        index=dataset.data.index,
+        columns=dataset.data.columns, dtype='str') + '" value="'
+    df_value = dataset.data.astype('str') + '"/>'
+    df_id: pd.DataFrame = df_id.add(df_value)
+
+
+
+    df_obs_dim = f'{child3}<generic:ObsDimension value="' + obs_dim_data + '"/>'
+    df_obs_value = f'{child3}<generic:ObsValue value="' + obs_value_data + '"/>'
+    df_id[dimObs] = df_obs_dim
+    df_id['OBS_VALUE'] = df_obs_value
+    df_id.insert(0, 'head', f'{child2}<generic:Obs>')
+    df_id.insert(len(df_id.keys()), 'end', f'{child2}</generic:Obs>')
+
+    dim_codes = []
+    att_codes = []
+    for e in df_id.keys():
+        if e in dataset.structure.dimensionCodes:
+            dim_codes.append(e)
+        elif e in dataset.structure.attributeCodes:
+            att_codes.append(e)
+
+    all_codes = ['head']
+    all_codes += series_key_codes
+    all_codes += series_att_codes
+    all_codes.append(dim_codes)
+    all_codes.append('OBS_VALUE')
+    all_codes += obs_att_codes
+    all_codes.append('end')
+    df_id = df_id.reindex(all_codes, axis=1)
+
+    df_dim = df_id[dim_codes]
+    last_dim = len(df_dim.columns) - 1
+    df_id.loc[:, df_dim.columns[0]] = f'{child3}<generic:ObsKey>{nl}' + df_dim.loc[:, df_dim.columns[0]]
+    df_id.loc[:, df_dim.columns[last_dim]] = df_dim.loc[:, df_dim.columns[last_dim]] + f'{nl}{child3}</generic:ObsKey>'
+
+    df_att = df_id[att_codes]
+    last_att = len(df_att.columns) - 1
+    df_id.loc[:, df_att.columns[0]] = f'{child3}<generic:Attributes>{nl}' + df_att.loc[:, df_att.columns[0]]
+    df_id.loc[:, df_att.columns[last_att]] = df_att.loc[:, df_att.columns[last_att]] + f'{nl}' \
+                                                                                       f'{child3}</generic:Attributes>'
+
+    obs_str = ''
+    obs_str += df_id.to_csv(path_or_buf=None, sep='\n', header=False, index=False, quoting=csv.QUOTE_NONE,
+                            escapechar='\\')
+    obs_str = obs_str.replace('\\', '')
+    obs_str = obs_str.replace('="nan"', '=""')
+    man_att = get_mandatory_attributes(dataset.structure)
+
+    for e in dataset.structure.attributeCodes:
+        if e in df_id.keys() and e not in man_att:
+            obs_str = obs_str.replace(f'{child4}<generic:Value id="{e}" value=""/>{nl}', '')
+
+    obs_str = f'{nl}'.join(obs_str.splitlines())
+
+
+
+
     logger.debug('End')
 
     """
-    del df
-
-    series_codes = []
-    obs_codes = [dimObs]
-    obs_codes.append(dsd.measureCode)
-    for e in dsd.attributeDescriptor.components.values():
-        if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
-            obs_codes.append(e.id)
-    for e in dataset.data.keys():
-        if (e in dsd.dimensionCodes and e != dimObs) or (e in dsd.attributeCodes and e not in obs_codes):
-            series_codes.append(e)
-
-    series_df = dataset.data[~dataset.data.duplicated(series_codes)][series_codes]
-
-    series_df.reset_index(drop=True, inplace=True)
-
-    df1 = pd.DataFrame(np.tile(np.array(obs_codes), len(dataset.data.index))
-                       .reshape(len(dataset.data.index), -1),
-                       index=dataset.data.index,
-                       columns=obs_codes, dtype='str') + '='
-    df2 = '"' + dataset.data[obs_codes].astype('str') + '"'
-    df1 = df1 + df2
-    df1.insert(0, 'head', f'{child2}<Obs')
-    df1.insert(len(df1.keys()), 'end', '/>')
-    obs_str = ''
-    obs_str += df1.to_csv(path_or_buf=None, sep=' ', header=False, index=False, quoting=csv.QUOTE_NONE, escapechar='\\')
-
-    obs_str = obs_str.replace('\\', '')
-    obs_str = f'{nl}'.join(obs_str.splitlines())
-    obs_str.replace(' />', '/>')
-
-    with open('test.xml', 'w') as f:
-        f.write(obs_str)
-    """
-
     """ DEMO 3
     dataset.toXML(DatasetType.GenericDataSet, pathTest)
 
     message = Message(DatasetType.GenericDataSet)
     message.readJSON(pathToJSON, urlMetadata)
     message.toXML(pathTest)
-    """
-
-    """
-    dataset.setDimensionAtObservation('AllDimensions')
-    dataset.toXML(DatasetType.GenericDataSet, pathTestGEN)
-    logger.debug('Fin All Generic')
-
-    dataset.setDimensionAtObservation('TIME_PERIOD')
-    dataset.toXML(DatasetType.StructureDataSet, pathTestXSSer)
-    logger.debug('Fin Series Structure')
-
-    dataset.setDimensionAtObservation('AllDimensions')
-    dataset.toXML(DatasetType.StructureDataSet, pathTestXS)
-    logger.debug('Fin All Structure')
-    """
-
-    """
-    logger.debug('Start')
-    message = Message(DatasetType.GenericDataSet)
-    message.readJSON(pathToJSON, urlMetadata)
-    logger.debug('Reading JSON')
-
-    message.toXML(pathTestGENSer)
-    logger.debug('Writing to Generic (AllDimensions)')
-
-    message.setDimensionAtObservation('AllDimensions')
-    message.toXML(pathTestGEN)
-    logger.debug('Writing to Generic (TimeSeries)')
-
-    message.type = DatasetType.StructureDataSet
-    message.toXML(pathTestXS)
-    logger.debug('Writing to Structure (AllDimensions)')
-
-
-    message.setDimensionAtObservation('TIME_PERIOD')
-    message.toXML(pathTestXSSer)
-    logger.debug('Writing to Structure (TimeSeries)')
     """
 
 

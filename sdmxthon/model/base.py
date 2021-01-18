@@ -185,6 +185,8 @@ class Annotation(object):
 class AnnotableArtefact(object):
     def __init__(self, annotations: List[Annotation] = None):
 
+        self._annotations = []
+
         if isinstance(annotations, list):
             for a in annotations:
                 self.addAnnotation(a)

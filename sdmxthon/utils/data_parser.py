@@ -1,6 +1,6 @@
-from SDMXThon.utils.generateds import GenerateSuper
-from SDMXThon.utils.mappings import ClassToNode, GenerateDSNamespaceDefs
-from SDMXThon.utils.xml_base import showIndent, encode_str_2_3, get_all_text_, Tag_pattern_
+from .generateds import GenerateSuper
+from .mappings import ClassToNode, GenerateDSNamespaceDefs
+from .xml_base import showIndent, encode_str_2_3, get_all_text_, Tag_pattern_
 
 Validate_simpletypes_ = True
 UseCapturedNS_ = True

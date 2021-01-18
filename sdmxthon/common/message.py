@@ -1,11 +1,11 @@
 import json
 from datetime import datetime
 
-from SDMXThon.model.structure import DataStructureDefinition
 from .dataSet import DataSet
 from ..message.generic import PartyType, SenderType, \
     StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, StructureSpecificDataHeaderType, \
     GenericDataHeaderType
+from ..model.structure import DataStructureDefinition
 from ..utils.dataset_parsing import getMetadata
 from ..utils.enums import DatasetType
 from ..utils.metadata_parsers import id_creator
@@ -164,8 +164,8 @@ class Message:
               sender='Unknown',
               receiver='Not_supplied'):
         if outputPath == '':
-            return writer(path=outputPath, dType=self.type, dataset=self, id_=id_, test=test,
+            return writer(path=outputPath, dType=self.type, dataset=self.payload, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver)
         else:
-            writer(path=outputPath, dType=self.type, dataset=self, id_=id_, test=test,
+            writer(path=outputPath, dType=self.type, dataset=self.payload, id_=id_, test=test,
                    prepared=prepared, sender=sender, receiver=receiver)

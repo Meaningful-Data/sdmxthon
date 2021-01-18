@@ -436,7 +436,13 @@ def get_DSDs(root, concepts=None, codelists=None):
         name = element.xpath(expression,
                              namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
         if len(name) > 0:
-            dsd.name = name[0]
+            dsd.name = str(name[0])
+
+        expression = "./com:Description/text()"
+        desc = element.xpath(expression,
+                             namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+        if len(desc) > 0:
+            dsd.description = str(desc[0])
 
         expression = "./str:DataStructureComponents/str:DimensionList"
         dimensionElement = element.xpath(expression,

@@ -7,7 +7,7 @@ import sys
 from lxml import etree as etree_
 from six.moves import zip_longest
 
-from SDMXThon.utils.xml_base import raise_parse_error, quote_xml, GDSParseError, GdsCollector_
+from .xml_base import raise_parse_error, quote_xml, GDSParseError, GdsCollector_
 
 ExternalEncoding = ''
 

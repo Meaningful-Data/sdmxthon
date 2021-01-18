@@ -581,6 +581,24 @@ class DataStructureDefinition(MaintainableArtefact):
         return rslt
 
     @property
+    def facetedObjects(self):
+        list_codes = []
+        for k, v in self.dimensionDescriptor.components.items():
+            if v.localRepresentation is not None and len(v.localRepresentation.facets) > 0:
+                list_codes.append(k)
+
+        if self.attributeDescriptor is not None:
+            for k, v in self.attributeDescriptor.components.items():
+                if v.localRepresentation is not None and len(v.localRepresentation.facets) > 0:
+                    list_codes.append(k)
+
+        if self.measureDescriptor is not None:
+            for k, v in self.measureDescriptor.components.items():
+                if v.localRepresentation is not None and len(v.localRepresentation.facets) > 0:
+                    list_codes.append(k)
+        return list_codes
+
+    @property
     def measureCode(self):
         return list(self.measureDescriptor.components.keys())[0]
 

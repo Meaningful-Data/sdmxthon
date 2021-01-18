@@ -5,7 +5,7 @@ import sys
 
 from lxml import etree as etree_
 
-from SDMXThon.utils.mappings import ClassToNode
+from .mappings import ClassToNode
 
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 CDATA_pattern_ = re_.compile(r"<!\[CDATA\[.*?\]\]>", re_.DOTALL)

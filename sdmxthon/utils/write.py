@@ -8,6 +8,7 @@ import pandas as pd
 
 from .validations import get_mandatory_attributes
 from .xml_base import makeWarnings
+from ..model.structure import PrimaryMeasure
 from ..utils.enums import DatasetType
 
 logger = logging.getLogger("logger")
@@ -128,10 +129,16 @@ def writer(path, dataset, dType, prettyprint=True, id_='test',
             count = 0
             for record in dataset.values():
                 count = count + 1
-                outfile += strWriting(record, prettyprint, count)
+                if record.dimAtObs == "AllDimensions":
+                    outfile += strWriting(record, prettyprint, count)
+                else:
+                    outfile += strSerWriting(record, prettyprint, count)
                 record.data = None
         else:
-            outfile += strWriting(dataset, prettyprint)
+            if dataset.dimAtObs == "AllDimensions":
+                outfile += strWriting(dataset, prettyprint)
+            else:
+                outfile += strSerWriting(dataset, prettyprint)
     outfile += f'</message:{data_type_string}>'
 
     if path != '':
@@ -168,7 +175,6 @@ def strWriting(dataset, prettyprint=True, count=1):
                        index=dataset.data.index,
                        columns=dataset.data.columns, dtype='str') + '='
     df2 = '"' + dataset.data.astype('str') + '"'
-
     df1 = df1.add(df2)
     df1.insert(0, 'head', f'{child2}<Obs')
     df1.insert(len(df1.keys()), 'end', '/>')
@@ -266,4 +272,95 @@ def genWriting(dataset, prettyprint=True):
 
     outfile += obs_str
     outfile += f'{nl}{child1}</message:DataSet>{nl}'
+    return outfile
+
+
+def strSerWriting(dataset, prettyprint=True, count=1):
+    outfile = ''
+
+    if prettyprint:
+        child1 = '\t'
+        child2 = '\t\t'
+        child3 = '\t\t\t'
+        child5 = '\t\t\t\t\t'
+        nl = '\n'
+    else:
+        child1 = child2 = child3 = child5 = nl = ''
+
+    marca_series_inicio = '//SeriesStart'
+    marca_series_final = 'Mark//'
+
+    dimObs = dataset.dimAtObs
+
+    attached_attributes_str = ''
+    for k, v in dataset.attachedAttributes.items():
+        attached_attributes_str += f'{k}="{v}" '
+
+    dataset.data = dataset.data.dropna(axis=1, how="all")
+
+    # Datasets
+    outfile += f'{child1}<message:DataSet {attached_attributes_str}ss:structureRef="{dataset.structure.id}" ' \
+               f'xsi:type="ns{count}:DataSetType" ss:dataScope="DataStructure" ' \
+               f'action="Replace">{nl}'
+
+    series_codes = []
+    obs_codes = [dimObs, dataset.structure.measureCode]
+    for e in dataset.structure.attributeDescriptor.components.values():
+        if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
+            obs_codes.append(e.id)
+    for e in dataset.data.keys():
+        if (e in dataset.structure.dimensionCodes and e != dimObs) or (
+                e in dataset.structure.attributeCodes and e not in obs_codes):
+            series_codes.append(e)
+    df = dataset.data.sort_values(series_codes, axis=0).astype('str')
+    df = df.reset_index(drop=True)
+    df_series: pd.DataFrame = df[series_codes].drop_duplicates()
+
+    df1_series = pd.DataFrame(np.tile(np.array(series_codes), len(df_series.index))
+                              .reshape(len(df_series.index), -1),
+                              index=df_series.index,
+                              columns=series_codes, dtype='str') + '='
+    df2_series = '"' + df_series.astype('str') + '"'
+    df1_series = df1_series + df2_series
+    df1_series.insert(0, 'head', f'{child2}<Series')
+    df1_series.insert(len(df1_series.keys()), 'end', f'>{nl}')
+
+    df1_obs = pd.DataFrame(np.tile(np.array(obs_codes), len(df[obs_codes].index))
+                           .reshape(len(df[obs_codes].index), -1),
+                           index=df[obs_codes].index,
+                           columns=obs_codes, dtype='str') + '='
+    df2_obs = '"' + df[obs_codes].astype('str') + '"'
+    df1_obs = df1_obs + df2_obs
+    df1_obs.insert(0, 'head', f'{child3}<Obs')
+    df1_obs.insert(len(df1_obs.keys()), 'end', '/>')
+
+    del df
+    df1_obs.iloc[df_series.index, 0] = f'{marca_series_inicio + marca_series_final}' + df1_obs.iloc[df_series.index, 0]
+
+    series_str = ''
+    temp_str = ''
+    series_str += df1_series.to_csv(path_or_buf=None, sep=' ', header=False, index=False, quoting=csv.QUOTE_NONE,
+                                    escapechar='\\')
+    series_str = series_str.replace('\\', '')
+    series_str = series_str.replace('\r\n', '')
+    series_str.replace('> ', '>')
+    list_series = series_str.split('<')
+    list_series = list_series[1:]
+    temp_str += df1_obs.to_csv(path_or_buf=None, sep=' ', header=False, index=False, quoting=csv.QUOTE_NONE,
+                               escapechar='\\')
+    temp_str = temp_str.replace('\\', '')
+    temp_str = temp_str.replace('="nan"', '=""')
+    temp_str = f'{nl}'.join(temp_str.splitlines())
+
+    for e in obs_codes:
+        temp_str = temp_str.replace(f'{e}="" ', '')
+
+    list_obs = temp_str.split(marca_series_inicio + marca_series_final)
+    list_obs = list_obs[1:]
+
+    end_series = f'{nl}{child2}</Series>{nl}'
+    outfile += ''.join([f"{child2}<" + str(a) + b + end_series for a, b in zip(list_series, list_obs)])
+    outfile = outfile.replace(f'{child5}', f'{child3}')
+    outfile = outfile.replace(f'{nl}{nl}', f'{nl}')
+    outfile += f'{child1}</message:DataSet>{nl}'
     return outfile

@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from SDMXThon.model.base import MaintainableArtefact, InternationalString
-from SDMXThon.model.structure import DataStructureDefinition
-from SDMXThon.model.utils import qName, genericSetter
+from .base import MaintainableArtefact, InternationalString
+from .structure import DataStructureDefinition
+from .utils import qName, genericSetter
 
 
 class DataFlowDefinition(MaintainableArtefact):

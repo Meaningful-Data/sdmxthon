@@ -1,9 +1,12 @@
-import re
+import logging
 
 import numpy as np
+import pandas.api.types
 from pandas import DataFrame
 
-from ..model.structure import DataStructureDefinition, Dimension, Facet
+from ..model.structure import DataStructureDefinition, Dimension
+
+logger = logging.getLogger("logger")
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
@@ -13,12 +16,12 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
 
         for element in dsd.dimensionDescriptor.components.values():
             if element.localRepresentation.codeList is not None:
-                data[element.id] = element.localRepresentation.codeList.items.keys()
+                data[element.id] = list(element.localRepresentation.codeList.items.keys())
 
     if dsd.attributeDescriptor is not None and dsd.attributeDescriptor.components is not None:
         for record in dsd.attributeDescriptor.components.values():
             if record.localRepresentation.codeList is not None:
-                data[record.id] = record.localRepresentation.codeList.items.keys()
+                data[record.id] = list(record.localRepresentation.codeList.items.keys())
 
     return data
 
@@ -37,76 +40,145 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
     return data
 
 
-def check_facets(facets: list, value, dsd: DataStructureDefinition, obj_id, obj_type):
-    error_list = []
+def facet_error(error_level, obj_id, obj_type, rows, value, facetType, facetValue) -> dict:
+    return {'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{obj_id}', 'Type': f'{obj_type}',
+            'Rows': rows.copy(), 'Message': f'Value {value} is not compliant with {facetType} : {facetValue}'}
 
-    isSequence = None
+
+def parse_datapoint(row):
+    string = ''
+    for k, v in row.items():
+        if k != 'OBS_VALUE':
+            string += f' ( {str(k)} : {str(v)} ) '
+    return string
+
+
+def format_row(row):
+    string = ''
+    for k, v in row.items():
+        string += f' ( {str(k)} : {str(v)} ) '
+    return string
+
+
+def check_num_facets(facets, data, key, type_):
+    data_column = data[key].drop_duplicates()
+
+    error_level = 'WARNING'
+    errors = []
+    is_sequence = None
     start = None
     end = None
     interval = None
     for f in facets:
-        f: Facet
-        if f.facetType is not None:
+        values = []
+        if f.facetType == 'maxLength' or f.facetType == 'maxValue':
+            if f.facetType == 'maxLength':
+                max_ = pow(10, int(f.facetValue))
+            else:
+                max_ = int(f.facetValue)
 
-            if f.facetType == 'minLength' and len(value) < int(f.facetValue):
-                error_list.append(f'Value {value} is not compliant with {f.facetType} : {f.facetValue} '
-                                  f'on {obj_type} {obj_id} in dataset {dsd.id}')
-            if f.facetType == 'maxLength' and len(value) > int(f.facetValue):
-                error_list.append(f'Value {value} is not compliant with {f.facetType} : {f.facetValue} '
-                                  f'on {obj_type} {obj_id} in dataset {dsd.id}')
-            if f.facetType == 'minValue' and int(value) < int(f.facetValue):
-                error_list.append(f'Value {value} is not compliant with {f.facetType} : {f.facetValue} '
-                                  f'on {obj_type} {obj_id} in dataset {dsd.id}')
-            if f.facetType == 'maxValue' and int(value) > int(f.facetValue):
-                error_list.append(f'Value {value} is not compliant with {f.facetType} : {f.facetValue} '
-                                  f'on {obj_type} {obj_id} in dataset {dsd.id}')
+            values = data_column[data_column > max_].tolist()
 
-            if f.facetType == 'pattern':
-                if re.fullmatch(str(f.facetValue).encode('unicode-escape').decode(), value) is None:
-                    error_list.append(f'Value {value} is not compliant with {f.facetType} : {f.facetValue} '
-                                      f'on {obj_type} {obj_id} in dataset {dsd.id}')
+        elif f.facetType == 'minLength' or f.facetType == 'minValue':
+            if f.facetType == 'minLength':
+                min_ = pow(10, int(f.facetValue))
+            else:
+                min_ = int(f.facetValue)
 
-            if f.facetType is 'isSequence':
-                if f.facetValue.upper() is 'TRUE':
-                    isSequence = True
-                elif f.facetValue.upper() is 'FALSE':
-                    isSequence = False
-            if f.facetType is 'startValue':
-                start = int(f.facetValue)
-            if f.facetType is 'endValue':
-                end = int(f.facetValue)
-            if f.facetType is 'interval':
-                interval = int(f.facetValue)
-
-    if isSequence is not None and start is not None and interval is not None:
-        if int(value) < start:
-            error_list.append(f'Value {value} is not compliant with startValue : {start} '
-                              f'on {obj_type} {obj_id} in dataset {dsd.id}')
-
-        if end is not None and int(value) > end:
-            error_list.append(f'Value {value} is not compliant with endValue : {end} '
-                              f'on {obj_type} {obj_id} in dataset {dsd.id}')
+            values = data_column[data_column < min_].tolist()
+        elif f.facetType is 'isSequence':
+            if f.facetValue.upper() is 'TRUE':
+                is_sequence = True
+        elif f.facetType is 'startValue':
+            start = int(f.facetValue)
+        elif f.facetType is 'endValue':
+            end = int(f.facetValue)
+        elif f.facetType is 'interval':
+            interval = int(f.facetValue)
         else:
-            result = int(value) - start
+            continue
 
-            if result % interval != 0:
-                error_list.append(f'Value {value} is not compliant with startValue : {start} '
-                                  f'in dataset {dsd.id}')
+        if len(values) > 0:
+            for v in values:
+                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                               'Rows': None, 'Message': f'Value {v} not compliant with '
+                                                        f'{f.facetType} : {f.facetValue}'})
 
-    return error_list
+    if is_sequence is not None and start is not None and interval is not None:
+        data_column = data_column.sort_values()
+        control = True
+        if int(data_column.iloc[0]) < start:
+            control = False
+            values = data_column[data_column < start].tolist()
+            if len(values) > 0:
+                for v in values:
+                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                                   'Rows': None, 'Message': f'Value {v} not compliant with startValue : {start}'})
+
+        if end is not None and int(data_column.iloc[-1]) > end:
+            control = False
+            values = data_column[data_column > end].tolist()
+            if len(values) > 0:
+                for v in values:
+                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                                   'Rows': None, 'Message': f'Value {v} not compliant with endValue : {end}'})
+
+        if control:
+            values = data_column[(data_column - start) % interval != 0]
+            if len(values) > 0:
+                for v in values:
+                    if end is not None:
+                        errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                                       'Rows': None,
+                                       'Message': f'Value {v} in {key} not compliant '
+                                                  f'with sequence : {start}-{end} (interval: {interval})'})
+                    else:
+                        errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                                       'Rows': None,
+                                       'Message': f'Value {v} in {key} '
+                                                  f'not compliant with sequence : '
+                                                  f'{start}-infinite (interval: {interval})'})
+
+    return errors
 
 
-def parse_datapoint(row, dsd):
-    string = ''
-    for k, v in row.items():
-        if k != 'OBS_VALUE':
-            string += ' (' + str(k) + ' : ' + str(v) + ') '
-    return f'Duplicated data point{string}for dataset {dsd.id}'
+def check_str_facets(facets, data, key, type_):
+    data_column = data[key].drop_duplicates()
+
+    error_level = 'WARNING'
+    errors = []
+    for f in facets:
+        if f.facetType == 'maxLength' or f.facetType == 'maxValue':
+            max_ = int(f.facetValue)
+            if f.facetType == 'maxLength':
+                values = data_column[data_column.str.len() > max_].tolist()
+            else:
+                values = data_column[int(data_column) > max_].tolist()
+        elif f.facetType == 'minLength' or f.facetType == 'minValue':
+            min_ = int(f.facetValue)
+            if f.facetType == 'minLength':
+                values = data_column[data_column.str.len() < min_].tolist()
+            else:
+                values = data_column[int(data_column) < min_].tolist()
+
+        elif f.facetType == 'pattern':
+            values = data_column[~data_column.str.fullmatch(
+                str(f.facetValue).encode('unicode-escape').decode())].tolist()
+        else:
+            continue
+
+        if len(values) > 0:
+            for v in values:
+                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                               'Rows': None, 'Message': f'Value {v} not compliant with '
+                                                        f'{f.facetType} : {f.facetValue}'})
+
+    return errors
 
 
-def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
+def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     mandatory = get_mandatory_attributes(dsd)
-    codelist_values: dict = get_codelist_values(dsd)
+    codelist_values = get_codelist_values(dsd)
 
     """
         Validations stands for the next schema:
@@ -117,120 +189,120 @@ def validate_obs(data: DataFrame, dsd: DataStructureDefinition):
         SS04: Check if an attribute/dimension value that is associated to a Codelist is valid
         SS05: Check that all dimensions have values for every record of a dataset
         SS06: Check that all mandatory attributes have values for every record of a dataset
-        SS07: Check if two OBS_VALUE are the same for each Serie
+        SS07: Check if two data_points are the same
         SS08: Check that the value inputted is compliant with Facets for the referred Representation
     """
 
-    list_ss01 = []
-    list_ss02 = []
-    list_ss03 = []
-    list_ss04 = []
-    list_ss05 = []
-    list_ss06 = []
-    list_ss07 = []
-    list_ss08 = []
+    errors = []
 
-    if 'OBS_VALUE' not in data.keys():
-        list_ss02.append(f'Missing OBS_VALUE for dataset {dsd.id}')
-    elif data['OBS_VALUE'].isnull().values.any():
-        df = data[data['OBS_VALUE'] == np.nan]
-        list_ss02 += df[:].apply(lambda row: f'Missing value for OBS_VALUE on row {":".join(map(str, row.values))}'
-                                             f' for dataset {dsd.id}', axis=1).tolist()
+    faceted_objects = dsd.facetedObjects
 
-    if dsd.measureDescriptor is not None and dsd.measureCode is not None:
-        if dsd.measureDescriptor.components[dsd.measureCode].localRepresentation is not None and \
-                len(dsd.measureDescriptor.components[dsd.measureCode].localRepresentation.facets) > 0:
-            values = data['OBS_VALUE'].unique()
-            for e in values:
-                list_ss08 += check_facets(dsd.measureDescriptor.components['OBS_VALUE'].localRepresentation.facets, e,
-                                          dsd, 'OBS_VALUE', 'Measure')
+    mc = dsd.measureCode
+    type_ = 'Measure'
+    if mc not in data.keys():
+        errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}', 'Rows': None,
+                       'Message': f'Missing {mc}'})
+    elif data[mc].isnull().values.any():
+        if 'OBS_STATUS' in data.keys():
 
-    facets = False
+            rows = data[(data[mc].isna()) & (data['OBS_STATUS'] != 'M')] \
+                .apply(lambda row: format_row(row), axis=1).tolist()
+            if len(rows) > 0:
+                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}',
+                               'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
+        else:
+            rows = data[data[mc].isna()].apply(lambda row: format_row(row), axis=1).tolist()
+            if len(rows) > 0:
+                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}',
+                               'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
 
-    for k in dsd.dimensionCodes:
-        if k not in data.keys():
-            list_ss01.append(f'Missing dimension {k} on dataset {dsd.id}')
-            continue
+    if mc in faceted_objects:
+        facets = dsd.measureDescriptor.components[mc].localRepresentation.facets
+        if pandas.api.types.is_numeric_dtype(data[mc]):
+            errors += check_num_facets(facets, data, mc, type_)
+        else:
+            errors += check_str_facets(facets, data, mc, type_)
+    grouping_keys = []
 
-        if dsd.dimensionDescriptor.components[k].localRepresentation is not None:
-            if len(dsd.dimensionDescriptor.components[k].localRepresentation.facets) > 0:
-                facets = True
+    all_codes = dsd.dimensionCodes + dsd.attributeCodes
 
-        values = data[k].unique()
-        for e in values:
+    for k in dsd.datasetAttributeCodes:
+        if k in all_codes:
+            all_codes.remove(k)
 
-            if facets:
-                list_ss08 += check_facets(dsd.dimensionDescriptor.components[k].localRepresentation.facets, e, dsd,
-                                          k, 'Dimension')
+    man_codes = dsd.dimensionCodes + mandatory
 
-            if e == np.nan or str(e) == 'nan' or str(e) == 'None':
-                df = data[data[k] == np.nan]
-                list_ss05 += df[:].apply(lambda row: f'Missing value "{e}" for dimension {k} on '
-                                                     f'row {":".join(map(str, row.values))} for dataset {dsd.id}',
-                                         axis=1).tolist()
-            elif k in codelist_values.keys() and str(e) not in codelist_values[k]:
-                df = data[data[k] == e]
-                list_ss04 += df[:].apply(lambda row: f'Wrong value "{e}" for dimension {k} '
-                                                     f'on row {":".join(map(str, row.values))} for dataset {dsd.id}',
-                                         axis=1).tolist()
-
-        facets = False
-
-    for k in dsd.attributeCodes:
-
-        if dsd.attributeDescriptor.components[k].localRepresentation is not None:
-            if len(dsd.attributeDescriptor.components[k].localRepresentation.facets) > 0:
-                facets = True
-
+    for k in all_codes:
         if k not in data.keys():
             if k in mandatory:
-                list_ss03.append(f'Missing attribute {k} on dataset {dsd.id}')
+                errors.append(
+                    {'Code': 'SS03', 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'Attribute', 'Rows': None,
+                     'Message': f'Missing {k}'})
+            else:
+                errors.append(
+                    {'Code': 'SS01', 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'Dimension', 'Rows': None,
+                     'Message': f'Missing {k}'})
             continue
-        values = data[k].unique()
-        for e in values:
-            if facets:
-                list_ss08 += check_facets(dsd.attributeDescriptor.components[k].localRepresentation.facets, e, dsd,
-                                          k, 'Attribute')
 
-            if e is np.nan or e is 'nan' or e is 'None' or e is None:
-                if k in mandatory:
-                    df = data[data[k] == np.nan]
-                    list_ss06 += df[:].apply(lambda row: f'Missing value for attribute {k} on row '
-                                                         f'{":".join(map(str, row.values))} for dataset {dsd.id}',
-                                             axis=1).tolist()
-            elif k in codelist_values.keys() and str(e) not in codelist_values[k]:
-                df = data[data[k] == e]
-                list_ss04 += df[:].apply(lambda row: f'Wrong value "{e}" for attribute {k} '
-                                                     f'on row {":".join(map(str, row.values))} for dataset {dsd.id}',
-                                         axis=1).tolist()
+        data_column = data[k].drop_duplicates()
 
-    grouping_keys = []
-    for e in dsd.dimensionCodes:
-        if e in data.keys():
-            grouping_keys.append(e)
+        if data_column.isnull().all():
+            continue
 
-    grouping_keys.append('OBS_VALUE')
-    duplicateRowsDF = data[data.duplicated(subset=grouping_keys)][grouping_keys]
+        if k in dsd.attributeCodes:
+            type_ = 'Attribute'
+            code = 'SS06'
+        else:
+            grouping_keys.append(k)
+            type_ = 'Dimension'
+            code = 'SS05'
 
-    if len(duplicateRowsDF) > 0:
-        list_ss07 += duplicateRowsDF[grouping_keys].apply(lambda row: parse_datapoint(row, dsd), axis=1).tolist()
+        if k in man_codes:
+            values = data_column[data_column.isna()]
+            if len(values) > 0:
+                pos = data[data[k] == np.nan].index.tolist()
+                rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
+                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
+                               'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
 
-    # Dictionary creation with key as each code and value the list of errors related
-    errors = {}
-    if len(list_ss01) > 0:
-        errors['SS01'] = list_ss01
-    if len(list_ss02) > 0:
-        errors['SS02'] = list_ss02
-    if len(list_ss03) > 0:
-        errors['SS03'] = list_ss03
-    if len(list_ss04) > 0:
-        errors['SS04'] = list_ss04
-    if len(list_ss05) > 0:
-        errors['SS05'] = list_ss05
-    if len(list_ss06) > 0:
-        errors['SS06'] = list_ss06
-    if len(list_ss07) > 0:
-        errors['SS07'] = list_ss07
-    if len(list_ss08) > 0:
-        errors['SS08'] = list_ss08
+        if k in codelist_values.keys():
+
+            code = 'SS04'
+
+            data_type = data_column.dtype
+            data_column = data_column.astype('str')
+            values = data_column[~data_column.isin(codelist_values[k])].tolist()
+
+            for v in values:
+                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
+                               'Rows': None, 'Message': f'Wrong value {v} for {type_.lower()} {k}'})
+            data_column = data_column.astype(data_type)
+
+        if k in faceted_objects:
+            if k in dsd.dimensionCodes:
+                facets = dsd.dimensionDescriptor.components[k].localRepresentation.facets
+            else:
+                facets = dsd.attributeDescriptor.components[k].localRepresentation.facets
+            if pandas.api.types.is_numeric_dtype(data_column):
+                errors += check_num_facets(facets, data, k, type_)
+            else:
+                errors += check_str_facets(facets, data, k, type_)
+
+    duplicated = data[data.duplicated(subset=grouping_keys)].drop_duplicates().index.values
+
+    if len(duplicated) > 0:
+        for v in duplicated:
+            data_point = data.loc[v, grouping_keys]
+            series = data[grouping_keys].apply(lambda row: np.array_equal(row.values, data_point.values), axis=1)
+            pos = series[series].index.values
+
+            rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
+            errors.append({'Code': 'SS07',
+                           'ErrorLevel': 'WARNING',
+                           'ID': f'Duplicated',
+                           'Type': f'Datapoint',
+                           'Rows': rows.copy(),
+                           'Message': f'Duplicated datapoint {format_row(data_point)}'
+                           })
+
     return errors
