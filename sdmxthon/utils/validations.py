@@ -1,12 +1,11 @@
-import logging
+import re
+import warnings
 
 import numpy as np
 import pandas.api.types
 from pandas import DataFrame
 
 from ..model.structure import DataStructureDefinition, Dimension
-
-logger = logging.getLogger("logger")
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
@@ -49,20 +48,22 @@ def parse_datapoint(row):
     string = ''
     for k, v in row.items():
         if k != 'OBS_VALUE':
-            string += f' ( {str(k)} : {str(v)} ) '
+            string += f' ( {str(k)} : {str(v) if str(v) != "nan" else ""} ) '
     return string
 
 
 def format_row(row):
     string = ''
     for k, v in row.items():
-        string += f' ( {str(k)} : {str(v)} ) '
+        string += f' ( {str(k)} : {str(v) if str(v) != "nan" else ""} ) '
     return string
 
 
-def check_num_facets(facets, data, key, type_):
-    data_column = data[key].drop_duplicates()
+def trunc_dec(x):
+    return x.rstrip('0').rstrip('.') if '.' in x else x
 
+
+def check_num_facets(facets, data_column, key, type_):
     error_level = 'WARNING'
     errors = []
     is_sequence = None
@@ -71,21 +72,25 @@ def check_num_facets(facets, data, key, type_):
     interval = None
     for f in facets:
         values = []
-        if f.facetType == 'maxLength' or f.facetType == 'maxValue':
+        if f.facetType == 'maxLength' or f.facetType == 'minLength':
+            temp = data_column.astype('str')
+            temp = temp[np.isin(temp, ['nan', 'None'], invert=True)]
+            format_temp = np.vectorize(trunc_dec)
+            length_checker = np.vectorize(len)
+            arr_len = length_checker(format_temp(temp))
             if f.facetType == 'maxLength':
-                max_ = pow(10, int(f.facetValue))
-            else:
                 max_ = int(f.facetValue)
-
-            values = data_column[data_column > max_].tolist()
-
-        elif f.facetType == 'minLength' or f.facetType == 'minValue':
-            if f.facetType == 'minLength':
-                min_ = pow(10, int(f.facetValue))
+                values = temp[arr_len > max_]
             else:
                 min_ = int(f.facetValue)
+                values = temp[arr_len < min_]
 
-            values = data_column[data_column < min_].tolist()
+        elif f.facetType == 'maxValue':
+            max_ = int(f.facetValue)
+            values = data_column[data_column > max_]
+        elif f.facetType == 'minValue':
+            min_ = int(f.facetValue)
+            values = data_column[data_column < min_]
         elif f.facetType is 'isSequence':
             if f.facetValue.upper() is 'TRUE':
                 is_sequence = True
@@ -105,9 +110,9 @@ def check_num_facets(facets, data, key, type_):
                                                         f'{f.facetType} : {f.facetValue}'})
 
     if is_sequence is not None and start is not None and interval is not None:
-        data_column = data_column.sort_values()
+        data_column = np.sort(data_column)
         control = True
-        if int(data_column.iloc[0]) < start:
+        if int(data_column[0]) < start:
             control = False
             values = data_column[data_column < start].tolist()
             if len(values) > 0:
@@ -115,7 +120,7 @@ def check_num_facets(facets, data, key, type_):
                     errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
                                    'Rows': None, 'Message': f'Value {v} not compliant with startValue : {start}'})
 
-        if end is not None and int(data_column.iloc[-1]) > end:
+        if end is not None and int(data_column[-1]) > end:
             control = False
             values = data_column[data_column > end].tolist()
             if len(values) > 0:
@@ -142,28 +147,34 @@ def check_num_facets(facets, data, key, type_):
     return errors
 
 
-def check_str_facets(facets, data, key, type_):
-    data_column = data[key].drop_duplicates()
+def check_str_facets(facets, data_column, key, type_):
+    data_column = data_column[np.isin(data_column, ['nan', 'None'], invert=True)]
 
     error_level = 'WARNING'
     errors = []
+
     for f in facets:
         if f.facetType == 'maxLength' or f.facetType == 'maxValue':
             max_ = int(f.facetValue)
             if f.facetType == 'maxLength':
-                values = data_column[data_column.str.len() > max_].tolist()
+                length_checker = np.vectorize(len)
+                arr_len = length_checker(data_column)
+                values = data_column[arr_len > max_]
             else:
-                values = data_column[int(data_column) > max_].tolist()
+                values = data_column[int(data_column) > max_]
         elif f.facetType == 'minLength' or f.facetType == 'minValue':
             min_ = int(f.facetValue)
             if f.facetType == 'minLength':
-                values = data_column[data_column.str.len() < min_].tolist()
+                length_checker = np.vectorize(len)
+                arr_len = length_checker(data_column)
+                values = data_column[arr_len < min_]
             else:
-                values = data_column[int(data_column) < min_].tolist()
+                values = data_column[int(data_column) < min_]
 
         elif f.facetType == 'pattern':
-            values = data_column[~data_column.str.fullmatch(
-                str(f.facetValue).encode('unicode-escape').decode())].tolist()
+            r = re.compile(str(f.facetValue).encode('unicode-escape').decode())
+            vec = np.vectorize(lambda x: bool(r.fullmatch(x)))
+            values = data_column[vec(data_column)]
         else:
             continue
 
@@ -172,13 +183,14 @@ def check_str_facets(facets, data, key, type_):
                 errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
                                'Rows': None, 'Message': f'Value {v} not compliant with '
                                                         f'{f.facetType} : {f.facetValue}'})
-
     return errors
 
 
 def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     mandatory = get_mandatory_attributes(dsd)
     codelist_values = get_codelist_values(dsd)
+
+    warnings.simplefilter(action='ignore', category=FutureWarning)
 
     """
         Validations stands for the next schema:
@@ -192,13 +204,13 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         SS07: Check if two data_points are the same
         SS08: Check that the value inputted is compliant with Facets for the referred Representation
     """
-
     errors = []
 
     faceted_objects = dsd.facetedObjects
 
     mc = dsd.measureCode
     type_ = 'Measure'
+
     if mc not in data.keys():
         errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}', 'Rows': None,
                        'Message': f'Missing {mc}'})
@@ -219,9 +231,12 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     if mc in faceted_objects:
         facets = dsd.measureDescriptor.components[mc].localRepresentation.facets
         if pandas.api.types.is_numeric_dtype(data[mc]):
-            errors += check_num_facets(facets, data, mc, type_)
+            data_column = data[mc].unique().astype('float64')
+            errors += check_num_facets(facets, data_column, mc, type_)
         else:
-            errors += check_str_facets(facets, data, mc, type_)
+            data_column = data[mc].unique().astype('str')
+            errors += check_str_facets(facets, data_column, mc, type_)
+
     grouping_keys = []
 
     all_codes = dsd.dimensionCodes + dsd.attributeCodes
@@ -244,10 +259,16 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                      'Message': f'Missing {k}'})
             continue
 
-        data_column = data[k].drop_duplicates()
-
-        if data_column.isnull().all():
+        if data[k].isnull().values.all():
             continue
+
+        is_numeric = False
+
+        if pandas.api.types.is_numeric_dtype(data[k]):
+            data_column = data[k].unique().astype('float64')
+            is_numeric = True
+        else:
+            data_column = data[k].unique().astype('str')
 
         if k in dsd.attributeCodes:
             type_ = 'Attribute'
@@ -258,42 +279,50 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             code = 'SS05'
 
         if k in man_codes:
-            values = data_column[data_column.isna()]
-            if len(values) > 0:
-                pos = data[data[k] == np.nan].index.tolist()
+            control = False
+            if is_numeric:
+                if np.isnan(np.sum(data_column)):
+                    control = True
+            else:
+                if 'nan' in data_column:
+                    control = True
+            if control:
+                pos = data[data[k].isnull()].index.tolist()
                 rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
                 errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
-
-        if k in codelist_values.keys():
-
-            code = 'SS04'
-
-            data_type = data_column.dtype
-            data_column = data_column.astype('str')
-            values = data_column[~data_column.isin(codelist_values[k])].tolist()
-
-            for v in values:
-                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
-                               'Rows': None, 'Message': f'Wrong value {v} for {type_.lower()} {k}'})
-            data_column = data_column.astype(data_type)
 
         if k in faceted_objects:
             if k in dsd.dimensionCodes:
                 facets = dsd.dimensionDescriptor.components[k].localRepresentation.facets
             else:
                 facets = dsd.attributeDescriptor.components[k].localRepresentation.facets
-            if pandas.api.types.is_numeric_dtype(data_column):
-                errors += check_num_facets(facets, data, k, type_)
+            if is_numeric:
+                errors += check_num_facets(facets, data_column, k, type_)
             else:
-                errors += check_str_facets(facets, data, k, type_)
+                errors += check_str_facets(facets, data_column, k, type_)
 
-    duplicated = data[data.duplicated(subset=grouping_keys)].drop_duplicates().index.values
+        if is_numeric:
+            data_column = data_column.astype('str')
+            format_temp = np.vectorize(trunc_dec)
+            data_column = format_temp(data_column)
+
+        if k in codelist_values.keys():
+            code = 'SS04'
+            values = data_column[np.isin(data_column, codelist_values[k], invert=True)]
+            if len(values) > 0:
+                values = values[np.isin(values, ['nan', 'None'], invert=True)]
+                for v in values:
+                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
+                                   'Rows': None, 'Message': f'Wrong value {v} for {type_.lower()} {k}'})
+
+    duplicated = data[data.duplicated(subset=grouping_keys)]
 
     if len(duplicated) > 0:
-        for v in duplicated:
-            data_point = data.loc[v, grouping_keys]
-            series = data[grouping_keys].apply(lambda row: np.array_equal(row.values, data_point.values), axis=1)
+        duplicated_indexes = duplicated.drop_duplicates().index.values
+        for v in duplicated_indexes:
+            data_point = duplicated.loc[v, grouping_keys]
+            series = duplicated[grouping_keys].apply(lambda row: np.array_equal(row.values, data_point.values), axis=1)
             pos = series[series].index.values
 
             rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()

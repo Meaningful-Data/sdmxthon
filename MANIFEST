@@ -38,7 +38,6 @@ SDMXThon\utils\mappings.py
 SDMXThon\utils\metadata_parsers.py
 SDMXThon\utils\new_read.py
 SDMXThon\utils\read.py
-SDMXThon\utils\series_parsing.py
 SDMXThon\utils\validations.py
 SDMXThon\utils\write.py
 SDMXThon\utils\xml_base.py
