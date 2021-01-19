@@ -173,7 +173,7 @@ def check_str_facets(facets, data_column, key, type_):
 
         elif f.facetType == 'pattern':
             r = re.compile(str(f.facetValue).encode('unicode-escape').decode())
-            vec = np.vectorize(lambda x: bool(r.fullmatch(x)))
+            vec = np.vectorize(lambda x: bool(not r.fullmatch(x)))
             values = data_column[vec(data_column)]
         else:
             continue

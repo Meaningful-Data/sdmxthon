@@ -1,10 +1,4 @@
 import logging
-import sqlite3
-
-import pandas as pd
-
-from SDMXThon import getMetadata, DataSet
-from SDMXThon.model.structure import DataStructureDefinition
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -51,14 +45,10 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 def main():
     """
-    datasets = getDatasets(pathTestGEN, urlMetadata, DatasetType.GenericDataSet)
-    logger.debug('End reading data old')
-    """
-    """
     dsds, errors = getMetadata(pathToMetadataFile)
     logger.debug('End')
     """
-
+    """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
     df = pd.read_sql('SELECT * from BIS_DER LIMIT 1000', conn)
@@ -74,7 +64,7 @@ def main():
     print(dataset.semanticValidation())
 
     logger.debug('End validation')
-
+    """
     """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
