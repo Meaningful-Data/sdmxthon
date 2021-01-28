@@ -40,10 +40,10 @@ def addStructure(dataset, prettyprint, dType):
     outfile += f'{child2}<message:Structure structureID="{dataset.structure.id}" '
     if dType != DatasetType.GenericDataSet:
         outfile += f'namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
-                   f'{dataset.structure.agencyId}:{dataset.structure.id}({dataset.structure.version})" '
+                   f'{dataset.structure.agencyID}:{dataset.structure.id}({dataset.structure.version})" '
 
     outfile += f'dimensionAtObservation="{dataset.dimAtObs}">{nl}'
-    outfile += f'{child3}<common:Structure>{nl}{child4}<Ref agencyID="{dataset.structure.agencyId}" ' \
+    outfile += f'{child3}<common:Structure>{nl}{child4}<Ref agencyID="{dataset.structure.agencyID}" ' \
                f'id="{dataset.structure.id}" ' \
                f'version="{dataset.structure.version}" class="DataStructure"/>{nl}{child3}</common:Structure>' \
                f'{nl}{child2}</message:Structure>{nl}'
@@ -68,11 +68,11 @@ def create_namespaces(dataTypeString, dataset, dType, prettyprint):
             for record in dataset.values():
                 count = count + 1
                 outfile += f'xmlns:ns{count}="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
-                           f'{record.structure.agencyId}:{record.structure.id}({record.structure.version})' \
+                           f'{record.structure.agencyID}:{record.structure.id}({record.structure.version})' \
                            f':ObsLevelDim:{record.dimAtObs}" '
         else:
             outfile += f'xmlns:ns1="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
-                       f'{dataset.structure.agencyId}:{dataset.structure.id}({dataset.structure.version})' \
+                       f'{dataset.structure.agencyID}:{dataset.structure.id}({dataset.structure.version})' \
                        f':ObsLevelDim:{dataset.dimAtObs}" '
     outfile += f'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" ' \
                f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message ' \

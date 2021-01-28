@@ -1,27 +1,13 @@
-import copy
-import logging
-from datetime import datetime
 from urllib.request import urlopen
 
-import numpy as np
 from lxml import etree
 
 from .metadata_parsers import get_codelist_model, get_concept_schemes, get_DSDs
 from ..common.generic import GenericDataStructureType
 from ..common.references import DataflowReferenceType
 from ..common.refs import DataflowRefType
-from ..data.generic import DataSetType as GenericDataSetType, \
-    SeriesType, ObsType, TimeValueType
-from ..data.generic import ValuesType, ComponentValueType, ObsOnlyType, ObsValueType
-from ..message.generic import PartyType, SenderType, \
-    StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, StructureSpecificDataHeaderType, \
-    GenericDataHeaderType
-from ..model.structure import DataStructureDefinition, PrimaryMeasure, Dimension
-from ..structure.specificbase import DataSetType as StructureDataSetType, ObsType as Observation, \
-    SeriesType as Series
+from ..model.structure import DataStructureDefinition
 from ..utils.enums import DatasetType
-
-logger = logging.getLogger("logger")
 
 
 def getMetadata(pathToMetadata):
@@ -31,13 +17,12 @@ def getMetadata(pathToMetadata):
     else:
         root = etree.parse(pathToMetadata)
     codelists = get_codelist_model(root)
-    concepts, data = get_concept_schemes(root, codelists)
-    if data is not None:
-        errors = {'Common': {'MX04': data}}
-        dsds, errorsDSD = get_DSDs(root, concepts, codelists)
-        if errorsDSD is not None:
-            errors += errorsDSD
-        return dsds, errors
+    concepts, errors_con = get_concept_schemes(root, codelists)
+    if errors_con is not None:
+        dsds, errors_dsd = get_DSDs(root, concepts, codelists)
+        if errors_dsd is not None:
+            errors_con += errors_dsd
+        return dsds, errors_con
     else:
         return get_DSDs(root, concepts, codelists)
 
@@ -62,7 +47,7 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset, datasetType: D
     ref = DataflowRefType()
     ref.original_tag_name_ = "Ref"
     ref.set_id(dsd.id)
-    ref.set_agencyID(dsd.agencyId)
+    ref.set_agencyID(dsd.agencyID)
     ref.set_version(dsd.version)
     ref.set_class("DataStructure")
     structure_usage.set_Ref(ref)
@@ -70,6 +55,7 @@ def get_structure_from_dsd(dsd: DataStructureDefinition, dataset, datasetType: D
     return structure
 
 
+"""
 def parse_obs_generic_from_dsd(data_frame, dsd: DataStructureDefinition):
     obs_attributes_keys = dsd.attributeCodes
     series_list_keys = dsd.dimensionCodes
@@ -430,3 +416,4 @@ def generateDataSetXML(dataset, dataset_type: DatasetType = DatasetType.GenericD
     data_set.set_action(dataset.datasetAttributes.get('action'))
 
     return data_set
+"""

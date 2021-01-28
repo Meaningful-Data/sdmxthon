@@ -352,6 +352,14 @@ class MaintainableArtefact(VersionableArtefact):
         self.serviceUrl = serviceUrl
         self.structureUrl = structureUrl
         self.maintainer = maintainer
+        if id_ is not None and maintainer is not None and version is not None:
+            self._unique_id = f'{maintainer.id}:{id_}({version})'
+        else:
+            self._unique_id = None
+
+    @property
+    def unique_id(self):
+        return self._unique_id
 
     @property
     def isFinal(self):
@@ -403,12 +411,12 @@ class MaintainableArtefact(VersionableArtefact):
             tag = QName(self._qName).localname
 
             # TOBECHECKED
-            urn = f"urn:sdmx:org.sdmx.infomodel.{urn_type}.{tag}={self.agencyId}:{self.id}({self.version})"
+            urn = f"urn:sdmx:org.sdmx.infomodel.{urn_type}.{tag}={self.agencyID}:{self.id}({self.version})"
         else:
             urn = ""
         return urn
 
     @property
-    def agencyId(self):
+    def agencyID(self):
         if self.maintainer is not None:
             return self.maintainer.id

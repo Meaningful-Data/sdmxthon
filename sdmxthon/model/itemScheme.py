@@ -31,10 +31,10 @@ class Item(NameableArtefact):
         self.parent = parent
 
         self._childs = []
-        urnList = []
+        urn_list = []
         for c in childs:
-            if c.urn not in urnList:
-                urnList.append(c.urn)
+            if c.urn not in urn_list:
+                urn_list.append(c.urn)
                 self.addChild(c)
             else:
                 raise ValueError('Item cannot have two childs with same URN')
@@ -79,7 +79,7 @@ class Item(NameableArtefact):
                 value.append(self)
                 self._unique_scheme = True
             else:
-                del self._scheme._items[self.id]
+                del self.scheme.items[self.id]
                 self._scheme = None
         else:
             raise TypeError(f"The scheme object has to be of the type {self._schemeType}")
@@ -132,11 +132,11 @@ class ItemScheme(MaintainableArtefact):
                                          serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer)
         if items is not None:
             self._items = {}
-            urnList = []
+            urn_list = []
             for i in items:
                 # self.append(i)
-                if i.urn not in urnList:
-                    urnList.append(i.urn)
+                if i.urn not in urn_list:
+                    urn_list.append(i.urn)
                     self.append(i)
                 else:
                     raise ValueError('Item Scheme cannot have two items with same URN')
@@ -416,7 +416,7 @@ class AgencyList(OrganisationScheme):
 
     @id.setter
     def id(self, value):
-        self._id = stringSetter(value, "[A-Za-z][A-Za-z0-9_\-]*(\.[A-Za-z][A-Za-z0-9_\-]*)*")
+        self._id = stringSetter(value, '[A-Za-z][A-Za-z0-9_\\-]*(\\.[A-Za-z][A-Za-z0-9_\\-]*)*')
 
 
 class Concept(Item):

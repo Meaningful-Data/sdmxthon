@@ -180,7 +180,7 @@ def getReferences(elem):
         return {
             "id_": ref.get("id"),
             "version": ref.get("version"),
-            "agencyId": ref.get("agencyID"),
+            "agencyID": ref.get("agencyID"),
             "maintainableParentId": ref.get("maintainableParentID"),
             "package": ref.get("package"),
             "maintainableParentVersion": ref.get("maintainableParentVersion")

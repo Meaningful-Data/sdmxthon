@@ -16,15 +16,15 @@ from .utils.write import save_file
 def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
     if dataset_type is None:
         raise ValueError('Dataset type cannot be None')
-    objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
+    obj_structure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
     dsds = getMetadata(pathToMetadata)
 
-    header = objStructure.Header
+    header = obj_structure.Header
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        datasets = sdmxGenToDataSet(objStructure, dsds)
+        datasets = sdmxGenToDataSet(obj_structure, dsds)
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        datasets = sdmxStrToDataset(objStructure, dsds)
+        datasets = sdmxStrToDataset(obj_structure, dsds)
     else:
         raise ValueError('Invalid Dataset Type')
     return Message(dataset_type, datasets, header)
@@ -34,14 +34,14 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
     if dataset_type is None:
         raise ValueError('Dataset Type cannot be None')
 
-    objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
+    obj_structure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
 
     dsds, errors = getMetadata(pathToMetadata)
 
     if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        datasets = sdmxGenToDataSet(objStructure, dsds)
+        datasets = sdmxGenToDataSet(obj_structure, dsds)
     elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        datasets = sdmxStrToDataset(objStructure, dsds)
+        datasets = sdmxStrToDataset(obj_structure, dsds)
     else:
         raise ValueError('Invalid Dataset Type')
 
@@ -104,8 +104,8 @@ def readJSON(pathToJSON, dsds) -> dict:
     for e in parsed:
         code = e.get('structureRef').get('code')
         version = e.get('structureRef').get('version')
-        agencyID = e.get('structureRef').get('agencyID')
-        dsdid = f"{agencyID}:{code}({version})"
+        agency_id = e.get('structureRef').get('agencyID')
+        dsdid = f"{agency_id}:{code}({version})"
         if dsdid not in dsds.keys():
             raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
         datasets[code] = DataSet(structure=dsds[dsdid],

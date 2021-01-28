@@ -527,13 +527,13 @@ class DataStructureDefinition(MaintainableArtefact):
             return False
 
     def __str__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     def __unicode__(self):
-        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     def __repr__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     @property
     def dimensionDescriptor(self):
@@ -711,13 +711,13 @@ class DataStructureDefinition(MaintainableArtefact):
             return False
 
     def __str__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     def __unicode__(self):
-        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     def __repr__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     @property
     def dimensionDescriptor(self):

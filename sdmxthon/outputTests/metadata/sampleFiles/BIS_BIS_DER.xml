@@ -11,6 +11,7 @@
         <mes:Sender id="Unknown"/>
         <mes:Receiver id="not_supplied"/>
     </mes:Header>
+
     <mes:Structures>
         <str:OrganisationSchemes>
             <str:AgencyScheme urn="urn:sdmx:org.sdmx.infomodel.base.AgencyScheme=SDMX:AGENCIES(1.0)"

@@ -1,4 +1,7 @@
 import logging
+import sqlite3
+
+from SDMXThon import getMetadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -30,6 +33,7 @@ pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202101141401030.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/invalid_DSD.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
@@ -43,12 +47,52 @@ pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
+def pretty(d, indent=0):
+    for key, value in d.items():
+        print('\t' * indent + str(key))
+        if isinstance(value, dict):
+            pretty(value, indent + 1)
+        else:
+            print('\t' * (indent + 1) + str(value))
+
+
 def main():
     """
+    root = etree.parse(pathToMetadataFile)
+
+    expression = "/mes:Structure/mes:Structures/str:OrganisationSchemes/str:AgencyScheme"
+    result = root.xpath(expression,
+                        namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
+                                    'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
+
+    if result is not None:
+
+        schemes = []
+
+        for a in result:
+            maintainer_scheme = Agency(id_=a.attrib['agencyID'])
+            agency_scheme = AgencyList(id_=a.attrib['id'], version=a.attrib['version'], maintainer=maintainer_scheme)
+
+            expression = "./com:Name/text()"
+            name = a.xpath(expression,
+                                 namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+
+
+    else:
+        return None
+
+    expression = "./com:Name/text()"
+    name = element.xpath(expression,
+                         namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+    if len(name) > 0:
+        cl.name = name[0]
+    """
+
+    """
     dsds, errors = getMetadata(pathToMetadataFile)
-    logger.debug('End')
+    print(errors)
     """
-    """
+
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
     df = pd.read_sql('SELECT * from BIS_DER LIMIT 1000', conn)
@@ -64,7 +108,7 @@ def main():
     print(dataset.semanticValidation())
 
     logger.debug('End validation')
-    """
+
     """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)

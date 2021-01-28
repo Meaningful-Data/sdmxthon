@@ -114,7 +114,7 @@ class DataSet:
         element = {}
 
         element['structureRef'] = {"code": self.structure.id, "version": self.structure.version,
-                                   "agencyID": self.structure.agencyId}
+                                   "agencyID": self.structure.agencyID}
         element['dataset_attributes'] = self.datasetAttributes
         element['attached_attributes'] = self.attachedAttributes
 

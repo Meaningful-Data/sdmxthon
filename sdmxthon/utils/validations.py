@@ -40,7 +40,7 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
 
 
 def facet_error(error_level, obj_id, obj_type, rows, value, facetType, facetValue) -> dict:
-    return {'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{obj_id}', 'Type': f'{obj_type}',
+    return {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{obj_id}', 'Type': f'{obj_type}',
             'Rows': rows.copy(), 'Message': f'Value {value} is not compliant with {facetType} : {facetValue}'}
 
 
@@ -105,7 +105,7 @@ def check_num_facets(facets, data_column, key, type_):
 
         if len(values) > 0:
             for v in values:
-                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
                                'Rows': None, 'Message': f'Value {v} not compliant with '
                                                         f'{f.facetType} : {f.facetValue}'})
 
@@ -117,7 +117,7 @@ def check_num_facets(facets, data_column, key, type_):
             values = data_column[data_column < start].tolist()
             if len(values) > 0:
                 for v in values:
-                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
                                    'Rows': None, 'Message': f'Value {v} not compliant with startValue : {start}'})
 
         if end is not None and int(data_column[-1]) > end:
@@ -125,7 +125,7 @@ def check_num_facets(facets, data_column, key, type_):
             values = data_column[data_column > end].tolist()
             if len(values) > 0:
                 for v in values:
-                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
                                    'Rows': None, 'Message': f'Value {v} not compliant with endValue : {end}'})
 
         if control:
@@ -133,16 +133,18 @@ def check_num_facets(facets, data_column, key, type_):
             if len(values) > 0:
                 for v in values:
                     if end is not None:
-                        errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
-                                       'Rows': None,
-                                       'Message': f'Value {v} in {key} not compliant '
-                                                  f'with sequence : {start}-{end} (interval: {interval})'})
+                        errors.append(
+                            {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
+                             'Rows': None,
+                             'Message': f'Value {v} in {key} not compliant '
+                                        f'with sequence : {start}-{end} (interval: {interval})'})
                     else:
-                        errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
-                                       'Rows': None,
-                                       'Message': f'Value {v} in {key} '
-                                                  f'not compliant with sequence : '
-                                                  f'{start}-infinite (interval: {interval})'})
+                        errors.append(
+                            {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
+                             'Rows': None,
+                             'Message': f'Value {v} in {key} '
+                                        f'not compliant with sequence : '
+                                        f'{start}-infinite (interval: {interval})'})
 
     return errors
 
@@ -180,7 +182,7 @@ def check_str_facets(facets, data_column, key, type_):
 
         if len(values) > 0:
             for v in values:
-                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'ID': f'{key}', 'Type': f'{type_}',
+                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
                                'Rows': None, 'Message': f'Value {v} not compliant with '
                                                         f'{f.facetType} : {f.facetValue}'})
     return errors
@@ -212,7 +214,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     type_ = 'Measure'
 
     if mc not in data.keys():
-        errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}', 'Rows': None,
+        errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}', 'Rows': None,
                        'Message': f'Missing {mc}'})
     elif data[mc].isnull().values.any():
         if 'OBS_STATUS' in data.keys():
@@ -220,12 +222,12 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             rows = data[(data[mc].isna()) & (data['OBS_STATUS'] != 'M')] \
                 .apply(lambda row: format_row(row), axis=1).tolist()
             if len(rows) > 0:
-                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}',
+                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
         else:
             rows = data[data[mc].isna()].apply(lambda row: format_row(row), axis=1).tolist()
             if len(rows) > 0:
-                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'ID': f'{mc}', 'Type': f'{type_}',
+                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
 
     if mc in faceted_objects:
@@ -251,11 +253,11 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         if k not in data.keys():
             if k in mandatory:
                 errors.append(
-                    {'Code': 'SS03', 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'Attribute', 'Rows': None,
+                    {'Code': 'SS03', 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'Attribute', 'Rows': None,
                      'Message': f'Missing {k}'})
             else:
                 errors.append(
-                    {'Code': 'SS01', 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'Dimension', 'Rows': None,
+                    {'Code': 'SS01', 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'Dimension', 'Rows': None,
                      'Message': f'Missing {k}'})
             continue
 
@@ -289,7 +291,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             if control:
                 pos = data[data[k].isnull()].index.tolist()
                 rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
-                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
+                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
 
         if k in faceted_objects:
@@ -313,22 +315,21 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             if len(values) > 0:
                 values = values[np.isin(values, ['nan', 'None'], invert=True)]
                 for v in values:
-                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'ID': f'{k}', 'Type': f'{type_}',
+                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
                                    'Rows': None, 'Message': f'Wrong value {v} for {type_.lower()} {k}'})
 
-    duplicated = data[data.duplicated(subset=grouping_keys)]
-
+    duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
     if len(duplicated) > 0:
-        duplicated_indexes = duplicated.drop_duplicates().index.values
+        duplicated_indexes = duplicated[grouping_keys].drop_duplicates().index.values
         for v in duplicated_indexes:
             data_point = duplicated.loc[v, grouping_keys]
             series = duplicated[grouping_keys].apply(lambda row: np.array_equal(row.values, data_point.values), axis=1)
             pos = series[series].index.values
-
-            rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
+            rows = duplicated.loc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
+            duplicated = duplicated.drop(pos)
             errors.append({'Code': 'SS07',
                            'ErrorLevel': 'WARNING',
-                           'ID': f'Duplicated',
+                           'Component': f'Duplicated',
                            'Type': f'Datapoint',
                            'Rows': rows.copy(),
                            'Message': f'Duplicated datapoint {format_row(data_point)}'

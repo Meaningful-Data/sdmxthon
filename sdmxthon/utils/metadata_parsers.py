@@ -10,11 +10,7 @@ from ..model.structure import Representation
 try:
     from lxml import etree as etree
 except ImportError:
-    from xml.etree import ElementTree as etree
-
-CapturedNsmap_ = {}
-print_warnings = True
-SaveElementTreeNode = True
+    from xml.etree import ElementTree as eTree
 
 # create logger
 logger = logging.getLogger("logger")
@@ -63,16 +59,15 @@ def get_codelist_model(root):
                 if len(desc) > 0:
                     cd.description = desc[0]
                 cl.append(cd)
-            identifier = id_creator(cl.maintainer.id, cl.id, cl.version)
 
-            codelists[identifier] = cl
+            codelists[cl.unique_id] = cl
         return codelists
     else:
         return None
 
 
 def get_concept_schemes(root, codelists=None):
-    list_mx04 = []
+    errors = []
 
     expression = "/mes:Structure/mes:Structures/str:Concepts/str:ConceptScheme"
     result = root.xpath(expression,
@@ -109,17 +104,17 @@ def get_concept_schemes(root, codelists=None):
                 facets = []
 
                 expression = "./str:CoreRepresentation/child::*"
-                representation = concept.xpath(expression,
-                                               namespaces={
-                                                   'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                representation = concept. \
+                    xpath(expression,
+                          namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
                 if len(representation) > 0:
                     cl = None
                     for e in representation:
                         if e.tag == '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Enumeration':
                             expression = "./str:CoreRepresentation/str:Enumeration/Ref"
-                            rep_data = concept.xpath(expression,
-                                                     namespaces={
-                                                         'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+                            rep_data = concept. \
+                                xpath(expression,
+                                      namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
                             if len(rep_data) == 1:
                                 attrib = rep_data[0].attrib
                                 if attrib['package'] == 'codelist' and attrib['class'] == 'Codelist':
@@ -127,8 +122,11 @@ def get_concept_schemes(root, codelists=None):
                                     if codelists is not None and id_ in codelists.keys():
                                         cl = codelists[id_]
                                     else:
-                                        list_mx04.append(
-                                            f'Codelist {id_} not found for Concept {cd.id}')
+                                        errors.append({'Code': 'MX04', 'ErrorLevel': 'CRITICAL',
+                                                       'ObjectID': f'{sch.unique_id}-{cd.id}', 'ObjectType': f'Concept',
+                                                       'Message': f'Codelist {id_} not found for '
+                                                                  f'Concept {sch.unique_id}-{cd.id}'})
+
                         elif e.tag == '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat':
                             for k, v in dict(e.attrib).items():
                                 if k in FacetType:
@@ -144,33 +142,25 @@ def get_concept_schemes(root, codelists=None):
                         else:
                             # TODO Error in Local Representation
                             print(
-                                f'CoreRepresentation for Concept {cd.id} hasn´t been parsed. Implemented elements are '
+                                f'CoreRepresentation for Concept {sch.unique_id}-{cd.id} '
+                                f'has not been parsed. Implemented elements are '
                                 f'Enumeration, Text Format and EnumerationFormat')
                     cd.coreRepresentation = Representation(codeList=cl, facets=facets)
                 sch.append(cd)
             identifier = id_creator(sch.maintainer.id, sch.id, sch.version)
             schemes[identifier] = sch
 
-        if len(list_mx04) > 0:
-            return schemes, list_mx04
+        if len(errors) > 0:
+            return schemes, errors
         return schemes, None
     else:
         return None
 
 
-def extract_ref_data(list_ms03, obj, dsd, ref, concepts):
+def extract_ref_data(ref, concepts, missing_rep):
     attrib_cs = ref[0].attrib
     cs_id = id_creator(attrib_cs['agencyID'], attrib_cs['maintainableParentID'],
                        attrib_cs['maintainableParentVersion'])
-
-    objType = ''
-
-    if isinstance(obj, Dimension):
-        objType = 'Dimension'
-    elif isinstance(obj, Attribute):
-        objType = 'Attribute'
-    elif isinstance(obj, PrimaryMeasure):
-        objType = 'Measure'
 
     if cs_id in concepts.keys():
         cs = concepts[cs_id]
@@ -184,13 +174,12 @@ def extract_ref_data(list_ms03, obj, dsd, ref, concepts):
             cs = None
             con = None
             cl = None
-            list_ms03.append(f'Concept {attrib_cs["id"]} not found for {objType} {obj.id} '
-                             f'on DSD '
-                             f'{id_creator(dsd.attrib["agencyID"], dsd.attrib["id"], dsd.attrib["version"])}')
     else:
-        list_ms03.append(f'Concept Scheme {cs_id} not found for {objType} {obj.id} '
-                         f'on DSD '
-                         f'{id_creator(dsd.attrib["agencyID"], dsd.attrib["id"], dsd.attrib["version"])}')
+        if cs_id not in missing_rep['CS']:
+            missing_rep['CS'].append(cs_id)
+        id_con = f"{cs_id}-{attrib_cs['id']}"
+        if id_con not in missing_rep['CON']:
+            missing_rep['CON'].append(id_con)
 
         cs = None
         con = None
@@ -199,7 +188,7 @@ def extract_ref_data(list_ms03, obj, dsd, ref, concepts):
     return cs, con, cl
 
 
-def override_core_rep(list_ms02, record, dsdid, codelist_list, obj):
+def override_core_rep(record, codelist_list, obj, dsd_id, missing_rep):
     facets = []
     codelist = None
     expression = "./str:LocalRepresentation/child::*"
@@ -221,12 +210,9 @@ def override_core_rep(list_ms02, record, dsdid, codelist_list, obj):
                         if codelist_list is not None and id_ in codelist_list.keys():
                             codelist = codelist_list[id_]
                         else:
-                            if isinstance(obj, Attribute):
-                                list_ms02.append(f'Codelist {id_} not found for Attribute {obj.id} in DSD {dsdid}')
-                            elif isinstance(obj, PrimaryMeasure):
-                                list_ms02.append(f'Codelist {id_} not found for Measure {obj.id} in DSD {dsdid}')
-                            elif isinstance(obj, Dimension):
-                                list_ms02.append(f'Codelist {id_} not found for Dimension {obj.id} in DSD {dsdid}')
+                            if id_ not in missing_rep['CL']:
+                                missing_rep['CL'].append(id_)
+
             elif e.tag == '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}TextFormat':
                 for k, v in dict(e.attrib).items():
                     if k in FacetType:
@@ -242,19 +228,19 @@ def override_core_rep(list_ms02, record, dsdid, codelist_list, obj):
                         facets.append(Facet(facetValueType=k, facetValue=v))
             else:
                 # TODO Error in Local Representation
-                print(f'Local Representation for attribute {obj.id} hasn´t been parsed. Implemented elements are '
-                      f'Enumeration, Text Format and EnumerationFormat')
+                print(f'Local Representation for attribute {dsd_id}-{obj.id} has not been parsed. Implemented elements '
+                      f'are Enumeration, Text Format and EnumerationFormat')
 
     return codelist, facets
 
 
-def gen_representation(record, concepts, codelists, obj, dsd, list_ms03, list_ms02):
+def gen_representation(record, concepts, codelists, obj, dsd_id, missing_rep):
     expression = "./str:ConceptIdentity/Ref"
     ref = record.xpath(expression,
                        namespaces={
                            'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
     if len(ref) == 1 and concepts is not None:
-        cs, con, cl = extract_ref_data(list_ms03, obj, dsd, ref, concepts=concepts)
+        cs, con, cl = extract_ref_data(ref=ref, concepts=concepts, missing_rep=missing_rep)
     else:
         # TODO Error no concept scheme found in DataStructureDefinition (validate_metadata)
         cs = None
@@ -268,9 +254,8 @@ def gen_representation(record, concepts, codelists, obj, dsd, list_ms03, list_ms
     facets = []
     if len(local) == 1:
 
-        cl, facets = override_core_rep(list_ms02=list_ms02, record=record,
-                                       dsdid=id_creator(dsd.attrib["agencyID"], dsd.attrib["id"],
-                                                        dsd.attrib["version"]), codelist_list=codelists, obj=obj)
+        cl, facets = override_core_rep(record=record, codelist_list=codelists,
+                                       obj=obj, dsd_id=dsd_id, missing_rep=missing_rep)
     else:
         if con is not None and con.coreRepresentation is not None and len(con.coreRepresentation.facets) > 0:
             facets = con.coreRepresentation.facets
@@ -278,8 +263,7 @@ def gen_representation(record, concepts, codelists, obj, dsd, list_ms03, list_ms
     return Representation(codeList=cl, conceptScheme=cs, concept=con, facets=facets)
 
 
-def get_attribute_relationship(record, measure_descriptor, attribute_descriptor, dimension_descriptor,
-                               list_ms04, list_ms05):
+def get_attribute_relationship(record, measure_descriptor, attribute_descriptor, dimension_descriptor, dsd_id, errors):
     expression = "./str:AttributeRelationship/child::*"
     obj = record.xpath(expression,
                        namespaces={
@@ -296,8 +280,10 @@ def get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
                     related.append(measure_descriptor.components.get(e.attrib['id']))
                 else:
                     # TODO Measure not found in Measure Descriptor
-                    list_ms05.append(f'Primary Measure {e.attrib["id"]} related to attribute '
-                                     f'{attribute_descriptor.id} not found')
+                    errors.append({'Code': 'MS05', 'ErrorLevel': 'CRITICAL',
+                                   'ObjectID': f'{dsd_id}-{attribute_descriptor.id}', 'ObjectType': f'Attribute',
+                                   'Message': f'Missing Primary Measure {e.attrib["id"]} related to Attribute '
+                                              f'{attribute_descriptor.id}'})
                     related = None
 
         elif len(meas_data) == 0 and dimension_descriptor is not None:
@@ -310,8 +296,11 @@ def get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
                     if e.attrib['id'] in dimension_descriptor.components.keys():
                         related.append(dimension_descriptor.components.get(e.attrib['id']))
                     else:
-                        list_ms04.append(f'Dimension {e.attrib["id"]} related to attribute '
-                                         f'{attribute_descriptor.id} not found')
+                        errors.append({'Code': 'MS04', 'ErrorLevel': 'CRITICAL',
+                                       'ObjectID': f'{dsd_id}-{attribute_descriptor.id}',
+                                       'ObjectType': f'Attribute',
+                                       'Message': f'Missing Dimension {e.attrib["id"]} related to Attribute '
+                                                  f'{attribute_descriptor.id}'})
                         related = None
 
         else:
@@ -321,7 +310,7 @@ def get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
     return related
 
 
-def create_dimension_data(list_ms02: list, list_ms03: list, dsd, dimension_descriptor, concepts, codelists,
+def create_dimension_data(dsd, dimension_descriptor, dsd_id, concepts, codelists, missing_rep,
                           dim_type='Dimension'):
     if dim_type not in ['Dimension', 'TimeDimension']:
         return None
@@ -341,15 +330,15 @@ def create_dimension_data(list_ms02: list, list_ms03: list, dsd, dimension_descr
             dim = Dimension(id_=record.attrib['id'], uri=record.attrib['urn'],
                             position=record.attrib['position'])
 
-        rep = gen_representation(record, concepts, codelists, dim, dsd, list_ms03, list_ms02)
+        rep = gen_representation(record, concepts, codelists, dim, dsd_id, missing_rep=missing_rep)
         dim.localRepresentation = rep
         dimension_descriptor.addComponent(dim)
 
     return dimension_descriptor
 
 
-def create_attribute_data(list_ms03: list, list_ms04: list, list_ms05: list, list_ms02: list, dsd, attribute_descriptor,
-                          concepts,
+def create_attribute_data(errors, dsd, attribute_descriptor,
+                          dsd_id, concepts, missing_rep,
                           codelists, measure_descriptor: MeasureDescriptor = None,
                           dimension_descriptor: DimensionDescriptor = None):
     expression = "./str:DataStructureComponents/str:AttributeList/str:Attribute"
@@ -362,10 +351,9 @@ def create_attribute_data(list_ms03: list, list_ms04: list, list_ms05: list, lis
                         usageStatus=record.attrib['assignmentStatus'])
 
         # Attribute Relationship
-
         list_related = get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
-                                                  dimension_descriptor,
-                                                  list_ms04, list_ms05)
+                                                  dimension_descriptor, dsd_id,
+                                                  errors)
 
         if len(list_related) == 1:
             att.relatedTo = list_related[0]
@@ -374,57 +362,78 @@ def create_attribute_data(list_ms03: list, list_ms04: list, list_ms05: list, lis
         else:
             att.relatedTo = list_related
 
-        rep = gen_representation(record, concepts, codelists, att, dsd, list_ms03, list_ms02)
+        rep = gen_representation(record, concepts, codelists, att, dsd_id, missing_rep=missing_rep)
         att.localRepresentation = rep
         attribute_descriptor.addComponent(att)
 
     return attribute_descriptor
 
 
-def create_measures_data(dsd, measure_descriptor, concepts, codelists, list_mx02: list, list_ms02: list,
-                         list_ms03: list):
+def create_measures_data(dsd_xml, measure_descriptor, dsd_id, concepts, codelists, missing_rep, errors):
     expression = "./str:DataStructureComponents/str:MeasureList/str:PrimaryMeasure"
-    measures = dsd.xpath(expression,
-                         namespaces={
-                             'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+    measures = dsd_xml.xpath(expression,
+                             namespaces={
+                                 'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
 
     if measures is None:
-        list_mx02.append(f'DSD {dsd.attrib["id"]} does not have a Primary Measure')
+        errors.append({'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
+                       'ObjectID': f'{dsd_id}', 'ObjectType': f'DSD',
+                       'Message': f'DSD {dsd_id} does not have a Primary Measure'})
     else:
 
         # Add Measure to Measure Descriptor
         for record in measures:
             meas = PrimaryMeasure(id_=record.attrib['id'], uri=record.attrib['urn'])
 
-            rep = gen_representation(record, concepts, codelists, meas, dsd, list_ms03, list_ms02)
+            rep = gen_representation(record, concepts, codelists, meas, dsd_id, missing_rep=missing_rep)
             meas.localRepresentation = rep
             measure_descriptor.addComponent(meas)
 
     return measure_descriptor
 
 
+def grouping_errors(missing_rep):
+    errors = []
+
+    if len(missing_rep['CL']) > 0:
+        for e in missing_rep['CL']:
+            errors.append({'Code': 'MS02', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}', 'ObjectType': f'Codelist',
+                           'Message': f'Missing Codelist {e}'})
+
+    if len(missing_rep['CS']) > 0:
+        for e in missing_rep['CS']:
+            errors.append({'Code': 'MS07', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}', 'ObjectType': f'Concept',
+                           'Message': f'Missing Concept Scheme {e}'})
+
+    if len(missing_rep['CON']) > 0:
+        for e in missing_rep['CON']:
+            errors.append({'Code': 'MS03', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}', 'ObjectType': f'Concept',
+                           'Message': f'Missing Concept {e}'})
+
+    return errors
+
+
 def get_DSDs(root, concepts=None, codelists=None):
-    errors = {}
-    list_ms06 = []
+    errors = []
     duplicated_dsds = []
+    missing_rep = {'CS': [], 'CL': [], 'CON': []}
 
     expression = "/mes:Structure/mes:Structures/str:DataStructures/str:DataStructure"
     result = root.xpath(expression,
                         namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
                                     'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
     if result is None:
-        errors['Common'] = {'MS01': 'Not found any DSD in this file'}
+        errors = [{'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ID': None,
+                   'ObjectType': f'DSD',
+                   'Message': f'Not found any DSD in this file'}]
         return errors
 
     dsds: Dict = {}
     for element in result:
-        list_ms02 = []
-        list_ms03 = []
-        list_ms04 = []
-        list_ms05 = []
-        list_mx01 = []
-        list_mx02 = []
-        list_mx03 = []
+        errors_dsd = []
         dsd = DataStructureDefinition(id_=element.attrib['id'],
                                       uri=element.attrib['urn'],
                                       isExternalReference=element.attrib['isExternalReference'],
@@ -432,6 +441,7 @@ def get_DSDs(root, concepts=None, codelists=None):
                                       isFinal=element.attrib['isFinal'],
                                       version=element.attrib['version']
                                       )
+
         expression = "./com:Name/text()"
         name = element.xpath(expression,
                              namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
@@ -445,101 +455,94 @@ def get_DSDs(root, concepts=None, codelists=None):
             dsd.description = str(desc[0])
 
         expression = "./str:DataStructureComponents/str:DimensionList"
-        dimensionElement = element.xpath(expression,
-                                         namespaces={
-                                             'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+        dimension_element = element.xpath(expression,
+                                          namespaces={
+                                              'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
 
         dd = None
 
-        if len(dimensionElement) == 1:
-            dd = DimensionDescriptor(id_=dimensionElement[0].attrib['id'],
-                                     uri=dimensionElement[0].attrib['urn'])
+        if len(dimension_element) == 1:
+            dd = DimensionDescriptor(id_=dimension_element[0].attrib['id'],
+                                     uri=dimension_element[0].attrib['urn'])
 
-            dd = create_dimension_data(list_ms02=list_ms02, list_ms03=list_ms03, dsd=element, dimension_descriptor=dd,
-                                       concepts=concepts,
-                                       codelists=codelists)
-            dd = create_dimension_data(list_ms02=list_ms02, list_ms03=list_ms03, dsd=element, dimension_descriptor=dd,
-                                       concepts=concepts,
-                                       codelists=codelists, dim_type='TimeDimension')
+            dd = create_dimension_data(dsd=element, dimension_descriptor=dd, dsd_id=dsd.unique_id,
+                                       concepts=concepts, codelists=codelists, missing_rep=missing_rep)
+            dd = create_dimension_data(dsd=element, dimension_descriptor=dd, dsd_id=dsd.unique_id,
+                                       concepts=concepts, codelists=codelists, missing_rep=missing_rep,
+                                       dim_type='TimeDimension')
 
-            if 'TIME_PERIOD' not in dd.components.keys() and dsd.agencyId == 'RBI':
-                list_mx03.append(f'Missing TIME_PERIOD as TimeDimension for DSD '
-                                 f'{id_creator(dsd.agencyId, dsd.id, dsd.version)}')
+            if 'TIME_PERIOD' not in dd.components.keys() and dsd.agencyID == 'RBI':
+                errors_dsd.append({'Code': 'MX03', 'ErrorLevel': 'WARNING',
+                                   'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
+                                   'Message': f'Missing TIME_PERIOD as TimeDimension'})
 
             dsd.dimensionDescriptor = dd
         else:
             # TODO Missing dimension list on DSD (validate_metadata)
-            list_mx01.append(f'DSD {id_creator(dsd.agencyId, dsd.id, dsd.version)} does not have a DimensionList')
+            errors_dsd.append({'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
+                               'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
+                               'Message': f'DSD {dsd.unique_id} does not have a DimensionList'})
 
         # Add Measures
         expression = "./str:DataStructureComponents/str:MeasureList"
-        measureElement = element.xpath(expression,
-                                       namespaces={
-                                           'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+        measure_element = element.xpath(expression,
+                                        namespaces={
+                                            'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
 
         md = None
-        if len(measureElement) == 1:
-            md = MeasureDescriptor(id_=measureElement[0].attrib['id'], uri=measureElement[0].attrib['urn'])
+        if len(measure_element) == 1:
+            md = MeasureDescriptor(id_=measure_element[0].attrib['id'], uri=measure_element[0].attrib['urn'])
 
-            create_measures_data(list_mx02=list_mx02, list_ms03=list_ms03, list_ms02=list_ms02, dsd=element,
-                                 measure_descriptor=md,
-                                 concepts=concepts, codelists=codelists)
+            create_measures_data(errors=errors_dsd, dsd_xml=element, dsd_id=dsd.unique_id, measure_descriptor=md,
+                                 concepts=concepts, codelists=codelists, missing_rep=missing_rep)
 
-            if 'OBS_VALUE' not in md.components.keys() and dsd.agencyId == 'RBI':
-                list_mx03.append(f'Missing OBS_VALUE as PrimaryMeasure for DSD '
-                                 f'{id_creator(dsd.agencyId, dsd.id, dsd.version)}')
+            if 'OBS_VALUE' not in md.components.keys() and dsd.agencyID == 'RBI':
+                errors_dsd.append({'Code': 'MX03', 'ErrorLevel': 'WARNING',
+                                   'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
+                                   'Message': f'Missing OBS_VALUE as PrimaryMeasure'})
 
             dsd.measureDescriptor = md
         else:
             # TODO Missing measure list on DSD (validate_metadata)
-            list_mx01.append(f'DSD {id_creator(dsd.agencyId, dsd.id, dsd.version)} does not have a MeasureList')
+            errors_dsd.append({'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
+                               'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
+                               'Message': f'DSD {dsd.unique_id} does not have a MeasureList'})
 
         # Add Attributes
         expression = "./str:DataStructureComponents/str:AttributeList"
-        attributeElement = element.xpath(expression,
-                                         namespaces={
-                                             'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
-        if len(attributeElement) == 1:
-            ad = AttributeDescriptor(id_=attributeElement[0].attrib['id'], uri=attributeElement[0].attrib['urn'])
+        attribute_element = element.xpath(expression,
+                                          namespaces={
+                                              'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+        if len(attribute_element) == 1:
+            ad = AttributeDescriptor(id_=attribute_element[0].attrib['id'], uri=attribute_element[0].attrib['urn'])
 
             if concepts is not None:
-                create_attribute_data(list_ms02=list_ms02, list_ms03=list_ms03, list_ms04=list_ms04,
-                                      list_ms05=list_ms05, dsd=element,
-                                      attribute_descriptor=ad, measure_descriptor=md,
+                create_attribute_data(errors=errors_dsd, dsd=element, dsd_id=dsd.unique_id,
+                                      attribute_descriptor=ad, measure_descriptor=md, missing_rep=missing_rep,
                                       concepts=concepts, codelists=codelists, dimension_descriptor=dd)
 
             dsd.attributeDescriptor = ad
 
-        identifier = id_creator(dsd.maintainer.id, dsd.id, dsd.version)
-        dsd_errors = {}
-        if identifier in dsds.keys():
-            list_ms06.append(f'DSD {identifier} is not unique')
-            duplicated_dsds.append(identifier)
+        if dsd.unique_id in dsds.keys():
+            duplicated_dsds.append(dsd.unique_id)
         else:
-            if len(list_ms02) > 0:
-                dsd_errors['MS02'] = list_ms02
-            if len(list_ms03) > 0:
-                dsd_errors['MS03'] = list_ms03
-            if len(list_ms04) > 0:
-                dsd_errors['MS04'] = list_ms04
-            if len(list_ms05) > 0:
-                dsd_errors['MS05'] = list_ms05
-            if len(list_mx01) > 0:
-                dsd_errors['MX01'] = list_mx01
-            if len(list_mx02) > 0:
-                dsd_errors['MX02'] = list_mx02
-            if len(list_mx03) > 0:
-                dsd_errors['MX03'] = list_mx03
-
-            if len(dsd_errors) > 0:
-                errors[identifier] = dsd_errors.copy()
+            if len(errors_dsd) > 0:
+                errors += errors_dsd.copy()
             else:
-                dsds[identifier] = dsd
+                dsds[dsd.unique_id] = dsd
 
-    if len(list_ms06) > 0:
-        errors['Common'] = {'MS06': list_ms06}
+    if len(duplicated_dsds) > 0:
         for e in duplicated_dsds:
+            errors.append({'Code': 'MS06', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}', 'ObjectType': f'DSD',
+                           'Message': f'DSD {e} is not unique'})
             del dsds[e]
+
+    errors_rep = grouping_errors(missing_rep=missing_rep)
+
+    if len(errors_rep) > 0:
+        errors += errors_rep
+        dsds = {}
 
     if len(errors) > 0:
         return dsds, errors
@@ -581,44 +584,44 @@ def delete_unused_codelists(codelists: dict, concepts: dict, dsds: dict):
         for i in e.attributeDescriptor.components.values():
             if i.localRepresentation.codeList is not None:
                 a = i.localRepresentation.codeList
-                used_codelists.append(id_creator(a.agencyId, a.id, a.version))
+                used_codelists.append(id_creator(a.agencyID, a.id, a.version))
             if i.localRepresentation.concept is not None:
                 b = i.localRepresentation.concept.scheme
-                used_concepts.append(id_creator(b.agencyId, b.id, b.version))
+                used_concepts.append(id_creator(b.agencyID, b.id, b.version))
 
         for j in e.dimensionDescriptor.components.values():
             if j.localRepresentation.codeList is not None:
                 a = j.localRepresentation.codeList
-                used_codelists.append(id_creator(a.agencyId, a.id, a.version))
+                used_codelists.append(id_creator(a.agencyID, a.id, a.version))
             if j.localRepresentation.concept is not None:
                 b = j.localRepresentation.concept.scheme
-                used_concepts.append(id_creator(b.agencyId, b.id, b.version))
+                used_concepts.append(id_creator(b.agencyID, b.id, b.version))
 
         for k in e.measureDescriptor.components.values():
             if k.localRepresentation.codeList is not None:
                 a = k.localRepresentation.codeList
-                used_codelists.append(id_creator(a.agencyId, a.id, a.version))
+                used_codelists.append(id_creator(a.agencyID, a.id, a.version))
             if k.localRepresentation.concept is not None:
                 b = k.localRepresentation.concept.scheme
-                used_concepts.append(id_creator(b.agencyId, b.id, b.version))
+                used_concepts.append(id_creator(b.agencyID, b.id, b.version))
 
     for m in concepts.values():
         for n in m.items.values():
             if n.coreRepresentation is not None:
                 if n.coreRepresentation.codeList is not None:
                     a = n.coreRepresentation.codeList
-                    used_codelists.append(id_creator(a.agencyId, a.id, a.version))
-    updatedCL = codelists.copy()
-    updatedCS = concepts.copy()
+                    used_codelists.append(id_creator(a.agencyID, a.id, a.version))
+    updated_cl = codelists.copy()
+    updated_cs = concepts.copy()
     for o in codelists.keys():
         if o not in used_codelists:
-            updatedCL.pop(o)
+            updated_cl.pop(o)
             print('Deleted CL key %s' % o)
     for o in concepts.keys():
         if o not in used_concepts:
-            updatedCS.pop(o)
+            updated_cs.pop(o)
             print('Deleted CS key %s' % o)
-    return updatedCL, updatedCS
+    return updated_cl, updated_cs
 
 
 def set_dsds_checked_to_false(dsds: dict):
