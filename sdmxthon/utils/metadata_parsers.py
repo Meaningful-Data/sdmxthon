@@ -2,9 +2,9 @@ import logging
 from typing import Dict
 
 from ..model.dataTypes import FacetType, FacetValueType
-from ..model.itemScheme import Code, Codelist, Agency, ConceptScheme, Concept
+from ..model.itemScheme import Code, Codelist, Agency, ConceptScheme, Concept, Facet
 from ..model.structure import DataStructureDefinition, DimensionDescriptor, MeasureDescriptor, \
-    AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension, Facet
+    AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension
 from ..model.structure import Representation
 
 try:

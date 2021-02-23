@@ -63,32 +63,17 @@ class RefBaseType(DataParser):
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
                  idx=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(RefBaseType, self).__init__(gds_collector_, **kwargs_)
-        self._namespacedef = 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
-        self._namespaceprefix = "common"
-        self._name = 'RefBaseType'
         self.gds_collector_ = gds_collector_
-        self.gds_elementtree_node_ = None
-        self.original_tagname_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
-        self.ns_prefix_ = None
         self._agencyID = agencyID
-        self._agencyID_nsprefix_ = None
         self._maintainableParentID = maintainableParentID
-        self._maintainableParentID_nsprefix_ = None
         self._maintainableParentVersion = maintainableParentVersion
-        self._maintainableParentVersion_nsprefix_ = None
         self._containerID = cast(None, containerID)
-        self._containerID_nsprefix_ = None
         self._id = idx
-        self._id_nsprefix_ = None
         self._version = version
-        self._version_nsprefix_ = None
-        self._local = cast(bool, local)
-        self._local_nsprefix_ = None
+        self._local = local
         self._class_ = class_
-        self._class__nsprefix_ = None
         self._package = package
-        self._package_nsprefix_ = None
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -225,34 +210,6 @@ class RefBaseType(DataParser):
 
         return result
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._agencyID is not None and 'agencyID' in valid_fields:
-            parent_dict.update({'agencyID': self._agencyID})
-
-        if self._maintainableParentID is not None and 'maintainableParentID' in valid_fields:
-            parent_dict.update({'maintainableParentID': self._maintainableParentID})
-
-        if self._maintainableParentVersion is not None and 'maintainableParentVersion' in valid_fields:
-            parent_dict.update({'maintainableParentVersion': self._maintainableParentVersion})
-
-        if self._containerID is not None and 'containerID' in valid_fields:
-            parent_dict.update({'containerID': self._containerID})
-
-        if self._id is not None and 'id' in valid_fields:
-            parent_dict.update({'id': self._id})
-
-        if self._version is not None and 'version' in valid_fields:
-            parent_dict.update({'version': self._version})
-
-        if self._local is not None and 'local' in valid_fields:
-            parent_dict.update({'local': self._local})
-
-        if self._class_ is not None and 'class_' in valid_fields:
-            parent_dict.update({'class_': self._class_})
-
-        if self._package is not None and 'package' in valid_fields:
-            parent_dict.update({'package': self._package})
-
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('agencyID', node)
 
@@ -289,7 +246,6 @@ class RefBaseType(DataParser):
         if value is not None and 'version' not in already_processed:
             already_processed.add('version')
             self._version = value
-            self.validate_version_type(self._version)  # validate dim_type VersionType
 
         value = find_attr_value_('local', node)
         if value is not None and 'local' not in already_processed:

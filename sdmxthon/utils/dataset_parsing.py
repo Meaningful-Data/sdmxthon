@@ -2,7 +2,7 @@ from urllib.request import urlopen
 
 from lxml import etree
 
-from .metadata_parsers import get_codelist_model, get_concept_schemes
+from .metadata_parsers import get_codelist_model, get_concept_schemes, get_DSDs
 
 
 def getMetadata(pathToMetadata):
@@ -13,7 +13,7 @@ def getMetadata(pathToMetadata):
         root = etree.parse(pathToMetadata)
     codelists = get_codelist_model(root)
     concepts, errors_con = get_concept_schemes(root, codelists)
-    """
+
     if errors_con is not None:
         dsds, errors_dsd = get_DSDs(root, concepts, codelists)
         if errors_dsd is not None:
@@ -21,7 +21,6 @@ def getMetadata(pathToMetadata):
         return dsds, errors_con
     else:
         return get_DSDs(root, concepts, codelists)
-    """
 
 
 def setReferences(obj):

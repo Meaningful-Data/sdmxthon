@@ -2,8 +2,9 @@ import warnings
 from datetime import datetime
 
 from .base import NameableArtefact, MaintainableArtefact, InternationalString
-from .structure import Representation
+from .dataTypes import FacetType, FacetValueType
 from .utils import boolSetter, qName, stringSetter, genericSetter
+from ..common.refs import RefBaseType
 from ..utils.data_parser import DataParser
 from ..utils.xml_base import find_attr_value_
 
@@ -434,7 +435,6 @@ class Codelist(ItemScheme, DataParser):
             self.version = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-
         if nodeName_ == 'Code':
             obj_ = Code.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -639,6 +639,238 @@ class Concept(Item, DataParser):
             obj_ = Representation.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.coreRepresentation = obj_
-
-        pass
         # TODO Parse Name and Description
+
+
+class Facet:
+    def __init__(self, facetType: str = None, facetValue: str = None, facetValueType: str = None):
+        self.facetType = facetType
+        self.facetValue = facetValue
+        self.facetValueType = facetValueType
+
+    @property
+    def facetType(self):
+        return self._facetType
+
+    @property
+    def facetValue(self):
+        return self._facetValue
+
+    @property
+    def facetValueType(self):
+        return self._facetValueType
+
+    @facetType.setter
+    def facetType(self, value):
+        if isinstance(value, str) or value is None:
+            if value in FacetType or value is None:
+                self._facetType = value
+            else:
+                raise ValueError(f"The facet {value} is not recognised")
+        else:
+            raise ValueError("Facet dim_type should be of the str dim_type")
+
+    @facetValue.setter
+    def facetValue(self, value):
+        self._facetValue = stringSetter(value)
+
+    @facetValueType.setter
+    def facetValueType(self, value):
+        if isinstance(value, str) or value is None:
+            if value in FacetValueType or value is None:
+                self._facetValueType = value
+            else:
+                raise ValueError(f"The facet value dim_type {value} is not recognised")
+        else:
+            raise ValueError("Facet value dim_type should be of the str dim_type")
+
+
+class EnumerationType(DataParser):
+    def __init__(self, codelist=None, gdscollector_=None, **kwargs_):
+        super().__init__(gds_collector_=gdscollector_, **kwargs_)
+        self._codelist = codelist
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return EnumerationType(*args_, **kwargs_)
+
+    @property
+    def codelist(self):
+        return self._codelist
+
+    @codelist.setter
+    def codelist(self, value):
+        self._codelist = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Ref':
+            obj_ = RefBaseType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if obj_.package is not None and obj_.package == 'codelist':
+                self.codelist = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
+
+    pass
+
+
+class TextFormatType(DataParser):
+    def __init__(self, facets=None, gdscollector_=None, **kwargs_):
+        super().__init__(gds_collector_=gdscollector_, **kwargs_)
+
+        if facets is None:
+            self._facets = []
+        else:
+            self._facets = facets
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return TextFormatType(*args_, **kwargs_)
+
+    @property
+    def facets(self):
+        return self._facets
+
+    @facets.setter
+    def facets(self, value):
+        if value is None:
+            self._facets = []
+        elif isinstance(value, list):
+            self._facets = value
+        else:
+            raise TypeError('Value must be a list')
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('isSequence', node)
+        if value is not None and 'isSequence' not in already_processed:
+            already_processed.add('isSequence')
+            value = self.gds_validate_boolean(value)
+            self.facets.append(Facet(facetType='isSequence', facetValue=value))
+
+        value = find_attr_value_('minLength', node)
+        if value is not None and 'minLength' not in already_processed:
+            already_processed.add('minLength')
+
+            self.facets.append(Facet(facetType='minLength', facetValue=value))
+
+        value = find_attr_value_('maxLength', node)
+        if value is not None and 'maxLength' not in already_processed:
+            already_processed.add('maxLength')
+            self.facets.append(Facet(facetType='maxLength', facetValue=value))
+
+        value = find_attr_value_('minValue', node)
+        if value is not None and 'minValue' not in already_processed:
+            already_processed.add('minValue')
+            value = self.gds_validate_decimal(value)
+            self.facets.append(Facet(facetType='minValue', facetValue=value))
+
+        value = find_attr_value_('maxValue', node)
+        if value is not None and 'maxValue' not in already_processed:
+            already_processed.add('maxValue')
+            value = self.gds_validate_decimal(value)
+            self.facets.append(Facet(facetType='maxValue', facetValue=value))
+
+        value = find_attr_value_('startValue', node)
+        if value is not None and 'startValue' not in already_processed:
+            already_processed.add('startValue')
+            value = self.gds_validate_decimal(value)
+            self.facets.append(Facet(facetType='startValue', facetValue=value))
+
+        value = find_attr_value_('endValue', node)
+        if value is not None and 'endValue' not in already_processed:
+            already_processed.add('endValue')
+            value = self.gds_validate_decimal(value)
+            self.facets.append(Facet(facetType='endValue', facetValue=value))
+
+        value = find_attr_value_('interval', node)
+        if value is not None and 'interval' not in already_processed:
+            already_processed.add('interval')
+            value = self.gds_validate_double(value)
+            self.facets.append(Facet(facetType='interval', facetValue=value))
+
+        value = find_attr_value_('timeInterval', node)
+        if value is not None and 'timeInterval' not in already_processed:
+            already_processed.add('timeInterval')
+            value = self.gds_validate_duration(value)
+            self.facets.append(Facet(facetType='timeInterval', facetValue=value))
+
+        value = find_attr_value_('decimals', node)
+        if value is not None and 'decimals' not in already_processed:
+            already_processed.add('decimals')
+            value = self.gds_validate_integer(value)
+            self.facets.append(Facet(facetType='decimals', facetValue=value))
+
+        value = find_attr_value_('pattern', node)
+        if value is not None and 'pattern' not in already_processed:
+            already_processed.add('pattern')
+            self.facets.append(Facet(facetType='pattern', facetValue=value))
+
+        value = find_attr_value_('startTime', node)
+        if value is not None and 'startTime' not in already_processed:
+            already_processed.add('startTime')
+            value = self.gds_validate_date(value)
+            self.facets.append(Facet(facetType='startTime', facetValue=value))
+
+        value = find_attr_value_('endTime', node)
+        if value is not None and 'endTime' not in already_processed:
+            already_processed.add('endTime')
+            value = self.gds_validate_date(value)
+            self.facets.append(Facet(facetType='endTime', facetValue=value))
+
+
+class Representation(DataParser):
+    def __init__(self, facets=None, codelist=None, conceptScheme=None, gdscollector_=None,
+                 **kwargs_):
+        super().__init__(gds_collector_=gdscollector_, **kwargs_)
+        self._components = []
+        if facets is None:
+            facets = []
+        for f in facets:
+            self.addFacet(f)
+        self.codelist = codelist
+        self.conceptScheme = conceptScheme
+
+    def __eq__(self, other):
+        if isinstance(other, Representation):
+            return (self._codelist == other._codelist and
+                    self._conceptScheme == other._conceptScheme)
+        else:
+            return False
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Representation(*args_, **kwargs_)
+
+    @property
+    def facets(self):
+        facets = []
+        for e in self._components:
+            facets.append(e)
+        return facets
+
+    @property
+    def codelist(self):
+        return self._codelist
+
+    @property
+    def conceptScheme(self):
+        return self._conceptScheme
+
+    @codelist.setter
+    def codelist(self, value):
+        self._codelist = value
+
+    @conceptScheme.setter
+    def conceptScheme(self, value):
+        self._conceptScheme = value
+
+    def addFacet(self, value):
+        self._components.append(value)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Enumeration':
+            obj_ = EnumerationType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.codelist = obj_.codelist
+        elif nodeName_ == 'TextFormat':
+            obj_ = TextFormatType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._components = obj_.facets

@@ -70,6 +70,7 @@ def parse_agencies(xml_element, agency_scheme):
 
 
 def main():
+
     logger.debug('Start')
     datasets = readSDMX(pathToMetadataFile, pathToMetadataFile)
     logger.debug('Read')

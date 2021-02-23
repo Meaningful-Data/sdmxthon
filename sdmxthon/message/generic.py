@@ -474,7 +474,7 @@ class PartyType(DataParser):
             obj_ = ContactType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
             self._contact.append(obj_)
-            obj_.original_tag_name_ = '_contact'
+            obj_.original_tag_name_ = 'Contact'
 
 
 # end class PartyType
@@ -1016,23 +1016,12 @@ class MessageType(DataParser):
     multiple times), and finally an optional footer section for conveying
     error, warning, and informational messages."""
     __hash__ = DataParser.__hash__
-    subclass = None
     superclass = None
 
-    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, gds_collector_=None, **kwargs_):
+    def __init__(self, Header=None, Footer=None, gds_collector_=None, **kwargs_):
         super(MessageType, self).__init__(gds_collector_, **kwargs_)
-        self._anytypeobjs_ = None
         self._gds_collector_ = gds_collector_
-        self._gds_elementtree_node_ = None
-        self.original_tagname_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
-        self.ns_prefix_ = None
         self._header = Header
-        self._header_nsprefix_ = None
-        if anytypeobjs_ is None:
-            self._anytypeobjs_ = []
-        else:
-            self._anytypeobjs_ = anytypeobjs_
         self._footer = Footer
         self._footer_nsprefix_ = None
         self._namespace_def = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' \
@@ -1044,7 +1033,7 @@ class MessageType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
-        return MessageType(*args_, **kwargs_)
+        return MessageType(**kwargs_)
 
     @property
     def header(self):
@@ -1053,25 +1042,6 @@ class MessageType(DataParser):
     @header.setter
     def header(self, value):
         self._header = value
-
-    @property
-    def anytypeobjs(self):
-        return self._anytypeobjs_
-
-    @anytypeobjs.setter
-    def anytypeobjs(self, value):
-        if value is None:
-            self._anytypeobjs_ = []
-        elif isinstance(value, list):
-            self._anytypeobjs_ = value
-        else:
-            raise TypeError('AnyTypeObjs must be a list')
-
-    def add_anytypeobjs_(self, value):
-        self._anytypeobjs_.append(value)
-
-    def insert_anytypeobjs_(self, index, value):
-        self._anytypeobjs_[index] = value
 
     @property
     def footer(self):
@@ -1084,7 +1054,6 @@ class MessageType(DataParser):
     def has_content_(self):
         if (
                 self._header is not None or
-                self._anytypeobjs_ or
                 self._footer is not None
         ):
             return True
@@ -1100,14 +1069,13 @@ class GenericDataType(MessageType):
     subclass = None
     superclass = MessageType
 
-    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
+    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(GenericDataType, self).__init__(Header, Footer, gds_collector_, **kwargs_)
 
         if DataSet is None:
             self._dataSet = []
         else:
             self._dataSet = DataSet
-        self.DataSet_nsprefix_ = None
 
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
@@ -1288,6 +1256,10 @@ class DataStructuresType(DataParser):
         else:
             self._gds_collector = GdsCollector()
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DataStructuresType(*args_, **kwargs_)
+
     @property
     def dsds(self):
         return self._dsds
@@ -1386,8 +1358,6 @@ class Structures(DataParser):
         else:
             self._concepts = concepts
 
-        self.DataSet_nsprefix_ = None
-
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
         else:
@@ -1452,23 +1422,23 @@ class Structures(DataParser):
         elif nodeName_ == 'DataStructures':
             obj_ = DataStructuresType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._dsds = obj_
+            self._dsds = obj_.dsds
+        """
         elif nodeName_ == 'Dataflows':
             obj_ = DataflowsType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
             self._codelists = obj_
+        """
 
 
 class MetadataType(MessageType):
     __hash__ = DataParser.__hash__
-    subclass = None
     superclass = MessageType
 
-    def __init__(self, header=None, anytypeobjs_=None, footer=None, structures=None, gds_collector_=None, **kwargs_):
-        super(MetadataType, self).__init__(header, anytypeobjs_, footer, gds_collector_, **kwargs_)
+    def __init__(self, header=None, footer=None, structures=None, gds_collector_=None, **kwargs_):
+        super(MetadataType, self).__init__(header, footer, gds_collector_, **kwargs_)
 
         self._structures = structures
-        self.DataSet_nsprefix_ = None
 
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
@@ -1552,14 +1522,13 @@ class StructureSpecificDataType(MessageType):
     subclass = None
     superclass = MessageType
 
-    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
+    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificDataType, self).__init__(Header, Footer, gds_collector_, **kwargs_)
 
         if DataSet is None:
             self._dataSet = []
         else:
             self._dataSet = DataSet
-        self._dataSet_nsprefix_ = None
         self._name = 'StructureSpecificDataType'
 
         if gds_collector_ is not None:
@@ -1635,8 +1604,8 @@ class GenericTimeSeriesDataType(GenericDataType):
     subclass = None
     superclass = GenericDataType
 
-    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, DataSet, gds_collector_,
+    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataType, self).__init__(Header, Footer, DataSet, gds_collector_,
                                                         **kwargs_)
 
     @staticmethod
@@ -1733,8 +1702,8 @@ class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
     subclass = None
     superclass = StructureSpecificDataType
 
-    def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, DataSet,
+    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, Footer, DataSet,
                                                                   gds_collector_, **kwargs_)
 
         if DataSet is None:
@@ -1742,7 +1711,6 @@ class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
         else:
             self._dataSet = DataSet
 
-        self.DataSet_nsprefix_ = None
         self._name = 'StructureSpecificTimeSeriesDataType'
 
         if gds_collector_ is not None:

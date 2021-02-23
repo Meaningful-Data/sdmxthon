@@ -37,7 +37,7 @@ except ImportError:
 
         def print_messages(self):
             for msg in self.messages:
-                print("Warning: {}".format(msg))
+                print(f"Warning: {msg}")
 
 
 def parse_xml(infile, parser=None, **kwargs):
@@ -184,10 +184,7 @@ def get_required_ns_prefix_defs(rootNode):
         if prefix is not None
     }
 
-    namespacedefs = ' '.join([
-        'xmlns:{}="{}"'.format(prefix, uri)
-        for prefix, uri in nsmap.items()
-    ])
+    namespacedefs = ' '.join([f'xmlns:{prefix}="{uri}"' for prefix, uri in nsmap.items()])
 
     return nsmap, namespacedefs
 
@@ -196,6 +193,6 @@ def makeWarnings(print_warnings, gds_collector):
     if print_warnings and len(gds_collector.get_messages()) > 0:
         separator = ('-' * 50) + '\n'
         sys.stderr.write(separator)
-        sys.stderr.write('----- Warnings -- count: {} -----\n'.format(len(gds_collector.get_messages())))
+        sys.stderr.write(f'----- Warnings -- count: {len(gds_collector.get_messages())} -----\n')
         gds_collector.write_messages(sys.stderr)
         sys.stderr.write(separator)
