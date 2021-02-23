@@ -37,17 +37,17 @@ class Message:
             else:
                 raise ValueError('Invalid Dataset type')
 
-            header.set_ID('test')
-            header.set_Test(True)
-            header.set_Prepared(datetime.now())
+            header.id_('test')
+            header.test(True)
+            header.prepared(datetime.now())
 
             sender = SenderType()
-            sender.set_id('Unknown')
+            sender.id_('Unknown')
 
             receiver = PartyType()
-            receiver.set_id('Not_supplied')
+            receiver.id_('Not_supplied')
 
-            header.set_Sender(sender)
+            header.sender(sender)
             header.add_Receiver(receiver)
 
         self._header = header
@@ -96,20 +96,20 @@ class Message:
         else:
             raise ValueError('Invalid Dataset type')
 
-        header.set_ID(id_)
-        header.set_Test(header.gds_format_boolean(test))
+        header.id_(id_)
+        header.test(header.gds_format_boolean(test))
         if datetimeStr == '':
-            header.set_Prepared(datetime.now())
+            header.prepared(datetime.now())
         else:
-            header.set_Prepared(header.gds_parse_datetime(datetimeStr))
+            header.prepared(header.gds_parse_datetime(datetimeStr))
 
         sender = SenderType()
-        sender.set_id(senderId)
+        sender.id_(senderId)
 
         receiver = PartyType()
-        receiver.set_id(receiverId)
+        receiver.id_(receiverId)
 
-        header.set_Sender(sender)
+        header.sender(sender)
         header.add_Receiver(receiver)
 
         self._header = header
@@ -148,8 +148,8 @@ class Message:
         for e in parsed:
             code = e.get('structureRef').get('code')
             version = e.get('structureRef').get('version')
-            agencyID = e.get('structureRef').get('agencyID')
-            dsdid = id_creator(agencyID, code, version)
+            agency_id = e.get('structureRef').get('agencyID')
+            dsdid = id_creator(agency_id, code, version)
             if dsdid not in dsds.keys():
                 raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
             datasets[code] = DataSet(structure=dsds[dsdid],

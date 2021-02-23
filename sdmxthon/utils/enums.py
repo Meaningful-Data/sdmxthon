@@ -14,10 +14,28 @@ class ActionType(str, Enum):
     data dim_type for all registry interactions. The "Informational" value is
     used when the message contains information in response to a query,
     rather than being used to invoke a maintenance activity."""
-    APPEND = 'Append'  # Append - this is an incremental update for an existing data/metadata set or the provision of new data or documentation (attribute values) formerly absent. If any of the supplied data or metadata is already present, it will not replace that data or metadata. This corresponds to the "Update" value found in version 1.0 of the SDMX Technical Standards.
-    REPLACE = 'Replace'  # Replace - data/metadata is to be replaced, and may also include additional data/metadata to be appended. The replacement occurs at the level of the observation - that is, it is not possible to replace an entire series.
-    DELETE = 'Delete'  # Delete - data/metadata is to be deleted. Deletion occurs at the lowest level object. For instance, if a delete data message contains a series with no observations, then the entire series will be deleted. If the series contains observations, then only those observations specified will be deleted. The same basic concept applies for attributes. If a series or observation in a delete message contains attributes, then only those attributes will be deleted.
-    INFORMATION = 'Information'  # Informational - data/metadata is being exchanged for informational purposes only, and not meant to update a system.
+
+    APPEND = 'Append'
+
+    """Append - this is an incremental update for an existing data/metadata set or the provision of new data 
+    or documentation (attribute values) formerly absent. If any of the supplied data or metadata is already present, 
+    it will not replace that data or metadata. This corresponds to the "Update" value found in version 1.0 of the 
+    SDMX Technical Standards."""
+
+    REPLACE = 'Replace'
+    """Replace - data/metadata is to be replaced, and may also include additional data/metadata to be appended. 
+    The replacement occurs at the level of the observation - that is, it is not possible to replace an entire series."""
+
+    DELETE = 'Delete'
+    """Delete - data/metadata is to be deleted. Deletion occurs at the lowest level object. 
+    For instance, if a delete data message contains a series with no observations, 
+    then the entire series will be deleted. If the series contains observations, then only those observations specified 
+    will be deleted. The same basic concept applies for attributes. If a series or observation in a delete message 
+    contains attributes, then only those attributes will be deleted."""
+
+    INFORMATION = 'Information'
+    """Informational - data/metadata is being exchanged for informational 
+    purposes only, and not meant to update a system."""
 
 
 class AnyQueryType(str, Enum):
@@ -76,7 +94,7 @@ class BasicComponentDataType(str, Enum):
 class CodeDataType(str, Enum):
     """CodeDataType is a restriction of the basic data types that are
     applicable to codes. Although some of the higher level time period
-    formats are perimitted, it should be noted that any value which
+    formats are permitted, it should be noted that any value which
     contains time (which includes a time zone offset) is not allowable as a
     code identifier."""
     STRING = 'String'
@@ -198,27 +216,50 @@ class ContentConstraintTypeCodeType(str, Enum):
     """ContentConstraintTypeCodeType defines a list of types for a content
     constraint. A content constraint can state which data is present or
     which content is allowed for the constraint attachment."""
-    ALLOWED = 'Allowed'  # The constraint contains the allowed values for attachable object.
-    ACTUAL = 'Actual'  # The constraints contains the actual data present for the attachable object.
+    ALLOWED = 'Allowed'
+    """The constraint contains the allowed values for attachable object."""
+
+    ACTUAL = 'Actual'
+    """The constraints contains the actual data present for the attachable object."""
 
 
 class DataReturnDetailType(str, Enum):
     """DataReturnDetailType contains a set of enumerations that indicate how
     much detail should be returned for a data set."""
-    FULL = 'Full'  # The entire data set (including all data, documentation, and annotations) will be returned.
-    DATA_ONLY = 'DataOnly'  # Only the observed values and their keys will be returned. Annotations and documentation (i.e. Attributes) and therefore Groups, will be excluded.
-    SERIES_KEY_ONLY = 'SeriesKeyOnly'  # Only the series elements and the values for the dimensions will be returned. Annotations, documentation, and observations will be excluded.
-    NO_DATA = 'NoData'  # Returns all documentation at the DataSet, Group, and Series level without any Observations (therefore, Observation level documentation is not returned). Annotations are not returned.
+
+    FULL = 'Full'
+    """The entire data set (including all data, documentation, and annotations) will be returned."""
+
+    DATA_ONLY = 'DataOnly'
+    """Only the observed values and their keys will be returned. 
+    Annotations and documentation (i.e. Attributes) and therefore Groups, will be excluded."""
+
+    SERIES_KEY_ONLY = 'SeriesKeyOnly'
+    """Only the series elements and the values for the dimensions will be returned. 
+    Annotations, documentation, and observations will be excluded."""
+
+    NO_DATA = 'NoData'
+    """Returns all documentation at the DataSet, Group, and Series level without any Observations 
+    (therefore, Observation level documentation is not returned). Annotations are not returned."""
 
 
 class DataScopeType(str, Enum):
     """DataScopeType is an enumeration of the possible validity scopes for a
     data set. These scopes indicate the level at which the data is stated
     to be valid."""
-    DATA_STRUCTURE = 'DataStructure'  # The data set conforms simply to the data structure definition as it is defined, without regard to any constraints.
-    CONSTRAINED_DATA_STRUCTURE = 'ConstrainedDataStructure'  # The data set conforms to the known allowable content constraints applied to the data structure definition.
-    DATAFLOW = 'Dataflow'  # The data set conforms to the known allowable content constraints applied to the dataflow.
-    PROVISION_AGREEMENT = 'ProvisionAgreement'  # The data set conforms to the known allowable content constraints applied to the provision agreement.
+
+    DATA_STRUCTURE = 'DataStructure'
+    """The data set conforms simply to the data structure definition as it is defined, 
+    without regard to any constraints."""
+
+    CONSTRAINED_DATA_STRUCTURE = 'ConstrainedDataStructure'
+    """The data set conforms to the known allowable content constraints applied to the data structure definition."""
+
+    DATAFLOW = 'Dataflow'
+    """The data set conforms to the known allowable content constraints applied to the dataflow."""
+
+    PROVISION_AGREEMENT = 'ProvisionAgreement'
+    """The data set conforms to the known allowable content constraints applied to the provision agreement."""
 
 
 class DataStructureComponentTypeCodelistType(str, Enum):
@@ -235,54 +276,166 @@ class DataStructureComponentTypeCodelistType(str, Enum):
 class DataType(str, Enum):
     """DataTypeType provides an enumerated list of the types of data formats
     allowed as the for the representation of an object."""
-    STRING = 'String'  # A string datatype corresponding to W3C XML Schema's xs:string datatype.
-    ALPHA = 'Alpha'  # A string datatype which only allows for the simple aplhabetic charcter set of A-Z, a-z.
-    ALPHA_NUMERIC = 'AlphaNumeric'  # A string datatype which only allows for the simple alphabetic character set of A-Z, a-z plus the simple numeric character set of 0-9.
-    NUMERIC = 'Numeric'  # A string datatype which only allows for the simple numeric character set of 0-9. This format is not treated as an integer, and therefore can having leading zeros.
-    BIG_INTEGER = 'BigInteger'  # An integer datatype corresponding to W3C XML Schema's xs:integer datatype.
-    INTEGER = 'Integer'  # An integer datatype corresponding to W3C XML Schema's xs:int datatype.
-    LONG = 'Long'  # A numeric datatype corresponding to W3C XML Schema's xs:long datatype.
-    SHORT = 'Short'  # A numeric datatype corresponding to W3C XML Schema's xs:short datatype.
-    DECIMAL = 'Decimal'  # A numeric datatype corresponding to W3C XML Schema's xs:decimal datatype.
-    FLOAT = 'Float'  # A numeric datatype corresponding to W3C XML Schema's xs:float datatype.
-    DOUBLE = 'Double'  # A numeric datatype corresponding to W3C XML Schema's xs:double datatype.
-    BOOLEAN = 'Boolean'  # A datatype corresponding to W3C XML Schema's xs:boolean datatype.
-    _uri = 'URI'  # A datatype corresponding to W3C XML Schema's xs:anyURI datatype.
-    COUNT = 'Count'  # A simple incrementing Integer dim_type. The isSequence facet must be set to true, and the interval facet must be set to "1".
-    INCLUSIVE_VALUE_RANGE = 'InclusiveValueRange'  # This value indicates that the startValue and endValue attributes provide the inclusive boundaries of a numeric range of dim_type xs:decimal.
-    EXCLUSIVE_VALUE_RANGE = 'ExclusiveValueRange'  # This value indicates that the startValue and endValue attributes provide the exclusive boundaries of a numeric range, of dim_type xs:decimal.
-    INCREMENTAL = 'Incremental'  # This value indicates that the value increments according to the value provided in the interval facet, and has a true value for the isSequence facet.
-    OBSERVATIONAL_TIME_PERIOD = 'ObservationalTimePeriod'  # Observational time periods are the superset of all time periods in SDMX. It is the union of the standard time periods (i.e. Gregorian time periods, the reporting time periods, and date time) and a time range.
-    STANDARD_TIME_PERIOD = 'StandardTimePeriod'  # Standard time periods is a superset of distinct time period in SDMX. It is the union of the basic time periods (i.e. the Gregorian time periods and date time) and the reporting time periods.
-    BASIC_TIME_PERIOD = 'BasicTimePeriod'  # BasicTimePeriod time periods is a superset of the Gregorian time periods and a date time.
-    GREGORIAN_TIME_PERIOD = 'GregorianTimePeriod'  # Gregorian time periods correspond to calendar periods and are represented in ISO-8601 formats. This is the union of the year, year month, and date formats.
-    GREGORIAN_YEAR = 'GregorianYear'  # A Gregorian time period corresponding to W3C XML Schema's xs:gYear datatype, which is based on ISO-8601.
-    GREGORIAN_YEAR_MONTH = 'GregorianYearMonth'  # A time datatype corresponding to W3C XML Schema's xs:gYearMonth datatype, which is based on ISO-8601.
-    GREGORIAN_DAY = 'GregorianDay'  # A time datatype corresponding to W3C XML Schema's xs:date datatype, which is based on ISO-8601.
-    REPORTING_TIME_PERIOD = 'ReportingTimePeriod'  # Reporting time periods represent periods of a standard length within a reporting year, where to start of the year (defined as a month and day) must be defined elsewhere or it is assumed to be January 1. This is the union of the reporting year, semester, trimester, quarter, month, week, and day.
-    REPORTING_YEAR = 'ReportingYear'  # A reporting year represents a period of 1 year (P1Y) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingYearType.
-    REPORTING_SEMESTER = 'ReportingSemester'  # A reporting semester represents a period of 6 months (P6M) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingSemesterType.
-    REPORTING_TRIMESTER = 'ReportingTrimester'  # A reporting trimester represents a period of 4 months (P4M) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingTrimesterType.
-    REPORTING_QUARTER = 'ReportingQuarter'  # A reporting quarter represents a period of 3 months (P3M) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingQuarterType.
-    REPORTING_MONTH = 'ReportingMonth'  # A reporting month represents a period of 1 month (P1M) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingMonthType.
-    REPORTING_WEEK = 'ReportingWeek'  # A reporting week represents a period of 7 days (P7D) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingWeekType.
-    REPORTING_DAY = 'ReportingDay'  # A reporting day represents a period of 1 day (P1D) from the start date of the reporting year. This is expressed as using the SDMX specific ReportingDayType.
-    DATE_TIME = 'DateTime'  # A time datatype corresponding to W3C XML Schema's xs:dateTime datatype.
-    TIME_RANGE = 'TimeRange'  # TimeRange defines a time period by providing a distinct start (date or date time) and a duration.
-    MONTH = 'Month'  # A time datatype corresponding to W3C XML Schema's xs:gMonth datatype.
-    MONTH_DAY = 'MonthDay'  # A time datatype corresponding to W3C XML Schema's xs:gMonthDay datatype.
-    DAY = 'Day'  # A time datatype corresponding to W3C XML Schema's xs:gDay datatype.
-    TIME = 'Time'  # A time datatype corresponding to W3C XML Schema's xs:time datatype.
-    DURATION = 'Duration'  # A time datatype corresponding to W3C XML Schema's xs:duration datatype.
-    XHTML = 'XHTML'  # This value indicates that the content of the component can contain XHTML markup.
-    KEY_VALUES = 'KeyValues'  # This value indicates that the content of the component will be data key (a set of dimension references and values for the dimensions).
-    IDENTIFIABLE_REFERENCE = 'IdentifiableReference'  # This value indicates that the content of the component will be complete reference (either URN or full set of reference fields) to an Identifiable object in the SDMX Information Model.
-    DATA_SET_REFERENCE = 'DataSetReference'  # This value indicates that the content of the component will be reference to a data provider, which is actually a formal reference to a data provider and a data set identifier value.
-    ATTACHMENT_CONSTRAINT_REFERENCE = 'AttachmentConstraintReference'  # This value indicates that the content of the component will be reference to an attachment constraint, which is actually a combination of a collection of full or partial key values and a reference to a data set or data structure, usage, or provision agreement.
+    STRING = 'String'
+    """A string datatype corresponding to W3C XML Schema's xs:string datatype."""
+
+    ALPHA = 'Alpha'
+    """A string datatype which only allows for the simple alphabetic character set of A-Z, a-z."""
+
+    ALPHA_NUMERIC = 'AlphaNumeric'
+    """A string datatype which only allows for the simple alphabetic character set of A-Z, 
+    a-z plus the simple numeric character set of 0-9."""
+
+    NUMERIC = 'Numeric'
+    """A string datatype which only allows for the simple numeric character set of 0-9. 
+    This format is not treated as an integer, and therefore can having leading zeros."""
+
+    BIG_INTEGER = 'BigInteger'
+    """An integer datatype corresponding to W3C XML Schema's xs:integer datatype."""
+
+    INTEGER = 'Integer'
+    """An integer datatype corresponding to W3C XML Schema's xs:int datatype."""
+
+    LONG = 'Long'
+    """A numeric datatype corresponding to W3C XML Schema's xs:long datatype."""
+
+    SHORT = 'Short'
+    """A numeric datatype corresponding to W3C XML Schema's xs:short datatype."""
+
+    DECIMAL = 'Decimal'
+    """A numeric datatype corresponding to W3C XML Schema's xs:decimal datatype."""
+
+    FLOAT = 'Float'
+    """A numeric datatype corresponding to W3C XML Schema's xs:float datatype."""
+
+    DOUBLE = 'Double'
+    """A numeric datatype corresponding to W3C XML Schema's xs:double datatype."""
+
+    BOOLEAN = 'Boolean'
+    """A datatype corresponding to W3C XML Schema's xs:boolean datatype."""
+
+    _uri = 'URI'
+    """A datatype corresponding to W3C XML Schema's xs:anyURI datatype."""
+
+    COUNT = 'Count'
+    """A simple incrementing Integer dim_type. The isSequence facet must be set to true, 
+    and the interval facet must be set to "1"."""
+
+    INCLUSIVE_VALUE_RANGE = 'InclusiveValueRange'
+    """This value indicates that the startValue and endValue attributes provide the inclusive 
+    boundaries of a numeric range of dim_type xs:decimal."""
+
+    EXCLUSIVE_VALUE_RANGE = 'ExclusiveValueRange'
+    """This value indicates that the startValue and endValue attributes provide the exclusive 
+    boundaries of a numeric range, of dim_type xs:decimal."""
+
+    INCREMENTAL = 'Incremental'
+    """This value indicates that the value increments according to the value provided in the 
+    interval facet, and has a true value for the isSequence facet."""
+
+    OBSERVATIONAL_TIME_PERIOD = 'ObservationalTimePeriod'
+    """Observational time periods are the superset of all time periods in SDMX. 
+    It is the union of the standard time periods 
+    (i.e. Gregorian time periods, the reporting time periods, and date time) and a time range."""
+
+    STANDARD_TIME_PERIOD = 'StandardTimePeriod'
+    """Standard time periods is a superset of distinct time period in SDMX. 
+    It is the union of the basic time periods (i.e. the Gregorian time periods and date time) 
+    and the reporting time periods."""
+
+    BASIC_TIME_PERIOD = 'BasicTimePeriod'
+    """BasicTimePeriod time periods is a superset of the Gregorian time periods and a date time."""
+
+    GREGORIAN_TIME_PERIOD = 'GregorianTimePeriod'
+    """Gregorian time periods correspond to calendar periods and are represented in ISO-8601 formats. 
+    This is the union of the year, year month, and date formats."""
+
+    GREGORIAN_YEAR = 'GregorianYear'
+    """A Gregorian time period corresponding to W3C XML Schema's xs:gYear datatype, which is based on ISO-8601."""
+
+    GREGORIAN_YEAR_MONTH = 'GregorianYearMonth'
+    """A time datatype corresponding to W3C XML Schema's xs:gYearMonth datatype, which is based on ISO-8601."""
+
+    GREGORIAN_DAY = 'GregorianDay'
+    """A time datatype corresponding to W3C XML Schema's xs:date datatype, which is based on ISO-8601."""
+
+    REPORTING_TIME_PERIOD = 'ReportingTimePeriod'
+    """Reporting time periods represent periods of a standard length within a reporting year, where to start 
+    of the year (defined as a month and day) must be defined elsewhere or it is assumed to be January 1. 
+    This is the union of the reporting year, semester, trimester, quarter, month, week, and day."""
+
+    REPORTING_YEAR = 'ReportingYear'
+    """A reporting year represents a period of 1 year (P1Y) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingYearType."""
+
+    REPORTING_SEMESTER = 'ReportingSemester'
+    """A reporting semester represents a period of 6 months (P6M) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingSemesterType."""
+
+    REPORTING_TRIMESTER = 'ReportingTrimester'
+    """A reporting trimester represents a period of 4 months (P4M) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingTrimesterType."""
+
+    REPORTING_QUARTER = 'ReportingQuarter'
+    """A reporting quarter represents a period of 3 months (P3M) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingQuarterType."""
+
+    REPORTING_MONTH = 'ReportingMonth'
+    """A reporting month represents a period of 1 month (P1M) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingMonthType."""
+
+    REPORTING_WEEK = 'ReportingWeek'
+    """A reporting week represents a period of 7 days (P7D) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingWeekType."""
+
+    REPORTING_DAY = 'ReportingDay'
+    """A reporting day represents a period of 1 day (P1D) from the start date of the reporting year. 
+    This is expressed as using the SDMX specific ReportingDayType."""
+
+    DATE_TIME = 'DateTime'
+    """A time datatype corresponding to W3C XML Schema's xs:dateTime datatype."""
+
+    TIME_RANGE = 'TimeRange'
+    """TimeRange defines a time period by providing a distinct start (date or date time) and a duration."""
+
+    MONTH = 'Month'
+    """A time datatype corresponding to W3C XML Schema's xs:gMonth datatype."""
+
+    MONTH_DAY = 'MonthDay'
+    """A time datatype corresponding to W3C XML Schema's xs:gMonthDay datatype."""
+
+    DAY = 'Day'
+    """A time datatype corresponding to W3C XML Schema's xs:gDay datatype."""
+
+    TIME = 'Time'
+    """A time datatype corresponding to W3C XML Schema's xs:time datatype."""
+
+    DURATION = 'Duration'
+    """A time datatype corresponding to W3C XML Schema's xs:duration datatype."""
+
+    XHTML = 'XHTML'
+    """This value indicates that the content of the component can contain XHTML markup."""
+
+    KEY_VALUES = 'KeyValues'
+    """This value indicates that the content of the component will be data key 
+    (a set of dimension references and values for the dimensions)."""
+
+    IDENTIFIABLE_REFERENCE = 'IdentifiableReference'
+    """This value indicates that the content of the component will be complete reference 
+    (either URN or full set of reference fields) to an Identifiable object in the SDMX Information Model."""
+
+    DATA_SET_REFERENCE = 'DataSetReference'
+    """This value indicates that the content of the component will be reference to a data provider, 
+    which is actually a formal reference to a data provider and a data set identifier value."""
+
+    ATTACHMENT_CONSTRAINT_REFERENCE = 'AttachmentConstraintReference'
+    """This value indicates that the content of the component will be reference to an attachment constraint, 
+    which is actually a combination of a collection of full or partial key values and a reference to a data set 
+    or data structure, usage, or provision agreement."""
 
 
-class DimensionEumerationSchemeTypeCodelistType(str, Enum):
-    """DimensionEumerationSchemeTypeCodelistType provides an enumeration of all
+class DimensionEnumerationSchemeTypeCodelistType(str, Enum):
+    """DimensionEnumerationSchemeTypeCodelistType provides an enumeration of all
     item schemes which are allowable as the representation of a data
     structure definition component."""
     CODELIST = 'Codelist'
@@ -299,17 +452,28 @@ class DimensionTypeCodelistType(str, Enum):
 
 class DimensionTypeType(str, Enum):
     """DimensionTypeType enumerates the sub-classes of a dimension."""
-    DIMENSION = 'Dimension'  # An ordinary dimension.
-    MEASURE_DIMENSION = 'MeasureDimension'  # A measure dimension.
-    TIME_DIMENSION = 'TimeDimension'  # The time dimension.
+    DIMENSION = 'Dimension'
+    """An ordinary dimension."""
+
+    MEASURE_DIMENSION = 'MeasureDimension'
+    """A measure dimension."""
+
+    TIME_DIMENSION = 'TimeDimension'
+    """The time dimension."""
 
 
 class InputOutputTypeCodeType(str, Enum):
     """InputOutputTypeCodeType enumerates the role an object plays in a process
     step."""
-    INPUT = 'Input'  # Input - referenced object is an input to the process step.
-    OUTPUT = 'Output'  # Output - referenced object is an output to the process step.
-    ANY = 'Any'  # Any - referenced object is either an input or an output to the process step.
+
+    INPUT = 'Input'
+    """Input - referenced object is an input to the process step."""
+
+    OUTPUT = 'Output'
+    """Output - referenced object is an output to the process step."""
+
+    ANY = 'Any'
+    """Any - referenced object is either an input or an output to the process step."""
 
 
 class ItemSchemePackageTypeCodelistType(str, Enum):
@@ -350,7 +514,9 @@ class LateBoundVersionType(str, Enum):
     """LateBoundVersionType is a single value code list, used to include the
     '*' character - indicating that the latest version of an object is
     required."""
-    _ = '*'  # Indicates that the latest version of an object is requested.
+
+    _ = '*'
+    """Indicates that the latest version of an object is requested."""
 
 
 class MaintainableReturnDetailType(str, Enum):
@@ -421,8 +587,8 @@ class MetadataStructureComponentTypeCodelistType(str, Enum):
 
 class ObjectTypeCodelistType(str, Enum):
     """ObjectTypeCodelistType provides an enumeration of all objects outside of
-    the base infomration model class. This includes some abstract object
-    types such as Organsiation and Constraint."""
+    the base information model class. This includes some abstract object
+    types such as Organisation and Constraint."""
     ANY = 'Any'
     AGENCY = 'Agency'
     AGENCY_SCHEME = 'AgencyScheme'
@@ -496,17 +662,31 @@ class ObjectTypeCodelistType(str, Enum):
 class ObsDimensionsCodeType(str, Enum):
     """ObsDimensionsCodeType is an enumeration containing the values
     "TimeDimension" and "AllDimensions" """
-    ALL_DIMENSIONS = 'AllDimensions'  # AllDimensions notes that the cross sectional format shall be flat; that is all dimensions should be contained at the observation level.
-    _time_period = 'TIME_PERIOD'  # TIME_PERIOD refers to the fixed identifier for the time dimension.
+    ALL_DIMENSIONS = 'AllDimensions'
+
+    """AllDimensions notes that the cross sectional format shall be flat; 
+    that is all dimensions should be contained at the observation level.
+    """
+
+    _time_period = 'TIME_PERIOD'
+    """TIME_PERIOD refers to the fixed identifier for the time dimension."""
 
 
 class ObservationActionCodeType(str, Enum):
     """ObservationActionCodeType enumerates the dim_type of observations to be
     returned."""
-    ACTIVE = 'Active'  # Active observations, regardless of when they were added or updated will be returned.
-    ADDED = 'Added'  # Only newly added observations will be returned.
-    UPDATED = 'Updated'  # Only updated observations will be returned.
-    DELETED = 'Deleted'  # Only deleted observations will be returned.
+
+    ACTIVE = 'Active'
+    """Active observations, regardless of when they were added or updated will be returned."""
+
+    ADDED = 'Added'
+    """Only newly added observations will be returned."""
+
+    UPDATED = 'Updated'
+    """Only updated observations will be returned."""
+
+    DELETED = 'Deleted'
+    """Only deleted observations will be returned."""
 
 
 class OrganisationSchemeTypeCodeType(str, Enum):
@@ -554,24 +734,41 @@ class PackageTypeCodelistType(str, Enum):
 class QueryTypeType(str, Enum):
     """QueryType provides an enumeration of values which specify the objects in
     the result-set for a registry query."""
-    DATA_SETS = 'DataSets'  # Only references data sets should be returned.
-    METADATA_SETS = 'MetadataSets'  # Only references to metadata sets should be returned.
-    ALL_SETS = 'AllSets'  # References to both data sets and metadata sets should be returned.
+    DATA_SETS = 'DataSets'
+    """Only references data sets should be returned."""
+
+    METADATA_SETS = 'MetadataSets'
+    """Only references to metadata sets should be returned."""
+
+    ALL_SETS = 'AllSets'
+    """References to both data sets and metadata sets should be returned."""
 
 
 class RangeOperatorType(str, Enum):
     """RangeOperatorType provides an enumeration of range operators to be
     applied to an ordered value."""
-    GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual'  # (>=) - value must be greater than or equal to the value supplied.
-    LESS_THAN_OR_EQUAL = 'lessThanOrEqual'  # (<=) - value must be less than or equal to the value supplied.
-    GREATER_THAN = 'greaterThan'  # (>) - value must be greater than the value supplied.
-    LESS_THAN = 'lessThan'  # (<) - value must be less than the value supplied.
+    GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual'
+    """(>=) - value must be greater than or equal to the value supplied."""
+
+    LESS_THAN_OR_EQUAL = 'lessThanOrEqual'
+    """(<=) - value must be less than or equal to the value supplied."""
+
+    GREATER_THAN = 'greaterThan'
+    """(>) - value must be greater than the value supplied."""
+
+    LESS_THAN = 'lessThan'
+    """(<) - value must be less than the value supplied."""
 
 
 class SeverityCodeType(str, Enum):
-    ERROR = 'Error'  # Error indicates the status message coresponds to an error.
-    WARNING = 'Warning'  # Warning indicates that the status message corresponds to a warning.
-    INFORMATION = 'Information'  # Information indicates that the status message corresponds to an informational message.
+    ERROR = 'Error'
+    """Error indicates the status message corresponds to an error."""
+
+    WARNING = 'Warning'
+    """Warning indicates that the status message corresponds to a warning."""
+
+    INFORMATION = 'Information'
+    """Information indicates that the status message corresponds to an informational message."""
 
 
 class SimpleCodeDataType(str, Enum):
@@ -631,8 +828,12 @@ class SimpleDataType(str, Enum):
 class SimpleOperatorType(str, Enum):
     """SimpleOperatorType provides an enumeration of simple operators to be
     applied to any value."""
-    NOT_EQUAL = 'notEqual'  # (!=) - value must not be equal to the value supplied.
-    EQUAL = 'equal'  # (=) - value must be exactly equal to the value supplied.
+
+    NOT_EQUAL = 'notEqual'
+    """(!=) - value must not be equal to the value supplied."""
+
+    EQUAL = 'equal'
+    """(=) - value must be exactly equal to the value supplied."""
 
 
 class SourceTargetType(str, Enum):
@@ -646,9 +847,14 @@ class SourceTargetType(str, Enum):
 class StatusType(str, Enum):
     """StatusType provides an enumeration of values that detail the status of
     queries or requests."""
-    SUCCESS = 'Success'  # Query or request successful.
-    WARNING = 'Warning'  # Query or request successful, but with warnings.
-    FAILURE = 'Failure'  # Query or request not successful.
+    SUCCESS = 'Success'
+    """Query or request successful."""
+
+    WARNING = 'Warning'
+    """Query or request successful, but with warnings."""
+
+    FAILURE = 'Failure'
+    """Query or request not successful."""
 
 
 class StructureOrUsageTypeCodelistType(str, Enum):
@@ -670,16 +876,31 @@ class StructurePackageTypeCodelistType(str, Enum):
 class StructureReturnDetailType(str, Enum):
     """StructureReturnDetailType contains a set of enumerations that indicate
     how much detail should be returned for an object."""
-    STUB = 'Stub'  # Only the identification information and name should be returned.
-    COMPLETE_STUB = 'CompleteStub'  # Identification information, name, description, and annotations should be returned.
-    FULL = 'Full'  # The entire detail of the object should be returned.
-    MATCHED_ITEMS = 'MatchedItems'  # For an item scheme, only the items matching the item where parameters will be returned. In the case that items are hierarchical, the entire hierarchy leading to the matched item will have to be returned.
-    CASCADED_MATCHED_ITEMS = 'CascadedMatchedItems'  # For an item scheme, only the items matching the item where parameters, and their hierarchical child items will be returned. In the case that items are hierarchical, the entire hierarchy leading to the matched item will have to be returned.
+
+    STUB = 'Stub'
+    """Only the identification information and name should be returned."""
+
+    COMPLETE_STUB = 'CompleteStub'
+    """Identification information, name, description, and annotations should be returned."""
+
+    FULL = 'Full'
+    """The entire detail of the object should be returned."""
+
+    MATCHED_ITEMS = 'MatchedItems'
+    """For an item scheme, only the items matching the item where parameters will be returned. 
+    In the case that items are hierarchical, the entire hierarchy leading to the matched item 
+    will have to be returned."""
+
+    CASCADED_MATCHED_ITEMS = 'CascadedMatchedItems'
+    """For an item scheme, only the items matching the item where parameters, 
+    and their hierarchical child items will be returned. In the case that items are hierarchical, 
+    the entire hierarchy leading to the matched item will have to be returned."""
 
 
 class StructureTypeCodelistType(str, Enum):
     """StructureTypeCodelistType provides an enumeration all structure
     objects"""
+
     DATA_STRUCTURE = 'DataStructure'
     METADATA_STRUCTURE = 'MetadataStructure'
 
@@ -687,6 +908,7 @@ class StructureTypeCodelistType(str, Enum):
 class StructureUsageTypeCodelistType(str, Enum):
     """StructureUsageTypeCodelistType provides an enumeration all structure
     usage objects"""
+
     DATAFLOW = 'Dataflow'
     METADATAFLOW = 'Metadataflow'
 
@@ -694,6 +916,7 @@ class StructureUsageTypeCodelistType(str, Enum):
 class TargetObjectDataType(str, Enum):
     """TargetObjectDataType restricts DataType to specify the allowable data
     types for representing a target object value."""
+
     KEY_VALUES = 'KeyValues'
     IDENTIFIABLE_REFERENCE = 'IdentifiableReference'
     DATA_SET_REFERENCE = 'DataSetReference'
@@ -713,12 +936,24 @@ class TargetObjectTypeCodelistType(str, Enum):
 class TextSearchOperatorType(str, Enum):
     """TextSearchOperatorType provides an enumeration of text search
     operators."""
-    CONTAINS = 'contains'  # The text being searched must contain the supplied text.
-    STARTS_WITH = 'startsWith'  # The text being searched must start with the supplied text.
-    ENDS_WITH = 'endsWith'  # The text being searched must end with the supplied text.
-    DOES_NOT_CONTAIN = 'doesNotContain'  # The text being searched cannot contain the supplied text.
-    DOES_NOT_START_WITH = 'doesNotStartWith'  # The text being searched cannot start with the supplied text.
-    DOES_NOT_END_WITH = 'doesNotEndWith'  # The text being searched cannot end with the supplied text.
+
+    CONTAINS = 'contains'
+    """The text being searched must contain the supplied text."""
+
+    STARTS_WITH = 'startsWith'
+    """The text being searched must start with the supplied text."""
+
+    ENDS_WITH = 'endsWith'
+    """The text being searched must end with the supplied text."""
+
+    DOES_NOT_CONTAIN = 'doesNotContain'
+    """The text being searched cannot contain the supplied text."""
+
+    DOES_NOT_START_WITH = 'doesNotStartWith'
+    """The text being searched cannot start with the supplied text."""
+
+    DOES_NOT_END_WITH = 'doesNotEndWith'
+    """The text being searched cannot end with the supplied text."""
 
 
 class TimeDataType(str, Enum):
@@ -756,28 +991,39 @@ class TimeOperatorType(str, Enum):
 class ToValueTypeType(str, Enum):
     """ToValueTypeType provides an enumeration of available text-equivalents
     for translation of coded values into textual formats."""
-    VALUE = 'Value'  # Code or other tokenized value, as provided in the representation scheme.
-    NAME = 'Name'  # The human-readable name of the Value, as provided in the representation scheme.
-    DESCRIPTION = 'Description'  # The human-readable description of the Value, as provided in the representation scheme.
+    VALUE = 'Value'
+    """Code or other tokenized value, as provided in the representation scheme."""
+
+    NAME = 'Name'
+    """The human-readable name of the Value, as provided in the representation scheme."""
+
+    DESCRIPTION = 'Description'
+    """The human-readable description of the Value, as provided in the representation scheme."""
 
 
 class UnboundedCodeType(str, Enum):
     """UnboundedCodeType provides single textual value of "unbounded", for use
-    in OccurentType."""
-    UNBOUNDED = 'unbounded'  # Object has no upper limit on occurrences.
+    in OccurrenceType."""
+
+    UNBOUNDED = 'unbounded'
+    """Object has no upper limit on occurrences."""
 
 
 class UsageStatusType(str, Enum):
     """UsageStatusType provides a list of enumerated types for indicating
     whether reporting a given attribute is mandatory or conditional."""
-    MANDATORY = 'Mandatory'  # Reporting the associated attribute is mandatory - a value must be supplied.
-    CONDITIONAL = 'Conditional'  # Reporting the associated attribute is not mandatory - a value may be supplied, but is not required.
+
+    MANDATORY = 'Mandatory'
+    """Reporting the associated attribute is mandatory - a value must be supplied."""
+    CONDITIONAL = 'Conditional'
+    """Reporting the associated attribute is not mandatory - a value may be supplied, but is not required."""
 
 
 class WildCardValueType(str, Enum):
     """WildCardValueType is a single value code list, used to include the '%'
     character - indicating that an entire field is wild carded."""
-    _ = '%'  # Indicates a wild card value.
+
+    _ = '%'  """Indicates a wild card value."""
 
 
 class DatasetType(Enum):

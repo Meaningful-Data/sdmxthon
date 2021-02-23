@@ -1,49 +1,54 @@
 import json
+import logging
 import sys
 from typing import Dict
 from zipfile import ZipFile
 
 from .common.dataSet import DataSet
 from .common.message import Message
-from .utils.dataset_parsing import getMetadata
+from .message.generic import MetadataType
+from .utils.dataset_parsing import getMetadata, setReferences
 from .utils.enums import DatasetType
 from .utils.metadata_parsers import id_creator
-from .utils.read import load_AllDimensions, sdmxGenToDataSet, \
+from .utils.read import readXML, sdmxGenToDataSet, \
     sdmxStrToDataset
 from .utils.write import save_file
 
+logger = logging.getLogger("logger")
 
-def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
-    if dataset_type is None:
-        raise ValueError('Dataset type cannot be None')
-    obj_structure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
-    dsds = getMetadata(pathToMetadata)
 
-    header = obj_structure.Header
+def readSDMX(path_to_xml, pathToMetadata):
+    obj_structure = readXML(path_to_xml)
+    logger.debug('XML parsed')
+    if isinstance(obj_structure, MetadataType):
+        setReferences(obj_structure)
+    logger.debug('References')
+    dsds, errors = getMetadata(pathToMetadata)
+    logger.debug('Metadata parsed')
 
-    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+    header = obj_structure.header
+    if obj_structure.original_tag_name_ == 'GenericData':
+        dataset_type = DatasetType.GenericDataSet
         datasets = sdmxGenToDataSet(obj_structure, dsds)
-    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
+    elif obj_structure.original_tag_name_ == 'StructureSpecificData':
+        dataset_type = DatasetType.StructureDataSet
         datasets = sdmxStrToDataset(obj_structure, dsds)
     else:
-        raise ValueError('Invalid Dataset Type')
+        raise ValueError('Wrong Message type')
     return Message(dataset_type, datasets, header)
 
 
-def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
-    if dataset_type is None:
-        raise ValueError('Dataset Type cannot be None')
-
-    obj_structure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
+def getDatasets(path_to_xml, pathToMetadata):
+    obj_structure = readXML(path_to_xml)
 
     dsds, errors = getMetadata(pathToMetadata)
 
-    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
+    if obj_structure.original_tag_name_ == 'GenericData':
         datasets = sdmxGenToDataSet(obj_structure, dsds)
-    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
+    elif obj_structure.original_tag_name_ == 'StructureSpecificData':
         datasets = sdmxStrToDataset(obj_structure, dsds)
     else:
-        raise ValueError('Invalid Dataset Type')
+        raise ValueError('Wrong Message type')
 
     if len(datasets) == 1:
         values_view = datasets.values()
@@ -54,10 +59,10 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
         return datasets
 
 
-def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
+def xmlToJSON(pathToXML, pathToMetadata, output_path):
     list_elements = []
 
-    dataset = getDatasets(pathToXML, pathToMetadata, dataset_type)
+    dataset = getDatasets(pathToXML, pathToMetadata)
 
     if isinstance(dataset, dict):
         for e in dataset.values():
@@ -68,8 +73,8 @@ def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.G
         f.write(json.dumps(list_elements, ensure_ascii=False, indent=2))
 
 
-def xmlToCSV(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
-    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata, dataset_type)
+def xmlToCSV(pathToXML, pathToMetadata, output_path):
+    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata)
 
     if '.zip' in output_path:
         with ZipFile(output_path, 'w') as zipObj:

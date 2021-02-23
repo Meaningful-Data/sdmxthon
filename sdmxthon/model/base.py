@@ -8,10 +8,7 @@ Please refer to the package in the SDMX Information Model
 from datetime import datetime
 from typing import List
 
-from lxml.etree import _Element, QName
-
-from .utils import (qName, stringSetter, dateSetter, setDateFromString,
-                    getDateString, boolSetter, genericSetter)
+from .utils import stringSetter, dateSetter, setDateFromString, getDateString, boolSetter, genericSetter
 
 
 class LocalisedString(object):
@@ -48,28 +45,6 @@ class LocalisedString(object):
     @label.setter
     def label(self, value):
         self._label = stringSetter(value)
-
-    @classmethod
-    def fromXml(cls, elem: _Element):
-        """Instantiates the object from lxml element.
-
-        Receives an etree Element and instantiates the localises string
-
-        Args:
-            elem: an etree Element of the localised string
-
-        Returns:
-            A LocalisedString instance corresponding to the XML
-
-        Raises:
-            ValueError if the item is not an etree._Element
-        """
-        if not isinstance(elem, _Element):
-            raise ValueError(f"etree._Element object required. {type(elem)} passed")
-
-        loc_string = cls(label=elem.text, locale=elem.get(qName("xml", "lang")))
-
-        return loc_string
 
 
 class InternationalString(object):
@@ -111,16 +86,6 @@ class InternationalString(object):
         else:
             self._localisedStrings.append(localisedString)
             self._localisedStringsDict[localisedString.locale] = localisedString.label
-
-    @classmethod
-    def fromXml(cls, records: List[_Element]):
-        if records:
-            international_string = cls()
-
-            for ls in records:
-                international_string.addLocalisedString(LocalisedString.fromXml(ls))
-
-            return international_string
 
     def getLocales(self):
         return set(self._localisedStringsDict.keys())
@@ -237,15 +202,6 @@ class IdentifiableArtefact(AnnotableArtefact):
     def uri(self, value):
         self._uri = stringSetter(value)
 
-    @property
-    def urn(self):
-        if self._urnType is not None and self._qName is not None:
-            # TOBECHECKED
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{QName(self._qName).localname}={self.id}"
-        else:
-            urn = ""
-        return urn
-
 
 class NameableArtefact(IdentifiableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None,
@@ -325,15 +281,6 @@ class VersionableArtefact(NameableArtefact):
     def getValidToString(self, format_: str = "%Y-%m-%d"):
         return getDateString(self.validTo, format_)
 
-    @property
-    def urn(self):
-        if self._urnType is not None and self._qName is not None:
-            # TOBECHECKED
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self._qName.split('}')[1]}={self.id}({self.version})"
-        else:
-            urn = ''
-        return urn
-
 
 class MaintainableArtefact(VersionableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None,
@@ -359,7 +306,7 @@ class MaintainableArtefact(VersionableArtefact):
 
     @property
     def unique_id(self):
-        return self._unique_id
+        return f'{self.maintainer.id}:{self.id}({self.version})'
 
     @property
     def isFinal(self):
@@ -403,18 +350,6 @@ class MaintainableArtefact(VersionableArtefact):
             self._maintainer = value
         else:
             raise TypeError("The maintainer has to be an instance of Agency")
-
-    @property
-    def urn(self):
-        if self._urnType is not None and self._qName is not None:
-            urn_type = self._urnType
-            tag = QName(self._qName).localname
-
-            # TOBECHECKED
-            urn = f"urn:sdmx:org.sdmx.infomodel.{urn_type}.{tag}={self.agencyID}:{self.id}({self.version})"
-        else:
-            urn = ""
-        return urn
 
     @property
     def agencyID(self):

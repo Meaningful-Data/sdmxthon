@@ -1,3 +1,10 @@
+MessageNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}'
+StructureSpecificNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}'
+QueryNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/query}'
+RegistryNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/registry}'
+StructureNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}'
+GenericNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic}'
+XMLInstanceNS = '{http://www.w3.org/2001/XMLSchema-instance}'
 
 ClassToNode = {
     'AgencyType': 'Agency',
@@ -143,70 +150,90 @@ ClassToNode = {
 }
 
 RenameMappings_ = {
-    "{http://www.w3.org/2001/XMLSchema-instance}dim_type": "Type",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic}GroupType": "GroupType9",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}DataSetType": "DataSetType10",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}GroupType": "GroupType11",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}ObsType": "ObsType13",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}SeriesType": "SeriesType12",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}TimeSeriesDataSetType": "TimeSeriesDataSetType14",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}TimeSeriesObsType": "TimeSeriesObsType16",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}TimeSeriesType": "TimeSeriesType15",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}CategorisationQueryType": "CategorisationQueryType53",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}CategorySchemeQueryType": "CategorySchemeQueryType45",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}CodelistQueryType": "CodelistQueryType47",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ConceptSchemeQueryType": "ConceptSchemeQueryType46",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ConstraintQueryType": "ConstraintQueryType55",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ContactType": "ContactType56",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}DataQueryType": "DataQueryType34",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}DataSchemaQueryType": "DataSchemaQueryType38",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}DataStructureQueryType": "DataStructureQueryType43",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}DataflowQueryType": "DataflowQueryType41",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}GenericDataQueryType": "GenericDataQueryType35",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}GenericTimeSeriesDataQueryType": "GenericTimeSeriesDataQueryType36",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}HierarchicalCodelistQueryType": "HierarchicalCodelistQueryType48",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}MetadataQueryType": "MetadataQueryType37",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}MetadataSchemaQueryType": "MetadataSchemaQueryType39",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}MetadataStructureQueryType": "MetadataStructureQueryType44",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}MetadataflowQueryType": "MetadataflowQueryType42",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}NotifyRegistryEventType": "NotifyRegistryEventType33",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}OrganisationSchemeQueryType": "OrganisationSchemeQueryType49",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ProcessQueryType": "ProcessQueryType52",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ProvisionAgreementQueryType": "ProvisionAgreementQueryType54",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}QueryRegistrationRequestType": "QueryRegistrationRequestType25",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}QueryRegistrationResponseType": "QueryRegistrationResponseType26",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}QuerySubscriptionRequestType": "QuerySubscriptionRequestType31",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}QuerySubscriptionResponseType": "QuerySubscriptionResponseType32",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}ReportingTaxonomyQueryType": "ReportingTaxonomyQueryType50",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}StructureSetQueryType": "StructureSetQueryType51",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}StructureType": "StructureType22",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}StructuresQueryType": "StructuresQueryType40",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}SubmitRegistrationsRequestType": "SubmitRegistrationsRequestType23",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}SubmitRegistrationsResponseType": "SubmitRegistrationsResponseType24",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}SubmitStructureRequestType": "SubmitStructureRequestType27",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}SubmitStructureResponseType": "SubmitStructureResponseType28",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}SubmitSubscriptionsRequestType": "SubmitSubscriptionsRequestType29",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}SubmitSubscriptionsResponseType": "SubmitSubscriptionsResponseType30",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}MetadataSetType": "MetadataSetType17",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}ReferenceValueType": "ReferenceValueType20",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}ReportType": "ReportType18",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}ReportedAttributeType": "ReportedAttributeType21",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}TargetType": "TargetType19",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/query}ConstraintTypeCodelistType": "ConstraintTypeCodelistType4",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/query}DataStructureRequestType": "DataStructureRequestType5",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/query}SimpleValueType": "SimpleValueType3",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/registry}QueryableDataSourceType": "QueryableDataSourceType6",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/registry}StatusMessageType": "StatusMessageType7",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/registry}VersionQueryType": "VersionQueryType8",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructureType": "DataStructureType1",
-    "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}MetadataStructureType": "MetadataStructureType2",
+    f"{XMLInstanceNS}dim_type": "Type",
+    f"{GenericNS}GroupType": "GroupType9",
+    f"{StructureSpecificNS}DataSetType": "DataSetType10",
+    f"{StructureSpecificNS}GroupType": "GroupType11",
+    f"{StructureSpecificNS}ObsType": "ObsType13",
+    f"{StructureSpecificNS}SeriesType": "SeriesType12",
+    f"{StructureSpecificNS}TimeSeriesDataSetType": "TimeSeriesDataSetType14",
+    f"{StructureSpecificNS}TimeSeriesObsType": "TimeSeriesObsType16",
+    f"{StructureSpecificNS}TimeSeriesType": "TimeSeriesType15",
+    f"{MessageNS}CategorisationQueryType": "CategorisationQueryType53",
+    f"{MessageNS}CategorySchemeQueryType": "CategorySchemeQueryType45",
+    f"{MessageNS}CodelistQueryType": "CodelistQueryType47",
+    f"{MessageNS}ConceptSchemeQueryType": "ConceptSchemeQueryType46",
+    f"{MessageNS}ConstraintQueryType": "ConstraintQueryType55",
+    f"{MessageNS}ContactType": "ContactType56",
+    f"{MessageNS}DataQueryType": "DataQueryType34",
+    f"{MessageNS}DataSchemaQueryType": "DataSchemaQueryType38",
+    f"{MessageNS}DataStructureQueryType": "DataStructureQueryType43",
+    f"{MessageNS}DataflowQueryType": "DataflowQueryType41",
+    f"{MessageNS}GenericDataQueryType": "GenericDataQueryType35",
+    f"{MessageNS}GenericTimeSeriesDataQueryType": "GenericTimeSeriesDataQueryType36",
+    f"{MessageNS}HierarchicalCodelistQueryType": "HierarchicalCodelistQueryType48",
+    f"{MessageNS}MetadataQueryType": "MetadataQueryType37",
+    f"{MessageNS}MetadataSchemaQueryType": "MetadataSchemaQueryType39",
+    f"{MessageNS}MetadataStructureQueryType": "MetadataStructureQueryType44",
+    f"{MessageNS}MetadataflowQueryType": "MetadataflowQueryType42",
+    f"{MessageNS}NotifyRegistryEventType": "NotifyRegistryEventType33",
+    f"{MessageNS}OrganisationSchemeQueryType": "OrganisationSchemeQueryType49",
+    f"{MessageNS}ProcessQueryType": "ProcessQueryType52",
+    f"{MessageNS}ProvisionAgreementQueryType": "ProvisionAgreementQueryType54",
+    f"{MessageNS}QueryRegistrationRequestType": "QueryRegistrationRequestType25",
+    f"{MessageNS}QueryRegistrationResponseType": "QueryRegistrationResponseType26",
+    f"{MessageNS}QuerySubscriptionRequestType": "QuerySubscriptionRequestType31",
+    f"{MessageNS}QuerySubscriptionResponseType": "QuerySubscriptionResponseType32",
+    f"{MessageNS}ReportingTaxonomyQueryType": "ReportingTaxonomyQueryType50",
+    f"{MessageNS}StructureSetQueryType": "StructureSetQueryType51",
+    f"{MessageNS}StructureType": "StructureType22",
+    f"{MessageNS}StructuresQueryType": "StructuresQueryType40",
+    f"{MessageNS}SubmitRegistrationsRequestType": "SubmitRegistrationsRequestType23",
+    f"{MessageNS}SubmitRegistrationsResponseType": "SubmitRegistrationsResponseType24",
+    f"{MessageNS}SubmitStructureRequestType": "SubmitStructureRequestType27",
+    f"{MessageNS}SubmitStructureResponseType": "SubmitStructureResponseType28",
+    f"{MessageNS}SubmitSubscriptionsRequestType": "SubmitSubscriptionsRequestType29",
+    f"{MessageNS}SubmitSubscriptionsResponseType": "SubmitSubscriptionsResponseType30",
+    f"{StructureSpecificNS}MetadataSetType": "MetadataSetType17",
+    f"{StructureSpecificNS}ReferenceValueType": "ReferenceValueType20",
+    f"{StructureSpecificNS}ReportType": "ReportType18",
+    f"{StructureSpecificNS}ReportedAttributeType": "ReportedAttributeType21",
+    f"{StructureSpecificNS}TargetType": "TargetType19",
+    f"{QueryNS}ConstraintTypeCodelistType": "ConstraintTypeCodelistType4",
+    f"{QueryNS}DataStructureRequestType": "DataStructureRequestType5",
+    f"{QueryNS}SimpleValueType": "SimpleValueType3",
+    f"{RegistryNS}QueryableDataSourceType": "QueryableDataSourceType6",
+    f"{RegistryNS}StatusMessageType": "StatusMessageType7",
+    f"{RegistryNS}VersionQueryType": "VersionQueryType8",
+    f"{StructureNS}DataStructureType": "DataStructureType1",
+    f"{StructureNS}MetadataStructureType": "MetadataStructureType2",
 }
 
 GenerateDSNamespaceDefs = {
-    'GenericDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'GenericTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
+    'GenericDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                       'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                       'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
+                       'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                       'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                       'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'StructureDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                         'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                         'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
+                         'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                         'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                         'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'GenericTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                                 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                                 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
+                                 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                                 'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                                 'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'StructureTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                                   'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                                   'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
+                                   'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                                   'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                                   'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
 }
 
 ClassToPrefix = {

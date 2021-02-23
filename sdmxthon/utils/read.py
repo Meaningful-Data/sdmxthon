@@ -5,119 +5,104 @@ import numpy as np
 import pandas as pd
 
 from ..common.dataSet import DataSet
-from ..message.generic import GenericDataType, StructureSpecificDataType
+from ..message.generic import GenericDataType, StructureSpecificDataType, MetadataType
 from ..model.structure import PrimaryMeasure
-from ..utils.enums import DatasetType
 from ..utils.metadata_parsers import id_creator
-from ..utils.xml_base import GdsCollector_, get_required_ns_prefix_defs, parsexml_, makeWarnings
-
-try:
-    from lxml import etree as etree
-except ImportError:
-    from xml.etree import ElementTree as etree
+from ..utils.xml_base import GdsCollector, get_required_ns_prefix_defs, parse_xml, makeWarnings
 
 CapturedNsmap_ = {}
 print_warnings = True
 SaveElementTreeNode = True
+
+GenericDataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}GenericData'
+StructureDataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}StructureSpecificData'
+MetadataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Structure'
 
 # create logger
 logger = logging.getLogger("logging_tryout2")
 logger.setLevel(logging.DEBUG)
 
 
-def load_AllDimensions(inFileName, print_warnings=True, datasetType=DatasetType.GenericDataSet):
+def readXML(inFileName, print_warning=True):
     # TODO Check if the message has been loaded correctly
 
     global CapturedNsmap_
-    gds_collector = GdsCollector_()
+    gds_collector = GdsCollector()
 
     parser = None
-    doc = parsexml_(inFileName, parser)
-    rootNode = doc.getroot()
-    if datasetType == DatasetType.GenericDataSet or datasetType == DatasetType.GenericTimeSeriesDataSet:
-        rootTag = 'GenericData'
-        rootClass = GenericDataType
-    elif datasetType == DatasetType.StructureDataSet or datasetType == DatasetType.StructureTimeSeriesDataSet:
-        rootTag = 'StructureSpecificData'
-        rootClass = StructureSpecificDataType
+    doc = parse_xml(inFileName, parser)
+    root_node = doc.getroot()
+    if root_node.tag == GenericDataConstant:
+        root_tag = 'GenericData'
+        root_class = GenericDataType
+    elif root_node.tag == StructureDataConstant:
+        root_tag = 'StructureSpecificData'
+        root_class = StructureSpecificDataType
+    elif root_node.tag == MetadataConstant:
+        root_tag = 'Structure'
+        root_class = MetadataType
     else:
         return None
-    rootObj = rootClass.factory()
-    rootObj.original_tag_name_ = rootTag
-    rootObj.build(rootNode, gds_collector_=gds_collector)
-    CapturedNsmap_, namespacedefs = get_required_ns_prefix_defs(rootNode)
-    rootObj._namespace_def = namespacedefs
-    makeWarnings(print_warnings, gds_collector)
+    root_obj = root_class.factory()
+    root_obj.original_tag_name_ = root_tag
+    root_obj.build(root_node, gds_collector_=gds_collector)
+    CapturedNsmap_, namespacedefs = get_required_ns_prefix_defs(root_node)
+    root_obj._namespace_def = namespacedefs
+    makeWarnings(print_warning, gds_collector)
 
-    return rootObj
+    return root_obj
 
 
 def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
     datasets = {}
     refs_data = {}
 
-    for i in xmlObj.Header._structure:
-        refs_data[i.gds_element_tree_node_.attrib['structureID']] = id_creator(i._ref._agencyID, i._ref._id,
-                                                                               i._ref._version)
+    for i in xmlObj.header.structure:
+        refs_data[i.gds_element_tree_node_.attrib['structureID']] = id_creator(i.ref.agencyID, i.ref.id_,
+                                                                               i.ref.version)
 
-    for e in xmlObj.DataSet:
-        strRef = e._structureRef
+    for e in xmlObj.dataset:
+        str_ref = e.structureRef
 
-        if strRef is None:
-            strRef = e.gds_element_tree_node_.attrib[
+        if str_ref is None:
+            str_ref = e.gds_element_tree_node_.attrib[
                 '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}structureRef']
-            if strRef is None:
+            if str_ref is None:
                 # TODO Warning Structure Ref not found
                 continue
-        if refs_data[strRef] not in dsd_dict:
-            # TODO Warning DSD not found
-            print(refs_data[strRef])
-            print(dsd_dict.keys())
+        if refs_data[str_ref] not in dsd_dict:
             continue
-        dsd = dsd_dict[refs_data[strRef]]
-
-        attached_attributes_keys = dsd.datasetAttributeCodes
-
-        dataset_attributes_keys = ['reportingBegin', 'reportingEnd', 'dataExtractionDate', 'validFrom',
-                                   'validTo', 'publicationYear', 'publicationPeriod']
+        dsd = dsd_dict[refs_data[str_ref]]
         item = DataSet(dsd)
-        obsDict = {}
 
-        dataset_attributes = {}
+        dataset_attributes = {'reportingBegin': e.reporting_begin_date, 'reportingEnd': e.reporting_end_date,
+                              'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+                              'validFrom': e.valid_from_date,
+                              'validTo': e.valid_to_date, 'publicationYear': e.publication_year,
+                              'publicationPeriod': e.publication_period, 'action': e.action,
+                              'setId': dsd.id}
 
         # Default Attributes
-        dataset_attributes['reportingBegin'] = None
-        dataset_attributes['reportingEnd'] = None
-        dataset_attributes['dataExtractionDate'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
-        dataset_attributes['validFrom'] = None
-        dataset_attributes['validTo'] = None
-        dataset_attributes['publicationYear'] = None
-        dataset_attributes['publicationPeriod'] = None
 
-        dataset_attributes['action'] = e._action
-        dataset_attributes['setId'] = dsd.id
+        dim_obs = ''
 
-        dimObs = ''
-
-        for j in xmlObj.Header._structure:
-            if j.gds_element_tree_node_.attrib['structureID'] == strRef \
+        for j in xmlObj.header.structure:
+            if j.gds_element_tree_node_.attrib['structureID'] == str_ref \
                     and j.gds_element_tree_node_.attrib['dimensionAtObservation']:
-                dimObs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
+                dim_obs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
 
-        if dimObs == '':
+        if dim_obs == '':
             dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
         else:
-            dataset_attributes['dimensionAtObservation'] = dimObs
+            dataset_attributes['dimensionAtObservation'] = dim_obs
 
         item.datasetAttributes = dataset_attributes.copy()
 
         attached_attributes = {}
 
-        for key, value in e.gds_element_tree_node_.attrib.items():
-            if key in attached_attributes_keys:
-                attached_attributes[key] = value
-            elif key in dataset_attributes_keys:
-                dataset_attributes[key] = value
+        for k, v in e.any_attributes.items():
+            if k in dsd.datasetAttributeCodes:
+                attached_attributes[k] = v
 
         item.attachedAttributes = attached_attributes
 
@@ -126,53 +111,8 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
             if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
                 obs_attributes_keys.append(record.id)
 
-        if len(e._Series) > 0:
-            series = {}
-            for i in e._Series:
-                series_key = {}
-                for key, value in i.gds_element_tree_node_.attrib.items():
-                    series_key[key] = value
-                for k in i._obs:
-                    list_keys = []
-                    for key, value in series_key.items():
-                        if key in series.keys():
-                            series[key].append(value)
-                        else:
-                            series[key] = [value]
-                    for key, value in k.gds_element_tree_node_.attrib.items():
-                        list_keys.append(key)
-                        if key in series.keys():
-                            series[key].append(value)
-                        else:
-                            series[key] = [value]
-                    for o in obs_attributes_keys:
-                        if o not in list_keys:
-                            text = np.nan
-                            if o in series.keys():
-                                series[o].append(text)
-                            else:
-                                series[o] = [text]
-            check_empty(series)
-            item.data = pd.DataFrame.from_dict(series)
-        elif len(e._obs) > 0:
-            for i in e._obs:
-                list_keys = []
-                for key, value in i.gds_element_tree_node_.attrib.items():
-                    list_keys.append(key)
-                    if key in obsDict.keys():
-                        obsDict[key].append(value)
-                    else:
-                        obsDict[key] = [value]
-
-                for o in obs_attributes_keys:
-                    if o not in list_keys:
-                        text = np.nan
-                        if o in obsDict.keys():
-                            obsDict[o].append(text)
-                        else:
-                            obsDict[o] = [text]
-            check_empty(obsDict)
-            item.data = pd.DataFrame.from_dict(obsDict.copy())
+        if len(e.data) > 0:
+            item.data = pd.DataFrame(e.data)
         datasets[dsd.id] = item
     del xmlObj
     return datasets
@@ -180,172 +120,58 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
 
 def check_empty(series: dict):
     temp_series = series.copy()
-    for key, list in temp_series.items():
-        if all(e is np.nan for e in list):
+    for key, list_ in temp_series.items():
+        if all(e is np.nan for e in list_):
             series.pop(key)
 
 
 def check_length(series: dict):
     length = -1
     key_ref = ''
-    for key, list in series.items():
+    for key, list_ in series.items():
         if length == -1:
-            length = len(list)
+            length = len(list_)
             key_ref = key
-        elif length != len(list):
+        elif length != len(list_):
             # All series must be on same size
-            print('Key: %s ---- length: %d ---- expected length: %d from key %s' % (key, len(list), length, key_ref))
+            print('Key: %s ---- length: %d ---- expected length: %d from key %s' % (key, len(list_), length, key_ref))
 
 
 def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
     datasets = {}
-    refs_data = {}
 
-    for i in xmlObj.Header._structure:
-        refs_data[i.gds_element_tree_node_.attrib['structureID']] = id_creator(i._ref._agencyID, i._ref._id,
-                                                                               i._ref._version)
-    for e in xmlObj.DataSet:
-        if refs_data[e._structureRef] not in dsd_dict:
+    for e in xmlObj.dataset:
+        if xmlObj.header.structure[e.structureRef]['DSDID'] not in dsd_dict:
             # TODO Warning DSD not found
             continue
-        dsd = dsd_dict[refs_data[e._structureRef]]
+
+        dsd = dsd_dict[xmlObj.header.structure[e.structureRef]['DSDID']]
         item = DataSet(dsd)
 
-        attached_attributes_keys = dsd.datasetAttributeCodes
+        dataset_attributes = {'reportingBegin': e.reportingBeginDate, 'reportingEnd': e.reportingEndDate,
+                              'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+                              'validFrom': e.validFromDate, 'validTo': e.validToDate,
+                              'publicationYear': e.publicationYear, 'publicationPeriod': e.publicationPeriod,
+                              'action': e.action, 'setId': dsd.id}
 
-        dataset_attributes = {}
+        dim_obs = xmlObj.header.structure[e.structureRef]['dimAtObs']
 
-        dataset_attributes['reportingBegin'] = e._reportingBeginDate
-        dataset_attributes['reportingEnd'] = e._reportingEndDate
-        dataset_attributes['dataExtractionDate'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
-        dataset_attributes['validFrom'] = e._validFromDate
-        dataset_attributes['validTo'] = e._validToDate
-        dataset_attributes['publicationYear'] = e._publicationYear
-        dataset_attributes['publicationPeriod'] = e._publicationPeriod
-
-        dataset_attributes['action'] = e._action
-        dataset_attributes['setId'] = dsd.id
-        dimObs = ''
-
-        for j in xmlObj.Header._structure:
-            if j.gds_element_tree_node_.attrib['structureID'] == e._structureRef and j.gds_element_tree_node_.attrib[
-                'dimensionAtObservation']:
-                dimObs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
-
-        if dimObs == '':
-            dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
-        else:
-            dataset_attributes['dimensionAtObservation'] = dimObs
+        dataset_attributes['dimensionAtObservation'] = dim_obs
 
         item.datasetAttributes = dataset_attributes.copy()
 
         attached_attributes = {}
-        if e._Attributes is not None:
-            for i in e._Attributes.Value:
-                key = i.gds_element_tree_node_.attrib.get('id')
-                value = i.gds_element_tree_node_.attrib.get('value')
-                if key in attached_attributes_keys:
-                    attached_attributes[key] = value
+        if e.Attributes is not None:
+            attached_attributes = e.Attributes.value_
 
         item.attachedAttributes = attached_attributes.copy()
 
-        if len(e._Series) > 0:
-            obs_attributes_keys = []
-            for record in dsd.attributeDescriptor.components.values():
-                if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
-                    obs_attributes_keys.append(record.id)
-            series = {}
-            for i in e._Series:
-                series_key = {}
-
-                if i._Attributes is not None:
-                    for m in i._Attributes.Value:
-                        key = m.gds_element_tree_node_.attrib.get('id')
-                        value = m.gds_element_tree_node_.attrib.get('value')
-                        series_key[key] = value
-
-                for j in i.SeriesKey.Value:
-                    key = j.gds_element_tree_node_.attrib.get('id')
-                    value = j.gds_element_tree_node_.attrib.get('value')
-                    series_key[key] = value
-                for k in i._obs:
-                    list_keys = []
-
-                    for key, value in series_key.items():
-                        list_keys.append(key)
-                        if key in series.keys():
-                            series[key].append(value)
-                        else:
-                            series[key] = [value]
-
-                    key = 'OBS_VALUE'
-                    value = k.ObsValue.gds_element_tree_node_.attrib.get('value')
-                    list_keys.append(key)
-                    if key in series.keys():
-                        series[key].append(value)
-                    else:
-                        series[key] = [value]
-
-                    for m in k._Attributes.Value:
-                        key = m.gds_element_tree_node_.attrib.get('id')
-                        value = m.gds_element_tree_node_.attrib.get('value')
-                        list_keys.append(key)
-                        if key in series.keys():
-                            series[key].append(value)
-                        else:
-                            series[key] = [value]
-
-                    for o in obs_attributes_keys:
-                        if o not in list_keys:
-                            text = np.nan
-                            if o in series.keys():
-                                series[o].append(text)
-                            else:
-                                series[o] = [text]
-            check_empty(series)
-            item.data = pd.DataFrame.from_dict(series)
-        elif len(e._obs) > 0:
-            obsDict = {}
-            obs_attributes_keys = []
-            for record in dsd.attributeCodes:
-                if record not in dsd.dimensionCodes:
-                    obs_attributes_keys.append(record)
-            for j in e._obs:
-                list_keys = []
-                for k in j._Attributes.Value:
-                    key = k._id
-                    value = k._value
-                    list_keys.append(key)
-                    if key in obsDict.keys():
-                        obsDict[key].append(value)
-                    else:
-                        obsDict[key] = [value]
-                for n in j.ObsKey.Value:
-                    key = n._id
-                    value = n._value
-                    list_keys.append(key)
-
-                    if key in obsDict.keys():
-                        obsDict[key].append(value)
-                    else:
-                        obsDict[key] = [value]
-                if j.ObsValue is not None:
-                    for key, value in j.ObsValue.gds_element_tree_node_.attrib.items():
-                        key = 'OBS_VALUE'
-                        list_keys.append(key)
-                        if key in obsDict.keys():
-                            obsDict[key].append(value)
-                        else:
-                            obsDict[key] = [value]
-                for o in obs_attributes_keys:
-                    if o not in list_keys:
-                        text = np.nan
-                        if o in obsDict.keys():
-                            obsDict[o].append(text)
-                        else:
-                            obsDict[o] = [text]
-            check_empty(obsDict)
-            item.data = pd.DataFrame.from_dict(obsDict.copy())
+        if len(e.data) > 0:
+            temp = pd.DataFrame(e.data)
+            if dim_obs == 'AllDimensions':
+                item.data = temp.rename(columns={'OBS_VALUE': dsd.measureCode})
+            else:
+                item.data = temp.rename(columns={'ObsDimension': dim_obs, 'OBS_VALUE': dsd.measureCode})
         datasets[dsd.id] = item
     del xmlObj
     return datasets

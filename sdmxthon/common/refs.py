@@ -1,5 +1,5 @@
 from ..utils.data_parser import DataParser, Validate_simpletypes_
-from ..utils.xml_base import _cast, find_attr_value_, quote_attrib, encode_str_2_3, raise_parse_error
+from ..utils.xml_base import cast, find_attr_value_, encode_str_2_3, raise_parse_error
 
 
 class RefBaseType(DataParser):
@@ -14,12 +14,12 @@ class RefBaseType(DataParser):
     As this is the case, any reference components which are not part of the
     URN structure should not be present in the derived types.The agencyID
     attribute identifies the maintenance agency for the object being
-    referenced (agency-id in the URN structure). This is optional to allow
+    referenced (agency-id_ in the URN structure). This is optional to allow
     for local references (where the other reference fields are inferred
     from another context), but all complete references will require
     this.The maintainableParentID attribute identifies the maintainable
     object in which the referenced object is defined, if applicable
-    (maintainable-parent-object-id in the URN structure). This is only used
+    (maintainable-parent-object-id_ in the URN structure). This is only used
     in references where the referenced object is not itself
     maintainable.The maintainableParentVersion attribute identifies the
     version of the maintainable object in which the referenced object is
@@ -28,12 +28,12 @@ class RefBaseType(DataParser):
     maintainable. This should only be used when the maintainableParentID is
     present. If this is available, a default of 1.0 will always apply.The
     containerID attribute identifies the object within a maintainable
-    object in which the referenced object is defined (container-object-id
+    object in which the referenced object is defined (container-object-id_
     in the URN structure). This is only used in references where the
     referenced object is not contained directly within a maintainable
     object (e.g. a Component within a ComponentList, within a maintainable
     Structure). If the container has a fixed identifier, this attribute
-    will not be present.The id attribute identifies the object being
+    will not be present.The id_ attribute identifies the object being
     referenced, and is therefore always required.The version attribute
     identifies the version of the object being reference, if applicable. If
     this is available, a default value of 1.0 will always apply.The local
@@ -48,14 +48,14 @@ class RefBaseType(DataParser):
     generically from this definition. References derived from this should
     fix the value of this attribute to indicate the dim_type of object that is
     being referenced, or in the case that a reference which allows specific
-    types of fields, the representation should be sub-setted to the
+    types of fields, the representation should be sub-set to the
     appropriate values.The package attribute indicates the package name for
     the object being referenced. This attribute allows any reference to be
     processed generically from this definition. References derived from
     this should fix the value of this attribute to indicate the dim_type of
     object that is being referenced, or in the case that a reference which
     allows specific types of fields, the representation should be sub-
-    setted to the appropriate values."""
+    set to the appropriate values."""
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = None
@@ -77,77 +77,94 @@ class RefBaseType(DataParser):
         self._maintainableParentID_nsprefix_ = None
         self._maintainableParentVersion = maintainableParentVersion
         self._maintainableParentVersion_nsprefix_ = None
-        self._containerID = _cast(None, containerID)
+        self._containerID = cast(None, containerID)
         self._containerID_nsprefix_ = None
         self._id = idx
         self._id_nsprefix_ = None
         self._version = version
         self._version_nsprefix_ = None
-        self._local = _cast(bool, local)
+        self._local = cast(bool, local)
         self._local_nsprefix_ = None
         self._class_ = class_
         self._class__nsprefix_ = None
         self._package = package
         self._package_nsprefix_ = None
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return RefBaseType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_agencyID(self):
+    @property
+    def agencyID(self):
         return self._agencyID
 
-    def set_agencyID(self, agencyID):
-        self._agencyID = agencyID
+    @agencyID.setter
+    def agencyID(self, value):
+        self._agencyID = value
 
-    def get_maintainableParentID(self):
+    @property
+    def maintainableParentID(self):
         return self._maintainableParentID
 
-    def set_maintainableParentID(self, maintainableParentID):
-        self._maintainableParentID = maintainableParentID
+    @maintainableParentID.setter
+    def maintainableParentID(self, value):
+        self._maintainableParentID = value
 
-    def get_maintainableParentVersion(self):
+    @property
+    def maintainableParentVersion(self):
         return self._maintainableParentVersion
 
-    def set_maintainableParentVersion(self, maintainableParentVersion):
-        self._maintainableParentVersion = maintainableParentVersion
+    @maintainableParentVersion.setter
+    def maintainableParentVersion(self, value):
+        self._maintainableParentVersion = value
 
-    def get_containerID(self):
+    @property
+    def containerID(self):
         return self._containerID
 
-    def set_containerID(self, containerID):
-        self._containerID = containerID
+    @containerID.setter
+    def containerID(self, value):
+        self._containerID = value
 
-    def get_id(self):
+    @property
+    def id_(self):
         return self._id
 
-    def set_id(self, idx):
-        self._id = idx
+    @id_.setter
+    def id_(self, value):
+        self._id = value
 
-    def get_version(self):
+    @property
+    def version(self):
         return self._version
 
-    def set_version(self, version):
-        self._version = version
+    @version.setter
+    def version(self, value):
+        self._version = value
 
-    def get_local(self):
+    @property
+    def local(self):
         return self._local
 
-    def set_local(self, local):
-        self._local = local
+    @local.setter
+    def local(self, value):
+        self._local = value
 
-    def get_class(self):
+    @property
+    def class_(self):
         return self._class_
 
-    def set_class(self, class_):
-        self._class_ = class_
+    @class_.setter
+    def class_(self, value):
+        self._class_ = value
 
-    def get_package(self):
+    @property
+    def package(self):
         return self._package
 
-    def set_package(self, package):
-        self._package = package
+    @package.setter
+    def package(self, value):
+        self._package = value
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
@@ -157,8 +174,7 @@ class RefBaseType(DataParser):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -181,8 +197,7 @@ class RefBaseType(DataParser):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ObjectTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -195,8 +210,7 @@ class RefBaseType(DataParser):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -206,55 +220,10 @@ class RefBaseType(DataParser):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on PackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='RefBaseType'):
-        if self._agencyID is not None and 'agencyID' not in already_processed:
-            already_processed.add('agencyID')
-            outfile.write(' agencyID=%s' % (quote_attrib(self._agencyID),))
-
-        if self._maintainableParentID is not None and 'maintainableParentID' not in already_processed:
-            already_processed.add('maintainableParentID')
-            outfile.write(' maintainableParentID=%s' % (quote_attrib(self._maintainableParentID),))
-
-        if self._maintainableParentVersion is not None and 'maintainableParentVersion' not in already_processed:
-            already_processed.add('maintainableParentVersion')
-            outfile.write(' maintainableParentVersion=%s' % (self.gds_encode(
-                self.gds_format_string(quote_attrib(self._maintainableParentVersion),
-                                       input_name='maintainableParentVersion')),))
-
-        if self._containerID is not None and 'containerID' not in already_processed:
-            already_processed.add('containerID')
-            outfile.write(' containerID=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._containerID), input_name='containerID')),))
-
-        if self._id is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            outfile.write(
-                ' id=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self._id), input_name='id')),))
-
-        if self._version is not None and 'version' not in already_processed:
-            already_processed.add('version')
-            outfile.write(' version=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._version), input_name='version')),))
-
-        if self._local is not None and 'local' not in already_processed:
-            already_processed.add('local')
-            outfile.write(' local="%s"' % self.gds_format_boolean(self._local, input_name='local'))
-
-        if self._class_ is not None and 'class_' not in already_processed:
-            already_processed.add('class_')
-            outfile.write(' class=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._class_), input_name='class')),))
-
-        if self._package is not None and 'package' not in already_processed:
-            already_processed.add('package')
-            outfile.write(' package=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._package), input_name='package')),))
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         if self._agencyID is not None and 'agencyID' in valid_fields:
@@ -361,10 +330,9 @@ class MaintainableRefBaseType(RefBaseType):
                                                       **kwargs_)
         self._name = 'MaintainableRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return MaintainableRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type MaintainableTypeCodelistType, a restriction on ObjectTypeCodelistType.
@@ -374,8 +342,7 @@ class MaintainableRefBaseType(RefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 result = False
 
             value = value
@@ -388,8 +355,7 @@ class MaintainableRefBaseType(RefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on MaintainableTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -402,8 +368,7 @@ class MaintainableRefBaseType(RefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 result = False
 
             value = value
@@ -413,8 +378,7 @@ class MaintainableRefBaseType(RefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on PackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -434,10 +398,9 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
                                                           gds_collector_, **kwargs_)
         self._name = 'StructureOrUsageRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureOrUsageRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type StructureOrUsageTypeCodelistType, a restriction on MaintainableTypeCodelistType.
@@ -447,8 +410,7 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 result = False
 
             value = value
@@ -457,8 +419,7 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructureOrUsageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -471,8 +432,7 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 result = False
 
             value = value
@@ -481,8 +441,7 @@ class StructureOrUsageRefBaseType(MaintainableRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructurePackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -500,13 +459,13 @@ class StructureRefBaseType(StructureOrUsageRefBaseType):
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
                  idx=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(StructureOrUsageRefBaseType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion,
-                                                          containerID, idx, version, local, class_, package, **kwargs_)
+                                                          containerID, idx, version, local, class_, package,
+                                                          gds_collector_, **kwargs_)
         self._name = 'StructureRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
 
 # end class StructureRefBaseType
@@ -520,15 +479,15 @@ class DataStructureRefType(StructureRefBaseType):
     superclass = StructureRefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(DataStructureRefType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion,
-                                                   containerID, id, version, local, class_, package, **kwargs_)
+                                                   containerID, id_, version, local, class_, package, gds_collector_,
+                                                   **kwargs_)
         self._name = 'DataStructureRefType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return DataStructureRefType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type StructureTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
@@ -537,8 +496,7 @@ class DataStructureRefType(StructureRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -547,8 +505,7 @@ class DataStructureRefType(StructureRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructureTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -560,8 +517,7 @@ class DataStructureRefType(StructureRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -570,8 +526,7 @@ class DataStructureRefType(StructureRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructurePackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -593,10 +548,9 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
                                                         gds_collector_, **kwargs_)
         self._name = 'StructureUsageRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureUsageRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type StructureUsageTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
@@ -605,8 +559,7 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 result = False
             value = value
 
@@ -614,8 +567,7 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructureUsageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -627,8 +579,7 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 result = False
 
             value = value
@@ -637,8 +588,7 @@ class StructureUsageRefBaseType(StructureOrUsageRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructurePackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -653,15 +603,14 @@ class DataflowRefType(StructureUsageRefBaseType):
     superclass = StructureUsageRefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(DataflowRefType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion, containerID,
-                                              id, version, local, class_, package, **kwargs_)
+                                              id_, version, local, class_, package, gds_collector_, **kwargs_)
         self._name = 'DataflowRefType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return DataflowRefType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type StructureUsageTypeCodelistType, a restriction on StructureOrUsageTypeCodelistType.
@@ -670,8 +619,7 @@ class DataflowRefType(StructureUsageRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -680,8 +628,7 @@ class DataflowRefType(StructureUsageRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructureUsageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -693,8 +640,7 @@ class DataflowRefType(StructureUsageRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -703,8 +649,7 @@ class DataflowRefType(StructureUsageRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on StructurePackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -720,15 +665,15 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
     superclass = MaintainableRefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(ProvisionAgreementRefType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion,
-                                                        containerID, id, version, local, class_, package, **kwargs_)
+                                                        containerID, id_, version, local, class_, package,
+                                                        gds_collector_, **kwargs_)
         self._name = 'ProvisionAgreementRefType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return ProvisionAgreementRefType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type MaintainableTypeCodelistType, a restriction on ObjectTypeCodelistType.
@@ -737,8 +682,7 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -751,8 +695,7 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on MaintainableTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -764,8 +707,7 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -775,8 +717,7 @@ class ProvisionAgreementRefType(MaintainableRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on PackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -792,16 +733,16 @@ class ChildObjectRefBaseType(RefBaseType):
     superclass = RefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(ChildObjectRefBaseType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion,
-                                                     containerID, id, version, local, class_, package, **kwargs_)
+                                                     containerID, id_, version, local, class_, package,
+                                                     gds_collector_, **kwargs_)
         self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
         self._name = 'ChildObjectRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return ChildObjectRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
@@ -810,8 +751,7 @@ class ChildObjectRefBaseType(RefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -834,8 +774,7 @@ class ChildObjectRefBaseType(RefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ObjectTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
             return result
 
@@ -846,8 +785,7 @@ class ChildObjectRefBaseType(RefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -857,8 +795,7 @@ class ChildObjectRefBaseType(RefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on PackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -878,16 +815,15 @@ class ItemRefBaseType(ChildObjectRefBaseType):
     superclass = ChildObjectRefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(ItemRefBaseType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion, containerID,
-                                              id, version, local, class_, package, **kwargs_)
+                                              id_, version, local, class_, package, gds_collector_, **kwargs_)
         self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
         self._name = 'ItemRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return ItemRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type ItemTypeCodelistType, a restriction on ObjectTypeCodelistType.
@@ -896,8 +832,7 @@ class ItemRefBaseType(ChildObjectRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -907,8 +842,7 @@ class ItemRefBaseType(ChildObjectRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ItemTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -920,8 +854,7 @@ class ItemRefBaseType(ChildObjectRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -930,8 +863,7 @@ class ItemRefBaseType(ChildObjectRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ItemSchemePackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -952,15 +884,15 @@ class OrganisationRefBaseType(ItemRefBaseType):
     superclass = ItemRefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(OrganisationRefBaseType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion,
-                                                      containerID, id, version, local, class_, package, **kwargs_)
+                                                      containerID, id_, version, local, class_, package,
+                                                      gds_collector_, **kwargs_)
         self._name = 'ItemRefBaseType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return OrganisationRefBaseType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type OrganisationTypeCodelistType, a restriction on ItemTypeCodelistType.
@@ -970,8 +902,7 @@ class OrganisationRefBaseType(ItemRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -980,8 +911,7 @@ class OrganisationRefBaseType(ItemRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on OrganisationTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -993,8 +923,7 @@ class OrganisationRefBaseType(ItemRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -1003,8 +932,7 @@ class OrganisationRefBaseType(ItemRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ItemSchemePackageTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
@@ -1020,15 +948,15 @@ class DataProviderRefType(OrganisationRefBaseType):
     superclass = OrganisationRefBaseType
 
     def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 id=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+                 id_=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
         super(DataProviderRefType, self).__init__(agencyID, maintainableParentID, maintainableParentVersion,
-                                                  containerID, id, version, local, class_, package, **kwargs_)
+                                                  containerID, id_, version, local, class_, package,
+                                                  gds_collector_, **kwargs_)
         self._name = 'DataProviderRefType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return DataProviderRefType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_object_type_code_list_type(self, value):
         # Validate dim_type OrganisationTypeCodelistType, a restriction on ItemTypeCodelistType.
@@ -1037,8 +965,7 @@ class DataProviderRefType(OrganisationRefBaseType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -1047,8 +974,7 @@ class DataProviderRefType(OrganisationRefBaseType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on OrganisationTypeCodelistType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result

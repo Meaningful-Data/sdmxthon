@@ -1,6 +1,6 @@
 from .annotations import TextType
 from ..utils.data_parser import DataParser
-from ..utils.xml_base import _cast, quote_attrib, find_attr_value_
+from ..utils.xml_base import cast, quote_attrib, find_attr_value_
 
 
 class StatusMessageType(DataParser):
@@ -16,13 +16,13 @@ class StatusMessageType(DataParser):
     superclass = None
 
     def __init__(self, code=None, Text=None, gds_collector_=None, **kwargs_):
-        super(StatusMessageType, self).__init__(None, gds_collector_)
+        super(StatusMessageType, self).__init__(None)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
         self.ns_prefix_ = None
-        self._code = _cast(None, code)
+        self._code = cast(None, code)
         self._code_nsprefix_ = None
         if Text is None:
             self._text = []
@@ -33,16 +33,22 @@ class StatusMessageType(DataParser):
         self._namespaceprefix = "common"
         self._name = 'StatusMessageType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StatusMessageType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_Text(self):
+    @property
+    def text(self):
         return self._text
 
-    def set_Text(self, Text):
-        self._text = Text
+    @text.setter
+    def text(self, value):
+        if value is None:
+            self._text = []
+        elif isinstance(value, list):
+            self._text = value
+        else:
+            raise TypeError('Text must be a list')
 
     def add_Text(self, value):
         self._text.append(value)
@@ -53,11 +59,13 @@ class StatusMessageType(DataParser):
     def replace_Text_at(self, index, value):
         self._text[index] = value
 
-    def get_code(self):
+    @property
+    def code(self):
         return self._code
 
-    def set_code(self, code):
-        self._code = code
+    @code.setter
+    def code(self, value):
+        self._code = value
 
     def has_content_(self):
         if (
@@ -71,7 +79,7 @@ class StatusMessageType(DataParser):
         if self._code is not None and 'Code' not in already_processed:
             already_processed.add('Code')
             outfile.write(
-                'Code=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self._code), input_name='Code')),))
+                'Code=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self._code))),))
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         pass
@@ -109,8 +117,7 @@ class CodedStatusMessageType(StatusMessageType):
         super(CodedStatusMessageType, self).__init__(code, Text, gds_collector_, **kwargs_)
         self._name = 'CodedStatusMessageType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return CodedStatusMessageType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 # end class CodedStatusMessageType

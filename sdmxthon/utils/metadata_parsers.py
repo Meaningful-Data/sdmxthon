@@ -2,7 +2,7 @@ import logging
 from typing import Dict
 
 from ..model.dataTypes import FacetType, FacetValueType
-from ..model.itemScheme import Code, CodeList, Agency, ConceptScheme, Concept
+from ..model.itemScheme import Code, Codelist, Agency, ConceptScheme, Concept
 from ..model.structure import DataStructureDefinition, DimensionDescriptor, MeasureDescriptor, \
     AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension, Facet
 from ..model.structure import Representation
@@ -29,7 +29,7 @@ def get_codelist_model(root):
     if result is not None:
         codelists: Dict = {}
         for element in result:
-            cl = CodeList(id_=element.attrib['id'],
+            cl = Codelist(id_=element.attrib['id'],
                           uri=element.attrib['urn'],
                           isExternalReference=element.attrib['isExternalReference'],
                           maintainer=Agency(id_=element.attrib['agencyID']),
@@ -145,7 +145,7 @@ def get_concept_schemes(root, codelists=None):
                                 f'CoreRepresentation for Concept {sch.unique_id}-{cd.id} '
                                 f'has not been parsed. Implemented elements are '
                                 f'Enumeration, Text Format and EnumerationFormat')
-                    cd.coreRepresentation = Representation(codeList=cl, facets=facets)
+                    cd.coreRepresentation = Representation(codelist=cl, facets=facets)
                 sch.append(cd)
             identifier = id_creator(sch.maintainer.id, sch.id, sch.version)
             schemes[identifier] = sch
@@ -167,7 +167,7 @@ def extract_ref_data(ref, concepts, missing_rep):
         if attrib_cs['id'] in cs.items.keys():
             con = cs.items[attrib_cs['id']]
             if con.coreRepresentation is not None:
-                cl = con.coreRepresentation.codeList
+                cl = con.coreRepresentation.codelist
             else:
                 cl = None
         else:
@@ -260,7 +260,7 @@ def gen_representation(record, concepts, codelists, obj, dsd_id, missing_rep):
         if con is not None and con.coreRepresentation is not None and len(con.coreRepresentation.facets) > 0:
             facets = con.coreRepresentation.facets
 
-    return Representation(codeList=cl, conceptScheme=cs, concept=con, facets=facets)
+    return Representation(codelist=cl, conceptScheme=cs, concept=con, facets=facets)
 
 
 def get_attribute_relationship(record, measure_descriptor, attribute_descriptor, dimension_descriptor, dsd_id, errors):
@@ -283,7 +283,7 @@ def get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
                     errors.append({'Code': 'MS05', 'ErrorLevel': 'CRITICAL',
                                    'ObjectID': f'{dsd_id}-{attribute_descriptor.id}', 'ObjectType': f'Attribute',
                                    'Message': f'Missing Primary Measure {e.attrib["id"]} related to Attribute '
-                                              f'{attribute_descriptor.id}'})
+                                              f'{record.attrib["id"]}'})
                     related = None
 
         elif len(meas_data) == 0 and dimension_descriptor is not None:
@@ -300,7 +300,7 @@ def get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
                                        'ObjectID': f'{dsd_id}-{attribute_descriptor.id}',
                                        'ObjectType': f'Attribute',
                                        'Message': f'Missing Dimension {e.attrib["id"]} related to Attribute '
-                                                  f'{attribute_descriptor.id}'})
+                                                  f'{record.attrib["id"]}'})
                         related = None
 
         else:
@@ -354,11 +354,10 @@ def create_attribute_data(errors, dsd, attribute_descriptor,
         list_related = get_attribute_relationship(record, measure_descriptor, attribute_descriptor,
                                                   dimension_descriptor, dsd_id,
                                                   errors)
-
-        if len(list_related) == 1:
-            att.relatedTo = list_related[0]
-        elif len(list_related) == 0 or list_related is None:
+        if list_related is None or len(list_related) == 0:
             att.relatedTo = None
+        elif len(list_related) == 1:
+            att.relatedTo = list_related[0]
         else:
             att.relatedTo = list_related
 
@@ -375,7 +374,7 @@ def create_measures_data(dsd_xml, measure_descriptor, dsd_id, concepts, codelist
                              namespaces={
                                  'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
 
-    if measures is None:
+    if measures is None or len(measures) == 0:
         errors.append({'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
                        'ObjectID': f'{dsd_id}', 'ObjectType': f'DSD',
                        'Message': f'DSD {dsd_id} does not have a Primary Measure'})
@@ -425,11 +424,11 @@ def get_DSDs(root, concepts=None, codelists=None):
     result = root.xpath(expression,
                         namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure',
                                     'mes': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message'})
-    if result is None:
-        errors = [{'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ID': None,
+    if result is None or len(result) == 0:
+        errors = [{'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
                    'ObjectType': f'DSD',
                    'Message': f'Not found any DSD in this file'}]
-        return errors
+        return {}, errors
 
     dsds: Dict = {}
     for element in result:
@@ -549,6 +548,7 @@ def get_DSDs(root, concepts=None, codelists=None):
     return dsds, None
 
 
+"""
 def validate_dataset_attributes_from_dsd(dsd, dataset):
     dataset_keys = dsd.datasetAttributeCodes
     attached_keys = dataset.attached_attributes.keys()
@@ -574,7 +574,7 @@ def add_elements_to_dict(dict1: dict, dict2: dict, updateElementsFromDict2=True)
                 dict1[e] = dict2[e]
 
     return dict1
-
+    
 
 def delete_unused_codelists(codelists: dict, concepts: dict, dsds: dict):
     used_codelists = []
@@ -584,33 +584,33 @@ def delete_unused_codelists(codelists: dict, concepts: dict, dsds: dict):
         for i in e.attributeDescriptor.components.values():
             if i.localRepresentation.codeList is not None:
                 a = i.localRepresentation.codeList
-                used_codelists.append(id_creator(a.agencyID, a.id, a.version))
+                used_codelists.append(id_creator(a.agencyID, a.id_, a.version))
             if i.localRepresentation.concept is not None:
                 b = i.localRepresentation.concept.scheme
-                used_concepts.append(id_creator(b.agencyID, b.id, b.version))
+                used_concepts.append(id_creator(b.agencyID, b.id_, b.version))
 
         for j in e.dimensionDescriptor.components.values():
             if j.localRepresentation.codeList is not None:
                 a = j.localRepresentation.codeList
-                used_codelists.append(id_creator(a.agencyID, a.id, a.version))
+                used_codelists.append(id_creator(a.agencyID, a.id_, a.version))
             if j.localRepresentation.concept is not None:
                 b = j.localRepresentation.concept.scheme
-                used_concepts.append(id_creator(b.agencyID, b.id, b.version))
+                used_concepts.append(id_creator(b.agencyID, b.id_, b.version))
 
         for k in e.measureDescriptor.components.values():
             if k.localRepresentation.codeList is not None:
                 a = k.localRepresentation.codeList
-                used_codelists.append(id_creator(a.agencyID, a.id, a.version))
+                used_codelists.append(id_creator(a.agencyID, a.id_, a.version))
             if k.localRepresentation.concept is not None:
                 b = k.localRepresentation.concept.scheme
-                used_concepts.append(id_creator(b.agencyID, b.id, b.version))
+                used_concepts.append(id_creator(b.agencyID, b.id_, b.version))
 
     for m in concepts.values():
         for n in m.items.values():
             if n.coreRepresentation is not None:
                 if n.coreRepresentation.codeList is not None:
                     a = n.coreRepresentation.codeList
-                    used_codelists.append(id_creator(a.agencyID, a.id, a.version))
+                    used_codelists.append(id_creator(a.agencyID, a.id_, a.version))
     updated_cl = codelists.copy()
     updated_cs = concepts.copy()
     for o in codelists.keys():
@@ -654,3 +654,4 @@ def set_codelists_checked_to_false(codelists: dict):
 def set_concepts_checked_to_false(concepts: dict):
     for e in concepts.values():
         e._checked = False
+"""

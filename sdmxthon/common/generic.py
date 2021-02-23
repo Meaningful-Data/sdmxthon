@@ -1,7 +1,7 @@
 from .references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
     DataflowReferenceType
 from ..utils.data_parser import DataParser
-from ..utils.xml_base import _cast, quote_attrib, find_attr_value_, raise_parse_error
+from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
 
 
 class PayloadStructureType(DataParser):
@@ -29,102 +29,121 @@ class PayloadStructureType(DataParser):
     superclass = None
 
     def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
-                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgrement=None, StructureUsage=None,
-                 Structure=None, gds_collector_=None, **kwargs_):
+                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
+                 StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
         super(PayloadStructureType, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self.gds_element_tree_node_ = None
         self.original_tag_name_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
         self.ns_prefix_ = None
-        self._structureID = _cast(None, structureID)
+        self._structureID = cast(None, structureID)
         self._structureID_nsprefix_ = None
-        self._schemaURL = _cast(None, schemaURL)
+        self._schemaURL = cast(None, schemaURL)
         self._schemaURL_nsprefix_ = None
-        self._namespace = _cast(None, namespace)
+        self._namespace = cast(None, namespace)
         self._namespace_nsprefix_ = None
-        self._dimensionAtObservation = _cast(None, dimensionAtObservation)
-        self._dimensionAtObservation_nsprefix_ = None
-        self._explicitMeasures = _cast(bool, explicitMeasures)
+        self._dimension_at_observation = cast(None, dimensionAtObservation)
+        self._dimension_at_observation_nsprefix_ = None
+        self._explicitMeasures = cast(bool, explicitMeasures)
         self._explicitMeasures_nsprefix_ = None
-        self._serviceURL = _cast(None, serviceURL)
+        self._serviceURL = cast(None, serviceURL)
         self._serviceURL_nsprefix_ = None
-        self._structureURL = _cast(None, structureURL)
+        self._structureURL = cast(None, structureURL)
         self._structureURL_nsprefix_ = None
-        self._provisionAgrement = ProvisionAgrement
-        self._provisionAgrement_nsprefix_ = None
+        self._provisionAgreement = ProvisionAgreement
+        self._provisionAgreement_nsprefix_ = None
         self._structureUsage = StructureUsage
         self._structureUsage_nsprefix_ = None
         self._structure = Structure
         self._structure_nsprefix_ = None
         self._namespacedef = 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
         self._namespaceprefix = "common"
-        self._namespace_prefix = "common"
 
     def factory(*args_, **kwargs_):
         return PayloadStructureType(*args_, **kwargs_)
 
     factory = staticmethod(factory)
 
-    def get_ProvisionAgrement(self):
-        return self._provisionAgrement
+    @property
+    def provisionAgreement(self):
+        return self._provisionAgreement
 
-    def set_ProvisionAgrement(self, ProvisionAgrement):
-        self._provisionAgrement = ProvisionAgrement
+    @provisionAgreement.setter
+    def provisionAgreement(self, value):
+        self._provisionAgreement = value
 
-    def get_StructureUsage(self):
+    @property
+    def structureUsage(self):
         return self._structureUsage
 
-    def set_StructureUsage(self, StructureUsage):
-        self._structureUsage = StructureUsage
+    @structureUsage.setter
+    def structureUsage(self, value):
+        self._structureUsage = value
 
-    def get_Structure(self):
+    @property
+    def structure(self):
         return self._structure
 
-    def set_Structure(self, Structure):
-        self._structure = Structure
+    @structure.setter
+    def structure(self, value):
+        self._structure = value
 
-    def get_structureID(self):
+    @property
+    def structureID(self):
         return self._structureID
 
-    def set_structureID(self, structureID):
-        self._structureID = structureID
+    @structureID.setter
+    def structureID(self, value):
+        self._structureID = value
 
-    def get_schemaURL(self):
-        return self._schemaURL
-
-    def set_schemaURL(self, schemaURL):
-        self._schemaURL = schemaURL
-
-    def get_namespace(self):
+    @property
+    def namespace(self):
         return self._namespace
 
-    def set_namespace(self, namespace):
-        self._namespace = namespace
+    @namespace.setter
+    def namespace(self, value):
+        self._namespace = value
 
-    def get_dimensionAtObservation(self):
-        return self._dimensionAtObservation
+    @property
+    def dimensionAtObservation(self):
+        return self._dimension_at_observation
 
-    def set_dimensionAtObservation(self, dimensionAtObservation):
-        self._dimensionAtObservation = dimensionAtObservation
+    @dimensionAtObservation.setter
+    def dimensionAtObservation(self, value):
+        self._dimension_at_observation = value
 
-    def get_explicitMeasures(self):
+    @property
+    def explicitMeasures(self):
         return self._explicitMeasures
 
-    def set_explicitMeasures(self, explicitMeasures):
-        self._explicitMeasures = explicitMeasures
+    @explicitMeasures.setter
+    def explicitMeasures(self, value):
+        self._explicitMeasures = value
 
-    def get_serviceURL(self):
+    @property
+    def schemaURL(self):
+        return self._schemaURL
+
+    @schemaURL.setter
+    def schemaURL(self, value):
+        self._schemaURL = value
+
+    @property
+    def serviceURL(self):
         return self._serviceURL
 
-    def set_serviceURL(self, serviceURL):
-        self._serviceURL = serviceURL
+    @serviceURL.setter
+    def serviceURL(self, value):
+        self._serviceURL = value
 
-    def get_structureURL(self):
+    @property
+    def structureURL(self):
         return self._structureURL
 
-    def set_structureURL(self, structureURL):
-        self._structureURL = structureURL
+    @structureURL.setter
+    def structureURL(self, value):
+        self._structureURL = value
 
     def validate_ObservationDimensionType(self, value):
         # Validate dim_type ObservationDimensionType, a restriction on None.
@@ -132,89 +151,13 @@ class PayloadStructureType(DataParser):
 
     def has_content_(self):
         if (
-                self._provisionAgrement is not None or
+                self._provisionAgreement is not None or
                 self._structureUsage is not None or
                 self._structure is not None
         ):
             return True
         else:
             return False
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='PayloadStructureType'):
-        if self._structureID is not None and 'structureID' not in already_processed:
-            already_processed.add('structureID')
-            outfile.write(' structureID=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._structureID), input_name='structureID')),))
-
-        if self._schemaURL is not None and 'schemaURL' not in already_processed:
-            already_processed.add('schemaURL')
-            outfile.write(' schemaURL=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._schemaURL), input_name='schemaURL')),))
-
-        if self._namespace is not None and 'namespace' not in already_processed:
-            already_processed.add('namespace')
-            outfile.write(' namespace=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._namespace), input_name='namespace')),))
-
-        if self._dimensionAtObservation is not None and 'dimensionAtObservation' not in already_processed:
-            already_processed.add('dimensionAtObservation')
-            outfile.write(' dimensionAtObservation=%s' % (quote_attrib(self._dimensionAtObservation),))
-
-        if self._explicitMeasures is not None and 'explicitMeasures' not in already_processed:
-            already_processed.add('explicitMeasures')
-            outfile.write(' explicitMeasures="%s"' % self.gds_format_boolean(self._explicitMeasures,
-                                                                             input_name='explicitMeasures'))
-
-        if self._serviceURL is not None and 'serviceURL' not in already_processed:
-            already_processed.add('serviceURL')
-            outfile.write(' serviceURL=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._serviceURL), input_name='serviceURL')),))
-
-        if self._structureURL is not None and 'structureURL' not in already_processed:
-            already_processed.add('structureURL')
-            outfile.write(' structureURL=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._structureURL), input_name='structureURL')),))
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._structureID is not None and 'structureID' in valid_fields:
-            parent_dict.update({'structureID': self._structureID})
-
-        if self._schemaURL is not None and 'schemaURL' in valid_fields:
-            parent_dict.update({'schemaURL': self._schemaURL})
-
-        if self._namespace is not None and 'namespace' in valid_fields:
-            parent_dict.update({'namespace': self._namespace})
-
-        if self._dimensionAtObservation is not None and 'dimensionAtObservation' in valid_fields:
-            parent_dict.update({'dimensionAtObservation': self._dimensionAtObservation})
-
-        if self._explicitMeasures is not None and 'explicitMeasures' in valid_fields:
-            parent_dict.update({'explicitMeasures': self._explicitMeasures})
-
-        if self._serviceURL is not None and 'serviceURL' in valid_fields:
-            parent_dict.update({'serviceURL': self._serviceURL})
-
-        if self._structureURL is not None and 'structureURL' in valid_fields:
-            parent_dict.update({'structureURL': self._structureURL})
-
-        if self._provisionAgrement is not None:
-            self._provisionAgrement.export_attributes_as_dict(parent_dict, )
-
-        if self._structureUsage is not None:
-            self._structureUsage.export_attributes_as_dict(parent_dict, )
-
-        if self._structure is not None:
-            self._structure.export_attributes_as_dict(parent_dict, )
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if self._provisionAgrement is not None:
-            self._provisionAgrement.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        if self._structureUsage is not None:
-            self._structureUsage.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        if self._structure is not None:
-            self._structure.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('structureID', node)
@@ -239,9 +182,9 @@ class PayloadStructureType(DataParser):
 
         if value is not None and 'dimensionAtObservation' not in already_processed:
             already_processed.add('dimensionAtObservation')
-            self._dimensionAtObservation = value
+            self._dimension_at_observation = value
             self.validate_ObservationDimensionType(
-                self._dimensionAtObservation)  # validate dim_type ObservationDimensionType
+                self._dimension_at_observation)  # validate dim_type ObservationDimensionType
 
         value = find_attr_value_('explicitMeasures', node)
 
@@ -267,11 +210,11 @@ class PayloadStructureType(DataParser):
             self._structureURL = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        if nodeName_ == 'ProvisionAgrement':
+        if nodeName_ == 'ProvisionAgreement':
             obj_ = ProvisionAgreementReferenceType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._provisionAgrement = obj_
-            obj_.original_tag_name_ = 'ProvisionAgrement'
+            self._provisionAgreement = obj_
+            obj_.original_tag_name_ = 'ProvisionAgreement'
 
         elif nodeName_ == 'StructureUsage':
             obj_ = DataflowReferenceType.factory(parent_object_=self)
@@ -282,8 +225,7 @@ class PayloadStructureType(DataParser):
         elif nodeName_ == 'Structure':
             obj_ = DataStructureReferenceType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._structure = obj_
-            obj_.original_tag_name_ = 'Structure'
+            self._structure = obj_.ref
 
 
 # end class PayloadStructureType
@@ -296,21 +238,18 @@ class DataStructureType(PayloadStructureType):
     superclass = PayloadStructureType
 
     def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
-                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgrement=None, StructureUsage=None,
-                 Structure=None, gds_collector_=None, **kwargs_):
+                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
+                 StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
         super(DataStructureType, self).__init__(structureID, schemaURL, namespace, dimensionAtObservation,
-                                                explicitMeasures, serviceURL, structureURL, ProvisionAgrement,
+                                                explicitMeasures, serviceURL, structureURL, ProvisionAgreement,
                                                 StructureUsage, Structure, **kwargs_)
         self._name = 'DataStructureType'
+        self._gds_collector = gds_collector_
 
     def factory(*args_, **kwargs_):
         return DataStructureType(*args_, **kwargs_)
 
     factory = staticmethod(factory)
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='DataStructureType'):
-        super(DataStructureType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
-                                                         name_='DataStructureType')
 
 
 # end class DataStructureType
@@ -325,25 +264,28 @@ class GenericDataStructureType(DataStructureType):
     superclass = DataStructureType
 
     def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
-                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgrement=None, StructureUsage=None,
-                 Structure=None, gds_collector_=None, **kwargs_):
+                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
+                 StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
         super(GenericDataStructureType, self).__init__(structureID, schemaURL, namespace, dimensionAtObservation,
-                                                       explicitMeasures, serviceURL, structureURL, ProvisionAgrement,
+                                                       explicitMeasures, serviceURL, structureURL, ProvisionAgreement,
                                                        StructureUsage, Structure, **kwargs_)
+        self._gds_collector = gds_collector_
         self._name = 'GenericDataStructureType'
         self._namespace_prefix = 'message'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return GenericDataStructureType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def structureID(self):
+        return self._structureID
+
+    @structureID.setter
+    def structureID(self, value):
+        self.structureID = value
 
     def validate_ObservationDimensionType(self, value):
         # Validate dim_type ObservationDimensionType, a restriction on None.
         pass
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='',
-                          name_='GenericDataStructureType'):
-        super(GenericDataStructureType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
-                                                                name_='GenericDataStructureType')
 # end class GenericDataStructureType

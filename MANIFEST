@@ -24,11 +24,8 @@ SDMXThon\model\itemScheme.py
 SDMXThon\model\structure.py
 SDMXThon\model\timePeriods.py
 SDMXThon\model\utils.py
-SDMXThon\query\__init__.py
-SDMXThon\registry\__init__.py
 SDMXThon\structure\__init__.py
 SDMXThon\structure\specificbase.py
-SDMXThon\test\__init__.py
 SDMXThon\utils\__init__.py
 SDMXThon\utils\data_parser.py
 SDMXThon\utils\dataset_parsing.py

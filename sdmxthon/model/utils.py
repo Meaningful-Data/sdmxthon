@@ -1,5 +1,4 @@
 import re
-import warnings
 from datetime import datetime
 from typing import List
 
@@ -19,7 +18,7 @@ def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
     return dt
 
 
-def getDateString(date: str, format_: str = "%Y-%m-%d"):
+def getDateString(date: datetime, format_: str = "%Y-%m-%d"):
     if date is None:
         return ""
     else:
@@ -94,16 +93,6 @@ def genericSetter(value, clss):
         raise TypeError(f"The value has to be an instance of the {clss.__name__} class. {type(value)} passed")
 
 
-def addToMessage(value, requiredClass, container):
-    if isinstance(value, requiredClass):
-        if value.urn in container:
-            warnings.warn(f"The {requiredClass.__name__} {value.urn} already exists in the message")
-        else:
-            container[value.urn] = value
-    else:
-        raise ValueError(f"Object of {requiredClass.__name__} Class required. {type(value)} received")
-
-
 def intSetter(value: int):
     if isinstance(value, int) or value is None:
         return value
@@ -111,7 +100,7 @@ def intSetter(value: int):
         try:
             return int(value)
         except:
-            raise ValueError("Type shoudl be int")
+            raise ValueError("Type should be int")
 
 
 #
@@ -134,66 +123,3 @@ NS = {
 def qName(ns, name):
     """Return a fully-qualified tag *name* in namespace *ns*."""
     return etree.QName(NS[ns], name)
-
-
-#
-# Bool mapper
-#
-
-boolMapper = {
-    "true": True,
-    "false": False,
-    None: None
-}
-
-
-#
-# Get international strings
-#
-
-def getNameAndDescription(elem: etree.Element):
-    from .base import InternationalString
-
-    # 1. Get Names
-    nameElems = elem.findall(qName("com", "Name"))
-    name = InternationalString.fromXml(nameElems)
-
-    # 2. Get descriptions
-    descriptionElems = elem.findall(qName("com", "Description"))
-    description = InternationalString.fromXml(descriptionElems)
-
-    return name, description
-
-
-#
-# Get references
-#
-
-def getReferences(elem):
-    if elem is None:
-        return None
-    else:
-        ref = elem.find("Ref")
-        if ref is None:
-            raise TypeError("The file contains a reference without Ref tag")
-
-        return {
-            "id_": ref.get("id"),
-            "version": ref.get("version"),
-            "agencyID": ref.get("agencyID"),
-            "maintainableParentId": ref.get("maintainableParentID"),
-            "package": ref.get("package"),
-            "maintainableParentVersion": ref.get("maintainableParentVersion")
-        }
-
-
-def lxmlElementsEqual(e1, e2):
-    """
-        Checks if two lxml Elements are equal, in the sense that they have the same tag, attributes...
-    """
-    if e1.tag != e2.tag: return False
-    if e1.text != e2.text: return False
-    if e1.tail != e2.tail: return False
-    if e1.attrib != e2.attrib: return False
-    if len(e1) != len(e2): return False
-    return all(lxmlElementsEqual(c1, c2) for c1, c2 in zip(e1, e2))

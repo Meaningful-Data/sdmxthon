@@ -287,10 +287,9 @@ def strSerWriting(dataset, prettyprint=True, count=1):
     else:
         child1 = child2 = child3 = child5 = nl = ''
 
-    marca_series_inicio = '//SeriesStart'
-    marca_series_final = 'Mark//'
+    mark_series = '//SeriesMark//'
 
-    dimObs = dataset.dimAtObs
+    dim_obs = dataset.dimAtObs
 
     attached_attributes_str = ''
     for k, v in dataset.attachedAttributes.items():
@@ -304,12 +303,12 @@ def strSerWriting(dataset, prettyprint=True, count=1):
                f'action="Replace">{nl}'
 
     series_codes = []
-    obs_codes = [dimObs, dataset.structure.measureCode]
+    obs_codes = [dim_obs, dataset.structure.measureCode]
     for e in dataset.structure.attributeDescriptor.components.values():
         if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
             obs_codes.append(e.id)
     for e in dataset.data.keys():
-        if (e in dataset.structure.dimensionCodes and e != dimObs) or (
+        if (e in dataset.structure.dimensionCodes and e != dim_obs) or (
                 e in dataset.structure.attributeCodes and e not in obs_codes):
             series_codes.append(e)
     df = dataset.data.sort_values(series_codes, axis=0).astype('str')
@@ -335,7 +334,7 @@ def strSerWriting(dataset, prettyprint=True, count=1):
     df1_obs.insert(len(df1_obs.keys()), 'end', '/>')
 
     del df
-    df1_obs.iloc[df_series.index, 0] = f'{marca_series_inicio + marca_series_final}' + df1_obs.iloc[df_series.index, 0]
+    df1_obs.iloc[df_series.index, 0] = f'{mark_series}' + df1_obs.iloc[df_series.index, 0]
 
     series_str = ''
     temp_str = ''
@@ -352,10 +351,12 @@ def strSerWriting(dataset, prettyprint=True, count=1):
     temp_str = temp_str.replace('="nan"', '=""')
     temp_str = f'{nl}'.join(temp_str.splitlines())
 
+    obs_codes.remove(dataset.structure.measureCode)
+
     for e in obs_codes:
         temp_str = temp_str.replace(f'{e}="" ', '')
 
-    list_obs = temp_str.split(marca_series_inicio + marca_series_final)
+    list_obs = temp_str.split(mark_series)
     list_obs = list_obs[1:]
 
     end_series = f'{nl}{child2}</Series>{nl}'

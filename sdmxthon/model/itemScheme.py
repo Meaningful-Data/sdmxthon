@@ -2,7 +2,10 @@ import warnings
 from datetime import datetime
 
 from .base import NameableArtefact, MaintainableArtefact, InternationalString
+from .structure import Representation
 from .utils import boolSetter, qName, stringSetter, genericSetter
+from ..utils.data_parser import DataParser
+from ..utils.xml_base import find_attr_value_
 
 
 class Item(NameableArtefact):
@@ -22,10 +25,6 @@ class Item(NameableArtefact):
                                    name=name, description=description)
         self.isPartial = isPartial
 
-        if scheme is not None:
-            self._unique_scheme = True
-        else:
-            self._unique_scheme = False
         self.scheme = scheme
 
         self.parent = parent
@@ -74,13 +73,8 @@ class Item(NameableArtefact):
         if value is None:
             self._scheme = value
         elif value.__class__.__name__ == self._schemeType:
-            if not self._unique_scheme:
-                self._scheme = value
-                value.append(self)
-                self._unique_scheme = True
-            else:
-                del self.scheme.items[self.id]
-                self._scheme = None
+            value.append(self)
+            self._scheme = value
         else:
             raise TypeError(f"The scheme object has to be of the type {self._schemeType}")
 
@@ -101,15 +95,6 @@ class Item(NameableArtefact):
                 value.parent = self
         else:
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
-
-    @property
-    def urn(self):
-        try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.{self._urnType}.{self.__class__.__name__}=" \
-                  f"{self.scheme.maintainer.id}:{self.scheme.id}({self.scheme.version}).{self.id}"
-        except:
-            urn = ""
-        return urn
 
 
 class ItemScheme(MaintainableArtefact):
@@ -166,7 +151,7 @@ class ItemScheme(MaintainableArtefact):
     def append(self, value):
         if isinstance(value, globals()[self._itemType]):
             if value.id is None:
-                warnings.warn("Item not added because it did not have id")
+                warnings.warn("Item not added because it did not have id_")
             if value.id not in self._items:
                 self._items[value.id] = value
                 value.scheme = self
@@ -174,8 +159,8 @@ class ItemScheme(MaintainableArtefact):
             raise TypeError(f"The object has to be of the type {self._itemType}")
 
 
-class Code(Item):
-    _schemeType = "CodeList"
+class Code(Item, DataParser):
+    _schemeType = "Codelist"
     _urnType = "codelist"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Code"
 
@@ -200,9 +185,28 @@ class Code(Item):
         else:
             return False
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Code(*args_, **kwargs_)
 
-class Agency(Item):
-    _schemeType = "AgencyList"
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+    def build_children(self, child_, node, nodeName_, gds_collector_=None):
+        pass
+        # TODO Parse Name and Description
+
+
+class Agency(Item, DataParser):
+    _schemeType = "AgencyScheme"
     _urnType = "base"
     _qName = qName("str", "Agency")
 
@@ -225,19 +229,27 @@ class Agency(Item):
         else:
             return False
 
-    @property
-    def urn(self):  # TOBECHECKED: What is the logic behind?
-        try:
-            if self.scheme.maintainer.id == "SDMX":
-                urn = f"urn:sdmx:org.sdmx.infomodel.base.Agency={self.id}"
-            else:
-                urn = f"urn:sdmx:org.sdmx.infomodel.base.Agency={self.scheme.maintainer.id}.{self.id}"
-        except:
-            urn = ""
-        return urn
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Agency(*args_, **kwargs_)
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        # TODO Parse Name and Description and Contact
+        pass
 
 
-class ConceptScheme(ItemScheme):
+class ConceptScheme(ItemScheme, DataParser):
     _itemType = "Concept"
     _urnType = "conceptscheme"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptScheme"
@@ -252,6 +264,7 @@ class ConceptScheme(ItemScheme):
             items = []
         if annotations is None:
             annotations = []
+        self._cl_references = {}
         super(ConceptScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                             name=name, description=description,
                                             version=version, validFrom=validFrom, validTo=validTo,
@@ -283,8 +296,61 @@ class ConceptScheme(ItemScheme):
         else:
             return False
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return ConceptScheme(*args_, **kwargs_)
 
-class CodeList(ItemScheme):
+    @property
+    def cl_references(self):
+        return self._cl_references
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+        value = find_attr_value_('agencyID', node)
+        if value is not None and 'agencyID' not in already_processed:
+            already_processed.add('agencyID')
+            self.maintainer = Agency(id_=value)
+
+        value = find_attr_value_('isExternalReference', node)
+        if value is not None and 'isExternalReference' not in already_processed:
+            already_processed.add('isExternalReference')
+            value = self.gds_parse_boolean(value)
+            self.isExternalReference = value
+
+        value = find_attr_value_('isFinal', node)
+        if value is not None and 'isFinal' not in already_processed:
+            already_processed.add('isFinal')
+            value = self.gds_parse_boolean(value)
+            self.isFinal = value
+
+        value = find_attr_value_('version', node)
+        if value is not None and 'version' not in already_processed:
+            already_processed.add('version')
+            # TODO Validate version
+            self.version = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+
+        if nodeName_ == 'Concept':
+            obj_ = Concept.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if obj_.coreRepresentation is not None and obj_.coreRepresentation.codelist is not None:
+                self._cl_references[obj_.id] = obj_.coreRepresentation.codelist
+            self.append(obj_)
+
+        # TODO Parse Name and Description
+
+
+class Codelist(ItemScheme, DataParser):
     _itemType = "Code"
     _urnType = "codelist"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Codelist"
@@ -299,7 +365,7 @@ class CodeList(ItemScheme):
             items = []
         if annotations is None:
             annotations = []
-        super(CodeList, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Codelist, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                        name=name, description=description,
                                        version=version, validFrom=validFrom, validTo=validTo,
                                        isFinal=isFinal, isExternalReference=isExternalReference,
@@ -308,26 +374,73 @@ class CodeList(ItemScheme):
         self._checked = False
 
     def __eq__(self, other):
-        if isinstance(other, CodeList):
+        if isinstance(other, Codelist):
             if not self._checked:
                 self._checked = True
-                return (self._id == other._id and
+                return (self.id == other.id and
                         self.uri == other.uri and
                         self.name == other.name and
-                        self._description == other._description and
-                        self._version == other._version and
-                        self._validFrom == other._validFrom and
-                        self._validTo == other._validTo and
-                        self._isFinal == other._isFinal and
-                        self._isExternalReference == other._isExternalReference and
-                        self._serviceUrl == other._serviceUrl and
-                        self._structureUrl == other._structureUrl and
-                        self._maintainer == other._maintainer and
-                        self._items == other._items)
+                        self.description == other.description and
+                        self.version == other.version and
+                        self.validFrom == other.validFrom and
+                        self.validTo == other.validTo and
+                        self.isFinal == other.isFinal and
+                        self.isExternalReference == other.isExternalReference and
+                        self.serviceUrl == other._serviceUrl and
+                        self.structureUrl == other.structureUrl and
+                        self.maintainer == other.maintainer and
+                        self.items == other._items)
             else:
                 return True
         else:
             return False
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Codelist(*args_, **kwargs_)
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+        value = find_attr_value_('agencyID', node)
+        if value is not None and 'agencyID' not in already_processed:
+            already_processed.add('agencyID')
+            self.maintainer = Agency(id_=value)
+
+        value = find_attr_value_('isExternalReference', node)
+        if value is not None and 'isExternalReference' not in already_processed:
+            already_processed.add('isExternalReference')
+            value = self.gds_parse_boolean(value)
+            self.isExternalReference = value
+
+        value = find_attr_value_('isFinal', node)
+        if value is not None and 'isFinal' not in already_processed:
+            already_processed.add('isFinal')
+            value = self.gds_parse_boolean(value)
+            self.isFinal = value
+
+        value = find_attr_value_('version', node)
+        if value is not None and 'version' not in already_processed:
+            already_processed.add('version')
+            # TODO Validate version
+            self.version = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+
+        if nodeName_ == 'Code':
+            obj_ = Code.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.append(obj_)
+
+        # TODO Parse Name and Description
 
 
 class OrganisationScheme(ItemScheme):
@@ -370,7 +483,7 @@ class OrganisationScheme(ItemScheme):
             return False
 
 
-class AgencyList(OrganisationScheme):
+class AgencyScheme(OrganisationScheme, DataParser):
     _itemType = "Agency"
     _urnType = "base"
     _qName = qName("str", "AgencyScheme")
@@ -385,15 +498,15 @@ class AgencyList(OrganisationScheme):
             items = []
         if annotations is None:
             annotations = []
-        super(AgencyList, self).__init__(id_=id_, uri=uri, annotations=annotations,
-                                         name=name, description=description,
-                                         version=version, validFrom=validFrom, validTo=validTo,
-                                         isFinal=isFinal, isExternalReference=isExternalReference,
-                                         serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
-                                         items=items)
+        super(AgencyScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+                                           name=name, description=description,
+                                           version=version, validFrom=validFrom, validTo=validTo,
+                                           isFinal=isFinal, isExternalReference=isExternalReference,
+                                           serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
+                                           items=items)
 
     def __eq__(self, other):
-        if isinstance(other, AgencyList):
+        if isinstance(other, AgencyScheme):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self.name == other.name and
@@ -418,8 +531,55 @@ class AgencyList(OrganisationScheme):
     def id(self, value):
         self._id = stringSetter(value, '[A-Za-z][A-Za-z0-9_\\-]*(\\.[A-Za-z][A-Za-z0-9_\\-]*)*')
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return AgencyScheme(*args_, **kwargs_)
 
-class Concept(Item):
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+        value = find_attr_value_('agencyID', node)
+        if value is not None and 'agencyID' not in already_processed:
+            already_processed.add('agencyID')
+            self.maintainer = Agency(id_=value)
+
+        value = find_attr_value_('isExternalReference', node)
+        if value is not None and 'isExternalReference' not in already_processed:
+            already_processed.add('isExternalReference')
+            value = self.gds_parse_boolean(value)
+            self.isExternalReference = value
+
+        value = find_attr_value_('isFinal', node)
+        if value is not None and 'isFinal' not in already_processed:
+            already_processed.add('isFinal')
+            value = self.gds_parse_boolean(value)
+            self.isFinal = value
+
+        value = find_attr_value_('version', node)
+        if value is not None and 'version' not in already_processed:
+            already_processed.add('version')
+            # TODO Validate version
+            self.version = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+
+        if nodeName_ == 'Agency':
+            obj_ = Agency.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.append(obj_)
+
+        # TODO Parse Name and Description
+
+
+class Concept(Item, DataParser):
     _schemeType = "ConceptScheme"
     _urnType = "conceptscheme"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concept"
@@ -458,3 +618,27 @@ class Concept(Item):
     def coreRepresentation(self, value):
         from .structure import Representation
         self._coreRepresentation = genericSetter(value, Representation)
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Concept(*args_, **kwargs_)
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+    def build_children(self, child_, node, nodeName_, gds_collector_=None):
+        if nodeName_ == 'CoreRepresentation':
+            obj_ = Representation.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.coreRepresentation = obj_
+
+        pass
+        # TODO Parse Name and Description

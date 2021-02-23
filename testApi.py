@@ -1,7 +1,7 @@
 import logging
-import sqlite3
 
-from SDMXThon import getMetadata
+from SDMXThon import readSDMX
+from SDMXThon.model.itemScheme import Agency
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -20,27 +20,18 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 pathDSDS = 'SDMXThon/outputTests/metadata/dsds.pickle'
-pathTestGEN = 'SDMXThon/outputTests/test_GEN.xml'
-pathTestGENSer = 'SDMXThon/outputTests/test_GEN_ser.xml'
-pathTestXS = 'SDMXThon/outputTests/test_XS.xml'
-pathTestXSSer = 'SDMXThon/outputTests/test_XS_ser.xml'
-pathToDataFile = 'SDMXThon/outputTests/BIS_DER_test.xml'
-pathSaveToGeneric = 'SDMXThon/outputTests/outputGen.xml'
-pathSaveToStructure = 'SDMXThon/outputTests/outputSpe.xml'
-pathSaveToTimeGen = 'SDMXThon/outputTests/outputTimeGen.xml'
-pathSaveToTimeXS = 'SDMXThon/outputTests/outputTimeXS.xml'
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202101141401030.xml'
-# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/invalid_DSD.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
 pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
-pathToData = 'SDMXThon/outputTests/BIS_DER_test.xml'
-pathTest = 'SDMXThon/outputTests/RBI_test.xml'
-patternTest = 'SDMXThon/outputTests/pattern_test.xml'
+pathToDataSpe = 'SDMXThon/examples/Structure/outputSpe.xml'
+pathToDataGen = 'SDMXThon/examples/Generic/outputGen.xml'
+pathToDataGenSer = 'SDMXThon/examples/Generic/genSeries.xml'
 pathToCSVData = 'SDMXThon/outputTests/BIS_data.csv'
 pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
@@ -56,7 +47,37 @@ def pretty(d, indent=0):
             print('\t' * (indent + 1) + str(value))
 
 
+def parse_agencies(xml_element, agency_scheme):
+    expression = "./str:Agency"
+    agencies = xml_element.xpath(expression,
+                                 namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
+
+    if agencies is not None:
+        for e in agencies:
+            a = Agency(id_=e.attrib['id_'], uri=e.attrib['urn'], scheme=agency_scheme)
+
+            expression = "./com:Name/text()"
+            name = e.xpath(expression,
+                           namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+            if len(name) > 0:
+                a.name = str(name[0])
+
+            expression = "./com:Description/text()"
+            desc = e.xpath(expression,
+                           namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+            if len(desc) > 0:
+                a.description = str(desc[0])
+
+
 def main():
+    logger.debug('Start')
+    datasets = readSDMX(pathToMetadataFile, pathToMetadataFile)
+    logger.debug('Read')
+
+    for e in datasets.payload.keys():
+        datasets.payload[e].semanticValidation()
+    logger.debug('Validate')
+
     """
     root = etree.parse(pathToMetadataFile)
 
@@ -70,29 +91,31 @@ def main():
         schemes = []
 
         for a in result:
-            maintainer_scheme = Agency(id_=a.attrib['agencyID'])
-            agency_scheme = AgencyList(id_=a.attrib['id'], version=a.attrib['version'], maintainer=maintainer_scheme)
+            agency_scheme = AgencyList(id_=a.attrib['id_'], version=a.attrib['version'],
+                                       maintainer=Agency(id_=a.attrib['agencyID']))
 
             expression = "./com:Name/text()"
             name = a.xpath(expression,
-                                 namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+                           namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
+            if len(name) > 0:
+                agency_scheme.name = str(name[0])
 
+            parse_agencies(a, agency_scheme)
+
+            schemes.append(agency_scheme)
+
+        print(schemes)
 
     else:
         return None
-
-    expression = "./com:Name/text()"
-    name = element.xpath(expression,
-                         namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
-    if len(name) > 0:
-        cl.name = name[0]
     """
-
     """
     dsds, errors = getMetadata(pathToMetadataFile)
-    print(errors)
-    """
 
+    with open('test_metadata.json', 'w') as f:
+        f.write(json.dumps(dsds))
+    """
+    """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
     df = pd.read_sql('SELECT * from BIS_DER LIMIT 1000', conn)
@@ -104,11 +127,11 @@ def main():
     dsd: DataStructureDefinition = dsds["BIS:BIS_DER(1.0)"]
 
     dataset = DataSet(data=df, structure=dsd)
-    logger.debug('Start validation')
-    print(dataset.semanticValidation())
-
-    logger.debug('End validation')
-
+    dataset.setDimensionAtObservation('TIME_PERIOD')
+    logger.debug('Start writing')
+    dataset.toXML(DatasetType.StructureDataSet, 'test_series.xml')
+    logger.debug('End writing')
+    """
     """
     logger.debug('Start reading')
     conn = sqlite3.connect(pathToDB)
@@ -142,8 +165,8 @@ def main():
     series_att_codes = []
     obs_att_codes = []
     for e in dataset.structure.attributeDescriptor.components.values():
-        if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
-            obs_att_codes.append(e.id)
+        if e.id_ in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
+            obs_att_codes.append(e.id_)
     for e in dataset.data.keys():
         if e in dataset.structure.dimensionCodes and e != dimObs:
             series_key_codes.append(e)
@@ -158,7 +181,7 @@ def main():
 
     df = df.sort_values(series_key_codes + series_att_codes, axis=0).astype('str')
     df_series: pd.DataFrame = df[series_key_codes + series_att_codes].drop_duplicates()
-    df_id = f'{child4}<generic:Value id="' + pd.DataFrame(
+    df_id = f'{child4}<generic:Value id_="' + pd.DataFrame(
         np.tile(np.array(df_series.columns), len(df_series.index)).reshape(len(dataset.data.index), -1),
         index=dataset.data.index,
         columns=dataset.data.columns, dtype='str') + '" value="'
@@ -211,7 +234,7 @@ def main():
 
     for e in dataset.structure.attributeCodes:
         if e in df_id.keys() and e not in man_att:
-            obs_str = obs_str.replace(f'{child4}<generic:Value id="{e}" value=""/>{nl}', '')
+            obs_str = obs_str.replace(f'{child4}<generic:Value id_="{e}" value=""/>{nl}', '')
 
     obs_str = f'{nl}'.join(obs_str.splitlines())
 

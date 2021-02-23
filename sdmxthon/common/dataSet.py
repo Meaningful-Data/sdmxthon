@@ -19,6 +19,8 @@ class DataSet:
 
         self._structure = structure
 
+        self._dataset_attributes = {}
+
         if dataset_attributes is None:
             self.check_DA_keys({}, structure.id)
         else:
@@ -111,12 +113,9 @@ class DataSet:
         return self.data.to_csv(pathToCSV, sep=',', encoding='utf-8', index=False, header=True)
 
     def toJSON(self, pathToJSON: str = None):
-        element = {}
-
-        element['structureRef'] = {"code": self.structure.id, "version": self.structure.version,
-                                   "agencyID": self.structure.agencyID}
-        element['dataset_attributes'] = self.datasetAttributes
-        element['attached_attributes'] = self.attachedAttributes
+        element = {'structureRef': {"code": self.structure.id, "version": self.structure.version,
+                                    "agencyID": self.structure.agencyID}, 'dataset_attributes': self.datasetAttributes,
+                   'attached_attributes': self.attachedAttributes}
 
         result = self.data.to_json(orient="records")
         element['data'] = json.loads(result).copy()
@@ -164,7 +163,7 @@ class DataSet:
                 else:
                     attributes[k] = None
 
-        self.datasetAttributes = attributes.copy()
+        self._dataset_attributes = attributes.copy()
 
     def toXML(self, dataset_type: DatasetType = DatasetType.GenericDataSet, outputPath='', id_='test',
               test='true',

@@ -14,13 +14,13 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
     if dsd.dimensionDescriptor.components is not None:
 
         for element in dsd.dimensionDescriptor.components.values():
-            if element.localRepresentation.codeList is not None:
-                data[element.id] = list(element.localRepresentation.codeList.items.keys())
+            if element.local_representation.codelist is not None:
+                data[element.id] = list(element.local_representation.codelist.items.keys())
 
     if dsd.attributeDescriptor is not None and dsd.attributeDescriptor.components is not None:
         for record in dsd.attributeDescriptor.components.values():
-            if record.localRepresentation.codeList is not None:
-                data[record.id] = list(record.localRepresentation.codeList.items.keys())
+            if record.local_representation.codelist is not None:
+                data[record.id] = list(record.local_representation.codelist.items.keys())
 
     return data
 
@@ -150,7 +150,7 @@ def check_num_facets(facets, data_column, key, type_):
 
 
 def check_str_facets(facets, data_column, key, type_):
-    data_column = data_column[np.isin(data_column, ['nan', 'None'], invert=True)]
+    data_column = data_column[np.isin(data_column, ['nan', 'None'], invert=True)].astype('str')
 
     error_level = 'WARNING'
     errors = []
@@ -213,7 +213,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     mc = dsd.measureCode
     type_ = 'Measure'
 
-    if mc not in data.keys():
+    if mc not in data.keys() or data[mc].isnull().values.all():
         errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}', 'Rows': None,
                        'Message': f'Missing {mc}'})
     elif data[mc].isnull().values.any():
@@ -230,14 +230,14 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
 
-    if mc in faceted_objects:
-        facets = dsd.measureDescriptor.components[mc].localRepresentation.facets
-        if pandas.api.types.is_numeric_dtype(data[mc]):
-            data_column = data[mc].unique().astype('float64')
-            errors += check_num_facets(facets, data_column, mc, type_)
-        else:
-            data_column = data[mc].unique().astype('str')
-            errors += check_str_facets(facets, data_column, mc, type_)
+        if mc in faceted_objects:
+            facets = dsd.measureDescriptor.components[mc].local_representation.facets
+            if pandas.api.types.is_numeric_dtype(data[mc]):
+                data_column = data[mc].unique().astype('float64')
+                errors += check_num_facets(facets, data_column, mc, type_)
+            else:
+                data_column = data[mc].unique().astype('str')
+                errors += check_str_facets(facets, data_column, mc, type_)
 
     grouping_keys = []
 
@@ -250,18 +250,15 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     man_codes = dsd.dimensionCodes + mandatory
 
     for k in all_codes:
-        if k not in data.keys():
+        if k not in data.keys() or data[k].isnull().values.all():
             if k in mandatory:
                 errors.append(
                     {'Code': 'SS03', 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'Attribute', 'Rows': None,
                      'Message': f'Missing {k}'})
-            else:
+            elif k in dsd.dimensionCodes:
                 errors.append(
                     {'Code': 'SS01', 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'Dimension', 'Rows': None,
                      'Message': f'Missing {k}'})
-            continue
-
-        if data[k].isnull().values.all():
             continue
 
         is_numeric = False
@@ -289,16 +286,16 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 if 'nan' in data_column:
                     control = True
             if control:
-                pos = data[data[k].isnull()].index.tolist()
+                pos = data[(data[k] == 'nan') | (data[k].isnull())].index.values
                 rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
                 errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
 
         if k in faceted_objects:
             if k in dsd.dimensionCodes:
-                facets = dsd.dimensionDescriptor.components[k].localRepresentation.facets
+                facets = dsd.dimensionDescriptor.components[k].local_representation.facets
             else:
-                facets = dsd.attributeDescriptor.components[k].localRepresentation.facets
+                facets = dsd.attributeDescriptor.components[k].local_representation.facets
             if is_numeric:
                 errors += check_num_facets(facets, data_column, k, type_)
             else:

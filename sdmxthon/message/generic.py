@@ -1,16 +1,17 @@
 from .footer import FooterType
 from ..common.annotations import TextType
 from ..common.generic import GenericDataStructureType
-from ..common.references import DataProviderReferenceType, DataStructureReferenceType
+from ..common.references import DataProviderReferenceType
 from ..data.generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
+from ..model.itemScheme import Codelist, AgencyScheme, ConceptScheme
+from ..model.structure import DataStructureDefinition
 from ..structure.specificbase import DataSetType as StructureDataSet, \
     TimeSeriesDataSetType as StructureTimeSeriesDataSet
 
-from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
+from ..utils.data_parser import DataParser, Validate_simpletypes_
 from ..utils.generateds import datetime_
-from ..utils.mappings import ClassToPrefix
-from ..utils.xml_base import BaseStrType_, encode_str_2_3, showIndent, quote_xml, find_attr_value_, _cast, \
-    quote_attrib, GdsCollector_
+from ..utils.xml_base import BaseStrType_, encode_str_2_3, find_attr_value_, cast, \
+    GdsCollector
 
 
 class ContactType(DataParser):
@@ -21,7 +22,7 @@ class ContactType(DataParser):
 
     def __init__(self, Name=None, Department=None, Role=None, Telephone=None, Fax=None, X400=None, URI=None, Email=None,
                  gds_collector_=None, **kwargs_):
-        super(ContactType, self).__init__(gds_collector_, kwargs_)
+        super(ContactType, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
@@ -85,16 +86,22 @@ class ContactType(DataParser):
         self._namespaceprefix = 'message'
         self._name = 'ContactType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return ContactType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_Name(self):
+    @property
+    def name(self):
         return self._Name
 
-    def set_Name(self, Name):
-        self._Name = Name
+    @name.setter
+    def name(self, value):
+        if value is None:
+            self._Name = []
+        elif isinstance(value, list):
+            self._Name = value
+        else:
+            raise TypeError('Name must be a list')
 
     def add_Name(self, value):
         self._Name.append(value)
@@ -105,11 +112,18 @@ class ContactType(DataParser):
     def replace_Name_at(self, index, value):
         self._Name[index] = value
 
-    def get_Department(self):
+    @property
+    def department(self):
         return self._department
 
-    def set_Department(self, Department):
-        self._department = Department
+    @department.setter
+    def department(self, value):
+        if value is None:
+            self._department = []
+        elif isinstance(value, list):
+            self._department = value
+        else:
+            raise TypeError('Department must be a list')
 
     def add_Department(self, value):
         self._department.append(value)
@@ -120,11 +134,18 @@ class ContactType(DataParser):
     def replace_Department_at(self, index, value):
         self._department[index] = value
 
-    def get_Role(self):
+    @property
+    def role(self):
         return self._role
 
-    def set_Role(self, Role):
-        self._role = Role
+    @role.setter
+    def role(self, value):
+        if value is None:
+            self._role = []
+        elif isinstance(value, list):
+            self._role = value
+        else:
+            raise TypeError('Role must be a list')
 
     def add_Role(self, value):
         self._role.append(value)
@@ -135,11 +156,18 @@ class ContactType(DataParser):
     def replace_Role_at(self, index, value):
         self._role[index] = value
 
-    def get_Telephone(self):
+    @property
+    def telephone(self):
         return self._telephone
 
-    def set_Telephone(self, Telephone):
-        self._telephone = Telephone
+    @telephone.setter
+    def telephone(self, value):
+        if value is None:
+            self._telephone = []
+        elif isinstance(value, list):
+            self._telephone = value
+        else:
+            raise TypeError('Telephone must be a list')
 
     def add_Telephone(self, value):
         self._telephone.append(value)
@@ -150,11 +178,18 @@ class ContactType(DataParser):
     def replace_Telephone_at(self, index, value):
         self._telephone[index] = value
 
-    def get_Fax(self):
+    @property
+    def fax(self):
         return self._fax
 
-    def set_Fax(self, Fax):
-        self._fax = Fax
+    @fax.setter
+    def fax(self, value):
+        if value is None:
+            self._fax = []
+        elif isinstance(value, list):
+            self._fax = value
+        else:
+            raise TypeError('Fax must be a list')
 
     def add_Fax(self, value):
         self._fax.append(value)
@@ -165,11 +200,18 @@ class ContactType(DataParser):
     def replace_Fax_at(self, index, value):
         self._fax[index] = value
 
-    def get_X400(self):
+    @property
+    def X400(self):
         return self._x400
 
-    def set_X400(self, X400):
-        self._x400 = X400
+    @X400.setter
+    def X400(self, value):
+        if value is None:
+            self._x400 = []
+        elif isinstance(value, list):
+            self._x400 = value
+        else:
+            raise TypeError('X400 must be a list')
 
     def add_X400(self, value):
         self._x400.append(value)
@@ -180,11 +222,18 @@ class ContactType(DataParser):
     def replace_X400_at(self, index, value):
         self._x400[index] = value
 
-    def get_URI(self):
+    @property
+    def URI(self):
         return self._uri
 
-    def set_URI(self, URI):
-        self._uri = URI
+    @URI.setter
+    def URI(self, value):
+        if value is None:
+            self._uri = []
+        elif isinstance(value, list):
+            self._uri = value
+        else:
+            raise TypeError('URI must be a list')
 
     def add_URI(self, value):
         self._uri.append(value)
@@ -195,11 +244,18 @@ class ContactType(DataParser):
     def replace_URI_at(self, index, value):
         self._uri[index] = value
 
-    def get_Email(self):
+    @property
+    def email(self):
         return self._email
 
-    def set_Email(self, Email):
-        self._email = Email
+    @email.setter
+    def email(self, value):
+        if value is None:
+            self._email = []
+        elif isinstance(value, list):
+            self._email = value
+        else:
+            raise TypeError('Email must be a list')
 
     def add_Email(self, value):
         self._email.append(value)
@@ -225,56 +281,6 @@ class ContactType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if pretty_print:
-            eol_ = '\n'
-        else:
-            eol_ = ''
-        for Name_ in self._Name:
-            Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Department_ in self._department:
-            Department_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Role_ in self._role:
-            Role_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Telephone_ in self._telephone:
-            namespaceprefix_ = self._telephone_nsprefix_ + ':' if (UseCapturedNS_ and self._telephone_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sTelephone>%s</%sTelephone>%s' % (
-                namespaceprefix_,
-                self.gds_encode(self.gds_format_string(quote_xml(Telephone_), input_name='Telephone')),
-                namespaceprefix_, eol_))
-
-        for Fax_ in self._fax:
-            namespaceprefix_ = self._fax_nsprefix_ + ':' if (UseCapturedNS_ and self._fax_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sFax>%s</%sFax>%s' % (
-                namespaceprefix_, self.gds_encode(self.gds_format_string(quote_xml(Fax_), input_name='Fax')),
-                namespaceprefix_, eol_))
-
-        for X400_ in self._x400:
-            namespaceprefix_ = self._x400_nsprefix_ + ':' if (UseCapturedNS_ and self._x400_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sX400>%s</%sX400>%s' % (
-                namespaceprefix_, self.gds_encode(self.gds_format_string(quote_xml(X400_), input_name='X400')),
-                namespaceprefix_, eol_))
-
-        for URI_ in self._uri:
-            namespaceprefix_ = self.URI_nsprefix_ + ':' if (UseCapturedNS_ and self.URI_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sURI>%s</%sURI>%s' % (
-                namespaceprefix_, self.gds_encode(self.gds_format_string(quote_xml(URI_), input_name='URI')),
-                namespaceprefix_, eol_))
-
-        for Email_ in self._email:
-            namespaceprefix_ = self._email_nsprefix_ + ':' if (UseCapturedNS_ and self._email_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sEmail>%s</%sEmail>%s' % (
-                namespaceprefix_, self.gds_encode(self.gds_format_string(quote_xml(Email_), input_name='Email')),
-                namespaceprefix_, eol_))
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Name':
             class_obj_ = self.get_class_obj_(child_, TextType)
@@ -299,36 +305,36 @@ class ContactType(DataParser):
 
         elif nodeName_ == 'Telephone':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'Telephone')
-            value_ = self.gds_validate_string(value_, node, 'Telephone')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._telephone.append(value_)
             self._telephone_nsprefix_ = child_.prefix
 
         elif nodeName_ == 'Fax':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'Fax')
-            value_ = self.gds_validate_string(value_, node, 'Fax')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._fax.append(value_)
             self._fax_nsprefix_ = child_.prefix
 
         elif nodeName_ == 'X400':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'X400')
-            value_ = self.gds_validate_string(value_, node, 'X400')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._x400.append(value_)
             self._x400_nsprefix_ = child_.prefix
 
         elif nodeName_ == 'URI':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'URI')
-            value_ = self.gds_validate_string(value_, node, 'URI')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._uri.append(value_)
             self.URI_nsprefix_ = child_.prefix
 
         elif nodeName_ == 'Email':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'Email')
-            value_ = self.gds_validate_string(value_, node, 'Email')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._email.append(value_)
             self._email_nsprefix_ = child_.prefix
 
@@ -337,7 +343,7 @@ class ContactType(DataParser):
 
 class PartyType(DataParser):
     """PartyType defines the information which is sent about various parties
-    such as senders and receivers of messages.The id attribute holds the
+    such as senders and receivers of messages.The id_ attribute holds the
     identification of the party."""
     __hash__ = DataParser.__hash__
     subclass = None
@@ -349,7 +355,7 @@ class PartyType(DataParser):
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
-        self._id = _cast(None, id_)
+        self._id = cast(None, id_)
         self._id_nsprefix_ = None
 
         if Name is None:
@@ -360,25 +366,31 @@ class PartyType(DataParser):
         self._name_nsprefix_ = None
 
         if Contact is None:
-            self.Contact = []
+            self._contact = []
         else:
-            self.Contact = Contact
+            self._contact = Contact
 
         self.Contact_nsprefix_ = None
         self._extensiontype_ = extensiontype_
         self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
         self._namespaceprefix = 'message'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return PartyType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_Name(self):
+    @property
+    def name(self):
         return self._Name
 
-    def set_Name(self, Name):
-        self._Name = Name
+    @name.setter
+    def name(self, value):
+        if value is None:
+            self._Name = []
+        elif isinstance(value, list):
+            self._Name = value
+        else:
+            raise TypeError('Name must be a list')
 
     def add_Name(self, value):
         self._Name.append(value)
@@ -389,72 +401,63 @@ class PartyType(DataParser):
     def replace_Name_at(self, index, value):
         self._Name[index] = value
 
-    def get_Contact(self):
-        return self.Contact
+    @property
+    def contact(self):
+        return self._contact
 
-    def set_Contact(self, Contact):
-        self.Contact = Contact
+    @contact.setter
+    def contact(self, value):
+        if value is None:
+            self._contact = []
+        elif isinstance(value, list):
+            self._contact = value
+        else:
+            raise TypeError('Contact must be a list')
 
     def add_Contact(self, value):
-        self.Contact.append(value)
+        self._contact.append(value)
 
     def insert_Contact_at(self, index, value):
-        self.Contact.insert(index, value)
+        self._contact.insert(index, value)
 
     def replace_Contact_at(self, index, value):
-        self.Contact[index] = value
+        self._contact[index] = value
 
-    def get_id(self):
+    @property
+    def id_(self):
         return self._id
 
-    def set_id(self, id_):
-        self._id = id_
+    @id_.setter
+    def id_(self, value):
+        self._id = value
 
-    def get_extensiontype_(self):
+    @property
+    def extensiontype(self):
         return self._extensiontype_
 
-    def set_extensiontype_(self, extensiontype_):
-        self._extensiontype_ = extensiontype_
+    @extensiontype.setter
+    def extensiontype(self, value):
+        self._extensiontype_ = value
 
     def has_content_(self):
         if (
                 self._Name or
-                self.Contact
+                self._contact
         ):
             return True
         else:
             return False
 
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='PartyType'):
-        if self._id is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            outfile.write(' id=%s' % (quote_attrib(self._id),))
-
-        if self._extensiontype_ is not None and 'xsi:dim_type' not in already_processed:
-            already_processed.add('xsi:dim_type')
-            outfile.write(' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
-            if ":" not in self._extensiontype_:
-                imported_ns_type_prefix_ = ClassToPrefix.get(self._extensiontype_, '')
-                outfile.write(' xsi:dim_type="%s%s"' % (imported_ns_type_prefix_, self._extensiontype_))
-            else:
-                outfile.write(' xsi:dim_type="%s"' % self._extensiontype_)
-
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         pass
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        for Name_ in self._Name:
-            Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Contact_ in self.Contact:
-            Contact_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_id_type(self._id)  # validate dim_type IDType
+            self.validate_id_type(self._id)
+        # validate dim_type IDType
         value = find_attr_value_('xsi:dim_type', node)
         if value is not None and 'xsi:dim_type' not in already_processed:
             already_processed.add('xsi:dim_type')
@@ -470,8 +473,8 @@ class PartyType(DataParser):
         elif nodeName_ == 'Contact':
             obj_ = ContactType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Contact.append(obj_)
-            obj_.original_tag_name_ = 'Contact'
+            self._contact.append(obj_)
+            obj_.original_tag_name_ = '_contact'
 
 
 # end class PartyType
@@ -485,22 +488,24 @@ class SenderType(PartyType):
 
     def __init__(self, id_=None, Name=None, Contact=None, Timezone=None, gds_collector_=None, **kwargs_):
         super(SenderType, self).__init__(id_, Name, Contact, gds_collector_, **kwargs_)
-        self.Timezone = Timezone
-        self.validate_TimezoneType(self.Timezone)
+        self._timezone = Timezone
+        self.validate_TimezoneType(self._timezone)
         self.Timezone_nsprefix_ = None
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" ' \
+                             'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
         self._name = 'SenderType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return SenderType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def timezone(self):
+        return self._timezone
 
-    def get_Timezone(self):
-        return self.Timezone
-
-    def set_Timezone(self, Timezone):
-        self.Timezone = Timezone
+    @timezone.setter
+    def timezone(self, value):
+        self._timezone = value
 
     def validate_TimezoneType(self, value):
         result = True
@@ -509,14 +514,13 @@ class SenderType(PartyType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno,
-                                                                                                      })
+                    f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
             if not self.gds_validate_simple_patterns(
                     self.validate_TimezoneType_patterns_, value):
-                self.gds_collector_.add_message('Value "%s" does not match xsd pattern restrictions: %s' % (
-                    encode_str_2_3(value), self.validate_TimezoneType_patterns_,))
+                self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}" '
+                                                f'does not match xsd pattern restrictions: '
+                                                f'{self.__validate_IDType_patterns}')
                 result = False
         return result
 
@@ -524,30 +528,12 @@ class SenderType(PartyType):
 
     def has_content_(self):
         if (
-                self.Timezone is not None or
+                self._timezone is not None or
                 super(SenderType, self).has_content_()
         ):
             return True
         else:
             return False
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='SenderType'):
-        super(SenderType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
-                                                  name_='SenderType')
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        super(SenderType, self).export_children(outfile, level, pretty_print=pretty_print)
-        if pretty_print:
-            eol_ = '\n'
-        else:
-            eol_ = ''
-        if self.Timezone is not None:
-            namespaceprefix_ = self.Timezone_nsprefix_ + ':' if (UseCapturedNS_ and self.Timezone_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sTimezone>%s</%sTimezone>%s' % (
-                namespaceprefix_,
-                self.gds_encode(self.gds_format_string(quote_xml(self.Timezone), input_name='Timezone')),
-                namespaceprefix_, eol_))
 
     def build_attributes(self, node, attrs, already_processed):
         super(SenderType, self).build_attributes(node, attrs, already_processed)
@@ -555,12 +541,12 @@ class SenderType(PartyType):
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Timezone':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'Timezone')
-            value_ = self.gds_validate_string(value_, node, 'Timezone')
-            self.Timezone = value_
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
+            self._timezone = value_
             self.Timezone_nsprefix_ = child_.prefix
             # validate dim_type TimezoneType
-            self.validate_TimezoneType(self.Timezone)
+            self.validate_TimezoneType(self._timezone)
         super(SenderType, self).build_children(child_, node, nodeName_, True)
 
 
@@ -607,7 +593,7 @@ class BaseHeaderType(DataParser):
         self._name_nsprefix_ = None
 
         if Structure is None:
-            self._structure = []
+            self._structure = {}
         else:
             self._structure = Structure
 
@@ -657,41 +643,55 @@ class BaseHeaderType(DataParser):
         self._namespace_prefix = 'message'
         self._name = 'BaseHeaderType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return BaseHeaderType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_ID(self):
+    @property
+    def id_(self):
         return self._ID
 
-    def set_ID(self, ID):
-        self._ID = ID
+    @id_.setter
+    def id_(self, value):
+        self._ID = value
 
-    def get_Test(self):
+    @property
+    def test(self):
         return self._Test
 
-    def set_Test(self, Test):
-        self._Test = Test
+    @test.setter
+    def test(self, value):
+        self._Test = value
 
-    def get_Prepared(self):
+    @property
+    def prepared(self):
         return self._Prepared
 
-    def set_Prepared(self, Prepared):
-        self._Prepared = Prepared
+    @prepared.setter
+    def prepared(self, value):
+        self._Prepared = value
 
-    def get_Sender(self):
+    @property
+    def sender(self):
         return self._Sender
 
-    def set_Sender(self, Sender):
-        self._Sender = Sender
+    @sender.setter
+    def sender(self, value):
+        self._Sender = value
         self._Sender._namespace_prefix = 'message'
 
-    def get_Receiver(self):
+    @property
+    def receiver(self):
         return self._Receiver
 
-    def set_Receiver(self, Receiver):
-        self._Receiver = Receiver
+    @receiver.setter
+    def receiver(self, value):
+        if value is None:
+            self._Receiver = []
+        elif isinstance(value, list):
+            self._Receiver = value
+        else:
+            raise TypeError('Receiver must be a list')
 
     def add_Receiver(self, value):
         value._namespace_prefix = 'message'
@@ -705,11 +705,18 @@ class BaseHeaderType(DataParser):
         value._namespace_prefix = 'message'
         self._Receiver[index] = value
 
-    def get_Name(self):
+    @property
+    def name(self):
         return self._Name
 
-    def set_Name(self, Name):
-        self._Name = Name
+    @name.setter
+    def name(self, value):
+        if value is None:
+            self._Name = []
+        elif isinstance(value, list):
+            self._Name = value
+        else:
+            raise TypeError('Name must be a list')
 
     def add_Name(self, value):
         self._Name.append(value)
@@ -722,40 +729,47 @@ class BaseHeaderType(DataParser):
         value._namespace_prefix = 'message'
         self._Name[index] = value
 
-    def get_Structure(self):
+    @property
+    def structure(self):
         return self._structure
 
-    def set_Structure(self, Structure):
-        self._structure = Structure
+    @structure.setter
+    def structure(self, value):
+        if value is None:
+            self._structure = {}
+        elif isinstance(value, dict):
+            self._structure = value
+        else:
+            raise TypeError('Structure must be a dict')
 
-    def add_Structure(self, value):
-        value._namespace_prefix = 'message'
-        self._structure.append(value)
-
-    def insert_Structure_at(self, index, value):
-        value._namespace_prefix = 'message'
-        self._structure.insert(index, value)
-
-    def replace_Structure_at(self, index, value):
-        self._structure[index] = value
-
-    def get_DataProvider(self):
+    @property
+    def dataProvider(self):
         return self._dataProvider
 
-    def set_DataProvider(self, DataProvider):
-        self._dataProvider = DataProvider
+    @dataProvider.setter
+    def dataProvider(self, value):
+        self._dataProvider = value
 
-    def get_DataSetAction(self):
+    @property
+    def datasetAction(self):
         return self._DataSetAction
 
-    def set_DataSetAction(self, DataSetAction):
-        self._DataSetAction = DataSetAction
+    @datasetAction.setter
+    def datasetAction(self, value):
+        self._DataSetAction = value
 
-    def get_DataSetID(self):
+    @property
+    def datasetID(self):
         return self._DataSetID
 
-    def set_DataSetID(self, DataSetID):
-        self._DataSetID = DataSetID
+    @datasetID.setter
+    def datasetID(self, value):
+        if value is None:
+            self._DataSetID = []
+        elif isinstance(value, list):
+            self._DataSetID = value
+        else:
+            raise TypeError('DatasetID must be a list')
 
     def add_DataSetID(self, value):
         self._DataSetID.append(value)
@@ -766,35 +780,50 @@ class BaseHeaderType(DataParser):
     def replace_DataSetID_at(self, index, value):
         self._DataSetID[index] = value
 
-    def get_Extracted(self):
+    @property
+    def extracted(self):
         return self._Extracted
 
-    def set_Extracted(self, Extracted):
-        self._Extracted = Extracted
+    @extracted.setter
+    def extracted(self, value):
+        self._Extracted = value
 
-    def get_ReportingBegin(self):
+    @property
+    def reportingBegin(self):
         return self._ReportingBegin
 
-    def set_ReportingBegin(self, ReportingBegin):
-        self._ReportingBegin = ReportingBegin
+    @reportingBegin.setter
+    def reportingBegin(self, value):
+        self._ReportingBegin = value
 
-    def get_ReportingEnd(self):
+    @property
+    def reportingEnd(self):
         return self._ReportingEnd
 
-    def set_ReportingEnd(self, ReportingEnd):
-        self._ReportingEnd = ReportingEnd
+    @reportingEnd.setter
+    def reportingEnd(self, value):
+        self._ReportingEnd = value
 
-    def get_EmbargoDate(self):
+    @property
+    def embargoDate(self):
         return self._EmbargoDate
 
-    def set_EmbargoDate(self, EmbargoDate):
-        self._EmbargoDate = EmbargoDate
+    @embargoDate.setter
+    def embargoDate(self, value):
+        self._EmbargoDate = value
 
-    def get_Source(self):
+    @property
+    def source(self):
         return self._Source
 
-    def set_Source(self, Source):
-        self._Source = Source
+    @source.setter
+    def source(self, value):
+        if value is None:
+            self._Source = []
+        elif isinstance(value, list):
+            self._Source = value
+        else:
+            raise TypeError('Source must be a list')
 
     def add_Source(self, value):
         self._Source.append(value)
@@ -808,7 +837,6 @@ class BaseHeaderType(DataParser):
     def validate_HeaderTimeType(self, value):
         result = True
         # Validate dim_type HeaderTimeType, a restriction on None.
-        pass
         return result
 
     def validate_ActionType(self, value):
@@ -817,17 +845,16 @@ class BaseHeaderType(DataParser):
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
-                self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                self.gds_collector_.add_message(f'Value "{value}" : {lineno} is not of '
+                                                f'the correct base simple dim_type (str)')
                 return False
             value = value
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ActionType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration '
+                    f'restriction on ActionType')
                 result = False
         return result
 
@@ -856,105 +883,25 @@ class BaseHeaderType(DataParser):
         else:
             return False
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if pretty_print:
-            eol_ = '\n'
-        else:
-            eol_ = ''
-        if self._ID is not None:
-            namespaceprefix_ = self._ID_nsprefix_ + ':' if (UseCapturedNS_ and self._ID_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sID>%s</%sID>%s' % (
-                namespaceprefix_, self.gds_encode(self.gds_format_string(quote_xml(self._ID), input_name='ID')),
-                namespaceprefix_, eol_))
-        if self._Test is not None:
-            namespaceprefix_ = self._Test_nsprefix_ + ':' if (UseCapturedNS_ and self._Test_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sTest>%s</%sTest>%s' % (
-                namespaceprefix_, self.gds_format_boolean(self._Test, input_name='Test'), namespaceprefix_, eol_))
-        if self._Prepared is not None:
-            namespaceprefix_ = self._Prepared_nsprefix_ + ':' if (UseCapturedNS_ and self._Prepared_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            self._Prepared = self._Prepared.strftime("%Y-%m-%dT%H:%M:%S")
-            outfile.write('<%sPrepared>%s</%sPrepared>%s' % (
-                namespaceprefix_,
-                self.gds_encode(self.gds_format_string(quote_xml(self._Prepared), input_name='Prepared')),
-                namespaceprefix_, eol_))
-        if self._Sender is not None:
-            self._Sender.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-        for Receiver_ in self._Receiver:
-            Receiver_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-        for Name_ in self._Name:
-            Name_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-        for Structure_ in self._structure:
-            Structure_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-        if self._dataProvider is not None:
-            self._dataProvider.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-        if self._DataSetAction is not None:
-            namespaceprefix_ = self.DataSetAction_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self.DataSetAction_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sDataSetAction>%s</%sDataSetAction>%s' % (namespaceprefix_, self.gds_encode(
-                self.gds_format_string(quote_xml(self._DataSetAction), input_name='DataSetAction')), namespaceprefix_,
-                                                                       eol_))
-        for DataSetID_ in self._DataSetID:
-            namespaceprefix_ = self._DataSetID_nsprefix_ + ':' if (UseCapturedNS_ and self._DataSetID_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sDataSetID>%s</%sDataSetID>%s' % (
-                namespaceprefix_,
-                self.gds_encode(self.gds_format_string(quote_xml(DataSetID_), input_name='DataSetID')),
-                namespaceprefix_, eol_))
-        if self._Extracted is not None:
-            namespaceprefix_ = self._Extracted_nsprefix_ + ':' if (UseCapturedNS_ and self._Extracted_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sExtracted>%s</%sExtracted>%s' % (
-                namespaceprefix_, self.gds_format_datetime(self._Extracted, input_name='Extracted'), namespaceprefix_,
-                eol_))
-        if self._ReportingBegin is not None:
-            namespaceprefix_ = self._ReportingBegin_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._ReportingBegin_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sReportingBegin>%s</%sReportingBegin>%s' % (namespaceprefix_, self.gds_encode(
-                self.gds_format_string(quote_xml(self._ReportingBegin), input_name='ReportingBegin')), namespaceprefix_,
-                                                                         eol_))
-        if self._ReportingEnd is not None:
-            namespaceprefix_ = self._ReportingEnd_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._ReportingEnd_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sReportingEnd>%s</%sReportingEnd>%s' % (namespaceprefix_, self.gds_encode(
-                self.gds_format_string(quote_xml(self._ReportingEnd), input_name='ReportingEnd')), namespaceprefix_,
-                                                                     eol_))
-        if self._EmbargoDate is not None:
-            namespaceprefix_ = self._EmbargoDate_nsprefix_ + ':' if (
-                    UseCapturedNS_ and self._EmbargoDate_nsprefix_) else ''
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sEmbargoDate>%s</%sEmbargoDate>%s' % (
-                namespaceprefix_, self.gds_format_datetime(self._EmbargoDate, input_name='EmbargoDate'),
-                namespaceprefix_,
-                eol_))
-        for Source_ in self._Source:
-            namespaceprefix_ = self._Source_nsprefix_ + ':' if (UseCapturedNS_ and self._Source_nsprefix_) else ''
-            Source_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'ID':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'ID')
-            value_ = self.gds_validate_string(value_, node, 'ID')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._ID = value_
             self._ID_nsprefix_ = child_.prefix
             # validate dim_type IDType
             self.validate_id_type(self._ID)
         elif nodeName_ == 'Test':
             sval_ = child_.text
-            ival_ = self.gds_parse_boolean(sval_, node, 'Test')
-            ival_ = self.gds_validate_boolean(ival_, node, 'Test')
+            ival_ = self.gds_parse_boolean(sval_)
+            ival_ = self.gds_validate_boolean(ival_)
             self._Test = ival_
             self._Test_nsprefix_ = child_.prefix
         elif nodeName_ == 'Prepared':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'Prepared')
-            value_ = self.gds_validate_string(value_, node, 'Prepared')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._Prepared = value_
             self._Prepared_nsprefix_ = child_.prefix
             # validate dim_type HeaderTimeType
@@ -976,16 +923,10 @@ class BaseHeaderType(DataParser):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Name.append(obj_)
             obj_.original_tag_name_ = 'Name'
-        elif nodeName_ == '_structure':
+        elif nodeName_ == 'Structure':
             obj_ = GenericDataStructureType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._structure.append(obj_)
-            obj_.original_tag_name_ = '_structure'
-        elif nodeName_ == 'Structure':
-            obj_ = DataStructureReferenceType.factory(parent_object_=self)
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._structure.append(obj_)
-            obj_.original_tag_name_ = 'Structure'
+            self._structure[obj_.structureID] = {'dimAtObs': obj_.dimensionAtObservation, 'DSDID': obj_.structure}
         elif nodeName_ == 'DataProvider':
             obj_ = DataProviderReferenceType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -993,16 +934,16 @@ class BaseHeaderType(DataParser):
             obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'DataSetAction':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'DataSetAction')
-            value_ = self.gds_validate_string(value_, node, 'DataSetAction')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._DataSetAction = value_
             self.DataSetAction_nsprefix_ = child_.prefix
             # validate dim_type ActionType
             self.validate_ActionType(self._DataSetAction)
         elif nodeName_ == 'DataSetID':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'DataSetID')
-            value_ = self.gds_validate_string(value_, node, 'DataSetID')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._DataSetID.append(value_)
             self._DataSetID_nsprefix_ = child_.prefix
             # validate dim_type IDType
@@ -1014,16 +955,16 @@ class BaseHeaderType(DataParser):
             self._Extracted_nsprefix_ = child_.prefix
         elif nodeName_ == 'ReportingBegin':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'ReportingBegin')
-            value_ = self.gds_validate_string(value_, node, 'ReportingBegin')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._ReportingBegin = value_
             self._ReportingBegin_nsprefix_ = child_.prefix
             # validate dim_type ObservationalTimePeriodType
             self.validate_ObservationalTimePeriodType(self._ReportingBegin)
         elif nodeName_ == 'ReportingEnd':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_, node, 'ReportingEnd')
-            value_ = self.gds_validate_string(value_, node, 'ReportingEnd')
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
             self._ReportingEnd = value_
             self._ReportingEnd_nsprefix_ = child_.prefix
             # validate dim_type ObservationalTimePeriodType
@@ -1058,10 +999,9 @@ class GenericDataHeaderType(BaseHeaderType):
                                                     EmbargoDate, Source, gds_collector_, **kwargs_)
         self._name = 'GenericDataHeaderType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return GenericDataHeaderType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_ObservationalTimePeriodType(self, value):
         pass
@@ -1082,67 +1022,74 @@ class MessageType(DataParser):
     def __init__(self, Header=None, anytypeobjs_=None, Footer=None, gds_collector_=None, **kwargs_):
         super(MessageType, self).__init__(gds_collector_, **kwargs_)
         self._anytypeobjs_ = None
-        self.gds_collector_ = gds_collector_
-        self.gds_elementtree_node_ = None
+        self._gds_collector_ = gds_collector_
+        self._gds_elementtree_node_ = None
         self.original_tagname_ = None
         self.parent_object_ = kwargs_.get('parent_object_')
         self.ns_prefix_ = None
-        self.Header = Header
-        self.Header_nsprefix_ = None
+        self._header = Header
+        self._header_nsprefix_ = None
         if anytypeobjs_ is None:
-            self.anytypeobjs_ = []
+            self._anytypeobjs_ = []
         else:
-            self.anytypeobjs_ = anytypeobjs_
-        self.Footer = Footer
-        self.Footer_nsprefix_ = None
-        self._namespace_def = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
+            self._anytypeobjs_ = anytypeobjs_
+        self._footer = Footer
+        self._footer_nsprefix_ = None
+        self._namespace_def = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' \
+                              'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" ' \
+                              'xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific" ' \
+                              'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
         self._namespace_prefix = 'message'
         self._name = 'MessageType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return MessageType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def header(self):
+        return self._header
 
-    def get_Header(self):
-        return self.Header
+    @header.setter
+    def header(self, value):
+        self._header = value
 
-    def set_Header(self, Header):
-        self.Header = Header
+    @property
+    def anytypeobjs(self):
+        return self._anytypeobjs_
 
-    def get_anytypeobjs_(self):
-        return self.anytypeobjs_
-
-    def set_anytypeobjs_(self, anytypeobjs_):
-        self.anytypeobjs_ = anytypeobjs_
+    @anytypeobjs.setter
+    def anytypeobjs(self, value):
+        if value is None:
+            self._anytypeobjs_ = []
+        elif isinstance(value, list):
+            self._anytypeobjs_ = value
+        else:
+            raise TypeError('AnyTypeObjs must be a list')
 
     def add_anytypeobjs_(self, value):
-        self.anytypeobjs_.append(value)
+        self._anytypeobjs_.append(value)
 
     def insert_anytypeobjs_(self, index, value):
         self._anytypeobjs_[index] = value
 
-    def get_Footer(self):
-        return self.Footer
+    @property
+    def footer(self):
+        return self._footer
 
-    def set_Footer(self, Footer):
-        self.Footer = Footer
+    @footer.setter
+    def footer(self, value):
+        self._footer = value
 
     def has_content_(self):
         if (
-                self.Header is not None or
-                self.anytypeobjs_ or
-                self.Footer is not None
+                self._header is not None or
+                self._anytypeobjs_ or
+                self._footer is not None
         ):
             return True
         else:
             return False
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if self.Header is not None:
-            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-        if self.Footer is not None:
-            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
 
 # end class MessageType
@@ -1155,84 +1102,412 @@ class GenericDataType(MessageType):
 
     def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
         super(GenericDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:None="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific"  xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"  xmlns:footer="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer" '
-        self._name = 'GenericDataType'
 
         if DataSet is None:
-            self.DataSet = []
+            self._dataSet = []
         else:
-            self.DataSet = DataSet
+            self._dataSet = DataSet
         self.DataSet_nsprefix_ = None
 
         if gds_collector_ is not None:
-            self.gds_collector_ = gds_collector_
+            self._gds_collector = gds_collector_
         else:
-            self.gds_collector_ = GdsCollector_()
+            self._gds_collector = GdsCollector()
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return GenericDataType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def dataset(self):
+        return self._dataSet
 
-    def get_DataSet(self):
-        return self.DataSet
-
-    def set_DataSet(self, DataSet):
-        self.DataSet = DataSet
+    @dataset.setter
+    def dataset(self, value):
+        if value is None:
+            self._dataSet = []
+        elif isinstance(value, list):
+            self._dataSet = value
+        else:
+            raise TypeError('Dataset must be a list')
 
     def add_DataSet(self, value):
-        self.DataSet.append(value)
+        self._dataSet.append(value)
 
     def insert_DataSet_at(self, index, value):
-        self.DataSet.insert(index, value)
+        self._dataSet.insert(index, value)
 
     def replace_DataSet_at(self, index, value):
-        self.DataSet[index] = value
+        self._dataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
-                                                                                        self).has_content_()):
+        if (self._header is not None or self._dataSet or
+                self._footer is not None or super(GenericDataType, self).has_content_()):
             return True
         else:
             return False
-
-    def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
-        data = []
-        for DataSet_ in self.DataSet:
-            parent_dict = {}
-            DataSet_.export_attributes_as_dict(parent_dict, )
-
-        return data
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if self.Header is not None:
-            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for DataSet_ in self.DataSet:
-            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        if self.Footer is not None:
-            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Header':
             obj_ = GenericDataHeaderType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Header = obj_
+            self._header = obj_
             obj_.original_tagname_ = 'Header'
         elif nodeName_ == 'DataSet':
             obj_ = GenericDataSet.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.DataSet.append(obj_)
+            self._dataSet.append(obj_)
             obj_.original_tag_name_ = 'DataSet'
         elif nodeName_ == 'Footer':
             obj_ = FooterType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Footer = obj_
+            self._footer = obj_
             obj_.original_tag_name_ = 'Footer'
 
 
 # end class GenericDataType
+
+class CodelistsType(DataParser):
+    def __init__(self, codelist=None, name=None, gds_collector_=None, **kwargs_):
+        super(CodelistsType, self).__init__(gds_collector_, **kwargs_)
+
+        if codelist is None:
+            self._codelists = {}
+        else:
+            self._codelists = codelist
+
+        if name is None:
+            self._name = ''
+        else:
+            self._name = name
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return CodelistsType(*args_, **kwargs_)
+
+    @property
+    def codelists(self):
+        return self._codelists
+
+    @codelists.setter
+    def codelists(self, value):
+        self._codelists = value
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    def has_content_(self):
+        if self._codelists is not None or super(CodelistsType, self).has_content_():
+            return True
+        else:
+            return False
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Codelist':
+            obj_ = Codelist.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._codelists[obj_.unique_id] = obj_
+        # TODO Parsing Name of the Codelist
+
+
+class ConceptsType(DataParser):
+    def __init__(self, concepts=None, name=None, gds_collector_=None, **kwargs_):
+        super(ConceptsType, self).__init__(gds_collector_, **kwargs_)
+
+        self._cl_references = []
+        if concepts is None:
+            self._concepts = {}
+        else:
+            self._concepts = concepts
+
+        if name is None:
+            self._name = ''
+        else:
+            self._name = name
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return ConceptsType(*args_, **kwargs_)
+
+    @property
+    def concepts(self):
+        return self._concepts
+
+    @concepts.setter
+    def concepts(self, value):
+        self._concepts = value
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    def has_content_(self):
+        if len(self.concepts) > 0 or super(ConceptsType, self).has_content_():
+            return True
+        else:
+            return False
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'ConceptScheme':
+            obj_ = ConceptScheme.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.concepts[obj_.unique_id] = obj_
+
+
+class DataStructuresType(DataParser):
+    def __init__(self, dsds=None, gds_collector_=None, **kwargs_):
+        super(DataStructuresType, self).__init__(gds_collector_, **kwargs_)
+
+        self._cl_references = []
+        if dsds is None:
+            self._dsds = {}
+        else:
+            self._dsds = dsds
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @property
+    def dsds(self):
+        return self._dsds
+
+    @dsds.setter
+    def dsds(self, value):
+        self._dsds = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'DataStructure':
+            obj_ = DataStructureDefinition.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.dsds[obj_.unique_id] = obj_
+
+
+class OrganisationSchemesType(DataParser):
+    def __init__(self, agency_scheme=None, name=None, gds_collector_=None, **kwargs_):
+        super(OrganisationSchemesType, self).__init__(gds_collector_, **kwargs_)
+
+        if agency_scheme is None:
+            self._agency_schemes = []
+        else:
+            self._agency_schemes = agency_scheme
+
+        if name is None:
+            self._name = ''
+        else:
+            self._name = name
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return OrganisationSchemesType(*args_, **kwargs_)
+
+    @property
+    def agencySchemes(self):
+        return self._agency_schemes
+
+    @agencySchemes.setter
+    def agencySchemes(self, value):
+        self._agency_schemes = value
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    def has_content_(self):
+        if self.agencySchemes is not None or super(OrganisationSchemesType, self).has_content_():
+            return True
+        else:
+            return False
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'AgencyScheme':
+            obj_ = AgencyScheme.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.agencySchemes = obj_
+        # TODO Parsing Name of the Codelist
+
+
+class DataflowsType(DataParser):
+    pass
+
+
+class Structures(DataParser):
+    __hash__ = DataParser.__hash__
+
+    def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, gds_collector_=None, **kwargs_):
+        super(Structures, self).__init__(gds_collector_, **kwargs_)
+
+        if dsds is None:
+            self._dsds = {}
+        else:
+            self._dsds = dsds
+
+        if codelists is None:
+            self._codelists = {}
+        else:
+            self._codelists = codelists
+
+        if organisations is None:
+            self._organisations = {}
+        else:
+            self._organisations = organisations
+
+        if concepts is None:
+            self._concepts = {}
+        else:
+            self._concepts = concepts
+
+        self.DataSet_nsprefix_ = None
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Structures(*args_, **kwargs_)
+
+    @property
+    def organisations(self):
+        return self._organisations
+
+    @organisations.setter
+    def organisations(self, value):
+        self._organisations = value
+
+    @property
+    def dsds(self):
+        return self._dsds
+
+    @dsds.setter
+    def dsds(self, value):
+        self._dsds = value
+
+    @property
+    def codelists(self):
+        return self._codelists
+
+    @codelists.setter
+    def codelists(self, value):
+        self._codelists = value
+
+    @property
+    def concepts(self):
+        return self._concepts
+
+    @concepts.setter
+    def concepts(self, value):
+        self._concepts = value
+
+    def has_content_(self):
+        if self._concepts is not None or self._codelists or self._dsds is not None \
+                or super(Structures, self).has_content_():
+            return True
+        else:
+            return False
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'OrganisationSchemes':
+            obj_ = OrganisationSchemesType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._organisations = obj_
+        elif nodeName_ == 'Codelists':
+            obj_ = CodelistsType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._codelists = obj_.codelists
+        elif nodeName_ == 'Concepts':
+            obj_ = ConceptsType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._concepts = obj_.concepts
+        elif nodeName_ == 'DataStructures':
+            obj_ = DataStructuresType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._dsds = obj_
+        elif nodeName_ == 'Dataflows':
+            obj_ = DataflowsType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._codelists = obj_
+
+
+class MetadataType(MessageType):
+    __hash__ = DataParser.__hash__
+    subclass = None
+    superclass = MessageType
+
+    def __init__(self, header=None, anytypeobjs_=None, footer=None, structures=None, gds_collector_=None, **kwargs_):
+        super(MetadataType, self).__init__(header, anytypeobjs_, footer, gds_collector_, **kwargs_)
+
+        self._structures = structures
+        self.DataSet_nsprefix_ = None
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return MetadataType(*args_, **kwargs_)
+
+    @property
+    def structures(self):
+        return self._structures
+
+    @structures.setter
+    def structures(self, value):
+        self._structures = value
+
+    def has_content_(self):
+        if (self._header is not None or self._structures or
+                self._footer is not None or super(MetadataType, self).has_content_()):
+            return True
+        else:
+            return False
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Header':
+            obj_ = GenericDataHeaderType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._header = obj_
+        elif nodeName_ == 'Structures':
+            obj_ = Structures.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._structures = obj_
+        elif nodeName_ == 'Footer':
+            obj_ = FooterType.factory(parent_object_=self)
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._footer = obj_
+
 
 class StructureSpecificDataHeaderType(BaseHeaderType):
     """StructureSpecificDataHeaderType defines the header structure for a
@@ -1250,10 +1525,9 @@ class StructureSpecificDataHeaderType(BaseHeaderType):
                                                               gds_collector_, **kwargs_)
         self._name = 'GenericDataHeaderType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureSpecificDataHeaderType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_HeaderTimeType(self, value):
         result = True
@@ -1282,78 +1556,73 @@ class StructureSpecificDataType(MessageType):
         super(StructureSpecificDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
 
         if DataSet is None:
-            self.DataSet = []
+            self._dataSet = []
         else:
-            self.DataSet = DataSet
-
-        self.DataSet_nsprefix_ = None
+            self._dataSet = DataSet
+        self._dataSet_nsprefix_ = None
         self._name = 'StructureSpecificDataType'
 
         if gds_collector_ is not None:
             self.gds_collector_ = gds_collector_
         else:
-            self.gds_collector_ = GdsCollector_()
+            self.gds_collector_ = GdsCollector()
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureSpecificDataType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def dataset(self):
+        return self._dataSet
 
-    def get_DataSet(self):
-        return self.DataSet
-
-    def set_DataSet(self, DataSet):
-        self.DataSet = DataSet
+    @dataset.setter
+    def dataset(self, value):
+        if value is None:
+            self._dataSet = []
+        elif isinstance(value, list):
+            self._dataSet = value
+        else:
+            raise TypeError('Dataset must be a list')
 
     def add_DataSet(self, value):
-        self.DataSet.append(value)
+        self._dataSet.append(value)
 
     def insert_DataSet_at(self, index, value):
-        self.DataSet.insert(index, value)
+        self._dataSet.insert(index, value)
 
     def replace_DataSet_at(self, index, value):
-        self.DataSet[index] = value
+        self._dataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(MessageType,
-                                                                                        self).has_content_()):
+        if (self._header is not None or self._dataSet or self._footer is not None or super(MessageType,
+                                                                                           self).has_content_()):
             return True
         else:
             return False
 
     def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
-        for DataSet_ in self.DataSet:
+        for DataSet_ in self._dataSet:
             parent_dict = {}
             DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if self.Header is not None:
-            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for DataSet_ in self.DataSet:
-            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        if self.Footer is not None:
-            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Header':
             obj_ = StructureSpecificDataHeaderType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Header = obj_
+            self._header = obj_
             obj_.original_tagname_ = 'Header'
         elif nodeName_ == 'DataSet':
             obj_ = StructureDataSet.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.DataSet.append(obj_)
+            self._dataSet.append(obj_)
             obj_.original_tag_name_ = 'DataSet'
         elif nodeName_ == 'Footer':
             obj_ = FooterType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Footer = obj_
+            self._footer = obj_
             obj_.original_tag_name_ = 'Footer'
 
 
@@ -1367,71 +1636,65 @@ class GenericTimeSeriesDataType(GenericDataType):
     superclass = GenericDataType
 
     def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_, **kwargs_)
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:None="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific"  xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"  xmlns:footer="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer" '
-        self._name = 'GenericTimeSeriesDataType'
+        super(GenericTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, DataSet, gds_collector_,
+                                                        **kwargs_)
 
     @staticmethod
     def factory(*args_, **kwargs_):
         return GenericTimeSeriesDataType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def dataset(self):
+        return self._dataSet
 
-    def get_DataSet(self):
-        return self.DataSet
-
-    def set_DataSet(self, DataSet):
-        self.DataSet = DataSet
+    @dataset.setter
+    def dataset(self, value):
+        if value is None:
+            self._dataSet = []
+        elif isinstance(value, list):
+            self._dataSet = value
+        else:
+            raise TypeError('Dataset must be a list')
 
     def add_DataSet(self, value):
-        self.DataSet.append(value)
+        self._dataSet.append(value)
 
     def insert_DataSet_at(self, index, value):
-        self.DataSet.insert(index, value)
+        self._dataSet.insert(index, value)
 
     def replace_DataSet_at(self, index, value):
-        self.DataSet[index] = value
+        self._dataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(GenericDataType,
-                                                                                        self).has_content_()):
+        if (self._header is not None or self._dataSet or self._footer is not None
+                or super(GenericDataType, self).has_content_()):
             return True
         else:
             return False
 
     def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
-        for DataSet_ in self.DataSet:
+        for DataSet_ in self._dataSet:
             parent_dict = {}
             DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if self.Header is not None:
-            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for DataSet_ in self.DataSet:
-            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        if self.Footer is not None:
-            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Header':
             obj_ = GenericTimeSeriesDataHeaderType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Header = obj_
+            self._header = obj_
             obj_.original_tagname_ = 'Header'
         elif nodeName_ == 'DataSet':
             obj_ = GenericTimeSeriesDataSet.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.DataSet.append(obj_)
+            self._dataSet.append(obj_)
             obj_.original_tag_name_ = 'DataSet'
         elif nodeName_ == 'Footer':
             obj_ = FooterType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Footer = obj_
+            self._footer = obj_
             obj_.original_tag_name_ = 'Footer'
 
 
@@ -1451,10 +1714,9 @@ class GenericTimeSeriesDataHeaderType(GenericDataHeaderType):
                                                               gds_collector_, **kwargs_)
         self._name = 'GenericTimeSeriesDataHeaderType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return GenericTimeSeriesDataHeaderType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_HeaderTimeType(self, value):
         pass
@@ -1472,13 +1734,13 @@ class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
     superclass = StructureSpecificDataType
 
     def __init__(self, Header=None, anytypeobjs_=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, gds_collector_,
-                                                                  **kwargs_)
+        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, anytypeobjs_, Footer, DataSet,
+                                                                  gds_collector_, **kwargs_)
 
         if DataSet is None:
-            self.DataSet = []
+            self._dataSet = []
         else:
-            self.DataSet = DataSet
+            self._dataSet = DataSet
 
         self.DataSet_nsprefix_ = None
         self._name = 'StructureSpecificTimeSeriesDataType'
@@ -1486,68 +1748,64 @@ class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
         if gds_collector_ is not None:
             self.gds_collector_ = gds_collector_
         else:
-            self.gds_collector_ = GdsCollector_()
+            self.gds_collector_ = GdsCollector()
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureSpecificDataType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def dataset(self):
+        return self._dataSet
 
-    def get_DataSet(self):
-        return self.DataSet
-
-    def set_DataSet(self, DataSet):
-        self.DataSet = DataSet
+    @dataset.setter
+    def dataset(self, value):
+        if value is None:
+            self._dataSet = []
+        elif isinstance(value, list):
+            self._dataSet = value
+        else:
+            raise TypeError('Dataset must be a list')
 
     def add_DataSet(self, value):
-        self.DataSet.append(value)
+        self._dataSet.append(value)
 
     def insert_DataSet_at(self, index, value):
-        self.DataSet.insert(index, value)
+        self._dataSet.insert(index, value)
 
     def replace_DataSet_at(self, index, value):
-        self.DataSet[index] = value
+        self._dataSet[index] = value
 
     def has_content_(self):
-        if (self.Header is not None or self.DataSet or self.Footer is not None or super(StructureSpecificDataType,
-                                                                                        self).has_content_()):
+        if (self._header is not None or self._dataSet or self._footer is not None
+                or super(StructureSpecificDataType, self).has_content_()):
             return True
         else:
             return False
 
     def export_attributes_as_dict(self, valid_fields: list, **kwargs) -> list:
         data = []
-        for DataSet_ in self.DataSet:
+        for DataSet_ in self._dataSet:
             parent_dict = {}
             DataSet_.export_attributes_as_dict(parent_dict, )
 
         return data
 
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True, **kwargs):
-        if self.Header is not None:
-            self.Header.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for DataSet_ in self.DataSet:
-            DataSet_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        if self.Footer is not None:
-            self.Footer.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Header':
             obj_ = StructureSpecificTimeSeriesDataHeaderType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Header = obj_
+            self._header = obj_
             obj_.original_tagname_ = 'Header'
         elif nodeName_ == 'DataSet':
             obj_ = StructureTimeSeriesDataSet.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.DataSet.append(obj_)
+            self._dataSet.append(obj_)
             obj_.original_tag_name_ = 'DataSet'
         elif nodeName_ == 'Footer':
             obj_ = FooterType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.Footer = obj_
+            self._footer = obj_
             obj_.original_tag_name_ = 'Footer'
 
 
@@ -1572,10 +1830,9 @@ class StructureSpecificTimeSeriesDataHeaderType(StructureSpecificDataHeaderType)
                                                                         Source, gds_collector_, **kwargs_)
         self._name = 'StructureSpecificTimeSeriesDataHeaderType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return StructureSpecificTimeSeriesDataHeaderType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     def validate_HeaderTimeType(self, value):
         result = True
