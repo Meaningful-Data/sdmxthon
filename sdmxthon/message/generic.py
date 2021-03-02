@@ -1251,6 +1251,8 @@ class DataStructuresType(DataParser):
         else:
             self._dsds = dsds
 
+        self._non_unique = None
+
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
         else:
@@ -1268,11 +1270,23 @@ class DataStructuresType(DataParser):
     def dsds(self, value):
         self._dsds = value
 
+    @property
+    def non_unique(self):
+        return self._non_unique
+
+    def add_non_unique(self, id_):
+        if self._non_unique is None:
+            self._non_unique = []
+        self._non_unique.append(id_)
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DataStructure':
             obj_ = DataStructureDefinition.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.dsds[obj_.unique_id] = obj_
+            if obj_.unique_id in self.dsds:
+                self.add_non_unique(obj_.unique_id)
+            else:
+                self.dsds[obj_.unique_id] = obj_
 
 
 class OrganisationSchemesType(DataParser):
@@ -1358,6 +1372,8 @@ class Structures(DataParser):
         else:
             self._concepts = concepts
 
+        self._errors = None
+
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
         else:
@@ -1399,6 +1415,15 @@ class Structures(DataParser):
     def concepts(self, value):
         self._concepts = value
 
+    @property
+    def errors(self):
+        return self._errors
+
+    def add_error(self, error):
+        if self._errors is None:
+            self._errors = []
+        self._errors.append(error)
+
     def has_content_(self):
         if self._concepts is not None or self._codelists or self._dsds is not None \
                 or super(Structures, self).has_content_():
@@ -1422,6 +1447,11 @@ class Structures(DataParser):
         elif nodeName_ == 'DataStructures':
             obj_ = DataStructuresType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
+            if obj_.non_unique is not None:
+                for e in obj_.non_unique:
+                    self.add_error({'Code': 'MS06', 'ErrorLevel': 'CRITICAL',
+                                    'ObjectID': f'{e}', 'ObjectType': f'DSD',
+                                    'Message': f'DSD {e} is not unique'})
             self._dsds = obj_.dsds
         """
         elif nodeName_ == 'Dataflows':

@@ -5,7 +5,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from ..model.structure import DataStructureDefinition
-from ..utils.enums import DatasetType
+from ..utils.enums import MessageType
 from ..utils.validations import validate_data
 from ..utils.write import writer
 
@@ -165,7 +165,7 @@ class DataSet:
 
         self._dataset_attributes = attributes.copy()
 
-    def toXML(self, dataset_type: DatasetType = DatasetType.GenericDataSet, outputPath='', id_='test',
+    def toXML(self, dataset_type: MessageType = MessageType.GenericDataSet, outputPath='', id_='test',
               test='true',
               prepared=datetime.now(),
               sender='Unknown',

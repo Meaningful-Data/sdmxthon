@@ -5914,7 +5914,7 @@
                                      maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
-                                <str:TextFormat textType="String" maxLength="15"/>
+                                <str:TextFormat textType="BigInteger" maxLength="15"/>
                             </str:LocalRepresentation>
                         </str:PrimaryMeasure>
                     </str:MeasureList>

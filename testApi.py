@@ -29,6 +29,7 @@ urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/publi
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
 pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
+pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
 pathToDataSpe = 'SDMXThon/examples/Structure/outputSpe.xml'
 pathToDataGen = 'SDMXThon/examples/Generic/outputGen.xml'
 pathToDataGenSer = 'SDMXThon/examples/Generic/genSeries.xml'
@@ -70,14 +71,12 @@ def parse_agencies(xml_element, agency_scheme):
 
 
 def main():
-
     logger.debug('Start')
-    datasets = readSDMX(pathToMetadataFile, pathToMetadataFile)
-    logger.debug('Read')
 
-    for e in datasets.payload.keys():
-        datasets.payload[e].semanticValidation()
-    logger.debug('Validate')
+    message = readSDMX(pathToDataSpe, pathToMetadataFile)
+
+    for e in message.payload.values():
+        e.semanticValidation()
 
     """
     root = etree.parse(pathToMetadataFile)

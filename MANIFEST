@@ -5,7 +5,6 @@ SDMXThon\__init__.py
 SDMXThon\common\__init__.py
 SDMXThon\common\annotations.py
 SDMXThon\common\dataSet.py
-SDMXThon\common\empty.py
 SDMXThon\common\generic.py
 SDMXThon\common\message.py
 SDMXThon\common\messagetypes.py

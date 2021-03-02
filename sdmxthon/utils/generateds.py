@@ -247,7 +247,7 @@ class GenerateSuper(object):
 
     @staticmethod
     def gds_validate_boolean(input_data, node=None):
-        if input_data not in (True, 1, False, 0,):
+        if input_data not in (True, 1, False, 0, 'false', 'true'):
             raise_parse_error(node, 'Requires boolean value (one of True, 1, False, 0)')
 
         return input_data

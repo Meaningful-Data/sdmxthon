@@ -1,24 +1,6 @@
-import logging
-from typing import Dict
-
-from ..model.dataTypes import FacetType, FacetValueType
-from ..model.itemScheme import Code, Codelist, Agency, ConceptScheme, Concept, Facet
-from ..model.structure import DataStructureDefinition, DimensionDescriptor, MeasureDescriptor, \
-    AttributeDescriptor, Dimension, Attribute, PrimaryMeasure, TimeDimension
-from ..model.structure import Representation
-
-try:
-    from lxml import etree as etree
-except ImportError:
-    from xml.etree import ElementTree as eTree
-
-# create logger
-logger = logging.getLogger("logger")
-
-
+"""
 def id_creator(agencyID, id_, version):
     return f"{agencyID}:{id_}({version})"
-
 
 def get_codelist_model(root):
     expression = "/mes:Structure/mes:Structures/str:Codelists/str:Codelist"
@@ -260,7 +242,7 @@ def gen_representation(record, concepts, codelists, obj, dsd_id, missing_rep):
         if con is not None and con.coreRepresentation is not None and len(con.coreRepresentation.facets) > 0:
             facets = con.coreRepresentation.facets
 
-    return Representation(codelist=cl, conceptScheme=cs, concept=con, facets=facets)
+    return Representation(codelist=cl, conceptScheme=cs, facets=facets)
 
 
 def get_attribute_relationship(record, measure_descriptor, attribute_descriptor, dimension_descriptor, dsd_id, errors):
@@ -331,7 +313,7 @@ def create_dimension_data(dsd, dimension_descriptor, dsd_id, concepts, codelists
                             position=record.attrib['position'])
 
         rep = gen_representation(record, concepts, codelists, dim, dsd_id, missing_rep=missing_rep)
-        dim.localRepresentation = rep
+        dim.local_representation = rep
         dimension_descriptor.addComponent(dim)
 
     return dimension_descriptor
@@ -362,7 +344,7 @@ def create_attribute_data(errors, dsd, attribute_descriptor,
             att.relatedTo = list_related
 
         rep = gen_representation(record, concepts, codelists, att, dsd_id, missing_rep=missing_rep)
-        att.localRepresentation = rep
+        att.local_representation = rep
         attribute_descriptor.addComponent(att)
 
     return attribute_descriptor
@@ -385,7 +367,7 @@ def create_measures_data(dsd_xml, measure_descriptor, dsd_id, concepts, codelist
             meas = PrimaryMeasure(id_=record.attrib['id'], uri=record.attrib['urn'])
 
             rep = gen_representation(record, concepts, codelists, meas, dsd_id, missing_rep=missing_rep)
-            meas.localRepresentation = rep
+            meas.local_representation = rep
             measure_descriptor.addComponent(meas)
 
     return measure_descriptor
@@ -477,7 +459,6 @@ def get_DSDs(root, concepts=None, codelists=None):
 
             dsd.dimensionDescriptor = dd
         else:
-            # TODO Missing dimension list on DSD (validate_metadata)
             errors_dsd.append({'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
                                'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
                                'Message': f'DSD {dsd.unique_id} does not have a DimensionList'})
@@ -548,7 +529,7 @@ def get_DSDs(root, concepts=None, codelists=None):
     return dsds, None
 
 
-"""
+
 def validate_dataset_attributes_from_dsd(dsd, dataset):
     dataset_keys = dsd.datasetAttributeCodes
     attached_keys = dataset.attached_attributes.keys()

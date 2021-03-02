@@ -1,5 +1,4 @@
 import json
-import logging
 import sys
 from typing import Dict
 from zipfile import ZipFile
@@ -8,34 +7,31 @@ from .common.dataSet import DataSet
 from .common.message import Message
 from .message.generic import MetadataType
 from .utils.dataset_parsing import getMetadata, setReferences
-from .utils.enums import DatasetType
-from .utils.metadata_parsers import id_creator
-from .utils.read import readXML, sdmxGenToDataSet, \
-    sdmxStrToDataset
+from .utils.enums import MessageType
+from .utils.read import readXML, sdmxGenToDataSet, sdmxStrToDataset
 from .utils.write import save_file
-
-logger = logging.getLogger("logger")
 
 
 def readSDMX(path_to_xml, pathToMetadata):
-    obj_structure = readXML(path_to_xml)
-    logger.debug('XML parsed')
-    if isinstance(obj_structure, MetadataType):
-        setReferences(obj_structure)
-    logger.debug('References')
-    dsds, errors = getMetadata(pathToMetadata)
-    logger.debug('Metadata parsed')
+    obj_ = readXML(path_to_xml)
+    if isinstance(obj_, MetadataType):
+        setReferences(obj_)
 
-    header = obj_structure.header
-    if obj_structure.original_tag_name_ == 'GenericData':
-        dataset_type = DatasetType.GenericDataSet
-        datasets = sdmxGenToDataSet(obj_structure, dsds)
-    elif obj_structure.original_tag_name_ == 'StructureSpecificData':
-        dataset_type = DatasetType.StructureDataSet
-        datasets = sdmxStrToDataset(obj_structure, dsds)
+    metadata = getMetadata(pathToMetadata)
+
+    header = obj_.header
+    if obj_.original_tag_name_ == 'GenericData':
+        type_ = MessageType.GenericDataSet
+        data = sdmxGenToDataSet(obj_, metadata.structures.dsds)
+    elif obj_.original_tag_name_ == 'StructureSpecificData':
+        type_ = MessageType.StructureDataSet
+        data = sdmxStrToDataset(obj_, metadata.structures.dsds)
+    elif obj_.original_tag_name_ == 'Structure':
+        type_ = MessageType.Metadata
+        data = obj_.structures
     else:
         raise ValueError('Wrong Message type')
-    return Message(dataset_type, datasets, header)
+    return Message(type_, data, header)
 
 
 def getDatasets(path_to_xml, pathToMetadata):
@@ -84,7 +80,7 @@ def xmlToCSV(pathToXML, pathToMetadata, output_path):
 
     else:
         if len(datasets) > 1:
-            raise ValueError('Cannot introduce several Datasets in a CSV. Consider using .zip as output path')
+            raise ValueError('Cannot introduce several Datasets in a CSV. Consider using .zip in output path')
         elif len(datasets) is 1:
             if '.zip' in output_path:
                 filename = output_path.split('.')[0]
@@ -92,9 +88,9 @@ def xmlToCSV(pathToXML, pathToMetadata, output_path):
             # Getting first value
             values_view = datasets.values()
             value_iterator = iter(values_view)
-            dset = next(value_iterator)
+            dataset = next(value_iterator)
 
-            dset.toCSV(output_path)
+            dataset.toCSV(output_path)
         else:
             raise ValueError('No Datasets were parsed')
 

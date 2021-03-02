@@ -6,6 +6,7 @@ from .itemScheme import Agency, Representation
 from .utils import genericSetter, qName, intSetter
 from ..common.refs import RefBaseType
 from ..utils.data_parser import DataParser
+from ..utils.mappings import Data_Types_VTL
 from ..utils.xml_base import find_attr_value_
 
 
@@ -16,7 +17,7 @@ class Component(IdentifiableArtefact):
             annotations = []
         super(Component, self).__init__(id_=id_, uri=uri, annotations=annotations)
 
-        self.local_representation = localRepresentation
+        self._local_representation = localRepresentation
         self._concept_identity = None
 
     def __eq__(self, other):
@@ -64,7 +65,7 @@ class Component(IdentifiableArtefact):
         elif nodeName_ == 'LocalRepresentation':
             obj_ = Representation.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.local_representation = obj_
+            self._local_representation = obj_
 
 
 class ConceptIdentityType(DataParser):
@@ -84,7 +85,8 @@ class ConceptIdentityType(DataParser):
         if nodeName_ == 'Ref':
             obj_ = RefBaseType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._ref = obj_
+            self._ref = {"CS": f"{obj_.agencyID}:{obj_.maintainableParentID}({obj_.maintainableParentVersion})",
+                         "CON": f"{obj_.id_}"}
 
 
 class Dimension(Component, DataParser):
@@ -271,11 +273,11 @@ class AttributeRelationshipType(DataParser):
             obj_.build(child_, gds_collector_=gds_collector_)
             if self._ref_id is None:
                 self._ref_id = obj_.ref
-                self._ref_type = 'Dimension'
-            else:
+            elif not isinstance(self._ref_id, list):
                 self._ref_id = [self._ref_id]
+            if isinstance(self._ref_id, list):
                 self._ref_id.append(obj_.ref)
-                self._ref_type = 'GroupDimension'
+            self._ref_type = 'Dimension'
 
 
 class Attribute(Component, DataParser):
@@ -347,7 +349,7 @@ class Attribute(Component, DataParser):
             if obj_.ref_id is None:
                 self.relatedTo = None
             else:
-                self.relatedTo = {'id': obj_.ref_id, 'type': obj_.ref_id}
+                self.relatedTo = {'id': obj_.ref_id, 'type': obj_.ref_type}
 
 
 class PrimaryMeasure(Component, DataParser):
@@ -768,33 +770,45 @@ class DataStructureDefinition(MaintainableArtefact, DataParser):
             value.dsd = self
 
     def toVtlJson(self, path):
-        data_types_mapping = {
-            "String": "String",
-            "ObservationalTimePeriod": "Date",
-            "BigInteger": "Integer"
-        }
-
         dataset_name = self.id
         components = []
-        for c in self.dimensionDescriptor.components:
+        for c in self.dimensionDescriptor.components.values():
+
+            if c.local_representation.type_ is None:
+                type_ = "String"
+            else:
+                type_ = c.local_representation.type_
+
             component = {"name": c.id, "role": "Identifier",
-                         "dim_type": data_types_mapping[c.local_representation["dataType"]], "isNull": False}
+                         "type": Data_Types_VTL[type_], "isNull": False}
 
             components.append(component)
-        for c in self.attributeDescriptor.components:
+        for c in self.attributeDescriptor.components.values():
+
+            if c.local_representation.type_ is None:
+                type_ = "String"
+            else:
+                type_ = c.local_representation.type_
+
             component = {"name": c.id, "role": "Attribute",
-                         "dim_type": data_types_mapping[c.local_representation["dataType"]], "isNull": True}
+                         "type": Data_Types_VTL[type_], "isNull": True}
 
             components.append(component)
-        for c in self.measureDescriptor.components:
+        for c in self.measureDescriptor.components.values():
+
+            if c.local_representation.type_ is None:
+                type_ = "String"
+            else:
+                type_ = c.local_representation.type_
+
             component = {"name": c.id, "role": "Measure",
-                         "dim_type": data_types_mapping[c.local_representation["dataType"]], "isNull": True}
+                         "type": Data_Types_VTL[type_], "isNull": True}
 
             components.append(component)
 
         result = {"DataSet": {"name": dataset_name, "DataStructure": components}}
         with open(path, 'w') as fp:
-            json.dump(result, fp)
+            fp.write(json.dumps(result))
         return result
 
     def build_attributes(self, node, attrs, already_processed):

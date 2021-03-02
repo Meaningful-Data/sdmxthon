@@ -9,7 +9,7 @@ import pandas as pd
 from .validations import get_mandatory_attributes
 from .xml_base import makeWarnings
 from ..model.structure import PrimaryMeasure
-from ..utils.enums import DatasetType
+from ..utils.enums import MessageType
 
 logger = logging.getLogger("logger")
 
@@ -38,7 +38,7 @@ def addStructure(dataset, prettyprint, dType):
         child2 = child3 = child4 = nl = ''
 
     outfile += f'{child2}<message:Structure structureID="{dataset.structure.id}" '
-    if dType != DatasetType.GenericDataSet:
+    if dType != MessageType.GenericDataSet:
         outfile += f'namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
                    f'{dataset.structure.agencyID}:{dataset.structure.id}({dataset.structure.version})" '
 
@@ -59,7 +59,7 @@ def create_namespaces(dataTypeString, dataset, dType, prettyprint):
     outfile = f'<?xml version="1.0" encoding="UTF-8"?>{nl}'
     outfile += f'<message:{dataTypeString} xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' \
                f'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-    if dType == DatasetType.GenericDataSet:
+    if dType == MessageType.GenericDataSet:
         outfile += f'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
     else:
         outfile += f'xmlns:ss="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific" '
@@ -93,7 +93,7 @@ def writer(path, dataset, dType, prettyprint=True, id_='test',
     else:
         child1 = child2 = nl = ''
 
-    if dType == DatasetType.GenericDataSet:
+    if dType == MessageType.GenericDataSet:
         data_type_string = 'GenericData'
     else:
         data_type_string = 'StructureSpecificData'
@@ -117,7 +117,7 @@ def writer(path, dataset, dType, prettyprint=True, id_='test',
     outfile += f'{child1}</message:Header>{nl}'
 
     # Dataset
-    if dType == DatasetType.GenericDataSet:
+    if dType == MessageType.GenericDataSet:
         if isinstance(dataset, dict):
             for record in dataset.values():
                 outfile += genWriting(record, prettyprint)

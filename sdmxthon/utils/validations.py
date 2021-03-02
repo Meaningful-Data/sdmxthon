@@ -5,7 +5,7 @@ import numpy as np
 import pandas.api.types
 from pandas import DataFrame
 
-from ..model.structure import DataStructureDefinition, Dimension
+from ..model.structure import DataStructureDefinition, Attribute
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
@@ -14,13 +14,20 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
     if dsd.dimensionDescriptor.components is not None:
 
         for element in dsd.dimensionDescriptor.components.values():
-            if element.local_representation.codelist is not None:
+            if element.local_representation is not None and element.local_representation.codelist is not None:
                 data[element.id] = list(element.local_representation.codelist.items.keys())
+            elif element.concept_identity is not None and element.concept_identity.coreRepresentation is not None \
+                    and element.concept_identity.coreRepresentation.codelist is not None:
+                data[element.id] = list(element.concept_identity.coreRepresentation.codelist.items.keys())
 
     if dsd.attributeDescriptor is not None and dsd.attributeDescriptor.components is not None:
         for record in dsd.attributeDescriptor.components.values():
-            if record.local_representation.codelist is not None:
+            record: Attribute
+            if record.local_representation is not None and record.local_representation.codelist is not None:
                 data[record.id] = list(record.local_representation.codelist.items.keys())
+            elif record.concept_identity is not None and record.concept_identity.coreRepresentation is not None \
+                    and record.concept_identity.coreRepresentation.codelist is not None:
+                data[record.id] = list(record.concept_identity.coreRepresentation.codelist.items.keys())
 
     return data
 
@@ -33,8 +40,7 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
 
     for record in dsd.attributeDescriptor.components.values():
         if record.relatedTo is not None and record.usageStatus == "Mandatory":
-            if isinstance(record.relatedTo, list) and all(isinstance(n, Dimension) for n in record.relatedTo):
-                data.append(record.id)
+            data.append(record.id)
 
     return data
 
@@ -219,13 +225,12 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     elif data[mc].isnull().values.any():
         if 'OBS_STATUS' in data.keys():
 
-            rows = data[(data[mc].isna()) & (data['OBS_STATUS'] != 'M')] \
-                .apply(lambda row: format_row(row), axis=1).tolist()
+            rows = data[(data[mc].isna()) & (data['OBS_STATUS'] != 'M')].to_dict('records')
             if len(rows) > 0:
                 errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
         else:
-            rows = data[data[mc].isna()].apply(lambda row: format_row(row), axis=1).tolist()
+            rows = data[data[mc].isna()].to_dict('records')
             if len(rows) > 0:
                 errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
@@ -287,7 +292,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                     control = True
             if control:
                 pos = data[(data[k] == 'nan') | (data[k].isnull())].index.values
-                rows = data.iloc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
+                rows = data.iloc[pos, :].to_dict('records')
                 errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
 
@@ -322,7 +327,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             data_point = duplicated.loc[v, grouping_keys]
             series = duplicated[grouping_keys].apply(lambda row: np.array_equal(row.values, data_point.values), axis=1)
             pos = series[series].index.values
-            rows = duplicated.loc[pos, :].apply(lambda row: format_row(row), axis=1).tolist()
+            rows = duplicated.loc[pos, :].to_dict('records')
             duplicated = duplicated.drop(pos)
             errors.append({'Code': 'SS07',
                            'ErrorLevel': 'WARNING',

@@ -712,8 +712,8 @@ class EnumerationType(DataParser):
     pass
 
 
-class TextFormatType(DataParser):
-    def __init__(self, facets=None, gdscollector_=None, **kwargs_):
+class FormatType(DataParser):
+    def __init__(self, facets=None, type_=None, gdscollector_=None, **kwargs_):
         super().__init__(gds_collector_=gdscollector_, **kwargs_)
 
         if facets is None:
@@ -721,9 +721,19 @@ class TextFormatType(DataParser):
         else:
             self._facets = facets
 
+        self._type = type_
+
     @staticmethod
     def factory(*args_, **kwargs_):
-        return TextFormatType(*args_, **kwargs_)
+        return FormatType(**kwargs_)
+
+    @property
+    def type_(self):
+        return self._type
+
+    @type_.setter
+    def type_(self, value):
+        self._type = value
 
     @property
     def facets(self):
@@ -748,7 +758,6 @@ class TextFormatType(DataParser):
         value = find_attr_value_('minLength', node)
         if value is not None and 'minLength' not in already_processed:
             already_processed.add('minLength')
-
             self.facets.append(Facet(facetType='minLength', facetValue=value))
 
         value = find_attr_value_('maxLength', node)
@@ -815,6 +824,11 @@ class TextFormatType(DataParser):
             value = self.gds_validate_date(value)
             self.facets.append(Facet(facetType='endTime', facetValue=value))
 
+        value = find_attr_value_('textType', node)
+        if value is not None and 'textType' not in already_processed:
+            already_processed.add('textType')
+            self._type = value
+
 
 class Representation(DataParser):
     def __init__(self, facets=None, codelist=None, conceptScheme=None, gdscollector_=None,
@@ -827,6 +841,7 @@ class Representation(DataParser):
             self.addFacet(f)
         self.codelist = codelist
         self.conceptScheme = conceptScheme
+        self._type = None
 
     def __eq__(self, other):
         if isinstance(other, Representation):
@@ -865,12 +880,17 @@ class Representation(DataParser):
     def addFacet(self, value):
         self._components.append(value)
 
+    @property
+    def type_(self):
+        return self._type
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Enumeration':
             obj_ = EnumerationType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.codelist = obj_.codelist
-        elif nodeName_ == 'TextFormat':
-            obj_ = TextFormatType.factory()
+        elif nodeName_ == 'TextFormat' or nodeName_ == 'EnumerationFormat':
+            obj_ = FormatType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
+            self._type = obj_.type_
             self._components = obj_.facets

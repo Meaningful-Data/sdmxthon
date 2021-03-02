@@ -1,13 +1,11 @@
 import logging
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
 
 from ..common.dataSet import DataSet
 from ..message.generic import GenericDataType, StructureSpecificDataType, MetadataType
 from ..model.structure import PrimaryMeasure
-from ..utils.metadata_parsers import id_creator
 from ..utils.xml_base import GdsCollector, get_required_ns_prefix_defs, parse_xml, makeWarnings
 
 CapturedNsmap_ = {}
@@ -55,24 +53,13 @@ def readXML(inFileName, print_warning=True):
 
 def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
     datasets = {}
-    refs_data = {}
-
-    for i in xmlObj.header.structure:
-        refs_data[i.gds_element_tree_node_.attrib['structureID']] = id_creator(i.ref.agencyID, i.ref.id_,
-                                                                               i.ref.version)
 
     for e in xmlObj.dataset:
-        str_ref = e.structureRef
-
-        if str_ref is None:
-            str_ref = e.gds_element_tree_node_.attrib[
-                '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific}structureRef']
-            if str_ref is None:
-                # TODO Warning Structure Ref not found
-                continue
-        if refs_data[str_ref] not in dsd_dict:
+        if xmlObj.header.structure[e.structureRef]['DSDID'] not in dsd_dict:
+            # TODO Warning DSD not found
             continue
-        dsd = dsd_dict[refs_data[str_ref]]
+
+        dsd = dsd_dict[xmlObj.header.structure[e.structureRef]['DSDID']]
         item = DataSet(dsd)
 
         dataset_attributes = {'reportingBegin': e.reporting_begin_date, 'reportingEnd': e.reporting_end_date,
@@ -84,17 +71,9 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
 
         # Default Attributes
 
-        dim_obs = ''
+        dim_obs = xmlObj.header.structure[e.structureRef]['dimAtObs']
 
-        for j in xmlObj.header.structure:
-            if j.gds_element_tree_node_.attrib['structureID'] == str_ref \
-                    and j.gds_element_tree_node_.attrib['dimensionAtObservation']:
-                dim_obs = j.gds_element_tree_node_.attrib['dimensionAtObservation']
-
-        if dim_obs == '':
-            dataset_attributes['dimensionAtObservation'] = 'AllDimensions'
-        else:
-            dataset_attributes['dimensionAtObservation'] = dim_obs
+        dataset_attributes['dimensionAtObservation'] = dim_obs
 
         item.datasetAttributes = dataset_attributes.copy()
 
@@ -116,25 +95,6 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
         datasets[dsd.id] = item
     del xmlObj
     return datasets
-
-
-def check_empty(series: dict):
-    temp_series = series.copy()
-    for key, list_ in temp_series.items():
-        if all(e is np.nan for e in list_):
-            series.pop(key)
-
-
-def check_length(series: dict):
-    length = -1
-    key_ref = ''
-    for key, list_ in series.items():
-        if length == -1:
-            length = len(list_)
-            key_ref = key
-        elif length != len(list_):
-            # All series must be on same size
-            print('Key: %s ---- length: %d ---- expected length: %d from key %s' % (key, len(list_), length, key_ref))
 
 
 def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
