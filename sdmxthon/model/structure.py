@@ -2,7 +2,7 @@ import json
 
 from .base import *
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
-from .itemScheme import Agency, Representation
+from .itemScheme import Representation
 from .utils import genericSetter, qName, intSetter
 from ..common.refs import RefBaseType
 from ..utils.data_parser import DataParser
@@ -725,21 +725,33 @@ class DataStructureDefinition(MaintainableArtefact, DataParser):
 
     @property
     def facetedObjects(self):
-        list_codes = []
+        facets = {}
         for k, v in self.dimensionDescriptor.components.items():
-            if v.local_representation is not None and len(v.local_representation.facets) > 0:
-                list_codes.append(k)
+            if v.local_representation is not None:
+                if len(v.local_representation.facets) > 0:
+                    facets[k] = v.local_representation.facets
+            elif v.concept_identity is not None and not isinstance(v.concept_identity, dict) and \
+                    len(v.concept_identity.facets) > 0:
+                facets[k] = v.concept_identity.facets
 
         if self.attributeDescriptor is not None:
             for k, v in self.attributeDescriptor.components.items():
-                if v.local_representation is not None and len(v.local_representation.facets) > 0:
-                    list_codes.append(k)
+                if v.local_representation is not None:
+                    if len(v.local_representation.facets) > 0:
+                        facets[k] = v.local_representation.facets
+                elif v.concept_identity is not None and not isinstance(v.concept_identity, dict) and \
+                        len(v.concept_identity.facets) > 0:
+                    facets[k] = v.concept_identity.facets
 
         if self.measureDescriptor is not None:
             for k, v in self.measureDescriptor.components.items():
-                if v.local_representation is not None and len(v.local_representation.facets) > 0:
-                    list_codes.append(k)
-        return list_codes
+                if v.local_representation is not None:
+                    if len(v.local_representation.facets) > 0:
+                        facets[k] = v.local_representation.facets
+                elif v.concept_identity is not None and not isinstance(v.concept_identity, dict) and \
+                        len(v.concept_identity.facets) > 0:
+                    facets[k] = v.concept_identity.facets
+        return facets
 
     @property
     def measureCode(self):
@@ -825,7 +837,7 @@ class DataStructureDefinition(MaintainableArtefact, DataParser):
         value = find_attr_value_('agencyID', node)
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
-            self.maintainer = Agency(id_=value)
+            self.maintainer = value
 
         value = find_attr_value_('isExternalReference', node)
         if value is not None and 'isExternalReference' not in already_processed:
@@ -846,10 +858,12 @@ class DataStructureDefinition(MaintainableArtefact, DataParser):
             self.version = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+
+        super(DataStructureDefinition, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
         if nodeName_ == 'DataStructureComponents':
             obj_ = DataStructureComponentType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._attributeDescriptor = obj_.attributeDescriptor
             self._dimensionDescriptor = obj_.dimensionDescriptor
             self._measureDescriptor = obj_.measureDescriptor
-        # TODO Parse Name and Description

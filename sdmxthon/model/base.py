@@ -9,9 +9,12 @@ from datetime import datetime
 from typing import List
 
 from .utils import stringSetter, dateSetter, setDateFromString, getDateString, boolSetter, genericSetter
+from ..utils.data_parser import DataParser
+from ..utils.mappings import Locale_Codes
+from ..utils.xml_base import find_attr_value_
 
 
-class LocalisedString(object):
+class LocalisedString(DataParser):
     """LocalisedString class.
 
         The Localised String supports the representation
@@ -24,27 +27,56 @@ class LocalisedString(object):
         locale: The geographic locale of the string
     """
 
-    def __init__(self, locale: str = None, label: str = None):
+    def __init__(self, locale: str = None, label: str = None, content: str = None, gds_collector=None):
         """Inits LocalisedString with optional attributes."""
 
+        super().__init__(gds_collector)
         self.label = label
-        self.locale = locale
+        self._locale = locale
+        self._content = content
+
+    @staticmethod
+    def factory():
+        return LocalisedString()
 
     @property
     def locale(self):
         return self._locale
 
-    @property
-    def label(self):
-        return self._label
-
     @locale.setter
     def locale(self, value):
         self._locale = stringSetter(value)
 
+    @property
+    def label(self):
+        return self._label
+
     @label.setter
     def label(self, value):
         self._label = stringSetter(value)
+
+    @property
+    def content(self):
+        return self._content
+
+    @content.setter
+    def content(self, value):
+        self._content = stringSetter(value)
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('{http://www.w3.org/XML/1998/namespace}lang', node)
+        if value is not None and 'lang' not in already_processed:
+            already_processed.add('lang')
+            self._label = value
+            if value in Locale_Codes.keys():
+                self._locale = Locale_Codes[value]
+            else:
+                raise ValueError(f'{value} is not in ISO 639-1 Codes')
+        if node.text.strip() not in ['', '\n']:
+            self._content = node.text
+
+    def build_children(self, child, node, node_name_, gds_collector_):
+        pass
 
 
 class InternationalString(object):
@@ -66,35 +98,30 @@ class InternationalString(object):
         """Inits InternationalString with optional attributes."""
 
         if localisedStrings is None:
-            self._localisedStrings = []
-            self._localisedStringsDict = {}
+            self._items = {}
         else:
             for record in localisedStrings:
                 self.addLocalisedString(record)
 
     @property
-    def localisedStrings(self):
-        return self._localisedStrings
-
-    @property
-    def localisedStringsDict(self):
-        return self._localisedStringsDict
+    def items(self):
+        return self._items
 
     def addLocalisedString(self, localisedString: LocalisedString):
         if not isinstance(localisedString, LocalisedString):
             raise TypeError("International strings can only get localised strings as arguments")
         else:
-            self._localisedStrings.append(localisedString)
-            self._localisedStringsDict[localisedString.locale] = localisedString.label
+            self._items[localisedString.label] = {'locale': localisedString.locale,
+                                                  'content': localisedString.content}
 
     def getLocales(self):
-        return set(self._localisedStringsDict.keys())
+        return set(self._items.keys())
 
     def __getitem__(self, key):
-        return self._localisedStringsDict[key]
+        return self._items[key]
 
     def __str__(self):
-        return str(self._localisedStringsDict)
+        return str(self._items)
 
 
 class Annotation(object):
@@ -177,7 +204,6 @@ class IdentifiableArtefact(AnnotableArtefact):
     _urnType = None
 
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None):
-
         if annotations is None:
             annotations = []
 
@@ -205,21 +231,45 @@ class IdentifiableArtefact(AnnotableArtefact):
 
 class NameableArtefact(IdentifiableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None,
-                 name: str = None, description: str = None):
+                 name: InternationalString = None, description: InternationalString = None):
         if annotations is None:
             annotations = []
 
         super(NameableArtefact, self).__init__(id_=id_, uri=uri, annotations=annotations)
 
-        self.name = name
-        self.description = description
+        self._name = name
+        self._description = description
 
     @property
     def name(self):
+        if self._name is None:
+            return None
+        elif isinstance(self._name, InternationalString):
+            if len(self._name.items) == 0:
+                return None
+            elif len(self._name.items) == 1:
+                values_view = self._name.items.values()
+                value_iterator = iter(values_view)
+                first_value = next(value_iterator)
+                return first_value['content']
+            else:
+                return self._name.items
         return self._name
 
     @property
     def description(self):
+        if self._description is None:
+            return None
+        elif isinstance(self._description, InternationalString):
+            if len(self._description.items) == 0:
+                return None
+            elif len(self._description.items) == 1:
+                values_view = self._description.items.values()
+                value_iterator = iter(values_view)
+                first_value = next(value_iterator)
+                return first_value['content']
+            else:
+                return self._description.items
         return self._description
 
     @name.setter
@@ -230,12 +280,25 @@ class NameableArtefact(IdentifiableArtefact):
     def description(self, value):
         self._description = value
 
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Name':
+            obj_ = LocalisedString.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._name is None:
+                self._name = InternationalString()
+            self._name.addLocalisedString(obj_)
+        elif nodeName_ == 'Description':
+            obj_ = LocalisedString.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._description is None:
+                self._description = InternationalString()
+            self._description.addLocalisedString(obj_)
+
 
 class VersionableArtefact(NameableArtefact):
     def __init__(self, id_: str, uri: str = None, annotations: List[Annotation] = None,
                  name: str = None, description: str = None,
                  version: str = "1.0", validFrom: datetime = None, validTo: datetime = None):
-
         if annotations is None:
             annotations = []
 
@@ -281,6 +344,9 @@ class VersionableArtefact(NameableArtefact):
     def getValidToString(self, format_: str = "%Y-%m-%d"):
         return getDateString(self.validTo, format_)
 
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(VersionableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
 
 class MaintainableArtefact(VersionableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations: List[Annotation] = None,
@@ -306,7 +372,11 @@ class MaintainableArtefact(VersionableArtefact):
 
     @property
     def unique_id(self):
-        return f'{self.maintainer.id}:{self.id}({self.version})'
+
+        if isinstance(self.maintainer, str):
+            return f'{self.maintainer}:{self.id}({self.version})'
+        else:
+            return f'{self.maintainer.id}:{self.id}({self.version})'
 
     @property
     def isFinal(self):
@@ -346,12 +416,17 @@ class MaintainableArtefact(VersionableArtefact):
 
     @maintainer.setter
     def maintainer(self, value):
-        if value.__class__.__name__ == "Agency" or value is None:
-            self._maintainer = value
-        else:
-            raise TypeError("The maintainer has to be an instance of Agency")
+        self._maintainer = value
 
     @property
     def agencyID(self):
         if self.maintainer is not None:
-            return self.maintainer.id
+            if isinstance(self.maintainer, str):
+                return self.maintainer
+            else:
+                return self.maintainer.id
+        else:
+            return None
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(MaintainableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)

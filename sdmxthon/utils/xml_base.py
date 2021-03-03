@@ -133,15 +133,22 @@ def get_all_text_(node):
 
 def find_attr_value_(attr_name, node):
     attrs = node.attrib
-    attr_parts = attr_name.split(':')
+    if '}' in attr_name:
+        attr_parts = attr_name.split('}')
+        attr_parts[0] += '}'
+    else:
+        attr_parts = attr_name.split(':')
     value = None
     if len(attr_parts) == 1:
         value = attrs.get(attr_name)
     elif len(attr_parts) == 2:
         prefix, name = attr_parts
-        namespace = node.nsmap.get(prefix)
-        if namespace is not None:
-            value = attrs.get(f'{prefix}:{name}')
+        if prefix == '{http://www.w3.org/XML/1998/namespace}':
+            value = attrs.get(f'{prefix}{name}')
+        else:
+            namespace = node.nsmap.get(prefix)
+            if namespace is not None:
+                value = attrs.get(f'{prefix}:{name}')
     return value
 
 

@@ -5,7 +5,7 @@ import numpy as np
 import pandas.api.types
 from pandas import DataFrame
 
-from ..model.structure import DataStructureDefinition, Attribute
+from ..model.structure import DataStructureDefinition
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
@@ -15,19 +15,24 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
 
         for element in dsd.dimensionDescriptor.components.values():
             if element.local_representation is not None and element.local_representation.codelist is not None:
-                data[element.id] = list(element.local_representation.codelist.items.keys())
-            elif element.concept_identity is not None and element.concept_identity.coreRepresentation is not None \
-                    and element.concept_identity.coreRepresentation.codelist is not None:
-                data[element.id] = list(element.concept_identity.coreRepresentation.codelist.items.keys())
+                if not isinstance(element.local_representation.codelist, str):
+                    data[element.id] = list(element.local_representation.codelist.items.keys())
+            elif element.concept_identity is not None:
+                if not isinstance(element.concept_identity, dict):
+                    if element.concept_identity.coreRepresentation is not None and \
+                            element.concept_identity.coreRepresentation.codelist is not None:
+                        data[element.id] = list(element.concept_identity.coreRepresentation.codelist.items.keys())
 
     if dsd.attributeDescriptor is not None and dsd.attributeDescriptor.components is not None:
         for record in dsd.attributeDescriptor.components.values():
-            record: Attribute
             if record.local_representation is not None and record.local_representation.codelist is not None:
-                data[record.id] = list(record.local_representation.codelist.items.keys())
-            elif record.concept_identity is not None and record.concept_identity.coreRepresentation is not None \
-                    and record.concept_identity.coreRepresentation.codelist is not None:
-                data[record.id] = list(record.concept_identity.coreRepresentation.codelist.items.keys())
+                if not isinstance(record.local_representation.codelist, str):
+                    data[record.id] = list(record.local_representation.codelist.items.keys())
+            elif record.concept_identity is not None:
+                if not isinstance(record.concept_identity, dict):
+                    if record.concept_identity.coreRepresentation is not None and \
+                            record.concept_identity.coreRepresentation.codelist is not None:
+                        data[record.id] = list(record.concept_identity.coreRepresentation.codelist.items.keys())
 
     return data
 
@@ -236,7 +241,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
 
         if mc in faceted_objects:
-            facets = dsd.measureDescriptor.components[mc].local_representation.facets
+            facets = faceted_objects[mc]
             if pandas.api.types.is_numeric_dtype(data[mc]):
                 data_column = data[mc].unique().astype('float64')
                 errors += check_num_facets(facets, data_column, mc, type_)
@@ -297,10 +302,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
 
         if k in faceted_objects:
-            if k in dsd.dimensionCodes:
-                facets = dsd.dimensionDescriptor.components[k].local_representation.facets
-            else:
-                facets = dsd.attributeDescriptor.components[k].local_representation.facets
+            facets = faceted_objects[k]
             if is_numeric:
                 errors += check_num_facets(facets, data_column, k, type_)
             else:

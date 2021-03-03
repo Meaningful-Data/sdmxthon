@@ -16,7 +16,6 @@ def readSDMX(path_to_xml, pathToMetadata):
     obj_ = readXML(path_to_xml)
     if isinstance(obj_, MetadataType):
         setReferences(obj_)
-
     metadata = getMetadata(pathToMetadata)
 
     header = obj_.header

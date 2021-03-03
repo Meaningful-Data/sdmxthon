@@ -97,6 +97,9 @@ class Item(NameableArtefact):
         else:
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
 
+    def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        super(Item, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
 
 class ItemScheme(MaintainableArtefact):
     _itemType = None
@@ -159,6 +162,9 @@ class ItemScheme(MaintainableArtefact):
         else:
             raise TypeError(f"The object has to be of the type {self._itemType}")
 
+    def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        super(ItemScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
 
 class Code(Item, DataParser):
     _schemeType = "Codelist"
@@ -201,9 +207,8 @@ class Code(Item, DataParser):
             already_processed.add('urn')
             self.uri = value
 
-    def build_children(self, child_, node, nodeName_, gds_collector_=None):
-        pass
-        # TODO Parse Name and Description
+    def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        super(Code, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
 class Agency(Item, DataParser):
@@ -247,7 +252,7 @@ class Agency(Item, DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         # TODO Parse Name and Description and Contact
-        pass
+        super(Agency, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
 class ConceptScheme(ItemScheme, DataParser):
@@ -319,7 +324,7 @@ class ConceptScheme(ItemScheme, DataParser):
         value = find_attr_value_('agencyID', node)
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
-            self.maintainer = Agency(id_=value)
+            self.maintainer = value
 
         value = find_attr_value_('isExternalReference', node)
         if value is not None and 'isExternalReference' not in already_processed:
@@ -340,15 +345,13 @@ class ConceptScheme(ItemScheme, DataParser):
             self.version = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-
+        super(ConceptScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'Concept':
             obj_ = Concept.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             if obj_.coreRepresentation is not None and obj_.coreRepresentation.codelist is not None:
                 self._cl_references[obj_.id] = obj_.coreRepresentation.codelist
             self.append(obj_)
-
-        # TODO Parse Name and Description
 
 
 class Codelist(ItemScheme, DataParser):
@@ -414,7 +417,7 @@ class Codelist(ItemScheme, DataParser):
         value = find_attr_value_('agencyID', node)
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
-            self.maintainer = Agency(id_=value)
+            self.maintainer = value
 
         value = find_attr_value_('isExternalReference', node)
         if value is not None and 'isExternalReference' not in already_processed:
@@ -435,12 +438,12 @@ class Codelist(ItemScheme, DataParser):
             self.version = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(Codelist, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
         if nodeName_ == 'Code':
             obj_ = Code.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.append(obj_)
-
-        # TODO Parse Name and Description
 
 
 class OrganisationScheme(ItemScheme):
@@ -549,7 +552,7 @@ class AgencyScheme(OrganisationScheme, DataParser):
         value = find_attr_value_('agencyID', node)
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
-            self.maintainer = Agency(id_=value)
+            self.maintainer = value
 
         value = find_attr_value_('isExternalReference', node)
         if value is not None and 'isExternalReference' not in already_processed:
@@ -570,13 +573,11 @@ class AgencyScheme(OrganisationScheme, DataParser):
             self.version = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-
+        super(AgencyScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'Agency':
             obj_ = Agency.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.append(obj_)
-
-        # TODO Parse Name and Description
 
 
 class Concept(Item, DataParser):
@@ -634,12 +635,12 @@ class Concept(Item, DataParser):
             already_processed.add('urn')
             self.uri = value
 
-    def build_children(self, child_, node, nodeName_, gds_collector_=None):
+    def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        super(Concept, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'CoreRepresentation':
             obj_ = Representation.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.coreRepresentation = obj_
-        # TODO Parse Name and Description
 
 
 class Facet:
@@ -708,8 +709,6 @@ class EnumerationType(DataParser):
             obj_.build(child_, gds_collector_=gds_collector_)
             if obj_.package is not None and obj_.package == 'codelist':
                 self.codelist = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
-
-    pass
 
 
 class FormatType(DataParser):

@@ -83,28 +83,49 @@ def checkRelationship(att, dsd, obj):
 
 
 def setReferences(obj):
+    agencies = {}
+    if obj.structures.organisations is not None and obj.structures.organisations.agencySchemes is not None and len(
+            obj.structures.organisations.agencySchemes.items) > 0:
+        agencies = obj.structures.organisations.agencySchemes.items
+        if obj.structures.organisations.agencySchemes.maintainer in agencies.keys():
+            obj.structures.organisations.agencySchemes.maintainer = agencies[
+                obj.structures.organisations.agencySchemes.maintainer]
+
+    if len(obj.structures.codelists) > 0:
+        for cl in obj.structures.codelists.values():
+            if cl.maintainer in agencies.keys():
+                cl.maintainer = agencies[cl.maintainer]
+
     if len(obj.structures.codelists) > 0 and len(obj.structures.concepts) > 0:
         for sch in obj.structures.concepts.values():
-            for con, cl in sch.cl_references.items():
-                if cl in obj.structures.codelists.keys():
-                    sch.items[con].coreRepresentation.codelist = obj.structures.codelists[cl]
-                else:
-                    obj.structures.add_error({'Code': 'MX04', 'ErrorLevel': 'CRITICAL',
-                                              'ObjectID': f'{sch.unique_id}-{con}', 'ObjectType': f'Concept',
-                                              'Message': f'Codelist {cl} not found for '
-                                                         f'Concept {sch.unique_id}-{con}'})
+            if sch.maintainer in agencies.keys():
+                sch.maintainer = agencies[sch.maintainer]
+            for con in sch.items.values():
+                if con.id in sch.cl_references.keys():
+                    cl = sch.cl_references[con.id]
+                    if cl in obj.structures.codelists.keys():
+                        sch.items[con.id].coreRepresentation.codelist = obj.structures.codelists[cl]
+                    else:
+                        obj.structures.add_error({'Code': 'MX04', 'ErrorLevel': 'CRITICAL',
+                                                  'ObjectID': f'{sch.unique_id}-{con}', 'ObjectType': f'Concept',
+                                                  'Message': f'Codelist {cl} not found for '
+                                                             f'Concept {sch.unique_id}-{con}'})
 
         if len(obj.structures.dsds) > 0:
             missing_rep = {'CS': [], 'CL': [], 'CON': []}
             keys_errors = []
             for key, dsd in obj.structures.dsds.items():
-                control_errors = False
+                if dsd.maintainer in agencies.keys():
+                    dsd.maintainer = agencies[dsd.maintainer]
                 if dsd.dimensionDescriptor is not None:
                     for dim in dsd.dimensionDescriptor.components.values():
                         control_errors = setOnComponent(comp=dim, obj=obj, missing_rep=missing_rep)
+                        if control_errors and key not in keys_errors:
+                            keys_errors.append(key)
 
                 else:
-                    control_errors = True
+                    if key not in keys_errors:
+                        keys_errors.append(key)
                     obj.structures.add_error({'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
                                               'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
                                               'Message': f'DSD {dsd.unique_id} does not have a DimensionList'})
@@ -112,6 +133,8 @@ def setReferences(obj):
                 if dsd.attributeDescriptor is not None:
                     for att in dsd.attributeDescriptor.components.values():
                         control_errors = setOnComponent(comp=att, obj=obj, missing_rep=missing_rep)
+                        if control_errors and key not in keys_errors:
+                            keys_errors.append(key)
                         if att.relatedTo is not None and att.relatedTo != 'NoSpecifiedRelationship':
                             checkRelationship(att, dsd, obj)
 
@@ -120,14 +143,15 @@ def setReferences(obj):
                         for meas in dsd.measureDescriptor.components.values():
                             control_errors = setOnComponent(comp=meas, obj=obj, missing_rep=missing_rep)
 
+                            if control_errors and key not in keys_errors:
+                                keys_errors.append(key)
+
                     else:
-                        control_errors = True
+                        if key not in keys_errors:
+                            keys_errors.append(key)
                         obj.structures.add_error({'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
                                                   'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
                                                   'Message': f'DSD {dsd.unique_id} does not have a Primary Measure'})
-
-                if control_errors:
-                    keys_errors.append(key)
 
             grouping_errors(missing_rep, obj, keys_errors)
         else:

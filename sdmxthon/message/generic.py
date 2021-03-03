@@ -1185,7 +1185,6 @@ class CodelistsType(DataParser):
             obj_ = Codelist.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._codelists[obj_.unique_id] = obj_
-        # TODO Parsing Name of the Codelist
 
 
 class ConceptsType(DataParser):
@@ -1290,18 +1289,13 @@ class DataStructuresType(DataParser):
 
 
 class OrganisationSchemesType(DataParser):
-    def __init__(self, agency_scheme=None, name=None, gds_collector_=None, **kwargs_):
+    def __init__(self, agency_scheme=None, gds_collector_=None, **kwargs_):
         super(OrganisationSchemesType, self).__init__(gds_collector_, **kwargs_)
 
         if agency_scheme is None:
             self._agency_schemes = []
         else:
             self._agency_schemes = agency_scheme
-
-        if name is None:
-            self._name = ''
-        else:
-            self._name = name
 
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
@@ -1320,14 +1314,6 @@ class OrganisationSchemesType(DataParser):
     def agencySchemes(self, value):
         self._agency_schemes = value
 
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
     def has_content_(self):
         if self.agencySchemes is not None or super(OrganisationSchemesType, self).has_content_():
             return True
@@ -1339,7 +1325,6 @@ class OrganisationSchemesType(DataParser):
             obj_ = AgencyScheme.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.agencySchemes = obj_
-        # TODO Parsing Name of the Codelist
 
 
 class DataflowsType(DataParser):

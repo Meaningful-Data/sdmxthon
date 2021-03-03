@@ -25,6 +25,7 @@ pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
+# pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
@@ -48,36 +49,9 @@ def pretty(d, indent=0):
             print('\t' * (indent + 1) + str(value))
 
 
-def parse_agencies(xml_element, agency_scheme):
-    expression = "./str:Agency"
-    agencies = xml_element.xpath(expression,
-                                 namespaces={'str': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure'})
-
-    if agencies is not None:
-        for e in agencies:
-            a = Agency(id_=e.attrib['id_'], uri=e.attrib['urn'], scheme=agency_scheme)
-
-            expression = "./com:Name/text()"
-            name = e.xpath(expression,
-                           namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
-            if len(name) > 0:
-                a.name = str(name[0])
-
-            expression = "./com:Description/text()"
-            desc = e.xpath(expression,
-                           namespaces={'com': 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common'})
-            if len(desc) > 0:
-                a.description = str(desc[0])
-
-
 def main():
-    logger.debug('Start')
 
     message = readSDMX(pathToDataSpe, pathToMetadataFile)
-
-    for e in message.payload.values():
-        e.semanticValidation()
-
     """
     root = etree.parse(pathToMetadataFile)
 

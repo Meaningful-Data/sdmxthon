@@ -1,3 +1,4 @@
+"""
 import numpy as np
 import pandas as pd
 from lxml import etree
@@ -196,3 +197,4 @@ def read_Structure(pathData, pathMetadata):
         return first_value
     else:
         return datasets
+"""
