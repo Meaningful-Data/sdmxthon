@@ -4,6 +4,7 @@ from .base import *
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
 from .itemScheme import Representation
 from .utils import genericSetter, qName, intSetter
+from ..common.references import RelationshipRefType
 from ..common.refs import RefBaseType
 from ..utils.data_parser import DataParser
 from ..utils.mappings import Data_Types_VTL
@@ -201,46 +202,6 @@ class TimeDimension(Dimension, DataParser):
         super(TimeDimension, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
 
 
-class RefIDType(DataParser):
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._id = None
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return RefIDType(*args_, **kwargs_)
-
-    @property
-    def id(self):
-        return self._id
-
-    def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._id = value
-
-
-class RelationshipRefType(DataParser):
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._ref = None
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return RelationshipRefType(*args_, **kwargs_)
-
-    @property
-    def ref(self):
-        return self._ref
-
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        if nodeName_ == 'Ref':
-            obj_ = RefIDType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._ref = obj_.id
-
-
 class AttributeRelationshipType(DataParser):
     def __init__(self, gds_collector_=None):
         super().__init__(gds_collector_)
@@ -426,15 +387,7 @@ class ComponentList(IdentifiableArtefact):
         return self.components[value]
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
+        super(ComponentList, self).build_attributes(node, attrs, already_processed)
 
 
 class DimensionDescriptor(ComponentList, DataParser):
@@ -619,7 +572,7 @@ class DataStructureComponentType(DataParser):
             self._measure_descriptor = obj_
 
 
-class DataStructureDefinition(MaintainableArtefact, DataParser):
+class DataStructureDefinition(MaintainableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
@@ -824,38 +777,7 @@ class DataStructureDefinition(MaintainableArtefact, DataParser):
         return result
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
-
-        value = find_attr_value_('agencyID', node)
-        if value is not None and 'agencyID' not in already_processed:
-            already_processed.add('agencyID')
-            self.maintainer = value
-
-        value = find_attr_value_('isExternalReference', node)
-        if value is not None and 'isExternalReference' not in already_processed:
-            already_processed.add('isExternalReference')
-            value = self.gds_parse_boolean(value)
-            self.isExternalReference = value
-
-        value = find_attr_value_('isFinal', node)
-        if value is not None and 'isFinal' not in already_processed:
-            already_processed.add('isFinal')
-            value = self.gds_parse_boolean(value)
-            self.isFinal = value
-
-        value = find_attr_value_('version', node)
-        if value is not None and 'version' not in already_processed:
-            already_processed.add('version')
-            # TODO Validate version
-            self.version = value
+        super(DataStructureDefinition, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
 

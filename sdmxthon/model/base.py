@@ -8,7 +8,7 @@ Please refer to the package in the SDMX Information Model
 from datetime import datetime
 from typing import List
 
-from .utils import stringSetter, dateSetter, setDateFromString, getDateString, boolSetter, genericSetter
+from .utils import stringSetter, dateSetter, setDateFromString, getDateString, boolSetter
 from ..utils.data_parser import DataParser
 from ..utils.mappings import Locale_Codes
 from ..utils.xml_base import find_attr_value_
@@ -124,14 +124,133 @@ class InternationalString(object):
         return str(self._items)
 
 
-class Annotation(object):
+class AnnotationType(DataParser):
+    """_annotationType provides for non-documentation notes and annotations to
+    be embedded in data and structure messages. It provides optional fields
+    for providing a title, a dim_type description, a URI, and the text of the
+    annotation.The id_ attribute provides a non-standard identification of
+    an annotation. It can be used to disambiguate annotations."""
+    __hash__ = DataParser.__hash__
+    subclass = None
+    superclass = None
+
+    def __init__(self, idx=None, annotation_title=None, annotation_type_member=None, annotation_URL=None,
+                 annotation_text: InternationalString = None, gds_collector_=None):
+        super(AnnotationType, self).__init__(gds_collector_)
+        self.gds_collector_ = gds_collector_
+        self._id = idx
+        self._annotationTitle = annotation_title
+        self._annotationType = annotation_type_member
+        self._annotationURL = annotation_URL
+        self._annotationText = annotation_text
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return AnnotationType(*args_, **kwargs_)
+
+    @property
+    def annotation_title(self):
+        return self._annotationTitle
+
+    @annotation_title.setter
+    def annotation_title(self, value):
+        self._annotationTitle = value
+
+    @property
+    def annotation_type(self):
+        return self._annotationType
+
+    @annotation_type.setter
+    def annotation_type(self, value):
+        self._annotationType = value
+
+    @property
+    def annotation_url(self):
+        return self._annotationURL
+
+    @annotation_url.setter
+    def annotation_url(self, value):
+        self._annotationURL = value
+
+    @property
+    def annotation_text(self):
+        if self._annotationText is None:
+            return None
+        elif isinstance(self._annotationText, InternationalString):
+            if len(self._annotationText.items) == 0:
+                return None
+            elif len(self._annotationText.items) == 1:
+                values_view = self._annotationText.items.values()
+                value_iterator = iter(values_view)
+                first_value = next(value_iterator)
+                return first_value['content']
+            else:
+                return self._annotationText.items
+        return self._annotationText
+
+    @annotation_text.setter
+    def annotation_text(self, value):
+        self._annotationText = value
+
+    @property
+    def id_(self):
+        return self._id
+
+    def has_content_(self):
+        if (
+                self._annotationTitle is not None or
+                self._annotationType is not None or
+                self._annotationURL is not None or
+                self._annotationText
+        ):
+            return True
+        else:
+            return False
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self._id = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'AnnotationTitle':
+            value_ = child_.text
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
+            self._annotationTitle = value_
+        elif nodeName_ == 'AnnotationType':
+            value_ = child_.text
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
+            self._annotationType = value_
+        elif nodeName_ == 'AnnotationURL':
+            value_ = child_.text
+            value_ = self.gds_parse_string(value_)
+            value_ = self.gds_validate_string(value_)
+            self._annotationURL = value_
+        elif nodeName_ == 'AnnotationText':
+            obj_ = LocalisedString.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._annotationText is None:
+                self._annotationText = InternationalString()
+            self._annotationText.addLocalisedString(obj_)
+
+
+class Annotation(DataParser):
     def __init__(self, id_: str = None, title: str = None, type_: str = None,
-                 url: str = None, text: InternationalString = None):
+                 url: str = None, text: InternationalString = None, gds_collector=None):
+        super(Annotation, self).__init__(gds_collector_=gds_collector)
         self.id = id_
         self.title = title
         self.type = type_
         self.url = url
         self.text = text
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Annotation(*args_, **kwargs_)
 
     @property
     def id(self):
@@ -171,12 +290,22 @@ class Annotation(object):
 
     @text.setter
     def text(self, value):
-        self._text = genericSetter(value, InternationalString)
+        self._text = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Annotation':
+            obj_ = AnnotationType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.text = obj_.annotation_text
+            self.title = obj_.annotation_title
+            self.type = obj_.annotation_type
+            self.url = obj_.annotation_url
 
 
-class AnnotableArtefact(object):
-    def __init__(self, annotations: List[Annotation] = None):
+class AnnotableArtefact(DataParser):
+    def __init__(self, annotations: List[Annotation] = None, gds_collector=None):
 
+        super().__init__(gds_collector_=gds_collector)
         self._annotations = []
 
         if isinstance(annotations, list):
@@ -197,6 +326,12 @@ class AnnotableArtefact(object):
             raise TypeError("Annotable artefacts can only get annotations as arguments")
         else:
             self._annotations.append(annotation)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Annotations':
+            obj_ = Annotation.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.addAnnotation(obj_)
 
 
 class IdentifiableArtefact(AnnotableArtefact):
@@ -227,6 +362,20 @@ class IdentifiableArtefact(AnnotableArtefact):
     @uri.setter
     def uri(self, value):
         self._uri = stringSetter(value)
+
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(IdentifiableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
 class NameableArtefact(IdentifiableArtefact):
@@ -280,7 +429,11 @@ class NameableArtefact(IdentifiableArtefact):
     def description(self, value):
         self._description = value
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(NameableArtefact, self).build_attributes(node, attrs, already_processed)
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(NameableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'Name':
             obj_ = LocalisedString.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -343,6 +496,15 @@ class VersionableArtefact(NameableArtefact):
 
     def getValidToString(self, format_: str = "%Y-%m-%d"):
         return getDateString(self.validTo, format_)
+
+    def build_attributes(self, node, attrs, already_processed):
+        super(VersionableArtefact, self).build_attributes(node, attrs, already_processed)
+
+        value = find_attr_value_('version', node)
+        if value is not None and 'version' not in already_processed:
+            already_processed.add('version')
+            # TODO Validate version
+            self.version = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         super(VersionableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
@@ -427,6 +589,27 @@ class MaintainableArtefact(VersionableArtefact):
                 return self.maintainer.id
         else:
             return None
+
+    def build_attributes(self, node, attrs, already_processed):
+
+        super(MaintainableArtefact, self).build_attributes(node, attrs, already_processed)
+
+        value = find_attr_value_('agencyID', node)
+        if value is not None and 'agencyID' not in already_processed:
+            already_processed.add('agencyID')
+            self.maintainer = value
+
+        value = find_attr_value_('isExternalReference', node)
+        if value is not None and 'isExternalReference' not in already_processed:
+            already_processed.add('isExternalReference')
+            value = self.gds_parse_boolean(value)
+            self.isExternalReference = value
+
+        value = find_attr_value_('isFinal', node)
+        if value is not None and 'isFinal' not in already_processed:
+            already_processed.add('isFinal')
+            value = self.gds_parse_boolean(value)
+            self.isFinal = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         super(MaintainableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)

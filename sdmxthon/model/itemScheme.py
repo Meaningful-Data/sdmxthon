@@ -4,6 +4,7 @@ from datetime import datetime
 from .base import NameableArtefact, MaintainableArtefact, InternationalString
 from .dataTypes import FacetType, FacetValueType
 from .utils import boolSetter, qName, stringSetter, genericSetter
+from ..common.references import RelationshipRefType
 from ..common.refs import RefBaseType
 from ..utils.data_parser import DataParser
 from ..utils.xml_base import find_attr_value_
@@ -81,6 +82,7 @@ class Item(NameableArtefact):
 
     @parent.setter
     def parent(self, value):
+        """
         if value is None:
             self._parent = value
         elif value.__class__ == self.__class__:
@@ -88,17 +90,22 @@ class Item(NameableArtefact):
             self._parent = value
         else:
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
+        """
+        self._parent = value
 
     def addChild(self, value):
-        if value.__class__ == self.__class__:
-            if value not in self._childs:
-                self._childs.append(value)
-                value.parent = self
-        else:
-            raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
+        self._childs.append(value)
+
+    def build_attributes(self, node, attrs, already_processed):
+        super(Item, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
         super(Item, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+        if nodeName_ == 'Parent':
+            obj_ = RelationshipRefType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.parent = obj_.ref
 
 
 class ItemScheme(MaintainableArtefact):
@@ -159,14 +166,20 @@ class ItemScheme(MaintainableArtefact):
             if value.id not in self._items:
                 self._items[value.id] = value
                 value.scheme = self
+                if value.parent is not None and value.parent in self._items.keys():
+                    self._items[value.parent].addChild(value.id)
+                    value.parent = self._items[value.parent]
         else:
             raise TypeError(f"The object has to be of the type {self._itemType}")
+
+    def build_attributes(self, node, attrs, already_processed):
+        super(ItemScheme, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
         super(ItemScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
-class Code(Item, DataParser):
+class Code(Item):
     _schemeType = "Codelist"
     _urnType = "codelist"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Code"
@@ -197,21 +210,13 @@ class Code(Item, DataParser):
         return Code(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
+        super(Code, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
         super(Code, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
-class Agency(Item, DataParser):
+class Agency(Item):
     _schemeType = "AgencyScheme"
     _urnType = "base"
     _qName = qName("str", "Agency")
@@ -240,22 +245,14 @@ class Agency(Item, DataParser):
         return Agency(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
+        super(Agency, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        # TODO Parse Name and Description and Contact
+        # TODO Parse Contact
         super(Agency, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
-class ConceptScheme(ItemScheme, DataParser):
+class ConceptScheme(ItemScheme):
     _itemType = "Concept"
     _urnType = "conceptscheme"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptScheme"
@@ -311,38 +308,7 @@ class ConceptScheme(ItemScheme, DataParser):
         return self._cl_references
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
-
-        value = find_attr_value_('agencyID', node)
-        if value is not None and 'agencyID' not in already_processed:
-            already_processed.add('agencyID')
-            self.maintainer = value
-
-        value = find_attr_value_('isExternalReference', node)
-        if value is not None and 'isExternalReference' not in already_processed:
-            already_processed.add('isExternalReference')
-            value = self.gds_parse_boolean(value)
-            self.isExternalReference = value
-
-        value = find_attr_value_('isFinal', node)
-        if value is not None and 'isFinal' not in already_processed:
-            already_processed.add('isFinal')
-            value = self.gds_parse_boolean(value)
-            self.isFinal = value
-
-        value = find_attr_value_('version', node)
-        if value is not None and 'version' not in already_processed:
-            already_processed.add('version')
-            # TODO Validate version
-            self.version = value
+        super(ConceptScheme, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         super(ConceptScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
@@ -354,7 +320,7 @@ class ConceptScheme(ItemScheme, DataParser):
             self.append(obj_)
 
 
-class Codelist(ItemScheme, DataParser):
+class Codelist(ItemScheme):
     _itemType = "Code"
     _urnType = "codelist"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Codelist"
@@ -404,38 +370,7 @@ class Codelist(ItemScheme, DataParser):
         return Codelist(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
-
-        value = find_attr_value_('agencyID', node)
-        if value is not None and 'agencyID' not in already_processed:
-            already_processed.add('agencyID')
-            self.maintainer = value
-
-        value = find_attr_value_('isExternalReference', node)
-        if value is not None and 'isExternalReference' not in already_processed:
-            already_processed.add('isExternalReference')
-            value = self.gds_parse_boolean(value)
-            self.isExternalReference = value
-
-        value = find_attr_value_('isFinal', node)
-        if value is not None and 'isFinal' not in already_processed:
-            already_processed.add('isFinal')
-            value = self.gds_parse_boolean(value)
-            self.isFinal = value
-
-        value = find_attr_value_('version', node)
-        if value is not None and 'version' not in already_processed:
-            already_processed.add('version')
-            # TODO Validate version
-            self.version = value
+        super(Codelist, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         super(Codelist, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
@@ -486,7 +421,7 @@ class OrganisationScheme(ItemScheme):
             return False
 
 
-class AgencyScheme(OrganisationScheme, DataParser):
+class AgencyScheme(OrganisationScheme):
     _itemType = "Agency"
     _urnType = "base"
     _qName = qName("str", "AgencyScheme")
@@ -539,38 +474,7 @@ class AgencyScheme(OrganisationScheme, DataParser):
         return AgencyScheme(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
-
-        value = find_attr_value_('agencyID', node)
-        if value is not None and 'agencyID' not in already_processed:
-            already_processed.add('agencyID')
-            self.maintainer = value
-
-        value = find_attr_value_('isExternalReference', node)
-        if value is not None and 'isExternalReference' not in already_processed:
-            already_processed.add('isExternalReference')
-            value = self.gds_parse_boolean(value)
-            self.isExternalReference = value
-
-        value = find_attr_value_('isFinal', node)
-        if value is not None and 'isFinal' not in already_processed:
-            already_processed.add('isFinal')
-            value = self.gds_parse_boolean(value)
-            self.isFinal = value
-
-        value = find_attr_value_('version', node)
-        if value is not None and 'version' not in already_processed:
-            already_processed.add('version')
-            # TODO Validate version
-            self.version = value
+        super(AgencyScheme, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         super(AgencyScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
@@ -580,7 +484,7 @@ class AgencyScheme(OrganisationScheme, DataParser):
             self.append(obj_)
 
 
-class Concept(Item, DataParser):
+class Concept(Item):
     _schemeType = "ConceptScheme"
     _urnType = "conceptscheme"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concept"
@@ -625,15 +529,7 @@ class Concept(Item, DataParser):
         return Concept(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.uri = value
+        super(Concept, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
         super(Concept, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)

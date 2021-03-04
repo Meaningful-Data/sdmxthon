@@ -1,5 +1,9 @@
+import logging
+
 from ..message.generic import MetadataType
 from ..utils.read import readXML
+
+logger = logging.getLogger('logger')
 
 
 def getMetadata(pathToMetadata):

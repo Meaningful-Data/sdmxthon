@@ -1,5 +1,5 @@
 from .footer import FooterType
-from ..common.annotations import TextType
+# from ..common.annotations import TextType
 from ..common.generic import GenericDataStructureType
 from ..common.references import DataProviderReferenceType
 from ..data.generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet

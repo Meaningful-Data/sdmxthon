@@ -1,7 +1,6 @@
 import logging
 
-from SDMXThon import readSDMX
-from SDMXThon.model.itemScheme import Agency
+from SDMXThon import getMetadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -50,8 +49,10 @@ def pretty(d, indent=0):
 
 
 def main():
-
-    message = readSDMX(pathToDataSpe, pathToMetadataFile)
+    logger.debug('Start')
+    # obj = readSDMX(pathToDataSpe, pathToMetadataFile)
+    obj = getMetadata(pathToMetadataFile)
+    logger.debug('End')
     """
     root = etree.parse(pathToMetadataFile)
 
