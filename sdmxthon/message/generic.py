@@ -1,10 +1,10 @@
 from .footer import FooterType
-# from ..common.annotations import TextType
+# from ..common.annotations import LocalisedString
 from ..common.generic import GenericDataStructureType
 from ..common.references import DataProviderReferenceType
 from ..data.generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
 from ..model.itemScheme import Codelist, AgencyScheme, ConceptScheme
-from ..model.structure import DataStructureDefinition
+from ..model.structure import DataStructureDefinition, LocalisedString
 from ..structure.specificbase import DataSetType as StructureDataSet, \
     TimeSeriesDataSetType as StructureTimeSeriesDataSet
 
@@ -283,22 +283,22 @@ class ContactType(DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Name':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            class_obj_ = self.get_class_obj_(child_, LocalisedString)
+            obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Name.append(obj_)
             obj_.original_tag_name_ = 'Name'
 
         elif nodeName_ == 'Department':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            class_obj_ = self.get_class_obj_(child_, LocalisedString)
+            obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._department.append(obj_)
             obj_.original_tag_name_ = 'Department'
 
         elif nodeName_ == 'Role':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            class_obj_ = self.get_class_obj_(child_, LocalisedString)
+            obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._role.append(obj_)
             obj_.original_tag_name_ = 'Role'
@@ -465,8 +465,8 @@ class PartyType(DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Name':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            class_obj_ = self.get_class_obj_(child_, LocalisedString)
+            obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Name.append(obj_)
             obj_.original_tag_name_ = 'Name'
@@ -918,8 +918,8 @@ class BaseHeaderType(DataParser):
             self._Receiver.append(obj_)
             obj_.original_tag_name_ = 'Receiver'
         elif nodeName_ == 'Name':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            class_obj_ = self.get_class_obj_(child_, LocalisedString)
+            obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Name.append(obj_)
             obj_.original_tag_name_ = 'Name'
@@ -975,8 +975,8 @@ class BaseHeaderType(DataParser):
             self._EmbargoDate = dval_
             self._EmbargoDate_nsprefix_ = child_.prefix
         elif nodeName_ == 'Source':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            class_obj_ = self.get_class_obj_(child_, LocalisedString)
+            obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Source.append(obj_)
             obj_.original_tag_name_ = 'Source'
@@ -1347,10 +1347,7 @@ class Structures(DataParser):
         else:
             self._codelists = codelists
 
-        if organisations is None:
-            self._organisations = {}
-        else:
-            self._organisations = organisations
+        self._organisations = organisations
 
         if concepts is None:
             self._concepts = {}

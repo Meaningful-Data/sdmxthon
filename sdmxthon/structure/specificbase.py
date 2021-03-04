@@ -642,77 +642,6 @@ class DataSetType(AnnotableArtefact):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
-
-        if value is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            self._reporting_year_start_day = value
-
-        value = find_attr_value_('structureRef', node)
-
-        if value is not None and 'structureRef' not in already_processed:
-            already_processed.add('structureRef')
-            self._structureRef = value
-
-        value = find_attr_value_('setID', node)
-
-        if value is not None and 'setID' not in already_processed:
-            already_processed.add('setID')
-            self._setID = value
-            self.validate_id_type(self._setID)  # validate dim_type IDType
-
-        value = find_attr_value_('action', node)
-
-        if value is not None and 'action' not in already_processed:
-            already_processed.add('action')
-            self._action = value
-            self.validate_ActionType(self._action)  # validate dim_type ActionType
-
-        value = find_attr_value_('reportingBeginDate', node)
-
-        if value is not None and 'reportingBeginDate' not in already_processed:
-            already_processed.add('reportingBeginDate')
-            self._reportingBeginDate = value
-            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
-
-        value = find_attr_value_('reportingEndDate', node)
-
-        if value is not None and 'reportingEndDate' not in already_processed:
-            already_processed.add('reportingEndDate')
-            self._reportingEndDate = value
-            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
-
-        value = find_attr_value_('validFromDate', node)
-
-        if value is not None and 'validFromDate' not in already_processed:
-            already_processed.add('validFromDate')
-            try:
-                self._validFromDate = self.gds_parse_datetime(value)
-            except ValueError as exp:
-                raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
-
-        value = find_attr_value_('validToDate', node)
-
-        if value is not None and 'validToDate' not in already_processed:
-            already_processed.add('validToDate')
-            try:
-                self._validToDate = self.gds_parse_datetime(value)
-            except ValueError as exp:
-                raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
-
-        value = find_attr_value_('publicationYear', node)
-
-        if value is not None and 'publicationYear' not in already_processed:
-            already_processed.add('publicationYear')
-            self._publicationYear = value
-
-        value = find_attr_value_('publicationPeriod', node)
-
-        if value is not None and 'publicationPeriod' not in already_processed:
-            already_processed.add('publicationPeriod')
-            self._publicationPeriod = value
-            self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
 
         self._anyAttributes_ = {}
         tag_pattern_ = re_.compile(r'({.*})?(.*)')
@@ -724,23 +653,95 @@ class DataSetType(AnnotableArtefact):
                     real_name = "xsi:dim_type"
                 self._anyAttributes_[real_name] = value
 
+        value = find_attr_value_('REPORTING_YEAR_START_DAY', self._anyAttributes_)
+
+        if value is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
+            already_processed.add('REPORTING_YEAR_START_DAY')
+            self._reporting_year_start_day = value
+
+        value = find_attr_value_('structureRef', self._anyAttributes_)
+
+        if value is not None and 'structureRef' not in already_processed:
+            already_processed.add('structureRef')
+            self._structureRef = value
+
+        value = find_attr_value_('setID', self._anyAttributes_)
+
+        if value is not None and 'setID' not in already_processed:
+            already_processed.add('setID')
+            self._setID = value
+            self.validate_id_type(self._setID)  # validate dim_type IDType
+
+        value = find_attr_value_('action', self._anyAttributes_)
+
+        if value is not None and 'action' not in already_processed:
+            already_processed.add('action')
+            self._action = value
+            self.validate_ActionType(self._action)  # validate dim_type ActionType
+
+        value = find_attr_value_('reportingBeginDate', self._anyAttributes_)
+
+        if value is not None and 'reportingBeginDate' not in already_processed:
+            already_processed.add('reportingBeginDate')
+            self._reportingBeginDate = value
+            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
+
+        value = find_attr_value_('reportingEndDate', self._anyAttributes_)
+
+        if value is not None and 'reportingEndDate' not in already_processed:
+            already_processed.add('reportingEndDate')
+            self._reportingEndDate = value
+            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
+
+        value = find_attr_value_('validFromDate', self._anyAttributes_)
+
+        if value is not None and 'validFromDate' not in already_processed:
+            already_processed.add('validFromDate')
+            try:
+                self._validFromDate = self.gds_parse_datetime(value)
+            except ValueError as exp:
+                raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
+
+        value = find_attr_value_('validToDate', self._anyAttributes_)
+
+        if value is not None and 'validToDate' not in already_processed:
+            already_processed.add('validToDate')
+            try:
+                self._validToDate = self.gds_parse_datetime(value)
+            except ValueError as exp:
+                raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
+
+        value = find_attr_value_('publicationYear', self._anyAttributes_)
+
+        if value is not None and 'publicationYear' not in already_processed:
+            already_processed.add('publicationYear')
+            self._publicationYear = value
+
+        value = find_attr_value_('publicationPeriod', self._anyAttributes_)
+
+        if value is not None and 'publicationPeriod' not in already_processed:
+            already_processed.add('publicationPeriod')
+            self._publicationPeriod = value
+            self.validate_ObservationalTimePeriodType(
+                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory(parent_object_=self)
+            obj_ = DataProviderReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
             obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Group':
-            obj_ = GroupType.factory(parent_object_=self)
+            obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
             obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
-            obj_ = SeriesType.factory(parent_object_=self)
+            obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data += obj_.obs
         elif nodeName_ == 'Obs':
-            obj_ = ObsType.factory(parent_object_=self)
+            obj_ = ObsType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.any_attributes)
         super(DataSetType, self).build_children(child_, node, nodeName_, True)

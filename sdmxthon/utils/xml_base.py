@@ -132,6 +132,12 @@ def get_all_text_(node):
 
 
 def find_attr_value_(attr_name, node):
+    if isinstance(node, dict):
+        if attr_name in node.keys():
+            return node[attr_name]
+        else:
+            return None
+
     attrs = node.attrib
     if '}' in attr_name:
         attr_parts = attr_name.split('}')
