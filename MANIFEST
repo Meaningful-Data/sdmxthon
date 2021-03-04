@@ -5,7 +5,6 @@ SDMXThon\__init__.py
 SDMXThon\common\__init__.py
 SDMXThon\common\annotations.py
 SDMXThon\common\dataSet.py
-SDMXThon\common\empty.py
 SDMXThon\common\generic.py
 SDMXThon\common\message.py
 SDMXThon\common\messagetypes.py
@@ -18,14 +17,14 @@ SDMXThon\message\footer.py
 SDMXThon\message\generic.py
 SDMXThon\model\base.py
 SDMXThon\model\dataTypes.py
+SDMXThon\model\dataflow.py
+SDMXThon\model\extras.py
 SDMXThon\model\itemScheme.py
 SDMXThon\model\structure.py
+SDMXThon\model\timePeriods.py
 SDMXThon\model\utils.py
-SDMXThon\query\__init__.py
-SDMXThon\registry\__init__.py
 SDMXThon\structure\__init__.py
 SDMXThon\structure\specificbase.py
-SDMXThon\test\__init__.py
 SDMXThon\utils\__init__.py
 SDMXThon\utils\data_parser.py
 SDMXThon\utils\dataset_parsing.py
@@ -35,7 +34,6 @@ SDMXThon\utils\mappings.py
 SDMXThon\utils\metadata_parsers.py
 SDMXThon\utils\new_read.py
 SDMXThon\utils\read.py
-SDMXThon\utils\series_parsing.py
 SDMXThon\utils\validations.py
 SDMXThon\utils\write.py
 SDMXThon\utils\xml_base.py

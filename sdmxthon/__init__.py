@@ -5,46 +5,46 @@ from zipfile import ZipFile
 
 from .common.dataSet import DataSet
 from .common.message import Message
-from .utils.dataset_parsing import getMetadata
-from .utils.enums import DatasetType
-from .utils.metadata_parsers import id_creator
-from .utils.read import load_AllDimensions, sdmxGenToDataSet, \
-    sdmxStrToDataset
+from .message.generic import MetadataType
+from .utils.dataset_parsing import getMetadata, setReferences
+from .utils.enums import MessageType
+from .utils.read import readXML, sdmxGenToDataSet, sdmxStrToDataset
 from .utils.write import save_file
 
 
-def readSDMX(path_to_xml, pathToMetadata, dataset_type=None):
-    if dataset_type is None:
-        raise ValueError('Dataset type cannot be None')
-    objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
-    dsds = getMetadata(pathToMetadata)
+def readSDMX(path_to_xml, pathToMetadata):
+    metadata = getMetadata(pathToMetadata)
 
-    header = objStructure.Header
+    obj_ = readXML(path_to_xml)
+    if isinstance(obj_, MetadataType):
+        setReferences(obj_)
 
-    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        datasets = sdmxGenToDataSet(objStructure, dsds)
-    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        datasets = sdmxStrToDataset(objStructure, dsds)
+    header = obj_.header
+    if obj_.original_tag_name_ == 'GenericData':
+        type_ = MessageType.GenericDataSet
+        data = sdmxGenToDataSet(obj_, metadata.structures.dsds)
+    elif obj_.original_tag_name_ == 'StructureSpecificData':
+        type_ = MessageType.StructureDataSet
+        data = sdmxStrToDataset(obj_, metadata.structures.dsds)
+    elif obj_.original_tag_name_ == 'Structure':
+        type_ = MessageType.Metadata
+        data = obj_.structures
     else:
-        raise ValueError('Invalid Dataset Type')
-    return Message(dataset_type, datasets, header)
+        raise ValueError('Wrong Message type')
+    return Message(type_, data, header)
 
 
-def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
-    if dataset_type is None:
-        raise ValueError('Dataset Type cannot be None')
-
-    objStructure = load_AllDimensions(path_to_xml, datasetType=dataset_type)
+def getDatasets(path_to_xml, pathToMetadata):
+    obj_structure = readXML(path_to_xml)
 
     dsds, errors = getMetadata(pathToMetadata)
-    print(errors)
 
-    if dataset_type == DatasetType.GenericDataSet or dataset_type == DatasetType.GenericTimeSeriesDataSet:
-        datasets = sdmxGenToDataSet(objStructure, dsds)
-    elif dataset_type == DatasetType.StructureDataSet or dataset_type == DatasetType.StructureTimeSeriesDataSet:
-        datasets = sdmxStrToDataset(objStructure, dsds)
+    if obj_structure.original_tag_name_ == 'GenericData':
+        datasets = sdmxGenToDataSet(obj_structure, dsds)
+    elif obj_structure.original_tag_name_ == 'StructureSpecificData':
+        datasets = sdmxStrToDataset(obj_structure, dsds)
     else:
-        raise ValueError('Invalid Dataset Type')
+        raise ValueError('Wrong Message type')
 
     if len(datasets) == 1:
         values_view = datasets.values()
@@ -55,10 +55,10 @@ def getDatasets(path_to_xml, pathToMetadata, dataset_type=None):
         return datasets
 
 
-def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
+def xmlToJSON(pathToXML, pathToMetadata, output_path):
     list_elements = []
 
-    dataset = getDatasets(pathToXML, pathToMetadata, dataset_type)
+    dataset = getDatasets(pathToXML, pathToMetadata)
 
     if isinstance(dataset, dict):
         for e in dataset.values():
@@ -69,8 +69,8 @@ def xmlToJSON(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.G
         f.write(json.dumps(list_elements, ensure_ascii=False, indent=2))
 
 
-def xmlToCSV(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.GenericDataSet):
-    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata, dataset_type)
+def xmlToCSV(pathToXML, pathToMetadata, output_path):
+    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata)
 
     if '.zip' in output_path:
         with ZipFile(output_path, 'w') as zipObj:
@@ -80,7 +80,7 @@ def xmlToCSV(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.Ge
 
     else:
         if len(datasets) > 1:
-            raise ValueError('Cannot introduce several Datasets in a CSV. Consider using .zip as output path')
+            raise ValueError('Cannot introduce several Datasets in a CSV. Consider using .zip in output path')
         elif len(datasets) is 1:
             if '.zip' in output_path:
                 filename = output_path.split('.')[0]
@@ -88,9 +88,9 @@ def xmlToCSV(pathToXML, pathToMetadata, output_path, dataset_type=DatasetType.Ge
             # Getting first value
             values_view = datasets.values()
             value_iterator = iter(values_view)
-            dset = next(value_iterator)
+            dataset = next(value_iterator)
 
-            dset.toCSV(output_path)
+            dataset.toCSV(output_path)
         else:
             raise ValueError('No Datasets were parsed')
 
@@ -105,8 +105,8 @@ def readJSON(pathToJSON, dsds) -> dict:
     for e in parsed:
         code = e.get('structureRef').get('code')
         version = e.get('structureRef').get('version')
-        agencyID = e.get('structureRef').get('agencyID')
-        dsdid = f"{agencyID}:{code}({version})"
+        agency_id = e.get('structureRef').get('agencyID')
+        dsdid = f"{agency_id}:{code}({version})"
         if dsdid not in dsds.keys():
             raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
         datasets[code] = DataSet(structure=dsds[dsdid],

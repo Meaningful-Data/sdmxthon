@@ -1,54 +1,48 @@
 import json
-from copy import copy
 from datetime import datetime
 
-from SDMXThon.model.structure import DataStructureDefinition
-from .dataSet import DataSet, generateDataSetXML, get_structure_from_dsd
-from ..message.generic import GenericDataType, StructureSpecificDataType, PartyType, SenderType, \
+from .dataSet import DataSet
+from ..message.generic import PartyType, SenderType, \
     StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, StructureSpecificDataHeaderType, \
     GenericDataHeaderType
+from ..model.structure import DataStructureDefinition
 from ..utils.dataset_parsing import getMetadata
-from ..utils.enums import DatasetType
-from ..utils.metadata_parsers import id_creator
-from ..utils.write import save_file
+from ..utils.enums import MessageType
+from ..utils.write import writer
 
 
 class Message:
     subclass = None
     superclass = None
 
-    def __init__(self, message_type: DatasetType = DatasetType.GenericDataSet, payload: dict = None,
+    def __init__(self, message_type: MessageType = MessageType.GenericDataSet, payload=None,
                  header: [GenericDataHeaderType, GenericTimeSeriesDataHeaderType,
                           StructureSpecificDataHeaderType, StructureSpecificTimeSeriesDataHeaderType] = None):
         self._type = message_type
-        if payload is None:
-            self._payload = {}
-        else:
-            if all(isinstance(n, DataSet) for n in payload.values()):
-                self._payload = payload
+        self._payload = payload
         if header is None:
-            if self.type == DatasetType.GenericDataSet:
+            if self.type == MessageType.GenericDataSet or self.type == MessageType.Metadata:
                 header = GenericDataHeaderType()
-            elif self.type == DatasetType.StructureDataSet:
+            elif self.type == MessageType.StructureDataSet:
                 header = StructureSpecificDataHeaderType()
-            elif self.type == DatasetType.GenericTimeSeriesDataSet:
+            elif self.type == MessageType.GenericTimeSeriesDataSet:
                 header = GenericTimeSeriesDataHeaderType()
-            elif self.type == DatasetType.StructureTimeSeriesDataSet:
+            elif self.type == MessageType.StructureTimeSeriesDataSet:
                 header = StructureSpecificTimeSeriesDataHeaderType()
             else:
-                raise ValueError('Invalid Dataset type')
+                raise ValueError('Invalid Message type')
 
-            header.set_ID('test')
-            header.set_Test(True)
-            header.set_Prepared(datetime.now())
+            header.id_('test')
+            header.test(True)
+            header.prepared(datetime.now())
 
             sender = SenderType()
-            sender.set_id('Unknown')
+            sender.id_('Unknown')
 
             receiver = PartyType()
-            receiver.set_id('Not_supplied')
+            receiver.id_('Not_supplied')
 
-            header.set_Sender(sender)
+            header.sender(sender)
             header.add_Receiver(receiver)
 
         self._header = header
@@ -86,31 +80,31 @@ class Message:
     def headerCreation(self, id_: str, test: bool = False,
                        senderId: str = "Unknown", receiverId: str = "not_supplied",
                        datetimeStr=''):
-        if self.type == DatasetType.GenericDataSet:
+        if self.type == MessageType.GenericDataSet:
             header = GenericDataHeaderType()
-        elif self.type == DatasetType.StructureDataSet:
+        elif self.type == MessageType.StructureDataSet:
             header = StructureSpecificDataHeaderType()
-        elif self.type == DatasetType.GenericTimeSeriesDataSet:
+        elif self.type == MessageType.GenericTimeSeriesDataSet:
             header = GenericTimeSeriesDataHeaderType()
-        elif self.type == DatasetType.StructureTimeSeriesDataSet:
+        elif self.type == MessageType.StructureTimeSeriesDataSet:
             header = StructureSpecificTimeSeriesDataHeaderType()
         else:
             raise ValueError('Invalid Dataset type')
 
-        header.set_ID(id_)
-        header.set_Test(header.gds_format_boolean(test))
+        header.id_(id_)
+        header.test(header.gds_format_boolean(test))
         if datetimeStr == '':
-            header.set_Prepared(datetime.now())
+            header.prepared(datetime.now())
         else:
-            header.set_Prepared(header.gds_parse_datetime(datetimeStr))
+            header.prepared(header.gds_parse_datetime(datetimeStr))
 
         sender = SenderType()
-        sender.set_id(senderId)
+        sender.id_(senderId)
 
         receiver = PartyType()
-        receiver.set_id(receiverId)
+        receiver.id_(receiverId)
 
-        header.set_Sender(sender)
+        header.sender(sender)
         header.add_Receiver(receiver)
 
         self._header = header
@@ -140,7 +134,7 @@ class Message:
             else:
                 raise ValueError('pathToMetadata must be a DataStructureDefinition dict or a string')
         else:
-            dsds = getMetadata(pathToMetadata)
+            dsds, error = getMetadata(pathToMetadata)
         if isinstance(pathToJSON, str):
             with open(pathToJSON, 'r') as f:
                 parsed = json.loads(f.read())
@@ -149,8 +143,8 @@ class Message:
         for e in parsed:
             code = e.get('structureRef').get('code')
             version = e.get('structureRef').get('version')
-            agencyID = e.get('structureRef').get('agencyID')
-            dsdid = id_creator(agencyID, code, version)
+            agency_id = e.get('structureRef').get('agencyID')
+            dsdid = f"{agency_id}:{code}({version})"
             if dsdid not in dsds.keys():
                 raise ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
             datasets[code] = DataSet(structure=dsds[dsdid],
@@ -159,35 +153,14 @@ class Message:
                                      data=e.get('data'))
         self.payload = datasets
 
-    def toXML(self, outputPath=''):
-        if len(self.payload) == 0:
-            raise ValueError('Datasets must be provided')
-
-        structures = []
-
-        header = copy(self.header)
-
-        if self.type == DatasetType.GenericDataSet or self.type == DatasetType.GenericTimeSeriesDataSet:
-            messageXML = GenericDataType()
-        elif self.type == DatasetType.StructureDataSet or self.type == DatasetType.StructureTimeSeriesDataSet:
-            messageXML = StructureSpecificDataType()
-        else:
-            raise ValueError('Wrong Dataset Type')
-        for e in self.payload.values():
-            data_set = generateDataSetXML(e, self.type)
-
-            messageXML.add_DataSet(data_set)
-
-            allDimensions = e.datasetAttributes.get('dimensionAtObservation') == 'AllDimensions'
-
-            structure = get_structure_from_dsd(e.structure, e, self.type, allDimensions=allDimensions)
-
-            structures.append(structure)
-        header.set_Structure(structures)
-        messageXML.set_Header(header)
-        if messageXML == None:
-            raise ValueError('Message could not be parsed')
+    def toXML(self, outputPath='', id_='test',
+              test='true',
+              prepared=datetime.now(),
+              sender='Unknown',
+              receiver='Not_supplied'):
         if outputPath == '':
-            return save_file(messageXML, outputPath)
+            return writer(path=outputPath, dType=self.type, dataset=self.payload, id_=id_, test=test,
+                          prepared=prepared, sender=sender, receiver=receiver)
         else:
-            save_file(messageXML, outputPath)
+            writer(path=outputPath, dType=self.type, dataset=self.payload, id_=id_, test=test,
+                   prepared=prepared, sender=sender, receiver=receiver)

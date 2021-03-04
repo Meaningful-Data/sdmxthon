@@ -1,170 +1,96 @@
 import json
 
 from .base import *
-from .dataTypes import FacetType, FacetValueType
-from .itemScheme import Concept, CodeList, ConceptScheme
-from .utils import genericSetter, qName, intSetter, stringSetter
-
-
-class Facet:
-    def __init__(self, facetType: str = None, facetValue: str = None, facetValueType: str = None):
-        self.facetType = facetType
-        self.facetValue = facetValue
-        self.facetValueType = facetValueType
-
-    @property
-    def facetType(self):
-        return self._facetType
-
-    @property
-    def facetValue(self):
-        return self._facetValue
-
-    @property
-    def facetValueType(self):
-        return self._facetValueType
-
-    @facetType.setter
-    def facetType(self, value):
-        if isinstance(value, str) or value is None:
-            if value in FacetType or value is None:
-                self._facetType = value
-            else:
-                raise ValueError(f"The facet {value} is not recognised")
-        else:
-            raise ValueError("Facet dim_type should be of the str dim_type")
-
-    @facetValue.setter
-    def facetValue(self, value):
-        self._facetValue = stringSetter(value)
-
-    @facetValueType.setter
-    def facetValueType(self, value):
-        if isinstance(value, str) or value is None:
-            if value in FacetValueType or value is None:
-                self._facetValueType = value
-            else:
-                raise ValueError(f"The facet value dim_type {value} is not recognised")
-        else:
-            raise ValueError("Facet value dim_type should be of the str dim_type")
-
-
-class Representation:
-    def __init__(self, concept: Concept = None, facets=None,
-                 codeList: CodeList = None, conceptScheme: ConceptScheme = None):
-        self._components = []
-        if facets is None:
-            facets = []
-        for f in facets:
-            self.addFacet(f)
-        self.concept = concept
-        self.codeList = codeList
-        self.conceptScheme = conceptScheme
-
-        self._conceptReference = None
-        self._codeListReference = None
-        self._conceptSchemeReference = None
-
-    def __eq__(self, other):
-        if isinstance(other, Representation):
-            return (self._concept == other._concept and
-                    self._codeList == other._codeList and
-                    self._conceptScheme == other._conceptScheme and
-                    self._conceptReference == other._conceptReference and
-                    self._codeListReference == other._codeListReference and
-                    self._conceptSchemeReference == other._conceptReference)
-        else:
-            return False
-
-    @property
-    def concept(self):
-        return self._concept
-
-    @property
-    def facets(self):
-        facets = []
-        for e in self._components:
-            if isinstance(e, Facet):
-                facets.append(e)
-        return facets
-
-    @property
-    def codeList(self):
-        return self._codeList
-
-    @property
-    def conceptScheme(self):
-        return self._conceptScheme
-
-    @concept.setter
-    def concept(self, value):
-        self._concept = genericSetter(value, Concept)
-
-    @codeList.setter
-    def codeList(self, value):
-        self._codeList = genericSetter(value, CodeList)
-
-    @conceptScheme.setter
-    def conceptScheme(self, value):
-        self._conceptScheme = genericSetter(value, ConceptScheme)
-
-    def addFacet(self, value):
-        if isinstance(value, Facet):
-            self._components.append(value)
-        else:
-            raise TypeError(f"The object has to be of the Facet")
+# from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
+from .itemScheme import Representation
+from .utils import genericSetter, qName, intSetter
+from ..common.references import RelationshipRefType
+from ..common.refs import RefBaseType
+from ..utils.data_parser import DataParser
+from ..utils.mappings import Data_Types_VTL
+from ..utils.xml_base import find_attr_value_
 
 
 class Component(IdentifiableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
-                 localRepresentation: Representation = None, componentList=None):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None, localRepresentation: Representation = None):
 
         if annotations is None:
             annotations = []
         super(Component, self).__init__(id_=id_, uri=uri, annotations=annotations)
 
-        self.localRepresentation = localRepresentation
-        self.componentList = componentList
-        self._conceptIdentityRef = None
+        self._local_representation = localRepresentation
+        self._concept_identity = None
 
     def __eq__(self, other):
         if isinstance(other, Component):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self._annotations == other._annotations and
-                    self._localRepresentation == other._localRepresentation and
-                    self._conceptIdentityRef == other._conceptIdentityRef)
+                    self._local_representation == other._local_representation and
+                    self._concept_identity == other._concept_identity)
         else:
             return False
 
     @property
-    def localRepresentation(self):
-        return self._localRepresentation
+    def local_representation(self):
+        return self._local_representation
+
+    @local_representation.setter
+    def local_representation(self, value):
+        self._local_representation = genericSetter(value, Representation)
 
     @property
-    def componentList(self):
-        return self._componentList
+    def concept_identity(self):
+        return self._concept_identity
 
-    @localRepresentation.setter
-    def localRepresentation(self, value):
-        self._localRepresentation = genericSetter(value, Representation)
+    @concept_identity.setter
+    def concept_identity(self, value):
+        self._concept_identity = value
 
-    @componentList.setter
-    def componentList(self, value):
-        self._componentList = genericSetter(value, ComponentList)
+    def build_attributes(self, node, attrs, already_processed):
+        value = find_attr_value_('id', node)
+        if value is not None and 'id' not in already_processed:
+            already_processed.add('id')
+            self.id = value
+
+        value = find_attr_value_('urn', node)
+        if value is not None and 'urn' not in already_processed:
+            already_processed.add('urn')
+            self.uri = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'ConceptIdentity':
+            obj_ = ConceptIdentityType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.concept_identity = obj_.ref
+        elif nodeName_ == 'LocalRepresentation':
+            obj_ = Representation.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._local_representation = obj_
+
+
+class ConceptIdentityType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._ref = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return ConceptIdentityType(*args_, **kwargs_)
 
     @property
-    def urn(self):
-        try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.{self.__class__.__name__}=" \
-                  f"{self.componentList.dsd.maintainer.id}:{self.componentList.dsd.id}" \
-                  f"({self.componentList.dsd.version}).{self.id}"
-        except:
-            urn = ""
-        return urn
+    def ref(self):
+        return self._ref
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Ref':
+            obj_ = RefBaseType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._ref = {"CS": f"{obj_.agencyID}:{obj_.maintainableParentID}({obj_.maintainableParentVersion})",
+                         "CON": f"{obj_.id_}"}
 
 
-class Dimension(Component):
+class Dimension(Component, DataParser):
     _urnType = "datastructure"
     _qName = qName("str", "Dimension")
 
@@ -183,10 +109,14 @@ class Dimension(Component):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self._annotations == other._annotations and
-                    self._localRepresentation == other._localRepresentation and
+                    self._local_representation == other._local_representation and
                     self._position == other._position)
         else:
             return False
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Dimension(*args_, **kwargs_)
 
     @property
     def position(self):
@@ -196,8 +126,19 @@ class Dimension(Component):
     def position(self, value):
         self._position = intSetter(value)
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(Dimension, self).build_attributes(node, attrs, already_processed)
 
-class MeasureDimension(Dimension):
+        value = find_attr_value_('position', node)
+        if value is not None and 'position' not in already_processed:
+            already_processed.add('position')
+            self.position = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(Dimension, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+
+
+class MeasureDimension(Dimension, DataParser):
     _qName = qName("str", "MeasureDimension")
 
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
@@ -213,13 +154,23 @@ class MeasureDimension(Dimension):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self._annotations == other._annotations and
-                    self._localRepresentation == other._localRepresentation and
+                    self._local_representation == other._local_representation and
                     self._position == other._position)
         else:
             return False
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return MeasureDimension(*args_, **kwargs_)
 
-class TimeDimension(Dimension):
+    def build_attributes(self, node, attrs, already_processed):
+        super(MeasureDimension, self).build_attributes(node, attrs, already_processed)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(MeasureDimension, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+
+
+class TimeDimension(Dimension, DataParser):
     _qName = qName("str", "TimeDimension")
 
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
@@ -235,13 +186,62 @@ class TimeDimension(Dimension):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self._annotations == other._annotations and
-                    self._localRepresentation == other._localRepresentation and
+                    self._local_representation == other._local_representation and
                     self._position == other._position)
         else:
             return False
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return TimeDimension(*args_, **kwargs_)
 
-class Attribute(Component):
+    def build_attributes(self, node, attrs, already_processed):
+        super(TimeDimension, self).build_attributes(node, attrs, already_processed)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(TimeDimension, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+
+
+class AttributeRelationshipType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._ref_id = None
+        self._ref_type = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return AttributeRelationshipType(*args_, **kwargs_)
+
+    @property
+    def ref_id(self):
+        return self._ref_id
+
+    @property
+    def ref_type(self):
+        return self._ref_type
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'None':
+            self._ref_id = None
+            self._ref_type = None
+        elif nodeName_ == 'PrimaryMeasure':
+            obj_ = RelationshipRefType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._ref_id = obj_.ref
+            self._ref_type = 'PrimaryMeasure'
+        elif nodeName_ == 'Dimension':
+            obj_ = RelationshipRefType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._ref_id is None:
+                self._ref_id = obj_.ref
+            elif not isinstance(self._ref_id, list):
+                self._ref_id = [self._ref_id]
+            if isinstance(self._ref_id, list):
+                self._ref_id.append(obj_.ref)
+            self._ref_type = 'Dimension'
+
+
+class Attribute(Component, DataParser):
     _urnType = "datastructure"
     _qName = qName("str", "Attribute")
 
@@ -261,11 +261,15 @@ class Attribute(Component):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self._annotations == other._annotations and
-                    self._localRepresentation == other._localRepresentation and
+                    self._local_representation == other._local_representation and
                     self._usageStatus == other._usageStatus and
                     self._relatedTo == other._relatedTo)
         else:
             return False
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return Attribute(*args_, **kwargs_)
 
     @property
     def usageStatus(self):
@@ -286,26 +290,30 @@ class Attribute(Component):
     def relatedTo(self, value):
         if value is None:
             self._relatedTo = "NoSpecifiedRelationship"
-        elif (isinstance(value, PrimaryMeasure) or (value == "NoSpecifiedRelationship") or
-              isinstance(value, GroupDimensionDescriptor) or isinstance(value, Dimension) or
-              all(isinstance(n, (PrimaryMeasure, Dimension)) for n in value)):
-            self._relatedTo = value
         else:
-            raise ValueError(
-                "The value for related To has to be None, the object of the GroupDimensionDescriptor "
-                "class or an object of the DimensionClass or an object of the PrimaryMeasure class")
+            self._relatedTo = value
 
-    @property
-    def urn(self):
-        try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute={self.componentList.dsd.maintainer.id}:" \
-                  f"{self.componentList.dsd.id}({self.componentList.dsd.version}).{self.id}"
-        except:
-            urn = ""
-        return urn
+    def build_attributes(self, node, attrs, already_processed):
+        super(Attribute, self).build_attributes(node, attrs, already_processed)
+
+        value = find_attr_value_('assignmentStatus', node)
+        if value is not None and 'assignmentStatus' not in already_processed:
+            already_processed.add('assignmentStatus')
+            self.usageStatus = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(Attribute, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+
+        if nodeName_ == 'AttributeRelationship':
+            obj_ = AttributeRelationshipType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if obj_.ref_id is None:
+                self.relatedTo = None
+            else:
+                self.relatedTo = {'id': obj_.ref_id, 'type': obj_.ref_type}
 
 
-class PrimaryMeasure(Component):
+class PrimaryMeasure(Component, DataParser):
     _urnType = "datastructure"
     _qName = qName("str", "PrimaryMeasure")
 
@@ -317,14 +325,24 @@ class PrimaryMeasure(Component):
         super(PrimaryMeasure, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                              localRepresentation=localRepresentation)
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return PrimaryMeasure(*args_, **kwargs_)
+
     def __eq__(self, other):
         if isinstance(other, PrimaryMeasure):
             return (self._id == other._id and
                     self.uri == other.uri and
                     self._annotations == other._annotations and
-                    self._localRepresentation == other._localRepresentation)
+                    self._local_representation == other._local_representation)
         else:
             return False
+
+    def build_attributes(self, node, attrs, already_processed):
+        super(PrimaryMeasure, self).build_attributes(node, attrs, already_processed)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        super(PrimaryMeasure, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
 
 
 class ComponentList(IdentifiableArtefact):
@@ -353,18 +371,10 @@ class ComponentList(IdentifiableArtefact):
     def components(self):
         return self._components
 
-    """
-    @property
-    def dsd(self):
-        return self._dsd
-
-    @dsd.setter
-    def dsd(self, value):
-        self._dsd = genericSetter(value, DataStructureDefinition)
-    """
-
     def addComponent(self, value):
-        if isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
+        if isinstance(self, MeasureDescriptor) and len(self._components) == 1:
+            raise ValueError('Measure Descriptor cannot have more than one Primary Measure')
+        elif isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
             value.componentList = self
             self._components[value.id] = value
         else:
@@ -372,24 +382,17 @@ class ComponentList(IdentifiableArtefact):
                 f"The object has to be of the dim_type [Dimension, Attribute, PrimaryMeasure], "
                 f"{value.__class__.__name__} provided")
 
-    """
-    @property
-    def urn(self):
-        try:
-            urn = f"urn:sdmx:org.sdmx.infomodel.datastructure.{self.__class__.__name__}={self.dsd.maintainer.id}:{self.dsd.id}({self.dsd.version}).{self.id}"
-        except:
-            urn = ""
-        return urn
-    """
-
     def __len__(self):
         return len(self.components)
 
     def __getitem__(self, value):
         return self.components[value]
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(ComponentList, self).build_attributes(node, attrs, already_processed)
 
-class DimensionDescriptor(ComponentList):
+
+class DimensionDescriptor(ComponentList, DataParser):
     _componentType = Dimension
     _urnType = "datastructure"
     _qName = qName("str", "DimensionList")
@@ -404,6 +407,10 @@ class DimensionDescriptor(ComponentList):
         super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   components=components)
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DimensionDescriptor(*args_, **kwargs_)
+
     def __eq__(self, other):
         if isinstance(other, DimensionDescriptor):
             return (self._id == other._id and
@@ -413,8 +420,21 @@ class DimensionDescriptor(ComponentList):
         else:
             return False
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(DimensionDescriptor, self).build_attributes(node, attrs, already_processed)
 
-class AttributeDescriptor(ComponentList):
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Dimension':
+            obj_ = Dimension.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.addComponent(obj_)
+        elif nodeName_ == 'TimeDimension':
+            obj_ = TimeDimension.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.addComponent(obj_)
+
+
+class AttributeDescriptor(ComponentList, DataParser):
     _componentType = Attribute
     _urnType = "datastructure"
     _qName = qName("str", "AttributeList")
@@ -429,6 +449,10 @@ class AttributeDescriptor(ComponentList):
         super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                   components=components)
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return AttributeDescriptor(*args_, **kwargs_)
+
     def __eq__(self, other):
         if isinstance(other, AttributeDescriptor):
             return (self._id == other._id and
@@ -438,8 +462,17 @@ class AttributeDescriptor(ComponentList):
         else:
             return False
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(AttributeDescriptor, self).build_attributes(node, attrs, already_processed)
 
-class MeasureDescriptor(ComponentList):
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Attribute':
+            obj_ = Attribute.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.addComponent(obj_)
+
+
+class MeasureDescriptor(ComponentList, DataParser):
     _componentType = PrimaryMeasure
     _urnType = "datastructure"
     _qName = qName("str", "MeasureList")
@@ -454,6 +487,10 @@ class MeasureDescriptor(ComponentList):
         super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                 components=components)
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return MeasureDescriptor(*args_, **kwargs_)
+
     def __eq__(self, other):
         if isinstance(other, MeasureDescriptor):
             return (self._id == other._id and
@@ -463,8 +500,17 @@ class MeasureDescriptor(ComponentList):
         else:
             return False
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(MeasureDescriptor, self).build_attributes(node, attrs, already_processed)
 
-class GroupDimensionDescriptor(ComponentList):
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'PrimaryMeasure':
+            obj_ = PrimaryMeasure.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.addComponent(obj_)
+
+
+class GroupDimensionDescriptor(ComponentList, DataParser):
     _componentType = Dimension
     _urnType = "datastructure"
     _qName = qName("str", "Group")
@@ -478,18 +524,59 @@ class GroupDimensionDescriptor(ComponentList):
         super(GroupDimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
                                                        components=components)
 
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return GroupDimensionDescriptor(*args_, **kwargs_)
+
+    def build_attributes(self, node, attrs, already_processed):
+        super(GroupDimensionDescriptor, self).build_attributes(node, attrs, already_processed)
+
+
+class DataStructureComponentType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._measure_descriptor = None
+        self._attribute_descriptor = None
+        self._dimension_descriptor = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DataStructureComponentType(*args_, **kwargs_)
+
+    @property
+    def dimensionDescriptor(self):
+        return self._dimension_descriptor
+
+    @property
+    def attributeDescriptor(self):
+        return self._attribute_descriptor
+
+    @property
+    def measureDescriptor(self):
+        return self._measure_descriptor
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'DimensionList':
+            obj_ = DimensionDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._dimension_descriptor = obj_
+        elif nodeName_ == 'AttributeList':
+            obj_ = AttributeDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._attribute_descriptor = obj_
+        elif nodeName_ == 'MeasureList':
+            obj_ = MeasureDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._measure_descriptor = obj_
+
 
 class DataStructureDefinition(MaintainableArtefact):
-    _urnType = "datastructure"
-    _qName = qName("str", "DataStructure")
-
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None,
-                 dimensionDescriptor: DimensionDescriptor = None, measureDescriptor: MeasureDescriptor = None,
-                 attributeDescriptor: AttributeDescriptor = None,
+                 structureUrl: str = None, maintainer=None, dimensionDescriptor: DimensionDescriptor = None,
+                 measureDescriptor: MeasureDescriptor = None, attributeDescriptor: AttributeDescriptor = None,
                  groupDimensionDescriptor: GroupDimensionDescriptor = None):
 
         if annotations is None:
@@ -530,13 +617,17 @@ class DataStructureDefinition(MaintainableArtefact):
             return False
 
     def __str__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     def __unicode__(self):
-        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
 
     def __repr__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyId, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DataStructureDefinition(*args_, **kwargs_)
 
     @property
     def dimensionDescriptor(self):
@@ -567,21 +658,54 @@ class DataStructureDefinition(MaintainableArtefact):
 
     @property
     def datasetAttributeCodes(self):
-        rslt = []
+        result = []
         if self.attributeDescriptor is not None:
             for k in self.attributeDescriptor.components:
                 if self.attributeDescriptor[k].relatedTo == "NoSpecifiedRelationship":
-                    rslt.append(k)
-        return rslt
+                    result.append(k)
+        return result
 
     @property
     def observationAttributeCodes(self):
-        rslt = []
+        result = []
         if self.attributeDescriptor is not None:
             for k in self.attributeDescriptor.components:
                 if self.attributeDescriptor[k].relatedTo == "PrimaryMeasure":
-                    rslt.append(k)
-        return rslt
+                    result.append(k)
+        return result
+
+    @property
+    def facetedObjects(self):
+        facets = {}
+        for k, v in self.dimensionDescriptor.components.items():
+            if v.local_representation is not None:
+                if len(v.local_representation.facets) > 0:
+                    facets[k] = v.local_representation.facets
+            elif v.concept_identity is not None and not \
+                    isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
+                    len(v.concept_identity.coreRepresentation.facets) > 0:
+                facets[k] = v.concept_identity.coreRepresentation.facets
+
+        if self.attributeDescriptor is not None:
+            for k, v in self.attributeDescriptor.components.items():
+                if v.local_representation is not None:
+                    if len(v.local_representation.facets) > 0:
+                        facets[k] = v.local_representation.facets
+                elif v.concept_identity is not None and not \
+                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
+                        len(v.concept_identity.coreRepresentation.facets) > 0:
+                    facets[k] = v.concept_identity.coreRepresentation.facets
+
+        if self.measureDescriptor is not None:
+            for k, v in self.measureDescriptor.components.items():
+                if v.local_representation is not None:
+                    if len(v.local_representation.facets) > 0:
+                        facets[k] = v.local_representation.facets
+                elif v.concept_identity is not None and not \
+                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
+                        len(v.concept_identity.coreRepresentation.facets) > 0:
+                    facets[k] = v.concept_identity.coreRepresentation.facets
+        return facets
 
     @property
     def measureCode(self):
@@ -612,60 +736,57 @@ class DataStructureDefinition(MaintainableArtefact):
             value.dsd = self
 
     def toVtlJson(self, path):
-        dataTypesMapping = {
-            "String": "String",
-            "ObservationalTimePeriod": "Date",
-            "BigInteger": "Integer"
-        }
-
-        datasetName = self.id
+        dataset_name = self.id
         components = []
-        for c in self.dimensionDescriptor.components:
+        for c in self.dimensionDescriptor.components.values():
+
+            if c.local_representation.type_ is None:
+                type_ = "String"
+            else:
+                type_ = c.local_representation.type_
+
             component = {"name": c.id, "role": "Identifier",
-                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": False}
+                         "type": Data_Types_VTL[type_], "isNull": False}
 
             components.append(component)
-        for c in self.attributeDescriptor.components:
+        for c in self.attributeDescriptor.components.values():
+
+            if c.local_representation.type_ is None:
+                type_ = "String"
+            else:
+                type_ = c.local_representation.type_
+
             component = {"name": c.id, "role": "Attribute",
-                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": True}
+                         "type": Data_Types_VTL[type_], "isNull": True}
 
             components.append(component)
-        for c in self.measureDescriptor.components:
+        for c in self.measureDescriptor.components.values():
+
+            if c.local_representation.type_ is None:
+                type_ = "String"
+            else:
+                type_ = c.local_representation.type_
+
             component = {"name": c.id, "role": "Measure",
-                         "dim_type": dataTypesMapping[c.localRepresentation["dataType"]], "isNull": True}
+                         "type": Data_Types_VTL[type_], "isNull": True}
 
             components.append(component)
 
-        rslt = {"DataSet": {"name": datasetName, "DataStructure": components}}
+        result = {"DataSet": {"name": dataset_name, "DataStructure": components}}
         with open(path, 'w') as fp:
-            json.dump(rslt, fp)
-        return rslt
+            fp.write(json.dumps(result))
+        return result
 
+    def build_attributes(self, node, attrs, already_processed):
+        super(DataStructureDefinition, self).build_attributes(node, attrs, already_processed)
 
-class DataFlowDefinition(MaintainableArtefact):
-    _urnType = "datastructure"
-    _qName = qName("str", "Dataflow")
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None,
-                 structure: DataStructureDefinition = None):
-        if annotations is None:
-            annotations = []
-        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
-                                                 name=name, description=description,
-                                                 version=version, validFrom=validFrom, validTo=validTo,
-                                                 isFinal=isFinal, isExternalReference=isExternalReference,
-                                                 serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                 maintainer=maintainer)
-        self.structure = structure
+        super(DataStructureDefinition, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
-    @property
-    def structure(self):
-        return self._structure
-
-    @structure.setter
-    def structure(self, value):
-        self._structure = genericSetter(value, DataStructureDefinition)
+        if nodeName_ == 'DataStructureComponents':
+            obj_ = DataStructureComponentType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._attributeDescriptor = obj_.attributeDescriptor
+            self._dimensionDescriptor = obj_.dimensionDescriptor
+            self._measureDescriptor = obj_.measureDescriptor

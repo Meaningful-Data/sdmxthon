@@ -5247,6 +5247,7 @@
             <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)"
                                isExternalReference="false" agencyID="BIS" id="BIS_DER" isFinal="false" version="1.0">
                 <com:Name xml:lang="en">BIS derivatives statistics</com:Name>
+                <com:Name xml:lang="es">Estadísticas de derivados del BIS</com:Name>
                 <str:DataStructureComponents>
                     <str:DimensionList
                             urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=BIS:BIS_DER(1.0).DimensionDescriptor"
@@ -5913,7 +5914,7 @@
                                      maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
-                                <str:TextFormat textType="String" maxLength="15"/>
+                                <str:TextFormat textType="BigInteger" maxLength="15"/>
                             </str:LocalRepresentation>
                         </str:PrimaryMeasure>
                     </str:MeasureList>

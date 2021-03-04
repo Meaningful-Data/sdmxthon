@@ -1,6 +1,7 @@
+
 from ..common.messagetypes import CodedStatusMessageType
-from ..utils.data_parser import DataParser, UseCapturedNS_, Validate_simpletypes_
-from ..utils.xml_base import quote_attrib, find_attr_value_, encode_str_2_3
+from ..utils.data_parser import DataParser, Validate_simpletypes_
+from ..utils.xml_base import find_attr_value_
 
 
 class FooterType(DataParser):
@@ -14,7 +15,7 @@ class FooterType(DataParser):
     superclass = None
 
     def __init__(self, Message=None, gds_collector_=None, **kwargs_):
-        super(FooterType, self).__init__(gds_collector_, kwargs_)
+        super(FooterType, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
@@ -26,16 +27,22 @@ class FooterType(DataParser):
             self._message = Message
         self._message_nsprefix_ = None
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return FooterType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_Message(self):
+    @property
+    def message(self):
         return self._message
 
-    def set_Message(self, Message):
-        self._message = Message
+    @message.setter
+    def message(self, value):
+        if value is None:
+            self._message = []
+        elif isinstance(value, list):
+            self._message = value
+        else:
+            raise TypeError('Message must be a list')
 
     def add_Message(self, value):
         self._message.append(value)
@@ -53,11 +60,6 @@ class FooterType(DataParser):
             return True
         else:
             return False
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
-        for Message_ in self._message:
-            namespaceprefix_ = self._message_nsprefix_ + ':' if (UseCapturedNS_ and self._message_nsprefix_) else ''
-            Message_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Message':
@@ -79,17 +81,19 @@ class FooterMessageType(CodedStatusMessageType):
 
     def __init__(self, code=None, Text=None, severity=None, gds_collector_=None, **kwargs_):
         super(FooterMessageType, self).__init__(code, Text, gds_collector_, **kwargs_)
+        self._severity = severity
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return FooterMessageType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
+    @property
+    def severity(self):
+        return self._severity
 
-    def get_severity(self):
-        return self.severity
-
-    def set_severity(self, severity):
-        self.severity = severity
+    @severity.setter
+    def severity(self, value):
+        self._severity = value
 
     def validate_SeverityCodeType(self, value):
         # Validate dim_type SeverityCodeType, a restriction on xs:string.
@@ -98,26 +102,16 @@ class FooterMessageType(CodedStatusMessageType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
             value = value
             enumerations = ['Error', 'Warning', 'Information']
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on SeverityCodeType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{value}": {lineno} does not match xsd enumeration restriction')
                 result = False
         return result
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='FooterMessageType'):
-        super(FooterMessageType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
-                                                         name_='FooterMessageType')
-        if self.severity is not None and 'severity' not in already_processed:
-            already_processed.add('severity')
-            outfile.write(' severity=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self.severity), input_name='severity')),))
 
     def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
         pass
@@ -127,6 +121,6 @@ class FooterMessageType(CodedStatusMessageType):
         if value is not None and 'severity' not in already_processed:
             already_processed.add('severity')
             self.severity = value
-            self.validate_SeverityCodeType(self.severity)  # validate dim_type SeverityCodeType
+            self.validate_SeverityCodeType(self.severity)
         super(FooterMessageType, self).build_attributes(node, attrs, already_processed)
 # end class FooterMessageType

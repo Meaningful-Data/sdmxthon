@@ -1,14 +1,13 @@
-import copy
 import re as re_
 
-from SDMXThon.common.annotations import AnnotableType
-from SDMXThon.common.references import DataProviderReferenceType
-from SDMXThon.utils.data_parser import Validate_simpletypes_
-from SDMXThon.utils.generateds import datetime_
-from SDMXThon.utils.xml_base import _cast, BaseStrType_, quote_attrib, find_attr_value_, encode_str_2_3
+from ..common.references import DataProviderReferenceType
+from ..model.base import AnnotableArtefact
+from ..utils.data_parser import Validate_simpletypes_
+from ..utils.generateds import datetime_
+from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
-class ObsType(AnnotableType):
+class ObsType(AnnotableArtefact):
     """ObsType is the abstract dim_type which defines the structure of a grouped or
     un-grouped observation. The observation must be provided a key, which
     is either a value for the dimension which is declared to be at the
@@ -81,135 +80,47 @@ class ObsType(AnnotableType):
     that in the case of multiple measures being used, that the
     representation of the primary measure is broad enough to handle the
     various representations of the measure concepts."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
     def __init__(self, Annotations=None, type_=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, OBS_VALUE=None,
                  gds_collector_=None, **kwargs_):
-        super(ObsType, self).__init__(Annotations, gds_collector_, **kwargs_)
-        self._type_ = _cast(None, type_)
-        self._type__nsprefix_ = None
-        self._time_period = _cast(None, TIME_PERIOD)
-        self._time_period_nsprefix_ = None
-        self._reporting_year_start_day = _cast(None, REPORTING_YEAR_START_DAY)
-        self._reporting_year_start_day_nsprefix_ = None
-        self._obs_value = _cast(None, OBS_VALUE)
-        self._obs_value_nsprefix_ = None
+        super(ObsType, self).__init__(Annotations, gds_collector_)
+        self._type_ = cast(None, type_)
+        self._time_period = cast(None, TIME_PERIOD)
+        self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
+        self._obs_value = cast(None, OBS_VALUE)
         self._anyAttributes_ = {}
-        self._namespaceprefix = 'structure'
-        self._namespacedef = 'structure:"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"'
-        self._name = 'ObsType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return ObsType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_type(self):
+    @property
+    def type(self):
         return self._type_
 
-    def set_type(self, type_):
-        self._type_ = type_
+    @type.setter
+    def type(self, value):
+        self._type_ = value
 
-    def get_TIME_PERIOD(self):
-        return self._time_period
-
-    def set_TIME_PERIOD(self, TIME_PERIOD):
-        self._time_period = TIME_PERIOD
-
-    def get_REPORTING_YEAR_START_DAY(self):
-        return self._reporting_year_start_day
-
-    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
-        self._reporting_year_start_day = REPORTING_YEAR_START_DAY
-
-    def get_OBS_VALUE(self):
-        return self._obs_value
-
-    def set_OBS_VALUE(self, OBS_VALUE):
-        self._obs_value = OBS_VALUE
-
-    def get_anyAttributes_(self):
+    @property
+    def any_attributes(self):
         return self._anyAttributes_
 
-    def set_anyAttributes_(self, anyAttributes_):
-        self._anyAttributes_ = anyAttributes_
+    @any_attributes.setter
+    def any_attributes(self, value):
+        self._anyAttributes_ = value
 
     def validate_ObservationalTimePeriodType(self, value):
         pass
 
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='ObsType'):
-        unique_counter = 0
-        for name, value in self._anyAttributes_.items():
-            if name not in already_processed:
-                already_processed.add(name)
-                outfile.write(' %s=%s' % (name, quote_attrib(value),))
-
-        if self._type_ is not None and 'type_' not in already_processed:
-            already_processed.add('type_')
-            outfile.write(' xsi:dim_type=%s' % (quote_attrib(self._type_),))
-
-        if self._time_period is not None and 'TIME_PERIOD' not in already_processed:
-            already_processed.add('TIME_PERIOD')
-            outfile.write(' TIME_PERIOD=%s' % (quote_attrib(self._time_period),))
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            outfile.write(' REPORTING_YEAR_START_DAY=%s' % (self.gds_encode(
-                self.gds_format_string(quote_attrib(self._reporting_year_start_day),
-                                       input_name='REPORTING_YEAR_START_DAY')),))
-
-        if self._obs_value is not None and 'OBS_VALUE' not in already_processed:
-            already_processed.add('OBS_VALUE')
-            outfile.write(' OBS_VALUE=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._obs_value), input_name='OBS_VALUE')),))
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._type_ is not None and 'type_' in valid_fields:
-            parent_dict.update({'type_': self._type_})
-
-        if self._time_period is not None and 'TIME_PERIOD' in valid_fields:
-            parent_dict.update({'TIME_PERIOD': self._time_period})
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
-
-        if self._obs_value is not None and 'OBS_VALUE' in valid_fields:
-            parent_dict.update({'OBS_VALUE': self._obs_value})
-
-        for key in self._anyAttributes_:
-            if self._anyAttributes_[key] is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
     def build_attributes(self, node, attrs, already_processed):
+        self._anyAttributes_ = {}
         value = find_attr_value_('dim_type', node)
         if value is not None and 'dim_type' not in already_processed:
             already_processed.add('dim_type')
             self._type_ = value
             self.validate_id_type(self._type_)  # validate dim_type IDType
 
-        value = find_attr_value_('TIME_PERIOD', node)
-
-        if value is not None and 'TIME_PERIOD' not in already_processed:
-            already_processed.add('TIME_PERIOD')
-            self._time_period = value
-            self.validate_ObservationalTimePeriodType(
-                self._time_period)  # validate dim_type ObservationalTimePeriodType
-
-        value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
-
-        if value is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            self._reporting_year_start_day = value
-
-        value = find_attr_value_('OBS_VALUE', node)
-
-        if value is not None and 'OBS_VALUE' not in already_processed:
-            already_processed.add('OBS_VALUE')
-            self._obs_value = value
-
-        self._anyAttributes_ = {}
         for name, value in attrs.items():
             if name not in already_processed:
                 self._anyAttributes_[name] = value
@@ -220,7 +131,7 @@ class ObsType(AnnotableType):
 # end class ObsType
 
 
-class GroupType(AnnotableType):
+class GroupType(AnnotableArtefact):
     """GroupType is the abstract dim_type which defines a structure which is used
     to communicate attribute values for a group defined in a data structure
     definition. The group can consist of either a subset of the dimensions
@@ -264,9 +175,6 @@ class GroupType(AnnotableType):
     require or prohibit this attribute, depending on whether the data
     structure declared the reporting year start day attribute and if so,
     the attribute relationship and assignment status assigned to it."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
     def __init__(self, Annotations=None, type_=None, REPORTING_YEAR_START_DAY=None, gds_collector_=None, **kwargs_):
         self.gds_collector_ = gds_collector_
@@ -275,9 +183,9 @@ class GroupType(AnnotableType):
         self.parent_object_ = kwargs_.get('parent_object_')
         self.ns_prefix_ = None
         super(GroupType, self).__init__(Annotations, **kwargs_)
-        self._type_ = _cast(None, type_)
+        self._type_ = cast(None, type_)
         self._type__nsprefix_ = None
-        self._reporting_year_start_day = _cast(None, REPORTING_YEAR_START_DAY)
+        self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
         self._reporting_year_start_day_nsprefix_ = None
         self._anyAttributes_ = {}
         self._namespaceprefix = 'structure'
@@ -289,76 +197,25 @@ class GroupType(AnnotableType):
 
     factory = staticmethod(factory)
 
-    def get_type(self):
+    @property
+    def type(self):
         return self._type_
 
-    def set_type(self, type_):
-        self._type_ = type_
+    @type.setter
+    def type(self, value):
+        self._type_ = value
 
-    def get_REPORTING_YEAR_START_DAY(self):
+    @property
+    def reporting_year_start_day(self):
         return self._reporting_year_start_day
 
-    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
-        self._reporting_year_start_day = REPORTING_YEAR_START_DAY
+    @reporting_year_start_day.setter
+    def reporting_year_start_day(self, value):
+        self._reporting_year_start_day = value
 
-    def get_anyAttributes_(self):
+    @property
+    def any_attributes(self):
         return self._anyAttributes_
-
-    def set_anyAttributes_(self, anyAttributes_):
-        self._anyAttributes_ = anyAttributes_
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='GroupType'):
-        unique_counter = 0
-        for name, value in self._anyAttributes_.items():
-            xsinamespaceprefix = 'xsi'
-            xsinamespace1 = 'http://www.w3.org/2001/XMLSchema-instance'
-            xsinamespace2 = '{%s}' % (xsinamespace1,)
-            if name.startswith(xsinamespace2):
-                name1 = name[len(xsinamespace2):]
-                name2 = '%s:%s' % (xsinamespaceprefix, name1,)
-                if name2 not in already_processed:
-                    already_processed.add(name2)
-                    outfile.write(' %s=%s' % (name2, quote_attrib(value),))
-            else:
-                mo = re_.match(value, name)
-                if mo is not None:
-                    namespace, name = mo.group(1, 2)
-                    if name not in already_processed:
-                        already_processed.add(name)
-                        if namespace == 'http://www.w3.org/XML/1998/namespace':
-                            outfile.write(' %s=%s' % (name, quote_attrib(value),))
-                        else:
-                            unique_counter += 1
-                            outfile.write(' xmlns:%d="%s"' % (unique_counter, namespace,))
-                            outfile.write(' %d:%s=%s' % (unique_counter, name, quote_attrib(value),))
-                else:
-                    if name not in already_processed:
-                        already_processed.add(name)
-                        outfile.write(' %s=%s' % (name, quote_attrib(value),))
-
-        super(GroupType, self).export_attributes(outfile, level, already_processed, namespace_prefix_,
-                                                 name_='GroupType')
-
-        if self._type_ is not None and 'type_' not in already_processed:
-            already_processed.add('type_')
-            outfile.write(' dim_type=%s' % (quote_attrib(self._type_),))
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            outfile.write(' REPORTING_YEAR_START_DAY=%s' % (self.gds_encode(
-                self.gds_format_string(quote_attrib(self._reporting_year_start_day),
-                                       input_name='REPORTING_YEAR_START_DAY')),))
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        for key in self._anyAttributes_:
-            if key is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
-        if self._type_ is not None and 'type_' in valid_fields:
-            parent_dict.update({'type_': self._type_})
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
 
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('dim_type', node)
@@ -385,7 +242,7 @@ class GroupType(AnnotableType):
 # end class GroupType
 
 
-class SeriesType(AnnotableType):
+class SeriesType(AnnotableArtefact):
     """SeriesType is the abstract dim_type which defines a structure which is used
     to group a collection of observations which have a key in common. The
     key for a series is every dimension defined in the data structure
@@ -432,18 +289,13 @@ class SeriesType(AnnotableType):
     this attribute, depending on whether the data structure declared the
     reporting year start day attribute and if so, the attribute
     relationship and assignment status assigned to it."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
-    def __init__(self, Annotations=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, Obs=None, gds_collector_=None,
-                 **kwargs_):
+    def __init__(self, Annotations=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, Obs=None,
+                 gds_collector_=None):
 
-        super(SeriesType, self).__init__(Annotations, gds_collector_, **kwargs_)
+        super(SeriesType, self).__init__(Annotations, gds_collector_)
         self._time_period = TIME_PERIOD
-        self._time_period_nsprefix_ = None
         self._reporting_year_start_day = REPORTING_YEAR_START_DAY
-        self._reporting_year_start_day_nsprefix_ = None
 
         if Obs is None:
             self._obs = []
@@ -452,20 +304,23 @@ class SeriesType(AnnotableType):
 
         self._obs_nsprefix_ = None
         self._anyAttributes_ = {}
-        self._namespaceprefix = 'structure'
-        self._namespacedef = 'structure:"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"'
-        self._name = 'SeriesType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return SeriesType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
-    def get_Obs(self):
+    @property
+    def obs(self):
         return self._obs
 
-    def set_Obs(self, Obs):
-        self._obs = Obs
+    @obs.setter
+    def obs(self, value):
+        if value is None:
+            self._obs = []
+        elif isinstance(value, list):
+            self._obs = value
+        else:
+            raise TypeError('Obs must be a list')
 
     def add_Obs(self, value):
         self._obs.append(value)
@@ -476,23 +331,13 @@ class SeriesType(AnnotableType):
     def replace_Obs_at(self, index, value):
         self._obs[index] = value
 
-    def get_TIME_PERIOD(self):
-        return self._time_period
-
-    def set_TIME_PERIOD(self, TIME_PERIOD):
-        self._time_period = TIME_PERIOD
-
-    def get_REPORTING_YEAR_START_DAY(self):
-        return self._reporting_year_start_day
-
-    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
-        self._reporting_year_start_day = REPORTING_YEAR_START_DAY
-
-    def get_anyAttributes_(self):
+    @property
+    def any_attributes(self):
         return self._anyAttributes_
 
-    def set_anyAttributes_(self, anyAttributes_):
-        self._anyAttributes_ = anyAttributes_
+    @any_attributes.setter
+    def any_attributes(self, value):
+        self._anyAttributes_ = value
 
     def validate_ObservationalTimePeriodType(self, value):
         pass
@@ -503,58 +348,7 @@ class SeriesType(AnnotableType):
         else:
             return False
 
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='SeriesType'):
-        unique_counter = 0
-        for name, value in self._anyAttributes_.items():
-            if name not in already_processed:
-                already_processed.add(name)
-                outfile.write(' %s=%s' % (name, quote_attrib(value),))
-
-        if self._time_period is not None and 'TIME_PERIOD' not in already_processed:
-            already_processed.add('TIME_PERIOD')
-            outfile.write(' TIME_PERIOD=%s' % (quote_attrib(self._time_period),))
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            outfile.write(' REPORTING_YEAR_START_DAY=%s' % (self.gds_encode(
-                self.gds_format_string(quote_attrib(self._reporting_year_start_day),
-                                       input_name='REPORTING_YEAR_START_DAY')),))
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._time_period is not None and 'TIME_PERIOD' in valid_fields:
-            parent_dict.update({'TIME_PERIOD': self._time_period})
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
-
-        for key in self._anyAttributes_:
-            if self._anyAttributes_[key] is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
-        for Obs_ in self._obs:
-            parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
-        for Obs_ in self._obs:
-            Obs_.export(outfile, level, pretty_print=pretty_print)
-
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('TIME_PERIOD', node)
-
-        if value is not None and 'TIME_PERIOD' not in already_processed:
-            already_processed.add('TIME_PERIOD')
-            self._time_period = value
-            self.validate_ObservationalTimePeriodType(
-                self._time_period)  # validate dim_type ObservationalTimePeriodType
-
-        value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
-
-        if value is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            self._reporting_year_start_day = value
-
         self._anyAttributes_ = {}
 
         for name, value in attrs.items():
@@ -567,7 +361,8 @@ class SeriesType(AnnotableType):
         if nodeName_ == 'Obs':
             obj_ = ObsType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._obs.append(obj_)
+            self._anyAttributes_.update(obj_.any_attributes)
+            self.obs.append(self._anyAttributes_.copy())
             obj_.original_tagname_ = 'Obs'
 
         super(SeriesType, self).build_children(child_, node, nodeName_, True)
@@ -575,7 +370,7 @@ class SeriesType(AnnotableType):
 
 # end class SeriesType
 
-class DataSetType(AnnotableType):
+class DataSetType(AnnotableArtefact):
     """DataSetType is the abstract dim_type which defines the base structure for
     any data structure definition specific data set. A derived data set
     dim_type will be created that is specific to a data structure definition
@@ -635,30 +430,18 @@ class DataSetType(AnnotableType):
     prohibit this attribute, depending on whether the data structure
     declared the reporting year start day attribute and if so, the
     attribute relationship and assignment status assigned to it."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
     def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None, structureRef=None, setID=None, action=None,
                  reportingBeginDate=None, reportingEndDate=None, validFromDate=None, validToDate=None,
-                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Series=None, Obs=None,
+                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Data=None,
                  gds_collector_=None, **kwargs_):
-        super(DataSetType, self).__init__(Annotations, None, gds_collector_, **kwargs_)
-        self._reporting_year_start_day = _cast(None, REPORTING_YEAR_START_DAY)
-        self._reporting_year_start_day_nsprefix_ = None
+        super(DataSetType, self).__init__(Annotations, gds_collector_)
+        self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
         self._structureRef = structureRef
-        self._structureRef_nsprefix_ = None
         self._setID = setID
-        self._setID_nsprefix_ = None
         self._action = action
-        self._action_nsprefix_ = None
         self._reportingBeginDate = reportingBeginDate
-        self._reportingBeginDate_nsprefix_ = None
         self._reportingEndDate = reportingEndDate
-        self._reportingEndDate_nsprefix_ = None
-        self._namespace_prefix = 'message'
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
-        self._name = "DataSetType"
 
         if isinstance(validFromDate, BaseStrType_):
             initvalue_ = datetime_.datetime.strptime(validFromDate, '%Y-%m-%dT%H:%M:%S')
@@ -673,33 +456,19 @@ class DataSetType(AnnotableType):
             initvalue_ = validToDate
 
         self._validToDate = initvalue_
-        self._publicationYear = _cast(None, publicationYear)
-        self._publicationYear_nsprefix_ = None
-        self._publicationPeriod = _cast(None, publicationPeriod)
-        self._publicationPeriod_nsprefix_ = None
+        self._publicationYear = cast(None, publicationYear)
+        self._publicationPeriod = cast(None, publicationPeriod)
         self._dataProvider = DataProvider
-        self._dataProvider_nsprefix_ = None
 
         if Group is None:
             self._group = []
         else:
             self._group = Group
 
-        self._group_nsprefix_ = None
-
-        if Series is None:
-            self._Series = []
+        if Data is None:
+            self._data = []
         else:
-            self._Series = Series
-
-        self._Series_nsprefix_ = None
-
-        if Obs is None:
-            self._obs = []
-        else:
-            self._obs = Obs
-
-        self._obs_nsprefix_ = None
+            self._data = Data
 
         self._anyAttributes_ = {}
 
@@ -708,17 +477,26 @@ class DataSetType(AnnotableType):
 
     factory = staticmethod(factory)
 
-    def get_DataProvider(self):
+    @property
+    def dataProvider(self):
         return self._dataProvider
 
-    def set_DataProvider(self, DataProvider):
-        self._dataProvider = DataProvider
+    @dataProvider.setter
+    def dataProvider(self, value):
+        self._dataProvider = value
 
-    def get_Group(self):
+    @property
+    def group(self):
         return self._group
 
-    def set_Group(self, Group):
-        self._group = Group
+    @group.setter
+    def group(self, value):
+        if value is None:
+            self._group = []
+        elif isinstance(value, list):
+            self._group = value
+        else:
+            raise TypeError('Group must be a list')
 
     def add_Group(self, value):
         self._group.append(value)
@@ -729,101 +507,101 @@ class DataSetType(AnnotableType):
     def replace_Group_at(self, index, value):
         self._group[index] = value
 
-    def get_Series(self):
-        return self._Series
+    @property
+    def data(self):
+        return self._data
 
-    def set_Series(self, Series):
-        self._Series = Series
+    @data.setter
+    def data(self, value):
+        self._data = value
 
-    def add_Series(self, value):
-        self._Series.append(value)
-
-    def insert_Series_at(self, index, value):
-        self._Series.insert(index, value)
-
-    def replace_Series_at(self, index, value):
-        self._Series[index] = value
-
-    def get_Obs(self):
-        return self._obs
-
-    def set_Obs(self, Obs):
-        self._obs = Obs
-
-    def add_Obs(self, value):
-        self._obs.append(value)
-
-    def insert_Obs_at(self, index, value):
-        self._obs.insert(index, value)
-
-    def replace_Obs_at(self, index, value):
-        self._obs[index] = value
-
-    def get_REPORTING_YEAR_START_DAY(self):
+    @property
+    def reporting_year_start_day(self):
         return self._reporting_year_start_day
 
-    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
-        self._reporting_year_start_day = REPORTING_YEAR_START_DAY
+    @reporting_year_start_day.setter
+    def reporting_year_start_day(self, value):
+        self._reporting_year_start_day = value
 
-    def get_structureRef(self):
+    @property
+    def structureRef(self):
         return self._structureRef
 
-    def set_structureRef(self, structureRef):
-        self._structureRef = structureRef
+    @structureRef.setter
+    def structureRef(self, value):
+        self._structureRef = value
 
-    def get_setID(self):
+    @property
+    def setID(self):
         return self._setID
 
-    def set_setID(self, setID):
-        self._setID = setID
+    @setID.setter
+    def setID(self, value):
+        self._setID = value
 
-    def get_action(self):
+    @property
+    def action(self):
         return self._action
 
-    def set_action(self, action):
-        self._action = action
+    @action.setter
+    def action(self, value):
+        self._action = value
 
-    def get_reportingBeginDate(self):
+    @property
+    def reporting_begin_date(self):
         return self._reportingBeginDate
 
-    def set_reportingBeginDate(self, reportingBeginDate):
-        self._reportingBeginDate = reportingBeginDate
+    @reporting_begin_date.setter
+    def reporting_begin_date(self, value):
+        self._reportingBeginDate = value
 
-    def get_reportingEndDate(self):
+    @property
+    def reporting_end_date(self):
         return self._reportingEndDate
 
-    def set_reportingEndDate(self, reportingEndDate):
-        self._reportingEndDate = reportingEndDate
+    @reporting_end_date.setter
+    def reporting_end_date(self, value):
+        self._reportingEndDate = value
 
-    def get_validFromDate(self):
+    @property
+    def valid_from_date(self):
         return self._validFromDate
 
-    def set_validFromDate(self, validFromDate):
-        self._validFromDate = validFromDate
+    @valid_from_date.setter
+    def valid_from_date(self, value):
+        self._validFromDate = value
 
-    def get_validToDate(self):
+    @property
+    def valid_to_date(self):
         return self._validToDate
 
-    def set_validToDate(self, validToDate):
-        self._validToDate = validToDate
+    @valid_to_date.setter
+    def valid_to_date(self, value):
+        self._validToDate = value
 
-    def get_publicationYear(self):
+    @property
+    def publication_year(self):
         return self._publicationYear
 
-    def set_publicationYear(self, publicationYear):
-        self._publicationYear = publicationYear
+    @publication_year.setter
+    def publication_year(self, value):
+        self._publicationYear = value
 
-    def get_publicationPeriod(self):
+    @property
+    def publication_period(self):
         return self._publicationPeriod
 
-    def set_publicationPeriod(self, publicationPeriod):
-        self._publicationPeriod = publicationPeriod
+    @publication_period.setter
+    def publication_period(self, value):
+        self._publicationPeriod = value
 
-    def get_anyAttributes_(self):
+    @property
+    def any_attributes(self):
         return self._anyAttributes_
 
-    def set_anyAttributes_(self, anyAttributes_):
-        self._anyAttributes_ = anyAttributes_
+    @any_attributes.setter
+    def any_attributes(self, value):
+        self._anyAttributes_ = value
 
     def validate_ActionType(self, value):
         # Validate dim_type common:ActionType, a restriction on xs:NMTOKEN.
@@ -833,8 +611,7 @@ class DataSetType(AnnotableType):
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s is not of the correct base simple dim_type (str)' % {"value": value,
-                                                                                                      "lineno": lineno, })
+                    f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
 
             value = value
@@ -843,8 +620,8 @@ class DataSetType(AnnotableType):
             if value not in enumerations:
                 lineno = self.gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    'Value "%(value)s"%(lineno)s does not match xsd enumeration restriction on ActionType' % {
-                        "value": encode_str_2_3(value), "lineno": lineno})
+                    f'Value "{encode_str_2_3(value)}": {lineno} does not match '
+                    f'xsd enumeration restriction on ActionType')
                 result = False
         return result
 
@@ -859,170 +636,64 @@ class DataSetType(AnnotableType):
     def has_content_(self):
         if (self._dataProvider is not None or
                 self._group is not None or
-                self._Series is not None or
-                self._obs is not None):
+                self._data is not None):
             return True
         else:
             return False
 
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='DataSetType'):
-        unique_counter = 0
-        for name, value in self._anyAttributes_.items():
-            if name not in already_processed:
-                already_processed.add(name)
-                outfile.write(' %s=%s' % (name, quote_attrib(value),))
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
-            already_processed.add('REPORTING_YEAR_START_DAY')
-            outfile.write(' REPORTING_YEAR_START_DAY=%s' % (self.gds_encode(
-                self.gds_format_string(quote_attrib(self._reporting_year_start_day),
-                                       input_name='REPORTING_YEAR_START_DAY')),))
-
-        if self._structureRef is not None and 'structureRef' not in already_processed:
-            already_processed.add('structureRef')
-            outfile.write(' structureRef=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._structureRef), input_name='structureRef')),))
-
-        if self._setID is not None and 'setID' not in already_processed:
-            already_processed.add('setID')
-            outfile.write(' setID=%s' % (quote_attrib(self._setID),))
-
-        if self._action is not None and 'action' not in already_processed:
-            already_processed.add('action')
-            outfile.write(' action=%s' % (
-                self.gds_encode(self.gds_format_string(quote_attrib(self._action), input_name='action')),))
-
-        if self._reportingBeginDate is not None and 'reportingBeginDate' not in already_processed:
-            already_processed.add('reportingBeginDate')
-            outfile.write(' reportingBeginDate=%s' % (quote_attrib(self._reportingBeginDate),))
-
-        if self._reportingEndDate is not None and 'reportingEndDate' not in already_processed:
-            already_processed.add('reportingEndDate')
-            outfile.write(' reportingEndDate=%s' % (quote_attrib(self._reportingEndDate),))
-
-        if self._validFromDate is not None and 'validFromDate' not in already_processed:
-            already_processed.add('validFromDate')
-            outfile.write(
-                ' validFromDate="%s"' % self.gds_format_datetime(self._validFromDate, input_name='validFromDate'))
-
-        if self._validToDate is not None and 'validToDate' not in already_processed:
-            already_processed.add('validToDate')
-            outfile.write(' validToDate="%s"' % self.gds_format_datetime(self._validToDate, input_name='validToDate'))
-
-        if self._publicationYear is not None and 'publicationYear' not in already_processed:
-            already_processed.add('publicationYear')
-            outfile.write(' publicationYear=%s' % (self.gds_encode(
-                self.gds_format_string(quote_attrib(self._publicationYear), input_name='publicationYear')),))
-
-        if self._publicationPeriod is not None and 'publicationPeriod' not in already_processed:
-            already_processed.add('publicationPeriod')
-            outfile.write(' publicationPeriod=%s' % (quote_attrib(self._publicationPeriod),))
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
-
-        if self._structureRef is not None and 'DSDID' in valid_fields:
-            parent_dict.update({'DSDID': self._structureRef})
-
-        if self._setID is not None and 'setID' in valid_fields:
-            parent_dict.update({'setID': self._setID})
-
-        if self._action is not None and 'action' in valid_fields:
-            parent_dict.update({'action': self._action})
-
-        if self._reportingBeginDate is not None and 'reportingBeginDate' in valid_fields:
-            parent_dict.update({'reportingBeginDate': self._reportingBeginDate})
-
-        if self._reportingEndDate is not None and 'reportingEndDate' in valid_fields:
-            parent_dict.update({'reportingEndDate': self._reportingEndDate})
-
-        if self._validFromDate is not None and 'validFromDate' in valid_fields:
-            parent_dict.update({'validFromDate': self._validFromDate})
-
-        if self._validToDate is not None and 'validToDate' in valid_fields:
-            parent_dict.update({'validToDate': self._validToDate})
-
-        if self._publicationYear is not None and 'publicationYear' in valid_fields:
-            parent_dict.update({'publicationYear': self._publicationYear})
-
-        if self._publicationPeriod is not None and 'publicationPeriod' in valid_fields:
-            parent_dict.update({'publicationPeriod': self._publicationPeriod})
-
-        for key in self._anyAttributes_:
-            if self._anyAttributes_[key] is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
-        for Group_ in self._group:
-            parent_data = copy.deepcopy(parent_dict)
-            Group_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
-        for Series_ in self._Series:
-            parent_data = copy.deepcopy(parent_dict)
-            Series_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
-        for Obs_ in self._obs:
-            parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
-        if self._dataProvider is not None:
-            self._dataProvider.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Group_ in self._group:
-            Group_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Series_ in self._Series:
-            Series_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
-        for Obs_ in self._obs:
-            Obs_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
-
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
+
+        self._anyAttributes_ = {}
+        tag_pattern_ = re_.compile(r'({.*})?(.*)')
+
+        for name, value in attrs.items():
+            real_name = tag_pattern_.match(name).groups()[-1]
+            if real_name not in already_processed:
+                if real_name == "dim_type":
+                    real_name = "xsi:dim_type"
+                self._anyAttributes_[real_name] = value
+
+        value = find_attr_value_('REPORTING_YEAR_START_DAY', self._anyAttributes_)
 
         if value is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
             already_processed.add('REPORTING_YEAR_START_DAY')
             self._reporting_year_start_day = value
 
-        value = find_attr_value_('structureRef', node)
+        value = find_attr_value_('structureRef', self._anyAttributes_)
 
         if value is not None and 'structureRef' not in already_processed:
             already_processed.add('structureRef')
             self._structureRef = value
 
-        value = find_attr_value_('setID', node)
+        value = find_attr_value_('setID', self._anyAttributes_)
 
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
             self._setID = value
             self.validate_id_type(self._setID)  # validate dim_type IDType
 
-        value = find_attr_value_('action', node)
+        value = find_attr_value_('action', self._anyAttributes_)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
             self._action = value
             self.validate_ActionType(self._action)  # validate dim_type ActionType
 
-        value = find_attr_value_('reportingBeginDate', node)
+        value = find_attr_value_('reportingBeginDate', self._anyAttributes_)
 
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
             self._reportingBeginDate = value
             self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
 
-        value = find_attr_value_('reportingEndDate', node)
+        value = find_attr_value_('reportingEndDate', self._anyAttributes_)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
             self._reportingEndDate = value
             self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
 
-        value = find_attr_value_('validFromDate', node)
+        value = find_attr_value_('validFromDate', self._anyAttributes_)
 
         if value is not None and 'validFromDate' not in already_processed:
             already_processed.add('validFromDate')
@@ -1031,7 +702,7 @@ class DataSetType(AnnotableType):
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
 
-        value = find_attr_value_('validToDate', node)
+        value = find_attr_value_('validToDate', self._anyAttributes_)
 
         if value is not None and 'validToDate' not in already_processed:
             already_processed.add('validToDate')
@@ -1040,13 +711,13 @@ class DataSetType(AnnotableType):
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
 
-        value = find_attr_value_('publicationYear', node)
+        value = find_attr_value_('publicationYear', self._anyAttributes_)
 
         if value is not None and 'publicationYear' not in already_processed:
             already_processed.add('publicationYear')
             self._publicationYear = value
 
-        value = find_attr_value_('publicationPeriod', node)
+        value = find_attr_value_('publicationPeriod', self._anyAttributes_)
 
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
@@ -1054,37 +725,25 @@ class DataSetType(AnnotableType):
             self.validate_ObservationalTimePeriodType(
                 self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
 
-        self._anyAttributes_ = {}
-        Tag_pattern_ = re_.compile(r'({.*})?(.*)')
-
-        for name, value in attrs.items():
-            real_name = Tag_pattern_.match(name).groups()[-1]
-            if real_name not in already_processed:
-                if real_name == "dim_type":
-                    real_name = "xsi:dim_type"
-                self._anyAttributes_[real_name] = value
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory(parent_object_=self)
+            obj_ = DataProviderReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
             obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Group':
-            obj_ = GroupType.factory(parent_object_=self)
+            obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
             obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
-            obj_ = SeriesType.factory(parent_object_=self)
+            obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._Series.append(obj_)
-            obj_.original_tagname_ = 'Series'
+            self._data += obj_.obs
         elif nodeName_ == 'Obs':
-            obj_ = ObsType.factory(parent_object_=self)
+            obj_ = ObsType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._obs.append(obj_)
-            obj_.original_tagname_ = 'Obs'
+            self._data.append(obj_.any_attributes)
         super(DataSetType, self).build_children(child_, node, nodeName_, True)
 
 
@@ -1110,13 +769,10 @@ class TimeSeriesDataSetType(DataSetType):
 
     def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None, structureRef=None, setID=None, action=None,
                  reportingBeginDate=None, reportingEndDate=None, validFromDate=None, validToDate=None,
-                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Series=None, Obs=None,
-                 gds_collector_=None, **kwargs_):
+                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Data=None):
         super(TimeSeriesDataSetType, self).__init__(Annotations, REPORTING_YEAR_START_DAY, structureRef, setID, action,
                                                     reportingBeginDate, reportingEndDate, validFromDate, validToDate,
-                                                    publicationYear, publicationPeriod, DataProvider, Group, Series,
-                                                    Obs,
-                                                    gds_collector_, **kwargs_)
+                                                    publicationYear, publicationPeriod, DataProvider, Group, Data)
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -1146,13 +802,8 @@ class TimeSeriesType(SeriesType):
     rules for derivation as the base series type apply to this specialized
     series."""
 
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
-
-    def __init__(self, Annotations=None, TIME_PERIOD=None, Obs=None, gds_collector_=None,
-                 **kwargs_):
-        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Obs, gds_collector_, **kwargs_)
+    def __init__(self, Annotations=None, TIME_PERIOD=None, Data=None, gds_collector_=None):
+        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Data, gds_collector_)
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -1160,11 +811,13 @@ class TimeSeriesType(SeriesType):
 
     factory = staticmethod(factory)
 
-    def get_REPORTING_YEAR_START_DAY(self):
+    @property
+    def reporting_year_start_day(self):
         return self._reporting_year_start_day
 
-    def set_REPORTING_YEAR_START_DAY(self, REPORTING_YEAR_START_DAY):
-        self._reporting_year_start_day = None
+    @reporting_year_start_day.setter
+    def reporting_year_start_day(self, value):
+        self._reporting_year_start_day = value
 
 
 class TimeSeriesObsType(ObsType):
@@ -1190,11 +843,13 @@ class TimeSeriesObsType(ObsType):
         super(TimeSeriesObsType, self).__init__(Annotations, type_, None, REPORTING_YEAR_START_DAY, OBS_VALUE,
                                                 gds_collector_, **kwargs_)
 
-    def get_TIME_PERIOD(self):
-        return self.TIME_PERIOD
+    @property
+    def time_period(self):
+        return self._time_period
 
-    def set_TIME_PERIOD(self, TIME_PERIOD):
-        self._time_period = None
+    @time_period.setter
+    def time_period(self, value):
+        self._time_period = value
 
     def validate_ObservationalTimePeriodType(self, value):
         # Validate type common:ObservationalTimePeriodType, a restriction on None.

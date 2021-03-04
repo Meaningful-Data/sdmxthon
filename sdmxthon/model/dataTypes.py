@@ -21,3 +21,4 @@ ConstraintRoleType = ['allowableContent', 'actualContent']
 FacetType = ['isSequence', 'minLength', 'maxLength', 'minValue', 'maxValue',
              'startValue', 'endValue', 'interval', 'timeInterval', 'decimals',
              'pattern', 'startTime', 'endTime']
+
