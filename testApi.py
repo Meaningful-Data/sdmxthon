@@ -22,19 +22,22 @@ pathDSDS = 'SDMXThon/outputTests/metadata/dsds.pickle'
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/ECB_ICPF1.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/ECB_SHS6_metadata.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/WB_WDI.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
-pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_OUTS.xml'
+pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
 pathToDataSpe = 'SDMXThon/examples/Structure/outputSpe.xml'
 pathToDataGen = 'SDMXThon/examples/Generic/outputGen.xml'
 pathToDataGenSer = 'SDMXThon/examples/Generic/genSeries.xml'
-pathToCSVData = 'SDMXThon/outputTests/BIS_data.csv'
-pathToCSVData2 = 'SDMXThon/outputTests/BIS_data2.csv'
 
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
@@ -50,7 +53,7 @@ def pretty(d, indent=0):
 
 def main():
     logger.debug('Start')
-    # obj = readSDMX(pathToDataSpe, pathToMetadataFile)
+    #obj = readSDMX(pathToDataBIS, pathToMetadataFile)
     obj = getMetadata(pathToMetadataFile)
     logger.debug('End')
     """

@@ -372,7 +372,9 @@ class ComponentList(IdentifiableArtefact):
         return self._components
 
     def addComponent(self, value):
-        if isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
+        if isinstance(self, MeasureDescriptor) and len(self._components) == 1:
+            raise ValueError('Measure Descriptor cannot have more than one Primary Measure')
+        elif isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
             value.componentList = self
             self._components[value.id] = value
         else:
@@ -505,11 +507,7 @@ class MeasureDescriptor(ComponentList, DataParser):
         if nodeName_ == 'PrimaryMeasure':
             obj_ = PrimaryMeasure.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            if len(self.components) == 0:
-                self.addComponent(obj_)
-            else:
-                # TODO Raise exception on more than one Measure
-                pass
+            self.addComponent(obj_)
 
 
 class GroupDimensionDescriptor(ComponentList, DataParser):
@@ -683,27 +681,30 @@ class DataStructureDefinition(MaintainableArtefact):
             if v.local_representation is not None:
                 if len(v.local_representation.facets) > 0:
                     facets[k] = v.local_representation.facets
-            elif v.concept_identity is not None and not isinstance(v.concept_identity, dict) and \
-                    len(v.concept_identity.facets) > 0:
-                facets[k] = v.concept_identity.facets
+            elif v.concept_identity is not None and not \
+                    isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
+                    len(v.concept_identity.coreRepresentation.facets) > 0:
+                facets[k] = v.concept_identity.coreRepresentation.facets
 
         if self.attributeDescriptor is not None:
             for k, v in self.attributeDescriptor.components.items():
                 if v.local_representation is not None:
                     if len(v.local_representation.facets) > 0:
                         facets[k] = v.local_representation.facets
-                elif v.concept_identity is not None and not isinstance(v.concept_identity, dict) and \
-                        len(v.concept_identity.facets) > 0:
-                    facets[k] = v.concept_identity.facets
+                elif v.concept_identity is not None and not \
+                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
+                        len(v.concept_identity.coreRepresentation.facets) > 0:
+                    facets[k] = v.concept_identity.coreRepresentation.facets
 
         if self.measureDescriptor is not None:
             for k, v in self.measureDescriptor.components.items():
                 if v.local_representation is not None:
                     if len(v.local_representation.facets) > 0:
                         facets[k] = v.local_representation.facets
-                elif v.concept_identity is not None and not isinstance(v.concept_identity, dict) and \
-                        len(v.concept_identity.facets) > 0:
-                    facets[k] = v.concept_identity.facets
+                elif v.concept_identity is not None and not \
+                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
+                        len(v.concept_identity.coreRepresentation.facets) > 0:
+                    facets[k] = v.concept_identity.coreRepresentation.facets
         return facets
 
     @property
