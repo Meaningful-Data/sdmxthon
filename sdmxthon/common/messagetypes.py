@@ -1,6 +1,6 @@
-from .annotations import TextType
+from ..model.base import LocalisedString, InternationalString
 from ..utils.data_parser import DataParser
-from ..utils.xml_base import cast, quote_attrib, find_attr_value_
+from ..utils.xml_base import find_attr_value_
 
 
 class StatusMessageType(DataParser):
@@ -15,23 +15,11 @@ class StatusMessageType(DataParser):
     subclass = None
     superclass = None
 
-    def __init__(self, code=None, Text=None, gds_collector_=None, **kwargs_):
+    def __init__(self, code=None, Text: InternationalString = None, gds_collector_=None, **kwargs_):
         super(StatusMessageType, self).__init__(None)
         self.gds_collector_ = gds_collector_
-        self.gds_elementtree_node_ = None
-        self.original_tagname_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
-        self.ns_prefix_ = None
-        self._code = cast(None, code)
-        self._code_nsprefix_ = None
-        if Text is None:
-            self._text = []
-        else:
-            self._text = Text
-        self.Text_nsprefix_ = None
-        self._namespacedef = 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
-        self._namespaceprefix = "common"
-        self._name = 'StatusMessageType'
+        self._code = code
+        self._text = Text
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -39,25 +27,23 @@ class StatusMessageType(DataParser):
 
     @property
     def text(self):
+        if self._text is None:
+            return None
+        elif isinstance(self._text, InternationalString):
+            if len(self._text.items) == 0:
+                return None
+            elif len(self._text.items) == 1:
+                values_view = self._text.items.values()
+                value_iterator = iter(values_view)
+                first_value = next(value_iterator)
+                return first_value['content']
+            else:
+                return self._text.items
         return self._text
 
     @text.setter
     def text(self, value):
-        if value is None:
-            self._text = []
-        elif isinstance(value, list):
-            self._text = value
-        else:
-            raise TypeError('Text must be a list')
-
-    def add_Text(self, value):
-        self._text.append(value)
-
-    def insert_Text_at(self, index, value):
-        self._text.insert(index, value)
-
-    def replace_Text_at(self, index, value):
-        self._text[index] = value
+        self._text = value
 
     @property
     def code(self):
@@ -68,25 +54,10 @@ class StatusMessageType(DataParser):
         self._code = value
 
     def has_content_(self):
-        if (
-                self._text
-        ):
+        if self._text:
             return True
         else:
             return False
-
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_='', name_='StatusMessageType'):
-        if self._code is not None and 'Code' not in already_processed:
-            already_processed.add('Code')
-            outfile.write(
-                'Code=%s' % (self.gds_encode(self.gds_format_string(quote_attrib(self._code))),))
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        pass
-
-    def export_children(self, outfile, level, pretty_print=True, has_parent=True):
-        for Text_ in self._text:
-            Text_.export(outfile, level, pretty_print=pretty_print, has_parent=has_parent)
 
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('Code', node)
@@ -96,11 +67,11 @@ class StatusMessageType(DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Text':
-            class_obj_ = self.get_class_obj_(child_, TextType)
-            obj_ = class_obj_.factory(parent_object_=self)
+            obj_ = LocalisedString.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._text.append(obj_)
-            obj_.original_tag_name_ = 'Text'
+            if self._text is None:
+                self._text = InternationalString()
+            self._text.addLocalisedString(obj_)
 
 
 # end class StatusMessageType

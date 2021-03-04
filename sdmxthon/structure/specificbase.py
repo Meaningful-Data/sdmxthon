@@ -1,14 +1,13 @@
-import copy
 import re as re_
 
-from ..common.annotations import AnnotableType
 from ..common.references import DataProviderReferenceType
+from ..model.base import AnnotableArtefact
 from ..utils.data_parser import Validate_simpletypes_
 from ..utils.generateds import datetime_
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
-class ObsType(AnnotableType):
+class ObsType(AnnotableArtefact):
     """ObsType is the abstract dim_type which defines the structure of a grouped or
     un-grouped observation. The observation must be provided a key, which
     is either a value for the dimension which is declared to be at the
@@ -81,30 +80,19 @@ class ObsType(AnnotableType):
     that in the case of multiple measures being used, that the
     representation of the primary measure is broad enough to handle the
     various representations of the measure concepts."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
     def __init__(self, Annotations=None, type_=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, OBS_VALUE=None,
                  gds_collector_=None, **kwargs_):
-        super(ObsType, self).__init__(Annotations, gds_collector_, **kwargs_)
+        super(ObsType, self).__init__(Annotations, gds_collector_)
         self._type_ = cast(None, type_)
-        self._type__nsprefix_ = None
         self._time_period = cast(None, TIME_PERIOD)
-        self._time_period_nsprefix_ = None
         self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
-        self._reporting_year_start_day_nsprefix_ = None
         self._obs_value = cast(None, OBS_VALUE)
-        self._obs_value_nsprefix_ = None
         self._anyAttributes_ = {}
-        self._namespaceprefix = 'structure'
-        self._namespacedef = 'structure:"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"'
-        self._name = 'ObsType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return ObsType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def type(self):
@@ -125,11 +113,6 @@ class ObsType(AnnotableType):
     def validate_ObservationalTimePeriodType(self, value):
         pass
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        for key in self._anyAttributes_:
-            if self._anyAttributes_[key] is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
     def build_attributes(self, node, attrs, already_processed):
         self._anyAttributes_ = {}
         value = find_attr_value_('dim_type', node)
@@ -148,7 +131,7 @@ class ObsType(AnnotableType):
 # end class ObsType
 
 
-class GroupType(AnnotableType):
+class GroupType(AnnotableArtefact):
     """GroupType is the abstract dim_type which defines a structure which is used
     to communicate attribute values for a group defined in a data structure
     definition. The group can consist of either a subset of the dimensions
@@ -192,9 +175,6 @@ class GroupType(AnnotableType):
     require or prohibit this attribute, depending on whether the data
     structure declared the reporting year start day attribute and if so,
     the attribute relationship and assignment status assigned to it."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
     def __init__(self, Annotations=None, type_=None, REPORTING_YEAR_START_DAY=None, gds_collector_=None, **kwargs_):
         self.gds_collector_ = gds_collector_
@@ -237,17 +217,6 @@ class GroupType(AnnotableType):
     def any_attributes(self):
         return self._anyAttributes_
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        for key in self._anyAttributes_:
-            if key is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
-        if self._type_ is not None and 'type_' in valid_fields:
-            parent_dict.update({'type_': self._type_})
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
-
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('dim_type', node)
 
@@ -273,7 +242,7 @@ class GroupType(AnnotableType):
 # end class GroupType
 
 
-class SeriesType(AnnotableType):
+class SeriesType(AnnotableArtefact):
     """SeriesType is the abstract dim_type which defines a structure which is used
     to group a collection of observations which have a key in common. The
     key for a series is every dimension defined in the data structure
@@ -320,18 +289,13 @@ class SeriesType(AnnotableType):
     this attribute, depending on whether the data structure declared the
     reporting year start day attribute and if so, the attribute
     relationship and assignment status assigned to it."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
-    def __init__(self, Annotations=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, Obs=None, gds_collector_=None,
-                 **kwargs_):
+    def __init__(self, Annotations=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, Obs=None,
+                 gds_collector_=None):
 
-        super(SeriesType, self).__init__(Annotations, gds_collector_, **kwargs_)
+        super(SeriesType, self).__init__(Annotations, gds_collector_)
         self._time_period = TIME_PERIOD
-        self._time_period_nsprefix_ = None
         self._reporting_year_start_day = REPORTING_YEAR_START_DAY
-        self._reporting_year_start_day_nsprefix_ = None
 
         if Obs is None:
             self._obs = []
@@ -340,14 +304,10 @@ class SeriesType(AnnotableType):
 
         self._obs_nsprefix_ = None
         self._anyAttributes_ = {}
-        self._namespaceprefix = 'structure'
-        self._namespacedef = 'structure:"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"'
-        self._name = 'SeriesType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return SeriesType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def obs(self):
@@ -388,22 +348,6 @@ class SeriesType(AnnotableType):
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._time_period is not None and 'TIME_PERIOD' in valid_fields:
-            parent_dict.update({'TIME_PERIOD': self._time_period})
-
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
-
-        for key in self._anyAttributes_:
-            if self._anyAttributes_[key] is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
-        for Obs_ in self._obs:
-            parent_data = copy.deepcopy(parent_dict)
-            Obs_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
     def build_attributes(self, node, attrs, already_processed):
         self._anyAttributes_ = {}
 
@@ -426,7 +370,7 @@ class SeriesType(AnnotableType):
 
 # end class SeriesType
 
-class DataSetType(AnnotableType):
+class DataSetType(AnnotableArtefact):
     """DataSetType is the abstract dim_type which defines the base structure for
     any data structure definition specific data set. A derived data set
     dim_type will be created that is specific to a data structure definition
@@ -486,31 +430,18 @@ class DataSetType(AnnotableType):
     prohibit this attribute, depending on whether the data structure
     declared the reporting year start day attribute and if so, the
     attribute relationship and assignment status assigned to it."""
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
 
     def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None, structureRef=None, setID=None, action=None,
                  reportingBeginDate=None, reportingEndDate=None, validFromDate=None, validToDate=None,
-                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Series=None, Obs=None,
+                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Data=None,
                  gds_collector_=None, **kwargs_):
-        super(DataSetType, self).__init__(Annotations, None, gds_collector_, **kwargs_)
+        super(DataSetType, self).__init__(Annotations, gds_collector_)
         self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
-        self._reporting_year_start_day_nsprefix_ = None
         self._structureRef = structureRef
-        self._structureRef_nsprefix_ = None
         self._setID = setID
-        self._setID_nsprefix_ = None
         self._action = action
-        self._action_nsprefix_ = None
         self._reportingBeginDate = reportingBeginDate
-        self._reportingBeginDate_nsprefix_ = None
         self._reportingEndDate = reportingEndDate
-        self._reportingEndDate_nsprefix_ = None
-        self._namespace_prefix = 'message'
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
-        self._name = "DataSetType"
-        self._data = []
 
         if isinstance(validFromDate, BaseStrType_):
             initvalue_ = datetime_.datetime.strptime(validFromDate, '%Y-%m-%dT%H:%M:%S')
@@ -526,22 +457,18 @@ class DataSetType(AnnotableType):
 
         self._validToDate = initvalue_
         self._publicationYear = cast(None, publicationYear)
-        self._publicationYear_nsprefix_ = None
         self._publicationPeriod = cast(None, publicationPeriod)
-        self._publicationPeriod_nsprefix_ = None
         self._dataProvider = DataProvider
-        self._dataProvider_nsprefix_ = None
 
         if Group is None:
             self._group = []
         else:
             self._group = Group
 
-        self._group_nsprefix_ = None
-
-        self._Series_nsprefix_ = None
-
-        self._obs_nsprefix_ = None
+        if Data is None:
+            self._data = []
+        else:
+            self._data = Data
 
         self._anyAttributes_ = {}
 
@@ -714,51 +641,6 @@ class DataSetType(AnnotableType):
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._reporting_year_start_day is not None and 'REPORTING_YEAR_START_DAY' in valid_fields:
-            parent_dict.update({'REPORTING_YEAR_START_DAY': self._reporting_year_start_day})
-
-        if self._structureRef is not None and 'DSDID' in valid_fields:
-            parent_dict.update({'DSDID': self._structureRef})
-
-        if self._setID is not None and 'setID' in valid_fields:
-            parent_dict.update({'setID': self._setID})
-
-        if self._action is not None and 'action' in valid_fields:
-            parent_dict.update({'action': self._action})
-
-        if self._reportingBeginDate is not None and 'reportingBeginDate' in valid_fields:
-            parent_dict.update({'reportingBeginDate': self._reportingBeginDate})
-
-        if self._reportingEndDate is not None and 'reportingEndDate' in valid_fields:
-            parent_dict.update({'reportingEndDate': self._reportingEndDate})
-
-        if self._validFromDate is not None and 'validFromDate' in valid_fields:
-            parent_dict.update({'validFromDate': self._validFromDate})
-
-        if self._validToDate is not None and 'validToDate' in valid_fields:
-            parent_dict.update({'validToDate': self._validToDate})
-
-        if self._publicationYear is not None and 'publicationYear' in valid_fields:
-            parent_dict.update({'publicationYear': self._publicationYear})
-
-        if self._publicationPeriod is not None and 'publicationPeriod' in valid_fields:
-            parent_dict.update({'publicationPeriod': self._publicationPeriod})
-
-        for key in self._anyAttributes_:
-            if self._anyAttributes_[key] is not None and key in valid_fields:
-                parent_dict.update({key: self._anyAttributes_[key]})
-
-        for Group_ in self._group:
-            parent_data = copy.deepcopy(parent_dict)
-            Group_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
-        for Data_ in self._data:
-            parent_data = copy.deepcopy(parent_dict)
-            Data_.export_attributes_as_dict(parent_data, )
-            data.append(parent_data)
-
     def build_attributes(self, node, attrs, already_processed):
         value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
 
@@ -886,13 +768,10 @@ class TimeSeriesDataSetType(DataSetType):
 
     def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None, structureRef=None, setID=None, action=None,
                  reportingBeginDate=None, reportingEndDate=None, validFromDate=None, validToDate=None,
-                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Series=None, Obs=None,
-                 gds_collector_=None, **kwargs_):
+                 publicationYear=None, publicationPeriod=None, DataProvider=None, Group=None, Data=None):
         super(TimeSeriesDataSetType, self).__init__(Annotations, REPORTING_YEAR_START_DAY, structureRef, setID, action,
                                                     reportingBeginDate, reportingEndDate, validFromDate, validToDate,
-                                                    publicationYear, publicationPeriod, DataProvider, Group, Series,
-                                                    Obs,
-                                                    gds_collector_, **kwargs_)
+                                                    publicationYear, publicationPeriod, DataProvider, Group, Data)
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -922,13 +801,8 @@ class TimeSeriesType(SeriesType):
     rules for derivation as the base series type apply to this specialized
     series."""
 
-    __hash__ = AnnotableType.__hash__
-    subclass = None
-    superclass = AnnotableType
-
-    def __init__(self, Annotations=None, TIME_PERIOD=None, Obs=None, gds_collector_=None,
-                 **kwargs_):
-        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Obs, gds_collector_, **kwargs_)
+    def __init__(self, Annotations=None, TIME_PERIOD=None, Data=None, gds_collector_=None):
+        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Data, gds_collector_)
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -974,7 +848,7 @@ class TimeSeriesObsType(ObsType):
 
     @time_period.setter
     def time_period(self, value):
-        self._time_period = None
+        self._time_period = value
 
     def validate_ObservationalTimePeriodType(self, value):
         # Validate type common:ObservationalTimePeriodType, a restriction on None.

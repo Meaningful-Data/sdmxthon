@@ -13,10 +13,11 @@ from .utils.write import save_file
 
 
 def readSDMX(path_to_xml, pathToMetadata):
+    metadata = getMetadata(pathToMetadata)
+
     obj_ = readXML(path_to_xml)
     if isinstance(obj_, MetadataType):
         setReferences(obj_)
-    metadata = getMetadata(pathToMetadata)
 
     header = obj_.header
     if obj_.original_tag_name_ == 'GenericData':
