@@ -1,5 +1,5 @@
-from ..model.base import LocalisedString, InternationalString
-from ..utils.data_parser import DataParser
+from .base import LocalisedString, InternationalString
+from ..parsers.data_parser import DataParser
 from ..utils.xml_base import find_attr_value_
 
 

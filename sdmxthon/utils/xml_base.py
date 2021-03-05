@@ -10,35 +10,13 @@ Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 CDATA_pattern_ = re_.compile(r'<!\[CDATA\[.*?]]>', re_.DOTALL)
 BaseStrType_ = str
 
+
 #
 # You can replace the following class definition by defining an
 # importable module named "generatedscollector" containing a class
 # named "GdsCollector".  See the default class definition below for
 # clues about the possible content of that class.
 #
-try:
-    from generatedscollector import GdsCollector as GdsCollector_
-except ImportError:
-    class GdsCollector(object):
-        def __init__(self, messages=None):
-            if messages is None:
-                self.messages = []
-            else:
-                self.messages = messages
-
-        def add_message(self, msg):
-            self.messages.append(msg)
-
-        def get_messages(self):
-            return self.messages
-
-        def clear_messages(self):
-            self.messages = []
-
-        def print_messages(self):
-            for msg in self.messages:
-                print(f"Warning: {msg}")
-
 
 def parse_xml(infile, parser=None, **kwargs):
     if parser is None:
@@ -162,10 +140,6 @@ def encode_str_2_3(instr):
     return instr
 
 
-class GDSParseError(Exception):
-    pass
-
-
 def raise_parse_error(node, msg):
     if node is not None:
         msg = f'{msg} (element {node.tag}/line {node.sourceline})'
@@ -209,3 +183,7 @@ def makeWarnings(print_warnings, gds_collector):
         sys.stderr.write(f'----- Warnings -- count: {len(gds_collector.get_messages())} -----\n')
         gds_collector.write_messages(sys.stderr)
         sys.stderr.write(separator)
+
+
+class GDSParseError(Exception):
+    pass

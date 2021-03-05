@@ -1,10 +1,9 @@
 from datetime import datetime, date, timedelta
 
 from .base import MaintainableArtefact, InternationalString
-from .dataTypes import ConstraintRoleType
-from .structure import ComponentList, List, Component
+from .component import ComponentList, List, Component
 from .timePeriods import ObservationalTimePeriod
-from .utils import qName, genericSetter
+from .utils import qName, genericSetter, ConstraintRoleType
 
 
 class SelectionValue:

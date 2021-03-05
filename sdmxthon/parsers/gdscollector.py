@@ -6,7 +6,7 @@ import sys
 
 from lxml import etree as etree_
 
-from .xml_base import raise_parse_error, quote_xml, GDSParseError, GdsCollector
+from ..utils.xml_base import raise_parse_error, quote_xml, GDSParseError
 
 ExternalEncoding = ''
 
@@ -608,3 +608,24 @@ class GenerateSuper(object):
             return ' near line {}'.format(self.gds_element_tree_node_.sourceline)
         else:
             return ""
+
+
+class GdsCollector(object):
+    def __init__(self, messages=None):
+        if messages is None:
+            self.messages = []
+        else:
+            self.messages = messages
+
+    def add_message(self, msg):
+        self.messages.append(msg)
+
+    def get_messages(self):
+        return self.messages
+
+    def clear_messages(self):
+        self.messages = []
+
+    def print_messages(self):
+        for msg in self.messages:
+            print(f"Warning: {msg}")

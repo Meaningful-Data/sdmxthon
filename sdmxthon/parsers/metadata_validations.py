@@ -1,7 +1,7 @@
 import logging
 
-from ..message.generic import MetadataType
-from ..utils.read import readXML
+from .message_parsers import MetadataType
+from .read import readXML
 
 logger = logging.getLogger('logger')
 
@@ -111,9 +111,9 @@ def setReferences(obj):
                         sch.items[con.id].coreRepresentation.codelist = obj.structures.codelists[cl]
                     else:
                         obj.structures.add_error({'Code': 'MX04', 'ErrorLevel': 'CRITICAL',
-                                                  'ObjectID': f'{sch.unique_id}-{con}', 'ObjectType': f'Concept',
+                                                  'ObjectID': f'{sch.unique_id}-{con.id}', 'ObjectType': f'Concept',
                                                   'Message': f'Codelist {cl} not found for '
-                                                             f'Concept {sch.unique_id}-{con}'})
+                                                             f'Concept {sch.unique_id}-{con.id}'})
 
         if len(obj.structures.dsds) > 0:
             missing_rep = {'CS': [], 'CL': [], 'CON': []}

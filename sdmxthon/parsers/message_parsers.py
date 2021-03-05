@@ -1,17 +1,15 @@
-from .footer import FooterType
-# from ..common.annotations import LocalisedString
-from ..common.generic import GenericDataStructureType
-from ..common.references import DataProviderReferenceType
-from ..data.generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
-from ..model.itemScheme import Codelist, AgencyScheme, ConceptScheme
-from ..model.structure import DataStructureDefinition, LocalisedString
-from ..structure.specificbase import DataSetType as StructureDataSet, \
+from .data_generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
+from .data_parser import DataParser, Validate_simpletypes_
+from .data_structure import DataSetType as StructureDataSet, \
     TimeSeriesDataSetType as StructureTimeSeriesDataSet
-
-from ..utils.data_parser import DataParser, Validate_simpletypes_
-from ..utils.generateds import datetime_
-from ..utils.xml_base import BaseStrType_, encode_str_2_3, find_attr_value_, cast, \
-    GdsCollector
+from .footer_parser import FooterType
+from .gdscollector import datetime_, GdsCollector
+from ..model.component import DataStructureDefinition, LocalisedString
+# from ..common.annotations import LocalisedString
+from ..model.data_structure import GenericDataStructureType
+from ..model.itemScheme import Codelist, AgencyScheme, ConceptScheme
+from ..model.references import DataProviderReferenceType
+from ..utils.xml_base import BaseStrType_, encode_str_2_3, find_attr_value_, cast
 
 
 class ContactType(DataParser):

@@ -3,10 +3,11 @@ from datetime import datetime
 
 import pandas as pd
 
-from ..common.dataSet import DataSet
-from ..message.generic import GenericDataType, StructureSpecificDataType, MetadataType
-from ..model.structure import PrimaryMeasure
-from ..utils.xml_base import GdsCollector, get_required_ns_prefix_defs, parse_xml, makeWarnings
+from .gdscollector import GdsCollector
+from .message_parsers import GenericDataType, StructureSpecificDataType, MetadataType
+from ..model.component import PrimaryMeasure
+from ..model.dataSet import DataSet
+from ..utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 
 CapturedNsmap_ = {}
 print_warnings = True
@@ -92,7 +93,7 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
 
         if len(e.data) > 0:
             item.data = pd.DataFrame(e.data)
-        datasets[dsd.id] = item
+        datasets[dsd.unique_id] = item
     del xmlObj
     return datasets
 
@@ -132,6 +133,6 @@ def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
                 item.data = temp.rename(columns={'OBS_VALUE': dsd.measureCode})
             else:
                 item.data = temp.rename(columns={'ObsDimension': dim_obs, 'OBS_VALUE': dsd.measureCode})
-        datasets[dsd.id] = item
+        datasets[dsd.unique_id] = item
     del xmlObj
     return datasets

@@ -3,10 +3,9 @@ import json
 from .base import *
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
 from .itemScheme import Representation
+from .references import RelationshipRefType, RefBaseType
 from .utils import genericSetter, qName, intSetter
-from ..common.references import RelationshipRefType
-from ..common.refs import RefBaseType
-from ..utils.data_parser import DataParser
+from ..parsers.data_parser import DataParser
 from ..utils.mappings import Data_Types_VTL
 from ..utils.xml_base import find_attr_value_
 

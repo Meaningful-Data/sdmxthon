@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import List
 
 from .utils import stringSetter, dateSetter, setDateFromString, getDateString, boolSetter
-from ..utils.data_parser import DataParser
+from ..parsers.data_parser import DataParser
 from ..utils.mappings import Locale_Codes
 from ..utils.xml_base import find_attr_value_
 

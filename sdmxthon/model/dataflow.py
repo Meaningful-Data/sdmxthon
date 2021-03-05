@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from .base import MaintainableArtefact, InternationalString
-from .structure import DataStructureDefinition
+from .component import DataStructureDefinition
 from .utils import qName, genericSetter
 
 

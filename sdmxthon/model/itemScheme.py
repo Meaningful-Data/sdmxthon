@@ -2,11 +2,9 @@ import warnings
 from datetime import datetime
 
 from .base import NameableArtefact, MaintainableArtefact, InternationalString
-from .dataTypes import FacetType, FacetValueType
-from .utils import boolSetter, qName, stringSetter, genericSetter
-from ..common.references import RelationshipRefType
-from ..common.refs import RefBaseType
-from ..utils.data_parser import DataParser
+from .references import RelationshipRefType, RefBaseType
+from .utils import boolSetter, qName, stringSetter, genericSetter, FacetValueType, FacetType
+from ..parsers.data_parser import DataParser
 from ..utils.xml_base import find_attr_value_
 
 
@@ -521,7 +519,7 @@ class Concept(Item):
 
     @coreRepresentation.setter
     def coreRepresentation(self, value):
-        from .structure import Representation
+        from .component import Representation
         self._coreRepresentation = genericSetter(value, Representation)
 
     @staticmethod

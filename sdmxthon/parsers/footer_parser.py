@@ -1,6 +1,5 @@
-
-from ..common.messagetypes import CodedStatusMessageType
-from ..utils.data_parser import DataParser, Validate_simpletypes_
+from .data_parser import DataParser, Validate_simpletypes_
+from ..model.status_message import CodedStatusMessageType
 from ..utils.xml_base import find_attr_value_
 
 

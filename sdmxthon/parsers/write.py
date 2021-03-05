@@ -6,10 +6,10 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 
-from .validations import get_mandatory_attributes
-from .xml_base import makeWarnings
-from ..model.structure import PrimaryMeasure
+from .data_validations import get_mandatory_attributes
+from ..model.component import PrimaryMeasure
 from ..utils.enums import MessageType
+from ..utils.xml_base import makeWarnings
 
 logger = logging.getLogger("logger")
 
