@@ -1,5 +1,5 @@
-from .generateds import GenerateSuper
-from .xml_base import encode_str_2_3, Tag_pattern_
+from .gdscollector import GenerateSuper
+from ..utils.xml_base import encode_str_2_3, Tag_pattern_
 
 Validate_simpletypes_ = True
 UseCapturedNS_ = True

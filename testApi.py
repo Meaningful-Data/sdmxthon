@@ -1,6 +1,7 @@
 import logging
+import pickle
 
-from SDMXThon import getMetadata
+from SDMXThon.api import getMetadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -23,11 +24,11 @@ pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/ECB_ICPF1.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/ECB_SHS6_metadata.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/WB_WDI.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/WB_WDI.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
@@ -53,8 +54,12 @@ def pretty(d, indent=0):
 
 def main():
     logger.debug('Start')
-    #obj = readSDMX(pathToDataBIS, pathToMetadataFile)
+    # obj = readSDMX(pathToDataBIS, pathToMetadataFile)
     obj = getMetadata(pathToMetadataFile)
+
+    with open('SDMXThon/testSuite/semanticValidation/data/metadata/dsd.pickle', 'wb') as f:
+        f.write(pickle.dumps(obj.structures.dsds['BIS:BIS_DER(1.0)']))
+
     logger.debug('End')
     """
     root = etree.parse(pathToMetadataFile)

@@ -4,10 +4,10 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from ..model.structure import DataStructureDefinition
+from ..model.component import DataStructureDefinition
+from ..parsers.data_validations import validate_data
+from ..parsers.write import writer
 from ..utils.enums import MessageType
-from ..utils.validations import validate_data
-from ..utils.write import writer
 
 
 class DataSet:

@@ -1,14 +1,14 @@
 import json
 from datetime import datetime
 
+from .component import DataStructureDefinition
 from .dataSet import DataSet
-from ..message.generic import PartyType, SenderType, \
+from ..parsers.message_parsers import PartyType, SenderType, \
     StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, StructureSpecificDataHeaderType, \
     GenericDataHeaderType
-from ..model.structure import DataStructureDefinition
-from ..utils.dataset_parsing import getMetadata
+from ..parsers.metadata_validations import getMetadata
+from ..parsers.write import writer
 from ..utils.enums import MessageType
-from ..utils.write import writer
 
 
 class Message:

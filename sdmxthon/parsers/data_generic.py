@@ -1,8 +1,7 @@
-from ..common.references import DataProviderReferenceType
+from .data_parser import DataParser, Validate_simpletypes_
+from .gdscollector import datetime_
 from ..model.base import AnnotableArtefact
-from ..utils.data_parser import DataParser
-from ..utils.data_parser import Validate_simpletypes_
-from ..utils.generateds import datetime_
+from ..model.references import DataProviderReferenceType
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
@@ -18,19 +17,11 @@ class BaseValueType(DataParser):
     subclass = None
     superclass = None
 
-    def __init__(self, idx=None, value=None, gds_collector_=None, **kwargs_):
-        super(BaseValueType, self).__init__(gds_collector_, **kwargs_)
+    def __init__(self, idx=None, value=None, gds_collector_=None):
+        super(BaseValueType, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
-        self.gds_element_tree_node_ = None
-        self.original_tag_name_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
         self._id = idx
-        self._id_nsprefix_ = None
         self._value = value
-        self._value_nsprefix_ = None
-        self._namespace_def = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespace_prefix = 'data'
-        self._name = 'BaseValueType'
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -113,8 +104,8 @@ class ComponentValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, id_=None, value=None, gds_collector_=None, **kwargs_):
-        super(ComponentValueType, self).__init__(id_, value, gds_collector_, **kwargs_)
+    def __init__(self, id_=None, value=None, gds_collector_=None):
+        super(ComponentValueType, self).__init__(id_, value, gds_collector_)
         self._name = 'ComponentValueType'
         self._namespace_prefix = 'generic'
 
@@ -151,13 +142,9 @@ class ValuesType(DataParser):
     subclass = None
     superclass = None
 
-    def __init__(self, Value=None, gds_collector_=None, **kwargs_):
-        super(ValuesType, self).__init__(gds_collector_, **kwargs_)
+    def __init__(self, Value=None, gds_collector_=None):
+        super(ValuesType, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
-        self.gds_elementtree_node_ = None
-        self.original_tagname_ = None
-        self._namespace_prefix = 'generic'
-        self.parent_object_ = kwargs_.get('parent_object_')
 
         if Value is None:
             self._value = {}
@@ -165,12 +152,6 @@ class ValuesType(DataParser):
             self._value = Value
         else:
             raise TypeError('Value must be a dict')
-
-        self._value_nsprefix_ = None
-        self._namespacedef = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespaceprefix = 'generic'
-        self._namespace_prefix = 'generic'
-        self._name = 'ValuesType'
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -201,7 +182,7 @@ class ValuesType(DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Value':
-            obj_ = ComponentValueType.factory(parent_object_=self)
+            obj_ = ComponentValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value[obj_.id_] = obj_.value_
             obj_.original_tag_name_ = 'Value'
@@ -226,14 +207,8 @@ class GroupType(AnnotableArtefact):
     def __init__(self, Annotations=None, type_=None, GroupKey=None, Attributes=None, gds_collector_=None):
         super(GroupType, self).__init__(Annotations, gds_collector_)
         self._type_ = cast(None, type_)
-        self._type__nsprefix_ = None
         self._group_key = GroupKey
-        self._groupKey_nsprefix_ = None
         self._attributes = Attributes
-        self._attributes_nsprefix_ = None
-        self._namespacedef = 'xmlns:data="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespaceprefix = 'data'
-        self._name = 'GroupType',
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -283,12 +258,12 @@ class GroupType(AnnotableArtefact):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'GroupKey':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group_key = obj_
             obj_.original_tagname_ = 'GroupKey'
         elif nodeName_ == 'Attributes':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._attributes = obj_
             obj_.original_tagname_ = 'Attributes'
@@ -348,7 +323,7 @@ class SeriesType(AnnotableArtefact):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'SeriesKey':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             if len(self.value_) == 0:
                 self._value = obj_.value_
@@ -357,12 +332,12 @@ class SeriesType(AnnotableArtefact):
             self._seriesKey = obj_
 
         elif nodeName_ == 'Attributes':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value.update(obj_.value_)
             obj_.original_tagname_ = 'Attributes'
         elif nodeName_ == 'Obs':
-            obj_ = ObsType.factory(parent_object_=self)
+            obj_ = ObsType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value.update(obj_.value_)
         super(SeriesType, self).build_children(child_, node, nodeName_, True)
@@ -423,7 +398,7 @@ class ObsOnlyType(AnnotableArtefact):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'ObsKey':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             if len(self.value_) == 0:
                 self._value = obj_.value_
@@ -431,12 +406,12 @@ class ObsOnlyType(AnnotableArtefact):
                 self._value.update(obj_.value_)
 
         elif nodeName_ == 'ObsValue':
-            obj_ = ObsValueType.factory(parent_object_=self)
+            obj_ = ObsValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value['OBS_VALUE'] = obj_.value_
 
         elif nodeName_ == 'Attributes':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             if len(self.value_) == 0:
                 self._value = obj_.value_
@@ -523,17 +498,17 @@ class ObsType(AnnotableArtefact):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'ObsDimension':
-            obj_ = BaseValueType.factory(parent_object_=self)
+            obj_ = BaseValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.value_['ObsDimension'] = obj_.value_
 
         elif nodeName_ == 'ObsValue':
-            obj_ = ObsValueType.factory(parent_object_=self)
+            obj_ = ObsValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.value_['OBS_VALUE'] = obj_.value_
 
         elif nodeName_ == 'Attributes':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.value_.update(obj_.value_)
 
@@ -827,27 +802,27 @@ class DataSetType(AnnotableArtefact):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory(parent_object_=self)
+            obj_ = DataProviderReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
             obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Attributes':
-            obj_ = ValuesType.factory(parent_object_=self)
+            obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Attributes = obj_
             obj_.original_tagname_ = 'Attributes'
         elif nodeName_ == 'Group':
-            obj_ = GroupType.factory(parent_object_=self)
+            obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
             obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
-            obj_ = SeriesType.factory(parent_object_=self)
+            obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.value_)
             obj_.original_tagname_ = 'Series'
         elif nodeName_ == 'Obs':
-            obj_ = ObsOnlyType.factory(parent_object_=self)
+            obj_ = ObsOnlyType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.value_)
             obj_.original_tagname_ = 'Obs'
@@ -928,5 +903,5 @@ class TimeValueType(BaseValueType):
     subclass = None
     superclass = BaseValueType
 
-    def __init__(self, idx=None, value=None, **kwargs_):
-        super(TimeValueType, self).__init__(idx, value, None, **kwargs_)
+    def __init__(self, idx=None, value=None):
+        super(TimeValueType, self).__init__(idx, value, None)

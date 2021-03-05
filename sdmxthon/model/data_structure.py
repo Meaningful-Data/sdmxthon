@@ -1,6 +1,6 @@
 from .references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
     DataflowReferenceType
-from ..utils.data_parser import DataParser
+from ..parsers.data_parser import DataParser
 from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
 
 

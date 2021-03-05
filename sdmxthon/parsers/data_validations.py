@@ -5,7 +5,7 @@ import numpy as np
 import pandas.api.types
 from pandas import DataFrame
 
-from ..model.structure import DataStructureDefinition
+from ..model.component import DataStructureDefinition
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:

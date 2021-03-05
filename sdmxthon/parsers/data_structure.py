@@ -1,9 +1,9 @@
 import re as re_
 
-from ..common.references import DataProviderReferenceType
+from .data_parser import Validate_simpletypes_
+from .gdscollector import datetime_
 from ..model.base import AnnotableArtefact
-from ..utils.data_parser import Validate_simpletypes_
-from ..utils.generateds import datetime_
+from ..model.references import DataProviderReferenceType
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
