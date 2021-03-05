@@ -1,6 +1,3 @@
-"""
-
-"""
 import json
 import os
 import pickle
@@ -9,7 +6,7 @@ import unittest
 
 import pandas as pd
 
-from SDMXThon import DataSet, readXML, MetadataType, setReferences
+from ..api import DataSet, readXML, MetadataType, setReferences
 
 
 def query_to_db(sqlite_db, limit):

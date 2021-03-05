@@ -1,5 +1,4 @@
 import logging
-import pickle
 
 from SDMXThon.api import getMetadata
 
@@ -56,10 +55,6 @@ def main():
     logger.debug('Start')
     # obj = readSDMX(pathToDataBIS, pathToMetadataFile)
     obj = getMetadata(pathToMetadataFile)
-
-    with open('SDMXThon/testSuite/semanticValidation/data/metadata/dsd.pickle', 'wb') as f:
-        f.write(pickle.dumps(obj.structures.dsds['BIS:BIS_DER(1.0)']))
-
     logger.debug('End')
     """
     root = etree.parse(pathToMetadataFile)

@@ -17,7 +17,7 @@ class SemanticValidation(TestHelper.TestHelper):
         sqlite_db = 'BIS_DER'
         sqlite_filename = 'BIS_DER_OUTS.db'
         limit = 10
-        pkl_filename = 'dsd1.pickle'
+        pkl_filename = 'dsd.pickle'
         reference_filename = 'errors_test_1.json'
 
         self.semantic_test(sqlite_db, sqlite_filename, limit, pkl_filename, reference_filename)
@@ -26,14 +26,14 @@ class SemanticValidation(TestHelper.TestHelper):
         sqlite_db = 'BIS_DER'
         sqlite_filename = 'BIS_DER_OUTS.db'
         limit = 10
-        pkl_filename = 'dsd1.pickle'
+        pkl_filename = 'dsd.pickle'
         self.semantic_valid_test(sqlite_db, sqlite_filename, limit, pkl_filename)
 
     def test_3(self):
         sqlite_db = 'BIS_DER_facets'
         sqlite_filename = 'BIS_DER_OUTS.db'
         limit = 100
-        pkl_filename = 'dsd1.pickle'
+        pkl_filename = 'dsd.pickle'
         reference_filename = 'errors_test_3.json'
         self.semantic_test(sqlite_db, sqlite_filename, limit, pkl_filename, reference_filename)
 
