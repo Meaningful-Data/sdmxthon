@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from typing import Dict
 from zipfile import ZipFile
@@ -9,6 +10,8 @@ from ..parsers.message_parsers import MetadataType
 from ..parsers.metadata_validations import getMetadata, setReferences
 from ..parsers.read import readXML, sdmxGenToDataSet, sdmxStrToDataset
 from ..utils.enums import MessageType
+
+logger = logging.getLogger('logger')
 
 
 def readSDMX(path_to_xml, pathToMetadata):

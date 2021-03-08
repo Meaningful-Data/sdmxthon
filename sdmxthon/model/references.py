@@ -203,7 +203,6 @@ class DataflowReferenceType(StructureUsageReferenceBaseType):
             obj_ = DataflowRefType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
             self._ref = obj_
-            obj_.original_tag_name_ = 'Ref'
 
         elif nodeName_ == 'URN':
             value_ = child_.text

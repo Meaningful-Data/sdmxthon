@@ -1,5 +1,4 @@
-from .references import ProvisionAgreementReferenceType, DataStructureReferenceType, \
-    DataflowReferenceType
+from .references import ProvisionAgreementReferenceType, DataStructureReferenceType
 from ..parsers.data_parser import DataParser
 from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
 
@@ -217,10 +216,9 @@ class PayloadStructureType(DataParser):
             obj_.original_tag_name_ = 'ProvisionAgreement'
 
         elif nodeName_ == 'StructureUsage':
-            obj_ = DataflowReferenceType.factory(parent_object_=self)
+            obj_ = DataStructureReferenceType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._structureUsage = obj_
-            obj_.original_tag_name_ = 'StructureUsage'
+            self._structureUsage = obj_.ref
 
         elif nodeName_ == 'Structure':
             obj_ = DataStructureReferenceType.factory(parent_object_=self)
@@ -246,10 +244,9 @@ class DataStructureType(PayloadStructureType):
         self._name = 'DataStructureType'
         self._gds_collector = gds_collector_
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return DataStructureType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
 
 # end class DataStructureType
@@ -259,9 +256,6 @@ class GenericDataStructureType(DataStructureType):
     generic data set. A reference to the structure, either explicitly or
     through a dataflow or provision agreement is required as well as the
     dimension which occurs at the observation level."""
-    __hash__ = DataParser.__hash__
-    subclass = None
-    superclass = DataStructureType
 
     def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
                  explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
@@ -271,7 +265,6 @@ class GenericDataStructureType(DataStructureType):
                                                        StructureUsage, Structure, **kwargs_)
         self._gds_collector = gds_collector_
         self._name = 'GenericDataStructureType'
-        self._namespace_prefix = 'message'
 
     @staticmethod
     def factory(*args_, **kwargs_):

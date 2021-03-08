@@ -1,6 +1,7 @@
 import logging
 
-from SDMXThon.api import getMetadata
+from SDMXThon.api import readSDMX
+from SDMXThon.utils.enums import MessageType
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -23,7 +24,7 @@ pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/ECB_ICPF1.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/ECB_SHS6_metadata.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/IMF_ALT_FISCAL_DSD.xml'
@@ -33,11 +34,13 @@ pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
+# pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_DATAFLOW.xml'
 pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
-pathToDataSpe = 'SDMXThon/examples/Structure/outputSpe.xml'
-pathToDataGen = 'SDMXThon/examples/Generic/outputGen.xml'
-pathToDataGenSer = 'SDMXThon/examples/Generic/genSeries.xml'
+pathToDataSpe = 'SDMXThon/examples/Structure/test_str_BIS.xml'
+pathToDataGen = 'SDMXThon/examples/Generic/test_gen_BIS.xml'
+pathToDataGenSer = 'SDMXThon/examples/Generic/test_gen_ser_BIS.xml'
+pathToDataSpeSer = 'SDMXThon/examples/Structure/test_str_ser_BIS.xml'
 
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
@@ -52,10 +55,9 @@ def pretty(d, indent=0):
 
 
 def main():
-    logger.debug('Start')
-    # obj = readSDMX(pathToDataBIS, pathToMetadataFile)
-    obj = getMetadata(pathToMetadataFile)
-    logger.debug('End')
+    obj = readSDMX(pathToDataGenSer, pathToMetadataFile)
+    obj.type = MessageType.StructureDataSet
+    obj.toXML('test_ser.xml')
     """
     root = etree.parse(pathToMetadataFile)
 

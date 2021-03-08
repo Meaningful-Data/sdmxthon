@@ -4,7 +4,7 @@ from .data_structure import DataSetType as StructureDataSet, \
     TimeSeriesDataSetType as StructureTimeSeriesDataSet
 from .footer_parser import FooterType
 from .gdscollector import datetime_, GdsCollector
-from ..model.component import DataStructureDefinition, LocalisedString
+from ..model.component import DataStructureDefinition, DataFlowDefinition, LocalisedString
 # from ..common.annotations import LocalisedString
 from ..model.data_structure import GenericDataStructureType
 from ..model.itemScheme import Codelist, AgencyScheme, ConceptScheme
@@ -564,17 +564,12 @@ class BaseHeaderType(DataParser):
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
         self.original_tagname_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
         self._ID = ID
         self.validate_id_type(self._ID)
-        self._ID_nsprefix_ = "message"
         self._Test = Test
-        self._Test_nsprefix_ = "message"
         self._Prepared = Prepared
         self.validate_HeaderTimeType(self._Prepared)
-        self._Prepared_nsprefix_ = "message"
         self._Sender = Sender
-        self._Sender_nsprefix_ = "message"
 
         if Receiver is None:
             self._Receiver = []
@@ -635,11 +630,6 @@ class BaseHeaderType(DataParser):
             self._Source = []
         else:
             self._Source = Source
-
-        self._Source_nsprefix_ = None
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
-        self._namespace_prefix = 'message'
-        self._name = 'BaseHeaderType'
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -887,7 +877,6 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._ID = value_
-            self._ID_nsprefix_ = child_.prefix
             # validate dim_type IDType
             self.validate_id_type(self._ID)
         elif nodeName_ == 'Test':
@@ -895,13 +884,11 @@ class BaseHeaderType(DataParser):
             ival_ = self.gds_parse_boolean(sval_)
             ival_ = self.gds_validate_boolean(ival_)
             self._Test = ival_
-            self._Test_nsprefix_ = child_.prefix
         elif nodeName_ == 'Prepared':
             value_ = child_.text
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._Prepared = value_
-            self._Prepared_nsprefix_ = child_.prefix
             # validate dim_type HeaderTimeType
             self.validate_HeaderTimeType(self._Prepared)
         elif nodeName_ == 'Sender':
@@ -1326,14 +1313,49 @@ class OrganisationSchemesType(DataParser):
 
 
 class DataflowsType(DataParser):
-    pass
+    def __init__(self, dataflows=None, gds_collector_=None, **kwargs_):
+        super(DataflowsType, self).__init__(gds_collector_, **kwargs_)
+
+        if dataflows is None:
+            self._dataflows = {}
+        else:
+            self._dataflows = dataflows
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DataflowsType(*args_, **kwargs_)
+
+    @property
+    def dataflows(self):
+        return self._dataflows
+
+    @dataflows.setter
+    def dataflows(self, value):
+        self._dataflows = value
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Dataflow':
+            obj_ = DataFlowDefinition.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.dataflows[obj_.unique_id] = obj_
 
 
 class Structures(DataParser):
     __hash__ = DataParser.__hash__
 
-    def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, gds_collector_=None, **kwargs_):
+    def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, dataflows=None,
+                 gds_collector_=None, **kwargs_):
         super(Structures, self).__init__(gds_collector_, **kwargs_)
+
+        if dataflows is None:
+            self._dataflows = {}
+        else:
+            self._dataflows = dataflows
 
         if dsds is None:
             self._dsds = {}
@@ -1362,6 +1384,14 @@ class Structures(DataParser):
     @staticmethod
     def factory(*args_, **kwargs_):
         return Structures(*args_, **kwargs_)
+
+    @property
+    def dataflows(self):
+        return self._dataflows
+
+    @dataflows.setter
+    def dataflows(self, value):
+        self._dataflows = value
 
     @property
     def organisations(self):
@@ -1433,12 +1463,11 @@ class Structures(DataParser):
                                     'ObjectID': f'{e}', 'ObjectType': f'DSD',
                                     'Message': f'DSD {e} is not unique'})
             self._dsds = obj_.dsds
-        """
+
         elif nodeName_ == 'Dataflows':
             obj_ = DataflowsType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._codelists = obj_
-        """
+            self._dataflows = obj_.dataflows
 
 
 class MetadataType(MessageType):

@@ -168,6 +168,11 @@ def setReferences(obj):
                                   'ObjectType': f'DSD',
                                   'Message': f'Not found any DSD in this file'})
 
+    if len(obj.structures.dsds) > 0 and len(obj.structures.dataflows) > 0:
+        for key, flow in obj.structures.dataflows.items():
+            if flow.structure in obj.structures.dsds.keys():
+                flow.structure = obj.structures.dsds[flow.structure]
+
 
 def grouping_errors(missing_rep, obj, keys_errors):
     for k in keys_errors:

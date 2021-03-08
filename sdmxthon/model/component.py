@@ -68,27 +68,6 @@ class Component(IdentifiableArtefact):
             self._local_representation = obj_
 
 
-class ConceptIdentityType(DataParser):
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._ref = None
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return ConceptIdentityType(*args_, **kwargs_)
-
-    @property
-    def ref(self):
-        return self._ref
-
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        if nodeName_ == 'Ref':
-            obj_ = RefBaseType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._ref = {"CS": f"{obj_.agencyID}:{obj_.maintainableParentID}({obj_.maintainableParentVersion})",
-                         "CON": f"{obj_.id_}"}
-
-
 class Dimension(Component, DataParser):
     _urnType = "datastructure"
     _qName = qName("str", "Dimension")
@@ -199,45 +178,6 @@ class TimeDimension(Dimension, DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         super(TimeDimension, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
-
-
-class AttributeRelationshipType(DataParser):
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._ref_id = None
-        self._ref_type = None
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return AttributeRelationshipType(*args_, **kwargs_)
-
-    @property
-    def ref_id(self):
-        return self._ref_id
-
-    @property
-    def ref_type(self):
-        return self._ref_type
-
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        if nodeName_ == 'None':
-            self._ref_id = None
-            self._ref_type = None
-        elif nodeName_ == 'PrimaryMeasure':
-            obj_ = RelationshipRefType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._ref_id = obj_.ref
-            self._ref_type = 'PrimaryMeasure'
-        elif nodeName_ == 'Dimension':
-            obj_ = RelationshipRefType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            if self._ref_id is None:
-                self._ref_id = obj_.ref
-            elif not isinstance(self._ref_id, list):
-                self._ref_id = [self._ref_id]
-            if isinstance(self._ref_id, list):
-                self._ref_id.append(obj_.ref)
-            self._ref_type = 'Dimension'
 
 
 class Attribute(Component, DataParser):
@@ -531,44 +471,6 @@ class GroupDimensionDescriptor(ComponentList, DataParser):
         super(GroupDimensionDescriptor, self).build_attributes(node, attrs, already_processed)
 
 
-class DataStructureComponentType(DataParser):
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._measure_descriptor = None
-        self._attribute_descriptor = None
-        self._dimension_descriptor = None
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return DataStructureComponentType(*args_, **kwargs_)
-
-    @property
-    def dimensionDescriptor(self):
-        return self._dimension_descriptor
-
-    @property
-    def attributeDescriptor(self):
-        return self._attribute_descriptor
-
-    @property
-    def measureDescriptor(self):
-        return self._measure_descriptor
-
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        if nodeName_ == 'DimensionList':
-            obj_ = DimensionDescriptor.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._dimension_descriptor = obj_
-        elif nodeName_ == 'AttributeList':
-            obj_ = AttributeDescriptor.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._attribute_descriptor = obj_
-        elif nodeName_ == 'MeasureList':
-            obj_ = MeasureDescriptor.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._measure_descriptor = obj_
-
-
 class DataStructureDefinition(MaintainableArtefact):
     def __init__(self, id_: str = None, uri: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
@@ -789,3 +691,163 @@ class DataStructureDefinition(MaintainableArtefact):
             self._attributeDescriptor = obj_.attributeDescriptor
             self._dimensionDescriptor = obj_.dimensionDescriptor
             self._measureDescriptor = obj_.measureDescriptor
+
+
+class DataFlowDefinition(MaintainableArtefact):
+    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+                 name: InternationalString = None, description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
+                 structureUrl: str = None, maintainer=None, structure: DataStructureDefinition = None):
+        if annotations is None:
+            annotations = []
+        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
+                                                 name=name, description=description,
+                                                 version=version, validFrom=validFrom, validTo=validTo,
+                                                 isFinal=isFinal, isExternalReference=isExternalReference,
+                                                 serviceUrl=serviceUrl, structureUrl=structureUrl,
+                                                 maintainer=maintainer)
+        self.structure = structure
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DataFlowDefinition(*args_, **kwargs_)
+
+    @property
+    def structure(self):
+        return self._structure
+
+    @structure.setter
+    def structure(self, value):
+        self._structure = value
+
+    def build_attributes(self, node, attrs, already_processed):
+        super(DataFlowDefinition, self).build_attributes(node, attrs, already_processed)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+
+        super(DataFlowDefinition, self).build_children(child_, node, nodeName_, fromsubclass_=False,
+                                                       gds_collector_=None)
+
+        if nodeName_ == 'Structure':
+            obj_ = StructureType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._structure = obj_.ref
+
+
+class AttributeRelationshipType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._ref_id = None
+        self._ref_type = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return AttributeRelationshipType(*args_, **kwargs_)
+
+    @property
+    def ref_id(self):
+        return self._ref_id
+
+    @property
+    def ref_type(self):
+        return self._ref_type
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'None':
+            self._ref_id = None
+            self._ref_type = None
+        elif nodeName_ == 'PrimaryMeasure':
+            obj_ = RelationshipRefType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._ref_id = obj_.ref
+            self._ref_type = 'PrimaryMeasure'
+        elif nodeName_ == 'Dimension':
+            obj_ = RelationshipRefType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._ref_id is None:
+                self._ref_id = obj_.ref
+            elif not isinstance(self._ref_id, list):
+                self._ref_id = [self._ref_id]
+            if isinstance(self._ref_id, list):
+                self._ref_id.append(obj_.ref)
+            self._ref_type = 'Dimension'
+
+
+class StructureType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._ref = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return StructureType(*args_, **kwargs_)
+
+    @property
+    def ref(self):
+        return self._ref
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Ref':
+            obj_ = RefBaseType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._ref = f"{obj_.agencyID}:{obj_.id_}({obj_.version})"
+
+
+class ConceptIdentityType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._ref = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return ConceptIdentityType(*args_, **kwargs_)
+
+    @property
+    def ref(self):
+        return self._ref
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'Ref':
+            obj_ = RefBaseType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._ref = {"CS": f"{obj_.agencyID}:{obj_.maintainableParentID}({obj_.maintainableParentVersion})",
+                         "CON": f"{obj_.id_}"}
+
+
+class DataStructureComponentType(DataParser):
+    def __init__(self, gds_collector_=None):
+        super().__init__(gds_collector_)
+        self._measure_descriptor = None
+        self._attribute_descriptor = None
+        self._dimension_descriptor = None
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return DataStructureComponentType(*args_, **kwargs_)
+
+    @property
+    def dimensionDescriptor(self):
+        return self._dimension_descriptor
+
+    @property
+    def attributeDescriptor(self):
+        return self._attribute_descriptor
+
+    @property
+    def measureDescriptor(self):
+        return self._measure_descriptor
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'DimensionList':
+            obj_ = DimensionDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._dimension_descriptor = obj_
+        elif nodeName_ == 'AttributeList':
+            obj_ = AttributeDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._attribute_descriptor = obj_
+        elif nodeName_ == 'MeasureList':
+            obj_ = MeasureDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._measure_descriptor = obj_

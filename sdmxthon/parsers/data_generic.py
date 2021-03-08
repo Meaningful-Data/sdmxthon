@@ -81,16 +81,7 @@ class ObsValueType(BaseValueType):
         return ObsValueType(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
-
-        value = find_attr_value_('value', node)
-        if value is not None and 'value' not in already_processed:
-            already_processed.add('value')
-            self._value = value
+        super(ObsValueType, self).build_attributes(node, attrs, already_processed)
 
 
 # end class ObsValueType
@@ -106,8 +97,6 @@ class ComponentValueType(BaseValueType):
 
     def __init__(self, id_=None, value=None, gds_collector_=None):
         super(ComponentValueType, self).__init__(id_, value, gds_collector_)
-        self._name = 'ComponentValueType'
-        self._namespace_prefix = 'generic'
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -122,15 +111,6 @@ class ComponentValueType(BaseValueType):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
-        value = find_attr_value_('value', node)
-        if value is not None and 'value' not in already_processed:
-            already_processed.add('value')
-            self._value = value
         super(ComponentValueType, self).build_attributes(node, attrs, already_processed)
 
 
@@ -176,16 +156,11 @@ class ValuesType(DataParser):
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        for Value_ in self._value:
-            Value_.export_attributes_as_dict(parent_dict, )
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'Value':
             obj_ = ComponentValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value[obj_.id_] = obj_.value_
-            obj_.original_tag_name_ = 'Value'
 
 
 # end class ValuesType
@@ -253,7 +228,6 @@ class GroupType(AnnotableArtefact):
         if value is not None and 'dim_type' not in already_processed:
             already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate dim_type IDType
         super(GroupType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
@@ -261,13 +235,11 @@ class GroupType(AnnotableArtefact):
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group_key = obj_
-            obj_.original_tagname_ = 'GroupKey'
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._attributes = obj_
-            obj_.original_tagname_ = 'Attributes'
-        super(GroupType, self).build_children(child_, node, nodeName_, True)
+        super(GroupType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class GroupType
@@ -298,6 +270,10 @@ class SeriesType(AnnotableArtefact):
     @staticmethod
     def factory(*args_, **kwargs_):
         return SeriesType(*args_, **kwargs_)
+
+    @property
+    def obs(self):
+        return self._obs
 
     @property
     def value_(self):
@@ -340,7 +316,8 @@ class SeriesType(AnnotableArtefact):
             obj_ = ObsType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value.update(obj_.value_)
-        super(SeriesType, self).build_children(child_, node, nodeName_, True)
+            self._obs.append(self._value.copy())
+        super(SeriesType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class SeriesType
@@ -383,16 +360,6 @@ class ObsOnlyType(AnnotableArtefact):
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._obsKey is not None and self._obsKey.has_content_():
-            self._obsKey.export_attributes_as_dict(parent_dict, )
-
-        if self._obsValue is not None:
-            self._obsValue.export_attributes_as_dict(parent_dict, )
-
-        if self._attributes is not None and self._attributes.has_content_():
-            self._attributes.export_attributes_as_dict(parent_dict, )
-
     def build_attributes(self, node, attrs, already_processed):
         super(ObsOnlyType, self).build_attributes(node, attrs, already_processed)
 
@@ -408,7 +375,10 @@ class ObsOnlyType(AnnotableArtefact):
         elif nodeName_ == 'ObsValue':
             obj_ = ObsValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._value['OBS_VALUE'] = obj_.value_
+            if obj_.value_ is None:
+                self._value['OBS_VALUE'] = ""
+            else:
+                self._value['OBS_VALUE'] = obj_.value_
 
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
@@ -418,7 +388,7 @@ class ObsOnlyType(AnnotableArtefact):
             else:
                 self._value.update(obj_.value_)
 
-        super(ObsOnlyType, self).build_children(child_, node, nodeName_, True)
+        super(ObsOnlyType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class ObsOnlyType
@@ -505,14 +475,17 @@ class ObsType(AnnotableArtefact):
         elif nodeName_ == 'ObsValue':
             obj_ = ObsValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.value_['OBS_VALUE'] = obj_.value_
+            if obj_.value_ is None:
+                self._value['OBS_VALUE'] = ""
+            else:
+                self._value['OBS_VALUE'] = obj_.value_
 
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.value_.update(obj_.value_)
 
-        super(ObsType, self).build_children(child_, node, nodeName_, True)
+        super(ObsType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class ObsType
@@ -819,14 +792,13 @@ class DataSetType(AnnotableArtefact):
         elif nodeName_ == 'Series':
             obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._data.append(obj_.value_)
-            obj_.original_tagname_ = 'Series'
+            self._data += obj_.obs
         elif nodeName_ == 'Obs':
             obj_ = ObsOnlyType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.value_)
             obj_.original_tagname_ = 'Obs'
-        super(DataSetType, self).build_children(child_, node, nodeName_, True)
+        super(DataSetType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
     def validate_ObservationalTimePeriodType(self, date):
         # TODO Anything to validate here??? (Observational Time Period)
