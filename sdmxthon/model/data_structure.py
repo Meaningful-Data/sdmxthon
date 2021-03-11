@@ -1,4 +1,4 @@
-from .references import ProvisionAgreementReferenceType, DataStructureReferenceType
+from .references import ReferenceType
 from ..parsers.data_parser import DataParser
 from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
 
@@ -32,37 +32,22 @@ class PayloadStructureType(DataParser):
                  StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
         super(PayloadStructureType, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
-        self.gds_element_tree_node_ = None
-        self.original_tag_name_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
-        self.ns_prefix_ = None
         self._structureID = cast(None, structureID)
-        self._structureID_nsprefix_ = None
         self._schemaURL = cast(None, schemaURL)
-        self._schemaURL_nsprefix_ = None
         self._namespace = cast(None, namespace)
-        self._namespace_nsprefix_ = None
         self._dimension_at_observation = cast(None, dimensionAtObservation)
-        self._dimension_at_observation_nsprefix_ = None
         self._explicitMeasures = cast(bool, explicitMeasures)
-        self._explicitMeasures_nsprefix_ = None
         self._serviceURL = cast(None, serviceURL)
-        self._serviceURL_nsprefix_ = None
         self._structureURL = cast(None, structureURL)
-        self._structureURL_nsprefix_ = None
         self._provisionAgreement = ProvisionAgreement
-        self._provisionAgreement_nsprefix_ = None
         self._structureUsage = StructureUsage
-        self._structureUsage_nsprefix_ = None
         self._structure = Structure
-        self._structure_nsprefix_ = None
         self._namespacedef = 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
         self._namespaceprefix = "common"
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return PayloadStructureType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def provisionAgreement(self):
@@ -210,18 +195,17 @@ class PayloadStructureType(DataParser):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'ProvisionAgreement':
-            obj_ = ProvisionAgreementReferenceType.factory(parent_object_=self)
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._provisionAgreement = obj_
-            obj_.original_tag_name_ = 'ProvisionAgreement'
+            self._provisionAgreement = obj_.ref
 
         elif nodeName_ == 'StructureUsage':
-            obj_ = DataStructureReferenceType.factory(parent_object_=self)
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._structureUsage = obj_.ref
 
         elif nodeName_ == 'Structure':
-            obj_ = DataStructureReferenceType.factory(parent_object_=self)
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._structure = obj_.ref
 

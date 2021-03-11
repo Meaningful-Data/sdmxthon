@@ -3,8 +3,9 @@ from datetime import datetime
 
 from .base import NameableArtefact, MaintainableArtefact, InternationalString
 from .references import RelationshipRefType, RefBaseType
-from .utils import boolSetter, qName, stringSetter, genericSetter, FacetValueType, FacetType
+from .utils import boolSetter, stringSetter, genericSetter, FacetValueType, FacetType
 from ..parsers.data_parser import DataParser
+from ..parsers.header_parser import Contact
 from ..utils.xml_base import find_attr_value_
 
 
@@ -13,7 +14,7 @@ class Item(NameableArtefact):
     _urnType = None
     _qName = None
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  isPartial: bool = None, scheme=None, parent=None, childs=None):
 
@@ -21,8 +22,8 @@ class Item(NameableArtefact):
             childs = []
         if annotations is None:
             annotations = []
-        super(Item, self).__init__(id_=id_, uri=uri, annotations=annotations,
-                                   name=name, description=description)
+        super(Item, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations, name=name,
+                                   description=description)
         self.isPartial = isPartial
 
         self.scheme = scheme
@@ -40,11 +41,7 @@ class Item(NameableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, Item):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial)
+            return super(Item, self).__eq__(other) and self._isPartial == other._isPartial
         else:
             return False
 
@@ -108,10 +105,8 @@ class Item(NameableArtefact):
 
 class ItemScheme(MaintainableArtefact):
     _itemType = None
-    _urnType = None
-    _qName = None
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: str = None, description: str = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -119,7 +114,7 @@ class ItemScheme(MaintainableArtefact):
                  items=None):
         if annotations is None:
             annotations = []
-        super(ItemScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(ItemScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                          name=name, description=description,
                                          version=version, validFrom=validFrom, validTo=validTo,
                                          isFinal=isFinal, isExternalReference=isExternalReference,
@@ -137,19 +132,7 @@ class ItemScheme(MaintainableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, ItemScheme):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._items == other._items)
+            return super(ItemScheme, self).__eq__(other) and self._items == other._items
         else:
             return False
 
@@ -182,24 +165,20 @@ class Code(Item):
     _urnType = "codelist"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Code"
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs=None):
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Code, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Code, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                    name=name, description=description,
                                    isPartial=isPartial, scheme=scheme, parent=parent, childs=childs)
 
     def __eq__(self, other):
         if isinstance(other, Code):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial)
+            return super(Code, self).__eq__(other)
         else:
             return False
 
@@ -216,27 +195,31 @@ class Code(Item):
 
 class Agency(Item):
     _schemeType = "AgencyScheme"
-    _urnType = "base"
-    _qName = qName("str", "Agency")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
-                 isPartial: bool = None, scheme: ItemScheme = None):
+                 isPartial: bool = None, scheme: ItemScheme = None, contacts=None):
         if annotations is None:
             annotations = []
-        super(Agency, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Agency, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                      name=name, description=description,
                                      isPartial=isPartial, scheme=scheme)
 
+        self._contacts = contacts
+
     def __eq__(self, other):
         if isinstance(other, Agency):
-            return (self._id == other._id and
-                    self._uri == other._uri and
-                    self._name == other._name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial)
+            return super(Agency, self).__eq__(other) and self._contacts == other._contacts
         else:
             return False
+
+    @property
+    def contacts(self):
+        return self._contacts
+
+    @contacts.setter
+    def contacts(self, value):
+        self._contacts = value
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -246,16 +229,20 @@ class Agency(Item):
         super(Agency, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        # TODO Parse Contact
         super(Agency, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+        if nodeName_ == 'Contact':
+            obj_ = Contact.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._contacts is None:
+                self._contacts = []
+            self._contacts.append(obj_)
 
 
 class ConceptScheme(ItemScheme):
     _itemType = "Concept"
-    _urnType = "conceptscheme"
-    _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptScheme"
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -266,7 +253,7 @@ class ConceptScheme(ItemScheme):
         if annotations is None:
             annotations = []
         self._cl_references = {}
-        super(ConceptScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(ConceptScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                             name=name, description=description,
                                             version=version, validFrom=validFrom, validTo=validTo,
                                             isFinal=isFinal, isExternalReference=isExternalReference,
@@ -279,19 +266,7 @@ class ConceptScheme(ItemScheme):
         if isinstance(other, ConceptScheme):
             if not self._checked:
                 self._checked = True
-                return (self._id == other._id and
-                        self.uri == other.uri and
-                        self.name == other.name and
-                        self._description == other._description and
-                        self._version == other._version and
-                        self._validFrom == other._validFrom and
-                        self._validTo == other._validTo and
-                        self._isFinal == other._isFinal and
-                        self._isExternalReference == other._isExternalReference and
-                        self._serviceUrl == other._serviceUrl and
-                        self._structureUrl == other._structureUrl and
-                        self._maintainer == other._maintainer and
-                        self._items == other._items)
+                return super(ConceptScheme, self).__eq__(other)
             else:
                 return True
         else:
@@ -320,10 +295,8 @@ class ConceptScheme(ItemScheme):
 
 class Codelist(ItemScheme):
     _itemType = "Code"
-    _urnType = "codelist"
-    _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Codelist"
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: str = None, description: str = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -331,9 +304,7 @@ class Codelist(ItemScheme):
                  items=None):
         if items is None:
             items = []
-        if annotations is None:
-            annotations = []
-        super(Codelist, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Codelist, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                        name=name, description=description,
                                        version=version, validFrom=validFrom, validTo=validTo,
                                        isFinal=isFinal, isExternalReference=isExternalReference,
@@ -345,19 +316,7 @@ class Codelist(ItemScheme):
         if isinstance(other, Codelist):
             if not self._checked:
                 self._checked = True
-                return (self.id == other.id and
-                        self.uri == other.uri and
-                        self.name == other.name and
-                        self.description == other.description and
-                        self.version == other.version and
-                        self.validFrom == other.validFrom and
-                        self.validTo == other.validTo and
-                        self.isFinal == other.isFinal and
-                        self.isExternalReference == other.isExternalReference and
-                        self.serviceUrl == other._serviceUrl and
-                        self.structureUrl == other.structureUrl and
-                        self.maintainer == other.maintainer and
-                        self.items == other._items)
+                return super(Codelist, self).__eq__(other)
             else:
                 return True
         else:
@@ -382,7 +341,7 @@ class Codelist(ItemScheme):
 class OrganisationScheme(ItemScheme):
     """Abstract class. Used for structure messages"""
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -392,7 +351,7 @@ class OrganisationScheme(ItemScheme):
             annotations = []
         if items is None:
             items = []
-        super(OrganisationScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(OrganisationScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                  name=name, description=description,
                                                  version=version, validFrom=validFrom, validTo=validTo,
                                                  isFinal=isFinal, isExternalReference=isExternalReference,
@@ -402,29 +361,15 @@ class OrganisationScheme(ItemScheme):
 
     def __eq__(self, other):
         if isinstance(other, OrganisationScheme):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._items == other._items)
+            return super(OrganisationScheme, self).__eq__(other)
         else:
             return False
 
 
 class AgencyScheme(OrganisationScheme):
     _itemType = "Agency"
-    _urnType = "base"
-    _qName = qName("str", "AgencyScheme")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -434,7 +379,7 @@ class AgencyScheme(OrganisationScheme):
             items = []
         if annotations is None:
             annotations = []
-        super(AgencyScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(AgencyScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                            name=name, description=description,
                                            version=version, validFrom=validFrom, validTo=validTo,
                                            isFinal=isFinal, isExternalReference=isExternalReference,
@@ -443,29 +388,9 @@ class AgencyScheme(OrganisationScheme):
 
     def __eq__(self, other):
         if isinstance(other, AgencyScheme):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._items == other._items)
+            return super(AgencyScheme, self).__eq__(other)
         else:
             return False
-
-    @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, value):
-        self._id = stringSetter(value, '[A-Za-z][A-Za-z0-9_\\-]*(\\.[A-Za-z][A-Za-z0-9_\\-]*)*')
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -487,7 +412,7 @@ class Concept(Item):
     _urnType = "conceptscheme"
     _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concept"
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs=None,
                  coreRepresentation=None):
@@ -495,7 +420,7 @@ class Concept(Item):
             childs = []
         if annotations is None:
             annotations = []
-        super(Concept, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Concept, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                       name=name, description=description,
                                       isPartial=isPartial, scheme=scheme, parent=parent, childs=childs)
 
@@ -504,12 +429,7 @@ class Concept(Item):
 
     def __eq__(self, other):
         if isinstance(other, Concept):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial and
-                    self._coreRepresentation == other._coreRepresentation)
+            return super(Concept, self).__eq__(other) and self._coreRepresentation == other._coreRepresentation
         else:
             return False
 
@@ -738,8 +658,8 @@ class Representation(DataParser):
 
     def __eq__(self, other):
         if isinstance(other, Representation):
-            return (self._codelist == other._codelist and
-                    self._conceptScheme == other._conceptScheme)
+            return self._codelist == other._codelist and self._conceptScheme == other._conceptScheme \
+                   and self._type == other._type
         else:
             return False
 

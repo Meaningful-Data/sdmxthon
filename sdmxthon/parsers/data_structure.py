@@ -3,7 +3,7 @@ import re as re_
 from .data_parser import Validate_simpletypes_
 from .gdscollector import datetime_
 from ..model.base import AnnotableArtefact
-from ..model.references import DataProviderReferenceType
+from ..model.references import ReferenceType
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
@@ -128,9 +128,6 @@ class ObsType(AnnotableArtefact):
         super(ObsType, self).build_attributes(node, attrs, already_processed)
 
 
-# end class ObsType
-
-
 class GroupType(AnnotableArtefact):
     """GroupType is the abstract dim_type which defines a structure which is used
     to communicate attribute values for a group defined in a data structure
@@ -188,14 +185,10 @@ class GroupType(AnnotableArtefact):
         self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
         self._reporting_year_start_day_nsprefix_ = None
         self._anyAttributes_ = {}
-        self._namespaceprefix = 'structure'
-        self._namespacedef = 'structure:"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"'
-        self._name = 'GroupType'
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return GroupType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def type(self):
@@ -237,9 +230,6 @@ class GroupType(AnnotableArtefact):
             if name not in already_processed:
                 self._anyAttributes_[name] = value
         super(GroupType, self).build_attributes(node, attrs, already_processed)
-
-
-# end class GroupType
 
 
 class SeriesType(AnnotableArtefact):
@@ -363,12 +353,9 @@ class SeriesType(AnnotableArtefact):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._anyAttributes_.update(obj_.any_attributes)
             self.obs.append(self._anyAttributes_.copy())
-            obj_.original_tagname_ = 'Obs'
 
         super(SeriesType, self).build_children(child_, node, nodeName_, True)
 
-
-# end class SeriesType
 
 class DataSetType(AnnotableArtefact):
     """DataSetType is the abstract dim_type which defines the base structure for
@@ -472,10 +459,9 @@ class DataSetType(AnnotableArtefact):
 
         self._anyAttributes_ = {}
 
+    @staticmethod
     def factory(*args_, **kwargs_):
         return DataSetType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def dataProvider(self):
@@ -722,20 +708,17 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
-            self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
+            self.validate_ObservationalTimePeriodType(self._publicationPeriod)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory()
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
-            obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Group':
             obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
-            obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
             obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -778,8 +761,6 @@ class TimeSeriesDataSetType(DataSetType):
     def factory(*args_, **kwargs_):
         return TimeSeriesDataSetType(*args_, **kwargs_)
 
-    factory = staticmethod(factory)
-
     def validate_BasicTimePeriodType(self, value):
         # Validate type common:BasicTimePeriodType, a restriction on None.
         pass
@@ -808,8 +789,6 @@ class TimeSeriesType(SeriesType):
     @staticmethod
     def factory(*args_, **kwargs_):
         return TimeSeriesType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def reporting_year_start_day(self):

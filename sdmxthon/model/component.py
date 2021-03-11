@@ -4,29 +4,24 @@ from .base import *
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
 from .itemScheme import Representation
 from .references import RelationshipRefType, RefBaseType
-from .utils import genericSetter, qName, intSetter
+from .utils import genericSetter, intSetter
 from ..parsers.data_parser import DataParser
 from ..utils.mappings import Data_Types_VTL
 from ..utils.xml_base import find_attr_value_
 
 
 class Component(IdentifiableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations=None, localRepresentation: Representation = None):
-
-        if annotations is None:
-            annotations = []
-        super(Component, self).__init__(id_=id_, uri=uri, annotations=annotations)
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+                 localRepresentation: Representation = None):
+        super(Component, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations)
 
         self._local_representation = localRepresentation
         self._concept_identity = None
 
     def __eq__(self, other):
         if isinstance(other, Component):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._local_representation == other._local_representation and
-                    self._concept_identity == other._concept_identity)
+            return super(Component, self).__eq__(other) and self._local_representation == other._local_representation \
+                   and self._concept_identity == other._concept_identity
         else:
             return False
 
@@ -69,26 +64,17 @@ class Component(IdentifiableArtefact):
 
 
 class Dimension(Component, DataParser):
-    _urnType = "datastructure"
-    _qName = qName("str", "Dimension")
-
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
-        if annotations is None:
-            annotations = []
-        super(Dimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Dimension, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                         localRepresentation=localRepresentation)
 
         self.position = position
 
     def __eq__(self, other):
         if isinstance(other, Dimension):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._local_representation == other._local_representation and
-                    self._position == other._position)
+            return super(Dimension, self).__eq__(other) and self._position == other._position
         else:
             return False
 
@@ -116,24 +102,42 @@ class Dimension(Component, DataParser):
         super(Dimension, self).build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
 
 
-class MeasureDimension(Dimension, DataParser):
-    _qName = qName("str", "MeasureDimension")
+class GroupDimension(DataParser):
+    def __init__(self, gds_collector=None):
+        super(GroupDimension, self).__init__(gds_collector)
+        self._ref = None
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __eq__(self, other):
+        if isinstance(other, GroupDimension):
+            return super(GroupDimension, self).__eq__(other)
+        else:
+            return False
+
+    @property
+    def ref(self):
+        return self._ref
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        return GroupDimension(*args_, **kwargs_)
+
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'DimensionReference':
+            obj_ = RelationshipRefType.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._ref = obj_.ref
+
+
+class MeasureDimension(Dimension, DataParser):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
-        if annotations is None:
-            annotations = []
-        super(MeasureDimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(MeasureDimension, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                localRepresentation=localRepresentation, position=position)
 
     def __eq__(self, other):
         if isinstance(other, MeasureDimension):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._local_representation == other._local_representation and
-                    self._position == other._position)
+            return super(MeasureDimension, self).__eq__(other)
         else:
             return False
 
@@ -149,23 +153,15 @@ class MeasureDimension(Dimension, DataParser):
 
 
 class TimeDimension(Dimension, DataParser):
-    _qName = qName("str", "TimeDimension")
-
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
-        if annotations is None:
-            annotations = []
-        super(TimeDimension, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(TimeDimension, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                             localRepresentation=localRepresentation, position=position)
 
     def __eq__(self, other):
         if isinstance(other, TimeDimension):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._local_representation == other._local_representation and
-                    self._position == other._position)
+            return super(TimeDimension, self).__eq__(other)
         else:
             return False
 
@@ -181,15 +177,10 @@ class TimeDimension(Dimension, DataParser):
 
 
 class Attribute(Component, DataParser):
-    _urnType = "datastructure"
-    _qName = qName("str", "Attribute")
-
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  localRepresentation: Representation = None,
                  usageStatus: str = None, relatedTo=None):
-        if annotations is None:
-            annotations = []
-        super(Attribute, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Attribute, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                         localRepresentation=localRepresentation)
 
         self.usageStatus = usageStatus
@@ -197,12 +188,8 @@ class Attribute(Component, DataParser):
 
     def __eq__(self, other):
         if isinstance(other, Attribute):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._local_representation == other._local_representation and
-                    self._usageStatus == other._usageStatus and
-                    self._relatedTo == other._relatedTo)
+            return super(Attribute, self).__eq__(other) and self._usageStatus == other._usageStatus \
+                   and self._relatedTo == other._relatedTo
         else:
             return False
 
@@ -253,15 +240,10 @@ class Attribute(Component, DataParser):
 
 
 class PrimaryMeasure(Component, DataParser):
-    _urnType = "datastructure"
-    _qName = qName("str", "PrimaryMeasure")
-
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  localRepresentation: Representation = None):
 
-        if annotations is None:
-            annotations = []
-        super(PrimaryMeasure, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(PrimaryMeasure, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                              localRepresentation=localRepresentation)
 
     @staticmethod
@@ -270,10 +252,7 @@ class PrimaryMeasure(Component, DataParser):
 
     def __eq__(self, other):
         if isinstance(other, PrimaryMeasure):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._local_representation == other._local_representation)
+            return super(PrimaryMeasure, self).__eq__(other)
         else:
             return False
 
@@ -285,24 +264,18 @@ class PrimaryMeasure(Component, DataParser):
 
 
 class ComponentList(IdentifiableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  components=None):
 
-        if annotations is None:
-            annotations = []
-        if components is None:
-            components = []
-        super(ComponentList, self).__init__(id_=id_, uri=uri, annotations=annotations)
+        super(ComponentList, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations)
         self._components = {}
-        for c in components:
-            self.addComponent(c)
+        if components is not None:
+            for c in components:
+                self.addComponent(c)
 
     def __eq__(self, other):
         if isinstance(other, ComponentList):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._components == other._components)
+            return super(ComponentList, self).__eq__(other) and self._components == other._components
         else:
             return False
 
@@ -316,6 +289,9 @@ class ComponentList(IdentifiableArtefact):
         elif isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
             value.componentList = self
             self._components[value.id] = value
+        elif isinstance(value, GroupDimension):
+            value.componentList = self
+            self._components[value.ref] = value
         else:
             raise TypeError(
                 f"The object has to be of the dim_type [Dimension, Attribute, PrimaryMeasure], "
@@ -333,17 +309,13 @@ class ComponentList(IdentifiableArtefact):
 
 class DimensionDescriptor(ComponentList, DataParser):
     _componentType = Dimension
-    _urnType = "datastructure"
-    _qName = qName("str", "DimensionList")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  components=None):
 
-        if annotations is None:
-            annotations = []
         if components is None:
             components = []
-        super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                   components=components)
 
     @staticmethod
@@ -352,10 +324,7 @@ class DimensionDescriptor(ComponentList, DataParser):
 
     def __eq__(self, other):
         if isinstance(other, DimensionDescriptor):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._components == other._components)
+            return super(DimensionDescriptor, self).__eq__(other)
         else:
             return False
 
@@ -375,17 +344,13 @@ class DimensionDescriptor(ComponentList, DataParser):
 
 class AttributeDescriptor(ComponentList, DataParser):
     _componentType = Attribute
-    _urnType = "datastructure"
-    _qName = qName("str", "AttributeList")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  components=None):
         if components is None:
             components = []
-        if annotations is None:
-            annotations = []
 
-        super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                   components=components)
 
     @staticmethod
@@ -394,10 +359,7 @@ class AttributeDescriptor(ComponentList, DataParser):
 
     def __eq__(self, other):
         if isinstance(other, AttributeDescriptor):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._components == other._components)
+            return super(AttributeDescriptor, self).__eq__(other)
         else:
             return False
 
@@ -413,17 +375,13 @@ class AttributeDescriptor(ComponentList, DataParser):
 
 class MeasureDescriptor(ComponentList, DataParser):
     _componentType = PrimaryMeasure
-    _urnType = "datastructure"
-    _qName = qName("str", "MeasureList")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  components=None):
 
         if components is None:
             components = []
-        if annotations is None:
-            annotations = []
-        super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                 components=components)
 
     @staticmethod
@@ -432,10 +390,7 @@ class MeasureDescriptor(ComponentList, DataParser):
 
     def __eq__(self, other):
         if isinstance(other, MeasureDescriptor):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self._annotations == other._annotations and
-                    self._components == other._components)
+            return super(MeasureDescriptor, self).__eq__(other)
         else:
             return False
 
@@ -451,17 +406,19 @@ class MeasureDescriptor(ComponentList, DataParser):
 
 class GroupDimensionDescriptor(ComponentList, DataParser):
     _componentType = Dimension
-    _urnType = "datastructure"
-    _qName = qName("str", "Group")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  components=None):
         if components is None:
             components = []
-        if annotations is None:
-            annotations = []
-        super(GroupDimensionDescriptor, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(GroupDimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                        components=components)
+
+    def __eq__(self, other):
+        if isinstance(other, GroupDimensionDescriptor):
+            return super(GroupDimensionDescriptor, self).__eq__(other)
+        else:
+            return False
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -470,9 +427,15 @@ class GroupDimensionDescriptor(ComponentList, DataParser):
     def build_attributes(self, node, attrs, already_processed):
         super(GroupDimensionDescriptor, self).build_attributes(node, attrs, already_processed)
 
+    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        if nodeName_ == 'GroupDimension':
+            obj_ = GroupDimension.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self.addComponent(obj_)
+
 
 class DataStructureDefinition(MaintainableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -480,9 +443,7 @@ class DataStructureDefinition(MaintainableArtefact):
                  measureDescriptor: MeasureDescriptor = None, attributeDescriptor: AttributeDescriptor = None,
                  groupDimensionDescriptor: GroupDimensionDescriptor = None):
 
-        if annotations is None:
-            annotations = []
-        super(DataStructureDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(DataStructureDefinition, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                       name=name, description=description,
                                                       version=version, validFrom=validFrom, validTo=validTo,
                                                       isFinal=isFinal, isExternalReference=isExternalReference,
@@ -494,26 +455,12 @@ class DataStructureDefinition(MaintainableArtefact):
         self.attributeDescriptor = attributeDescriptor
         self.groupDimensionDescriptor = groupDimensionDescriptor
 
-        self._urnType = "datastructure"
-        self._qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructure"
-
     def __eq__(self, other):
         if isinstance(other, DataStructureDefinition):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._dimensionDescriptor == other._dimensionDescriptor and
-                    self._attributeDescriptor == other._attributeDescriptor and
-                    self._measureDescriptor == other._measureDescriptor)
+            return super.__eq__(self, other) and self._dimensionDescriptor == other._dimensionDescriptor \
+                   and self._attributeDescriptor == other._attributeDescriptor \
+                   and self._measureDescriptor == other._measureDescriptor \
+                   and self._groupDimensionDescriptor == other._groupDimensionDescriptor
         else:
             return False
 
@@ -691,23 +638,26 @@ class DataStructureDefinition(MaintainableArtefact):
             self._attributeDescriptor = obj_.attributeDescriptor
             self._dimensionDescriptor = obj_.dimensionDescriptor
             self._measureDescriptor = obj_.measureDescriptor
+            self._groupDimensionDescriptor = obj_.groupDimensionDescriptor
 
 
 class DataFlowDefinition(MaintainableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None, structure: DataStructureDefinition = None):
-        if annotations is None:
-            annotations = []
-        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                  name=name, description=description,
                                                  version=version, validFrom=validFrom, validTo=validTo,
                                                  isFinal=isFinal, isExternalReference=isExternalReference,
                                                  serviceUrl=serviceUrl, structureUrl=structureUrl,
                                                  maintainer=maintainer)
         self.structure = structure
+
+    def __eq__(self, other):
+        if isinstance(other, DataFlowDefinition):
+            return super(DataFlowDefinition, self).__eq__(other) and self._structure == other._structure
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -725,10 +675,8 @@ class DataFlowDefinition(MaintainableArtefact):
         super(DataFlowDefinition, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-
         super(DataFlowDefinition, self).build_children(child_, node, nodeName_, fromsubclass_=False,
                                                        gds_collector_=None)
-
         if nodeName_ == 'Structure':
             obj_ = StructureType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -821,6 +769,7 @@ class DataStructureComponentType(DataParser):
         self._measure_descriptor = None
         self._attribute_descriptor = None
         self._dimension_descriptor = None
+        self._groupDimensionDescriptor = None
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -838,6 +787,10 @@ class DataStructureComponentType(DataParser):
     def measureDescriptor(self):
         return self._measure_descriptor
 
+    @property
+    def groupDimensionDescriptor(self):
+        return self._groupDimensionDescriptor
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DimensionList':
             obj_ = DimensionDescriptor.factory()
@@ -851,3 +804,7 @@ class DataStructureComponentType(DataParser):
             obj_ = MeasureDescriptor.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._measure_descriptor = obj_
+        elif nodeName_ == 'Group':
+            obj_ = GroupDimensionDescriptor.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            self._groupDimensionDescriptor = obj_

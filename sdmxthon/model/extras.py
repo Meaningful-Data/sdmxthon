@@ -249,7 +249,7 @@ class Constraint(MaintainableArtefact):
     _urnType = "datastructure"
     _qName = qName("str", "Constraint")
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -258,7 +258,7 @@ class Constraint(MaintainableArtefact):
                  availableDates: List[ReferencePeriod] = None, calendar: List[ReleaseCalendar] = None):
         if annotations is None:
             annotations = []
-        super(Constraint, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Constraint, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                          name=name, description=description,
                                          version=version, validFrom=validFrom, validTo=validTo,
                                          isFinal=isFinal, isExternalReference=isExternalReference,
@@ -306,7 +306,7 @@ class AttachmentConstraint(Constraint):
 
 
 class ContentConstraint(Constraint):
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
@@ -316,7 +316,7 @@ class ContentConstraint(Constraint):
                  role: str = None):
         if annotations is None:
             annotations = []
-        super(ContentConstraint, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(ContentConstraint, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                 name=name, description=description,
                                                 version=version, validFrom=validFrom, validTo=validTo,
                                                 isFinal=isFinal, isExternalReference=isExternalReference,

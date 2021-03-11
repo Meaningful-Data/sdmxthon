@@ -1,7 +1,7 @@
 from .data_parser import DataParser, Validate_simpletypes_
 from .gdscollector import datetime_
 from ..model.base import AnnotableArtefact
-from ..model.references import DataProviderReferenceType
+from ..model.references import ReferenceType
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
@@ -405,15 +405,8 @@ class ObsType(AnnotableArtefact):
     def __init__(self, Annotations=None, ObsDimension=None, ObsValue=None, Attributes=None, gds_collector_=None):
         super(ObsType, self).__init__(Annotations, gds_collector_)
         self._obsDimension = ObsDimension
-        self._obsDimension_nsprefix_ = None
         self._obsValue = ObsValue
-        self._obsValue_nsprefix_ = None
         self._attributes = Attributes
-        self._attributes_nsprefix_ = None
-        self._name = 'ObsType'
-        self._namespacedef = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespaceprefix = 'generic'
-        self.original_tagname_ = 'Obs'
         self._value = {}
 
     @staticmethod
@@ -548,11 +541,6 @@ class DataSetType(AnnotableArtefact):
             self._group = []
         else:
             self._group = Group
-        self._group_nsprefix_ = None
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
-        self._namespace_prefix = 'message'
-        self._name = 'DataSetType'
-        self.original_tagname_ = 'DataSet'
 
     @staticmethod
     def factory(*args_, **kwargs_):
@@ -775,20 +763,17 @@ class DataSetType(AnnotableArtefact):
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory()
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
-            obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Attributes = obj_
-            obj_.original_tagname_ = 'Attributes'
         elif nodeName_ == 'Group':
             obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
-            obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
             obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -797,7 +782,6 @@ class DataSetType(AnnotableArtefact):
             obj_ = ObsOnlyType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.value_)
-            obj_.original_tagname_ = 'Obs'
         super(DataSetType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
     def validate_ObservationalTimePeriodType(self, date):

@@ -1,5 +1,4 @@
 import csv
-import logging
 from datetime import datetime
 from io import StringIO
 
@@ -10,8 +9,6 @@ from .data_validations import get_mandatory_attributes
 from ..model.component import PrimaryMeasure
 from ..utils.enums import MessageType
 from ..utils.xml_base import makeWarnings
-
-logger = logging.getLogger("logger")
 
 
 def save_file(message, path='', print_warnings=True):
@@ -218,16 +215,19 @@ def genWriting(dataset, prettyprint=True):
             outfile += f'{child3}<generic:Value id="{k}" value="{v}"/>{nl}'
         outfile += f'{child2}</generic:Attributes>{nl}'
 
-    obs_value_data = dataset.data['OBS_VALUE'].astype('str')
-    del dataset.data['OBS_VALUE']
+    df_data = dataset.data.astype('str')
+    obs_value_data = df_data['OBS_VALUE'].astype('str')
+    del df_data['OBS_VALUE']
     df_id = f'{child4}<generic:Value id="' + pd.DataFrame(
-        np.tile(np.array(dataset.data.columns), len(dataset.data.index)).reshape(len(dataset.data.index), -1),
-        index=dataset.data.index,
-        columns=dataset.data.columns, dtype='str') + '" value="'
-    df_value = dataset.data.astype('str') + '"/>'
+        np.tile(np.array(df_data.columns), len(df_data.index)).reshape(len(df_data.index), -1),
+        index=df_data.index,
+        columns=df_data.columns, dtype='str') + '" value="'
+    df_value = df_data + '"/>'
     df_id: pd.DataFrame = df_id.add(df_value)
     df_obs_value = f'{child3}<generic:ObsValue value="' + obs_value_data + '"/>'
+    df_obs_value = df_obs_value.replace(f'{child3}<generic:ObsValue value="nan"/>', f'{child3}<generic:ObsValue />')
     df_id['OBS_VALUE'] = df_obs_value
+
     df_id.insert(0, 'head', f'{child2}<generic:Obs>')
     df_id.insert(len(df_id.keys()), 'end', f'{child2}</generic:Obs>')
 
@@ -272,6 +272,9 @@ def genWriting(dataset, prettyprint=True):
 
     outfile += obs_str
     outfile += f'{nl}{child1}</message:DataSet>{nl}'
+
+    df_data.add(obs_value_data)
+
     return outfile
 
 

@@ -3,9 +3,9 @@ from datetime import datetime
 
 from .component import DataStructureDefinition
 from .dataSet import DataSet
-from ..parsers.message_parsers import PartyType, SenderType, \
-    StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, StructureSpecificDataHeaderType, \
-    GenericDataHeaderType
+from ..parsers.header_parser import PartyType, SenderType, GenericDataHeaderType
+from ..parsers.message_parsers import StructureSpecificTimeSeriesDataHeaderType, GenericTimeSeriesDataHeaderType, \
+    StructureSpecificDataHeaderType
 from ..parsers.metadata_validations import getMetadata
 from ..parsers.write import writer
 from ..utils.enums import MessageType

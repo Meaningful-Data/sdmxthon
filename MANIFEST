@@ -8,7 +8,6 @@ SDMXThon\model\base.py
 SDMXThon\model\component.py
 SDMXThon\model\dataSet.py
 SDMXThon\model\data_structure.py
-SDMXThon\model\dataflow.py
 SDMXThon\model\extras.py
 SDMXThon\model\itemScheme.py
 SDMXThon\model\message.py
@@ -23,6 +22,7 @@ SDMXThon\parsers\data_structure.py
 SDMXThon\parsers\data_validations.py
 SDMXThon\parsers\footer_parser.py
 SDMXThon\parsers\gdscollector.py
+SDMXThon\parsers\header_parser.py
 SDMXThon\parsers\message_parsers.py
 SDMXThon\parsers\metadata_validations.py
 SDMXThon\parsers\read.py

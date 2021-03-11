@@ -573,6 +573,7 @@ class GenerateSuper(object):
 
         return result
 
+    """
     def __eq__(self, other):
         def excl_select_objs_(obj):
             return obj[0] != 'parent_object_' and obj[0] != 'gds_collector_'
@@ -582,6 +583,7 @@ class GenerateSuper(object):
 
         return all(x == y for x, y in zip(filter(excl_select_objs_, self.__dict__.items()),
                                           filter(excl_select_objs_, other.__dict__.items())))
+    """
 
     def __ne__(self, other):
         return not self.__eq__(other)

@@ -1,4 +1,4 @@
-import logging
+import warnings
 from datetime import datetime
 
 import pandas as pd
@@ -16,10 +16,6 @@ SaveElementTreeNode = True
 GenericDataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}GenericData'
 StructureDataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}StructureSpecificData'
 MetadataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Structure'
-
-# create logger
-logger = logging.getLogger("logging_tryout2")
-logger.setLevel(logging.DEBUG)
 
 
 def readXML(inFileName, print_warning=True):
@@ -52,16 +48,28 @@ def readXML(inFileName, print_warning=True):
     return root_obj
 
 
-def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
+def sdmxStrToDataset(xmlObj, dsds, dataflows) -> []:
     datasets = {}
-
     for e in xmlObj.dataset:
-        if xmlObj.header.structure[e.structureRef]['DSDID'] not in dsd_dict:
-            # TODO Warning DSD not found
+        if e.structureRef in xmlObj.header.structure.keys():
+            str_dict = xmlObj.header.structure[e.structureRef]
+            if dsds is not None and str_dict['type'] == 'DataStructure' and str_dict['ID'] in dsds.keys():
+                dsd = dsds[str_dict['ID']]
+                item = DataSet(structure=dsd)
+            elif dataflows is not None and str_dict['type'] == 'DataFlow':
+                if str_dict['ID'] in dataflows.keys():
+                    dataflow = dataflows[str_dict['ID']]
+                    dsd = dataflow.structure
+                    item = DataSet(structure=dsd, dataflow=dataflow)
+                else:
+                    warnings.warn(f'DataFlow {str_dict["ID"]} not found')
+                    continue
+            else:
+                warnings.warn(f'DSD {str_dict["ID"]} not found')
+                continue
+        else:
+            warnings.warn(f'Structure {e.structureRef} not found')
             continue
-
-        dsd = dsd_dict[xmlObj.header.structure[e.structureRef]['DSDID']]
-        item = DataSet(dsd)
 
         dataset_attributes = {'reportingBegin': e.reporting_begin_date, 'reportingEnd': e.reporting_end_date,
                               'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
@@ -98,16 +106,29 @@ def sdmxStrToDataset(xmlObj, dsd_dict) -> []:
     return datasets
 
 
-def sdmxGenToDataSet(xmlObj, dsd_dict) -> []:
+def sdmxGenToDataSet(xmlObj, dsds, dataflows) -> []:
     datasets = {}
 
     for e in xmlObj.dataset:
-        if xmlObj.header.structure[e.structureRef]['DSDID'] not in dsd_dict:
-            # TODO Warning DSD not found
+        if e.structureRef in xmlObj.header.structure.keys():
+            str_dict = xmlObj.header.structure[e.structureRef]
+            if dsds is not None and str_dict['type'] == 'DataStructure' and str_dict['ID'] in dsds.keys():
+                dsd = dsds[str_dict['ID']]
+                item = DataSet(structure=dsd)
+            elif dataflows is not None and str_dict['type'] == 'DataFlow':
+                if str_dict['ID'] in dataflows.keys():
+                    dataflow = dataflows[str_dict['ID']]
+                    dsd = dataflow.structure
+                    item = DataSet(structure=dsd, dataflow=dataflow)
+                else:
+                    warnings.warn(f'DataFlow {str_dict["ID"]} not found')
+                    continue
+            else:
+                warnings.warn(f'DSD {str_dict["ID"]} not found')
+                continue
+        else:
+            warnings.warn(f'Structure {e.structureRef} not found')
             continue
-
-        dsd = dsd_dict[xmlObj.header.structure[e.structureRef]['DSDID']]
-        item = DataSet(dsd)
 
         dataset_attributes = {'reportingBegin': e.reportingBeginDate, 'reportingEnd': e.reportingEndDate,
                               'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),

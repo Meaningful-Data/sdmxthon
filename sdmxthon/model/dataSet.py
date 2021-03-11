@@ -4,7 +4,7 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from ..model.component import DataStructureDefinition
+from ..model.component import DataStructureDefinition, DataFlowDefinition
 from ..parsers.data_validations import validate_data
 from ..parsers.write import writer
 from ..utils.enums import MessageType
@@ -14,10 +14,11 @@ class DataSet:
     subclass = None
     superclass = None
 
-    def __init__(self, structure: DataStructureDefinition, dataset_attributes: dict = None,
-                 attached_attributes: dict = None, data=None):
+    def __init__(self, structure: DataStructureDefinition, dataflow: DataFlowDefinition = None,
+                 dataset_attributes: dict = None, attached_attributes: dict = None, data=None):
 
         self._structure = structure
+        self._dataflow = dataflow
 
         self._dataset_attributes = {}
 
@@ -49,12 +50,26 @@ class DataSet:
         return '<DataSet  - %s>' % self.structure.id
 
     @property
+    def describedBy(self):
+        return self._dataflow
+
+    @describedBy.setter
+    def describedBy(self, value):
+        if isinstance(value, DataFlowDefinition):
+            self._dataflow = value
+        else:
+            raise TypeError('describedBy must be a DataFlowDefinition')
+
+    @property
     def structure(self):
         return self._structure
 
     @structure.setter
     def structure(self, value):
-        self._structure = value
+        if isinstance(value, DataStructureDefinition):
+            self._structure = value
+        else:
+            raise TypeError('structure must be a DataStructureDefinition')
 
     @property
     def datasetAttributes(self):
