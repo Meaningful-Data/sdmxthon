@@ -1,14 +1,20 @@
+"""
+    header file contains the parsers for the Header
+"""
+
 import datetime as datetime_
 
-from SDMXThon.model.base import InternationalString, LocalisedString
-from SDMXThon.model.data_structure import GenericDataStructureType
-from SDMXThon.model.references import ReferenceType
-from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
-from SDMXThon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, BaseStrType_
+from ..model.base import InternationalString, LocalisedString
+from ..model.data_structure import GenericDataStructureType
+from ..model.references import ReferenceType
+from ..parsers.data_parser import DataParser, Validate_simpletypes_
+from ..utils.handlers import add_indent
+from ..utils.mappings import *
+from ..utils.xml_base import cast, find_attr_value_, encode_str_2_3, BaseStrType_
 
 
 class Contact(DataParser):
-    """ContactType provides defines the contact information about a party."""
+    """Contact provides defines the contact information about a party."""
 
     def __init__(self, Name=None, Department=None, Role=None, Telephone=None, Fax=None, X400=None, URI=None, Email=None,
                  gds_collector_=None):
@@ -40,10 +46,12 @@ class Contact(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Contact"""
         return Contact(*args_, **kwargs_)
 
     @property
     def name(self):
+        """Name of the Contact"""
         if self._name is None:
             return None
         elif isinstance(self._name, InternationalString):
@@ -69,6 +77,7 @@ class Contact(DataParser):
 
     @property
     def department(self):
+        """Department of the Contact"""
         if self._department is None:
             return None
         elif isinstance(self._department, InternationalString):
@@ -89,6 +98,7 @@ class Contact(DataParser):
 
     @property
     def role(self):
+        """Role of the Contact"""
         if self._role is None:
             return None
         elif isinstance(self._role, InternationalString):
@@ -109,6 +119,7 @@ class Contact(DataParser):
 
     @property
     def telephone(self):
+        """Telephone of the Contact"""
         if self._telephone is None:
             return None
         elif len(self._telephone) == 1:
@@ -127,7 +138,7 @@ class Contact(DataParser):
 
     @property
     def fax(self):
-
+        """Fax of the Contact"""
         if self._fax is None:
             return None
         elif len(self._fax) == 1:
@@ -146,6 +157,7 @@ class Contact(DataParser):
 
     @property
     def X400(self):
+        """IPM of the Contact"""
         if self._x400 is None:
             return None
         elif len(self._x400) == 1:
@@ -164,6 +176,7 @@ class Contact(DataParser):
 
     @property
     def URI(self):
+        """URI of the Contact"""
         if self._uri is None:
             return None
         elif len(self._uri) == 1:
@@ -182,6 +195,7 @@ class Contact(DataParser):
 
     @property
     def email(self):
+        """Email of the Contact"""
         if self._email is None:
             return None
         elif len(self._email) == 1:
@@ -199,6 +213,7 @@ class Contact(DataParser):
             raise TypeError('Email must be a list')
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._name or
                 self._department or
@@ -214,6 +229,7 @@ class Contact(DataParser):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Name':
             obj_ = LocalisedString.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -285,9 +301,44 @@ class Contact(DataParser):
 
             self._email.append(value_)
 
+    def to_XML(self, indent):
+        outfile = ''
 
-class PartyType(DataParser):
-    """PartyType defines the information which is sent about various parties
+        prettyprint = indent != ''
+
+        if self.name is not None:
+            data = self._name.to_XML(f'{commonAbbr}:Name', prettyprint)
+            for e in data:
+                outfile += f'{indent}{e}'
+        if self._department is not None:
+            data = self._department.to_XML(f'{structureAbbr}:Department', prettyprint)
+            for e in data:
+                outfile += f'{indent}{e}'
+        if self._role is not None:
+            data = self._role.to_XML(f'{structureAbbr}:Role', prettyprint)
+            for e in data:
+                outfile += f'{indent}{e}'
+        indent = add_indent(indent)
+        if self._telephone is not None:
+            for e in self._telephone:
+                outfile += f'{indent}<{structureAbbr}:Telephone>{e}</{structureAbbr}:Telephone>'
+        if self._uri is not None:
+            for e in self._uri:
+                outfile += f'{indent}<{structureAbbr}:URI>{e}</{structureAbbr}:URI>'
+        if self._x400 is not None:
+            for e in self._x400:
+                outfile += f'{indent}<{structureAbbr}:X400>{e}</{structureAbbr}:X400>'
+        if self._fax is not None:
+            for e in self._fax:
+                outfile += f'{indent}<{structureAbbr}:Fax>{e}</{structureAbbr}:Fax>'
+        if self._email is not None:
+            for e in self._email:
+                outfile += f'{indent}<{structureAbbr}:Email>{e}</{structureAbbr}:Email>'
+        return outfile
+
+
+class Party(DataParser):
+    """Party defines the information which is sent about various parties
     such as senders and receivers of messages.The id_ attribute holds the
     identification of the party."""
     __hash__ = DataParser.__hash__
@@ -295,10 +346,9 @@ class PartyType(DataParser):
     superclass = None
 
     def __init__(self, id_=None, Name=None, contact=None, extensiontype_=None, gds_collector_=None, **kwargs_):
-        super(PartyType, self).__init__(gds_collector_, **kwargs_)
+        super(Party, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self.gds_elementtree_node_ = None
-        self.original_tagname_ = None
         self._id = cast(None, id_)
 
         if Name is None:
@@ -315,10 +365,12 @@ class PartyType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
-        return PartyType(*args_, **kwargs_)
+        """Factory Method of Party"""
+        return Party(*args_, **kwargs_)
 
     @property
     def name(self):
+        """Name of the Party"""
         return self._Name
 
     @name.setter
@@ -332,6 +384,7 @@ class PartyType(DataParser):
 
     @property
     def contact(self):
+        """Contact of the Party"""
         return self._contact
 
     @contact.setter
@@ -345,6 +398,7 @@ class PartyType(DataParser):
 
     @property
     def id_(self):
+        """ID of the Sender/Receiver"""
         return self._id
 
     @id_.setter
@@ -353,6 +407,7 @@ class PartyType(DataParser):
 
     @property
     def extensiontype(self):
+        """Dim_type attribute"""
         return self._extensiontype_
 
     @extensiontype.setter
@@ -360,6 +415,7 @@ class PartyType(DataParser):
         self._extensiontype_ = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._Name or
                 self._contact
@@ -368,10 +424,8 @@ class PartyType(DataParser):
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        pass
-
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
@@ -384,6 +438,7 @@ class PartyType(DataParser):
             self._extensiontype_ = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Name':
             class_obj_ = self.get_class_obj_(child_, LocalisedString)
             obj_ = class_obj_.factory()
@@ -395,24 +450,26 @@ class PartyType(DataParser):
             self._contact.append(obj_)
 
 
-class SenderType(PartyType):
-    """SenderType extends the basic party structure to add an optional time
+class Sender(Party):
+    """Sender extends the basic party structure to add an optional time
     zone declaration."""
-    __hash__ = PartyType.__hash__
+    __hash__ = Party.__hash__
     subclass = None
-    superclass = PartyType
+    superclass = Party
 
     def __init__(self, id_=None, name=None, contact=None, timezone=None, gds_collector_=None, **kwargs_):
-        super(SenderType, self).__init__(id_, name, contact, gds_collector_, **kwargs_)
+        super(Sender, self).__init__(id_, name, contact, gds_collector_, **kwargs_)
         self._timezone = timezone
         self.validate_TimezoneType(self._timezone)
 
     @staticmethod
     def factory(*args_, **kwargs_):
-        return SenderType(*args_, **kwargs_)
+        """Factory Method of Sender"""
+        return Sender(*args_, **kwargs_)
 
     @property
     def timezone(self):
+        """Timezone of the Sender"""
         return self._timezone
 
     @timezone.setter
@@ -420,8 +477,8 @@ class SenderType(PartyType):
         self._timezone = value
 
     def validate_TimezoneType(self, value):
+        """Validate dim_type TimezoneType, a restriction on xs:string."""
         result = True
-        # Validate dim_type TimezoneType, a restriction on xs:string.
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self.gds_get_node_line_number_()
@@ -439,46 +496,46 @@ class SenderType(PartyType):
     validate_TimezoneType_patterns_ = [['^(Z)$', '^((\\+|\\-)(14:00|((0[0-9]|1[0-3]):[0-5][0-9])))$']]
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._timezone is not None or
-                super(SenderType, self).has_content_()
+                super(Sender, self).has_content_()
         ):
             return True
         else:
             return False
 
     def build_attributes(self, node, attrs, already_processed):
-        super(SenderType, self).build_attributes(node, attrs, already_processed)
+        """Builds the attributes present in the XML element"""
+        super(Sender, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Timezone':
             value_ = child_.text
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._timezone = value_
-            # validate dim_type TimezoneType
             self.validate_TimezoneType(self._timezone)
-        super(SenderType, self).build_children(child_, node, nodeName_, True)
+        super(Sender, self).build_children(child_, node, nodeName_, True)
 
 
-class BaseHeaderType(DataParser):
-    """BaseHeaderType in an abstract base dim_type that defines the basis for all
-    message headers. Specific message formats will refine this"""
+class Header(DataParser):
+    """Header defines the basis for all message headers."""
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = None
 
-    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
+    def __init__(self, ID=None, Test=False, Prepared=None, sender=None, Receiver=None, Name=None, Structure=None,
                  DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
                  ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
-        super(BaseHeaderType, self).__init__(gds_collector_, **kwargs_)
+        super(Header, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self._ID = ID
         self.validate_id_type(self._ID)
         self._Test = Test
         self._Prepared = Prepared
-        self.validate_HeaderTimeType(self._Prepared)
-        self._Sender = Sender
+        self._Sender = sender
 
         if Receiver is None:
             self._Receiver = []
@@ -511,9 +568,7 @@ class BaseHeaderType(DataParser):
 
         self._Extracted = initvalue_
         self._ReportingBegin = ReportingBegin
-        self.validate_ObservationalTimePeriodType(self._ReportingBegin)
         self._ReportingEnd = ReportingEnd
-        self.validate_ObservationalTimePeriodType(self._ReportingEnd)
 
         if isinstance(EmbargoDate, BaseStrType_):
             initvalue_ = datetime_.datetime.strptime(EmbargoDate, '%Y-%m-%dT%H:%M:%S')
@@ -529,10 +584,12 @@ class BaseHeaderType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
-        return BaseHeaderType(*args_, **kwargs_)
+        """Factory Method of Header"""
+        return Header(*args_, **kwargs_)
 
     @property
     def id_(self):
+        """Identifier of the Message"""
         return self._ID
 
     @id_.setter
@@ -541,6 +598,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def test(self):
+        """Sets if the Message is for testing purposes"""
         return self._Test
 
     @test.setter
@@ -549,6 +607,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def prepared(self):
+        """Datetime of the preparation of the Message"""
         return self._Prepared
 
     @prepared.setter
@@ -557,15 +616,16 @@ class BaseHeaderType(DataParser):
 
     @property
     def sender(self):
+        """Sender of the Message"""
         return self._Sender
 
     @sender.setter
     def sender(self, value):
         self._Sender = value
-        self._Sender._namespace_prefix = 'message'
 
     @property
     def receiver(self):
+        """Receiver of the Message"""
         return self._Receiver
 
     @receiver.setter
@@ -577,20 +637,9 @@ class BaseHeaderType(DataParser):
         else:
             raise TypeError('Receiver must be a list')
 
-    def add_Receiver(self, value):
-        value._namespace_prefix = 'message'
-        self._Receiver.append(value)
-
-    def insert_Receiver_at(self, index, value):
-        value._namespace_prefix = 'message'
-        self._Receiver.insert(index, value)
-
-    def replace_Receiver_at(self, index, value):
-        value._namespace_prefix = 'message'
-        self._Receiver[index] = value
-
     @property
     def name(self):
+        """Name of the Message"""
         return self._Name
 
     @name.setter
@@ -602,19 +651,9 @@ class BaseHeaderType(DataParser):
         else:
             raise TypeError('Name must be a list')
 
-    def add_Name(self, value):
-        self._Name.append(value)
-
-    def insert_Name_at(self, index, value):
-        value._namespace_prefix = 'message'
-        self._Name.insert(index, value)
-
-    def replace_Name_at(self, index, value):
-        value._namespace_prefix = 'message'
-        self._Name[index] = value
-
     @property
     def structure(self):
+        """Structures of the data in the Message"""
         return self._structure
 
     @structure.setter
@@ -628,6 +667,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def dataProvider(self):
+        """Data provider of the Message"""
         return self._dataProvider
 
     @dataProvider.setter
@@ -636,6 +676,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def datasetAction(self):
+        """Action of the Dataset"""
         return self._DataSetAction
 
     @datasetAction.setter
@@ -644,6 +685,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def datasetID(self):
+        """ID of the Dataset"""
         return self._DataSetID
 
     @datasetID.setter
@@ -655,17 +697,9 @@ class BaseHeaderType(DataParser):
         else:
             raise TypeError('DatasetID must be a list')
 
-    def add_DataSetID(self, value):
-        self._DataSetID.append(value)
-
-    def insert_DataSetID_at(self, index, value):
-        self._DataSetID.insert(index, value)
-
-    def replace_DataSetID_at(self, index, value):
-        self._DataSetID[index] = value
-
     @property
     def extracted(self):
+        """Datetime of the information extracted"""
         return self._Extracted
 
     @extracted.setter
@@ -674,6 +708,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def reportingBegin(self):
+        """Start of the reporting"""
         return self._ReportingBegin
 
     @reportingBegin.setter
@@ -682,6 +717,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def reportingEnd(self):
+        """End of the reporting"""
         return self._ReportingEnd
 
     @reportingEnd.setter
@@ -690,6 +726,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def embargoDate(self):
+        """Datetime of the Embargo (only in Data Messages)"""
         return self._EmbargoDate
 
     @embargoDate.setter
@@ -698,6 +735,7 @@ class BaseHeaderType(DataParser):
 
     @property
     def source(self):
+        """Source of the Message"""
         return self._Source
 
     @source.setter
@@ -709,43 +747,8 @@ class BaseHeaderType(DataParser):
         else:
             raise TypeError('Source must be a list')
 
-    def add_Source(self, value):
-        self._Source.append(value)
-
-    def insert_Source_at(self, index, value):
-        self._Source.insert(index, value)
-
-    def replace_Source_at(self, index, value):
-        self._Source[index] = value
-
-    def validate_HeaderTimeType(self, value):
-        result = True
-        # Validate dim_type HeaderTimeType, a restriction on None.
-        return result
-
-    def validate_ActionType(self, value):
-        result = True
-        # Validate dim_type ActionType, a restriction on xs:NMTOKEN.
-        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
-            if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
-                self.gds_collector_.add_message(f'Value "{value}" : {lineno} is not of '
-                                                f'the correct base simple dim_type (str)')
-                return False
-            value = value
-            enumerations = ['Append', 'Replace', 'Delete', 'Information']
-            if value not in enumerations:
-                lineno = self.gds_get_node_line_number_()
-                self.gds_collector_.add_message(
-                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration '
-                    f'restriction on ActionType')
-                result = False
-        return result
-
-    def validate_ObservationalTimePeriodType(self, value):
-        pass
-
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._ID is not None or
                 self._Test or
@@ -768,12 +771,12 @@ class BaseHeaderType(DataParser):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'ID':
             value_ = child_.text
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._ID = value_
-            # validate dim_type IDType
             self.validate_id_type(self._ID)
         elif nodeName_ == 'Test':
             sval_ = child_.text
@@ -785,14 +788,12 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._Prepared = value_
-            # validate dim_type HeaderTimeType
-            self.validate_HeaderTimeType(self._Prepared)
         elif nodeName_ == 'Sender':
-            obj_ = SenderType.factory()
+            obj_ = Sender.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Sender = obj_
         elif nodeName_ == 'Receiver':
-            class_obj_ = self.get_class_obj_(child_, PartyType)
+            class_obj_ = self.get_class_obj_(child_, Party)
             obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Receiver.append(obj_)
@@ -827,14 +828,12 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._DataSetAction = value_
-            # validate dim_type ActionType
             self.validate_ActionType(self._DataSetAction)
         elif nodeName_ == 'DataSetID':
             value_ = child_.text
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._DataSetID.append(value_)
-            # validate dim_type IDType
             self.validate_id_type(self._DataSetID[-1])
         elif nodeName_ == 'Extracted':
             sval_ = child_.text
@@ -845,15 +844,11 @@ class BaseHeaderType(DataParser):
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._ReportingBegin = value_
-            # validate dim_type ObservationalTimePeriodType
-            self.validate_ObservationalTimePeriodType(self._ReportingBegin)
         elif nodeName_ == 'ReportingEnd':
             value_ = child_.text
             value_ = self.gds_parse_string(value_)
             value_ = self.gds_validate_string(value_)
             self._ReportingEnd = value_
-            # validate dim_type ObservationalTimePeriodType
-            self.validate_ObservationalTimePeriodType(self._ReportingEnd)
         elif nodeName_ == 'EmbargoDate':
             sval_ = child_.text
             dval_ = self.gds_parse_datetime(sval_)
@@ -863,26 +858,3 @@ class BaseHeaderType(DataParser):
             obj_ = class_obj_.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Source.append(obj_)
-
-
-class GenericDataHeaderType(BaseHeaderType):
-    """GenericDataHeaderType defines the header structure for a generic data
-    message."""
-    __hash__ = DataParser.__hash__
-    subclass = None
-    superclass = BaseHeaderType
-
-    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
-                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
-                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
-        super(GenericDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name, Structure, DataProvider,
-                                                    DataSetAction, DataSetID, Extracted, ReportingBegin, ReportingEnd,
-                                                    EmbargoDate, Source, gds_collector_, **kwargs_)
-        self._name = 'GenericDataHeaderType'
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return GenericDataHeaderType(*args_, **kwargs_)
-
-    def validate_ObservationalTimePeriodType(self, value):
-        pass

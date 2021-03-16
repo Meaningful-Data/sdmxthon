@@ -1,12 +1,18 @@
+"""
+    Message_parsers file contains all classes to parse a SDMX-ML Message
+"""
+
 from .data_generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
 from .data_parser import DataParser
-from .data_structure import DataSetType as StructureDataSet, \
-    TimeSeriesDataSetType as StructureTimeSeriesDataSet
+from .data_structure import DataSetType as StructureDataSet
 from .footer_parser import FooterType
 from .gdscollector import GdsCollector
-from .header_parser import BaseHeaderType, GenericDataHeaderType
 from ..model.component import DataStructureDefinition, DataFlowDefinition
+from ..model.header import Header
 from ..model.itemScheme import Codelist, AgencyScheme, ConceptScheme
+from ..utils.handlers import add_indent
+
+from ..utils.mappings import *
 
 
 class MessageType(DataParser):
@@ -16,18 +22,20 @@ class MessageType(DataParser):
     multiple times), and finally an optional footer section for conveying
     error, warning, and informational messages."""
 
-    def __init__(self, Header=None, Footer=None, gds_collector_=None, **kwargs_):
+    def __init__(self, header=None, Footer=None, gds_collector_=None, **kwargs_):
         super(MessageType, self).__init__(gds_collector_, **kwargs_)
         self._gds_collector_ = gds_collector_
-        self._header = Header
+        self._header = header
         self._footer = Footer
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of MessageType"""
         return MessageType(**kwargs_)
 
     @property
     def header(self):
+        """Header of the Message"""
         return self._header
 
     @header.setter
@@ -36,6 +44,7 @@ class MessageType(DataParser):
 
     @property
     def footer(self):
+        """Footer of the Message"""
         return self._footer
 
     @footer.setter
@@ -43,6 +52,7 @@ class MessageType(DataParser):
         self._footer = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._header is not None or
                 self._footer is not None
@@ -60,8 +70,8 @@ class GenericDataType(MessageType):
     subclass = None
     superclass = MessageType
 
-    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericDataType, self).__init__(Header, Footer, gds_collector_, **kwargs_)
+    def __init__(self, header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(GenericDataType, self).__init__(header, Footer, gds_collector_, **kwargs_)
 
         if DataSet is None:
             self._dataSet = []
@@ -75,10 +85,12 @@ class GenericDataType(MessageType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of GenericDataType"""
         return GenericDataType(*args_, **kwargs_)
 
     @property
     def dataset(self):
+        """List of Datasets in a Generic Message"""
         return self._dataSet
 
     @dataset.setter
@@ -90,16 +102,8 @@ class GenericDataType(MessageType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def add_DataSet(self, value):
-        self._dataSet.append(value)
-
-    def insert_DataSet_at(self, index, value):
-        self._dataSet.insert(index, value)
-
-    def replace_DataSet_at(self, index, value):
-        self._dataSet[index] = value
-
     def has_content_(self):
+        """Check if it has any content"""
         if (self._header is not None or self._dataSet or
                 self._footer is not None or super(GenericDataType, self).has_content_()):
             return True
@@ -107,8 +111,9 @@ class GenericDataType(MessageType):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
-            obj_ = GenericDataHeaderType.factory()
+            obj_ = Header.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._header = obj_
             obj_.original_tagname_ = 'Header'
@@ -127,18 +132,15 @@ class GenericDataType(MessageType):
 # end class GenericDataType
 
 class CodelistsType(DataParser):
-    def __init__(self, codelist=None, name=None, gds_collector_=None, **kwargs_):
+    """CodelistsType is the parser for the Codelists XML element"""
+
+    def __init__(self, codelist=None, gds_collector_=None, **kwargs_):
         super(CodelistsType, self).__init__(gds_collector_, **kwargs_)
 
         if codelist is None:
             self._codelists = {}
         else:
             self._codelists = codelist
-
-        if name is None:
-            self._name = ''
-        else:
-            self._name = name
 
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
@@ -147,31 +149,27 @@ class CodelistsType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of CodelistsType"""
         return CodelistsType(*args_, **kwargs_)
 
     @property
     def codelists(self):
+        """Dict of Codelists"""
         return self._codelists
 
     @codelists.setter
     def codelists(self, value):
         self._codelists = value
 
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
     def has_content_(self):
+        """Check if it has any content"""
         if self._codelists is not None or super(CodelistsType, self).has_content_():
             return True
         else:
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Codelist':
             obj_ = Codelist.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -179,7 +177,9 @@ class CodelistsType(DataParser):
 
 
 class ConceptsType(DataParser):
-    def __init__(self, concepts=None, name=None, gds_collector_=None, **kwargs_):
+    """ConceptsType is the parser for the Concepts XML element"""
+
+    def __init__(self, concepts=None, gds_collector_=None, **kwargs_):
         super(ConceptsType, self).__init__(gds_collector_, **kwargs_)
 
         self._cl_references = []
@@ -188,11 +188,6 @@ class ConceptsType(DataParser):
         else:
             self._concepts = concepts
 
-        if name is None:
-            self._name = ''
-        else:
-            self._name = name
-
         if gds_collector_ is not None:
             self._gds_collector = gds_collector_
         else:
@@ -200,31 +195,27 @@ class ConceptsType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ConceptsType"""
         return ConceptsType(*args_, **kwargs_)
 
     @property
     def concepts(self):
+        """Dict of Concepts"""
         return self._concepts
 
     @concepts.setter
     def concepts(self, value):
         self._concepts = value
 
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
     def has_content_(self):
+        """Check if it has any content"""
         if len(self.concepts) > 0 or super(ConceptsType, self).has_content_():
             return True
         else:
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'ConceptScheme':
             obj_ = ConceptScheme.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -232,6 +223,8 @@ class ConceptsType(DataParser):
 
 
 class DataStructuresType(DataParser):
+    """DataStructuresType is the parser for the DataStructures XML element"""
+
     def __init__(self, dsds=None, gds_collector_=None, **kwargs_):
         super(DataStructuresType, self).__init__(gds_collector_, **kwargs_)
 
@@ -247,10 +240,12 @@ class DataStructuresType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of DataStructuresType"""
         return DataStructuresType(*args_, **kwargs_)
 
     @property
     def dsds(self):
+        """Dict of DSDs"""
         return self._dsds
 
     @dsds.setter
@@ -259,14 +254,17 @@ class DataStructuresType(DataParser):
 
     @property
     def non_unique(self):
+        """Dict of non-unique dsds"""
         return self._non_unique
 
     def add_non_unique(self, id_):
+        """Method to add a non-unique DSD to generate the error"""
         if self._non_unique is None:
             self._non_unique = []
         self._non_unique.append(id_)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'DataStructure':
             obj_ = DataStructureDefinition.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -281,6 +279,8 @@ class DataStructuresType(DataParser):
 
 
 class OrganisationSchemesType(DataParser):
+    """OrganisationSchemesType is the parser for the OrganisationScheme XML element"""
+
     def __init__(self, agency_scheme=None, gds_collector_=None, **kwargs_):
         super(OrganisationSchemesType, self).__init__(gds_collector_, **kwargs_)
 
@@ -296,10 +296,12 @@ class OrganisationSchemesType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of OrganisationSchemesType"""
         return OrganisationSchemesType(*args_, **kwargs_)
 
     @property
     def agencySchemes(self):
+        """Getter of the AgencyScheme"""
         return self._agency_schemes
 
     @agencySchemes.setter
@@ -307,12 +309,14 @@ class OrganisationSchemesType(DataParser):
         self._agency_schemes = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if self._agency_schemes is not None or super(OrganisationSchemesType, self).has_content_():
             return True
         else:
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'AgencyScheme':
             obj_ = AgencyScheme.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -320,6 +324,8 @@ class OrganisationSchemesType(DataParser):
 
 
 class DataflowsType(DataParser):
+    """DataflowsType is the parser for the DataFlowDefinition XML element"""
+
     def __init__(self, dataflows=None, gds_collector_=None, **kwargs_):
         super(DataflowsType, self).__init__(gds_collector_, **kwargs_)
 
@@ -335,10 +341,12 @@ class DataflowsType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of DataflowsType"""
         return DataflowsType(*args_, **kwargs_)
 
     @property
     def dataflows(self):
+        """Dict of Dataflows"""
         return self._dataflows
 
     @dataflows.setter
@@ -346,6 +354,7 @@ class DataflowsType(DataParser):
         self._dataflows = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Dataflow':
             obj_ = DataFlowDefinition.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -353,6 +362,7 @@ class DataflowsType(DataParser):
 
 
 class Structures(DataParser):
+    """Structures class is the Metadata holder to access all elements in a Structures SDMX_ML file"""
     __hash__ = DataParser.__hash__
 
     def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, dataflows=None,
@@ -392,10 +402,12 @@ class Structures(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Structures"""
         return Structures(*args_, **kwargs_)
 
     @property
     def dataflows(self):
+        """Dict of dataflows"""
         return self._dataflows
 
     @dataflows.setter
@@ -404,6 +416,7 @@ class Structures(DataParser):
 
     @property
     def organisations(self):
+        """Dict of OrganisationScheme"""
         return self._organisations
 
     @organisations.setter
@@ -412,6 +425,7 @@ class Structures(DataParser):
 
     @property
     def dsds(self):
+        """Dict of DataStructureDefinition"""
         return self._dsds
 
     @dsds.setter
@@ -420,6 +434,7 @@ class Structures(DataParser):
 
     @property
     def codelists(self):
+        """Dict of Codelists"""
         return self._codelists
 
     @codelists.setter
@@ -428,6 +443,7 @@ class Structures(DataParser):
 
     @property
     def concepts(self):
+        """Dict of Concepts"""
         return self._concepts
 
     @concepts.setter
@@ -436,14 +452,17 @@ class Structures(DataParser):
 
     @property
     def errors(self):
+        """List of Errors"""
         return self._errors
 
     def add_error(self, error):
+        """Method to add an error in the Structures"""
         if self._errors is None:
             self._errors = []
         self._errors.append(error)
 
     def has_content_(self):
+        """Check if it has any content"""
         if self._concepts is not None or self._codelists or self._dsds is not None \
                 or super(Structures, self).has_content_():
             return True
@@ -451,6 +470,7 @@ class Structures(DataParser):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'OrganisationSchemes':
             obj_ = OrganisationSchemesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -478,8 +498,55 @@ class Structures(DataParser):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataflows = obj_.dataflows
 
+    def to_XML(self, prettyprint=True):
+
+        if prettyprint:
+            indent = '\t'
+            newline = '\n'
+        else:
+            indent = newline = ''
+
+        outfile = f'{indent}<{messageAbbr}:Structures>'
+        if self.organisations is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:OrganisationSchemes>'
+            outfile += self.organisations.parse_XML(indent_child, f'{structureAbbr}:AgencyScheme')
+            outfile += f'{indent_child}</{structureAbbr}:OrganisationSchemes>'
+        if self.codelists is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:Codelists>'
+            for e in self.codelists.values():
+                outfile += e.parse_XML(indent_child, f'{structureAbbr}:Codelist')
+            outfile += f'{indent_child}</{structureAbbr}:Codelists>'
+
+        if self.concepts is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:Concepts>'
+            for e in self.concepts.values():
+                outfile += e.parse_XML(indent_child, f'{structureAbbr}:ConceptScheme')
+            outfile += f'{indent_child}</{structureAbbr}:Concepts>'
+
+        if self.dsds is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:DataStructures>'
+            for e in self.dsds.values():
+                outfile += e.parse_XML(indent_child, f'{structureAbbr}:DataStructure')
+            outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
+
+        if self.dataflows is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
+            for e in self.dataflows.values():
+                outfile += e.parse_XML(indent_child, f'{structureAbbr}:Dataflow')
+            outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
+
+        outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
+
+        return outfile
+
 
 class MetadataType(MessageType):
+    """MetadataType is a type of Message that starts with the tag Structure and contains the Metadata information"""
     __hash__ = DataParser.__hash__
     superclass = MessageType
 
@@ -495,10 +562,12 @@ class MetadataType(MessageType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of MetadataType"""
         return MetadataType(*args_, **kwargs_)
 
     @property
     def structures(self):
+        """Reference to the Structure in the Message"""
         return self._structures
 
     @structures.setter
@@ -506,6 +575,7 @@ class MetadataType(MessageType):
         self._structures = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (self._header is not None or self._structures or
                 self._footer is not None or super(MetadataType, self).has_content_()):
             return True
@@ -513,8 +583,9 @@ class MetadataType(MessageType):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
-            obj_ = GenericDataHeaderType.factory()
+            obj_ = Header.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._header = obj_
         elif nodeName_ == 'Structures':
@@ -526,37 +597,6 @@ class MetadataType(MessageType):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._footer = obj_
 
-
-class StructureSpecificDataHeaderType(BaseHeaderType):
-    """StructureSpecificDataHeaderType defines the header structure for a
-    structure specific data message."""
-    __hash__ = BaseHeaderType.__hash__
-    subclass = None
-    superclass = BaseHeaderType
-
-    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
-                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
-                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name, Structure,
-                                                              DataProvider, DataSetAction, DataSetID, Extracted,
-                                                              ReportingBegin, ReportingEnd, EmbargoDate, Source,
-                                                              gds_collector_, **kwargs_)
-        self._name = 'GenericDataHeaderType'
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return StructureSpecificDataHeaderType(*args_, **kwargs_)
-
-    def validate_HeaderTimeType(self, value):
-        result = True
-        return result
-
-    def validate_ObservationalTimePeriodType(self, value):
-        result = True
-        return result
-
-
-# end class StructureSpecificDataHeaderType
 
 class StructureSpecificDataType(MessageType):
     """StructureSpecificDataType defines the structure of the structure
@@ -570,8 +610,8 @@ class StructureSpecificDataType(MessageType):
     subclass = None
     superclass = MessageType
 
-    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificDataType, self).__init__(Header, Footer, gds_collector_, **kwargs_)
+    def __init__(self, header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(StructureSpecificDataType, self).__init__(header, Footer, gds_collector_, **kwargs_)
 
         if DataSet is None:
             self._dataSet = []
@@ -586,10 +626,12 @@ class StructureSpecificDataType(MessageType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of StructureSpecificDataType"""
         return StructureSpecificDataType(*args_, **kwargs_)
 
     @property
     def dataset(self):
+        """List of Datasets in a Structure Specific Message"""
         return self._dataSet
 
     @dataset.setter
@@ -601,16 +643,8 @@ class StructureSpecificDataType(MessageType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def add_DataSet(self, value):
-        self._dataSet.append(value)
-
-    def insert_DataSet_at(self, index, value):
-        self._dataSet.insert(index, value)
-
-    def replace_DataSet_at(self, index, value):
-        self._dataSet[index] = value
-
     def has_content_(self):
+        """Check if it has any content"""
         if self._header is not None or self._dataSet or self._footer is not None \
                 or super(MessageType, self).has_content_():
             return True
@@ -618,8 +652,9 @@ class StructureSpecificDataType(MessageType):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
-            obj_ = StructureSpecificDataHeaderType.factory()
+            obj_ = Header.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._header = obj_
             obj_.original_tagname_ = 'Header'
@@ -644,16 +679,18 @@ class GenericTimeSeriesDataType(GenericDataType):
     subclass = None
     superclass = GenericDataType
 
-    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericTimeSeriesDataType, self).__init__(Header, Footer, DataSet, gds_collector_,
+    def __init__(self, header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataType, self).__init__(header, Footer, DataSet, gds_collector_,
                                                         **kwargs_)
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of GenericTimeSeriesDataType"""
         return GenericTimeSeriesDataType(*args_, **kwargs_)
 
     @property
     def dataset(self):
+        """List of Datasets in a Generic Time Series Message"""
         return self._dataSet
 
     @dataset.setter
@@ -665,16 +702,8 @@ class GenericTimeSeriesDataType(GenericDataType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def add_DataSet(self, value):
-        self._dataSet.append(value)
-
-    def insert_DataSet_at(self, index, value):
-        self._dataSet.insert(index, value)
-
-    def replace_DataSet_at(self, index, value):
-        self._dataSet[index] = value
-
     def has_content_(self):
+        """Check if it has any content"""
         if (self._header is not None or self._dataSet or self._footer is not None
                 or super(GenericDataType, self).has_content_()):
             return True
@@ -682,8 +711,9 @@ class GenericTimeSeriesDataType(GenericDataType):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
-            obj_ = GenericTimeSeriesDataHeaderType.factory()
+            obj_ = Header.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._header = obj_
             obj_.original_tagname_ = 'Header'
@@ -697,139 +727,3 @@ class GenericTimeSeriesDataType(GenericDataType):
             obj_.build(child_, gds_collector_=gds_collector_)
             self._footer = obj_
             obj_.original_tag_name_ = 'Footer'
-
-
-class GenericTimeSeriesDataHeaderType(GenericDataHeaderType):
-    """GenericTimeSeriesDataHeaderType defines the header structure for a time
-    series only generic data message."""
-    __hash__ = GenericDataHeaderType.__hash__
-    subclass = None
-    superclass = GenericDataHeaderType
-
-    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
-                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
-                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
-        super(GenericTimeSeriesDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name, Structure,
-                                                              DataProvider, DataSetAction, DataSetID, Extracted,
-                                                              ReportingBegin, ReportingEnd, EmbargoDate, Source,
-                                                              gds_collector_, **kwargs_)
-        self._name = 'GenericTimeSeriesDataHeaderType'
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return GenericTimeSeriesDataHeaderType(*args_, **kwargs_)
-
-    def validate_HeaderTimeType(self, value):
-        pass
-
-    def validate_ObservationalTimePeriodType(self, value):
-        pass
-
-
-class StructureSpecificTimeSeriesDataType(StructureSpecificDataType):
-    """StructureSpecificTimeSeriesDataType defines the structure of the
-    structure specific time series data message."""
-
-    __hash__ = StructureSpecificDataType.__hash__
-    subclass = None
-    superclass = StructureSpecificDataType
-
-    def __init__(self, Header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificTimeSeriesDataType, self).__init__(Header, Footer, DataSet,
-                                                                  gds_collector_, **kwargs_)
-
-        if DataSet is None:
-            self._dataSet = []
-        else:
-            self._dataSet = DataSet
-
-        self._name = 'StructureSpecificTimeSeriesDataType'
-
-        if gds_collector_ is not None:
-            self.gds_collector_ = gds_collector_
-        else:
-            self.gds_collector_ = GdsCollector()
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return StructureSpecificDataType(*args_, **kwargs_)
-
-    @property
-    def dataset(self):
-        return self._dataSet
-
-    @dataset.setter
-    def dataset(self, value):
-        if value is None:
-            self._dataSet = []
-        elif isinstance(value, list):
-            self._dataSet = value
-        else:
-            raise TypeError('Dataset must be a list')
-
-    def add_DataSet(self, value):
-        self._dataSet.append(value)
-
-    def insert_DataSet_at(self, index, value):
-        self._dataSet.insert(index, value)
-
-    def replace_DataSet_at(self, index, value):
-        self._dataSet[index] = value
-
-    def has_content_(self):
-        if (self._header is not None or self._dataSet or self._footer is not None
-                or super(StructureSpecificDataType, self).has_content_()):
-            return True
-        else:
-            return False
-
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        if nodeName_ == 'Header':
-            obj_ = StructureSpecificTimeSeriesDataHeaderType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._header = obj_
-            obj_.original_tagname_ = 'Header'
-        elif nodeName_ == 'DataSet':
-            obj_ = StructureTimeSeriesDataSet.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._dataSet.append(obj_)
-            obj_.original_tag_name_ = 'DataSet'
-        elif nodeName_ == 'Footer':
-            obj_ = FooterType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
-            self._footer = obj_
-            obj_.original_tag_name_ = 'Footer'
-
-
-# end class StructureSpecificDataType
-
-
-class StructureSpecificTimeSeriesDataHeaderType(StructureSpecificDataHeaderType):
-    """StructureSpecificTimeSeriesDataHeaderType defines the header structure
-    for a time series only structure specific data message."""
-    __hash__ = StructureSpecificDataHeaderType.__hash__
-    subclass = None
-    superclass = StructureSpecificDataHeaderType
-
-    def __init__(self, ID=None, Test=False, Prepared=None, Sender=None, Receiver=None, Name=None, Structure=None,
-                 DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
-                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificTimeSeriesDataHeaderType, self).__init__(ID, Test, Prepared, Sender, Receiver, Name,
-                                                                        Structure, DataProvider, DataSetAction,
-                                                                        DataSetID,
-                                                                        Extracted, ReportingBegin, ReportingEnd,
-                                                                        EmbargoDate,
-                                                                        Source, gds_collector_, **kwargs_)
-        self._name = 'StructureSpecificTimeSeriesDataHeaderType'
-
-    @staticmethod
-    def factory(*args_, **kwargs_):
-        return StructureSpecificTimeSeriesDataHeaderType(*args_, **kwargs_)
-
-    def validate_HeaderTimeType(self, value):
-        result = True
-        return result
-
-    def validate_ObservationalTimePeriodType(self, value):
-        result = True
-        return result

@@ -1,3 +1,7 @@
+"""
+    Data_Structure has the parsers for the information of data sets
+"""
+
 from .references import ReferenceType
 from ..parsers.data_parser import DataParser
 from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
@@ -5,7 +9,7 @@ from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
 
 class PayloadStructureType(DataParser):
     """PayloadStructureType is an abstract base dim_type used to define the
-    structural information for data or metadata sets. A reference to the
+    structural information for data sets. A reference to the
     structure is provided (either explicitly or through a reference to a
     structure usage).The structureID attribute uniquely identifies the
     structure for the purpose of referencing it from the payload. This is
@@ -24,8 +28,6 @@ class PayloadStructureType(DataParser):
     is only applicable for the measure dimension as the dimension at the
     observation level or the flat structure."""
     __hash__ = DataParser.__hash__
-    subclass = None
-    superclass = None
 
     def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
                  explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
@@ -42,15 +44,19 @@ class PayloadStructureType(DataParser):
         self._provisionAgreement = ProvisionAgreement
         self._structureUsage = StructureUsage
         self._structure = Structure
-        self._namespacedef = 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"'
-        self._namespaceprefix = "common"
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of PayloadStructureType"""
         return PayloadStructureType(*args_, **kwargs_)
 
     @property
     def provisionAgreement(self):
+        """Links the Data Provider to the relevant Structure Usage
+        (e.g. DataflowDefinition or MetadataflowDefinition) for which the
+        provider supplies data or metadata The agreement may constrain
+        the scope of the data or metadata that can be provided,
+        by means of a Constraint. """
         return self._provisionAgreement
 
     @provisionAgreement.setter
@@ -59,6 +65,7 @@ class PayloadStructureType(DataParser):
 
     @property
     def structureUsage(self):
+        """References the DataFlowDefinition"""
         return self._structureUsage
 
     @structureUsage.setter
@@ -67,6 +74,7 @@ class PayloadStructureType(DataParser):
 
     @property
     def structure(self):
+        """References the DataStructureDefinition"""
         return self._structure
 
     @structure.setter
@@ -75,6 +83,7 @@ class PayloadStructureType(DataParser):
 
     @property
     def structureID(self):
+        """Identifies the structure"""
         return self._structureID
 
     @structureID.setter
@@ -82,15 +91,8 @@ class PayloadStructureType(DataParser):
         self._structureID = value
 
     @property
-    def namespace(self):
-        return self._namespace
-
-    @namespace.setter
-    def namespace(self, value):
-        self._namespace = value
-
-    @property
     def dimensionAtObservation(self):
+        """Gets the dimensionAtObservation in the structure"""
         return self._dimension_at_observation
 
     @dimensionAtObservation.setter
@@ -98,15 +100,8 @@ class PayloadStructureType(DataParser):
         self._dimension_at_observation = value
 
     @property
-    def explicitMeasures(self):
-        return self._explicitMeasures
-
-    @explicitMeasures.setter
-    def explicitMeasures(self, value):
-        self._explicitMeasures = value
-
-    @property
     def schemaURL(self):
+        """URL of the Schema"""
         return self._schemaURL
 
     @schemaURL.setter
@@ -115,6 +110,7 @@ class PayloadStructureType(DataParser):
 
     @property
     def serviceURL(self):
+        """URL of the Service"""
         return self._serviceURL
 
     @serviceURL.setter
@@ -123,17 +119,15 @@ class PayloadStructureType(DataParser):
 
     @property
     def structureURL(self):
+        """URL of the Structure"""
         return self._structureURL
 
     @structureURL.setter
     def structureURL(self, value):
         self._structureURL = value
 
-    def validate_ObservationDimensionType(self, value):
-        # Validate dim_type ObservationDimensionType, a restriction on None.
-        pass
-
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._provisionAgreement is not None or
                 self._structureUsage is not None or
@@ -144,6 +138,7 @@ class PayloadStructureType(DataParser):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('structureID', node)
 
         if value is not None and 'structureID' not in already_processed:
@@ -167,8 +162,6 @@ class PayloadStructureType(DataParser):
         if value is not None and 'dimensionAtObservation' not in already_processed:
             already_processed.add('dimensionAtObservation')
             self._dimension_at_observation = value
-            self.validate_ObservationDimensionType(
-                self._dimension_at_observation)  # validate dim_type ObservationDimensionType
 
         value = find_attr_value_('explicitMeasures', node)
 
@@ -194,6 +187,7 @@ class PayloadStructureType(DataParser):
             self._structureURL = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'ProvisionAgreement':
             obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -225,11 +219,11 @@ class DataStructureType(PayloadStructureType):
         super(DataStructureType, self).__init__(structureID, schemaURL, namespace, dimensionAtObservation,
                                                 explicitMeasures, serviceURL, structureURL, ProvisionAgreement,
                                                 StructureUsage, Structure, **kwargs_)
-        self._name = 'DataStructureType'
         self._gds_collector = gds_collector_
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of DataStructureType"""
         return DataStructureType(*args_, **kwargs_)
 
 
@@ -252,17 +246,15 @@ class GenericDataStructureType(DataStructureType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of GenericDataStructureType"""
         return GenericDataStructureType(*args_, **kwargs_)
 
     @property
     def structureID(self):
+        """ID of the Structure"""
         return self._structureID
 
     @structureID.setter
     def structureID(self, value):
         self.structureID = value
-
-    def validate_ObservationDimensionType(self, value):
-        # Validate dim_type ObservationDimensionType, a restriction on None.
-        pass
 # end class GenericDataStructureType

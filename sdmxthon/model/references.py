@@ -1,3 +1,7 @@
+"""
+    References file withholds all the Reference classes needed for parsing
+"""
+
 from ..parsers.data_parser import DataParser, Validate_simpletypes_
 from ..utils.xml_base import find_attr_value_, cast, encode_str_2_3, raise_parse_error
 
@@ -30,9 +34,11 @@ class ReferenceType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ReferenceType"""
         return ReferenceType(*args_, **kwargs_)
 
     def has_content_(self):
+        """Check if it has any content"""
         if self._ref is not None or self._urn is not None:
             return True
         else:
@@ -40,6 +46,7 @@ class ReferenceType(DataParser):
 
     @property
     def ref(self):
+        """Component Reference"""
         return self._ref
 
     @ref.setter
@@ -48,6 +55,7 @@ class ReferenceType(DataParser):
 
     @property
     def urn(self):
+        """Component URN"""
         return self._urn
 
     @urn.setter
@@ -55,6 +63,7 @@ class ReferenceType(DataParser):
         self._urn = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefBaseType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -70,19 +79,25 @@ class ReferenceType(DataParser):
 # end class ReferenceType
 
 class RelationshipRefType(DataParser):
+    """Parser of Relationships in the XML Element DimensionReference, PrimaryMeasure,
+     Dimension and Parent of an Item """
+
     def __init__(self, gds_collector_=None):
         super().__init__(gds_collector_)
         self._ref = None
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of RelationshipRefType"""
         return RelationshipRefType(*args_, **kwargs_)
 
     @property
     def ref(self):
+        """Reference to the Component as String"""
         return self._ref
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefIDType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -90,19 +105,24 @@ class RelationshipRefType(DataParser):
 
 
 class RefIDType(DataParser):
+    """Parser of a Reference which has an ID only"""
+
     def __init__(self, gds_collector_=None):
         super().__init__(gds_collector_)
         self._id = None
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of RefIDType"""
         return RefIDType(*args_, **kwargs_)
 
     @property
     def id(self):
+        """ID of the Component Referenced"""
         return self._id
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
@@ -183,10 +203,12 @@ class RefBaseType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of RefBaseType"""
         return RefBaseType(*args_, **kwargs_)
 
     @property
     def agencyID(self):
+        """Gets the attribute AgencyID of the reference"""
         return self._agencyID
 
     @agencyID.setter
@@ -195,6 +217,7 @@ class RefBaseType(DataParser):
 
     @property
     def maintainableParentID(self):
+        """Gets the attribute maintainableParentID of the reference"""
         return self._maintainableParentID
 
     @maintainableParentID.setter
@@ -203,6 +226,7 @@ class RefBaseType(DataParser):
 
     @property
     def maintainableParentVersion(self):
+        """Gets the attribute maintainableParentVersion of the reference"""
         return self._maintainableParentVersion
 
     @maintainableParentVersion.setter
@@ -211,6 +235,7 @@ class RefBaseType(DataParser):
 
     @property
     def containerID(self):
+        """Gets the attribute containerID of the reference"""
         return self._containerID
 
     @containerID.setter
@@ -219,6 +244,7 @@ class RefBaseType(DataParser):
 
     @property
     def id_(self):
+        """Gets the attribute id of the reference"""
         return self._id
 
     @id_.setter
@@ -227,6 +253,7 @@ class RefBaseType(DataParser):
 
     @property
     def version(self):
+        """Gets the attribute version of the reference"""
         return self._version
 
     @version.setter
@@ -235,6 +262,7 @@ class RefBaseType(DataParser):
 
     @property
     def local(self):
+        """Gets the attribute local of the reference"""
         return self._local
 
     @local.setter
@@ -243,6 +271,7 @@ class RefBaseType(DataParser):
 
     @property
     def class_(self):
+        """Gets the attribute class_ of the reference"""
         return self._class_
 
     @class_.setter
@@ -251,6 +280,7 @@ class RefBaseType(DataParser):
 
     @property
     def package(self):
+        """Gets the attribute package of the reference"""
         return self._package
 
     @package.setter
@@ -258,7 +288,7 @@ class RefBaseType(DataParser):
         self._package = value
 
     def validate_object_type_code_list_type(self, value):
-        # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
+        """Validate dim_type ObjectTypeCodelistType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -294,7 +324,7 @@ class RefBaseType(DataParser):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
+        """Validate dim_type PackageTypeCodelistType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -317,6 +347,7 @@ class RefBaseType(DataParser):
         return result
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('agencyID', node)
 
         if value is not None and 'agencyID' not in already_processed:

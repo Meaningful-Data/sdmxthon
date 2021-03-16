@@ -1,3 +1,7 @@
+"""
+    Utils has some handling functions for the model module
+"""
+
 import re
 from datetime import datetime
 from typing import List
@@ -9,7 +13,19 @@ from lxml import etree
 # Convenience setters and getters
 #
 
-def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
+def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S") -> datetime:
+    """Generic function to format a string to datetime
+
+    Args:
+        value: The value to be validated.
+        format_: A regex pattern to validate if the string has a specific format
+
+    Returns:
+        A datetime object
+
+    Raises:
+        ValueError: If the value violates the format constraint.
+    """
     try:
         dt = datetime.strptime(value, format_)
     except:
@@ -19,6 +35,18 @@ def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
 
 
 def getDateString(date: datetime, format_: str = "%Y-%m-%d"):
+    """Generic function to get a string from a datetime object
+
+    Args:
+        date: The value to be validated.
+        format_: A regex pattern to return the string with
+
+    Returns:
+        A string formatted
+
+    Raises:
+        ValueError: If the value violates any of the conditions.
+    """
     if date is None:
         return ""
     else:
@@ -67,6 +95,15 @@ def stringSetter(value: str, pattern: str = None, enumeration: List[str] = None)
 
 
 def dateSetter(value: datetime):
+    """Generic setter for datetime objects
+
+    Args:
+        value: The value to be validated.
+
+    Raises:
+        TypeError: If the value is not datetime or date
+    """
+
     if isinstance(value, datetime) or value is None:
         return value
     elif isinstance(value, str):
@@ -76,6 +113,14 @@ def dateSetter(value: datetime):
 
 
 def boolSetter(value: bool):
+    """Generic setter for bool objects
+
+        Args:
+            value: The value to be validated.
+
+        Raises:
+            TypeError: If the value is not bool
+    """
     if isinstance(value, bool) or value is None:
         return value
     elif value == "false":
@@ -86,14 +131,32 @@ def boolSetter(value: bool):
         raise ValueError("Type should be bool")
 
 
-def genericSetter(value, clss):
-    if isinstance(value, clss) or value is None:
+def genericSetter(value, class_):
+    """Generic setter for class objects
+
+        Args:
+            value: The value to be validated.
+            class_: The class to validate with
+
+        Raises:
+            TypeError: If the value is not an instance of the class
+    """
+    if isinstance(value, class_) or value is None:
         return value
     else:
-        raise TypeError(f"The value has to be an instance of the {clss.__name__} class. {type(value)} passed")
+        raise TypeError(f"The value has to be an instance of the {class_.__name__} class. {type(value)} passed")
 
 
 def intSetter(value: int):
+    """Generic setter for integer objects
+
+            Args:
+                value: The value to be validated.
+
+            Raises:
+                TypeError: If the value is not an integer
+        """
+
     if isinstance(value, int) or value is None:
         return value
     else:
@@ -102,10 +165,6 @@ def intSetter(value: int):
         except:
             raise ValueError("Type should be int")
 
-
-#
-# Qnames manager
-#
 
 _base_ns = 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1'
 NS = {
@@ -123,13 +182,6 @@ NS = {
 def qName(ns, name):
     """Return a fully-qualified tag *name* in namespace *ns*."""
     return etree.QName(NS[ns], name)
-
-
-# NB three diagrams in the spec show this enumeration containing
-#    'gregorianYearMonth' but not 'gregorianYear' or 'gregorianMonth'. The
-#    table in §3.6.3.3 Representation Constructs does the opposite. One ESTAT
-#    query (via SGR) shows a real-world usage of 'gregorianYear'; while one NB
-#    query shows usage of 'gregorianYearMonth'; so all three are included.
 
 
 ActionType = ['Delete, Replace, Append, Information']

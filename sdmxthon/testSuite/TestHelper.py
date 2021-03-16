@@ -6,7 +6,7 @@ import unittest
 
 import pandas as pd
 
-from SDMXThon.parsers.metadata_validations import getMetadata
+from SDMXThon.parsers.read import getMetadata
 from ..api import DataSet, readXML, MetadataType, setReferences, readSDMX
 
 
@@ -20,12 +20,11 @@ class TestHelper(unittest.TestCase):
     pathToMetadata = os.path.join(os.path.join(path, "data"), "metadata")
     pathToReference = os.path.join(os.path.join(path, "data"), "reference")
 
-    def load_input_data(self, sqlite_db, sqlite_filename, limit, pkl_filename):
+    def load_input_data(self, sqlite_db, sqlite_filename, limit, meta_file):
         conn = sqlite3.connect(os.path.join(self.pathToDB, sqlite_filename))
         df = pd.read_sql(query_to_db(sqlite_db, limit), conn).astype('category')
 
-        with open(os.path.join(self.pathToMetadata, pkl_filename), 'rb') as f:
-            dsd = pickle.loads(f.read())
+        dsd = getMetadata(os.path.join(self.pathToMetadata, meta_file)).payload.dsds['BIS:BIS_DER(1.0)']
 
         return DataSet(structure=dsd, data=df)
 
@@ -45,8 +44,8 @@ class TestHelper(unittest.TestCase):
         dataframe = message.payload['BIS:BIS_DER(1.0)'].data.astype('str')
         pd.testing.assert_frame_equal(dataframe.replace('nan', ''), reference.replace('nan', ''), check_like=True)
 
-    def semantic_test(self, sqlite_db, sqlite_filename, limit, pkl_filename, reference_filename):
-        dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, pkl_filename)
+    def semantic_test(self, sqlite_db, sqlite_filename, limit, meta_file, reference_filename):
+        dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, meta_file)
         errors = dataset.semanticValidation()
         reference_dict = self.load_reference_data(reference_filename)
         self.assert_equal_validation(json.loads(json.dumps(errors).replace("NaN", 'null')), reference_dict)
@@ -59,7 +58,7 @@ class TestHelper(unittest.TestCase):
     def metadata_test(self, reference_filename, path_to_data):
         obj_ = getMetadata(os.path.join(self.pathToMetadata, path_to_data))
         reference = self.load_reference_data(reference_filename)
-        errors = obj_.structures.errors
+        errors = obj_.payload.errors
         if errors is None:
             errors = []
         self.assert_equal_validation(errors, reference)
@@ -76,7 +75,7 @@ class TestHelper(unittest.TestCase):
     def metadata_compare(self, reference_filename, data_filename):
         obj_ = getMetadata(os.path.join(self.pathToDB, data_filename))
         reference = self.load_reference_pickle(reference_filename)
-        self.assertEqual(obj_.structures == reference, True)
+        self.assertEqual(obj_.payload == reference, True)
 
     def assert_equal_validation(self, result, reference):
         if len(result) == len(reference):

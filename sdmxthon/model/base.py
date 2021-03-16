@@ -8,9 +8,9 @@ Please refer to the package in the SDMX Information Model
 from datetime import datetime
 from typing import List
 
-from .utils import stringSetter, dateSetter, setDateFromString, getDateString, boolSetter
+from .utils import stringSetter, boolSetter
 from ..parsers.data_parser import DataParser
-from ..utils.mappings import Locale_Codes
+from ..utils.mappings import Locale_Codes, commonAbbr
 from ..utils.xml_base import find_attr_value_
 
 
@@ -25,6 +25,7 @@ class LocalisedString(DataParser):
     Attributes:
         label: Label of the string
         locale: The geographic locale of the string
+        content: The string itself
     """
 
     def __init__(self, locale: str = None, label: str = None, content: str = None, gds_collector=None):
@@ -43,10 +44,12 @@ class LocalisedString(DataParser):
 
     @staticmethod
     def factory(*args):
+        """Factory Method of LocalisedString"""
         return LocalisedString(*args)
 
     @property
     def locale(self):
+        """Locale is the name of the country. Obtained from the ISO 639-1 code"""
         return self._locale
 
     @locale.setter
@@ -55,6 +58,7 @@ class LocalisedString(DataParser):
 
     @property
     def label(self):
+        """Label present in attribute lang of the XML namespace. Uses an ISO 639-1 code to specify the country"""
         return self._label
 
     @label.setter
@@ -63,6 +67,7 @@ class LocalisedString(DataParser):
 
     @property
     def content(self):
+        """Added attribute to the Information Model to specify the string itself"""
         return self._content
 
     @content.setter
@@ -70,6 +75,7 @@ class LocalisedString(DataParser):
         self._content = stringSetter(value)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('{http://www.w3.org/XML/1998/namespace}lang', node)
         if value is not None and 'lang' not in already_processed:
             already_processed.add('lang')
@@ -81,9 +87,6 @@ class LocalisedString(DataParser):
         if node.text.strip() not in ['', '\n']:
             self._content = " ".join(node.text.split())
 
-    def build_children(self, child, node, node_name_, gds_collector_):
-        pass
-
 
 class InternationalString(object):
     """InternationalString class.
@@ -93,11 +96,7 @@ class InternationalString(object):
         multiple locales. 
 
     Attributes:
-        localisedStrings: List with all the localised strings belonging to the InternationalString
-        localisedStrings Dict: Convenience access to the localised strings. Dict[locale:label]
-
-    Index:
-        A locale in the index returns the label
+        localisedStrings: Convenience access to the localised strings. List[{label:[Locale, Content]}]
     """
 
     def __init__(self, localisedStrings: List[LocalisedString] = None):
@@ -117,16 +116,19 @@ class InternationalString(object):
 
     @property
     def items(self):
+        """Items of the InternationalString"""
         return self._items
 
     def addLocalisedString(self, localisedString: LocalisedString):
+        """Adds a localisedString to the International String"""
         if not isinstance(localisedString, LocalisedString):
             raise TypeError("International strings can only get localised strings as arguments")
         else:
             self._items[localisedString.label] = {'locale': localisedString.locale,
                                                   'content': localisedString.content}
 
-    def getLocales(self):
+    def getLabels(self):
+        """Gets the labels of the items present in the International String"""
         return set(self._items.keys())
 
     def __getitem__(self, key):
@@ -135,8 +137,35 @@ class InternationalString(object):
     def __str__(self):
         return str(self._items)
 
+    def to_XML(self, name, prettyprint):
+
+        if prettyprint:
+            child1 = '\t'
+        else:
+            child1 = ''
+
+        outfile = []
+        if len(self._items) > 0:
+            for label, v in self._items.items():
+                outfile.append(f'{child1}<{name} xml:lang="{label}">{v["content"].replace("&", "&amp;")}</{name}>')
+
+        return outfile
+
 
 class Annotation(DataParser):
+    """Annotation class.
+
+            Additional descriptive information attached to an object
+
+        Attributes:
+            id: Identifier for the Annotation. It can be used to disambiguate one Annotation from another
+            where there are several Annotations for the same annotated object.
+            title: A title used to identify an annotation.
+            type: Specifies how the annotation is to be processed.
+            url: A link to external descriptive text.
+            text: An International String provides the multilingual text content of the annotation via this role
+        """
+
     def __init__(self, id_: str = None, title: str = None, type_: str = None,
                  url: str = None, text: InternationalString = None, gds_collector=None):
         super(Annotation, self).__init__(gds_collector_=gds_collector)
@@ -153,26 +182,33 @@ class Annotation(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Annotation"""
         return Annotation(*args_, **kwargs_)
 
     @property
     def id(self):
+        """Identifier for the Annotation. It can be used to disambiguate one Annotation from another
+            where there are several Annotations for the same annotated object."""
         return self._id
 
     @property
     def title(self):
+        """A title used to identify an annotation."""
         return self._title
 
     @property
     def type(self):
+        """Specifies how the annotation is to be processed"""
         return self._type
 
     @property
     def url(self):
+        """A link to external descriptive text"""
         return self._url
 
     @property
     def text(self):
+        """An International String provides the multilingual text content of the annotation via this role"""
         return self._text
 
     @id.setter
@@ -196,6 +232,7 @@ class Annotation(DataParser):
         self._text = value
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
 
         if value is not None and 'id' not in already_processed:
@@ -203,6 +240,7 @@ class Annotation(DataParser):
             self._id = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the attributes present in the XML element"""
         if nodeName_ == 'AnnotationTitle':
             value_ = child_.text
             value_ = self.gds_parse_string(value_)
@@ -227,19 +265,24 @@ class Annotation(DataParser):
 
 
 class AnnotationsType(DataParser):
+    """Parser of the XML element Annotations"""
+
     def __init__(self, gds_collector_=None):
         super().__init__(gds_collector_)
         self._annotations = []
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of AnnotationsType"""
         return AnnotationsType(*args_, **kwargs_)
 
     @property
     def annotations(self):
+        """The annotations included in the XML element Annotations"""
         return self._annotations
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Annotation':
             obj_ = Annotation.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -247,6 +290,14 @@ class AnnotationsType(DataParser):
 
 
 class AnnotableArtefact(DataParser):
+    """ AnnotableArtefact class.
+
+        Superclass of all artefacts. Contains the list of annotations.
+
+    Attributes:
+        annotations: List of the annotations of the element
+    """
+
     def __init__(self, annotations: List[Annotation] = None, gds_collector=None):
 
         super().__init__(gds_collector_=gds_collector)
@@ -267,26 +318,72 @@ class AnnotableArtefact(DataParser):
 
     @property
     def annotations(self):
+        """List of the annotations of the element"""
         return self._annotations
 
     def addAnnotation(self, annotation: Annotation):
+        """Method to add an annotation to the list"""
         if not isinstance(annotation, Annotation):
             raise TypeError("Annotable artefacts can only get annotations as arguments")
         else:
             self._annotations.append(annotation)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Annotations':
             obj_ = AnnotationsType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._annotations = obj_.annotations
 
+    def to_XML(self, prettyprint):
+
+        if prettyprint:
+            child1 = '\t'
+            child2 = '\t\t'
+        else:
+            child1 = child2 = ''
+        if len(self.annotations) > 0:
+            outfile = [f'<{commonAbbr}:Annotations>']
+            for e in self.annotations:
+                if e.id is None:
+                    outfile.append(f'{child1}<{commonAbbr}:Annotation>')
+                else:
+                    outfile.append(f'{child1}<{commonAbbr}:Annotation id="{e.id}">')
+
+                if e.title is not None and e.title != '':
+                    outfile.append(f'{child2}<{commonAbbr}:AnnotationTitle>{e.title.replace("&", "&amp;")}'
+                                   f'</{commonAbbr}:AnnotationTitle>')
+
+                if e.type is not None and e.type != '':
+                    outfile.append(f'{child2}<{commonAbbr}:AnnotationType>{e.type.replace("&", "&amp;")}'
+                                   f'</{commonAbbr}:AnnotationType>')
+
+                if e.url is not None and e.url != '':
+                    outfile.append(f'{child2}<{commonAbbr}:AnnotationURL>{e.url.replace("&", "&amp;")}'
+                                   f'</{commonAbbr}:AnnotationURL>')
+
+                if e.text is not None:
+                    outfile += [child1 + i for i in e._text.to_XML(f"{commonAbbr}:AnnotationText", prettyprint)]
+                outfile.append(f'{child1}</{commonAbbr}:Annotation>')
+            outfile.append(f'</{commonAbbr}:Annotations>')
+            return outfile
+        else:
+            return None
+
 
 class IdentifiableArtefact(AnnotableArtefact):
-    _qName = None
-    _urnType = None
+    """ IdentifiableArtefact class.
 
-    def __init__(self, id_: str = None, uri: str = None, urn=None, annotations: List[Annotation] = None):
+           Provides identity to all derived classes. It also provides annotations to derived classes
+           because it is a subclass of AnnotableArtefact.
+
+        Attributes:
+            id: The unique identifier of the object.
+            uri: Universal resource identifier that may or may not be resolvable.
+            urn: Universal resource name – this is for use in registries: all registered objects have a urn.
+        """
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations: List[Annotation] = None):
 
         super(IdentifiableArtefact, self).__init__(annotations=annotations)
 
@@ -303,29 +400,33 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @property
     def id(self):
+        """The unique identifier of the object."""
         return self._id
 
     @property
     def uri(self):
+        """Universal resource identifier that may or may not be resolvable."""
         return self._uri
 
     @property
     def urn(self):
+        """Universal resource name – this is for use in registries: all registered objects have a urn."""
         return self._urn
 
     @id.setter
     def id(self, value):
-        self._id = stringSetter(value, "[A-Za-z0-9_@$-]+")
+        self._id = value
 
     @uri.setter
     def uri(self, value):
-        self._uri = stringSetter(value)
+        self._uri = value
 
     @urn.setter
     def urn(self, value):
-        self._urn = stringSetter(value)
+        self._urn = value
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
@@ -342,10 +443,37 @@ class IdentifiableArtefact(AnnotableArtefact):
             self.urn = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(IdentifiableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+    def to_XML(self, prettyprint) -> dict:
+
+        attributes = ''
+
+        if self.id is not None:
+            attributes += f' id="{self.id}"'
+
+        if self.uri is not None:
+            attributes += f' uri="{self.uri}"'
+
+        if self.urn is not None:
+            attributes += f' urn="{self.urn}"'
+
+        outfile = {'Annotations': super(IdentifiableArtefact, self).to_XML(prettyprint), 'Attributes': attributes}
+
+        return outfile
 
 
 class NameableArtefact(IdentifiableArtefact):
+    """ NameableArtefact class.
+
+       Provides a Name and Description to all derived classes in addition to identification and annotations.
+
+    Attributes:
+        name: A multi-lingual name is provided by this role via the International String class
+        description: A multi-lingual description is provided by this role via the International String class.
+    """
+
     def __init__(self, id_: str = None, uri: str = None, urn=None, annotations: List[Annotation] = None,
                  name: InternationalString = None, description: InternationalString = None):
         super(NameableArtefact, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations)
@@ -362,6 +490,7 @@ class NameableArtefact(IdentifiableArtefact):
 
     @property
     def name(self):
+        """A multi-lingual name is provided by this role via the International String class """
         if self._name is None:
             return None
         elif isinstance(self._name, InternationalString):
@@ -378,6 +507,7 @@ class NameableArtefact(IdentifiableArtefact):
 
     @property
     def description(self):
+        """A multi-lingual description is provided by this role via the International String class."""
         if self._description is None:
             return None
         elif isinstance(self._description, InternationalString):
@@ -401,9 +531,11 @@ class NameableArtefact(IdentifiableArtefact):
         self._description = value
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(NameableArtefact, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(NameableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'Name':
             obj_ = LocalisedString.factory()
@@ -418,8 +550,29 @@ class NameableArtefact(IdentifiableArtefact):
                 self._description = InternationalString()
             self._description.addLocalisedString(obj_)
 
+    def to_XML(self, prettyprint) -> dict:
+        outfile = super(NameableArtefact, self).to_XML(prettyprint)
+
+        if self.name is not None:
+            outfile['Name'] = self._name.to_XML(f'{commonAbbr}:Name', prettyprint)
+
+        if self._description is not None:
+            outfile['Description'] = self._description.to_XML(f'{commonAbbr}:Description', prettyprint)
+
+        return outfile
+
 
 class VersionableArtefact(NameableArtefact):
+    """ VersionableArtefact class.
+
+           Provides versioning information for all derived objects
+
+        Attributes:
+            version: A version string following an agreed convention
+            validFrom: Date from which the version is valid
+            validTo: Date from which version is superseded
+    """
+
     def __init__(self, id_: str, uri: str = None, urn=None, annotations: List[Annotation] = None,
                  name: str = None, description: str = None,
                  version: str = "1.0", validFrom: datetime = None, validTo: datetime = None):
@@ -439,14 +592,17 @@ class VersionableArtefact(NameableArtefact):
 
     @property
     def version(self):
+        """A version string following an agreed convention"""
         return self._version
 
     @property
     def validFrom(self):
+        """Date from which the version is valid"""
         return self._validFrom
 
     @property
     def validTo(self):
+        """Date from which version is superseded"""
         return self._validTo
 
     @version.setter
@@ -455,25 +611,16 @@ class VersionableArtefact(NameableArtefact):
 
     @validFrom.setter
     def validFrom(self, value):
-        self._validFrom = dateSetter(value)
+        # self._validFrom = setDateFromString(value, "%Y-%m-%d")
+        self._validFrom = value
 
     @validTo.setter
     def validTo(self, value):
-        self._validTo = dateSetter(value)
-
-    def setValidFromString(self, date: str, format_: str = "%Y-%m-%d"):
-        self._validFrom = setDateFromString(date, format_)
-
-    def setValidToString(self, date: str, format_: str = "%Y-%m-%d"):
-        self._validTo = setDateFromString(date, format_)
-
-    def getValidFromString(self, format_: str = "%Y-%m-%d"):
-        return getDateString(self.validFrom, format_)
-
-    def getValidToString(self, format_: str = "%Y-%m-%d"):
-        return getDateString(self.validTo, format_)
+        # self._validTo = setDateFromString(value, "%Y-%m-%d")
+        self._validTo = value
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(VersionableArtefact, self).build_attributes(node, attrs, already_processed)
 
         value = find_attr_value_('version', node)
@@ -482,11 +629,50 @@ class VersionableArtefact(NameableArtefact):
             # TODO Validate version
             self.version = value
 
+        value = find_attr_value_('validFrom', node)
+        if value is not None and 'validFrom' not in already_processed:
+            already_processed.add('validFrom')
+            self.validFrom = value
+
+        value = find_attr_value_('validTo', node)
+        if value is not None and 'validTo' not in already_processed:
+            already_processed.add('validTo')
+            self.validTo = value
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(VersionableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+    def to_XML(self, prettyprint) -> dict:
+        outfile = super(VersionableArtefact, self).to_XML(prettyprint)
+
+        if self.version is not None:
+            outfile['Attributes'] += f' version="{self.version}"'
+
+        if self.validFrom is not None:
+            outfile['Attributes'] += f' validFrom="{self.validFrom}"'
+
+        if self.validTo is not None:
+            outfile['Attributes'] += f' validTo="{self.validTo}"'
+
+        return outfile
 
 
 class MaintainableArtefact(VersionableArtefact):
+    """ MaintainableArtefact class.
+
+       An abstract class to group together primary structural metadata artefacts
+       that are maintained by an Agency.
+
+        Attributes:
+            isFinal: Defines whether a maintained artefact is draft or final
+            isExternalReference: If set to “true” it indicates that the content of the object is held externally.
+            structureUrl: The URL of an SDMX-ML document containing the external object.
+
+            serviceUrl: The URL of an SDMX commonpliant web service from which the external object can be retrieved.
+            maintainer: Association to the Maintenance Agency responsible for maintaining the artefact.
+    """
+
     def __init__(self, id_: str = None, uri: str = None, urn=None, annotations: List[Annotation] = None,
                  name: str = None, description: str = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
@@ -518,7 +704,7 @@ class MaintainableArtefact(VersionableArtefact):
 
     @property
     def unique_id(self):
-
+        """Provides the unique id in the shape of AgencyID:ID(version)"""
         if isinstance(self.maintainer, str):
             return f'{self.maintainer}:{self.id}({self.version})'
         else:
@@ -526,22 +712,27 @@ class MaintainableArtefact(VersionableArtefact):
 
     @property
     def isFinal(self):
+        """Defines whether a maintained artefact is draft or final"""
         return self._isFinal
 
     @property
     def isExternalReference(self):
+        """If set to “true” it indicates that the content of the object is held externally."""
         return self._isExternalReference
 
     @property
     def serviceUrl(self):
+        """The URL of an SDMX commonpliant web service from which the external object can be retrieved."""
         return self._serviceUrl
 
     @property
     def structureUrl(self):
+        """The URL of an SDMX-ML document containing the external object."""
         return self._structureUrl
 
     @property
     def maintainer(self):
+        """Association to the Maintenance Agency responsible for maintaining the artefact."""
         return self._maintainer
 
     @isFinal.setter
@@ -566,6 +757,7 @@ class MaintainableArtefact(VersionableArtefact):
 
     @property
     def agencyID(self):
+        """Extracts the agencyID from the maintainer"""
         if self.maintainer is not None:
             if isinstance(self.maintainer, str):
                 return self.maintainer
@@ -575,7 +767,7 @@ class MaintainableArtefact(VersionableArtefact):
             return None
 
     def build_attributes(self, node, attrs, already_processed):
-
+        """Builds the attributes present in the XML element"""
         super(MaintainableArtefact, self).build_attributes(node, attrs, already_processed)
 
         value = find_attr_value_('agencyID', node)
@@ -596,4 +788,22 @@ class MaintainableArtefact(VersionableArtefact):
             self.isFinal = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(MaintainableArtefact, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+    def to_XML(self, prettyprint):
+        outfile = super(MaintainableArtefact, self).to_XML(prettyprint)
+
+        if self.isExternalReference is not None:
+            outfile['Attributes'] += f' isExternalReference="{str(self.isExternalReference).lower()}"'
+
+        if self.isFinal is not None:
+            outfile['Attributes'] += f' isFinal="{str(self.isFinal).lower()}"'
+
+        if self.maintainer is not None:
+            if isinstance(self.maintainer, str):
+                outfile['Attributes'] += f' agencyID="{self.maintainer}"'
+            else:
+                outfile['Attributes'] += f' agencyID="{self.maintainer.id}"'
+
+        return outfile

@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 from .base import MaintainableArtefact, InternationalString
 from .component import ComponentList, List, Component
 from .timePeriods import ObservationalTimePeriod
-from .utils import qName, genericSetter, ConstraintRoleType
+from .utils import genericSetter, ConstraintRoleType
 
 
 class SelectionValue:
@@ -246,9 +246,6 @@ class ReleaseCalendar:
 
 
 class Constraint(MaintainableArtefact):
-    _urnType = "datastructure"
-    _qName = qName("str", "Constraint")
-
     def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,

@@ -1026,7 +1026,7 @@ class WildCardValueType(str, Enum):
     _ = '%'  """Indicates a wild card value."""
 
 
-class MessageType(Enum):
+class MessageTypeEnum(Enum):
     GenericDataSet = 'GenericDataSet'
     StructureDataSet = 'StructureDataSet'
     GenericTimeSeriesDataSet = 'GenericTimeSeriesDataSet'

@@ -136,8 +136,8 @@ ClassToNode = {
     'ValuesType': "Attributes",
     'ObsType': 'Obs',
     'SeriesType': 'Series',
-    'SenderType': 'Sender',
-    'PartyType': 'Receiver',
+    'Sender': 'Sender',
+    'Party': 'Receiver',
     'StructureType': 'Structure',
     'GenericDataStructureType': 'Structure',
     'DataSetType': 'DataSet',
@@ -209,31 +209,48 @@ RenameMappings_ = {
     f"{StructureNS}MetadataStructureType": "MetadataStructureType2",
 }
 
+# Definitions for the abbreviations of the namespaces
+
+messageAbbr = 'mes'
+genericAbbr = 'gen'
+commonAbbr = 'com'
+structureAbbr = 'str'
+structureSpecificAbbr = 'ss'
+
 GenerateDSNamespaceDefs = {
-    'GenericDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                       'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                       'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
-                       'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                       'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                       'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                         'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                         'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
-                         'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                         'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                         'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'GenericTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                                 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                                 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
-                                 'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                                 'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                                 'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureTimeSeriesDataType': 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                                   'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                                   'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
-                                   'xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                                   'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                                   'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
+    'GenericDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                       f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                       f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
+                       f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                       f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                       f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'StructureDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                         f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                         f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
+                         f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                         f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                         f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'GenericTimeSeriesDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                                 f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                                 f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data'
+                                 f'/generic" '
+                                 f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                                 f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                                 f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    'StructureTimeSeriesDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                                   f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                                   f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data'
+                                   f'/generic" '
+                                   f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                                   f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                                   f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+
+    'Structure': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                 f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
+                 f'xmlns:{structureAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" '
+                 f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
+                 f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
+                 f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
 }
 
 ClassToPrefix = {
@@ -368,8 +385,8 @@ ClassToPrefix = {
     'StructureDataSetType': 'DataSet',
     'ObsType': 'Obs',
     'SeriesType': 'Series',
-    'SenderType': 'Sender',
-    'PartyType': 'Receiver',
+    'Sender': 'Sender',
+    'Party': 'Receiver',
     'DataSetType': 'message',
     'GenericDataStructureType': 'Structure',
     'ValuesType': "Attributes",

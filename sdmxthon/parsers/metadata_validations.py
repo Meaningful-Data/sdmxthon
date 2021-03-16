@@ -1,16 +1,6 @@
 import logging
 
-from .message_parsers import MetadataType
-from .read import readXML
-
 logger = logging.getLogger('logger')
-
-
-def getMetadata(pathToMetadata):
-    metadata = readXML(pathToMetadata)
-    if isinstance(metadata, MetadataType):
-        setReferences(metadata)
-    return metadata
 
 
 def setOnComponent(comp, obj, missing_rep):

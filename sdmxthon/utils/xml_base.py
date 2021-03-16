@@ -4,8 +4,6 @@ import sys
 
 from lxml import etree as etree_
 
-from .mappings import ClassToNode
-
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 CDATA_pattern_ = re_.compile(r'<!\[CDATA\[.*?]]>', re_.DOTALL)
 BaseStrType_ = str
@@ -34,79 +32,6 @@ def parse_xml(infile, parser=None, **kwargs):
         pass
     doc = etree_.parse(infile, parser=parser, **kwargs)
     return doc
-
-
-def showIndent(outfile, level, pretty_print=True):
-    if pretty_print:
-        for idx in range(level):
-            outfile.write('    ')
-
-
-def quote_xml(inStr):
-    """Escape markup chars, but do not modify CDATA sections."""
-    if not inStr:
-        return ''
-    s1 = (isinstance(inStr, BaseStrType_) and inStr or str(inStr))
-    s2 = ''
-    pos = 0
-    matchobjects = CDATA_pattern_.finditer(s1)
-    for mo in matchobjects:
-        s3 = s1[pos:mo.start()]
-        s2 += quote_xml_aux(s3)
-        s2 += s1[mo.start():mo.end()]
-        pos = mo.end()
-    s3 = s1[pos:]
-    s2 += quote_xml_aux(s3)
-    return s2
-
-
-def quote_xml_aux(inStr):
-    s1 = inStr.replace('&', '&amp;')
-    s1 = s1.replace('<', '&lt;')
-    s1 = s1.replace('>', '&gt;')
-    return s1
-
-
-def quote_attrib(inStr):
-    s1 = (isinstance(inStr, BaseStrType_) and inStr or '%s' % inStr)
-    s1 = s1.replace('&', '&amp;')
-    s1 = s1.replace('<', '&lt;')
-    s1 = s1.replace('>', '&gt;')
-    if '"' in s1:
-        if "'" in s1:
-            s1 = '"%s"' % s1.replace('"', "&quot;")
-        else:
-            s1 = f"'{s1}'"
-    else:
-        s1 = f'"{s1}"'
-    return s1
-
-
-def quote_python(inStr):
-    s1 = inStr
-    if s1.find("'") == -1:
-        if s1.find('\n') == -1:
-            return f"'{s1}'"
-        else:
-            return f"'''{s1}'''"
-    else:
-        if s1.find('"') != -1:
-            s1 = s1.replace('"', '\\"')
-        if s1.find('\n') == -1:
-            return f'"{s1}"'
-        else:
-            return f'"""{s1}"""'
-
-
-def get_all_text_(node):
-    if node.text is not None:
-        text = node.text
-    else:
-        text = ''
-    for child in node:
-        if child.tail is not None:
-            text += child.tail
-    return text
 
 
 def find_attr_value_(attr_name, node):
@@ -150,14 +75,6 @@ def cast(typ, value):
     if typ is None or value is None:
         return value
     return typ(value)
-
-
-def get_root_tag(node):
-    tag = Tag_pattern_.match(node.tag).groups()[-1]
-    root_class = ClassToNode.get(tag)
-    if root_class is None:
-        root_class = globals().get(tag)
-    return tag, root_class
 
 
 def get_required_ns_prefix_defs(rootNode):

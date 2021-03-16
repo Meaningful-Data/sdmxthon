@@ -1,3 +1,8 @@
+"""
+    DataSet file contains only the class DataSet, used for external assets
+    to perform any validation or conversion to different formats.
+"""
+
 import json
 from datetime import date, datetime
 
@@ -7,18 +12,32 @@ from pandas import DataFrame
 from ..model.component import DataStructureDefinition, DataFlowDefinition
 from ..parsers.data_validations import validate_data
 from ..parsers.write import writer
-from ..utils.enums import MessageType
+from ..utils.enums import MessageTypeEnum
 
 
 class DataSet:
+    """ DataSet class.
+
+           An organised collection of data.
+
+           Attributes:
+               structure: Associates the DataStructureDefinition to the DataSet
+               describedBy: Associates the DataFlowDefinition to the Dataset
+               dataset_attributes: Contains all the attributes from the DataSet class of the Information Model
+               attached_attributes: Contains all the attributes at a Dataset level
+               data: Pandas DataFrame that withholds all the data
+
+
+    """
+
     subclass = None
     superclass = None
 
-    def __init__(self, structure: DataStructureDefinition, dataflow: DataFlowDefinition = None,
+    def __init__(self, structure: DataStructureDefinition, describedBy: DataFlowDefinition = None,
                  dataset_attributes: dict = None, attached_attributes: dict = None, data=None):
 
         self._structure = structure
-        self._dataflow = dataflow
+        self._dataflow = describedBy
 
         self._dataset_attributes = {}
 
@@ -51,6 +70,7 @@ class DataSet:
 
     @property
     def describedBy(self):
+        """Associates the DataFlowDefinition to the Dataset"""
         return self._dataflow
 
     @describedBy.setter
@@ -62,6 +82,7 @@ class DataSet:
 
     @property
     def structure(self):
+        """Associates the DataStructureDefinition to the DataSet"""
         return self._structure
 
     @structure.setter
@@ -73,6 +94,7 @@ class DataSet:
 
     @property
     def datasetAttributes(self):
+        """Contains all the attributes from the DataSet class of the Information Model"""
         return self._dataset_attributes
 
     @datasetAttributes.setter
@@ -81,6 +103,7 @@ class DataSet:
 
     @property
     def attachedAttributes(self):
+        """Contains all the attributes at a Dataset level"""
         return self._attached_attributes
 
     @attachedAttributes.setter
@@ -89,6 +112,7 @@ class DataSet:
 
     @property
     def data(self):
+        """Pandas DataFrame that withholds all the data"""
         return self._data
 
     @data.setter
@@ -113,24 +137,36 @@ class DataSet:
 
     @property
     def dimAtObs(self):
+        """Extracts the dimensionAtObservation from the dataset_attributes"""
         return self.datasetAttributes.get('dimensionAtObservation')
 
     def readCSV(self, pathToCSV: str):
+        """Loads the data from a CSV"""
         self._data = pd.read_csv(pathToCSV)
 
     def readJSON(self, pathToJSON: str):
+        """Loads the data from a JSON with orientation as records.
+        Check the Pandas read_json documentation for more details"""
         self._data = pd.read_json(pathToJSON, orient='records')
 
     def readExcel(self, pathToExcel: str):
+        """Loads the data from a Excel file"""
         self._data = pd.read_excel(pathToExcel)
 
     def toCSV(self, pathToCSV: str = None):
+        """Parses the data to a CSV file with comma separation and no header or index"""
         return self.data.to_csv(pathToCSV, sep=',', encoding='utf-8', index=False, header=True)
 
     def toJSON(self, pathToJSON: str = None):
+        """Parses the data using the JSON Specification from the library documentation"""
+
         element = {'structureRef': {"code": self.structure.id, "version": self.structure.version,
-                                    "agencyID": self.structure.agencyID}, 'dataset_attributes': self.datasetAttributes,
-                   'attached_attributes': self.attachedAttributes}
+                                    "agencyID": self.structure.agencyID}}
+        if len(self.datasetAttributes) > 0:
+            element['dataset_attributes'] = self.datasetAttributes
+
+        if len(self.attachedAttributes) > 0:
+            element['attached_attributes'] = self.attachedAttributes
 
         result = self.data.to_json(orient="records")
         element['data'] = json.loads(result).copy()
@@ -141,15 +177,18 @@ class DataSet:
                 f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
     def toFeather(self, pathToFeather):
+        """Parses the data to an Apache Feather format"""
         self.data.to_feather(pathToFeather)
 
     def semanticValidation(self):
+        """Performs a Semantic Validation on the Data"""
         if isinstance(self.data, DataFrame):
             return validate_data(self.data, self.structure)
         else:
             raise ValueError('Data for dataset %s is not well formed' % self.structure.id)
 
     def setDimensionAtObservation(self, dimAtObs):
+        """Sets the dimensionAtObservation"""
         if dimAtObs in self.structure.dimensionCodes:
             self.datasetAttributes['dimensionAtObservation'] = dimAtObs
         elif dimAtObs == 'AllDimensions':
@@ -158,6 +197,7 @@ class DataSet:
             raise ValueError('%s is not a dimension of dataset %s' % (dimAtObs, self.structure.id))
 
     def check_DA_keys(self, attributes, code):
+        """Inputs default values to the dataset_attributes in case they are missing"""
         keys = ["reportingBegin", "reportingEnd", "dataExtractionDate", "validFrom", "validTo", "publicationYear",
                 "publicationPeriod", "action", "setId", "dimensionAtObservation"]
 
@@ -180,15 +220,16 @@ class DataSet:
 
         self._dataset_attributes = attributes.copy()
 
-    def toXML(self, dataset_type: MessageType = MessageType.GenericDataSet, outputPath='', id_='test',
+    def toXML(self, message_type: MessageTypeEnum = MessageTypeEnum.GenericDataSet, outputPath='', id_='test',
               test='true',
               prepared=datetime.now(),
               sender='Unknown',
               receiver='Not_supplied',
               prettyprint=True):
+        """Parses the data to SDMX-ML 2.1, specifying the Message_Type (StructureSpecific or Generic or Metadata)"""
         if outputPath == '':
-            return writer(path=outputPath, dType=dataset_type, dataset=self, id_=id_, test=test,
+            return writer(path=outputPath, dType=message_type, payload=self, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver)
         else:
-            writer(path=outputPath, dType=dataset_type, dataset=self, id_=id_, test=test,
+            writer(path=outputPath, dType=message_type, payload=self, id_=id_, test=test,
                    prepared=prepared, sender=sender, receiver=receiver, prettyprint=prettyprint)
