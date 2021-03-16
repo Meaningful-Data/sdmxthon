@@ -1,3 +1,7 @@
+"""
+    Data parser file contains only the DataParser class
+"""
+
 from .gdscollector import GenerateSuper
 from ..utils.xml_base import encode_str_2_3, Tag_pattern_
 
@@ -7,6 +11,11 @@ save_element_tree_node = False
 
 
 class DataParser(GenerateSuper):
+    """
+        Data Parser contains all abstract methods to parse the information of a SDMX-ML file, as well as the validations
+        methods.
+    """
+
     def __init__(self, gds_collector_=None, **kwargs_):
         super().__init__(gds_collector_)
         self._value = ''
@@ -23,13 +32,18 @@ class DataParser(GenerateSuper):
                                                  ['^([A-Za-z0-9_@$\\-]+(\\.[A-Za-z0-9_@$\\-]+)*)$']]
 
     def has_content_(self):
+        """Check if an element has any content for parsing purposes"""
         return False
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory methods are provided to generate the desired class in order to parse any XML Element
+        that is currently supported by the library"""
         pass
 
     def build(self, node, gds_collector_=None):
+        """Build method is used to parse a XML element, its attributes and its children"""
+
         self.gds_collector_ = gds_collector_
 
         if save_element_tree_node:
@@ -46,10 +60,11 @@ class DataParser(GenerateSuper):
         return self
 
     def build_attributes(self, node, attributes_, already_processed):
+        """Builds the attributes present in the XML element"""
         pass
 
     def validate_nested_NC_name_id_type(self, value):
-        # Validate dim_type NestedNCNameIDType, a restriction on NestedIDType.
+        """Validate dim_type NestedNCNameIDType, a restriction on NestedIDType."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -68,7 +83,7 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_id_type(self, value):
-        # Validate dim_type IDType, a restriction on NestedIDType.
+        """Validate dim_type IDType, a restriction on NestedIDType."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -87,7 +102,7 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_version_type(self, value):
-        # Validate dim_type VersionType, a restriction on xs:string.
+        """Validate dim_type VersionType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -105,8 +120,27 @@ class DataParser(GenerateSuper):
 
         return result
 
+    def validate_ActionType(self, value):
+        """Validate dim_type ActionType, a restriction on xs:NMTOKEN."""
+        result = True
+        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
+            if not isinstance(value, str):
+                lineno = self.gds_get_node_line_number_()
+                self.gds_collector_.add_message(f'Value "{value}" : {lineno} is not of '
+                                                f'the correct base simple dim_type (str)')
+                return False
+            value = value
+            enumerations = ['Append', 'Replace', 'Delete', 'Information']
+            if value not in enumerations:
+                lineno = self.gds_get_node_line_number_()
+                self.gds_collector_.add_message(
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration '
+                    f'restriction on ActionType')
+                result = False
+        return result
+
     def validate_nested_id_type(self, value):
-        # Validate dim_type NestedIDType, a restriction on xs:string.
+        """Validate dim_type NestedIDType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -125,7 +159,7 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_NC_name_id_type(self, value):
-        # Validate dim_type common:NCNameIDType, a restriction on IDType.
+        """Validate dim_type common:NCNameIDType, a restriction on IDType."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -144,7 +178,7 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_object_type_code_list_type(self, value):
-        # Validate dim_type ObjectTypeCodelistType, a restriction on xs:string.
+        """Validate dim_type ObjectTypeCodelistType, a restriction on xs:string."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
@@ -179,7 +213,7 @@ class DataParser(GenerateSuper):
         return result
 
     def validate_package_type_code_list_type(self, value):
-        # Validate dim_type PackageTypeCodelistType, a restriction on xs:string.
+        """Validate dim_type PackageTypeCodelistType, a restriction on xs:string."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
@@ -200,14 +234,6 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def export_attributes(self, outfile, level, already_processed, namespace_prefix_, name_):
-        pass
-
-    def validate(self):
-        pass
-
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        pass
-
     def build_children(self, child, node, node_name_, gds_collector_):
+        """Builds the childs of the XML element"""
         pass

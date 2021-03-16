@@ -1,16 +1,6 @@
 import logging
 
-from .message_parsers import MetadataType
-from .read import readXML
-
 logger = logging.getLogger('logger')
-
-
-def getMetadata(pathToMetadata):
-    metadata = readXML(pathToMetadata)
-    if isinstance(metadata, MetadataType):
-        setReferences(metadata)
-    return metadata
 
 
 def setOnComponent(comp, obj, missing_rep):
@@ -88,19 +78,19 @@ def checkRelationship(att, dsd, obj):
 
 def setReferences(obj):
     agencies = {}
-    if obj.structures.organisations is not None and obj.structures.organisations.agencySchemes is not None and len(
-            obj.structures.organisations.agencySchemes.items) > 0:
-        agencies = obj.structures.organisations.agencySchemes.items
-        if obj.structures.organisations.agencySchemes.maintainer in agencies.keys():
-            obj.structures.organisations.agencySchemes.maintainer = agencies[
-                obj.structures.organisations.agencySchemes.maintainer]
+    if obj.structures.organisations is not None and len(
+            obj.structures.organisations.items) > 0:
+        agencies = obj.structures.organisations.items
+        if obj.structures.organisations.maintainer in agencies.keys():
+            obj.structures.organisations.maintainer = agencies[
+                obj.structures.organisations.maintainer]
 
-    if len(obj.structures.codelists) > 0:
+    if obj.structures.codelists is not None:
         for cl in obj.structures.codelists.values():
             if cl.maintainer in agencies.keys():
                 cl.maintainer = agencies[cl.maintainer]
 
-    if len(obj.structures.codelists) > 0 and len(obj.structures.concepts) > 0:
+    if obj.structures.codelists is not None and obj.structures.concepts is not None:
         for sch in obj.structures.concepts.values():
             if sch.maintainer in agencies.keys():
                 sch.maintainer = agencies[sch.maintainer]
@@ -115,7 +105,7 @@ def setReferences(obj):
                                                   'Message': f'Codelist {cl} not found for '
                                                              f'Concept {sch.unique_id}-{con.id}'})
 
-        if len(obj.structures.dsds) > 0:
+        if obj.structures.dsds is not None:
             missing_rep = {'CS': [], 'CL': [], 'CON': []}
             keys_errors = []
             for key, dsd in obj.structures.dsds.items():
@@ -157,16 +147,29 @@ def setReferences(obj):
                                                   'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
                                                   'Message': f'DSD {dsd.unique_id} does not have a Primary Measure'})
 
+                if dsd.groupDimensionDescriptor is not None:
+                    for gr in dsd.groupDimensionDescriptor.components.keys():
+                        if gr in dsd.dimensionDescriptor.components.keys():
+                            dsd.groupDimensionDescriptor.components[gr] = dsd.dimensionDescriptor.components[gr]
+                        else:
+                            # TODO Error Dimension not found
+                            pass
+
             grouping_errors(missing_rep, obj, keys_errors)
         else:
             obj.structures.add_error({'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
                                       'ObjectType': f'DSD',
                                       'Message': f'Not found any DSD in this file'})
 
-    elif len(obj.structures.dsds) == 0:
+    elif obj.structures.dsds is None:
         obj.structures.add_error({'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
                                   'ObjectType': f'DSD',
                                   'Message': f'Not found any DSD in this file'})
+
+    if obj.structures.dsds is not None and obj.structures.dataflows is not None:
+        for key, flow in obj.structures.dataflows.items():
+            if flow.structure in obj.structures.dsds.keys():
+                flow.structure = obj.structures.dsds[flow.structure]
 
 
 def grouping_errors(missing_rep, obj, keys_errors):

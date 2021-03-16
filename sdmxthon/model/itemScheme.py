@@ -1,29 +1,44 @@
+"""
+    itemScheme file contains the classes for Item and ItemScheme and its derivatives
+"""
+
 import warnings
 from datetime import datetime
 
 from .base import NameableArtefact, MaintainableArtefact, InternationalString
 from .references import RelationshipRefType, RefBaseType
-from .utils import boolSetter, qName, stringSetter, genericSetter, FacetValueType, FacetType
+from .utils import stringSetter, genericSetter, FacetValueType, FacetType
+from ..model.header import Contact
 from ..parsers.data_parser import DataParser
+from ..utils.handlers import export_intern_data, add_indent
+from ..utils.mappings import *
 from ..utils.xml_base import find_attr_value_
 
 
 class Item(NameableArtefact):
-    _schemeType = None
-    _urnType = None
-    _qName = None
+    """ Item class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 isPartial: bool = None, scheme=None, parent=None, childs=None):
+           The Item is an item of content in an Item Scheme. This may be a node in
+           a taxonomy or ontology, a code in a code list etc.
+
+            Attributes:
+                scheme: Reference to the ItemScheme
+                parent: Reference to the parent Item
+                childs: Reference to the child Items
+    """
+
+    _schemeType = None
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+                 name: InternationalString = None, description: InternationalString = None, scheme=None, parent=None,
+                 childs=None):
 
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Item, self).__init__(id_=id_, uri=uri, annotations=annotations,
-                                   name=name, description=description)
-        self.isPartial = isPartial
+        super(Item, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations, name=name,
+                                   description=description)
 
         self.scheme = scheme
 
@@ -40,33 +55,24 @@ class Item(NameableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, Item):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial)
+            return super(Item, self).__eq__(other)
         else:
             return False
 
     @property
-    def isPartial(self):
-        return self._isPartial
-
-    @property
     def scheme(self):
+        """Reference to the ItemScheme"""
         return self._scheme
 
     @property
     def parent(self):
+        """Reference to the parent Item"""
         return self._parent
 
     @property
     def childs(self):
+        """Reference to the child Items"""
         return self._childs
-
-    @isPartial.setter
-    def isPartial(self, value):
-        self._isPartial = boolSetter(value)
 
     @scheme.setter
     def scheme(self, value):
@@ -92,12 +98,15 @@ class Item(NameableArtefact):
         self._parent = value
 
     def addChild(self, value):
+        """Adds a child to the Item"""
         self._childs.append(value)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(Item, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(Item, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
         if nodeName_ == 'Parent':
@@ -105,30 +114,52 @@ class Item(NameableArtefact):
             obj_.build(child_, gds_collector_=gds_collector_)
             self.parent = obj_.ref
 
+    def parse_XML(self, indent, head):
+        head = f'{structureAbbr}:' + head
+
+        prettyprint = indent != ''
+
+        data = super(Item, self).to_XML(prettyprint)
+        indent = add_indent(indent)
+        outfile = f'{indent}<{head} {data["Attributes"]}>'
+        outfile += export_intern_data(data, indent)
+        return outfile
+
 
 class ItemScheme(MaintainableArtefact):
-    _itemType = None
-    _urnType = None
-    _qName = None
+    """ ItemScheme class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+           The descriptive information for an arrangement or division of objects into groups based
+           on characteristics, which the objects have in common.
+
+            Attributes:
+                isPartial: Denotes whether the Item Scheme contains a sub set
+                of the full set of Items in the maintained scheme.
+
+                items: Association to the Items in the scheme
+    """
+
+    _itemType = None
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: str = None, description: str = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
-                 items=None):
-        if annotations is None:
-            annotations = []
-        super(ItemScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+                 items=None, isPartial: bool = None):
+
+        super(ItemScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                          name=name, description=description,
                                          version=version, validFrom=validFrom, validTo=validTo,
                                          isFinal=isFinal, isExternalReference=isExternalReference,
                                          serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer)
+
+        self._isPartial = isPartial
+
+        self._items = {}
         if items is not None:
-            self._items = {}
             urn_list = []
             for i in items:
-                # self.append(i)
                 if i.urn not in urn_list:
                     urn_list.append(i.urn)
                     self.append(i)
@@ -137,31 +168,33 @@ class ItemScheme(MaintainableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, ItemScheme):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._items == other._items)
+            return super(ItemScheme, self).__eq__(other) and self._items == other._items
         else:
             return False
 
     @property
     def items(self):
+        """Association to the Items in the scheme"""
         return self._items
 
+    @property
+    def isPartial(self):
+        """Denotes whether the Item Scheme contains a sub set of the 
+        full set of Items in the maintained scheme."""
+        return self._isPartial
+
+    @isPartial.setter
+    def isPartial(self, value):
+        self._isPartial = value
+
     def append(self, value):
+
+        """Adds an Item to the ItemScheme"""
+
         if isinstance(value, globals()[self._itemType]):
             if value.id is None:
                 warnings.warn("Item not added because it did not have id_")
-            if value.id not in self._items:
+            if value.id not in self._items.keys():
                 self._items[value.id] = value
                 value.scheme = self
                 if value.parent is not None and value.parent in self._items.keys():
@@ -171,102 +204,190 @@ class ItemScheme(MaintainableArtefact):
             raise TypeError(f"The object has to be of the type {self._itemType}")
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(ItemScheme, self).build_attributes(node, attrs, already_processed)
 
+        value = find_attr_value_('isPartial', node)
+        if value is not None and 'isPartial' not in already_processed:
+            already_processed.add('isPartial')
+            value = self.gds_parse_boolean(value)
+            self.isPartial = value
+
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(ItemScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+    def parse_XML(self, indent, label):
+        prettyprint = indent != ''
+
+        indent = add_indent(indent)
+
+        data = super(ItemScheme, self).to_XML(prettyprint)
+
+        if self.isPartial is not None:
+            data['Attributes'] += f' isPartial="{str(self.isPartial).lower()}"'
+
+        outfile = ''
+
+        attributes = data.get('Attributes') or None
+
+        if attributes is not None:
+            outfile += f'{indent}<{label}{attributes}>'
+        else:
+            outfile += f'{indent}<{label}>'
+
+        outfile += export_intern_data(data, indent)
+
+        for i in self.items.values():
+            outfile += i.parse_XML(indent, self._itemType)
+
+        outfile += f'{indent}</{label}>'
+
+        return outfile
 
 
 class Code(Item):
-    _schemeType = "Codelist"
-    _urnType = "codelist"
-    _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Code"
+    """ Code class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+           A language independent set of letters, numbers or symbols that represent
+           a concept whose meaning is described in a natural language
+    """
+
+    _schemeType = "Codelist"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
-                 isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs=None):
+                 scheme: ItemScheme = None, parent: Item = None, childs=None):
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Code, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Code, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                    name=name, description=description,
-                                   isPartial=isPartial, scheme=scheme, parent=parent, childs=childs)
+                                   scheme=scheme, parent=parent, childs=childs)
 
     def __eq__(self, other):
         if isinstance(other, Code):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial)
+            return super(Code, self).__eq__(other)
         else:
             return False
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Code"""
         return Code(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(Code, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(Code, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+    def parse_XML(self, indent, head):
+        outfile = super(Code, self).parse_XML(indent, head)
+
+        indent = add_indent(indent)
+        outfile += f'{indent}</{structureAbbr}:{head}>'
+
+        return outfile
 
 
 class Agency(Item):
-    _schemeType = "AgencyScheme"
-    _urnType = "base"
-    _qName = qName("str", "Agency")
+    """ Agency class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+           Provides identity to all derived classes. It also provides annotations to derived classes
+           because it is a subclass of AnnotableArtefact.
+
+            Attributes:
+                contacts: list of associations to the Contact Information
+
+    """
+    _schemeType = "AgencyScheme"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
-                 isPartial: bool = None, scheme: ItemScheme = None):
+                 scheme: ItemScheme = None, contacts=None):
         if annotations is None:
             annotations = []
-        super(Agency, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Agency, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                      name=name, description=description,
-                                     isPartial=isPartial, scheme=scheme)
+                                     scheme=scheme)
+
+        self._contacts = contacts
 
     def __eq__(self, other):
         if isinstance(other, Agency):
-            return (self._id == other._id and
-                    self._uri == other._uri and
-                    self._name == other._name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial)
+            return super(Agency, self).__eq__(other) and self._contacts == other._contacts
         else:
             return False
 
+    @property
+    def contacts(self):
+        """list of associations to the Contact Information"""
+        return self._contacts
+
+    @contacts.setter
+    def contacts(self, value):
+        self._contacts = value
+
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Agency"""
         return Agency(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(Agency, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        # TODO Parse Contact
+        """Builds the childs of the XML element"""
         super(Agency, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+        if nodeName_ == 'Contact':
+            obj_ = Contact.factory()
+            obj_.build(child_, gds_collector_=gds_collector_)
+            if self._contacts is None:
+                self._contacts = []
+            self._contacts.append(obj_)
+
+    def parse_XML(self, indent, head):
+        outfile = super(Agency, self).parse_XML(indent, head)
+
+        indent = add_indent(indent)
+
+        if self.contacts is not None:
+            indent_child = add_indent(indent)
+            for e in self.contacts:
+                outfile += f'{indent_child}<{structureAbbr}:Contact>'
+                outfile += e.to_XML(indent_child)
+                outfile += f'{indent_child}</{structureAbbr}:Contact>'
+
+        outfile += f'{indent}</{structureAbbr}:{head}>'
+
+        return outfile
 
 
 class ConceptScheme(ItemScheme):
-    _itemType = "Concept"
-    _urnType = "conceptscheme"
-    _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}ConceptScheme"
+    """ ConceptScheme class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+           The descriptive information for an arrangement or division of concepts into groups based
+           on characteristics, which the objects have in common.
+    """
+
+    _itemType = "Concept"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
-        if items is None:
-            items = []
         if annotations is None:
             annotations = []
         self._cl_references = {}
-        super(ConceptScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(ConceptScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                             name=name, description=description,
                                             version=version, validFrom=validFrom, validTo=validTo,
                                             isFinal=isFinal, isExternalReference=isExternalReference,
@@ -279,19 +400,7 @@ class ConceptScheme(ItemScheme):
         if isinstance(other, ConceptScheme):
             if not self._checked:
                 self._checked = True
-                return (self._id == other._id and
-                        self.uri == other.uri and
-                        self.name == other.name and
-                        self._description == other._description and
-                        self._version == other._version and
-                        self._validFrom == other._validFrom and
-                        self._validTo == other._validTo and
-                        self._isFinal == other._isFinal and
-                        self._isExternalReference == other._isExternalReference and
-                        self._serviceUrl == other._serviceUrl and
-                        self._structureUrl == other._structureUrl and
-                        self._maintainer == other._maintainer and
-                        self._items == other._items)
+                return super(ConceptScheme, self).__eq__(other)
             else:
                 return True
         else:
@@ -299,16 +408,20 @@ class ConceptScheme(ItemScheme):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ConceptScheme"""
         return ConceptScheme(*args_, **kwargs_)
 
     @property
     def cl_references(self):
+        """For parsing purposes, makes a dict of all the Codelist references"""
         return self._cl_references
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(ConceptScheme, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(ConceptScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'Concept':
             obj_ = Concept.factory()
@@ -319,21 +432,19 @@ class ConceptScheme(ItemScheme):
 
 
 class Codelist(ItemScheme):
-    _itemType = "Code"
-    _urnType = "codelist"
-    _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Codelist"
+    """ Codelist class.
+           A list from which some statistical concepts (coded concepts) take their values.
+    """
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    _itemType = "Code"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: str = None, description: str = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
-        if items is None:
-            items = []
-        if annotations is None:
-            annotations = []
-        super(Codelist, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Codelist, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                        name=name, description=description,
                                        version=version, validFrom=validFrom, validTo=validTo,
                                        isFinal=isFinal, isExternalReference=isExternalReference,
@@ -345,19 +456,7 @@ class Codelist(ItemScheme):
         if isinstance(other, Codelist):
             if not self._checked:
                 self._checked = True
-                return (self.id == other.id and
-                        self.uri == other.uri and
-                        self.name == other.name and
-                        self.description == other.description and
-                        self.version == other.version and
-                        self.validFrom == other.validFrom and
-                        self.validTo == other.validTo and
-                        self.isFinal == other.isFinal and
-                        self.isExternalReference == other.isExternalReference and
-                        self.serviceUrl == other._serviceUrl and
-                        self.structureUrl == other.structureUrl and
-                        self.maintainer == other.maintainer and
-                        self.items == other._items)
+                return super(Codelist, self).__eq__(other)
             else:
                 return True
         else:
@@ -365,12 +464,15 @@ class Codelist(ItemScheme):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Codelist"""
         return Codelist(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(Codelist, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(Codelist, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
         if nodeName_ == 'Code':
@@ -382,17 +484,14 @@ class Codelist(ItemScheme):
 class OrganisationScheme(ItemScheme):
     """Abstract class. Used for structure messages"""
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
-        if annotations is None:
-            annotations = []
-        if items is None:
-            items = []
-        super(OrganisationScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+
+        super(OrganisationScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                                  name=name, description=description,
                                                  version=version, validFrom=validFrom, validTo=validTo,
                                                  isFinal=isFinal, isExternalReference=isExternalReference,
@@ -402,39 +501,27 @@ class OrganisationScheme(ItemScheme):
 
     def __eq__(self, other):
         if isinstance(other, OrganisationScheme):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._items == other._items)
+            return super(OrganisationScheme, self).__eq__(other)
         else:
             return False
 
 
 class AgencyScheme(OrganisationScheme):
-    _itemType = "Agency"
-    _urnType = "base"
-    _qName = qName("str", "AgencyScheme")
+    """ AgencyScheme class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+           A maintained collection of Maintenance Agencies.
+    """
+
+    _itemType = "Agency"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
                  version: str = None, validFrom: datetime = None, validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
-        if items is None:
-            items = []
-        if annotations is None:
-            annotations = []
-        super(AgencyScheme, self).__init__(id_=id_, uri=uri, annotations=annotations,
+
+        super(AgencyScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                            name=name, description=description,
                                            version=version, validFrom=validFrom, validTo=validTo,
                                            isFinal=isFinal, isExternalReference=isExternalReference,
@@ -443,38 +530,21 @@ class AgencyScheme(OrganisationScheme):
 
     def __eq__(self, other):
         if isinstance(other, AgencyScheme):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._version == other._version and
-                    self._validFrom == other._validFrom and
-                    self._validTo == other._validTo and
-                    self._isFinal == other._isFinal and
-                    self._isExternalReference == other._isExternalReference and
-                    self._serviceUrl == other._serviceUrl and
-                    self._structureUrl == other._structureUrl and
-                    self._maintainer == other._maintainer and
-                    self._items == other._items)
+            return super(AgencyScheme, self).__eq__(other)
         else:
             return False
 
-    @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, value):
-        self._id = stringSetter(value, '[A-Za-z][A-Za-z0-9_\\-]*(\\.[A-Za-z][A-Za-z0-9_\\-]*)*')
-
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of AgencyScheme"""
         return AgencyScheme(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(AgencyScheme, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(AgencyScheme, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'Agency':
             obj_ = Agency.factory()
@@ -483,38 +553,41 @@ class AgencyScheme(OrganisationScheme):
 
 
 class Concept(Item):
-    _schemeType = "ConceptScheme"
-    _urnType = "conceptscheme"
-    _qName = "{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Concept"
+    """ Concept class.
 
-    def __init__(self, id_: str = None, uri: str = None, annotations=None,
+           A concept is a unit of knowledge created by a unique combination of characteristics.
+
+           Attributes:
+               coreRepresentation: associates a Representation
+
+    """
+
+    _schemeType = "ConceptScheme"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
                  name: InternationalString = None, description: InternationalString = None,
-                 isPartial: bool = None, scheme: ItemScheme = None, parent: Item = None, childs=None,
+                 scheme: ItemScheme = None, parent: Item = None, childs=None,
                  coreRepresentation=None):
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Concept, self).__init__(id_=id_, uri=uri, annotations=annotations,
+        super(Concept, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                       name=name, description=description,
-                                      isPartial=isPartial, scheme=scheme, parent=parent, childs=childs)
+                                      scheme=scheme, parent=parent, childs=childs)
 
         self.coreRepresentation = coreRepresentation
         self._ref = None  # Attribute for storing the references to codelists.
 
     def __eq__(self, other):
         if isinstance(other, Concept):
-            return (self._id == other._id and
-                    self.uri == other.uri and
-                    self.name == other.name and
-                    self._description == other._description and
-                    self._isPartial == other._isPartial and
-                    self._coreRepresentation == other._coreRepresentation)
+            return super(Concept, self).__eq__(other) and self._coreRepresentation == other._coreRepresentation
         else:
             return False
 
     @property
     def coreRepresentation(self):
+        """Associates a Representation"""
         return self._coreRepresentation
 
     @coreRepresentation.setter
@@ -524,20 +597,56 @@ class Concept(Item):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Concept"""
         return Concept(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(Concept, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+        """Builds the childs of the XML element"""
         super(Concept, self).build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
         if nodeName_ == 'CoreRepresentation':
             obj_ = Representation.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.coreRepresentation = obj_
 
+    def parse_XML(self, indent, head):
+        outfile = super(Concept, self).parse_XML(indent, head)
+
+        indent = add_indent(indent)
+        indent_child = add_indent(indent)
+        if self.coreRepresentation is not None:
+            indent_enum = add_indent(indent_child)
+            indent_ref = add_indent(indent_enum)
+            outfile += f'{indent_child}<{structureAbbr}:CoreRepresentation>'
+            if self.coreRepresentation.codelist is not None:
+                outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
+                outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.coreRepresentation.codelist.agencyID}" ' \
+                           f'id="{self.coreRepresentation.codelist.id}" ' \
+                           f'version="{self.coreRepresentation.codelist.version}" class="Codelist"/>'
+                outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
+
+            outfile += f'{indent_child}</{structureAbbr}:CoreRepresentation>'
+
+        outfile += f'{indent}</{structureAbbr}:{head}>'
+
+        return outfile
+
 
 class Facet:
+    """ Facet class.
+           Defines the format for the content of the Component when reported in a data
+           or metadata set.
+
+           Attributes:
+               facetType: A specific content type which is constrained by the FacetType enumeration
+               facetValueType: The format of the value of a Component when reported in a data or metadata set.
+            This is constrained by the FacetValueType enumeration.
+               facetValue: The value of the Facet
+    """
+
     def __init__(self, facetType: str = None, facetValue: str = None, facetValueType: str = None):
         self.facetType = facetType
         self.facetValue = facetValue
@@ -545,14 +654,18 @@ class Facet:
 
     @property
     def facetType(self):
+        """A specific content type which is constrained by the FacetType enumeration"""
         return self._facetType
 
     @property
     def facetValue(self):
+        """The value of the Facet"""
         return self._facetValue
 
     @property
     def facetValueType(self):
+        """The format of the value of a Component when reported in a data or metadata set.
+            This is constrained by the FacetValueType enumeration."""
         return self._facetValueType
 
     @facetType.setter
@@ -581,16 +694,20 @@ class Facet:
 
 
 class EnumerationType(DataParser):
+    """Parser of the XML element Enumeration"""
+
     def __init__(self, codelist=None, gdscollector_=None, **kwargs_):
         super().__init__(gds_collector_=gdscollector_, **kwargs_)
         self._codelist = codelist
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of EnumerationType"""
         return EnumerationType(*args_, **kwargs_)
 
     @property
     def codelist(self):
+        """Reference to the Codelist by its unique ID"""
         return self._codelist
 
     @codelist.setter
@@ -598,6 +715,7 @@ class EnumerationType(DataParser):
         self._codelist = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefBaseType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -606,6 +724,8 @@ class EnumerationType(DataParser):
 
 
 class FormatType(DataParser):
+    """Parser of the EnumerationFormat or TextFormat XML element"""
+
     def __init__(self, facets=None, type_=None, gdscollector_=None, **kwargs_):
         super().__init__(gds_collector_=gdscollector_, **kwargs_)
 
@@ -618,10 +738,12 @@ class FormatType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of FormatType"""
         return FormatType(**kwargs_)
 
     @property
     def type_(self):
+        """Specifies the basic type of the component (String, BigInteger...)"""
         return self._type
 
     @type_.setter
@@ -630,6 +752,7 @@ class FormatType(DataParser):
 
     @property
     def facets(self):
+        """List of Facet"""
         return self._facets
 
     @facets.setter
@@ -642,6 +765,7 @@ class FormatType(DataParser):
             raise TypeError('Value must be a list')
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('isSequence', node)
         if value is not None and 'isSequence' not in already_processed:
             already_processed.add('isSequence')
@@ -724,42 +848,54 @@ class FormatType(DataParser):
 
 
 class Representation(DataParser):
+    """ Representation class.
+
+           The allowable value or format for Component or Concept
+
+           Attributes:
+               facets: list of Facets found
+               codelist: reference to the codelist
+               conceptScheme: reference to the ConceptScheme (only in MeasureDimension)
+               type: Specifies the basic type of the component (String, BigInteger...)
+
+    """
+
     def __init__(self, facets=None, codelist=None, conceptScheme=None, gdscollector_=None,
                  **kwargs_):
         super().__init__(gds_collector_=gdscollector_, **kwargs_)
-        self._components = []
-        if facets is None:
-            facets = []
-        for f in facets:
-            self.addFacet(f)
         self.codelist = codelist
         self.conceptScheme = conceptScheme
         self._type = None
+        self._facets = []
+        if facets is not None:
+            for f in facets:
+                self.addFacet(f)
 
     def __eq__(self, other):
         if isinstance(other, Representation):
-            return (self._codelist == other._codelist and
-                    self._conceptScheme == other._conceptScheme)
+            return self._codelist == other._codelist and self._conceptScheme == other._conceptScheme \
+                   and self._type == other._type
         else:
             return False
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of Representation"""
         return Representation(*args_, **kwargs_)
 
     @property
     def facets(self):
-        facets = []
-        for e in self._components:
-            facets.append(e)
-        return facets
+        """list of Facets found"""
+        return self._facets
 
     @property
     def codelist(self):
+        """Reference to the codelist"""
         return self._codelist
 
     @property
     def conceptScheme(self):
+        """Reference to the ConceptScheme (only in MeasureDimension)"""
         return self._conceptScheme
 
     @codelist.setter
@@ -770,14 +906,21 @@ class Representation(DataParser):
     def conceptScheme(self, value):
         self._conceptScheme = value
 
+    @facets.setter
+    def facets(self, value):
+        self._facets = value
+
     def addFacet(self, value):
-        self._components.append(value)
+        """Add a facet to the list"""
+        self._facets.append(value)
 
     @property
     def type_(self):
+        """Specifies the basic type of the component (String, BigInteger...)"""
         return self._type
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Enumeration':
             obj_ = EnumerationType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -786,4 +929,4 @@ class Representation(DataParser):
             obj_ = FormatType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._type = obj_.type_
-            self._components = obj_.facets
+            self._facets = obj_.facets

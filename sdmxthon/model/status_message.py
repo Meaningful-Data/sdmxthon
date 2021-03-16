@@ -1,3 +1,7 @@
+"""
+    Status messages file withholds some extra MessageTypes for specific purposes
+"""
+
 from .base import LocalisedString, InternationalString
 from ..parsers.data_parser import DataParser
 from ..utils.xml_base import find_attr_value_
@@ -23,10 +27,12 @@ class StatusMessageType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of StatusMessageType"""
         return StatusMessageType(*args_, **kwargs_)
 
     @property
     def text(self):
+        """Text of the Message"""
         if self._text is None:
             return None
         elif isinstance(self._text, InternationalString):
@@ -47,6 +53,7 @@ class StatusMessageType(DataParser):
 
     @property
     def code(self):
+        """Status code of the Message"""
         return self._code
 
     @code.setter
@@ -54,18 +61,21 @@ class StatusMessageType(DataParser):
         self._code = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if self._text:
             return True
         else:
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('Code', node)
         if value is not None and 'Code' not in already_processed:
             already_processed.add('Code')
             self._code = value
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Text':
             obj_ = LocalisedString.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -90,5 +100,6 @@ class CodedStatusMessageType(StatusMessageType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of CodedStatusMessageType"""
         return CodedStatusMessageType(*args_, **kwargs_)
 # end class CodedStatusMessageType

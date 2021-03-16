@@ -5,7 +5,7 @@ setup(
     packages=['SDMXThon'],
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py', 'utils/*.py']),
-    version='0.8.8',
+    version='0.9',
     license='MIT',
     description='Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation',
     author='Javier Hernandez/Ruben Cardoso',

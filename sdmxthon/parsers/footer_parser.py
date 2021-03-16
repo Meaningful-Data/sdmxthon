@@ -1,3 +1,7 @@
+"""
+    Footer_parser file define the classes for parsing the footer of a Message
+"""
+
 from .data_parser import DataParser, Validate_simpletypes_
 from ..model.status_message import CodedStatusMessageType
 from ..utils.xml_base import find_attr_value_
@@ -28,10 +32,12 @@ class FooterType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of FooterType"""
         return FooterType(*args_, **kwargs_)
 
     @property
     def message(self):
+        """Message at the footer"""
         return self._message
 
     @message.setter
@@ -43,16 +49,8 @@ class FooterType(DataParser):
         else:
             raise TypeError('Message must be a list')
 
-    def add_Message(self, value):
-        self._message.append(value)
-
-    def insert_Message_at(self, index, value):
-        self._message.insert(index, value)
-
-    def replace_Message_at(self, index, value):
-        self._message[index] = value
-
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._message
         ):
@@ -61,11 +59,11 @@ class FooterType(DataParser):
             return False
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Message':
             obj_ = FooterMessageType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
             self._message.append(obj_)
-            obj_.original_tagname_ = 'Message'
 
 
 # end class FooterType
@@ -84,18 +82,22 @@ class FooterMessageType(CodedStatusMessageType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+
+        """Factory Method of FooterMessageType"""
         return FooterMessageType(*args_, **kwargs_)
 
     @property
     def severity(self):
+        """Severity code (Error, Information or Warning)"""
         return self._severity
 
     @severity.setter
     def severity(self, value):
-        self._severity = value
+        if self.validate_SeverityCodeType(value):
+            self._severity = value
 
     def validate_SeverityCodeType(self, value):
-        # Validate dim_type SeverityCodeType, a restriction on xs:string.
+        """Validate dim_type SeverityCodeType, a restriction on xs:string."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
@@ -112,10 +114,8 @@ class FooterMessageType(CodedStatusMessageType):
                 result = False
         return result
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        pass
-
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('severity', node)
         if value is not None and 'severity' not in already_processed:
             already_processed.add('severity')

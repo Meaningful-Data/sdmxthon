@@ -1,7 +1,11 @@
+"""
+        Data_generic contains all parsers for the data in a Generic Message
+"""
+
 from .data_parser import DataParser, Validate_simpletypes_
 from .gdscollector import datetime_
 from ..model.base import AnnotableArtefact
-from ..model.references import DataProviderReferenceType
+from ..model.references import ReferenceType
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
@@ -10,9 +14,7 @@ class BaseValueType(DataParser):
     data structure definition component and a value for that component. In
     this structure the reference to the component is optional to allow for
     usages where the actual reference might be provided in another
-    context.The id_ attribute contains the identifier for the component for
-    which a value is being provided.The value attribute contains the
-    provided component value."""
+    context."""
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = None
@@ -25,10 +27,13 @@ class BaseValueType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of BaseValueType"""
         return BaseValueType(*args_, **kwargs_)
 
     @property
     def id_(self):
+        """The id_ attribute contains the identifier for the component for
+    which a value is being provided."""
         return self._id
 
     @id_.setter
@@ -37,6 +42,8 @@ class BaseValueType(DataParser):
 
     @property
     def value_(self):
+        """The value attribute contains the
+    provided component value"""
         return self._value
 
     @value_.setter
@@ -44,6 +51,7 @@ class BaseValueType(DataParser):
         self._value = value
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
@@ -78,19 +86,12 @@ class ObsValueType(BaseValueType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ObsValueType"""
         return ObsValueType(*args_, **kwargs_)
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
-
-        value = find_attr_value_('value', node)
-        if value is not None and 'value' not in already_processed:
-            already_processed.add('value')
-            self._value = value
+        """Builds the attributes present in the XML element"""
+        super(ObsValueType, self).build_attributes(node, attrs, already_processed)
 
 
 # end class ObsValueType
@@ -106,14 +107,14 @@ class ComponentValueType(BaseValueType):
 
     def __init__(self, id_=None, value=None, gds_collector_=None):
         super(ComponentValueType, self).__init__(id_, value, gds_collector_)
-        self._name = 'ComponentValueType'
-        self._namespace_prefix = 'generic'
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ComponentValueType"""
         return ComponentValueType(*args_, **kwargs_)
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 super(ComponentValueType, self).has_content_()
         ):
@@ -122,15 +123,7 @@ class ComponentValueType(BaseValueType):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._id = value
-            self.validate_NC_name_id_type(self._id)  # validate dim_type NCNameIDType
-        value = find_attr_value_('value', node)
-        if value is not None and 'value' not in already_processed:
-            already_processed.add('value')
-            self._value = value
+        """Builds the attributes present in the XML element"""
         super(ComponentValueType, self).build_attributes(node, attrs, already_processed)
 
 
@@ -155,10 +148,12 @@ class ValuesType(DataParser):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ValuesType"""
         return ValuesType(*args_, **kwargs_)
 
     @property
     def value_(self):
+        """Getter for the Value parsed"""
         return self._value
 
     @value_.setter
@@ -171,21 +166,18 @@ class ValuesType(DataParser):
             raise TypeError('Value must be a dict')
 
     def has_content_(self):
+        """Check if it has any content"""
         if self._value is not None:
             return True
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        for Value_ in self._value:
-            Value_.export_attributes_as_dict(parent_dict, )
-
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Value':
             obj_ = ComponentValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value[obj_.id_] = obj_.value_
-            obj_.original_tag_name_ = 'Value'
 
 
 # end class ValuesType
@@ -200,9 +192,7 @@ class GroupType(AnnotableArtefact):
     identification of group is provided. It is expected that a system which
     is processing this will relate that identifier to the key sets defined
     in the constraint and apply the values provided for the attributes
-    appropriately.The dim_type attribute holds the identifier assigned to the
-    group in the data structure definition for which attribute values are
-    being provided."""
+    appropriately."""
 
     def __init__(self, Annotations=None, type_=None, GroupKey=None, Attributes=None, gds_collector_=None):
         super(GroupType, self).__init__(Annotations, gds_collector_)
@@ -212,10 +202,12 @@ class GroupType(AnnotableArtefact):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of GroupType"""
         return GroupType(*args_, **kwargs_)
 
     @property
     def group_key(self):
+        """Key of the Group"""
         return self._group_key
 
     @group_key.setter
@@ -224,6 +216,7 @@ class GroupType(AnnotableArtefact):
 
     @property
     def attributes(self):
+        """Attributes of the Group"""
         return self._attributes
 
     @attributes.setter
@@ -232,6 +225,9 @@ class GroupType(AnnotableArtefact):
 
     @property
     def type(self):
+        """The dim_type attribute holds the identifier assigned to the
+    group in the data structure definition for which attribute values are
+    being provided."""
         return self._type_
 
     @type.setter
@@ -239,6 +235,7 @@ class GroupType(AnnotableArtefact):
         self._type_ = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._group_key is not None or
                 self._attributes is not None or
@@ -249,25 +246,24 @@ class GroupType(AnnotableArtefact):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('dim_type', node)
         if value is not None and 'dim_type' not in already_processed:
             already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate dim_type IDType
         super(GroupType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'GroupKey':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group_key = obj_
-            obj_.original_tagname_ = 'GroupKey'
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._attributes = obj_
-            obj_.original_tagname_ = 'Attributes'
-        super(GroupType, self).build_children(child_, node, nodeName_, True)
+        super(GroupType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class GroupType
@@ -297,10 +293,17 @@ class SeriesType(AnnotableArtefact):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of SeriesType"""
         return SeriesType(*args_, **kwargs_)
 
     @property
+    def obs(self):
+        """Observations in a Series"""
+        return self._obs
+
+    @property
     def value_(self):
+        """List of values in a Series. Contains SeriesKey and Attributes"""
         return self._value
 
     @value_.setter
@@ -308,6 +311,7 @@ class SeriesType(AnnotableArtefact):
         self._value = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._seriesKey is not None or
                 self._attributes is not None or
@@ -319,9 +323,11 @@ class SeriesType(AnnotableArtefact):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(SeriesType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'SeriesKey':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -340,7 +346,8 @@ class SeriesType(AnnotableArtefact):
             obj_ = ObsType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._value.update(obj_.value_)
-        super(SeriesType, self).build_children(child_, node, nodeName_, True)
+            self._obs.append(self._value.copy())
+        super(SeriesType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class SeriesType
@@ -362,10 +369,12 @@ class ObsOnlyType(AnnotableArtefact):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ObsOnlyType"""
         return ObsOnlyType(*args_, **kwargs_)
 
     @property
     def value_(self):
+        """List of all values in an Observation"""
         return self._value
 
     @value_.setter
@@ -373,6 +382,7 @@ class ObsOnlyType(AnnotableArtefact):
         self._value = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._obsKey is not None or
                 self._obsValue is not None or
@@ -383,20 +393,12 @@ class ObsOnlyType(AnnotableArtefact):
         else:
             return False
 
-    def export_attributes_as_dict(self, parent_dict: dict, data: list, valid_fields: list):
-        if self._obsKey is not None and self._obsKey.has_content_():
-            self._obsKey.export_attributes_as_dict(parent_dict, )
-
-        if self._obsValue is not None:
-            self._obsValue.export_attributes_as_dict(parent_dict, )
-
-        if self._attributes is not None and self._attributes.has_content_():
-            self._attributes.export_attributes_as_dict(parent_dict, )
-
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(ObsOnlyType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'ObsKey':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -408,7 +410,10 @@ class ObsOnlyType(AnnotableArtefact):
         elif nodeName_ == 'ObsValue':
             obj_ = ObsValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._value['OBS_VALUE'] = obj_.value_
+            if obj_.value_ is None:
+                self._value['OBS_VALUE'] = ""
+            else:
+                self._value['OBS_VALUE'] = obj_.value_
 
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
@@ -418,7 +423,7 @@ class ObsOnlyType(AnnotableArtefact):
             else:
                 self._value.update(obj_.value_)
 
-        super(ObsOnlyType, self).build_children(child_, node, nodeName_, True)
+        super(ObsOnlyType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class ObsOnlyType
@@ -435,23 +440,18 @@ class ObsType(AnnotableArtefact):
     def __init__(self, Annotations=None, ObsDimension=None, ObsValue=None, Attributes=None, gds_collector_=None):
         super(ObsType, self).__init__(Annotations, gds_collector_)
         self._obsDimension = ObsDimension
-        self._obsDimension_nsprefix_ = None
         self._obsValue = ObsValue
-        self._obsValue_nsprefix_ = None
         self._attributes = Attributes
-        self._attributes_nsprefix_ = None
-        self._name = 'ObsType'
-        self._namespacedef = 'xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"'
-        self._namespaceprefix = 'generic'
-        self.original_tagname_ = 'Obs'
         self._value = {}
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ObsType"""
         return ObsType(*args_, **kwargs_)
 
     @property
     def obsDimension(self):
+        """Dimension at Observation value"""
         return self._obsDimension
 
     @obsDimension.setter
@@ -460,6 +460,7 @@ class ObsType(AnnotableArtefact):
 
     @property
     def obsValue(self):
+        """Observation value"""
         return self._obsValue
 
     @obsValue.setter
@@ -468,6 +469,7 @@ class ObsType(AnnotableArtefact):
 
     @property
     def attributes(self):
+        """Attributes at Observation Level"""
         return self._attributes
 
     @attributes.setter
@@ -476,6 +478,7 @@ class ObsType(AnnotableArtefact):
 
     @property
     def value_(self):
+        """List of all values"""
         return self._value
 
     @value_.setter
@@ -483,6 +486,7 @@ class ObsType(AnnotableArtefact):
         self._value = value
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self.obsDimension is not None or
                 self.obsValue is not None or
@@ -494,9 +498,11 @@ class ObsType(AnnotableArtefact):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         super(ObsType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'ObsDimension':
             obj_ = BaseValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -505,22 +511,20 @@ class ObsType(AnnotableArtefact):
         elif nodeName_ == 'ObsValue':
             obj_ = ObsValueType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self.value_['OBS_VALUE'] = obj_.value_
+            if obj_.value_ is None:
+                self._value['OBS_VALUE'] = ""
+            else:
+                self._value['OBS_VALUE'] = obj_.value_
 
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self.value_.update(obj_.value_)
 
-        super(ObsType, self).build_children(child_, node, nodeName_, True)
+        super(ObsType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class ObsType
-
-def validate_BasicTimePeriodType():
-    # TODO Anything to validate here??? (BasicTimePeriod)
-    pass
-
 
 class DataSetType(AnnotableArtefact):
     """DataSetType defines the structure of the generic data set. Data is
@@ -575,18 +579,15 @@ class DataSetType(AnnotableArtefact):
             self._group = []
         else:
             self._group = Group
-        self._group_nsprefix_ = None
-        self._namespacedef = 'xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"'
-        self._namespace_prefix = 'message'
-        self._name = 'DataSetType'
-        self.original_tagname_ = 'DataSet'
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of DataSetType"""
         return DataSetType(*args_, **kwargs_)
 
     @property
     def DataProvider(self):
+        """DataProvider of the DataSet"""
         return self._dataProvider
 
     @DataProvider.setter
@@ -595,6 +596,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def Attributes(self):
+        """Documentation of the DataSet"""
         return self._Attributes
 
     @Attributes.setter
@@ -603,6 +605,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def Group(self):
+        """Group in a Dataset"""
         return self._group
 
     @Group.setter
@@ -614,17 +617,9 @@ class DataSetType(AnnotableArtefact):
         else:
             raise TypeError('Group must be a list')
 
-    def add_Group(self, value):
-        self._group.append(value)
-
-    def insert_Group_at(self, index, value):
-        self._group.insert(index, value)
-
-    def replace_Group_at(self, index, value):
-        self._group[index] = value
-
     @property
     def data(self):
+        """List of Series and/or observations of the DataSet"""
         return self._data
 
     @data.setter
@@ -633,6 +628,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def structureRef(self):
+        """Reference to the Structure in the Header"""
         return self._structureRef
 
     @structureRef.setter
@@ -641,6 +637,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def setID(self):
+        """Metadata identifier"""
         return self._setID
 
     @setID.setter
@@ -649,6 +646,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def action(self):
+        """The action attribute indicates whether the file is appending, replacing, or deleting."""
         return self._action
 
     @action.setter
@@ -657,6 +655,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reportingBeginDate(self):
+        """The reportingBeginDate indicates the inclusive start time
+                of the data reported in the data or metadata set."""
         return self._reportingBeginDate
 
     @reportingBeginDate.setter
@@ -665,6 +665,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reportingEndDate(self):
+        """The reportingEndDate indicates the inclusive end time
+                of the data reported in the data or metadata set."""
         return self._reportingEndDate
 
     @reportingEndDate.setter
@@ -673,6 +675,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def validFromDate(self):
+        """The validFromDate indicates the inclusive start time indicating the validity
+                of the information in the data or metadata set."""
         return self._validFromDate
 
     @validFromDate.setter
@@ -681,6 +685,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def validToDate(self):
+        """The validToDate indicates the inclusive end time indicating the validity
+                of the information in the data or metadata set."""
         return self._validToDate
 
     @validToDate.setter
@@ -689,6 +695,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def publicationYear(self):
+        """The publicationYear holds the ISO 8601 four-digit year."""
         return self._publicationYear
 
     @publicationYear.setter
@@ -697,6 +704,9 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def publicationPeriod(self):
+        """The publicationPeriod specifies the period of publication of the data or metadata in terms of whatever
+            provisioning agreements might be in force (i.e., "Q1 2005" if that is the time of
+            publication for a data set published on a quarterly basis). """
         return self._publicationPeriod
 
     @publicationPeriod.setter
@@ -704,7 +714,7 @@ class DataSetType(AnnotableArtefact):
         self._publicationPeriod = value
 
     def validate_ActionType(self, value):
-        # Validate dim_type common:ActionType, a restriction on xs:NMTOKEN.
+        """Validate dim_type common:ActionType, a restriction on xs:NMTOKEN."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
@@ -722,6 +732,7 @@ class DataSetType(AnnotableArtefact):
         return result
 
     def has_content_(self):
+        """Check if it has any content"""
         if (
                 self._dataProvider is not None or
                 self._Attributes is not None or
@@ -734,6 +745,7 @@ class DataSetType(AnnotableArtefact):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('structureRef', node)
 
         if value is not None and 'structureRef' not in already_processed:
@@ -795,42 +807,32 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
-            self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
 
         super(DataSetType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory()
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
-            obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Attributes':
             obj_ = ValuesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._Attributes = obj_
-            obj_.original_tagname_ = 'Attributes'
         elif nodeName_ == 'Group':
             obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
-            obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
             obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
-            self._data.append(obj_.value_)
-            obj_.original_tagname_ = 'Series'
+            self._data += obj_.obs
         elif nodeName_ == 'Obs':
             obj_ = ObsOnlyType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.value_)
-            obj_.original_tagname_ = 'Obs'
-        super(DataSetType, self).build_children(child_, node, nodeName_, True)
-
-    def validate_ObservationalTimePeriodType(self, date):
-        # TODO Anything to validate here??? (Observational Time Period)
-        pass
+        super(DataSetType, self).build_children(child_, node, nodeName_, True, gds_collector_)
 
 
 # end class DataSetType

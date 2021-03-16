@@ -6,7 +6,7 @@ import sys
 
 from lxml import etree as etree_
 
-from ..utils.xml_base import raise_parse_error, quote_xml, GDSParseError
+from ..utils.xml_base import raise_parse_error, GDSParseError
 
 ExternalEncoding = ''
 
@@ -564,15 +564,7 @@ class GenerateSuper(object):
         else:
             return in_string
 
-    @staticmethod
-    def convert_unicode(in_string):
-        if isinstance(in_string, str):
-            result = quote_xml(in_string)
-        else:
-            result = GenerateSuper.gds_encode(str(in_string))
-
-        return result
-
+    """
     def __eq__(self, other):
         def excl_select_objs_(obj):
             return obj[0] != 'parent_object_' and obj[0] != 'gds_collector_'
@@ -582,6 +574,7 @@ class GenerateSuper(object):
 
         return all(x == y for x, y in zip(filter(excl_select_objs_, self.__dict__.items()),
                                           filter(excl_select_objs_, other.__dict__.items())))
+    """
 
     def __ne__(self, other):
         return not self.__eq__(other)

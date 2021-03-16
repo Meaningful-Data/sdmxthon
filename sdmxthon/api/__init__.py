@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from typing import Dict
 from zipfile import ZipFile
@@ -9,6 +10,8 @@ from ..parsers.message_parsers import MetadataType
 from ..parsers.metadata_validations import getMetadata, setReferences
 from ..parsers.read import readXML, sdmxGenToDataSet, sdmxStrToDataset
 from ..utils.enums import MessageType
+
+logger = logging.getLogger('logger')
 
 
 def readSDMX(path_to_xml, pathToMetadata):
@@ -21,10 +24,10 @@ def readSDMX(path_to_xml, pathToMetadata):
     header = obj_.header
     if obj_.original_tag_name_ == 'GenericData':
         type_ = MessageType.GenericDataSet
-        data = sdmxGenToDataSet(obj_, metadata.structures.dsds)
+        data = sdmxGenToDataSet(obj_, metadata.structures.dsds, metadata.structures.dataflows)
     elif obj_.original_tag_name_ == 'StructureSpecificData':
         type_ = MessageType.StructureDataSet
-        data = sdmxStrToDataset(obj_, metadata.structures.dsds)
+        data = sdmxStrToDataset(obj_, metadata.structures.dsds, metadata.structures.dataflows)
     elif obj_.original_tag_name_ == 'Structure':
         type_ = MessageType.Metadata
         data = obj_.structures

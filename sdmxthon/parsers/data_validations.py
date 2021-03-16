@@ -277,7 +277,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             data_column = data[k].unique().astype('float64')
             is_numeric = True
         else:
-            data_column = data[k].unique().astype('str')
+            data_column = data[k].astype('str').fillna('nan').unique()
 
         if k in dsd.attributeCodes:
             type_ = 'Attribute'
@@ -317,7 +317,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             code = 'SS04'
             values = data_column[np.isin(data_column, codelist_values[k], invert=True)]
             if len(values) > 0:
-                values = values[np.isin(values, ['nan', 'None'], invert=True)]
+                values = values[np.isin(values, ['nan', 'None', np.nan], invert=True)]
                 for v in values:
                     errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
                                    'Rows': None, 'Message': f'Wrong value {v} for {type_.lower()} {k}'})

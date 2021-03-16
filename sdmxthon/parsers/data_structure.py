@@ -1,9 +1,13 @@
+"""
+    Data_Structure contains all parsers for the data in a Structure Specific Message
+"""
+
 import re as re_
 
 from .data_parser import Validate_simpletypes_
 from .gdscollector import datetime_
 from ..model.base import AnnotableArtefact
-from ..model.references import DataProviderReferenceType
+from ..model.references import ReferenceType
 from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
@@ -72,14 +76,7 @@ class ObsType(AnnotableArtefact):
     which is intended to hold the value for the observation. This is
     declared in the base schema since it has a fixed identifier. This
     attribute is un-typed, since the representation of the observed value
-    can vary widely. Derived types will restrict this to be a dim_type based on
-    the representation of the primary measure. In the case that an explicit
-    measure is used, the derived dim_type for a given measure might further
-    restrict the dim_type of the primary measure to be more specific to the
-    core representation for the measure concept. Note that it is required
-    that in the case of multiple measures being used, that the
-    representation of the primary measure is broad enough to handle the
-    various representations of the measure concepts."""
+    can vary widely."""
 
     def __init__(self, Annotations=None, type_=None, TIME_PERIOD=None, REPORTING_YEAR_START_DAY=None, OBS_VALUE=None,
                  gds_collector_=None, **kwargs_):
@@ -92,10 +89,19 @@ class ObsType(AnnotableArtefact):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of ObsType"""
         return ObsType(*args_, **kwargs_)
 
     @property
     def type(self):
+        """Derived types will restrict this to be a dim_type based on
+    the representation of the primary measure. In the case that an explicit
+    measure is used, the derived dim_type for a given measure might further
+    restrict the dim_type of the primary measure to be more specific to the
+    core representation for the measure concept. Note that it is required
+    that in the case of multiple measures being used, that the
+    representation of the primary measure is broad enough to handle the
+    various representations of the measure concepts."""
         return self._type_
 
     @type.setter
@@ -104,16 +110,17 @@ class ObsType(AnnotableArtefact):
 
     @property
     def any_attributes(self):
+        """Any Attributes contains the attributes at a Dataset Level"""
+
         return self._anyAttributes_
 
     @any_attributes.setter
     def any_attributes(self, value):
         self._anyAttributes_ = value
 
-    def validate_ObservationalTimePeriodType(self, value):
-        pass
-
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
+
         self._anyAttributes_ = {}
         value = find_attr_value_('dim_type', node)
         if value is not None and 'dim_type' not in already_processed:
@@ -126,9 +133,6 @@ class ObsType(AnnotableArtefact):
                 self._anyAttributes_[name] = value
 
         super(ObsType, self).build_attributes(node, attrs, already_processed)
-
-
-# end class ObsType
 
 
 class GroupType(AnnotableArtefact):
@@ -159,11 +163,37 @@ class GroupType(AnnotableArtefact):
     attributes are required, these should be qualified with a namespace so
     that a generic application can easily distinguish them as not being
     meant to represent a data structure definition dimension or attribute.
-    The dim_type attribute reference the identifier of the group as defined in the
+    """
+
+    def __init__(self, Annotations=None, type_=None, REPORTING_YEAR_START_DAY=None, gds_collector_=None, **kwargs_):
+        self.gds_collector_ = gds_collector_
+        self.gds_elementtree_node_ = None
+        super(GroupType, self).__init__(Annotations, **kwargs_)
+        self._type_ = cast(None, type_)
+        self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
+        self._anyAttributes_ = {}
+
+    @staticmethod
+    def factory(*args_, **kwargs_):
+        """Factory Method of GroupType"""
+        return GroupType(*args_, **kwargs_)
+
+    @property
+    def type(self):
+        """The dim_type attribute reference the identifier of the group as defined in the
     data structure definition. This is optional, but derived group types
     will provide a fixed value for this so that it always available in the
     post validation information set. This allows the group to be processed
-    in a generic manner.The REPORTING_YEAR_START_DAY attribute is an
+    in a generic manner"""
+        return self._type_
+
+    @type.setter
+    def type(self, value):
+        self._type_ = value
+
+    @property
+    def reporting_year_start_day(self):
+        """The REPORTING_YEAR_START_DAY attribute is an
     explict attribute for the reporting year start day, which provides
     context to the time dimension when its value contains a reporting
     period (e.g. 2010-Q1). This attribute is used to state the month and
@@ -175,38 +205,6 @@ class GroupType(AnnotableArtefact):
     require or prohibit this attribute, depending on whether the data
     structure declared the reporting year start day attribute and if so,
     the attribute relationship and assignment status assigned to it."""
-
-    def __init__(self, Annotations=None, type_=None, REPORTING_YEAR_START_DAY=None, gds_collector_=None, **kwargs_):
-        self.gds_collector_ = gds_collector_
-        self.gds_elementtree_node_ = None
-        self.original_tagname_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
-        self.ns_prefix_ = None
-        super(GroupType, self).__init__(Annotations, **kwargs_)
-        self._type_ = cast(None, type_)
-        self._type__nsprefix_ = None
-        self._reporting_year_start_day = cast(None, REPORTING_YEAR_START_DAY)
-        self._reporting_year_start_day_nsprefix_ = None
-        self._anyAttributes_ = {}
-        self._namespaceprefix = 'structure'
-        self._namespacedef = 'structure:"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"'
-        self._name = 'GroupType'
-
-    def factory(*args_, **kwargs_):
-        return GroupType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
-
-    @property
-    def type(self):
-        return self._type_
-
-    @type.setter
-    def type(self, value):
-        self._type_ = value
-
-    @property
-    def reporting_year_start_day(self):
         return self._reporting_year_start_day
 
     @reporting_year_start_day.setter
@@ -215,9 +213,11 @@ class GroupType(AnnotableArtefact):
 
     @property
     def any_attributes(self):
+        """Any Attributes contains the attributes at a Group Level"""
         return self._anyAttributes_
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         value = find_attr_value_('dim_type', node)
 
         if value is not None and 'dim_type' not in already_processed:
@@ -237,9 +237,6 @@ class GroupType(AnnotableArtefact):
             if name not in already_processed:
                 self._anyAttributes_[name] = value
         super(GroupType, self).build_attributes(node, attrs, already_processed)
-
-
-# end class GroupType
 
 
 class SeriesType(AnnotableArtefact):
@@ -307,10 +304,12 @@ class SeriesType(AnnotableArtefact):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of SeriesType"""
         return SeriesType(*args_, **kwargs_)
 
     @property
     def obs(self):
+        """Observations in a Series"""
         return self._obs
 
     @obs.setter
@@ -322,33 +321,24 @@ class SeriesType(AnnotableArtefact):
         else:
             raise TypeError('Obs must be a list')
 
-    def add_Obs(self, value):
-        self._obs.append(value)
-
-    def insert_Obs_at(self, index, value):
-        self._obs.insert(index, value)
-
-    def replace_Obs_at(self, index, value):
-        self._obs[index] = value
-
     @property
     def any_attributes(self):
+        """Any Attributes contains the attributes at a Series Level"""
         return self._anyAttributes_
 
     @any_attributes.setter
     def any_attributes(self, value):
         self._anyAttributes_ = value
 
-    def validate_ObservationalTimePeriodType(self, value):
-        pass
-
     def has_content_(self):
+        """Check if it has any content"""
         if self._obs is not None or super(SeriesType, self).has_content_():
             return True
         else:
             return False
 
     def build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
         self._anyAttributes_ = {}
 
         for name, value in attrs.items():
@@ -358,17 +348,15 @@ class SeriesType(AnnotableArtefact):
         super(SeriesType, self).build_attributes(node, attrs, already_processed)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'Obs':
             obj_ = ObsType.factory(parent_object_=self)
             obj_.build(child_, gds_collector_=gds_collector_)
             self._anyAttributes_.update(obj_.any_attributes)
             self.obs.append(self._anyAttributes_.copy())
-            obj_.original_tagname_ = 'Obs'
 
         super(SeriesType, self).build_children(child_, node, nodeName_, True)
 
-
-# end class SeriesType
 
 class DataSetType(AnnotableArtefact):
     """DataSetType is the abstract dim_type which defines the base structure for
@@ -417,16 +405,7 @@ class DataSetType(AnnotableArtefact):
     definition. If additional attributes are required, these should be
     qualified with a namespace so that a generic application can easily
     distinguish them as not being meant to represent a data structure
-    definition attribute.
-    The REPORTING_YEAR_START_DAY attribute is an explict attribute for the
-    reporting year start day, which provides context to the time dimension
-    when its value contains a reporting period (e.g. 2010-Q1). This
-    attribute is used to state the month and day that the reporting year
-    begins (e.g. --07-01 for July 1st). In the absence of an explicit value
-    provided in this attribute, all reporting period values will be assumed
-    to be based on a reporting year start day of January 1. This is
-    declared in the base schema since it has a fixed identifier and
-    representation. The derived data set dim_type may either require or
+    definition attribute. The derived data set dim_type may either require or
     prohibit this attribute, depending on whether the data structure
     declared the reporting year start day attribute and if so, the
     attribute relationship and assignment status assigned to it."""
@@ -472,13 +451,14 @@ class DataSetType(AnnotableArtefact):
 
         self._anyAttributes_ = {}
 
+    @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of DataSetType"""
         return DataSetType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def dataProvider(self):
+        """DataProvider contains a reference to the provider for the data set."""
         return self._dataProvider
 
     @dataProvider.setter
@@ -487,6 +467,9 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def group(self):
+        """Group contains a references to a defined group in the data structure definition
+        along with its key (if necessary) and values for the attributes which are associated
+        with the group."""
         return self._group
 
     @group.setter
@@ -498,17 +481,9 @@ class DataSetType(AnnotableArtefact):
         else:
             raise TypeError('Group must be a list')
 
-    def add_Group(self, value):
-        self._group.append(value)
-
-    def insert_Group_at(self, index, value):
-        self._group.insert(index, value)
-
-    def replace_Group_at(self, index, value):
-        self._group[index] = value
-
     @property
     def data(self):
+        """Data refers to the series or observations included in the Dataset"""
         return self._data
 
     @data.setter
@@ -517,6 +492,15 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reporting_year_start_day(self):
+        """ The REPORTING_YEAR_START_DAY attribute is an explict attribute for the
+    reporting year start day, which provides context to the time dimension
+    when its value contains a reporting period (e.g. 2010-Q1). This
+    attribute is used to state the month and day that the reporting year
+    begins (e.g. --07-01 for July 1st). In the absence of an explicit value
+    provided in this attribute, all reporting period values will be assumed
+    to be based on a reporting year start day of January 1. This is
+    declared in the base schema since it has a fixed identifier and
+    representation. """
         return self._reporting_year_start_day
 
     @reporting_year_start_day.setter
@@ -525,6 +509,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def structureRef(self):
+        """StructureRef is the reference to the structure located in the Header"""
         return self._structureRef
 
     @structureRef.setter
@@ -533,6 +518,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def setID(self):
+        """The setID provides an identification of the data or metadata set"""
         return self._setID
 
     @setID.setter
@@ -541,6 +527,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def action(self):
+        """The action attribute indicates whether the file is appending, replacing, or deleting."""
         return self._action
 
     @action.setter
@@ -549,6 +536,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reporting_begin_date(self):
+        """The reportingBeginDate indicates the inclusive start time
+        of the data reported in the data or metadata set."""
         return self._reportingBeginDate
 
     @reporting_begin_date.setter
@@ -557,6 +546,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reporting_end_date(self):
+        """The reportingEndDate indicates the inclusive end time
+        of the data reported in the data or metadata set."""
         return self._reportingEndDate
 
     @reporting_end_date.setter
@@ -565,6 +556,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def valid_from_date(self):
+        """The validFromDate indicates the inclusive start time indicating the validity
+        of the information in the data or metadata set."""
         return self._validFromDate
 
     @valid_from_date.setter
@@ -573,6 +566,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def valid_to_date(self):
+        """The validToDate indicates the inclusive end time indicating the validity
+        of the information in the data or metadata set."""
         return self._validToDate
 
     @valid_to_date.setter
@@ -581,6 +576,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def publication_year(self):
+        """The publicationYear holds the ISO 8601 four-digit year."""
         return self._publicationYear
 
     @publication_year.setter
@@ -589,6 +585,9 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def publication_period(self):
+        """The publicationPeriod specifies the period of publication of the data or metadata in terms of whatever
+        provisioning agreements might be in force (i.e., "Q1 2005" if that is the time of publication for a data set
+        published on a quarterly basis). """
         return self._publicationPeriod
 
     @publication_period.setter
@@ -597,6 +596,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def any_attributes(self):
+        """Any Attributes contains the attributes at a Dataset Level"""
         return self._anyAttributes_
 
     @any_attributes.setter
@@ -604,7 +604,7 @@ class DataSetType(AnnotableArtefact):
         self._anyAttributes_ = value
 
     def validate_ActionType(self, value):
-        # Validate dim_type common:ActionType, a restriction on xs:NMTOKEN.
+        """Validate dim_type common:ActionType, a restriction on xs:NMTOKEN."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
@@ -626,14 +626,15 @@ class DataSetType(AnnotableArtefact):
         return result
 
     def validate_BasicTimePeriodType(self, value):
-        # Validate dim_type common:BasicTimePeriodType, a restriction on None.
+        """Validate dim_type common:BasicTimePeriodType, a restriction on None."""
         pass
 
     def validate_ObservationalTimePeriodType(self, value):
-        # Validate dim_type common:ObservationalTimePeriodType, a restriction on None.
+        """Validate dim_type common:ObservationalTimePeriodType, a restriction on None."""
         pass
 
     def has_content_(self):
+        """Check if it has any content"""
         if (self._dataProvider is not None or
                 self._group is not None or
                 self._data is not None):
@@ -642,7 +643,7 @@ class DataSetType(AnnotableArtefact):
             return False
 
     def build_attributes(self, node, attrs, already_processed):
-
+        """Builds the attributes present in the XML element"""
         self._anyAttributes_ = {}
         tag_pattern_ = re_.compile(r'({.*})?(.*)')
 
@@ -722,20 +723,18 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
-            self.validate_ObservationalTimePeriodType(
-                self._publicationPeriod)  # validate dim_type ObservationalTimePeriodType
+            self.validate_ObservationalTimePeriodType(self._publicationPeriod)
 
     def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
         if nodeName_ == 'DataProvider':
-            obj_ = DataProviderReferenceType.factory()
+            obj_ = ReferenceType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
-            obj_.original_tag_name_ = 'DataProvider'
         elif nodeName_ == 'Group':
             obj_ = GroupType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
-            obj_.original_tagname_ = 'Group'
         elif nodeName_ == 'Series':
             obj_ = SeriesType.factory()
             obj_.build(child_, gds_collector_=gds_collector_)
@@ -776,17 +775,8 @@ class TimeSeriesDataSetType(DataSetType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of TimeSeriesDataSetType"""
         return TimeSeriesDataSetType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
-
-    def validate_BasicTimePeriodType(self, value):
-        # Validate type common:BasicTimePeriodType, a restriction on None.
-        pass
-
-    def validate_ObservationalTimePeriodType(self, value):
-        # Validate type common:ObservationalTimePeriodType, a restriction on None.
-        pass
 
 
 class TimeSeriesType(SeriesType):
@@ -807,12 +797,20 @@ class TimeSeriesType(SeriesType):
 
     @staticmethod
     def factory(*args_, **kwargs_):
+        """Factory Method of TimeSeriesType"""
         return TimeSeriesType(*args_, **kwargs_)
-
-    factory = staticmethod(factory)
 
     @property
     def reporting_year_start_day(self):
+        """ The REPORTING_YEAR_START_DAY attribute is an explict attribute for the
+    reporting year start day, which provides context to the time dimension
+    when its value contains a reporting period (e.g. 2010-Q1). This
+    attribute is used to state the month and day that the reporting year
+    begins (e.g. --07-01 for July 1st). In the absence of an explicit value
+    provided in this attribute, all reporting period values will be assumed
+    to be based on a reporting year start day of January 1. This is
+    declared in the base schema since it has a fixed identifier and
+    representation. """
         return self._reporting_year_start_day
 
     @reporting_year_start_day.setter
@@ -827,13 +825,7 @@ class TimeSeriesObsType(ObsType):
     the series in which it is defined (i.e. there should not be another
     observation with the same time value). The observation can contain an
     observed value and/or attribute values. The same rules for derivation
-    as the base observation type apply to this specialized observation.The
-    TIME_PERIOD attribute is an explicit attribute for the time dimension.
-    This is declared in the base schema since it has a fixed identifier and
-    representation. Since this data is structured to be time series only,
-    this attribute is always required. If the time dimension specifies a
-    more specific representation of time the derived type will restrict the
-    type definition to the appropriate type."""
+    as the base observation type apply to this specialized observation."""
     __hash__ = ObsType.__hash__
     subclass = None
     superclass = ObsType
@@ -845,12 +837,14 @@ class TimeSeriesObsType(ObsType):
 
     @property
     def time_period(self):
+        """The TIME_PERIOD attribute is an explicit attribute for the time dimension.
+        This is declared in the base schema since it has a fixed identifier and
+        representation. Since this data is structured to be time series only,
+        this attribute is always required. If the time dimension specifies a
+        more specific representation of time the derived type will restrict the
+        type definition to the appropriate type."""
         return self._time_period
 
     @time_period.setter
     def time_period(self, value):
         self._time_period = value
-
-    def validate_ObservationalTimePeriodType(self, value):
-        # Validate type common:ObservationalTimePeriodType, a restriction on None.
-        pass

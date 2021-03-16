@@ -1,0 +1,44 @@
+[
+  {
+    "Code": "MS02",
+    "ErrorLevel": "CRITICAL",
+    "Message": "Missing Codelist SDMX:TEST_ERROR(1.0)",
+    "ObjectID": "SDMX:TEST_ERROR(1.0)",
+    "ObjectType": "Codelist"
+  },
+  {
+    "Code": "MS03",
+    "ErrorLevel": "CRITICAL",
+    "Message": "Missing Concept DEPENDENCY_TYPE",
+    "ObjectID": "DEPENDENCY_TYPE",
+    "ObjectType": "Concept"
+  },
+  {
+    "Code": "MS04",
+    "ErrorLevel": "CRITICAL",
+    "Message": "Missing Dimension TEST_ERROR related to Attribute DEPENDENCY_TYPE",
+    "ObjectID": "RBI:TEST(1.0)-AttributeDescriptor",
+    "ObjectType": "Attribute"
+  },
+  {
+    "Code": "MS05",
+    "ErrorLevel": "CRITICAL",
+    "Message": "Missing Primary Measure TEST_ERROR related to Attribute DMID",
+    "ObjectID": "RBI:WRT_OFF_ACC_1CR(1.0)-AttributeDescriptor",
+    "ObjectType": "Attribute"
+  },
+  {
+    "Code": "MS06",
+    "ErrorLevel": "CRITICAL",
+    "Message": "DSD RBI:WRT_OFF_ACC_1CR(1.0) is not unique",
+    "ObjectID": "RBI:WRT_OFF_ACC_1CR(1.0)",
+    "ObjectType": "DSD"
+  },
+  {
+    "Code": "MS07",
+    "ErrorLevel": "CRITICAL",
+    "Message": "Missing Concept Scheme RBI:TEST_ERROR(1.0)",
+    "ObjectID": "RBI:TEST_ERROR(1.0)",
+    "ObjectType": "Concept"
+  }
+]
