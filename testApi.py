@@ -1,6 +1,6 @@
 import logging
 
-from SDMXThon.parsers.read import getMetadata
+from SDMXThon import get_metadata
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -58,9 +58,7 @@ def pretty(d, indent=0):
 def main():
     # Test Metadata From Different Sources Generator
     logger.debug('Start')
-    metadata = getMetadata(pathToMetadataFile)
-    for e in metadata.payload.dsds.values():
-        print(e.to_vtl_json())
+    metadata = get_metadata(pathToMetadataFile)
     logger.debug('End')
 
     """

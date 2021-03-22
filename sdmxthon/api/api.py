@@ -8,7 +8,7 @@ from SDMXThon.model.dataSet import DataSet
 from SDMXThon.model.message import Message
 from SDMXThon.parsers.message_parsers import MetadataType
 from SDMXThon.parsers.metadata_validations import setReferences
-from SDMXThon.parsers.read import readXML, sdmxGenToDataSet, sdmxStrToDataset, sdmxToDataFrame, getMetadata
+from SDMXThon.parsers.read import _read_xml, _sdmx_gen_to_dataset, _sdmx_str_to_dataset, _sdmx_to_dataframe
 from SDMXThon.utils.enums import MessageTypeEnum
 from SDMXThon.utils.handlers import first_element_dict
 
@@ -26,19 +26,19 @@ def read_sdmx(path_to_xml, path_to_metadata=None) -> Message:
     if path_to_metadata is None:
         return get_data(path_to_xml)
 
-    metadata = getMetadata(path_to_metadata)
+    metadata = get_metadata(path_to_metadata)
 
-    obj_ = readXML(path_to_xml)
+    obj_ = _read_xml(path_to_xml)
     if isinstance(obj_, MetadataType):
         setReferences(obj_)
 
     header = obj_.header
     if obj_.original_tag_name_ == 'GenericData':
         type_ = MessageTypeEnum.GenericDataSet
-        data = sdmxGenToDataSet(obj_, metadata.payload.dsds, metadata.payload.dataflows)
+        data = _sdmx_gen_to_dataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     elif obj_.original_tag_name_ == 'StructureSpecificData':
         type_ = MessageTypeEnum.StructureDataSet
-        data = sdmxStrToDataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
+        data = _sdmx_str_to_dataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     elif obj_.original_tag_name_ == 'Structure':
         type_ = MessageTypeEnum.Metadata
         data = obj_.structures
@@ -56,14 +56,14 @@ def get_datasets(path_to_xml, path_to_metadata):
     :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of :obj:`Datasets <model.dataSet.DataSet>`
     """
 
-    obj_ = readXML(path_to_xml)
+    obj_ = _read_xml(path_to_xml)
 
-    metadata = getMetadata(path_to_metadata)
+    metadata = get_metadata(path_to_metadata)
 
     if obj_.original_tag_name_ == 'GenericData':
-        datasets = sdmxGenToDataSet(obj_, metadata.payload.dsds, metadata.payload.dataflows)
+        datasets = _sdmx_gen_to_dataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     elif obj_.original_tag_name_ == 'StructureSpecificData':
-        datasets = sdmxStrToDataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
+        datasets = _sdmx_str_to_dataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     else:
         raise ValueError('Wrong Message type')
 
@@ -82,12 +82,12 @@ def get_data(path_to_data):
     :return: A `Pandas Dataframe <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_ or a dict of
             `Pandas Dataframe <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    obj_ = readXML(path_to_data)
+    obj_ = _read_xml(path_to_data)
 
     if isinstance(obj_, MetadataType):
-        raise TypeError('No data available in a Structure file. You should use getMetadata method')
+        raise TypeError('No data available in a Structure file. You should use get_metadata method')
 
-    return sdmxToDataFrame(obj_)
+    return _sdmx_to_dataframe(obj_)
 
 
 def xml_to_json(pathToXML, path_to_metadata, output_path):
@@ -210,3 +210,12 @@ def _get_size(obj, seen=None):
     elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
         size += sum([_get_size(i, seen) for i in obj])
     return size
+
+
+def get_metadata(path_to_metadata):
+    metadata = _read_xml(path_to_metadata)
+    if isinstance(metadata, MetadataType):
+        setReferences(metadata)
+        return Message(payload=metadata.structures, message_type=MessageTypeEnum.Metadata, header=metadata.header)
+    else:
+        raise TypeError('Need a Structure file to be parsed')

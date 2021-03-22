@@ -3,7 +3,7 @@ Api Package
 
 The ``api`` package contains all the methods to load data into SDMXthon.
 
-.. currentmodule:: api.__init__
+.. currentmodule:: api.api
 
 Read SDMX
 *********

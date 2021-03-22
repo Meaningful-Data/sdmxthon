@@ -6,8 +6,7 @@ import unittest
 
 import pandas as pd
 
-from SDMXThon.parsers.read import getMetadata
-from ..api import DataSet, readXML, MetadataType, setReferences, readSDMX
+from ..api.api import DataSet, _read_xml, MetadataType, setReferences, read_sdmx, get_metadata
 
 
 def query_to_db(sqlite_db, limit):
@@ -24,7 +23,7 @@ class TestHelper(unittest.TestCase):
         conn = sqlite3.connect(os.path.join(self.pathToDB, sqlite_filename))
         df = pd.read_sql(query_to_db(sqlite_db, limit), conn).astype('category')
 
-        dsd = getMetadata(os.path.join(self.pathToMetadata, meta_file)).payload.dsds['BIS:BIS_DER(1.0)']
+        dsd = get_metadata(os.path.join(self.pathToMetadata, meta_file)).payload.dsds['BIS:BIS_DER(1.0)']
 
         return DataSet(structure=dsd, data=df)
 
@@ -38,7 +37,7 @@ class TestHelper(unittest.TestCase):
 
     def reading_test(self, data_filename):
         metadata_filename = os.path.join(self.pathToMetadata, "metadata.xml")
-        message = readSDMX(os.path.join(self.pathToDB, data_filename), metadata_filename)
+        message = read_sdmx(os.path.join(self.pathToDB, data_filename), metadata_filename)
         with open(os.path.join(self.pathToDB, "df.pickle"), 'rb') as f:
             reference = pickle.loads(f.read())
         dataframe = message.payload['BIS:BIS_DER(1.0)'].data.astype('str')
@@ -56,7 +55,7 @@ class TestHelper(unittest.TestCase):
         self.assert_equal_validation(errors, [])
 
     def metadata_test(self, reference_filename, path_to_data):
-        obj_ = getMetadata(os.path.join(self.pathToMetadata, path_to_data))
+        obj_ = get_metadata(os.path.join(self.pathToMetadata, path_to_data))
         reference = self.load_reference_data(reference_filename)
         errors = obj_.payload.errors
         if errors is None:
@@ -64,7 +63,7 @@ class TestHelper(unittest.TestCase):
         self.assert_equal_validation(errors, reference)
 
     def metadata_valid_test(self, path_to_data):
-        obj_ = readXML(os.path.join(self.pathToMetadata, path_to_data))
+        obj_ = _read_xml(os.path.join(self.pathToMetadata, path_to_data))
         if isinstance(obj_, MetadataType):
             setReferences(obj_)
         errors = obj_.structures.errors
@@ -73,7 +72,7 @@ class TestHelper(unittest.TestCase):
         self.assert_equal_validation(errors, [])
 
     def metadata_compare(self, reference_filename, data_filename):
-        obj_ = getMetadata(os.path.join(self.pathToDB, data_filename))
+        obj_ = get_metadata(os.path.join(self.pathToDB, data_filename))
         reference = self.load_reference_pickle(reference_filename)
         self.assertEqual(obj_.payload == reference, True)
 

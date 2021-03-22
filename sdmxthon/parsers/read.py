@@ -5,12 +5,9 @@ import pandas as pd
 
 from SDMXThon.model.component import PrimaryMeasure
 from SDMXThon.model.dataSet import DataSet
-from SDMXThon.model.message import Message
-from SDMXThon.utils.enums import MessageTypeEnum
 from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 from .gdscollector import GdsCollector
 from .message_parsers import GenericDataType, StructureSpecificDataType, MetadataType
-from .metadata_validations import setReferences
 
 CapturedNsmap_ = {}
 print_warnings = True
@@ -21,7 +18,7 @@ StructureDataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/mess
 MetadataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}Structure'
 
 
-def readXML(inFileName, print_warning=True):
+def _read_xml(inFileName, print_warning=True):
     # TODO Check if the message has been loaded correctly
 
     global CapturedNsmap_
@@ -51,7 +48,7 @@ def readXML(inFileName, print_warning=True):
     return root_obj
 
 
-def sdmxStrToDataset(xmlObj, dsds, dataflows) -> []:
+def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
     datasets = {}
     for e in xmlObj.dataset:
         if e.structureRef in xmlObj.header.structure.keys():
@@ -109,7 +106,7 @@ def sdmxStrToDataset(xmlObj, dsds, dataflows) -> []:
     return datasets
 
 
-def sdmxGenToDataSet(xmlObj, dsds, dataflows) -> []:
+def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
     datasets = {}
 
     for e in xmlObj.dataset:
@@ -162,12 +159,12 @@ def sdmxGenToDataSet(xmlObj, dsds, dataflows) -> []:
     return datasets
 
 
-def sdmxToDataFrame(xmlObj):
+def _sdmx_to_dataframe(xml_obj):
     dataframes = []
 
-    for e in xmlObj.dataset:
-        if e.structureRef in xmlObj.header.structure.keys():
-            str_dict = xmlObj.header.structure[e.structureRef]
+    for e in xml_obj.dataset:
+        if e.structureRef in xml_obj.header.structure.keys():
+            str_dict = xml_obj.header.structure[e.structureRef]
         else:
             warnings.warn(f'Structure {e.structureRef} not found')
             continue
@@ -181,18 +178,9 @@ def sdmxToDataFrame(xmlObj):
             else:
                 dataframes.append(temp.rename(columns={'ObsDimension': dim_obs}))
 
-    del xmlObj
+    del xml_obj
 
     if len(dataframes) == 1:
         return dataframes[0]
     else:
         return dataframes
-
-
-def getMetadata(pathToMetadata):
-    metadata = readXML(pathToMetadata)
-    if isinstance(metadata, MetadataType):
-        setReferences(metadata)
-        return Message(payload=metadata.structures, message_type=MessageTypeEnum.Metadata, header=metadata.header)
-    else:
-        raise TypeError('Need a Structure file to be parsed')
