@@ -4,11 +4,11 @@
 
 import re as re_
 
+from SDMXThon.model.base import AnnotableArtefact
+from SDMXThon.parsers.references import ReferenceType
+from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 from .data_parser import Validate_simpletypes_
 from .gdscollector import datetime_
-from ..model.base import AnnotableArtefact
-from ..model.references import ReferenceType
-from ..utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 
 
 class ObsType(AnnotableArtefact):
@@ -88,7 +88,7 @@ class ObsType(AnnotableArtefact):
         self._anyAttributes_ = {}
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of ObsType"""
         return ObsType(*args_, **kwargs_)
 
@@ -118,7 +118,7 @@ class ObsType(AnnotableArtefact):
     def any_attributes(self, value):
         self._anyAttributes_ = value
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
 
         self._anyAttributes_ = {}
@@ -126,13 +126,13 @@ class ObsType(AnnotableArtefact):
         if value is not None and 'dim_type' not in already_processed:
             already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate dim_type IDType
+            self._validate_id_type(self._type_)  # validate dim_type IDType
 
         for name, value in attrs.items():
             if name not in already_processed:
                 self._anyAttributes_[name] = value
 
-        super(ObsType, self).build_attributes(node, attrs, already_processed)
+        super(ObsType, self)._build_attributes(node, attrs, already_processed)
 
 
 class GroupType(AnnotableArtefact):
@@ -174,7 +174,7 @@ class GroupType(AnnotableArtefact):
         self._anyAttributes_ = {}
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of GroupType"""
         return GroupType(*args_, **kwargs_)
 
@@ -216,14 +216,14 @@ class GroupType(AnnotableArtefact):
         """Any Attributes contains the attributes at a Group Level"""
         return self._anyAttributes_
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('dim_type', node)
 
         if value is not None and 'dim_type' not in already_processed:
             already_processed.add('dim_type')
             self._type_ = value
-            self.validate_id_type(self._type_)  # validate dim_type IDType
+            self._validate_id_type(self._type_)  # validate dim_type IDType
 
         value = find_attr_value_('REPORTING_YEAR_START_DAY', node)
 
@@ -236,7 +236,7 @@ class GroupType(AnnotableArtefact):
         for name, value in attrs.items():
             if name not in already_processed:
                 self._anyAttributes_[name] = value
-        super(GroupType, self).build_attributes(node, attrs, already_processed)
+        super(GroupType, self)._build_attributes(node, attrs, already_processed)
 
 
 class SeriesType(AnnotableArtefact):
@@ -303,7 +303,7 @@ class SeriesType(AnnotableArtefact):
         self._anyAttributes_ = {}
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of SeriesType"""
         return SeriesType(*args_, **kwargs_)
 
@@ -330,14 +330,14 @@ class SeriesType(AnnotableArtefact):
     def any_attributes(self, value):
         self._anyAttributes_ = value
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if it has any content"""
-        if self._obs is not None or super(SeriesType, self).has_content_():
+        if self._obs is not None or super(SeriesType, self)._has_content_():
             return True
         else:
             return False
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         self._anyAttributes_ = {}
 
@@ -345,17 +345,17 @@ class SeriesType(AnnotableArtefact):
             if name not in already_processed:
                 self._anyAttributes_[name] = value
 
-        super(SeriesType, self).build_attributes(node, attrs, already_processed)
+        super(SeriesType, self)._build_attributes(node, attrs, already_processed)
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Obs':
-            obj_ = ObsType.factory(parent_object_=self)
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = ObsType._factory(parent_object_=self)
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._anyAttributes_.update(obj_.any_attributes)
             self.obs.append(self._anyAttributes_.copy())
 
-        super(SeriesType, self).build_children(child_, node, nodeName_, True)
+        super(SeriesType, self)._build_children(child_, node, nodeName_, True)
 
 
 class DataSetType(AnnotableArtefact):
@@ -452,7 +452,7 @@ class DataSetType(AnnotableArtefact):
         self._anyAttributes_ = {}
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of DataSetType"""
         return DataSetType(*args_, **kwargs_)
 
@@ -603,13 +603,13 @@ class DataSetType(AnnotableArtefact):
     def any_attributes(self, value):
         self._anyAttributes_ = value
 
-    def validate_ActionType(self, value):
+    def _validate_action_type(self, value):
         """Validate dim_type common:ActionType, a restriction on xs:NMTOKEN."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
@@ -618,7 +618,7 @@ class DataSetType(AnnotableArtefact):
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
 
             if value not in enumerations:
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{encode_str_2_3(value)}": {lineno} does not match '
                     f'xsd enumeration restriction on ActionType')
@@ -633,7 +633,7 @@ class DataSetType(AnnotableArtefact):
         """Validate dim_type common:ObservationalTimePeriodType, a restriction on None."""
         pass
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if it has any content"""
         if (self._dataProvider is not None or
                 self._group is not None or
@@ -642,7 +642,7 @@ class DataSetType(AnnotableArtefact):
         else:
             return False
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         self._anyAttributes_ = {}
         tag_pattern_ = re_.compile(r'({.*})?(.*)')
@@ -671,14 +671,14 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
             self._setID = value
-            self.validate_id_type(self._setID)  # validate dim_type IDType
+            self._validate_id_type(self._setID)  # validate dim_type IDType
 
         value = find_attr_value_('action', self._anyAttributes_)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
             self._action = value
-            self.validate_ActionType(self._action)  # validate dim_type ActionType
+            self._validate_action_type(self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', self._anyAttributes_)
 
@@ -699,7 +699,7 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'validFromDate' not in already_processed:
             already_processed.add('validFromDate')
             try:
-                self._validFromDate = self.gds_parse_datetime(value)
+                self._validFromDate = self._gds_parse_datetime(value)
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
 
@@ -708,7 +708,7 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'validToDate' not in already_processed:
             already_processed.add('validToDate')
             try:
-                self._validToDate = self.gds_parse_datetime(value)
+                self._validToDate = self._gds_parse_datetime(value)
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
 
@@ -725,25 +725,25 @@ class DataSetType(AnnotableArtefact):
             self._publicationPeriod = value
             self.validate_ObservationalTimePeriodType(self._publicationPeriod)
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'DataProvider':
-            obj_ = ReferenceType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = ReferenceType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._dataProvider = obj_
         elif nodeName_ == 'Group':
-            obj_ = GroupType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = GroupType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._group.append(obj_)
         elif nodeName_ == 'Series':
-            obj_ = SeriesType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = SeriesType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._data += obj_.obs
         elif nodeName_ == 'Obs':
-            obj_ = ObsType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = ObsType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._data.append(obj_.any_attributes)
-        super(DataSetType, self).build_children(child_, node, nodeName_, True)
+        super(DataSetType, self)._build_children(child_, node, nodeName_, True)
 
 
 class TimeSeriesDataSetType(DataSetType):
@@ -774,7 +774,7 @@ class TimeSeriesDataSetType(DataSetType):
                                                     publicationYear, publicationPeriod, DataProvider, Group, Data)
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of TimeSeriesDataSetType"""
         return TimeSeriesDataSetType(*args_, **kwargs_)
 
@@ -796,7 +796,7 @@ class TimeSeriesType(SeriesType):
         super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None, Data, gds_collector_)
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of TimeSeriesType"""
         return TimeSeriesType(*args_, **kwargs_)
 

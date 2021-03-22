@@ -9,29 +9,30 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from ..model.component import DataStructureDefinition, DataFlowDefinition
-from ..parsers.data_validations import validate_data
-from ..parsers.write import writer
-from ..utils.enums import MessageTypeEnum
+from SDMXThon.parsers.data_validations import validate_data
+from SDMXThon.parsers.write import writer
+from SDMXThon.utils.enums import MessageTypeEnum
+from .component import DataStructureDefinition, DataFlowDefinition
 
 
 class DataSet:
-    """ DataSet class.
+    """ An organised collection of data.
 
-           An organised collection of data.
+    :param structure: Associates the DataStructureDefinition to the DataSet
+    :type structure: class:`DataStructureDefinition`
 
-           Attributes:
-               structure: Associates the DataStructureDefinition to the DataSet
-               describedBy: Associates the DataFlowDefinition to the Dataset
-               dataset_attributes: Contains all the attributes from the DataSet class of the Information Model
-               attached_attributes: Contains all the attributes at a Dataset level
-               data: Pandas DataFrame that withholds all the data
+    :param describedBy: Associates the DataFlowDefinition to the Dataset
+    :type describedBy: class:`DataFlowDefinition`
 
+    :param dataset_attributes: Contains all the attributes from the DataSet class of the Information Model
+    :type dataset_attributes: dict
 
+    :param attached_attributes:  Contains all the attributes at a Dataset level
+    :type attached_attributes: dict
+
+    :param data: Any object compatible with pandas.DataFrame()
+    :type data: `Pandas Dataframe <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_
     """
-
-    subclass = None
-    superclass = None
 
     def __init__(self, structure: DataStructureDefinition, describedBy: DataFlowDefinition = None,
                  dataset_attributes: dict = None, attached_attributes: dict = None, data=None):
@@ -70,7 +71,11 @@ class DataSet:
 
     @property
     def describedBy(self):
-        """Associates the DataFlowDefinition to the Dataset"""
+        """Associates the DataFlowDefinition to the Dataset
+
+        :class: `DataFlowDefinition`
+
+        """
         return self._dataflow
 
     @describedBy.setter
@@ -82,7 +87,11 @@ class DataSet:
 
     @property
     def structure(self):
-        """Associates the DataStructureDefinition to the DataSet"""
+        """Associates the DataStructureDefinition to the DataSet
+
+        :class: `DataStructureDefinition`
+
+        """
         return self._structure
 
     @structure.setter
@@ -94,7 +103,12 @@ class DataSet:
 
     @property
     def datasetAttributes(self):
-        """Contains all the attributes from the DataSet class of the Information Model"""
+        """Contains all the attributes from the DataSet class of the `Information Model
+        <https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf#page=85>`_
+
+        :class: dict
+
+        """
         return self._dataset_attributes
 
     @datasetAttributes.setter
@@ -103,7 +117,7 @@ class DataSet:
 
     @property
     def attachedAttributes(self):
-        """Contains all the attributes at a Dataset level"""
+        """Contains all the attributes at a Dataset level with NoSpecifiedRelationship"""
         return self._attached_attributes
 
     @attachedAttributes.setter
@@ -141,24 +155,52 @@ class DataSet:
         return self.datasetAttributes.get('dimensionAtObservation')
 
     def readCSV(self, pathToCSV: str):
-        """Loads the data from a CSV"""
+        """Loads the data from a CSVCheck the
+        `Pandas read_csv docs <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html>`_
+
+        :param pathToCSV: Path to CSV file
+        :type pathToCSV: str
+
+        """
         self._data = pd.read_csv(pathToCSV)
 
-    def readJSON(self, pathToJSON: str):
-        """Loads the data from a JSON with orientation as records.
-        Check the Pandas read_json documentation for more details"""
-        self._data = pd.read_json(pathToJSON, orient='records')
+    def readJSON(self, pathToJSON: str, orient: str = 'records'):
+        """Loads the data from a JSON with orientation as records. Check the
+        `Pandas read_json docs <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_json.html>`_
+
+        :param pathToJSON: Path to JSON file
+        :type pathToJSON: str
+
+        :param orient: Orientation of the file
+        :type orient: str
+        """
+        self._data = pd.read_json(pathToJSON, orient=orient)
 
     def readExcel(self, pathToExcel: str):
-        """Loads the data from a Excel file"""
+        """Loads the data from a Excel file. Check the
+        `Pandas read_excel docs <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html>`_
+
+        :param pathToExcel: Path to Excel file
+        :type pathToExcel: str
+        """
         self._data = pd.read_excel(pathToExcel)
 
     def toCSV(self, pathToCSV: str = None):
-        """Parses the data to a CSV file with comma separation and no header or index"""
+        """Parses the data to a CSV file with comma separation and no header or index
+
+        :param pathToCSV: Path to save as CSV file
+        :type pathToCSV: str
+
+        """
         return self.data.to_csv(pathToCSV, sep=',', encoding='utf-8', index=False, header=True)
 
     def toJSON(self, pathToJSON: str = None):
-        """Parses the data using the JSON Specification from the library documentation"""
+        """Parses the data using the JSON Specification from the library documentation
+
+        :param pathToJSON: Path to save as JSON file
+        :type pathToJSON: str
+
+        """
 
         element = {'structureRef': {"code": self.structure.id, "version": self.structure.version,
                                     "agencyID": self.structure.agencyID}}
@@ -176,28 +218,46 @@ class DataSet:
             with open(pathToJSON, 'w') as f:
                 f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
-    def toFeather(self, pathToFeather):
-        """Parses the data to an Apache Feather format"""
+    def toFeather(self, pathToFeather: str):
+        """Parses the data to an Apache Feather format
+
+        :param pathToFeather: Path to Feather file
+        :type pathToFeather: str
+
+        """
         self.data.to_feather(pathToFeather)
 
     def semanticValidation(self):
-        """Performs a Semantic Validation on the Data"""
+        """Performs a Semantic Validation on the Data.
+
+        :returns:
+            A list of errors as defined in the Validation Page.
+
+        """
         if isinstance(self.data, DataFrame):
             return validate_data(self.data, self.structure)
         else:
             raise ValueError('Data for dataset %s is not well formed' % self.structure.id)
 
     def setDimensionAtObservation(self, dimAtObs):
-        """Sets the dimensionAtObservation"""
-        if dimAtObs in self.structure.dimensionCodes:
-            self.datasetAttributes['dimensionAtObservation'] = dimAtObs
-        elif dimAtObs == 'AllDimensions':
+        """Sets the dimensionAtObservation
+            :param dimAtObs: Dimension At Observation
+            :type dimAtObs: str
+        """
+        if dimAtObs in self.structure.dimensionCodes or dimAtObs == 'AllDimensions':
             self.datasetAttributes['dimensionAtObservation'] = dimAtObs
         else:
             raise ValueError('%s is not a dimension of dataset %s' % (dimAtObs, self.structure.id))
 
-    def check_DA_keys(self, attributes, code):
-        """Inputs default values to the dataset_attributes in case they are missing"""
+    def check_DA_keys(self, attributes: dict, setID: str):
+        """Inputs default values to the dataset_attributes in case they are missing
+
+        :param attributes: A dictionary with dataset_attributes
+        :type attributes: dict
+        
+        :param setID: Provides an identification of the data set.
+        :type setID: str
+        """
         keys = ["reportingBegin", "reportingEnd", "dataExtractionDate", "validFrom", "validTo", "publicationYear",
                 "publicationPeriod", "action", "setId", "dimensionAtObservation"]
 
@@ -212,7 +272,7 @@ class DataSet:
                 elif k == "action":
                     attributes[k] = "Replace"
                 elif k == "setId":
-                    attributes[k] = code
+                    attributes[k] = setID
                 elif k == "dimensionAtObservation":
                     attributes[k] = "AllDimensions"
                 else:
@@ -220,13 +280,46 @@ class DataSet:
 
         self._dataset_attributes = attributes.copy()
 
-    def toXML(self, message_type: MessageTypeEnum = MessageTypeEnum.GenericDataSet, outputPath='', id_='test',
-              test='true',
-              prepared=datetime.now(),
-              sender='Unknown',
-              receiver='Not_supplied',
+    def toXML(self, message_type: MessageTypeEnum = MessageTypeEnum.StructureDataSet, outputPath: str = '',
+              id_: str = 'test',
+              test: str = 'true',
+              prepared: datetime = None,
+              sender: str = 'Unknown',
+              receiver: str = 'Not_supplied',
               prettyprint=True):
-        """Parses the data to SDMX-ML 2.1, specifying the Message_Type (StructureSpecific or Generic or Metadata)"""
+        """Parses the data to SDMX-ML 2.1, specifying the Message_Type (StructureSpecific or Generic or Metadata)
+
+        :param message_type: Format of the Message in SDMX-ML
+        :type message_type: MessageTypeEnum
+
+        :param outputPath: Path to save the file, defaults to ''
+        :type outputPath: str
+
+        :param id_: ID of the Header, defaults to 'test'
+        :type id_: str
+
+        :param test: Mark as test file, defaults to 'true'
+        :type test: str
+
+        :param prepared: Datetime of the preparation of the Message, defaults to current date and time
+        :type prepared: datetime
+
+        :param sender: ID of the Sender, defaults to 'Unknown'
+        :type sender: str
+
+        :param receiver: ID of the Receiver, defaults to 'Not_supplied'
+        :type receiver: str
+
+        :param prettyprint: Saves the file formatted to be human readable
+        :type prettyprint: bool
+
+        :returns:
+            StringIO object, if outputPath is ''
+        """
+
+        if prepared is None:
+            prepared = datetime.now()
+
         if outputPath == '':
             return writer(path=outputPath, dType=message_type, payload=self, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver)

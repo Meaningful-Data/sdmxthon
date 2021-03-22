@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Message &mdash; SDMXthon documentation</title>
+
+
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+
+
+    <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+
+    <script type="text/javascript" id="documentation_options" data-url_root="../../"
+            src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="Component" href="component.html"/>
+    <link rel="prev" title="DataSet" href="dataset.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home"> SDMXthon
+
+
+                </a>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a>
+                        <ul>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read
+                                SDMX</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get
+                                Datasets</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get
+                                Data</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To
+                                CSV</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate
+                                Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#annotable-artefact">Annotable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#identifiable-artefact">Identifiable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#nameable-artefact">Nameable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#versionable-artefact">Versionable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#maintainable-artefact">Maintainable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#international-string">International
+                                        String</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="base.html#localised-string">Localised
+                                                String</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataset.html">DataSet</a></li>
+                            <li class="toctree-l2 current"><a class="current reference internal" href="#">Message</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="component.html">Component</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#dimension">Dimension</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#timedimension">TimeDimension</a>
+                                            </li>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#measuredimension">MeasureDimension</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#attribute">Attribute</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#primarymeasure">PrimaryMeasure</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="componentList.html">ComponentList</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#dimensiondescriptor">DimensionDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#attributedescriptor">AttributeDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#measuredescriptor">MeasureDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#groupdimensiondescriptor">GroupDimensionDescriptor</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="item.html">Item</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="item.html#agency">Agency</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="itemScheme.html">ItemScheme</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#conceptscheme">ConceptScheme</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#codelist">Codelist</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#organisationscheme">OrganisationScheme</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="itemScheme.html#agencyscheme">AgencyScheme</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="header.html">Header</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="header.html#party">Party</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="header.html#sender">Sender</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="representation.html">Representation</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="representation.html#facet">Facet</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
+
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">SDMXthon</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content style-external-links">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+                        <li><a href="../model.html">Model Package</a> &raquo;</li>
+
+                        <li>Message</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/packages/model/message.rst.txt" rel="nofollow"> View page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="message">
+                            <h1>Message<a class="headerlink" href="#message" title="Permalink to this headline">¶</a>
+                            </h1>
+                            <dl class="py class">
+                                <dt id="model.message.Message">
+                                    <em class="property"><span class="pre">class</span> </em><code
+                                        class="sig-prename descclassname"><span class="pre">model.message.</span></code><code
+                                        class="sig-name descname"><span class="pre">Message</span></code><span
+                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                        class="pre">message_type</span></span><span class="p"><span class="pre">:</span></span>
+                                    <span class="n"><span class="pre">SDMXThon.utils.enums.MessageTypeEnum</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span class="pre">header</span></span><span
+                                            class="p"><span class="pre">:</span></span> <span class="n"><span
+                                            class="pre">SDMXThon.model.header.Header</span></span></em><span
+                                        class="sig-paren">)</span><a class="headerlink" href="#model.message.Message"
+                                                                     title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span
+                                        class="pre">object</span></code></p>
+                                    <p>Message class holds the type of a SDMX Message, its payload and its header.</p>
+                                    <dl class="field-list simple">
+                                        <dt class="field-odd">Parameters</dt>
+                                        <dd class="field-odd">
+                                            <ul class="simple">
+                                                <li><p><strong>message_type</strong> (<cite>MessageTypeEnum</cite>) –
+                                                    Enumeration that withholds the Message type for writing purposes</p>
+                                                </li>
+                                                <li><p><strong>payload</strong> (<a class="reference internal"
+                                                                                    href="dataset.html"><span
+                                                        class="doc">Dataset</span></a>) – Information stored in the
+                                                    message (Datasets or structures)</p></li>
+                                                <li><p><strong>header</strong> (<cite>Header</cite>) – Header of the
+                                                    message.</p></li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+                                    <dl class="py method">
+                                        <dt id="model.message.Message.header">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">header</span></code><a
+                                                class="headerlink" href="#model.message.Message.header"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Header of the message.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p><cite>Header</cite></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.message.Message.headerCreation">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">headerCreation</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">id_</span></span><span class="p"><span class="pre">:</span></span>
+                                            <span class="n"><span class="pre">str</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">test</span></span><span class="p"><span class="pre">:</span></span>
+                                            <span class="n"><span class="pre">bool</span></span> <span class="o"><span
+                                                    class="pre">=</span></span> <span class="default_value"><span
+                                                    class="pre">False</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">senderId</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span>
+                                            <span class="o"><span class="pre">=</span></span> <span
+                                                    class="default_value"><span class="pre">'Unknown'</span></span></em>,
+                                            <em class="sig-param"><span class="n"><span
+                                                    class="pre">receiverId</span></span><span class="p"><span
+                                                    class="pre">:</span></span> <span class="n"><span
+                                                    class="pre">str</span></span> <span class="o"><span
+                                                    class="pre">=</span></span> <span class="default_value"><span
+                                                    class="pre">'not_supplied'</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">datetimeStr</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">''</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#model.message.Message.headerCreation"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Creates the header for a Message</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>id</strong> (<em>str</em>) – ID of the Header</p>
+                                                        </li>
+                                                        <li><p><strong>test</strong> (<em>bool</em>) – Mark as test file
+                                                        </p></li>
+                                                        <li><p><strong>senderId</strong> (<em>str</em>) – ID of the
+                                                            Sender</p></li>
+                                                        <li><p><strong>receiverId</strong> (<em>str</em>) – ID of the
+                                                            Receiver</p></li>
+                                                        <li><p><strong>datetimeStr</strong> (<em>datetime</em>) –
+                                                            Datetime of the preparation of the Message. Format:
+                                                            ‘%Y-%m-%dT%H:%M:%S’</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.message.Message.payload">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">payload</span></code><a
+                                                class="headerlink" href="#model.message.Message.payload"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Information stored in the message (DataSet or Structure). A dictionary of
+                                            datasets could also be used.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p><a class="reference internal"
+                                                                            href="dataset.html"><span class="doc">Dataset</span></a>
+                                                </p>
+                                                </dd>
+                                                <dt class="field-even">Class</dt>
+                                                <dd class="field-even"><p><cite>Dict [str, Dataset]</cite></p>
+                                                </dd>
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p><cite>Structure</cite></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.message.Message.setDimensionAtObservation">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">setDimensionAtObservation</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">dimAtObs</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.message.Message.setDimensionAtObservation"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Sets the dimensionAtObservation if the payload is formed by Datasets</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>dimAtObs</strong> (<em>str</em>) –
+                                                    Dimension At Observation</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.message.Message.toXML">
+                                            <code class="sig-name descname"><span class="pre">toXML</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">outputPath</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span>
+                                            <span class="o"><span class="pre">=</span></span> <span
+                                                    class="default_value"><span class="pre">''</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">id_</span></span><span class="p"><span class="pre">:</span></span>
+                                            <span class="n"><span class="pre">str</span></span> <span class="o"><span
+                                                    class="pre">=</span></span> <span class="default_value"><span
+                                                    class="pre">'test'</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">test</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span>
+                                            <span class="o"><span class="pre">=</span></span> <span
+                                                    class="default_value"><span class="pre">'true'</span></span></em>,
+                                            <em class="sig-param"><span class="n"><span
+                                                    class="pre">prepared</span></span><span class="p"><span class="pre">:</span></span>
+                                                <span class="n"><span class="pre">Optional</span><span class="p"><span
+                                                        class="pre">[</span></span><span
+                                                        class="pre">datetime.datetime</span><span class="p"><span
+                                                        class="pre">]</span></span></span> <span class="o"><span
+                                                        class="pre">=</span></span> <span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">sender</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span>
+                                            <span class="o"><span class="pre">=</span></span> <span
+                                                    class="default_value"><span class="pre">'Unknown'</span></span></em>,
+                                            <em class="sig-param"><span class="n"><span
+                                                    class="pre">receiver</span></span><span class="p"><span class="pre">:</span></span>
+                                                <span class="n"><span class="pre">str</span></span> <span
+                                                        class="o"><span class="pre">=</span></span> <span
+                                                        class="default_value"><span
+                                                        class="pre">'Not_supplied'</span></span></em><span
+                                                class="sig-paren">)</span> &#x2192; <span
+                                                class="pre">_io.StringIO</span><a class="headerlink"
+                                                                                  href="#model.message.Message.toXML"
+                                                                                  title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Exports its payload to a XML file in SDMX-ML 2.1 format</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>outputPath</strong> (<em>str</em>) – Path to save
+                                                            the file, defaults to ‘’</p></li>
+                                                        <li><p><strong>id</strong> (<em>str</em>) – ID of the Header,
+                                                            defaults to ‘test’</p></li>
+                                                        <li><p><strong>test</strong> (<em>str</em>) – Mark as test file,
+                                                            defaults to ‘true’</p></li>
+                                                        <li><p><strong>prepared</strong> (<em>datetime</em>) – Datetime
+                                                            of the preparation of the Message, defaults to current date
+                                                            and time</p></li>
+                                                        <li><p><strong>sender</strong> (<em>str</em>) – ID of the
+                                                            Sender, defaults to ‘Unknown’</p></li>
+                                                        <li><p><strong>receiver</strong> (<em>str</em>) – ID of the
+                                                            Receiver, defaults to ‘Not_supplied’</p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p>StringIO object, if outputPath is ‘’</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.message.Message.type">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">type</span></code><a
+                                                class="headerlink" href="#model.message.Message.type"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Enumeration that withholds the Message type for writing purposes.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p><cite>MessageTypeEnum</cite></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &#169; Copyright 2021, MeaningfulData.
+
+                        </p>
+                    </div>
+
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+
+</body>
+</html>

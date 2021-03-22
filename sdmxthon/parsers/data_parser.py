@@ -2,8 +2,8 @@
     Data parser file contains only the DataParser class
 """
 
+from SDMXThon.utils.xml_base import encode_str_2_3, Tag_pattern_
 from .gdscollector import GenerateSuper
-from ..utils.xml_base import encode_str_2_3, Tag_pattern_
 
 Validate_simpletypes_ = True
 UseCapturedNS_ = True
@@ -31,17 +31,17 @@ class DataParser(GenerateSuper):
         self.__validate_NCNameIDType_patterns = [['^([A-Za-z][A-Za-z0-9_\\-]*)$'], ['^([A-Za-z0-9_@$\\-]+)$'],
                                                  ['^([A-Za-z0-9_@$\\-]+(\\.[A-Za-z0-9_@$\\-]+)*)$']]
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if an element has any content for parsing purposes"""
         return False
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory methods are provided to generate the desired class in order to parse any XML Element
         that is currently supported by the library"""
         pass
 
-    def build(self, node, gds_collector_=None):
+    def _build(self, node, gds_collector_=None):
         """Build method is used to parse a XML element, its attributes and its children"""
 
         self.gds_collector_ = gds_collector_
@@ -51,30 +51,30 @@ class DataParser(GenerateSuper):
 
         already_processed = set()
 
-        self.build_attributes(node, node.attrib, already_processed)
+        self._build_attributes(node, node.attrib, already_processed)
 
         for child in node:
             node_name_ = Tag_pattern_.match(child.tag).groups()[-1]
-            self.build_children(child, node, node_name_, gds_collector_=gds_collector_)
+            self._build_children(child, node, node_name_, gds_collector_=gds_collector_)
 
         return self
 
-    def build_attributes(self, node, attributes_, already_processed):
+    def _build_attributes(self, node, attributes_, already_processed):
         """Builds the attributes present in the XML element"""
         pass
 
-    def validate_nested_NC_name_id_type(self, value):
+    def _validate_nested_NC_name_id_type(self, value):
         """Validate dim_type NestedNCNameIDType, a restriction on NestedIDType."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
 
-            if not self.gds_validate_simple_patterns(self.__validate_NestedNCNameIDType_patterns, value):
+            if not self._gds_validate_simple_patterns(self.__validate_NestedNCNameIDType_patterns, value):
                 self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}" '
                                                 f'does not match xsd pattern restrictions: '
                                                 f'{self.__validate_NestedNCNameIDType_patterns}')
@@ -82,18 +82,18 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def validate_id_type(self, value):
+    def _validate_id_type(self, value):
         """Validate dim_type IDType, a restriction on NestedIDType."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
 
-            if not self.gds_validate_simple_patterns(self.__validate_IDType_patterns, value):
+            if not self._gds_validate_simple_patterns(self.__validate_IDType_patterns, value):
                 self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}" '
                                                 f'does not match xsd pattern restrictions: '
                                                 f'{self.__validate_IDType_patterns}')
@@ -101,18 +101,18 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def validate_version_type(self, value):
+    def _validate_version_type(self, value):
         """Validate dim_type VersionType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
 
-            if not self.gds_validate_simple_patterns(self.__validate_VersionType_patterns, value):
+            if not self._gds_validate_simple_patterns(self.__validate_VersionType_patterns, value):
                 self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}" '
                                                 f'does not match xsd pattern restrictions: '
                                                 f'{self.__validate_IDType_patterns}')
@@ -120,37 +120,37 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def validate_ActionType(self, value):
+    def _validate_action_type(self, value):
         """Validate dim_type ActionType, a restriction on xs:NMTOKEN."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(f'Value "{value}" : {lineno} is not of '
                                                 f'the correct base simple dim_type (str)')
                 return False
             value = value
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
             if value not in enumerations:
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration '
                     f'restriction on ActionType')
                 result = False
         return result
 
-    def validate_nested_id_type(self, value):
+    def _validate_nested_id_type(self, value):
         """Validate dim_type NestedIDType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
 
-            if not self.gds_validate_simple_patterns(self.__validate_NestedIDType_patterns, value):
+            if not self._gds_validate_simple_patterns(self.__validate_NestedIDType_patterns, value):
                 self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}" '
                                                 f'does not match xsd pattern restrictions: '
                                                 f'{self.__validate_IDType_patterns}')
@@ -158,18 +158,18 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def validate_NC_name_id_type(self, value):
+    def _validate_nc_name_id_type(self, value):
         """Validate dim_type common:NCNameIDType, a restriction on IDType."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
 
-            if not self.gds_validate_simple_patterns(self.__validate_NCNameIDType_patterns, value):
+            if not self._gds_validate_simple_patterns(self.__validate_NCNameIDType_patterns, value):
                 self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}" '
                                                 f'does not match xsd pattern restrictions: '
                                                 f'{self.__validate_IDType_patterns}')
@@ -177,12 +177,12 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def validate_object_type_code_list_type(self, value):
+    def _validate_object_type_code_list_type(self, value):
         """Validate dim_type ObjectTypeCodelistType, a restriction on xs:string."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 result = False
@@ -212,12 +212,12 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def validate_package_type_code_list_type(self, value):
+    def _validate_package_type_code_list_type(self, value):
         """Validate dim_type PackageTypeCodelistType, a restriction on xs:string."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 result = False
@@ -234,6 +234,6 @@ class DataParser(GenerateSuper):
 
         return result
 
-    def build_children(self, child, node, node_name_, gds_collector_):
+    def _build_children(self, child, node, node_name_, gds_collector_):
         """Builds the childs of the XML element"""
         pass

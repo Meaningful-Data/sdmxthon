@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ItemScheme &mdash; SDMXthon  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DataStructureDefinition" href="dataStructure.html" />
+    <link rel="prev" title="Item" href="item.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SDMXthon
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read SDMX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#annotable-artefact">Annotable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#identifiable-artefact">Identifiable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#nameable-artefact">Nameable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#versionable-artefact">Versionable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#maintainable-artefact">Maintainable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#international-string">International String</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="base.html#localised-string">Localised String</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">DataSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html">Component</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="component.html#dimension">Dimension</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="component.html#timedimension">TimeDimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="component.html#measuredimension">MeasureDimension</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="component.html#attribute">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="component.html#primarymeasure">PrimaryMeasure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="componentList.html">ComponentList</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#dimensiondescriptor">DimensionDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#attributedescriptor">AttributeDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#measuredescriptor">MeasureDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#groupdimensiondescriptor">GroupDimensionDescriptor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="item.html">Item</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="item.html#agency">Agency</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ItemScheme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#conceptscheme">ConceptScheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#codelist">Codelist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#organisationscheme">OrganisationScheme</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#agencyscheme">AgencyScheme</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="header.html">Header</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="header.html#party">Party</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="header.html#sender">Sender</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="representation.html">Representation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="representation.html#facet">Facet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SDMXthon</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../model.html">Model Package</a> &raquo;</li>
+        
+      <li>ItemScheme</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/packages/model/itemScheme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="itemscheme">
+<h1>ItemScheme<a class="headerlink" href="#itemscheme" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="model.itemScheme.ItemScheme">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.itemScheme.</span></code><code class="sig-name descname"><span class="pre">ItemScheme</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">urn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validFrom</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validTo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isFinal</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isExternalReference</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serviceUrl</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structureUrl</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maintainer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isPartial</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.itemScheme.ItemScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#model.base.MaintainableArtefact" title="model.base.MaintainableArtefact"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.base.MaintainableArtefact</span></code></a></p>
+<p>The descriptive information for an arrangement or division of objects into groups based
+on characteristics, which the objects have in common.</p>
+<dl class="py method">
+<dt id="model.itemScheme.ItemScheme.append">
+<code class="sig-name descname"><span class="pre">append</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.itemScheme.ItemScheme.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an Item to the ItemScheme</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.itemScheme.ItemScheme.isPartial">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">isPartial</span></code><a class="headerlink" href="#model.itemScheme.ItemScheme.isPartial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Denotes whether the Item Scheme contains a sub set of the 
+full set of Items in the maintained scheme.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.itemScheme.ItemScheme.items">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">items</span></code><a class="headerlink" href="#model.itemScheme.ItemScheme.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Association to the Items in the scheme</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="conceptscheme">
+<h2>ConceptScheme<a class="headerlink" href="#conceptscheme" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.itemScheme.ConceptScheme">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.itemScheme.</span></code><code class="sig-name descname"><span class="pre">ConceptScheme</span></code><a class="headerlink" href="#model.itemScheme.ConceptScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.itemScheme.ItemScheme" title="model.itemScheme.ItemScheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.itemScheme.ItemScheme</span></code></a></p>
+<p>The descriptive information for an arrangement or division of concepts into groups based
+on characteristics, which the objects have in common.</p>
+<dl class="simple">
+<dt>ItemType:</dt><dd><p><a class="reference internal" href="item.html#model.itemScheme.Concept" title="model.itemScheme.Concept"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Concept</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="codelist">
+<h2>Codelist<a class="headerlink" href="#codelist" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.itemScheme.Codelist">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.itemScheme.</span></code><code class="sig-name descname"><span class="pre">Codelist</span></code><a class="headerlink" href="#model.itemScheme.Codelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.itemScheme.ItemScheme" title="model.itemScheme.ItemScheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.itemScheme.ItemScheme</span></code></a></p>
+<p>A list from which some statistical concepts (coded concepts) take their values.</p>
+<dl class="simple">
+<dt>ItemType:</dt><dd><p><a class="reference internal" href="item.html#model.itemScheme.Code" title="model.itemScheme.Code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Code</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="organisationscheme">
+<h2>OrganisationScheme<a class="headerlink" href="#organisationscheme" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.itemScheme.OrganisationScheme">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.itemScheme.</span></code><code class="sig-name descname"><span class="pre">OrganisationScheme</span></code><a class="headerlink" href="#model.itemScheme.OrganisationScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.itemScheme.ItemScheme" title="model.itemScheme.ItemScheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.itemScheme.ItemScheme</span></code></a></p>
+<p>Abstract class. Used for structure messages</p>
+</dd></dl>
+
+<div class="section" id="agencyscheme">
+<h3>AgencyScheme<a class="headerlink" href="#agencyscheme" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="model.itemScheme.AgencyScheme">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.itemScheme.</span></code><code class="sig-name descname"><span class="pre">AgencyScheme</span></code><a class="headerlink" href="#model.itemScheme.AgencyScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.itemScheme.OrganisationScheme" title="model.itemScheme.OrganisationScheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.itemScheme.OrganisationScheme</span></code></a></p>
+<p>A maintained collection of Maintenance Agencies.</p>
+<dl class="simple">
+<dt>ItemType:</dt><dd><p><a class="reference internal" href="item.html#model.itemScheme.Agency" title="model.itemScheme.Agency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Agency</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, MeaningfulData.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

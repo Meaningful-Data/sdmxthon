@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Representation &mdash; SDMXthon documentation</title>
+
+
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+
+
+    <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+
+    <script type="text/javascript" id="documentation_options" data-url_root="../../"
+            src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="prev" title="Header" href="header.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home"> SDMXthon
+
+
+                </a>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a>
+                        <ul>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read
+                                SDMX</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get
+                                Datasets</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get
+                                Data</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To
+                                CSV</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate
+                                Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#annotable-artefact">Annotable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#identifiable-artefact">Identifiable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#nameable-artefact">Nameable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#versionable-artefact">Versionable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#maintainable-artefact">Maintainable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#international-string">International
+                                        String</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="base.html#localised-string">Localised
+                                                String</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataset.html">DataSet</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="message.html">Message</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="component.html">Component</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#dimension">Dimension</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#timedimension">TimeDimension</a>
+                                            </li>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#measuredimension">MeasureDimension</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#attribute">Attribute</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#primarymeasure">PrimaryMeasure</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="componentList.html">ComponentList</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#dimensiondescriptor">DimensionDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#attributedescriptor">AttributeDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#measuredescriptor">MeasureDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#groupdimensiondescriptor">GroupDimensionDescriptor</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="item.html">Item</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="item.html#agency">Agency</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="itemScheme.html">ItemScheme</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#conceptscheme">ConceptScheme</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#codelist">Codelist</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#organisationscheme">OrganisationScheme</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="itemScheme.html#agencyscheme">AgencyScheme</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="header.html">Header</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="header.html#party">Party</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="header.html#sender">Sender</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2 current"><a class="current reference internal"
+                                                              href="#">Representation</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="#facet">Facet</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
+
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">SDMXthon</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content style-external-links">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+                        <li><a href="../model.html">Model Package</a> &raquo;</li>
+
+                        <li>Representation</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/packages/model/representation.rst.txt" rel="nofollow"> View page
+                                source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="representation">
+                            <h1>Representation<a class="headerlink" href="#representation"
+                                                 title="Permalink to this headline">¶</a></h1>
+                            <dl class="py class">
+                                <dt id="model.representation.Representation">
+                                    <em class="property"><span class="pre">class</span> </em><code
+                                        class="sig-prename descclassname"><span class="pre">model.representation.</span></code><code
+                                        class="sig-name descname"><span class="pre">Representation</span></code><span
+                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                        class="pre">facets</span></span><span class="p"><span
+                                        class="pre">:</span></span> <span class="n"><span
+                                        class="pre">Optional</span><span class="p"><span
+                                        class="pre">[</span></span><span class="pre">List</span><span class="p"><span
+                                        class="pre">[</span></span><a class="reference internal"
+                                                                      href="#model.representation.Facet"
+                                                                      title="model.representation.Facet"><span
+                                        class="pre">model.representation.Facet</span></a><span class="p"><span
+                                        class="pre">]</span></span><span class="p"><span
+                                        class="pre">]</span></span></span> <span class="o"><span
+                                        class="pre">=</span></span> <span class="default_value"><span
+                                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                                        class="pre">codelist</span></span><span class="o"><span
+                                        class="pre">=</span></span><span class="default_value"><span
+                                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                                        class="pre">conceptScheme</span></span><span class="o"><span
+                                        class="pre">=</span></span><span class="default_value"><span
+                                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                                        class="pre">gdscollector_</span></span><span class="o"><span
+                                        class="pre">=</span></span><span class="default_value"><span
+                                        class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                        class="headerlink" href="#model.representation.Representation"
+                                        title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span
+                                        class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
+                                    <p>The allowable value or format for Component or Concept</p>
+                                    <dl class="py method">
+                                        <dt id="model.representation.Representation.addFacet">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">addFacet</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">value</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#model.representation.Representation.addFacet"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Add a facet to the list</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.representation.Representation.codelist">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">codelist</span></code><a
+                                                class="headerlink" href="#model.representation.Representation.codelist"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Reference to the codelist</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.representation.Representation.conceptScheme">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span
+                                                class="pre">conceptScheme</span></code><a class="headerlink"
+                                                                                          href="#model.representation.Representation.conceptScheme"
+                                                                                          title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Reference to the ConceptScheme (only in MeasureDimension)</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.representation.Representation.facets">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">facets</span></code><a
+                                                class="headerlink" href="#model.representation.Representation.facets"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>list of Facets found</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.representation.Representation.type_">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">type_</span></code><a
+                                                class="headerlink" href="#model.representation.Representation.type_"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Specifies the basic type of the component (String, BigInteger…)</p>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                            <div class="section" id="facet">
+                                <h2>Facet<a class="headerlink" href="#facet" title="Permalink to this headline">¶</a>
+                                </h2>
+                                <dl class="py class">
+                                    <dt id="model.representation.Facet">
+                                        <em class="property"><span class="pre">class</span> </em><code
+                                            class="sig-prename descclassname"><span
+                                            class="pre">model.representation.</span></code><code
+                                            class="sig-name descname"><span class="pre">Facet</span></code><span
+                                            class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                            class="pre">facetType</span></span><span class="p"><span
+                                            class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
+                                            class="pre">str</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                        <em class="sig-param"><span class="n"><span class="pre">facetValue</span></span><span
+                                                class="p"><span class="pre">:</span></span> <span class="n"><span
+                                                class="pre">Optional</span><span class="p"><span
+                                                class="pre">[</span></span><span class="pre">str</span><span
+                                                class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                                class="pre">=</span></span> <span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                            class="n"><span class="pre">facetValueType</span></span><span
+                                            class="p"><span class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
+                                            class="pre">str</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span
+                                            class="sig-paren">)</span><a class="headerlink"
+                                                                         href="#model.representation.Facet"
+                                                                         title="Permalink to this definition">¶</a></dt>
+                                    <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span
+                                            class="pre">object</span></code></p>
+                                        <p>Defines the format for the content of the Component when reported in a data
+                                            or metadata set.</p>
+                                        <dl class="py method">
+                                            <dt id="model.representation.Facet.facetType">
+                                                <em class="property"><span class="pre">property</span> </em><code
+                                                    class="sig-name descname"><span
+                                                    class="pre">facetType</span></code><a class="headerlink"
+                                                                                          href="#model.representation.Facet.facetType"
+                                                                                          title="Permalink to this definition">¶</a>
+                                            </dt>
+                                            <dd><p>A specific content type which is constrained by the FacetType
+                                                enumeration</p>
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="py method">
+                                            <dt id="model.representation.Facet.facetValue">
+                                                <em class="property"><span class="pre">property</span> </em><code
+                                                    class="sig-name descname"><span class="pre">facetValue</span></code><a
+                                                    class="headerlink" href="#model.representation.Facet.facetValue"
+                                                    title="Permalink to this definition">¶</a></dt>
+                                            <dd><p>The value of the Facet</p>
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="py method">
+                                            <dt id="model.representation.Facet.facetValueType">
+                                                <em class="property"><span class="pre">property</span> </em><code
+                                                    class="sig-name descname"><span
+                                                    class="pre">facetValueType</span></code><a class="headerlink"
+                                                                                               href="#model.representation.Facet.facetValueType"
+                                                                                               title="Permalink to this definition">¶</a>
+                                            </dt>
+                                            <dd><p>The format of the value of a Component when reported in a data or
+                                                metadata set.
+                                                This is constrained by the FacetValueType enumeration.</p>
+                                            </dd>
+                                        </dl>
+
+                                    </dd>
+                                </dl>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &#169; Copyright 2021, MeaningfulData.
+
+                        </p>
+                    </div>
+
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+
+</body>
+</html>

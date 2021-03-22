@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Read Parser &mdash; SDMXthon documentation</title>
+
+
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+
+
+    <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+
+    <script type="text/javascript" id="documentation_options" data-url_root="../../"
+            src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="Write Parser" href="write.html"/>
+    <link rel="prev" title="Parsers Package" href="../parsers.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search" style="background: lightblue">
+
+
+                <a href="../../index.html" class="icon icon-home"> SDMXthon
+
+
+                </a>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../model.html">Model Package</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../parsers.html">Parsers
+                        Package</a>
+                        <ul class="current">
+                            <li class="toctree-l2 current"><a class="current reference internal" href="#">Read
+                                Parser</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="write.html">Write Parser</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
+
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">SDMXthon</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content style-external-links">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+                        <li><a href="../parsers.html">Parsers Package</a> &raquo;</li>
+
+                        <li>Read Parser</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/packages/parsers/read.rst.txt" rel="nofollow"> View page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="read-parser">
+                            <h1>Read Parser<a class="headerlink" href="#read-parser" title="Permalink to this headline">¶</a>
+                            </h1>
+                            <dl class="py class">
+                                <dt id="model.component.Component">
+                                    <em class="property"><span class="pre">class</span> </em><code
+                                        class="sig-prename descclassname"><span
+                                        class="pre">model.component.</span></code><code class="sig-name descname"><span
+                                        class="pre">Component</span></code><span class="sig-paren">(</span><em
+                                        class="sig-param"><span class="n"><span class="pre">id_</span></span><span
+                                        class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span
+                                        class="p"><span class="pre">[</span></span><span class="pre">str</span><span
+                                        class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                        class="pre">=</span></span> <span class="default_value"><span
+                                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                                        class="pre">uri</span></span><span class="p"><span class="pre">:</span></span>
+                                    <span class="n"><span class="pre">Optional</span><span class="p"><span
+                                            class="pre">[</span></span><span class="pre">str</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span class="pre">urn</span></span><span
+                                            class="p"><span class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
+                                            class="pre">str</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span
+                                            class="pre">annotations</span></span><span class="o"><span
+                                            class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span
+                                            class="pre">localRepresentation</span></span><span class="p"><span
+                                            class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a
+                                            class="reference internal"
+                                            href="../model/representation.html#model.representation.Representation"
+                                            title="model.representation.Representation"><span class="pre">model.representation.Representation</span></a><span
+                                            class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span
+                                        class="sig-paren">)</span><a class="headerlink"
+                                                                     href="#model.component.Component"
+                                                                     title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span
+                                        class="pre">model.base.IdentifiableArtefact</span></code></p>
+                                    <p>A component is an abstract super class used to define qualitative and
+                                        quantitative data
+                                        and metadata items that belong to a Component List and hence a Structure.
+                                        Component is refined through its sub-classes.</p>
+                                    <dl class="py method">
+                                        <dt id="model.component.Component.concept_identity">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span
+                                                class="pre">concept_identity</span></code><a class="headerlink"
+                                                                                             href="#model.component.Component.concept_identity"
+                                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Association to a Concept in a Concept Scheme that
+                                            identifies and defines the semantic of the Component</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.component.Component.local_representation">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">local_representation</span></code><a
+                                                class="headerlink"
+                                                href="#model.component.Component.local_representation"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Association to the Representation of the Component if this is different
+                                            from
+                                            the coreRepresentation of the Concept which the Component uses
+                                            (ConceptUsage)</p>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &#169; Copyright 2021, MeaningfulData.
+
+                        </p>
+                    </div>
+
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+
+</body>
+</html>
