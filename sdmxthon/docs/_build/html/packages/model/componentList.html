@@ -1,339 +1,458 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>ComponentList &mdash; SDMXthon  documentation</title>
-  
+    <meta charset="utf-8"/>
 
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  
-  
+    <title>ComponentList &mdash; SDMXthon documentation</title>
 
-  
-  
 
-  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
 
-  
-  <!--[if lt IE 9]>
+
+    <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-    
+    <![endif]-->
+
+
+    <script type="text/javascript" id="documentation_options" data-url_root="../../"
+            src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-    
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Item" href="item.html" />
-    <link rel="prev" title="Component" href="component.html" /> 
+
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="Item" href="item.html"/>
+    <link rel="prev" title="Component" href="component.html"/>
 </head>
 
 <body class="wy-body-for-nav">
 
-   
-  <div class="wy-grid-for-nav">
-    
+
+<div class="wy-grid-for-nav">
+
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
 
-          
-            <a href="../../index.html" class="icon icon-home"> SDMXthon
-          
 
-          
-          </a>
+                <a href="../../index.html" class="icon icon-home"> SDMXthon
 
-          
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
+                </a>
 
-          
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a>
+                        <ul>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read
+                                SDMX</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get
+                                Datasets</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get
+                                Data</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To
+                                CSV</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate
+                                Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#annotable-artefact">Annotable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#identifiable-artefact">Identifiable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#nameable-artefact">Nameable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#versionable-artefact">Versionable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#maintainable-artefact">Maintainable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#international-string">International
+                                        String</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="base.html#localised-string">Localised
+                                                String</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataset.html">DataSet</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="message.html">Message</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="component.html">Component</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#dimension">Dimension</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#timedimension">TimeDimension</a>
+                                            </li>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#measuredimension">MeasureDimension</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#attribute">Attribute</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#primarymeasure">PrimaryMeasure</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2 current"><a class="current reference internal"
+                                                              href="#">ComponentList</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="#dimensiondescriptor">DimensionDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="#attributedescriptor">AttributeDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="#measuredescriptor">MeasureDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="#groupdimensiondescriptor">GroupDimensionDescriptor</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="item.html">Item</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="item.html#agency">Agency</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="itemScheme.html">ItemScheme</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#conceptscheme">ConceptScheme</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#codelist">Codelist</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#organisationscheme">OrganisationScheme</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="itemScheme.html#agencyscheme">AgencyScheme</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="header.html">Header</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="header.html#party">Party</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="header.html#sender">Sender</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="representation.html">Representation</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="representation.html#facet">Facet</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
+
         </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read SDMX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get Datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To CSV</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate Data</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="base.html#annotable-artefact">Annotable Artefact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="base.html#identifiable-artefact">Identifiable Artefact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="base.html#nameable-artefact">Nameable Artefact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="base.html#versionable-artefact">Versionable Artefact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="base.html#maintainable-artefact">Maintainable Artefact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="base.html#international-string">International String</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="base.html#localised-string">Localised String</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="dataset.html">DataSet</a></li>
-<li class="toctree-l2"><a class="reference internal" href="message.html">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="component.html">Component</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="component.html#dimension">Dimension</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="component.html#timedimension">TimeDimension</a></li>
-<li class="toctree-l4"><a class="reference internal" href="component.html#measuredimension">MeasureDimension</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="component.html#attribute">Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="component.html#primarymeasure">PrimaryMeasure</a></li>
-</ul>
-</li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">ComponentList</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#dimensiondescriptor">DimensionDescriptor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#attributedescriptor">AttributeDescriptor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#measuredescriptor">MeasureDescriptor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#groupdimensiondescriptor">GroupDimensionDescriptor</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="item.html">Item</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a></li>
-<li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a></li>
-<li class="toctree-l3"><a class="reference internal" href="item.html#agency">Agency</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="itemScheme.html">ItemScheme</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="itemScheme.html#conceptscheme">ConceptScheme</a></li>
-<li class="toctree-l3"><a class="reference internal" href="itemScheme.html#codelist">Codelist</a></li>
-<li class="toctree-l3"><a class="reference internal" href="itemScheme.html#organisationscheme">OrganisationScheme</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="itemScheme.html#agencyscheme">AgencyScheme</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="header.html">Header</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="header.html#party">Party</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="header.html#sender">Sender</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="representation.html">Representation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="representation.html#facet">Facet</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-            
-          
-        </div>
-        
-      </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">SDMXthon</a>
-        
-      </nav>
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">SDMXthon</a>
+
+        </nav>
 
 
-      <div class="wy-nav-content">
-        
-        <div class="rst-content style-external-links">
-        
-          
+        <div class="wy-nav-content">
+
+            <div class="rst-content style-external-links">
 
 
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+                        <li><a href="../model.html">Model Package</a> &raquo;</li>
+
+                        <li>ComponentList</li>
 
 
+                        <li class="wy-breadcrumbs-aside">
 
 
+                            <a href="../../_sources/packages/model/componentList.rst.txt" rel="nofollow"> View page
+                                source</a>
 
 
+                        </li>
+
+                    </ul>
 
 
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="componentlist">
+                            <h1>ComponentList<a class="headerlink" href="#componentlist"
+                                                title="Permalink to this headline">¶</a></h1>
+                            <dl class="py class">
+                                <dt id="model.component.ComponentList">
+                                    <em class="property"><span class="pre">class</span> </em><code
+                                        class="sig-prename descclassname"><span
+                                        class="pre">model.component.</span></code><code class="sig-name descname"><span
+                                        class="pre">ComponentList</span></code><span class="sig-paren">(</span><em
+                                        class="sig-param"><span class="n"><span class="pre">id_</span></span><span
+                                        class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span
+                                        class="p"><span class="pre">[</span></span><span class="pre">str</span><span
+                                        class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                        class="pre">=</span></span> <span class="default_value"><span
+                                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                                        class="pre">uri</span></span><span class="p"><span class="pre">:</span></span>
+                                    <span class="n"><span class="pre">Optional</span><span class="p"><span
+                                            class="pre">[</span></span><span class="pre">str</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span class="pre">urn</span></span><span
+                                            class="p"><span class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
+                                            class="pre">str</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span
+                                            class="pre">annotations</span></span><span class="o"><span
+                                            class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span
+                                            class="pre">components</span></span><span class="o"><span
+                                            class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span
+                                        class="sig-paren">)</span><a class="headerlink"
+                                                                     href="#model.component.ComponentList"
+                                                                     title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Bases: <a class="reference internal"
+                                                 href="base.html#model.base.IdentifiableArtefact"
+                                                 title="model.base.IdentifiableArtefact"><code
+                                        class="xref py py-class docutils literal notranslate"><span class="pre">model.base.IdentifiableArtefact</span></code></a>
+                                </p>
+                                    <p>An abstract definition of a list of components.
+                                        A concrete example is a Dimension Descriptor which defines
+                                        the list of Dimensions in a DataStructure Definition.</p>
+                                    <dl class="py method">
+                                        <dt id="model.component.ComponentList.addComponent">
+                                            <code class="sig-name descname"><span class="pre">addComponent</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">value</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#model.component.ComponentList.addComponent"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Method to add a Component to the ComponentList</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.component.ComponentList.components">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">components</span></code><a
+                                                class="headerlink" href="#model.component.ComponentList.components"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>An aggregate association to one or more components which make up the
+                                            list.</p>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                            <div class="section" id="dimensiondescriptor">
+                                <h2>DimensionDescriptor<a class="headerlink" href="#dimensiondescriptor"
+                                                          title="Permalink to this headline">¶</a></h2>
+                                <dl class="py class">
+                                    <dt id="model.component.DimensionDescriptor">
+                                        <em class="property"><span class="pre">class</span> </em><code
+                                            class="sig-prename descclassname"><span class="pre">model.component.</span></code><code
+                                            class="sig-name descname"><span
+                                            class="pre">DimensionDescriptor</span></code><a class="headerlink"
+                                                                                            href="#model.component.DimensionDescriptor"
+                                                                                            title="Permalink to this definition">¶</a>
+                                    </dt>
+                                    <dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList"
+                                                     title="model.component.ComponentList"><code
+                                            class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>,
+                                        <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code>
+                                    </p>
+                                        <p>An ordered set of metadata concepts that, combined, classify a statistical
+                                            series,
+                                            and whose values, when combined (the key) in an instance such as a data set,
+                                            uniquely identify a specific observation</p>
+                                    </dd>
+                                </dl>
+
+                            </div>
+                            <div class="section" id="attributedescriptor">
+                                <h2>AttributeDescriptor<a class="headerlink" href="#attributedescriptor"
+                                                          title="Permalink to this headline">¶</a></h2>
+                                <dl class="py class">
+                                    <dt id="model.component.AttributeDescriptor">
+                                        <em class="property"><span class="pre">class</span> </em><code
+                                            class="sig-prename descclassname"><span class="pre">model.component.</span></code><code
+                                            class="sig-name descname"><span
+                                            class="pre">AttributeDescriptor</span></code><a class="headerlink"
+                                                                                            href="#model.component.AttributeDescriptor"
+                                                                                            title="Permalink to this definition">¶</a>
+                                    </dt>
+                                    <dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList"
+                                                     title="model.component.ComponentList"><code
+                                            class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>,
+                                        <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code>
+                                    </p>
+                                        <p>A set metadata concepts that define the attributes of a Data Structure
+                                            Definition.</p>
+                                    </dd>
+                                </dl>
+
+                            </div>
+                            <div class="section" id="measuredescriptor">
+                                <h2>MeasureDescriptor<a class="headerlink" href="#measuredescriptor"
+                                                        title="Permalink to this headline">¶</a></h2>
+                                <dl class="py class">
+                                    <dt id="model.component.MeasureDescriptor">
+                                        <em class="property"><span class="pre">class</span> </em><code
+                                            class="sig-prename descclassname"><span class="pre">model.component.</span></code><code
+                                            class="sig-name descname"><span
+                                            class="pre">MeasureDescriptor</span></code><a class="headerlink"
+                                                                                          href="#model.component.MeasureDescriptor"
+                                                                                          title="Permalink to this definition">¶</a>
+                                    </dt>
+                                    <dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList"
+                                                     title="model.component.ComponentList"><code
+                                            class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>,
+                                        <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code>
+                                    </p>
+                                        <p>A metadata concept that defines the measure of a Data Structure
+                                            Definition</p>
+                                    </dd>
+                                </dl>
+
+                            </div>
+                            <div class="section" id="groupdimensiondescriptor">
+                                <h2>GroupDimensionDescriptor<a class="headerlink" href="#groupdimensiondescriptor"
+                                                               title="Permalink to this headline">¶</a></h2>
+                                <dl class="py class">
+                                    <dt id="model.component.GroupDimensionDescriptor">
+                                        <em class="property"><span class="pre">class</span> </em><code
+                                            class="sig-prename descclassname"><span class="pre">model.component.</span></code><code
+                                            class="sig-name descname"><span class="pre">GroupDimensionDescriptor</span></code><a
+                                            class="headerlink" href="#model.component.GroupDimensionDescriptor"
+                                            title="Permalink to this definition">¶</a></dt>
+                                    <dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList"
+                                                     title="model.component.ComponentList"><code
+                                            class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>,
+                                        <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code>
+                                    </p>
+                                        <p>A set metadata concepts that define a partial key derived from the Dimension
+                                            Descriptor in a
+                                            Data Structure Definition.</p>
+                                    </dd>
+                                </dl>
+
+                            </div>
+                        </div>
 
 
+                    </div>
+
+                </div>
+                <footer>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &#169; Copyright 2021, MeaningfulData.
+
+                        </p>
+                    </div>
 
 
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
 
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
 
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../model.html">Model Package</a> &raquo;</li>
-        
-      <li>ComponentList</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="../../_sources/packages/model/componentList.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="componentlist">
-<h1>ComponentList<a class="headerlink" href="#componentlist" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="model.component.ComponentList">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.component.</span></code><code class="sig-name descname"><span class="pre">ComponentList</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">urn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.component.ComponentList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="base.html#model.base.IdentifiableArtefact" title="model.base.IdentifiableArtefact"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.base.IdentifiableArtefact</span></code></a></p>
-<p>An abstract definition of a list of components.
-A concrete example is a Dimension Descriptor which defines
-the list of Dimensions in a DataStructure Definition.</p>
-<dl class="py method">
-<dt id="model.component.ComponentList.addComponent">
-<code class="sig-name descname"><span class="pre">addComponent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.component.ComponentList.addComponent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to add a Component to the ComponentList</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="model.component.ComponentList.components">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">components</span></code><a class="headerlink" href="#model.component.ComponentList.components" title="Permalink to this definition">¶</a></dt>
-<dd><p>An aggregate association to one or more components which make up the list.</p>
-</dd></dl>
-
-</dd></dl>
-
-<div class="section" id="dimensiondescriptor">
-<h2>DimensionDescriptor<a class="headerlink" href="#dimensiondescriptor" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model.component.DimensionDescriptor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.component.</span></code><code class="sig-name descname"><span class="pre">DimensionDescriptor</span></code><a class="headerlink" href="#model.component.DimensionDescriptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList" title="model.component.ComponentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
-<p>An ordered set of metadata concepts that, combined, classify a statistical series,
-and whose values, when combined (the key) in an instance such as a data set,
-uniquely identify a specific observation</p>
-</dd></dl>
-
-</div>
-<div class="section" id="attributedescriptor">
-<h2>AttributeDescriptor<a class="headerlink" href="#attributedescriptor" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model.component.AttributeDescriptor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.component.</span></code><code class="sig-name descname"><span class="pre">AttributeDescriptor</span></code><a class="headerlink" href="#model.component.AttributeDescriptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList" title="model.component.ComponentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
-<p>A set metadata concepts that define the attributes of a Data Structure Definition.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="measuredescriptor">
-<h2>MeasureDescriptor<a class="headerlink" href="#measuredescriptor" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model.component.MeasureDescriptor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.component.</span></code><code class="sig-name descname"><span class="pre">MeasureDescriptor</span></code><a class="headerlink" href="#model.component.MeasureDescriptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList" title="model.component.ComponentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
-<p>A metadata concept that defines the measure of a Data Structure Definition</p>
-</dd></dl>
-
-</div>
-<div class="section" id="groupdimensiondescriptor">
-<h2>GroupDimensionDescriptor<a class="headerlink" href="#groupdimensiondescriptor" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model.component.GroupDimensionDescriptor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.component.</span></code><code class="sig-name descname"><span class="pre">GroupDimensionDescriptor</span></code><a class="headerlink" href="#model.component.GroupDimensionDescriptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.component.ComponentList" title="model.component.ComponentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.component.ComponentList</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
-<p>A set metadata concepts that define a partial key derived from the Dimension Descriptor in a
-Data Structure Definition.</p>
-</dd></dl>
-
-</div>
-</div>
-
-
-           </div>
-           
-          </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, MeaningfulData.
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
+                </footer>
+            </div>
         </div>
-      </div>
 
     </section>
 
-  </div>
-  
+</div>
 
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(false);
-      });
-  </script>
 
-  
-  
-    
-   
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
 
 </body>
 </html>
