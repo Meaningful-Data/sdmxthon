@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>SDMXthon: the pythonic SDMX &mdash; SDMXthon  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Api Package" href="packages/api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> SDMXthon
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="packages/api.html">Api Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#read-sdmx">Read SDMX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#get-datasets">Get Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#get-data">Get Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#xml-to-json">XML To JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#xml-to-csv">XML To CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#read-json">Read JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#validate-data">Validate Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages/model.html">Model Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/base.html">Base Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#annotation">Annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#annotable-artefact">Annotable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#identifiable-artefact">Identifiable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#nameable-artefact">Nameable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#versionable-artefact">Versionable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#maintainable-artefact">Maintainable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/base.html#international-string">International String</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="packages/model/base.html#localised-string">Localised String</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/dataset.html">DataSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/component.html">Component</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/component.html#dimension">Dimension</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="packages/model/component.html#timedimension">TimeDimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="packages/model/component.html#measuredimension">MeasureDimension</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/component.html#attribute">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/component.html#primarymeasure">PrimaryMeasure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/componentList.html">ComponentList</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/componentList.html#dimensiondescriptor">DimensionDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/componentList.html#attributedescriptor">AttributeDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/componentList.html#measuredescriptor">MeasureDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/componentList.html#groupdimensiondescriptor">GroupDimensionDescriptor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/item.html">Item</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/item.html#code">Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/item.html#concept">Concept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/item.html#agency">Agency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/itemScheme.html">ItemScheme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/itemScheme.html#conceptscheme">ConceptScheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/itemScheme.html#codelist">Codelist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/itemScheme.html#organisationscheme">OrganisationScheme</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="packages/model/itemScheme.html#agencyscheme">AgencyScheme</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/dataStructure.html">DataStructureDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/dataStructure.html#dataflowdefinition">DataFlowDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/header.html">Header</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/header.html#party">Party</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="packages/model/header.html#sender">Sender</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/representation.html">Representation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="packages/model/representation.html#facet">Facet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">SDMXthon</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SDMXthon: the pythonic SDMX</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sdmxthon-the-pythonic-sdmx">
+<h1>SDMXthon: the pythonic SDMX<a class="headerlink" href="#sdmxthon-the-pythonic-sdmx" title="Permalink to this headline">¶</a></h1>
+<p>SDMXthon is a library for parsing, validate and write SDMX documents.</p>
+<p>Based on Pandas and written in python, it allows the conversion from different data formats, as CSV or JSON,
+and inputting the data straight from a Pandas Dataframe.</p>
+<p>Main features of the library:</p>
+<ul class="simple">
+<li><p>SDMX to Pandas Dataframe</p></li>
+<li><p>SDMX metadata parsing</p></li>
+<li><p>Data and metadata validation</p></li>
+<li><p>Pandas Dataframe to SDMX</p></li>
+<li><p>All SDMX-ML 2.1 formats supported</p></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>SDMXthon is designed upon the necessity of a python library that guarantees
+the conversion of data to SDMX from many formats and vice versa.</p>
+<p>The philosophy to build it was to provide a simple way to parse and access the data and metadata,
+perform validations on it, modify the data if necessary using the Pandas infrastructure and
+provide an engine to write the SDMX-ML files.</p>
+<div class="section" id="information-model">
+<h2>Information Model<a class="headerlink" href="#information-model" title="Permalink to this headline">¶</a></h2>
+<p>The library is based on the <a class="reference external" href="https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf">SDMX Information model</a>.
+Same names for classes and properties have been used.</p>
+</div>
+<div class="section" id="access-to-the-main-features-of-sdmxthon">
+<h2>Access to the main features of SDMXthon<a class="headerlink" href="#access-to-the-main-features-of-sdmxthon" title="Permalink to this headline">¶</a></h2>
+<p>All access to parse the SDMX files are in the <a class="reference internal" href="packages/api.html"><span class="doc">Api package</span></a></p>
+<p>Classes of the library are in the <a class="reference internal" href="packages/model.html"><span class="doc">Model package</span></a></p>
+</div>
+<div class="section" id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packages/api.html">Api Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#read-sdmx">Read SDMX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#get-datasets">Get Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#get-data">Get Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#xml-to-json">XML To JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#xml-to-csv">XML To CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#read-json">Read JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/api.html#validate-data">Validate Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages/model.html">Model Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/base.html">Base Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/dataset.html">DataSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/component.html">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/componentList.html">ComponentList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/item.html">Item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/itemScheme.html">ItemScheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/dataStructure.html">DataStructureDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/dataStructure.html#dataflowdefinition">DataFlowDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/header.html">Header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages/model/representation.html">Representation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, MeaningfulData.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

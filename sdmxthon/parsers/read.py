@@ -3,14 +3,14 @@ from datetime import datetime
 
 import pandas as pd
 
+from SDMXThon.model.component import PrimaryMeasure
+from SDMXThon.model.dataSet import DataSet
+from SDMXThon.model.message import Message
+from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 from .gdscollector import GdsCollector
 from .message_parsers import GenericDataType, StructureSpecificDataType, MetadataType
 from .metadata_validations import setReferences
-from ..model.component import PrimaryMeasure
-from ..model.dataSet import DataSet
-from ..model.message import Message
-from ..utils.enums import MessageTypeEnum
-from ..utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 
 CapturedNsmap_ = {}
 print_warnings = True
@@ -41,9 +41,9 @@ def readXML(inFileName, print_warning=True):
         root_class = MetadataType
     else:
         return None
-    root_obj = root_class.factory()
+    root_obj = root_class._factory()
     root_obj.original_tag_name_ = root_tag
-    root_obj.build(root_node, gds_collector_=gds_collector)
+    root_obj._build(root_node, gds_collector_=gds_collector)
     CapturedNsmap_, namespacedefs = get_required_ns_prefix_defs(root_node)
     root_obj._namespace_def = namespacedefs
     makeWarnings(print_warning, gds_collector)

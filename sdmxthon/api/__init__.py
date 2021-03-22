@@ -4,18 +4,29 @@ import sys
 from typing import Dict
 from zipfile import ZipFile
 
-from ..model.dataSet import DataSet
-from ..model.message import Message
-from ..parsers.message_parsers import MetadataType
-from ..parsers.metadata_validations import getMetadata, setReferences
-from ..parsers.read import readXML, sdmxGenToDataSet, sdmxStrToDataset
-from ..utils.enums import MessageType
+from SDMXThon.model.dataSet import DataSet
+from SDMXThon.model.message import Message
+from SDMXThon.parsers.message_parsers import MetadataType
+from SDMXThon.parsers.metadata_validations import setReferences
+from SDMXThon.parsers.read import readXML, sdmxGenToDataSet, sdmxStrToDataset, sdmxToDataFrame, getMetadata
+from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXThon.utils.handlers import first_element_dict
 
 logger = logging.getLogger('logger')
 
 
-def readSDMX(path_to_xml, pathToMetadata):
-    metadata = getMetadata(pathToMetadata)
+def read_sdmx(path_to_xml, path_to_metadata=None) -> Message:
+    """
+    Read SDMX performs the operation of reading a SDMX Data and SDMX metadata files. URLs could be used.
+
+    :param path_to_xml: Path or URL to the SDMX data file
+    :param path_to_metadata: Path or URL to the SDMX metadata file (Optional)
+    :return: A :obj:`Message <model.message.Message>` object or a dict of Dataframes if path_to_metadata is None
+    """
+    if path_to_metadata is None:
+        return get_data(path_to_xml)
+
+    metadata = getMetadata(path_to_metadata)
 
     obj_ = readXML(path_to_xml)
     if isinstance(obj_, MetadataType):
@@ -23,44 +34,73 @@ def readSDMX(path_to_xml, pathToMetadata):
 
     header = obj_.header
     if obj_.original_tag_name_ == 'GenericData':
-        type_ = MessageType.GenericDataSet
-        data = sdmxGenToDataSet(obj_, metadata.structures.dsds, metadata.structures.dataflows)
+        type_ = MessageTypeEnum.GenericDataSet
+        data = sdmxGenToDataSet(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     elif obj_.original_tag_name_ == 'StructureSpecificData':
-        type_ = MessageType.StructureDataSet
-        data = sdmxStrToDataset(obj_, metadata.structures.dsds, metadata.structures.dataflows)
+        type_ = MessageTypeEnum.StructureDataSet
+        data = sdmxStrToDataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     elif obj_.original_tag_name_ == 'Structure':
-        type_ = MessageType.Metadata
+        type_ = MessageTypeEnum.Metadata
         data = obj_.structures
     else:
         raise ValueError('Wrong Message type')
     return Message(type_, data, header)
 
 
-def getDatasets(path_to_xml, pathToMetadata):
-    obj_structure = readXML(path_to_xml)
+def get_datasets(path_to_xml, path_to_metadata):
+    """
+    GetDatasets performs the operation of reading a SDMX Data and SDMX metadata files. URLs could be used.
 
-    dsds, errors = getMetadata(pathToMetadata)
+    :param path_to_xml: Path or URL to the SDMX data file
+    :param path_to_metadata: Path or URL to the SDMX metadata file
+    :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of :obj:`Datasets <model.dataSet.DataSet>`
+    """
 
-    if obj_structure.original_tag_name_ == 'GenericData':
-        datasets = sdmxGenToDataSet(obj_structure, dsds)
-    elif obj_structure.original_tag_name_ == 'StructureSpecificData':
-        datasets = sdmxStrToDataset(obj_structure, dsds)
+    obj_ = readXML(path_to_xml)
+
+    metadata = getMetadata(path_to_metadata)
+
+    if obj_.original_tag_name_ == 'GenericData':
+        datasets = sdmxGenToDataSet(obj_, metadata.payload.dsds, metadata.payload.dataflows)
+    elif obj_.original_tag_name_ == 'StructureSpecificData':
+        datasets = sdmxStrToDataset(obj_, metadata.payload.dsds, metadata.payload.dataflows)
     else:
         raise ValueError('Wrong Message type')
 
     if len(datasets) == 1:
-        values_view = datasets.values()
-        value_iterator = iter(values_view)
-        first_value = next(value_iterator)
-        return first_value
+        return first_element_dict(datasets)
     else:
         return datasets
 
 
-def xmlToJSON(pathToXML, pathToMetadata, output_path):
+def get_data(path_to_data):
+    """
+    GetData reads all observations in a SDMX file
+
+    :param path_to_data: Path or URL to the SDMX data file
+
+    :return: A `Pandas Dataframe <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_ or a dict of
+            `Pandas Dataframe <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
+    """
+    obj_ = readXML(path_to_data)
+
+    if isinstance(obj_, MetadataType):
+        raise TypeError('No data available in a Structure file. You should use getMetadata method')
+
+    return sdmxToDataFrame(obj_)
+
+
+def xml_to_json(pathToXML, path_to_metadata, output_path):
+    """
+    XML to JSON transforms a SDMX file into a JSON in the shape of the JSON Specification. Saves the file on disk.
+
+    :param pathToXML: Path or URL to the SDMX data file
+    :param path_to_metadata: Path or URL to the SDMX metadata file
+    :param output_path: Path to save the JSON
+    """
     list_elements = []
 
-    dataset = getDatasets(pathToXML, pathToMetadata)
+    dataset = get_datasets(pathToXML, path_to_metadata)
 
     if isinstance(dataset, dict):
         for e in dataset.values():
@@ -71,8 +111,17 @@ def xmlToJSON(pathToXML, pathToMetadata, output_path):
         f.write(json.dumps(list_elements, ensure_ascii=False, indent=2))
 
 
-def xmlToCSV(pathToXML, pathToMetadata, output_path):
-    datasets: Dict[str, DataSet] = getDatasets(pathToXML, pathToMetadata)
+def xml_to_csv(pathToXML, path_to_metadata, output_path):
+    """
+    XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or .zip of CSV. If the SDMX data file has
+    only a Dataset and output_path is '', it returns a StringIO object.
+
+    :param pathToXML: Path or URL to the SDMX data file
+    :param path_to_metadata: Path or URL to the SDMX metadata file
+    :param output_path: Path to save the CSV
+    :return: A StringIO object if output_path is ''
+    """
+    datasets: Dict[str, DataSet] = get_datasets(pathToXML, path_to_metadata)
 
     if '.zip' in output_path:
         with ZipFile(output_path, 'w') as zipObj:
@@ -88,22 +137,28 @@ def xmlToCSV(pathToXML, pathToMetadata, output_path):
                 filename = output_path.split('.')[0]
                 output_path = filename + '.csv'
             # Getting first value
-            values_view = datasets.values()
-            value_iterator = iter(values_view)
-            dataset = next(value_iterator)
+            dataset = first_element_dict(datasets)
 
-            dataset.toCSV(output_path)
+            return dataset.toCSV(output_path)
         else:
             raise ValueError('No Datasets were parsed')
 
 
-def readJSON(pathToJSON, dsds) -> dict:
+def read_json(path_to_json, dsds) -> dict:
+    """
+
+    Transforms a JSON file in the shape of the JSON Specification into a dict of :obj:`Dataset <model.dataset.DataSet>`.
+
+    :param path_to_json: Path to the JSON file.
+    :param dsds: A dict of DataStructureDefinition
+    :return: A dict of :obj:`Datasets <model.dataSet.DataSet>`.
+    """
     datasets = {}
-    if isinstance(pathToJSON, str):
-        with open(pathToJSON, 'r') as f:
+    if isinstance(path_to_json, str):
+        with open(path_to_json, 'r') as f:
             parsed = json.loads(f.read())
     else:
-        parsed = json.loads(pathToJSON.read())
+        parsed = json.loads(path_to_json.read())
     for e in parsed:
         code = e.get('structureRef').get('code')
         version = e.get('structureRef').get('version')
@@ -118,7 +173,13 @@ def readJSON(pathToJSON, dsds) -> dict:
     return datasets
 
 
-def validateData(datasets: Dict[str, DataSet]):
+def validate_data(datasets: Dict[str, DataSet]):
+    """
+    Performs a semantic validation on each element of a dict of Dataset
+
+    :param datasets: A dict of :obj:`datasets <model.dataSet.DataSet>`.
+    :return: A list of errors. See the Validation page
+    """
     validations = {}
     for e in datasets.values():
         list_errors = e.semanticValidation()
@@ -130,7 +191,7 @@ def validateData(datasets: Dict[str, DataSet]):
         return validations
 
 
-def get_size(obj, seen=None):
+def _get_size(obj, seen=None):
     """Recursively finds size of objects"""
     size = sys.getsizeof(obj)
     if seen is None:
@@ -142,10 +203,10 @@ def get_size(obj, seen=None):
     # self-referential objects
     seen.add(obj_id)
     if isinstance(obj, dict):
-        size += sum([get_size(v, seen) for v in obj.values()])
-        size += sum([get_size(k, seen) for k in obj.keys()])
+        size += sum([_get_size(v, seen) for v in obj.values()])
+        size += sum([_get_size(k, seen) for k in obj.keys()])
     elif hasattr(obj, '__dict__'):
-        size += get_size(obj.__dict__, seen)
+        size += _get_size(obj.__dict__, seen)
     elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
-        size += sum([get_size(i, seen) for i in obj])
+        size += sum([_get_size(i, seen) for i in obj])
     return size

@@ -2,9 +2,9 @@
     Status messages file withholds some extra MessageTypes for specific purposes
 """
 
-from .base import LocalisedString, InternationalString
-from ..parsers.data_parser import DataParser
-from ..utils.xml_base import find_attr_value_
+from SDMXThon.model.base import LocalisedString, InternationalString
+from SDMXThon.parsers.data_parser import DataParser
+from SDMXThon.utils.xml_base import find_attr_value_
 
 
 class StatusMessageType(DataParser):
@@ -26,7 +26,7 @@ class StatusMessageType(DataParser):
         self._text = Text
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of StatusMessageType"""
         return StatusMessageType(*args_, **kwargs_)
 
@@ -60,25 +60,25 @@ class StatusMessageType(DataParser):
     def code(self, value):
         self._code = value
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if it has any content"""
         if self._text:
             return True
         else:
             return False
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('Code', node)
         if value is not None and 'Code' not in already_processed:
             already_processed.add('Code')
             self._code = value
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Text':
-            obj_ = LocalisedString.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = LocalisedString._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             if self._text is None:
                 self._text = InternationalString()
             self._text.addLocalisedString(obj_)
@@ -99,7 +99,7 @@ class CodedStatusMessageType(StatusMessageType):
         self._name = 'CodedStatusMessageType'
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of CodedStatusMessageType"""
         return CodedStatusMessageType(*args_, **kwargs_)
 # end class CodedStatusMessageType

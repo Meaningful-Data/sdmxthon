@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Header &mdash; SDMXthon  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Representation" href="representation.html" />
+    <link rel="prev" title="DataStructureDefinition" href="dataStructure.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SDMXthon
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read SDMX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#annotable-artefact">Annotable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#identifiable-artefact">Identifiable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#nameable-artefact">Nameable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#versionable-artefact">Versionable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#maintainable-artefact">Maintainable Artefact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base.html#international-string">International String</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="base.html#localised-string">Localised String</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">DataSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html">Component</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="component.html#dimension">Dimension</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="component.html#timedimension">TimeDimension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="component.html#measuredimension">MeasureDimension</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="component.html#attribute">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="component.html#primarymeasure">PrimaryMeasure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="componentList.html">ComponentList</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#dimensiondescriptor">DimensionDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#attributedescriptor">AttributeDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#measuredescriptor">MeasureDescriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="componentList.html#groupdimensiondescriptor">GroupDimensionDescriptor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="item.html">Item</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="item.html#agency">Agency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="itemScheme.html">ItemScheme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="itemScheme.html#conceptscheme">ConceptScheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="itemScheme.html#codelist">Codelist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="itemScheme.html#organisationscheme">OrganisationScheme</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="itemScheme.html#agencyscheme">AgencyScheme</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Header</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#party">Party</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sender">Sender</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="representation.html">Representation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="representation.html#facet">Facet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SDMXthon</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../model.html">Model Package</a> &raquo;</li>
+        
+      <li>Header</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/packages/model/header.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="header">
+<h1>Header<a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="model.header.Header">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.header.</span></code><code class="sig-name descname"><span class="pre">Header</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Prepared</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Receiver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Structure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DataProvider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DataSetAction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DataSetID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Extracted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ReportingBegin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ReportingEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EmbargoDate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gds_collector_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.header.Header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
+<p>Header defines the basis for all message headers.</p>
+<dl class="py method">
+<dt id="model.header.Header.dataProvider">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">dataProvider</span></code><a class="headerlink" href="#model.header.Header.dataProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data provider of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.datasetAction">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">datasetAction</span></code><a class="headerlink" href="#model.header.Header.datasetAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action of the Dataset</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.datasetID">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">datasetID</span></code><a class="headerlink" href="#model.header.Header.datasetID" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of the Dataset</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.embargoDate">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">embargoDate</span></code><a class="headerlink" href="#model.header.Header.embargoDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Datetime of the Embargo (only in Data Messages)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.extracted">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">extracted</span></code><a class="headerlink" href="#model.header.Header.extracted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Datetime of the information extracted</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.id_">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">id_</span></code><a class="headerlink" href="#model.header.Header.id_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.name">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#model.header.Header.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.prepared">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">prepared</span></code><a class="headerlink" href="#model.header.Header.prepared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Datetime of the preparation of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.receiver">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">receiver</span></code><a class="headerlink" href="#model.header.Header.receiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receiver of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.reportingBegin">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">reportingBegin</span></code><a class="headerlink" href="#model.header.Header.reportingBegin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start of the reporting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.reportingEnd">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">reportingEnd</span></code><a class="headerlink" href="#model.header.Header.reportingEnd" title="Permalink to this definition">¶</a></dt>
+<dd><p>End of the reporting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.sender">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sender</span></code><a class="headerlink" href="#model.header.Header.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sender of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.source">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">source</span></code><a class="headerlink" href="#model.header.Header.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source of the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.structure">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">structure</span></code><a class="headerlink" href="#model.header.Header.structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structures of the data in the Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Header.test">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">test</span></code><a class="headerlink" href="#model.header.Header.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets if the Message is for testing purposes</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="party">
+<h2>Party<a class="headerlink" href="#party" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.header.Party">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.header.</span></code><code class="sig-name descname"><span class="pre">Party</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extensiontype_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gds_collector_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.header.Party" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SDMXThon.parsers.data_parser.DataParser</span></code></p>
+<p>Party defines the information which is sent about various parties
+such as senders and receivers of messages.The id attribute holds the
+identification of the party.</p>
+<dl class="py method">
+<dt id="model.header.Party.contact">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">contact</span></code><a class="headerlink" href="#model.header.Party.contact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contact of the Party</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Party.extensiontype">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">extensiontype</span></code><a class="headerlink" href="#model.header.Party.extensiontype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dim_type attribute</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Party.id_">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">id_</span></code><a class="headerlink" href="#model.header.Party.id_" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of the Sender/Receiver</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.header.Party.name">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#model.header.Party.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the Party</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="sender">
+<h3>Sender<a class="headerlink" href="#sender" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="model.header.Sender">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">model.header.</span></code><code class="sig-name descname"><span class="pre">Sender</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gds_collector_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.header.Sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.header.Party" title="model.header.Party"><code class="xref py py-class docutils literal notranslate"><span class="pre">model.header.Party</span></code></a></p>
+<p>Sender extends the basic party structure to add an optional time
+zone declaration.</p>
+<dl class="py method">
+<dt id="model.header.Sender.timezone">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">timezone</span></code><a class="headerlink" href="#model.header.Sender.timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timezone of the Sender</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, MeaningfulData.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

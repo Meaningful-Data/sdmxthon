@@ -1,0 +1,7 @@
+Message
+-----------------
+
+.. autoclass:: model.message.Message
+   :members:
+   :undoc-members:
+   :show-inheritance:

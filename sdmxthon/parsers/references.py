@@ -2,8 +2,8 @@
     References file withholds all the Reference classes needed for parsing
 """
 
-from ..parsers.data_parser import DataParser, Validate_simpletypes_
-from ..utils.xml_base import find_attr_value_, cast, encode_str_2_3, raise_parse_error
+from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
+from SDMXThon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, raise_parse_error
 
 
 class ReferenceType(DataParser):
@@ -33,11 +33,11 @@ class ReferenceType(DataParser):
         self._urn = URN
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of ReferenceType"""
         return ReferenceType(*args_, **kwargs_)
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if it has any content"""
         if self._ref is not None or self._urn is not None:
             return True
@@ -62,16 +62,16 @@ class ReferenceType(DataParser):
     def urn(self, value):
         self._urn = value
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
-            obj_ = RefBaseType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = RefBaseType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._ref = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
         elif nodeName_ == 'URN':
             value_ = child_.text
-            value_ = self.gds_parse_string(value_)
-            value_ = self.gds_validate_string(value_)
+            value_ = self._gds_parse_string(value_)
+            value_ = self._gds_validate_string(value_)
             aux = value_.split("=", 1)[1]
             self._ref = aux
 
@@ -87,7 +87,7 @@ class RelationshipRefType(DataParser):
         self._ref = None
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of RelationshipRefType"""
         return RelationshipRefType(*args_, **kwargs_)
 
@@ -96,11 +96,11 @@ class RelationshipRefType(DataParser):
         """Reference to the Component as String"""
         return self._ref
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
-            obj_ = RefIDType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = RefIDType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._ref = obj_.id
 
 
@@ -112,7 +112,7 @@ class RefIDType(DataParser):
         self._id = None
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of RefIDType"""
         return RefIDType(*args_, **kwargs_)
 
@@ -121,7 +121,7 @@ class RefIDType(DataParser):
         """ID of the Component Referenced"""
         return self._id
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
@@ -202,7 +202,7 @@ class RefBaseType(DataParser):
         self._package = package
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of RefBaseType"""
         return RefBaseType(*args_, **kwargs_)
 
@@ -287,13 +287,13 @@ class RefBaseType(DataParser):
     def package(self, value):
         self._package = value
 
-    def validate_object_type_code_list_type(self, value):
+    def _validate_object_type_code_list_type(self, value):
         """Validate dim_type ObjectTypeCodelistType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
@@ -316,20 +316,20 @@ class RefBaseType(DataParser):
                             'StructureSet', 'TimeDimension', 'Transition']
 
             if value not in enumerations:
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
 
-    def validate_package_type_code_list_type(self, value):
+    def _validate_package_type_code_list_type(self, value):
         """Validate dim_type PackageTypeCodelistType, a restriction on xs:string."""
         result = True
 
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
                 return False
@@ -339,45 +339,45 @@ class RefBaseType(DataParser):
                             'categoryscheme', 'conceptscheme']
 
             if value not in enumerations:
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
                 result = False
 
         return result
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('agencyID', node)
 
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
             self._agencyID = value
-            self.validate_nested_NC_name_id_type(self._agencyID)  # validate dim_type NestedNCNameIDType
+            self._validate_nested_NC_name_id_type(self._agencyID)  # validate dim_type NestedNCNameIDType
 
         value = find_attr_value_('maintainableParentID', node)
         if value is not None and 'maintainableParentID' not in already_processed:
             already_processed.add('maintainableParentID')
             self._maintainableParentID = value
-            self.validate_id_type(self._maintainableParentID)  # validate dim_type IDType
+            self._validate_id_type(self._maintainableParentID)  # validate dim_type IDType
 
         value = find_attr_value_('maintainableParentVersion', node)
         if value is not None and 'maintainableParentVersion' not in already_processed:
             already_processed.add('maintainableParentVersion')
             self._maintainableParentVersion = value
-            self.validate_version_type(self._maintainableParentVersion)  # validate dim_type VersionType
+            self._validate_version_type(self._maintainableParentVersion)  # validate dim_type VersionType
 
         value = find_attr_value_('containerID', node)
         if value is not None and 'containerID' not in already_processed:
             already_processed.add('containerID')
             self._containerID = value
-            self.validate_nested_id_type(self._containerID)  # validate dim_type NestedIDType
+            self._validate_nested_id_type(self._containerID)  # validate dim_type NestedIDType
 
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self.validate_nested_id_type(self._id)  # validate dim_type NestedIDType
+            self._validate_nested_id_type(self._id)  # validate dim_type NestedIDType
 
         value = find_attr_value_('version', node)
         if value is not None and 'version' not in already_processed:
@@ -398,10 +398,10 @@ class RefBaseType(DataParser):
         if value is not None and 'class' not in already_processed:
             already_processed.add('class')
             self._class_ = value
-            self.validate_object_type_code_list_type(self._class_)
+            self._validate_object_type_code_list_type(self._class_)
 
         value = find_attr_value_('package', node)
         if value is not None and 'package' not in already_processed:
             already_processed.add('package')
             self._package = value
-            self.validate_package_type_code_list_type(self._package)
+            self._validate_package_type_code_list_type(self._package)

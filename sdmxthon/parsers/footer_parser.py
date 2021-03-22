@@ -2,9 +2,9 @@
     Footer_parser file define the classes for parsing the footer of a Message
 """
 
+from SDMXThon.parsers.status_message import CodedStatusMessageType
+from SDMXThon.utils.xml_base import find_attr_value_
 from .data_parser import DataParser, Validate_simpletypes_
-from ..model.status_message import CodedStatusMessageType
-from ..utils.xml_base import find_attr_value_
 
 
 class FooterType(DataParser):
@@ -13,17 +13,10 @@ class FooterType(DataParser):
     be used when the message has payload, but also needs to communicate
     additional information. If an error occurs and no payload is generated,
     an Error message should be returned."""
-    __hash__ = DataParser.__hash__
-    subclass = None
-    superclass = None
 
-    def __init__(self, Message=None, gds_collector_=None, **kwargs_):
+    def __init__(self, Message=None, gds_collector_=None):
         super(FooterType, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
-        self.gds_elementtree_node_ = None
-        self.original_tagname_ = None
-        self.parent_object_ = kwargs_.get('parent_object_')
-        self.ns_prefix_ = None
         if Message is None:
             self._message = []
         else:
@@ -31,7 +24,7 @@ class FooterType(DataParser):
         self._message_nsprefix_ = None
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of FooterType"""
         return FooterType(*args_, **kwargs_)
 
@@ -49,7 +42,7 @@ class FooterType(DataParser):
         else:
             raise TypeError('Message must be a list')
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if it has any content"""
         if (
                 self._message
@@ -58,11 +51,11 @@ class FooterType(DataParser):
         else:
             return False
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Message':
-            obj_ = FooterMessageType.factory(parent_object_=self)
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = FooterMessageType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._message.append(obj_)
 
 
@@ -81,7 +74,7 @@ class FooterMessageType(CodedStatusMessageType):
         self._severity = severity
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
 
         """Factory Method of FooterMessageType"""
         return FooterMessageType(*args_, **kwargs_)
@@ -93,33 +86,33 @@ class FooterMessageType(CodedStatusMessageType):
 
     @severity.setter
     def severity(self, value):
-        if self.validate_SeverityCodeType(value):
+        if self._validate_SeverityCodeType(value):
             self._severity = value
 
-    def validate_SeverityCodeType(self, value):
+    def _validate_SeverityCodeType(self, value):
         """Validate dim_type SeverityCodeType, a restriction on xs:string."""
         result = True
         if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
             if not isinstance(value, str):
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
                 return False
             value = value
             enumerations = ['Error', 'Warning', 'Information']
             if value not in enumerations:
-                lineno = self.gds_get_node_line_number_()
+                lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
                     f'Value "{value}": {lineno} does not match xsd enumeration restriction')
                 result = False
         return result
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('severity', node)
         if value is not None and 'severity' not in already_processed:
             already_processed.add('severity')
             self.severity = value
-            self.validate_SeverityCodeType(self.severity)
-        super(FooterMessageType, self).build_attributes(node, attrs, already_processed)
+            self._validate_SeverityCodeType(self.severity)
+        super(FooterMessageType, self)._build_attributes(node, attrs, already_processed)
 # end class FooterMessageType

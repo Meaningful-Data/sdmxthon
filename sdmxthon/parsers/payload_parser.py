@@ -2,9 +2,9 @@
     Data_Structure has the parsers for the information of data sets
 """
 
-from .references import ReferenceType
-from ..parsers.data_parser import DataParser
-from ..utils.xml_base import cast, find_attr_value_, raise_parse_error
+from SDMXThon.parsers.data_parser import DataParser
+from SDMXThon.parsers.references import ReferenceType
+from SDMXThon.utils.xml_base import cast, find_attr_value_, raise_parse_error
 
 
 class PayloadStructureType(DataParser):
@@ -46,7 +46,7 @@ class PayloadStructureType(DataParser):
         self._structure = Structure
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of PayloadStructureType"""
         return PayloadStructureType(*args_, **kwargs_)
 
@@ -126,7 +126,7 @@ class PayloadStructureType(DataParser):
     def structureURL(self, value):
         self._structureURL = value
 
-    def has_content_(self):
+    def _has_content_(self):
         """Check if it has any content"""
         if (
                 self._provisionAgreement is not None or
@@ -137,7 +137,7 @@ class PayloadStructureType(DataParser):
         else:
             return False
 
-    def build_attributes(self, node, attrs, already_processed):
+    def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('structureID', node)
 
@@ -186,21 +186,21 @@ class PayloadStructureType(DataParser):
             already_processed.add('structureURL')
             self._structureURL = value
 
-    def build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ProvisionAgreement':
-            obj_ = ReferenceType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = ReferenceType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._provisionAgreement = obj_.ref
 
         elif nodeName_ == 'StructureUsage':
-            obj_ = ReferenceType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = ReferenceType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._structureUsage = obj_.ref
 
         elif nodeName_ == 'Structure':
-            obj_ = ReferenceType.factory()
-            obj_.build(child_, gds_collector_=gds_collector_)
+            obj_ = ReferenceType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
             self._structure = obj_.ref
 
 
@@ -222,7 +222,7 @@ class DataStructureType(PayloadStructureType):
         self._gds_collector = gds_collector_
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of DataStructureType"""
         return DataStructureType(*args_, **kwargs_)
 
@@ -245,7 +245,7 @@ class GenericDataStructureType(DataStructureType):
         self._name = 'GenericDataStructureType'
 
     @staticmethod
-    def factory(*args_, **kwargs_):
+    def _factory(*args_, **kwargs_):
         """Factory Method of GenericDataStructureType"""
         return GenericDataStructureType(*args_, **kwargs_)
 

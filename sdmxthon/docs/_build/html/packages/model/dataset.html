@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>DataSet &mdash; SDMXthon documentation</title>
+
+
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+
+
+    <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+
+    <script type="text/javascript" id="documentation_options" data-url_root="../../"
+            src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="Message" href="message.html"/>
+    <link rel="prev" title="Base Package" href="base.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home"> SDMXthon
+
+
+                </a>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../api.html">Api Package</a>
+                        <ul>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-sdmx">Read
+                                SDMX</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-datasets">Get
+                                Datasets</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#get-data">Get
+                                Data</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-json">XML To
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#xml-to-csv">XML To
+                                CSV</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#read-json">Read
+                                JSON</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../api.html#validate-data">Validate
+                                Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../model.html">Model Package</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="base.html">Base Package</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="base.html#annotation">Annotation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#annotable-artefact">Annotable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#identifiable-artefact">Identifiable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#nameable-artefact">Nameable Artefact</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#versionable-artefact">Versionable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#maintainable-artefact">Maintainable
+                                        Artefact</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="base.html#international-string">International
+                                        String</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="base.html#localised-string">Localised
+                                                String</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2 current"><a class="current reference internal" href="#">DataSet</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="message.html">Message</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="component.html">Component</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#dimension">Dimension</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#timedimension">TimeDimension</a>
+                                            </li>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="component.html#measuredimension">MeasureDimension</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#attribute">Attribute</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="component.html#primarymeasure">PrimaryMeasure</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="componentList.html">ComponentList</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#dimensiondescriptor">DimensionDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#attributedescriptor">AttributeDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#measuredescriptor">MeasureDescriptor</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="componentList.html#groupdimensiondescriptor">GroupDimensionDescriptor</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="item.html">Item</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#code">Code</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="item.html#concept">Concept</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="item.html#agency">Agency</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="itemScheme.html">ItemScheme</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#conceptscheme">ConceptScheme</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#codelist">Codelist</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="itemScheme.html#organisationscheme">OrganisationScheme</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="itemScheme.html#agencyscheme">AgencyScheme</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="dataStructure.html">DataStructureDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="dataStructure.html#dataflowdefinition">DataFlowDefinition</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="header.html">Header</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="header.html#party">Party</a>
+                                        <ul>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="header.html#sender">Sender</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="representation.html">Representation</a>
+                                <ul>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="representation.html#facet">Facet</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
+
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">SDMXthon</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content style-external-links">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+                        <li><a href="../model.html">Model Package</a> &raquo;</li>
+
+                        <li>DataSet</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/packages/model/dataset.rst.txt" rel="nofollow"> View page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="dataset">
+                            <h1>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a>
+                            </h1>
+                            <dl class="py class">
+                                <dt id="model.dataSet.DataSet">
+                                    <em class="property"><span class="pre">class</span> </em><code
+                                        class="sig-prename descclassname"><span class="pre">model.dataSet.</span></code><code
+                                        class="sig-name descname"><span class="pre">DataSet</span></code><span
+                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                        class="pre">structure</span></span><span class="p"><span
+                                        class="pre">:</span></span> <span class="n"><a class="reference internal"
+                                                                                       href="dataStructure.html#model.component.DataStructureDefinition"
+                                                                                       title="model.component.DataStructureDefinition"><span
+                                        class="pre">model.component.DataStructureDefinition</span></a></span></em>, <em
+                                        class="sig-param"><span class="n"><span
+                                        class="pre">describedBy</span></span><span class="p"><span class="pre">:</span></span>
+                                    <span class="n"><span class="pre">Optional</span><span class="p"><span
+                                            class="pre">[</span></span><a class="reference internal"
+                                                                          href="dataStructure.html#model.component.DataFlowDefinition"
+                                                                          title="model.component.DataFlowDefinition"><span
+                                            class="pre">model.component.DataFlowDefinition</span></a><span
+                                            class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span
+                                            class="pre">dataset_attributes</span></span><span class="p"><span
+                                            class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
+                                            class="pre">dict</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span
+                                            class="pre">attached_attributes</span></span><span class="p"><span
+                                            class="pre">:</span></span> <span class="n"><span
+                                            class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
+                                            class="pre">dict</span><span class="p"><span
+                                            class="pre">]</span></span></span> <span class="o"><span
+                                            class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>,
+                                    <em class="sig-param"><span class="n"><span class="pre">data</span></span><span
+                                            class="o"><span class="pre">=</span></span><span class="default_value"><span
+                                            class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                        class="headerlink" href="#model.dataSet.DataSet"
+                                        title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span
+                                        class="pre">object</span></code></p>
+                                    <p>An organised collection of data.</p>
+                                    <dl class="field-list simple">
+                                        <dt class="field-odd">Parameters</dt>
+                                        <dd class="field-odd">
+                                            <ul class="simple">
+                                                <li><p><strong>structure</strong>
+                                                    (class:<cite>DataStructureDefinition</cite>) – Associates the
+                                                    DataStructureDefinition to the DataSet</p></li>
+                                                <li><p><strong>describedBy</strong>
+                                                    (class:<cite>DataFlowDefinition</cite>) – Associates the
+                                                    DataFlowDefinition to the Dataset</p></li>
+                                                <li><p><strong>dataset_attributes</strong> (<em>dict</em>) – Contains
+                                                    all the attributes from the DataSet class of the Information Model
+                                                </p></li>
+                                                <li><p><strong>attached_attributes</strong> (<em>dict</em>) – Contains
+                                                    all the attributes at a Dataset level</p></li>
+                                                <li><p><strong>data</strong> (<a class="reference external"
+                                                                                 href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">Pandas
+                                                    Dataframe</a>) – Any object compatible with pandas.DataFrame()</p>
+                                                </li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.attachedAttributes">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span
+                                                class="pre">attachedAttributes</span></code><a class="headerlink"
+                                                                                               href="#model.dataSet.DataSet.attachedAttributes"
+                                                                                               title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Contains all the attributes at a Dataset level with
+                                            NoSpecifiedRelationship</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.check_DA_keys">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">check_DA_keys</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">attributes</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span
+                                                class="pre">dict</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">setID</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.check_DA_keys"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Inputs default values to the dataset_attributes in case they are
+                                            missing</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>attributes</strong> (<em>dict</em>) – A
+                                                            dictionary with dataset_attributes</p></li>
+                                                        <li><p><strong>setID</strong> (<em>str</em>) – Provides an
+                                                            identification of the data set.</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.data">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">data</span></code><a
+                                                class="headerlink" href="#model.dataSet.DataSet.data"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Pandas DataFrame that withholds all the data</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.datasetAttributes">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span
+                                                class="pre">datasetAttributes</span></code><a class="headerlink"
+                                                                                              href="#model.dataSet.DataSet.datasetAttributes"
+                                                                                              title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Contains all the attributes from the DataSet class of the <a
+                                                class="reference external"
+                                                href="https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf#page=85">Information
+                                            Model</a></p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p>dict</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.describedBy">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">describedBy</span></code><a
+                                                class="headerlink" href="#model.dataSet.DataSet.describedBy"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Associates the DataFlowDefinition to the Dataset</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p><cite>DataFlowDefinition</cite></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.dimAtObs">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">dimAtObs</span></code><a
+                                                class="headerlink" href="#model.dataSet.DataSet.dimAtObs"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Extracts the dimensionAtObservation from the dataset_attributes</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.readCSV">
+                                            <code class="sig-name descname"><span class="pre">readCSV</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">pathToCSV</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.readCSV"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Loads the data from a CSVCheck the
+                                            <a class="reference external"
+                                               href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">Pandas
+                                                read_csv docs</a></p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>pathToCSV</strong> (<em>str</em>) –
+                                                    Path to CSV file</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.readExcel">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">readExcel</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">pathToExcel</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.readExcel"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Loads the data from a Excel file. Check the
+                                            <a class="reference external"
+                                               href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html">Pandas
+                                                read_excel docs</a></p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>pathToExcel</strong> (<em>str</em>) –
+                                                    Path to Excel file</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.readJSON">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">readJSON</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">pathToJSON</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>,
+                                            <em class="sig-param"><span class="n"><span class="pre">orient</span></span><span
+                                                    class="p"><span class="pre">:</span></span> <span class="n"><span
+                                                    class="pre">str</span></span> <span class="o"><span
+                                                    class="pre">=</span></span> <span class="default_value"><span
+                                                    class="pre">'records'</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.readJSON"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Loads the data from a JSON with orientation as records. Check the
+                                            <a class="reference external"
+                                               href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_json.html">Pandas
+                                                read_json docs</a></p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>pathToJSON</strong> (<em>str</em>) – Path to JSON
+                                                            file</p></li>
+                                                        <li><p><strong>orient</strong> (<em>str</em>) – Orientation of
+                                                            the file</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.semanticValidation">
+                                            <code class="sig-name descname"><span class="pre">semanticValidation</span></code><span
+                                                class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#model.dataSet.DataSet.semanticValidation"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Performs a Semantic Validation on the Data.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>A list of errors as defined in the Validation
+                                                    Page.</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.setDimensionAtObservation">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">setDimensionAtObservation</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">dimAtObs</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.setDimensionAtObservation"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Sets the dimensionAtObservation
+                                            :param dimAtObs: Dimension At Observation
+                                            :type dimAtObs: str</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.structure">
+                                            <em class="property"><span class="pre">property</span> </em><code
+                                                class="sig-name descname"><span class="pre">structure</span></code><a
+                                                class="headerlink" href="#model.dataSet.DataSet.structure"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Associates the DataStructureDefinition to the DataSet</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Class</dt>
+                                                <dd class="field-odd"><p><cite>DataStructureDefinition</cite></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.toCSV">
+                                            <code class="sig-name descname"><span class="pre">toCSV</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">pathToCSV</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span
+                                                class="pre">Optional</span><span class="p"><span
+                                                class="pre">[</span></span><span class="pre">str</span><span
+                                                class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                                class="pre">=</span></span> <span class="default_value"><span
+                                                class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#model.dataSet.DataSet.toCSV"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Parses the data to a CSV file with comma separation and no header or
+                                            index</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>pathToCSV</strong> (<em>str</em>) –
+                                                    Path to save as CSV file</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.toFeather">
+                                            <code class="sig-name descname"><span
+                                                    class="pre">toFeather</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">pathToFeather</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.toFeather"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Parses the data to an Apache Feather format</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>pathToFeather</strong> (<em>str</em>) –
+                                                    Path to Feather file</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.toJSON">
+                                            <code class="sig-name descname"><span class="pre">toJSON</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">pathToJSON</span></span><span class="p"><span
+                                                class="pre">:</span></span> <span class="n"><span
+                                                class="pre">Optional</span><span class="p"><span
+                                                class="pre">[</span></span><span class="pre">str</span><span
+                                                class="p"><span class="pre">]</span></span></span> <span class="o"><span
+                                                class="pre">=</span></span> <span class="default_value"><span
+                                                class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#model.dataSet.DataSet.toJSON"
+                                                title="Permalink to this definition">¶</a></dt>
+                                        <dd><p>Parses the data using the JSON Specification from the library
+                                            documentation</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>pathToJSON</strong> (<em>str</em>) –
+                                                    Path to save as JSON file</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt id="model.dataSet.DataSet.toXML">
+                                            <code class="sig-name descname"><span class="pre">toXML</span></code><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="pre">message_type:</span>
+                                            <span class="pre">SDMXThon.utils.enums.MessageTypeEnum</span> <span
+                                                    class="pre">=</span> <span class="pre">&lt;MessageTypeEnum.StructureDataSet:</span>
+                                            <span class="pre">'StructureDataSet'&gt;</span></em>, <em class="sig-param"><span
+                                                class="pre">outputPath:</span> <span class="pre">str</span> <span
+                                                class="pre">=</span> <span class="pre">''</span></em>, <em
+                                                class="sig-param"><span class="pre">id_:</span> <span
+                                                class="pre">str</span> <span class="pre">=</span> <span class="pre">'test'</span></em>,
+                                            <em class="sig-param"><span class="pre">test:</span> <span
+                                                    class="pre">str</span> <span class="pre">=</span> <span class="pre">'true'</span></em>,
+                                            <em class="sig-param"><span class="pre">prepared:</span> <span class="pre">Optional[datetime.datetime]</span>
+                                                <span class="pre">=</span> <span class="pre">None</span></em>, <em
+                                                class="sig-param"><span class="pre">sender:</span> <span
+                                                class="pre">str</span> <span class="pre">=</span> <span class="pre">'Unknown'</span></em>,
+                                            <em class="sig-param"><span class="pre">receiver:</span> <span class="pre">str</span>
+                                                <span class="pre">=</span> <span class="pre">'Not_supplied'</span></em>,
+                                            <em class="sig-param"><span class="pre">prettyprint=True</span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#model.dataSet.DataSet.toXML"
+                                                                             title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Parses the data to SDMX-ML 2.1, specifying the Message_Type
+                                            (StructureSpecific or Generic or Metadata)</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>message_type</strong> (<em>MessageTypeEnum</em>)
+                                                            – Format of the Message in SDMX-ML</p></li>
+                                                        <li><p><strong>outputPath</strong> (<em>str</em>) – Path to save
+                                                            the file, defaults to ‘’</p></li>
+                                                        <li><p><strong>id</strong> (<em>str</em>) – ID of the Header,
+                                                            defaults to ‘test’</p></li>
+                                                        <li><p><strong>test</strong> (<em>str</em>) – Mark as test file,
+                                                            defaults to ‘true’</p></li>
+                                                        <li><p><strong>prepared</strong> (<em>datetime</em>) – Datetime
+                                                            of the preparation of the Message, defaults to current date
+                                                            and time</p></li>
+                                                        <li><p><strong>sender</strong> (<em>str</em>) – ID of the
+                                                            Sender, defaults to ‘Unknown’</p></li>
+                                                        <li><p><strong>receiver</strong> (<em>str</em>) – ID of the
+                                                            Receiver, defaults to ‘Not_supplied’</p></li>
+                                                        <li><p><strong>prettyprint</strong> (<em>bool</em>) – Saves the
+                                                            file formatted to be human readable</p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p>StringIO object, if outputPath is ‘’</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &#169; Copyright 2021, MeaningfulData.
+
+                        </p>
+                    </div>
+
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+
+</body>
+</html>
