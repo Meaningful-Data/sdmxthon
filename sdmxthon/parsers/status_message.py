@@ -2,9 +2,9 @@
     Status messages file withholds some extra MessageTypes for specific purposes
 """
 
-from SDMXThon.model.base import LocalisedString, InternationalString
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.utils.xml_base import find_attr_value_
+from SDMXthon.model.base import LocalisedString, InternationalString
+from SDMXthon.parsers.data_parser import DataParser
+from SDMXthon.utils.xml_base import find_attr_value_
 
 
 class StatusMessageType(DataParser):

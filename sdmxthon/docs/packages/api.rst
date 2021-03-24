@@ -13,25 +13,14 @@ Get Datasets
 ************
 .. autofunction:: get_datasets
 
-Get Data
-********
-.. autofunction:: get_data
-
-XML To JSON
-***********
-.. autofunction:: xml_to_json
+Get Pandas DF
+*************
+.. autofunction:: get_pandas_df
 
 XML To CSV
 **********
 .. autofunction:: xml_to_csv
 
-Read JSON
-*********
-.. autofunction:: read_json
-
-Validate Data
-*************
-.. autofunction:: validate_data
 
 
 

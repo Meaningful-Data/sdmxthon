@@ -9,9 +9,9 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from SDMXThon.parsers.data_validations import validate_data
-from SDMXThon.parsers.write import writer
-from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXthon.parsers.data_validations import validate_data
+from SDMXthon.parsers.write import writer
+from SDMXthon.utils.enums import MessageTypeEnum
 from .component import DataStructureDefinition, DataFlowDefinition
 
 
@@ -21,8 +21,8 @@ class DataSet:
     :param structure: Associates the DataStructureDefinition to the DataSet
     :type structure: class:`DataStructureDefinition`
 
-    :param describedBy: Associates the DataFlowDefinition to the Dataset
-    :type describedBy: class:`DataFlowDefinition`
+    :param dataflow: Associates the DataFlowDefinition to the Dataset
+    :type dataflow: class:`DataFlowDefinition`
 
     :param dataset_attributes: Contains all the attributes from the DataSet class of the Information Model
     :type dataset_attributes: dict
@@ -34,43 +34,58 @@ class DataSet:
     :type data: `Pandas Dataframe <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_
     """
 
-    def __init__(self, structure: DataStructureDefinition, describedBy: DataFlowDefinition = None,
+    def __init__(self, structure: DataStructureDefinition = None, dataflow: DataFlowDefinition = None,
                  dataset_attributes: dict = None, attached_attributes: dict = None, data=None):
-
-        self._structure = structure
-        self._dataflow = describedBy
 
         self._dataset_attributes = {}
 
-        if dataset_attributes is None:
-            self.check_DA_keys({}, structure.id)
-        else:
-            self.check_DA_keys(dataset_attributes, structure.id)
+        self.data = None
+        self._dataflow = None
+        self._structure = None
+        self.attachedAttributes = {}
 
-        if attached_attributes is None:
-            self._attached_attributes = {}
-        else:
-            self._attached_attributes = attached_attributes.copy()
+        if attached_attributes is not None:
+            self.attachedAttributes = attached_attributes.copy()
 
-        if data is None:
-            self._data = pd.DataFrame()
-        else:
+        if structure is not None and dataflow is not None:
+            raise ValueError('A Dataset cannot have a structure and a dataflow, use only one')
+        elif structure is not None:
+            self._dataflow = None
+            self.structure = structure
+        elif dataflow is not None:
+            self.dataflow = dataflow
+
+        if data is not None:
             if isinstance(data, pd.DataFrame):
                 self.data = data.copy()
             else:
                 self.data = pd.DataFrame(data)
 
+        if dataset_attributes is None:
+            self.check_DA_keys({})
+        else:
+            self.check_DA_keys(dataset_attributes)
+
     def __str__(self):
-        return '<DataSet  - %s>' % self.structure.id
+        if self.structure is not None:
+            return f'<DataSet  - {self.structure.id}>'
+        else:
+            return '<DataSet - No Structure found>'
 
     def __unicode__(self):
-        return '<DataSet  - %s>' % self.structure.id
+        if self.structure is not None:
+            return f'<DataSet  - {self.structure.id}>'
+        else:
+            return '<DataSet - No Structure found>'
 
     def __repr__(self):
-        return '<DataSet  - %s>' % self.structure.id
+        if self.structure is not None:
+            return f'<DataSet  - {self.structure.id}>'
+        else:
+            return '<DataSet - No Structure found>'
 
     @property
-    def describedBy(self):
+    def dataflow(self) -> DataFlowDefinition:
         """Associates the DataFlowDefinition to the Dataset
 
         :class: `DataFlowDefinition`
@@ -78,15 +93,31 @@ class DataSet:
         """
         return self._dataflow
 
-    @describedBy.setter
-    def describedBy(self, value):
-        if isinstance(value, DataFlowDefinition):
+    @dataflow.setter
+    def dataflow(self, value: DataFlowDefinition):
+        if isinstance(value, DataFlowDefinition) or value is None:
             self._dataflow = value
+            if value is not None:
+                if len(self.attachedAttributes) > 0:
+                    attached_attributes = self.attachedAttributes.copy()
+                    for k in attached_attributes.keys():
+                        if k not in value.structure.datasetAttributeCodes:
+                            del self._attached_attributes[k]
+
+                    for k in value.structure.datasetAttributeCodes:
+                        if k not in attached_attributes.keys():
+                            raise ValueError(f'Missing attribute {k} at a dataset level (attached_attributes)')
+
+                if 'OBS_VALUE' in self._data.columns and value.structure.measureCode != 'OBS_VALUE':
+                    self._data = self._data.rename({'OBS_VALUE': value.structure.measureCode})
+                self.datasetAttributes['setId'] = value.id
+                self._structure = value
+                self._structure = value.structure
         else:
-            raise TypeError('describedBy must be a DataFlowDefinition')
+            raise TypeError('dataflow must be a DataFlowDefinition')
 
     @property
-    def structure(self):
+    def structure(self) -> DataStructureDefinition:
         """Associates the DataStructureDefinition to the DataSet
 
         :class: `DataStructureDefinition`
@@ -95,14 +126,31 @@ class DataSet:
         return self._structure
 
     @structure.setter
-    def structure(self, value):
-        if isinstance(value, DataStructureDefinition):
-            self._structure = value
-        else:
+    def structure(self, value: DataStructureDefinition):
+        if not isinstance(value, DataStructureDefinition) and value is not None:
             raise TypeError('structure must be a DataStructureDefinition')
 
+        if self._dataflow is not None and value is not None:
+            raise ValueError('dataflow property is not None')
+
+        if value is not None:
+            if len(self.attachedAttributes) > 0:
+                attached_attributes = self.attachedAttributes.copy()
+                for k in attached_attributes.keys():
+                    if k not in value.datasetAttributeCodes:
+                        del self._attached_attributes[k]
+
+                for k in value.datasetAttributeCodes:
+                    if k not in attached_attributes.keys():
+                        raise ValueError(f'Missing attribute {k} at a dataset level (attached_attributes)')
+
+            if 'OBS_VALUE' in self._data.columns and value.measureCode != 'OBS_VALUE':
+                self._data = self._data.rename({'OBS_VALUE': value.measureCode})
+            self.datasetAttributes['setId'] = value.id
+        self._structure = value
+
     @property
-    def datasetAttributes(self):
+    def datasetAttributes(self) -> dict:
         """Contains all the attributes from the DataSet class of the `Information Model
         <https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf#page=85>`_
 
@@ -112,20 +160,26 @@ class DataSet:
         return self._dataset_attributes
 
     @datasetAttributes.setter
-    def datasetAttributes(self, value):
-        self._dataset_attributes = value
+    def datasetAttributes(self, value: dict):
+        self.check_DA_keys(value)
 
     @property
-    def attachedAttributes(self):
+    def attachedAttributes(self) -> dict:
         """Contains all the attributes at a Dataset level with NoSpecifiedRelationship"""
         return self._attached_attributes
 
     @attachedAttributes.setter
-    def attachedAttributes(self, value):
+    def attachedAttributes(self, value: dict):
+        if self.structure is not None:
+            temp = value.copy()
+            for k in temp.keys():
+                if k not in self.structure.datasetAttributeCodes:
+                    raise ValueError(f'{k} not in the attributes at dataset level for DSD {self.structure.unique_id}')
+
         self._attached_attributes = value
 
     @property
-    def data(self):
+    def data(self) -> pd.DataFrame:
         """Pandas DataFrame that withholds all the data"""
         return self._data
 
@@ -139,10 +193,11 @@ class DataSet:
             else:
                 temp = pd.DataFrame(value)
             attached_attributes = {}
-            for e in self.structure.datasetAttributeCodes:
-                if e in temp.keys():
-                    attached_attributes[e] = temp.loc[0, e]
-                    del temp[e]
+            if self._structure is not None:
+                for e in self.structure.datasetAttributeCodes:
+                    if e in temp.keys():
+                        attached_attributes[e] = temp.loc[0, e]
+                        del temp[e]
 
             self._data = temp
             if len(attached_attributes) > 0:
@@ -249,14 +304,11 @@ class DataSet:
         else:
             raise ValueError('%s is not a dimension of dataset %s' % (dimAtObs, self.structure.id))
 
-    def check_DA_keys(self, attributes: dict, setID: str):
+    def check_DA_keys(self, attributes: dict):
         """Inputs default values to the dataset_attributes in case they are missing
 
         :param attributes: A dictionary with dataset_attributes
         :type attributes: dict
-        
-        :param setID: Provides an identification of the data set.
-        :type setID: str
         """
         keys = ["reportingBegin", "reportingEnd", "dataExtractionDate", "validFrom", "validTo", "publicationYear",
                 "publicationPeriod", "action", "setId", "dimensionAtObservation"]
@@ -272,7 +324,10 @@ class DataSet:
                 elif k == "action":
                     attributes[k] = "Replace"
                 elif k == "setId":
-                    attributes[k] = setID
+                    if self.structure is not None:
+                        attributes[k] = self.structure.id
+                    elif self.dataflow is not None:
+                        attributes[k] = self.dataflow.structure.id
                 elif k == "dimensionAtObservation":
                     attributes[k] = "AllDimensions"
                 else:

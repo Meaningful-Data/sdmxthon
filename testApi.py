@@ -1,6 +1,6 @@
 import logging
 
-from SDMXThon import get_metadata
+from SDMXthon.api.api import read_sdmx
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -18,17 +18,16 @@ ch.setFormatter(formatter)
 # add ch to logger
 logger.addHandler(ch)
 
-pathDSDS = 'SDMXThon/outputTests/metadata/dsds.pickle'
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb_wdi.xml'
-pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
+# pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/ecb.xml'
-# pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
+pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/imf.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
@@ -58,7 +57,8 @@ def pretty(d, indent=0):
 def main():
     # Test Metadata From Different Sources Generator
     logger.debug('Start')
-    metadata = get_metadata(pathToMetadataFile)
+    message = read_sdmx(pathToMetadataFile)
+    print(message.payload)
     logger.debug('End')
 
     """

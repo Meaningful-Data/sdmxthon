@@ -2,9 +2,9 @@
         Data_generic contains all parsers for the data in a Generic Message
 """
 
-from SDMXThon.model.base import AnnotableArtefact
-from SDMXThon.parsers.references import ReferenceType
-from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
+from SDMXthon.model.base import AnnotableArtefact
+from SDMXthon.parsers.references import ReferenceType
+from SDMXthon.utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 from .data_parser import DataParser, Validate_simpletypes_
 from .gdscollector import datetime_
 
@@ -654,63 +654,63 @@ class DataSetType(AnnotableArtefact):
         self._action = value
 
     @property
-    def reportingBeginDate(self):
-        """The reportingBeginDate indicates the inclusive start time
+    def reporting_begin_date(self):
+        """The reporting_begin_date indicates the inclusive start time
                 of the data reported in the data or metadata set."""
         return self._reportingBeginDate
 
-    @reportingBeginDate.setter
-    def reportingBeginDate(self, value):
+    @reporting_begin_date.setter
+    def reporting_begin_date(self, value):
         self._reportingBeginDate = value
 
     @property
-    def reportingEndDate(self):
-        """The reportingEndDate indicates the inclusive end time
+    def reporting_end_date(self):
+        """The reporting_end_date indicates the inclusive end time
                 of the data reported in the data or metadata set."""
         return self._reportingEndDate
 
-    @reportingEndDate.setter
-    def reportingEndDate(self, value):
+    @reporting_end_date.setter
+    def reporting_end_date(self, value):
         self._reportingEndDate = value
 
     @property
-    def validFromDate(self):
+    def valid_from_date(self):
         """The validFromDate indicates the inclusive start time indicating the validity
                 of the information in the data or metadata set."""
         return self._validFromDate
 
-    @validFromDate.setter
-    def validFromDate(self, value):
+    @valid_from_date.setter
+    def valid_from_date(self, value):
         self._validFromDate = value
 
     @property
-    def validToDate(self):
+    def valid_to_date(self):
         """The validToDate indicates the inclusive end time indicating the validity
                 of the information in the data or metadata set."""
         return self._validToDate
 
-    @validToDate.setter
-    def validToDate(self, value):
+    @valid_to_date.setter
+    def valid_to_date(self, value):
         self._validToDate = value
 
     @property
-    def publicationYear(self):
+    def publication_year(self):
         """The publicationYear holds the ISO 8601 four-digit year."""
         return self._publicationYear
 
-    @publicationYear.setter
-    def publicationYear(self, value):
+    @publication_year.setter
+    def publication_year(self, value):
         self._publicationYear = value
 
     @property
-    def publicationPeriod(self):
+    def publication_period(self):
         """The publicationPeriod specifies the period of publication of the data or metadata in terms of whatever
             provisioning agreements might be in force (i.e., "Q1 2005" if that is the time of
             publication for a data set published on a quarterly basis). """
         return self._publicationPeriod
 
-    @publicationPeriod.setter
-    def publicationPeriod(self, value):
+    @publication_period.setter
+    def publication_period(self, value):
         self._publicationPeriod = value
 
     def _validate_action_type(self, value):

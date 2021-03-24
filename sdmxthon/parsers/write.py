@@ -5,9 +5,9 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 
-from SDMXThon.model.component import PrimaryMeasure
-from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.mappings import *
+from SDMXthon.model.component import PrimaryMeasure
+from SDMXthon.utils.enums import MessageTypeEnum
+from SDMXthon.utils.mappings import *
 from .data_validations import get_mandatory_attributes
 from .message_parsers import Structures
 

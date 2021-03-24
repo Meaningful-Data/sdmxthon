@@ -10,7 +10,7 @@ import sys
 
 from lxml import etree as etree_
 
-from SDMXThon.utils.xml_base import raise_parse_error, GDSParseError
+from SDMXthon.utils.xml_base import raise_parse_error, GDSParseError
 
 ExternalEncoding = ''
 

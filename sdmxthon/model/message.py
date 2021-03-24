@@ -4,9 +4,9 @@
 from datetime import datetime
 from io import StringIO
 
-from SDMXThon.parsers.message_parsers import Header
-from SDMXThon.parsers.write import writer
-from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXthon.parsers.message_parsers import Header
+from SDMXthon.parsers.write import writer
+from SDMXthon.utils.enums import MessageTypeEnum
 from .dataSet import DataSet
 from .header import Party, Sender
 
@@ -52,7 +52,6 @@ class Message:
         :class: :doc:`Dataset<./dataset>`
         :class: `Dict [str, Dataset]`
         :class: `Structure`
-
 
         """
         if self._payload is None:

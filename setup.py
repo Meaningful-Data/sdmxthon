@@ -1,12 +1,13 @@
 from distutils.core import setup
 
 setup(
-    name='SDMXThon',
+    name='SDMXthon',
     packages=['SDMXThon'],
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py', 'utils/*.py']),
-    version='0.8.10.1',
-    license='MIT',
+    version='0.8.10.2',
+    license='Apache 2.0',
+    license_files='license.txt',
     description='Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation',
     author='MeaningfulData',
     author_email='javier.hernandez@meaningfuldata.eu',

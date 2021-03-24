@@ -10,6 +10,8 @@ lxml = { version = "4.6.1", index = "pypi" }
 pandas = { version = "1.2.0", index = "pypi" }
 numpy = "==1.19.3"
 coverage = "*"
+validators = "*"
+defusedxml = "*"
 
 [requires]
 python_version = "*"

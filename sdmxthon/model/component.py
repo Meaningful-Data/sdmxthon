@@ -5,11 +5,11 @@
 import json
 from datetime import datetime
 
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXThon.utils.handlers import export_intern_data, add_indent
-from SDMXThon.utils.mappings import *
-from SDMXThon.utils.xml_base import find_attr_value_
+from SDMXthon.parsers.data_parser import DataParser
+from SDMXthon.parsers.references import RelationshipRefType, RefBaseType
+from SDMXthon.utils.handlers import export_intern_data, add_indent
+from SDMXthon.utils.mappings import *
+from SDMXthon.utils.xml_base import find_attr_value_
 from .base import IdentifiableArtefact, MaintainableArtefact, InternationalString
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
 from .representation import Representation

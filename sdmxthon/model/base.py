@@ -8,9 +8,9 @@ Please refer to the package in the SDMX Information Model
 from datetime import datetime
 from typing import List
 
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.utils.mappings import Locale_Codes, commonAbbr
-from SDMXThon.utils.xml_base import find_attr_value_
+from SDMXthon.parsers.data_parser import DataParser
+from SDMXthon.utils.mappings import Locale_Codes, commonAbbr
+from SDMXthon.utils.xml_base import find_attr_value_
 from .utils import stringSetter, boolSetter
 
 

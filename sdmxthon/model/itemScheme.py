@@ -6,10 +6,10 @@ import warnings
 from datetime import datetime
 from typing import List
 
-from SDMXThon.parsers.references import RelationshipRefType
-from SDMXThon.utils.handlers import add_indent, export_intern_data
-from SDMXThon.utils.mappings import structureAbbr
-from SDMXThon.utils.xml_base import find_attr_value_
+from SDMXthon.parsers.references import RelationshipRefType
+from SDMXthon.utils.handlers import add_indent, export_intern_data
+from SDMXthon.utils.mappings import structureAbbr
+from SDMXthon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, NameableArtefact, InternationalString
 from .header import Contact
 from .representation import Representation
