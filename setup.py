@@ -5,8 +5,9 @@ setup(
     packages=['SDMXThon'],
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py', 'utils/*.py']),
-    version='0.8.10.1',
-    license='MIT',
+    version='0.8.11',
+    license='Apache 2.0',
+    license_files='license.txt',
     description='Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation',
     author='MeaningfulData',
     author_email='javier.hernandez@meaningfuldata.eu',
@@ -16,7 +17,9 @@ setup(
     install_requires=[
         'lxml',
         'pandas',
-        'numpy'
+        'numpy',
+        'validators',
+        'requests'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

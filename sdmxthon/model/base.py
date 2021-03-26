@@ -11,7 +11,7 @@ from typing import List
 from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.utils.mappings import Locale_Codes, commonAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
-from .utils import stringSetter, boolSetter
+from .utils import stringSetter, boolSetter, genericSetter, setDateFromString
 
 
 class LocalisedString(DataParser):
@@ -388,7 +388,7 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @urn.setter
     def urn(self, value):
-        self._urn = value
+        self._urn = genericSetter(value, str)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -482,11 +482,11 @@ class NameableArtefact(IdentifiableArtefact):
 
     @name.setter
     def name(self, value):
-        self._name = value
+        self._name = genericSetter(value, InternationalString)
 
     @description.setter
     def description(self, value):
-        self._description = value
+        self._description = genericSetter(value, InternationalString)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -561,13 +561,14 @@ class VersionableArtefact(NameableArtefact):
 
     @validFrom.setter
     def validFrom(self, value):
-        # self._validFrom = setDateFromString(value, "%Y-%m-%d")
-        self._validFrom = value
+        self._validFrom = setDateFromString(value, "%Y-%m-%d")
+
+    #        self._validFrom = value
 
     @validTo.setter
     def validTo(self, value):
-        # self._validTo = setDateFromString(value, "%Y-%m-%d")
-        self._validTo = value
+        self._validTo = setDateFromString(value, "%Y-%m-%d")
+        # self._validTo = value
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -712,7 +713,7 @@ class MaintainableArtefact(VersionableArtefact):
         value = find_attr_value_('agencyID', node)
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
-            self.maintainer = value
+            self._maintainer = value
 
         value = find_attr_value_('isExternalReference', node)
         if value is not None and 'isExternalReference' not in already_processed:

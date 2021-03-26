@@ -4,12 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+coverage = "*"
 
 [packages]
 lxml = { version = "4.6.1", index = "pypi" }
 pandas = { version = "1.2.0", index = "pypi" }
 numpy = "==1.19.3"
-coverage = "*"
+validators = "*"
 
 [requires]
 python_version = "*"

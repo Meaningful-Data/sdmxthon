@@ -11,6 +11,7 @@ from SDMXThon.utils.handlers import add_indent
 from SDMXThon.utils.mappings import *
 from SDMXThon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, BaseStrType_
 from .base import InternationalString, LocalisedString
+from .utils import genericSetter, stringSetter, boolSetter, setDateFromString
 
 
 class Contact(DataParser):
@@ -68,12 +69,7 @@ class Contact(DataParser):
 
     @name.setter
     def name(self, value):
-        if value is None:
-            self._name = []
-        elif isinstance(value, list):
-            self._name = value
-        else:
-            raise TypeError('Name must be a list')
+        self.name = genericSetter(value, InternationalString)
 
     @property
     def department(self):
@@ -94,7 +90,7 @@ class Contact(DataParser):
 
     @department.setter
     def department(self, value):
-        self._department = value
+        self._department = genericSetter(value, InternationalString)
 
     @property
     def role(self):
@@ -115,7 +111,7 @@ class Contact(DataParser):
 
     @role.setter
     def role(self, value):
-        self._role = value
+        self._role = genericSetter(value, InternationalString)
 
     @property
     def telephone(self):
@@ -585,7 +581,7 @@ class Header(DataParser):
 
     @id_.setter
     def id_(self, value):
-        self._ID = value
+        self._ID = stringSetter(value)
 
     @property
     def test(self):
@@ -594,7 +590,7 @@ class Header(DataParser):
 
     @test.setter
     def test(self, value):
-        self._Test = value
+        self._Test = boolSetter(value)
 
     @property
     def prepared(self):
@@ -603,7 +599,7 @@ class Header(DataParser):
 
     @prepared.setter
     def prepared(self, value):
-        self._Prepared = value
+        self._Prepared = setDateFromString(value)
 
     @property
     def sender(self):
@@ -612,7 +608,7 @@ class Header(DataParser):
 
     @sender.setter
     def sender(self, value):
-        self._Sender = value
+        self._Sender = genericSetter(value, Sender)
 
     @property
     def receiver(self):
@@ -672,7 +668,7 @@ class Header(DataParser):
 
     @datasetAction.setter
     def datasetAction(self, value):
-        self._DataSetAction = value
+        self._DataSetAction = stringSetter(value)
 
     @property
     def datasetID(self):
@@ -695,7 +691,7 @@ class Header(DataParser):
 
     @extracted.setter
     def extracted(self, value):
-        self._Extracted = value
+        self._Extracted = setDateFromString(value)
 
     @property
     def reportingBegin(self):
@@ -704,7 +700,7 @@ class Header(DataParser):
 
     @reportingBegin.setter
     def reportingBegin(self, value):
-        self._ReportingBegin = value
+        self._ReportingBegin = stringSetter(value)
 
     @property
     def reportingEnd(self):
@@ -713,7 +709,7 @@ class Header(DataParser):
 
     @reportingEnd.setter
     def reportingEnd(self, value):
-        self._ReportingEnd = value
+        self._ReportingEnd = stringSetter(value)
 
     @property
     def embargoDate(self):
@@ -722,7 +718,7 @@ class Header(DataParser):
 
     @embargoDate.setter
     def embargoDate(self, value):
-        self._EmbargoDate = value
+        self._EmbargoDate = setDateFromString(value)
 
     @property
     def source(self):

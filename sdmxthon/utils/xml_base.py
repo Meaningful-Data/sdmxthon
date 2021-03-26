@@ -1,7 +1,10 @@
 import os
 import re as re_
 import sys
+from io import BytesIO
 
+import requests
+import validators
 from lxml import etree as etree_
 
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
@@ -16,7 +19,21 @@ BaseStrType_ = str
 # clues about the possible content of that class.
 #
 
-def parse_xml(infile, parser=None, **kwargs):
+def parse_xml(infile, parser=None):
+    if validators.url(infile):
+        try:
+            response = requests.get(infile)
+            if response.status_code == 400:
+                raise requests.ConnectionError(f'Invalid URL. Response from server: {response.text}')
+            infile = BytesIO(response.content)
+        except requests.ConnectionError:
+            raise requests.ConnectionError(f'Invalid URL. No response from server')
+    else:
+        try:
+            if isinstance(infile, os.PathLike):
+                infile = os.path.join(infile)
+        except AttributeError:
+            pass
     if parser is None:
         # Use the lxml ElementTree compatible parser so that, e.g.,
         #   we ignore comments.
@@ -25,19 +42,16 @@ def parse_xml(infile, parser=None, **kwargs):
         except AttributeError:
             # fallback to xml.etree
             parser = etree_.XMLParser()
-    try:
-        if isinstance(infile, os.PathLike):
-            infile = os.path.join(infile)
-    except AttributeError:
-        pass
-    doc = etree_.parse(infile, parser=parser, **kwargs)
+    doc = etree_.parse(infile, parser=parser)
     return doc
 
 
 def find_attr_value_(attr_name, node):
     if isinstance(node, dict):
         if attr_name in node.keys():
-            return node[attr_name]
+            value = node[attr_name]
+            del node[attr_name]
+            return value
         else:
             return None
 

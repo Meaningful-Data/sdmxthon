@@ -13,7 +13,7 @@ from SDMXThon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, NameableArtefact, InternationalString
 from .header import Contact
 from .representation import Representation
-from .utils import genericSetter
+from .utils import genericSetter, boolSetter
 
 
 class ItemScheme(MaintainableArtefact):
@@ -54,6 +54,15 @@ class ItemScheme(MaintainableArtefact):
         else:
             return False
 
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.unique_id}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.unique_id}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.unique_id}>'
+
     @property
     def items(self):
         """Association to the Items in the scheme"""
@@ -67,7 +76,7 @@ class ItemScheme(MaintainableArtefact):
 
     @isPartial.setter
     def isPartial(self, value):
-        self._isPartial = value
+        self._isPartial = boolSetter(value)
 
     def append(self, value):
 
@@ -353,6 +362,15 @@ class Item(NameableArtefact):
         else:
             return False
 
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
     @property
     def scheme(self):
         """Reference to the ItemScheme"""
@@ -503,7 +521,7 @@ class Agency(Item):
 
     @contacts.setter
     def contacts(self, value):
-        self._contacts = value
+        self._contacts = genericSetter(value, List[Contact])
 
     @staticmethod
     def _factory(*args_, **kwargs_):

@@ -3,8 +3,8 @@ from datetime import datetime
 
 import pandas as pd
 
-from SDMXThon.model.component import PrimaryMeasure
 from SDMXThon.model.dataSet import DataSet
+from SDMXThon.utils.enums import MessageTypeEnum
 from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 from .gdscollector import GdsCollector
 from .message_parsers import GenericDataType, StructureSpecificDataType, MetadataType
@@ -60,7 +60,7 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
                 if str_dict['ID'] in dataflows.keys():
                     dataflow = dataflows[str_dict['ID']]
                     dsd = dataflow.structure
-                    item = DataSet(structure=dsd, describedBy=dataflow)
+                    item = DataSet(structure=dsd, dataflow=dataflow)
                 else:
                     warnings.warn(f'DataFlow {str_dict["ID"]} not found')
                     continue
@@ -73,16 +73,11 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
 
         dataset_attributes = {'reportingBegin': e.reporting_begin_date, 'reportingEnd': e.reporting_end_date,
                               'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
-                              'validFrom': e.valid_from_date,
-                              'validTo': e.valid_to_date, 'publicationYear': e.publication_year,
-                              'publicationPeriod': e.publication_period, 'action': e.action,
-                              'setId': dsd.id}
+                              'validFrom': e.valid_from_date, 'validTo': e.valid_to_date,
+                              'publicationYear': e.publication_year, 'publicationPeriod': e.publication_period,
+                              'action': e.action, 'setId': dsd.id, 'dimensionAtObservation': str_dict['dimAtObs']}
 
         # Default Attributes
-
-        dim_obs = xmlObj.header.structure[e.structureRef]['dimAtObs']
-
-        dataset_attributes['dimensionAtObservation'] = dim_obs
 
         item.datasetAttributes = dataset_attributes.copy()
 
@@ -93,11 +88,6 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
                 attached_attributes[k] = v
 
         item.attachedAttributes = attached_attributes
-
-        obs_attributes_keys = []
-        for record in dsd.attributeDescriptor.components.values():
-            if record.relatedTo is not None and isinstance(record.relatedTo, PrimaryMeasure):
-                obs_attributes_keys.append(record.id)
 
         if len(e.data) > 0:
             item.data = pd.DataFrame(e.data)
@@ -119,7 +109,7 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
                 if str_dict['ID'] in dataflows.keys():
                     dataflow = dataflows[str_dict['ID']]
                     dsd = dataflow.structure
-                    item = DataSet(structure=dsd, describedBy=dataflow)
+                    item = DataSet(structure=dsd, dataflow=dataflow)
                 else:
                     warnings.warn(f'DataFlow {str_dict["ID"]} not found')
                     continue
@@ -130,15 +120,11 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
             warnings.warn(f'Structure {e.structureRef} not found')
             continue
 
-        dataset_attributes = {'reportingBegin': e.reportingBeginDate, 'reportingEnd': e.reportingEndDate,
+        dataset_attributes = {'reportingBegin': e.reporting_begin_date, 'reportingEnd': e.reporting_end_date,
                               'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
-                              'validFrom': e.validFromDate, 'validTo': e.validToDate,
-                              'publicationYear': e.publicationYear, 'publicationPeriod': e.publicationPeriod,
-                              'action': e.action, 'setId': dsd.id}
-
-        dim_obs = xmlObj.header.structure[e.structureRef]['dimAtObs']
-
-        dataset_attributes['dimensionAtObservation'] = dim_obs
+                              'validFrom': e.valid_from_date, 'validTo': e.valid_to_date,
+                              'publicationYear': e.publication_year, 'publicationPeriod': e.publication_period,
+                              'action': e.action, 'setId': dsd.id, 'dimensionAtObservation': str_dict['dimAtObs']}
 
         item.datasetAttributes = dataset_attributes.copy()
 
@@ -150,12 +136,60 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
 
         if len(e.data) > 0:
             temp = pd.DataFrame(e.data)
-            if dim_obs == 'AllDimensions':
+            if str_dict['dimAtObs'] == 'AllDimensions':
                 item.data = temp.rename(columns={'OBS_VALUE': dsd.measureCode})
             else:
-                item.data = temp.rename(columns={'ObsDimension': dim_obs, 'OBS_VALUE': dsd.measureCode})
+                item.data = temp.rename(columns={'ObsDimension': str_dict['dimAtObs'], 'OBS_VALUE': dsd.measureCode})
         datasets[dsd.unique_id] = item
     del xmlObj
+    return datasets
+
+
+def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
+    datasets = {}
+
+    for e in xml_obj.dataset:
+        if e.structureRef in xml_obj.header.structure.keys():
+            str_dict = xml_obj.header.structure[e.structureRef]
+        else:
+            warnings.warn(f'Structure {e.structureRef} not found')
+            continue
+
+        dataset_attributes = {'reportingBegin': e.reporting_begin_date, 'reportingEnd': e.reporting_end_date,
+                              'dataExtractionDate': datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+                              'validFrom': e.valid_from_date, 'validTo': e.valid_to_date,
+                              'publicationYear': e.publication_year, 'publicationPeriod': e.publication_period,
+                              'action': e.action, 'setId': e.structureRef,
+                              'dimensionAtObservation': str_dict['dimAtObs']}
+
+        item = DataSet(dataset_attributes=dataset_attributes)
+
+        if type_ == MessageTypeEnum.GenericDataSet:
+            attached_attributes = {}
+            if e.Attributes is not None:
+                attached_attributes = e.Attributes.value_
+
+            if len(e.data) > 0:
+                temp = pd.DataFrame(e.data)
+                if str_dict['dimAtObs'] == 'AllDimensions':
+                    item.data = temp
+                else:
+                    item.data = temp.rename(columns={'ObsDimension': str_dict['dimAtObs']})
+        else:
+            attached_attributes = {}
+            for k, v in e.any_attributes.items():
+                if k not in ['type', 'xsi:dim_type']:
+                    attached_attributes[k] = v
+
+            item.attachedAttributes = attached_attributes
+
+            if len(e.data) > 0:
+                item.data = pd.DataFrame(e.data)
+
+        item.attachedAttributes = attached_attributes
+
+        datasets[e.structureRef] = item
+    del xml_obj
     return datasets
 
 

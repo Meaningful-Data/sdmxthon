@@ -438,6 +438,7 @@ class DataSetType(AnnotableArtefact):
         self._publicationYear = cast(None, publicationYear)
         self._publicationPeriod = cast(None, publicationPeriod)
         self._dataProvider = DataProvider
+        self._dataScope = None
 
         if Group is None:
             self._group = []
@@ -536,7 +537,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reporting_begin_date(self):
-        """The reportingBeginDate indicates the inclusive start time
+        """The reporting_begin_date indicates the inclusive start time
         of the data reported in the data or metadata set."""
         return self._reportingBeginDate
 
@@ -546,7 +547,7 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def reporting_end_date(self):
-        """The reportingEndDate indicates the inclusive end time
+        """The reporting_end_date indicates the inclusive end time
         of the data reported in the data or metadata set."""
         return self._reportingEndDate
 
@@ -595,6 +596,10 @@ class DataSetType(AnnotableArtefact):
         self._publicationPeriod = value
 
     @property
+    def dataScope(self):
+        return self._dataScope
+
+    @property
     def any_attributes(self):
         """Any Attributes contains the attributes at a Dataset Level"""
         return self._anyAttributes_
@@ -625,11 +630,11 @@ class DataSetType(AnnotableArtefact):
                 result = False
         return result
 
-    def validate_BasicTimePeriodType(self, value):
+    def _validate_BasicTimePeriodType(self, value):
         """Validate dim_type common:BasicTimePeriodType, a restriction on None."""
         pass
 
-    def validate_ObservationalTimePeriodType(self, value):
+    def _validate_ObservationalTimePeriodType(self, value):
         """Validate dim_type common:ObservationalTimePeriodType, a restriction on None."""
         pass
 
@@ -685,14 +690,14 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
             self._reportingBeginDate = value
-            self.validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
+            self._validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('reportingEndDate', self._anyAttributes_)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
             self._reportingEndDate = value
-            self.validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
+            self._validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('validFromDate', self._anyAttributes_)
 
@@ -723,7 +728,13 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
             self._publicationPeriod = value
-            self.validate_ObservationalTimePeriodType(self._publicationPeriod)
+            self._validate_ObservationalTimePeriodType(self._publicationPeriod)
+
+        value = find_attr_value_('dataScope', self._anyAttributes_)
+
+        if value is not None and 'dataScope' not in already_processed:
+            already_processed.add('dataScope')
+            self._dataScope = value
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
