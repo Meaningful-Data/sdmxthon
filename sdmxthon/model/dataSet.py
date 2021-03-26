@@ -9,9 +9,9 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from SDMXthon.parsers.data_validations import validate_data
-from SDMXthon.parsers.write import writer
-from SDMXthon.utils.enums import MessageTypeEnum
+from SDMXThon.parsers.data_validations import validate_data
+from SDMXThon.parsers.write import writer
+from SDMXThon.utils.enums import MessageTypeEnum
 from .component import DataStructureDefinition, DataFlowDefinition
 
 

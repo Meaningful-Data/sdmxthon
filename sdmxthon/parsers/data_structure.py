@@ -4,9 +4,9 @@
 
 import re as re_
 
-from SDMXthon.model.base import AnnotableArtefact
-from SDMXthon.parsers.references import ReferenceType
-from SDMXthon.utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
+from SDMXThon.model.base import AnnotableArtefact
+from SDMXThon.parsers.references import ReferenceType
+from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
 from .data_parser import Validate_simpletypes_
 from .gdscollector import datetime_
 

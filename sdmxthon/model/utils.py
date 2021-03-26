@@ -13,7 +13,7 @@ from lxml import etree
 # Convenience setters and getters
 #
 
-def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S") -> datetime:
+def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
     """Generic function to format a string to datetime
 
     Args:
@@ -26,6 +26,9 @@ def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S") -> datetim
     Raises:
         ValueError: If the value violates the format constraint.
     """
+
+    if value is None:
+        return None
     try:
         dt = datetime.strptime(value, format_)
     except:

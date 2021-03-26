@@ -1,13 +1,13 @@
 import sys
 from zipfile import ZipFile
 
-from SDMXthon.model.message import Message
-from SDMXthon.parsers.message_parsers import MetadataType
-from SDMXthon.parsers.metadata_validations import setReferences
-from SDMXthon.parsers.read import _read_xml, _sdmx_gen_to_dataset, _sdmx_str_to_dataset, _sdmx_to_dataframe, \
+from SDMXThon.model.message import Message
+from SDMXThon.parsers.message_parsers import MetadataType
+from SDMXThon.parsers.metadata_validations import setReferences
+from SDMXThon.parsers.read import _read_xml, _sdmx_gen_to_dataset, _sdmx_str_to_dataset, _sdmx_to_dataframe, \
     _sdmx_to_dataset_no_metadata
-from SDMXthon.utils.enums import MessageTypeEnum
-from SDMXthon.utils.handlers import first_element_dict
+from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXThon.utils.handlers import first_element_dict
 
 
 def read_sdmx(path_to_sdmx_file) -> Message:

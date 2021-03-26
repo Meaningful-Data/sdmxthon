@@ -1,9 +1,9 @@
 from typing import List
 
-from SDMXthon.model.utils import FacetType, stringSetter, FacetValueType
-from SDMXthon.parsers.data_parser import DataParser
-from SDMXthon.parsers.references import RefBaseType
-from SDMXthon.utils.xml_base import find_attr_value_
+from SDMXThon.model.utils import FacetType, stringSetter, FacetValueType
+from SDMXThon.parsers.data_parser import DataParser
+from SDMXThon.parsers.references import RefBaseType
+from SDMXThon.utils.xml_base import find_attr_value_
 
 
 class Facet:

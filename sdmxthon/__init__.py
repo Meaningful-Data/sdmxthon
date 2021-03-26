@@ -1,1 +1,1 @@
-from .api.api import *
+from SDMXThon.api.api import *

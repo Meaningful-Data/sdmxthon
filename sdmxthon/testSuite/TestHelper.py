@@ -6,7 +6,8 @@ import unittest
 
 import pandas as pd
 
-from ..api.api import DataSet, _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
+from SDMXThon.model.dataSet import DataSet
+from ..api.api import _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
 
 
 def query_to_db(sqlite_db, limit):

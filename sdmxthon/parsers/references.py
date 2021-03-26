@@ -2,8 +2,8 @@
     References file withholds all the Reference classes needed for parsing
 """
 
-from SDMXthon.parsers.data_parser import DataParser, Validate_simpletypes_
-from SDMXthon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, raise_parse_error
+from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
+from SDMXThon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, raise_parse_error
 
 
 class ReferenceType(DataParser):

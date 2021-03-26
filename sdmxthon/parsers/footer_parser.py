@@ -2,8 +2,8 @@
     Footer_parser file define the classes for parsing the footer of a Message
 """
 
-from SDMXthon.parsers.status_message import CodedStatusMessageType
-from SDMXthon.utils.xml_base import find_attr_value_
+from SDMXThon.parsers.status_message import CodedStatusMessageType
+from SDMXThon.utils.xml_base import find_attr_value_
 from .data_parser import DataParser, Validate_simpletypes_
 
 

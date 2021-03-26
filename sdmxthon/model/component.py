@@ -5,13 +5,14 @@
 import json
 from datetime import datetime
 
-from SDMXthon.parsers.data_parser import DataParser
-from SDMXthon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXthon.utils.handlers import export_intern_data, add_indent
-from SDMXthon.utils.mappings import *
-from SDMXthon.utils.xml_base import find_attr_value_
+from SDMXThon.parsers.data_parser import DataParser
+from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
+from SDMXThon.utils.handlers import export_intern_data, add_indent
+from SDMXThon.utils.mappings import *
+from SDMXThon.utils.xml_base import find_attr_value_
 from .base import IdentifiableArtefact, MaintainableArtefact, InternationalString
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
+from .itemScheme import Concept
 from .representation import Representation
 from .utils import genericSetter, intSetter
 
@@ -42,7 +43,7 @@ class Component(IdentifiableArtefact):
         return self._local_representation
 
     @local_representation.setter
-    def local_representation(self, value):
+    def local_representation(self, value: Representation):
         self._local_representation = genericSetter(value, Representation)
 
     @property
@@ -52,8 +53,8 @@ class Component(IdentifiableArtefact):
         return self._concept_identity
 
     @concept_identity.setter
-    def concept_identity(self, value):
-        self._concept_identity = value
+    def concept_identity(self, value: Concept):
+        self._concept_identity = genericSetter(value, Concept)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -64,7 +65,7 @@ class Component(IdentifiableArtefact):
         if nodeName_ == 'ConceptIdentity':
             obj_ = ConceptIdentityType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.concept_identity = obj_.ref
+            self._concept_identity = obj_.ref
         elif nodeName_ == 'LocalRepresentation':
             obj_ = Representation._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
@@ -916,6 +917,15 @@ class DataFlowDefinition(MaintainableArtefact):
         if isinstance(other, DataFlowDefinition):
             return super(DataFlowDefinition, self).__eq__(other) and self._structure == other._structure
 
+    def __str__(self):
+        return f'<DataFlowDefinition - {self.unique_id}>'
+
+    def __unicode__(self):
+        return f'<DataFlowDefinition - {self.unique_id}>'
+
+    def __repr__(self):
+        return f'<DataFlowDefinition - {self.unique_id}>'
+
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory Method of DataFlowDefinition"""
@@ -928,7 +938,7 @@ class DataFlowDefinition(MaintainableArtefact):
 
     @structure.setter
     def structure(self, value):
-        self._structure = value
+        self._structure = genericSetter(value, DataStructureDefinition)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""

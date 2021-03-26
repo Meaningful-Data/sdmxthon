@@ -3,10 +3,11 @@
 """
 from datetime import datetime
 from io import StringIO
+from typing import Dict
 
-from SDMXthon.parsers.message_parsers import Header
-from SDMXthon.parsers.write import writer
-from SDMXthon.utils.enums import MessageTypeEnum
+from SDMXThon.parsers.message_parsers import Header, Structures
+from SDMXThon.parsers.write import writer
+from SDMXThon.utils.enums import MessageTypeEnum
 from .dataSet import DataSet
 from .header import Party, Sender
 
@@ -24,7 +25,8 @@ class Message:
     :type header: `Header`
     """
 
-    def __init__(self, message_type: MessageTypeEnum, payload, header: Header):
+    def __init__(self, message_type: MessageTypeEnum, payload: (Structures, Dict[str, DataSet], DataSet),
+                 header: Header):
         self._type = message_type
         self._payload = payload
         if header is None:
@@ -43,6 +45,10 @@ class Message:
 
     @type.setter
     def type(self, value):
+        if not isinstance(value, MessageTypeEnum):
+            raise TypeError('Type must be a MessageTypeEnum')
+        if isinstance(self.payload, Structures) and value != MessageTypeEnum.Metadata:
+            raise ValueError('On a Structures Payload, Type can only be MessageTypeEnum.Metadata')
         self._type = value
 
     @property
@@ -60,7 +66,35 @@ class Message:
 
     @payload.setter
     def payload(self, value):
+        if not isinstance(value, (Structures, Dict[str, DataSet], DataSet)):
+            raise TypeError('Payload must be a DataSet, a dict of DataSet or a Structures object')
         self._payload = value
+
+    @property
+    def content(self):
+        """Returns the payload as a dict
+
+        :class: `Dict`
+
+        """
+        if isinstance(self.payload, Structures):
+            content = {}
+            if self.payload.codelists is not None:
+                content['codelists'] = self.payload.codelists
+            if self.payload.concepts is not None:
+                content['concepts'] = self.payload.concepts
+            if self.payload.dataflows is not None:
+                content['dataflows'] = self.payload.dataflows
+            if self.payload.dsds is not None:
+                content['dsds'] = self.payload.dsds
+            if self.payload.organisations is not None:
+                content['organisations'] = self.payload.organisations
+
+            return content
+        elif isinstance(self.payload, DataSet):
+            return {'datasets': {self.payload.unique_id, self.payload}}
+        else:
+            return {'datasets': self.payload}
 
     @property
     def header(self):
@@ -73,6 +107,7 @@ class Message:
 
     @header.setter
     def header(self, value):
+
         self._header = value
 
     def setDimensionAtObservation(self, dimAtObs):

@@ -1,6 +1,6 @@
 import logging
 
-from SDMXthon.api.api import read_sdmx
+from SDMXThon.api.api import read_sdmx
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -58,7 +58,7 @@ def main():
     # Test Metadata From Different Sources Generator
     logger.debug('Start')
     message = read_sdmx(pathToMetadataFile)
-    print(message.payload)
+    print(message.content['codelists']['ESTAT:GEO(1.5)'].items)
     logger.debug('End')
 
     """

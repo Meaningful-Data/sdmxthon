@@ -3,9 +3,9 @@ from datetime import datetime
 
 import pandas as pd
 
-from SDMXthon.model.dataSet import DataSet
-from SDMXthon.utils.enums import MessageTypeEnum
-from SDMXthon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
+from SDMXThon.model.dataSet import DataSet
+from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 from .gdscollector import GdsCollector
 from .message_parsers import GenericDataType, StructureSpecificDataType, MetadataType
 
