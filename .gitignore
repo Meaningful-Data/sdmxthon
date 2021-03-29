@@ -6,3 +6,4 @@
 *.py[cod]
 *$py.class
 dist
+SDMXThon/docs/_build/html

@@ -33,6 +33,11 @@ class ReadingValidation(TestHelper.TestHelper):
 
         self.reading_test(data_filename)
 
+    def test_5(self):
+        data_filename = 'dataflow.xml'
+
+        self.reading_test(data_filename)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=1)

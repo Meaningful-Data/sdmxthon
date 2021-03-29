@@ -1,6 +1,7 @@
 import logging
+from time import time
 
-from SDMXThon.api.api import read_sdmx
+from SDMXThon.api.api import get_datasets
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -22,12 +23,12 @@ pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb_wdi.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/ecb.xml'
-pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
+# pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/imf.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
@@ -53,14 +54,19 @@ def pretty(d, indent=0):
         else:
             print('\t' * (indent + 1) + str(value))
 
-
 def main():
     # Test Metadata From Different Sources Generator
-    logger.debug('Start')
-    message = read_sdmx(pathToMetadataFile)
-    print(message.content['codelists']['ESTAT:GEO(1.5)'].items)
-    logger.debug('End')
+    start = time()
+    result = get_datasets(pathToDataBIS, pathToMetadataFile)
+    end = time()
+    print(result)
+    print(end - start)
 
+    start = time()
+    errors = result.semanticValidation()
+    end = time()
+    print(errors)
+    print(end - start)
     """
     # Test Reading Generator
     

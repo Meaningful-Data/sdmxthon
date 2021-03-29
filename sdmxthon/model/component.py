@@ -730,38 +730,61 @@ class DataStructureDefinition(MaintainableArtefact):
         return result
 
     @property
-    def facetedObjects(self):
+    def _facet_type(self):
         """Returns any component that has facets"""
         facets = {}
+        type_ = {}
         for k, v in self.dimensionDescriptor.components.items():
             if v.local_representation is not None:
+                if v.local_representation.type_ is not None:
+                    type_[k] = v.local_representation.type_
+
                 if len(v.local_representation.facets) > 0:
                     facets[k] = v.local_representation.facets
             elif v.concept_identity is not None and not \
-                    isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
-                    len(v.concept_identity.coreRepresentation.facets) > 0:
-                facets[k] = v.concept_identity.coreRepresentation.facets
+                    isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None:
+
+                if v.concept_identity.coreRepresentation.type_ is not None:
+                    type_[k] = v.concept_identity.coreRepresentation.type_
+
+                if len(v.concept_identity.coreRepresentation.facets) > 0:
+                    facets[k] = v.concept_identity.coreRepresentation.facets
 
         if self.attributeDescriptor is not None:
             for k, v in self.attributeDescriptor.components.items():
                 if v.local_representation is not None:
+                    if v.local_representation.type_ is not None:
+                        type_[k] = v.local_representation.type_
+
                     if len(v.local_representation.facets) > 0:
                         facets[k] = v.local_representation.facets
                 elif v.concept_identity is not None and not \
-                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
-                        len(v.concept_identity.coreRepresentation.facets) > 0:
-                    facets[k] = v.concept_identity.coreRepresentation.facets
+                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None:
+
+                    if v.concept_identity.coreRepresentation.type_ is not None:
+                        type_[k] = v.concept_identity.coreRepresentation.type_
+
+                    if len(v.concept_identity.coreRepresentation.facets) > 0:
+                        facets[k] = v.concept_identity.coreRepresentation.facets
 
         if self.measureDescriptor is not None:
             for k, v in self.measureDescriptor.components.items():
                 if v.local_representation is not None:
+                    if v.local_representation.type_ is not None:
+                        type_[k] = v.local_representation.type_
+
                     if len(v.local_representation.facets) > 0:
                         facets[k] = v.local_representation.facets
                 elif v.concept_identity is not None and not \
-                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None and \
-                        len(v.concept_identity.coreRepresentation.facets) > 0:
-                    facets[k] = v.concept_identity.coreRepresentation.facets
-        return facets
+                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None:
+
+                    if v.concept_identity.coreRepresentation.type_ is not None:
+                        type_[k] = v.concept_identity.coreRepresentation.type_
+
+                    if len(v.concept_identity.coreRepresentation.facets) > 0:
+                        facets[k] = v.concept_identity.coreRepresentation.facets
+
+        return facets, type_
 
     @property
     def measureCode(self):

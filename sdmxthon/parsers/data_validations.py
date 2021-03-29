@@ -1,11 +1,14 @@
 import re
 import warnings
+from datetime import datetime
 
 import numpy as np
 import pandas.api.types
 from pandas import DataFrame
 
 from SDMXThon.model.component import DataStructureDefinition
+
+error_level_facets = 'WARNING'
 
 
 def get_codelist_values(dsd: DataStructureDefinition) -> dict:
@@ -50,6 +53,34 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
     return data
 
 
+def time_period_valid(dt_str):
+    """Validates any time period"""
+
+    regex_monthly = r'(19|[2-9][0-9])\d{2}(-(0[1-9]|1[012]))?'
+    match_monthly = re.compile(regex_monthly)
+
+    # Matching year and monthly
+
+    if match_monthly.fullmatch(dt_str):
+        return True
+
+    # Matching semester, quarter and trimester
+    regex_specials = r'(19|[2-9][0-9])\d{2}-(S[1-2]|(Q|T)[1-4])'
+    match_specials = re.compile(regex_specials)
+
+    if match_specials.fullmatch(dt_str):
+        return True
+
+    # Matching daily and iso format
+    try:
+        res = datetime.fromisoformat(dt_str)
+        if not 1900 < res.year < 9999:
+            return False
+    except:
+        return False
+    return True
+
+
 def facet_error(error_level, obj_id, obj_type, rows, value, facetType, facetValue) -> dict:
     return {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{obj_id}', 'Type': f'{obj_type}',
             'Rows': rows.copy(), 'Message': f'Value {value} is not compliant with {facetType} : {facetValue}'}
@@ -75,7 +106,6 @@ def trunc_dec(x):
 
 
 def check_num_facets(facets, data_column, key, type_):
-    error_level = 'WARNING'
     errors = []
     is_sequence = None
     start = None
@@ -116,9 +146,10 @@ def check_num_facets(facets, data_column, key, type_):
 
         if len(values) > 0:
             for v in values:
-                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
-                               'Rows': None, 'Message': f'Value {v} not compliant with '
-                                                        f'{f.facetType} : {f.facetValue}'})
+                errors.append(
+                    {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}', 'Type': f'{type_}',
+                     'Rows': None, 'Message': f'Value {v} not compliant with '
+                                              f'{f.facetType} : {f.facetValue}'})
 
     if is_sequence is not None and start is not None and interval is not None:
         data_column = np.sort(data_column)
@@ -128,16 +159,18 @@ def check_num_facets(facets, data_column, key, type_):
             values = data_column[data_column < start].tolist()
             if len(values) > 0:
                 for v in values:
-                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
-                                   'Rows': None, 'Message': f'Value {v} not compliant with startValue : {start}'})
+                    errors.append(
+                        {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}', 'Type': f'{type_}',
+                         'Rows': None, 'Message': f'Value {v} not compliant with startValue : {start}'})
 
         if end is not None and int(data_column[-1]) > end:
             control = False
             values = data_column[data_column > end].tolist()
             if len(values) > 0:
                 for v in values:
-                    errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
-                                   'Rows': None, 'Message': f'Value {v} not compliant with endValue : {end}'})
+                    errors.append(
+                        {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}', 'Type': f'{type_}',
+                         'Rows': None, 'Message': f'Value {v} not compliant with endValue : {end}'})
 
         if control:
             values = data_column[(data_column - start) % interval != 0]
@@ -145,13 +178,15 @@ def check_num_facets(facets, data_column, key, type_):
                 for v in values:
                     if end is not None:
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
+                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}',
+                             'Type': f'{type_}',
                              'Rows': None,
                              'Message': f'Value {v} in {key} not compliant '
                                         f'with sequence : {start}-{end} (interval: {interval})'})
                     else:
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
+                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}',
+                             'Type': f'{type_}',
                              'Rows': None,
                              'Message': f'Value {v} in {key} '
                                         f'not compliant with sequence : '
@@ -219,7 +254,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     """
     errors = []
 
-    faceted_objects = dsd.facetedObjects
+    faceted, types = dsd._facet_type
 
     mc = dsd.measureCode
     type_ = 'Measure'
@@ -240,8 +275,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
 
-        if mc in faceted_objects:
-            facets = faceted_objects[mc]
+        if mc in faceted:
+            facets = faceted[mc]
             if pandas.api.types.is_numeric_dtype(data[mc]):
                 data_column = data[mc].unique().astype('float64')
                 errors += check_num_facets(facets, data_column, mc, type_)
@@ -301,8 +336,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
 
-        if k in faceted_objects:
-            facets = faceted_objects[k]
+        if k in faceted:
+            facets = faceted[k]
             if is_numeric:
                 errors += check_num_facets(facets, data_column, k, type_)
             else:
@@ -312,6 +347,16 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             data_column = data_column.astype('str')
             format_temp = np.vectorize(trunc_dec)
             data_column = format_temp(data_column)
+
+        if k in types:
+            if types[k] == 'ObservationalTimePeriod':
+                for e in data_column:
+                    if not time_period_valid(e):
+                        errors.append(
+                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{k}',
+                             'Type': f'{type_}',
+                             'Rows': None, 'Message': f'Value {e} not compliant with '
+                                                      f'type : ObservationalTimePeriod'})
 
         if k in codelist_values.keys():
             code = 'SS04'

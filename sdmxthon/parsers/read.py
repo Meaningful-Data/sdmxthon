@@ -60,7 +60,7 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
                 if str_dict['ID'] in dataflows.keys():
                     dataflow = dataflows[str_dict['ID']]
                     dsd = dataflow.structure
-                    item = DataSet(structure=dsd, dataflow=dataflow)
+                    item = DataSet(dataflow=dataflow)
                 else:
                     warnings.warn(f'DataFlow {str_dict["ID"]} not found')
                     continue
@@ -109,7 +109,7 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
                 if str_dict['ID'] in dataflows.keys():
                     dataflow = dataflows[str_dict['ID']]
                     dsd = dataflow.structure
-                    item = DataSet(structure=dsd, dataflow=dataflow)
+                    item = DataSet(dataflow=dataflow)
                 else:
                     warnings.warn(f'DataFlow {str_dict["ID"]} not found')
                     continue

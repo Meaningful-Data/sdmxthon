@@ -5,13 +5,12 @@
                xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
                xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
     <mes:Header>
-        <mes:ID>IREF689011</mes:ID>
+        <mes:ID>IREF534795</mes:ID>
         <mes:Test>false</mes:Test>
-        <mes:Prepared>2020-12-14T18:01:42Z</mes:Prepared>
+        <mes:Prepared>2021-03-05T14:11:16Z</mes:Prepared>
         <mes:Sender id="Unknown"/>
         <mes:Receiver id="not_supplied"/>
     </mes:Header>
-
     <mes:Structures>
         <str:OrganisationSchemes>
             <str:AgencyScheme urn="urn:sdmx:org.sdmx.infomodel.base.AgencyScheme=SDMX:AGENCIES(1.0)"
@@ -127,7 +126,6 @@
                 </str:Agency>
                 <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=IBGE" id="IBGE">
                     <com:Name xml:lang="en">The Brazilian Institute of Geography and Statistics</com:Name>
-                    <com:Name xml:lang="br">Instituto Brasileiro de Geografia e Estatística</com:Name>
                 </str:Agency>
                 <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=NG_NSB" id="NG_NSB">
                     <com:Name xml:lang="en">Nigerian National Bureau of Statistics (NBS)</com:Name>
@@ -247,8 +245,48 @@
                 <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=RBI" id="RBI">
                     <com:Name xml:lang="en">RBI</com:Name>
                 </str:Agency>
+                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=RBI_CIMS" id="RBI_CIMS">
+                    <com:Name xml:lang="en">RBI_CIMS</com:Name>
+                    <com:Description xml:lang="en">RBI_CIMS for testing</com:Description>
+                </str:Agency>
+                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=TEST_DEV_TEAM" id="TEST_DEV_TEAM">
+                    <com:Name xml:lang="en">TEST_DEV_TEAM</com:Name>
+                    <com:Description xml:lang="en">TEST_DEV_TEAM</com:Description>
+                </str:Agency>
+                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=ESCBSHS" id="ESCBSHS">
+                    <com:Name xml:lang="en">ESCBSHS</com:Name>
+                    <com:Description xml:lang="en">ESCBSHS</com:Description>
+                </str:Agency>
             </str:AgencyScheme>
         </str:OrganisationSchemes>
+        <str:Dataflows>
+            <str:Dataflow urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=BIS:WEBSTATS_DER_DATAFLOW(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="WEBSTATS_DER_DATAFLOW" isFinal="false"
+                          version="1.0">
+                <com:Name xml:lang="en">OTC derivatives turnover</com:Name>
+                <com:Description xml:lang="en">OTC derivatives and FX spot - turnover</com:Description>
+                <str:Structure>
+                    <Ref package="datastructure" agencyID="BIS" id="BIS_DER" version="1.0" class="DataStructure"/>
+                </str:Structure>
+            </str:Dataflow>
+            <str:Dataflow urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=BIS:WEBSTATS_LBS_D_PUB_DATAFLOW(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="WEBSTATS_LBS_D_PUB_DATAFLOW" isFinal="false"
+                          version="1.0">
+                <com:Name xml:lang="en">BIS locational banking</com:Name>
+                <str:Structure>
+                    <Ref package="datastructure" agencyID="BIS" id="BIS_LBS_DISS" version="1.0" class="DataStructure"/>
+                </str:Structure>
+            </str:Dataflow>
+            <str:Dataflow
+                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=BIS:WEBSTATS_XRU_CURRENT_D_DATAFLOW(1.0)"
+                    isExternalReference="false" agencyID="BIS" id="WEBSTATS_XRU_CURRENT_D_DATAFLOW" isFinal="false"
+                    version="1.0">
+                <com:Name xml:lang="en">US dollar exchange rates, current, daily</com:Name>
+                <str:Structure>
+                    <Ref package="datastructure" agencyID="BIS" id="BIS_XR" version="1.0" class="DataStructure"/>
+                </str:Structure>
+            </str:Dataflow>
+        </str:Dataflows>
         <str:Codelists>
             <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_AVAILABILITY(1.0)"
                           isExternalReference="false" agencyID="BIS" id="CL_AVAILABILITY" isFinal="false" version="1.0">
@@ -3595,6 +3633,729 @@
                     </com:Name>
                 </str:Code>
             </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_CURRENCY_3POS(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_CURRENCY_3POS" isFinal="false"
+                          version="1.0">
+                <com:Name xml:lang="en">Currency</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AED" id="AED">
+                    <com:Name xml:lang="en">UAE Dirham</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AFA" id="AFA">
+                    <com:Name xml:lang="en">Afghani (old)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AFN" id="AFN">
+                    <com:Name xml:lang="en">Afghani</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ALL" id="ALL">
+                    <com:Name xml:lang="en">Albanian Lek</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AMD" id="AMD">
+                    <com:Name xml:lang="en">Armenian Dram</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ANG" id="ANG">
+                    <com:Name xml:lang="en">Netherlands Antillean Guilder</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AOA" id="AOA">
+                    <com:Name xml:lang="en">Angolan Kwanza</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ARS" id="ARS">
+                    <com:Name xml:lang="en">Argentine Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ATS" id="ATS">
+                    <com:Name xml:lang="en">Austrian Schilling</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AUD" id="AUD">
+                    <com:Name xml:lang="en">Australian Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AWG" id="AWG">
+                    <com:Name xml:lang="en">Aruban Guilder</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).AZN" id="AZN">
+                    <com:Name xml:lang="en">Azerbaijanian Manat</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BAM" id="BAM">
+                    <com:Name xml:lang="en">Bosnian Convertible Mark</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BBD" id="BBD">
+                    <com:Name xml:lang="en">Barbados Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BDT" id="BDT">
+                    <com:Name xml:lang="en">Bangadesh Taka</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BEF" id="BEF">
+                    <com:Name xml:lang="en">Belgian Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BEL" id="BEL">
+                    <com:Name xml:lang="en">Belgian Financial Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BGN" id="BGN">
+                    <com:Name xml:lang="en">Bulgarian Lev</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BHD" id="BHD">
+                    <com:Name xml:lang="en">Bahraini Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BIF" id="BIF">
+                    <com:Name xml:lang="en">Burundi Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BMD" id="BMD">
+                    <com:Name xml:lang="en">Bermudian Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BND" id="BND">
+                    <com:Name xml:lang="en">Brunei Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BOB" id="BOB">
+                    <com:Name xml:lang="en">Bolivian Boliviano</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BOV" id="BOV">
+                    <com:Name xml:lang="en">Bolivian Mvdol</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BRE" id="BRE">
+                    <com:Name xml:lang="en">Cruzeiro (historical up to 1993/08)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BRL" id="BRL">
+                    <com:Name xml:lang="en">Brazilian Real</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BRR" id="BRR">
+                    <com:Name xml:lang="en">Cruzeiro Real (historical 1993/08-1994/07)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BSD" id="BSD">
+                    <com:Name xml:lang="en">Bahamian Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BTN" id="BTN">
+                    <com:Name xml:lang="en">Bhutanese Ngultrum</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BWP" id="BWP">
+                    <com:Name xml:lang="en">Botswana Pula</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BYR" id="BYR">
+                    <com:Name xml:lang="en">Belarussian Ruble</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BZD" id="BZD">
+                    <com:Name xml:lang="en">Belize Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CAD" id="CAD">
+                    <com:Name xml:lang="en">Canadian Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CDF" id="CDF">
+                    <com:Name xml:lang="en">Congolese Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CHE" id="CHE">
+                    <com:Name xml:lang="en">WIR Euro</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CHF" id="CHF">
+                    <com:Name xml:lang="en">Swiss Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CHW" id="CHW">
+                    <com:Name xml:lang="en">WIR Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CLF" id="CLF">
+                    <com:Name xml:lang="en">Unidades de fomento</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CLP" id="CLP">
+                    <com:Name xml:lang="en">Chilean Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CNY" id="CNY">
+                    <com:Name xml:lang="en">Yuan Renminbi</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).COP" id="COP">
+                    <com:Name xml:lang="en">Colombian Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).COU" id="COU">
+                    <com:Name xml:lang="en">Unidad de Valor Real</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CRC" id="CRC">
+                    <com:Name xml:lang="en">Costa Rican Colon</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CSD" id="CSD">
+                    <com:Name xml:lang="en">Serbian Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CSK" id="CSK">
+                    <com:Name xml:lang="en">Czechoslovakia Koruna</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CUC" id="CUC">
+                    <com:Name xml:lang="en">Peso Convertible</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CUP" id="CUP">
+                    <com:Name xml:lang="en">Cuban Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CVE" id="CVE">
+                    <com:Name xml:lang="en">Cape Verde Escudo</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CYP" id="CYP">
+                    <com:Name xml:lang="en">Cyprus Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).CZK" id="CZK">
+                    <com:Name xml:lang="en">Czech Koruna</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).DEM" id="DEM">
+                    <com:Name xml:lang="en">Deutsche Mark</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).DJF" id="DJF">
+                    <com:Name xml:lang="en">Djibouti Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).DKK" id="DKK">
+                    <com:Name xml:lang="en">Danish Krone</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).DOP" id="DOP">
+                    <com:Name xml:lang="en">Dominican Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).DZD" id="DZD">
+                    <com:Name xml:lang="en">Algerian Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ECU" id="ECU">
+                    <com:Name xml:lang="en">European Currency Unit</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).EEK" id="EEK">
+                    <com:Name xml:lang="en">Estonian Kroon</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).EGP" id="EGP">
+                    <com:Name xml:lang="en">Egyptian Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ERN" id="ERN">
+                    <com:Name xml:lang="en">Eritrean Nakfa</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ESP" id="ESP">
+                    <com:Name xml:lang="en">Spanish Peseta</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ETB" id="ETB">
+                    <com:Name xml:lang="en">Ethiopian Birr</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).EU1" id="EU1">
+                    <com:Name xml:lang="en">Sum of ECU, Euro and legacy currencies now included in the Euro</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).EUA" id="EUA">
+                    <com:Name xml:lang="en">European unit of accounts</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).EUR" id="EUR">
+                    <com:Name xml:lang="en">Euro</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).FC1" id="FC1">
+                    <com:Name xml:lang="en">Foreign currency</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).FIM" id="FIM">
+                    <com:Name xml:lang="en">Finnish Markka</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).FJD" id="FJD">
+                    <com:Name xml:lang="en">Fiji Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).FKP" id="FKP">
+                    <com:Name xml:lang="en">Falkland Islands Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).FRF" id="FRF">
+                    <com:Name xml:lang="en">French Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GBP" id="GBP">
+                    <com:Name xml:lang="en">Pound Sterling</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GEL" id="GEL">
+                    <com:Name xml:lang="en">Georgian Lari</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GHS" id="GHS">
+                    <com:Name xml:lang="en">Ghana Cedi</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GIP" id="GIP">
+                    <com:Name xml:lang="en">Gibraltar Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GMD" id="GMD">
+                    <com:Name xml:lang="en">Gambia Dalasi</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GNF" id="GNF">
+                    <com:Name xml:lang="en">Guinea Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GRD" id="GRD">
+                    <com:Name xml:lang="en">Greek Drachma</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GTQ" id="GTQ">
+                    <com:Name xml:lang="en">Guatemalan Quetzal</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).GYD" id="GYD">
+                    <com:Name xml:lang="en">Guyana Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).HKD" id="HKD">
+                    <com:Name xml:lang="en">Hong Kong Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).HNL" id="HNL">
+                    <com:Name xml:lang="en">Honduran Lempira</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).HRK" id="HRK">
+                    <com:Name xml:lang="en">Croatian Kuna</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).HTG" id="HTG">
+                    <com:Name xml:lang="en">Haitian Gourde</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).HUF" id="HUF">
+                    <com:Name xml:lang="en">Hungarian Forint</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).IDR" id="IDR">
+                    <com:Name xml:lang="en">Indonesia Rupiah</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).IEP" id="IEP">
+                    <com:Name xml:lang="en">Irish Punt</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ILN" id="ILN">
+                    <com:Name xml:lang="en">Israel Shekel (old)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ILS" id="ILS">
+                    <com:Name xml:lang="en">New Israeli Sheqel</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).INR" id="INR">
+                    <com:Name xml:lang="en">Indian Rupee</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).IQD" id="IQD">
+                    <com:Name xml:lang="en">Iraqi Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).IRR" id="IRR">
+                    <com:Name xml:lang="en">Iranian Rial</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ISK" id="ISK">
+                    <com:Name xml:lang="en">Iceland Krona</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ITL" id="ITL">
+                    <com:Name xml:lang="en">Italian Lira</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).JMD" id="JMD">
+                    <com:Name xml:lang="en">Jamaican Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).JOD" id="JOD">
+                    <com:Name xml:lang="en">Jordanian Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).JPY" id="JPY">
+                    <com:Name xml:lang="en">Japanese Yen</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KES" id="KES">
+                    <com:Name xml:lang="en">Kenyan Shilling</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KGS" id="KGS">
+                    <com:Name xml:lang="en">Kyrgyzstani Som</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KHR" id="KHR">
+                    <com:Name xml:lang="en">Cambodian Riel</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KMF" id="KMF">
+                    <com:Name xml:lang="en">Comoro Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KPW" id="KPW">
+                    <com:Name xml:lang="en">North Korean Won</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KRW" id="KRW">
+                    <com:Name xml:lang="en">Korean Won</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KWD" id="KWD">
+                    <com:Name xml:lang="en">Kuwaiti Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KYD" id="KYD">
+                    <com:Name xml:lang="en">Cayman Islands Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).KZT" id="KZT">
+                    <com:Name xml:lang="en">Kazakhstan Tenge</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LAK" id="LAK">
+                    <com:Name xml:lang="en">Lao Kip</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LBP" id="LBP">
+                    <com:Name xml:lang="en">Lebanese Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LC1" id="LC1">
+                    <com:Name xml:lang="en">Local currency</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LKR" id="LKR">
+                    <com:Name xml:lang="en">Sri Lanka Rupee</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LRD" id="LRD">
+                    <com:Name xml:lang="en">Liberian Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LSL" id="LSL">
+                    <com:Name xml:lang="en">Lesotho Loti</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LTL" id="LTL">
+                    <com:Name xml:lang="en">Lithuanian Litas</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LUF" id="LUF">
+                    <com:Name xml:lang="en">Luxembourg Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LVL" id="LVL">
+                    <com:Name xml:lang="en">Latvian Lats</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).LYD" id="LYD">
+                    <com:Name xml:lang="en">Libyan Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MAD" id="MAD">
+                    <com:Name xml:lang="en">Moroccan Dirham</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MDL" id="MDL">
+                    <com:Name xml:lang="en">Moldovan Leu</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MGA" id="MGA">
+                    <com:Name xml:lang="en">Malagasy Ariary</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MKD" id="MKD">
+                    <com:Name xml:lang="en">Macedonian Denar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MMK" id="MMK">
+                    <com:Name xml:lang="en">Myanmar Kyat</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MNT" id="MNT">
+                    <com:Name xml:lang="en">Mongolian Tugrik</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MOP" id="MOP">
+                    <com:Name xml:lang="en">Macao Pataca</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MRO" id="MRO">
+                    <com:Name xml:lang="en">Mauritania Ouguiya</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MTL" id="MTL">
+                    <com:Name xml:lang="en">Maltese Lira</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MUR" id="MUR">
+                    <com:Name xml:lang="en">Mauritius Rupee</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MVR" id="MVR">
+                    <com:Name xml:lang="en">Maldives Rufiyaa</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MWK" id="MWK">
+                    <com:Name xml:lang="en">Malawian Kwacha</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MXN" id="MXN">
+                    <com:Name xml:lang="en">Mexican Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MXP" id="MXP">
+                    <com:Name xml:lang="en">Mexican Peso (historical)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MXV" id="MXV">
+                    <com:Name xml:lang="en">Mexican Unidad de Inversion</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MYR" id="MYR">
+                    <com:Name xml:lang="en">Malaysian Ringgit</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).MZN" id="MZN">
+                    <com:Name xml:lang="en">Mozambican Metical</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NAD" id="NAD">
+                    <com:Name xml:lang="en">Namibia Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NGN" id="NGN">
+                    <com:Name xml:lang="en">Nigerian Naira</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NIO" id="NIO">
+                    <com:Name xml:lang="en">Nicaraguan Cordoba Oro</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NLG" id="NLG">
+                    <com:Name xml:lang="en">Dutch Guilder</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NOK" id="NOK">
+                    <com:Name xml:lang="en">Norwegian Krone</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NPR" id="NPR">
+                    <com:Name xml:lang="en">Nepalese Rupee</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).NZD" id="NZD">
+                    <com:Name xml:lang="en">New Zealand Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).OMR" id="OMR">
+                    <com:Name xml:lang="en">Rial Omani</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).OTH" id="OTH">
+                    <com:Name xml:lang="en">Other currencies</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PAB" id="PAB">
+                    <com:Name xml:lang="en">Panama Balboa</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PEN" id="PEN">
+                    <com:Name xml:lang="en">Peru New Sol</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PGK" id="PGK">
+                    <com:Name xml:lang="en">Papua New Guinea Kina</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PHP" id="PHP">
+                    <com:Name xml:lang="en">Philippine Piso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PKR" id="PKR">
+                    <com:Name xml:lang="en">Pakistan Rupee</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PLN" id="PLN">
+                    <com:Name xml:lang="en">Polish zloty</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PLZ" id="PLZ">
+                    <com:Name xml:lang="en">Poland Zloty</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PTE" id="PTE">
+                    <com:Name xml:lang="en">Portuguese Escudo</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).PYG" id="PYG">
+                    <com:Name xml:lang="en">Paraguay Guarani</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).QAR" id="QAR">
+                    <com:Name xml:lang="en">Qatari Rial</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ROL" id="ROL">
+                    <com:Name xml:lang="en">Romanian Leu (old)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).RON" id="RON">
+                    <com:Name xml:lang="en">Romanian Leu</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).RSD" id="RSD">
+                    <com:Name xml:lang="en">Serbian Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).RUB" id="RUB">
+                    <com:Name xml:lang="en">Russian Rouble</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).RUR" id="RUR">
+                    <com:Name xml:lang="en">Russian Federation Rouble</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).RWF" id="RWF">
+                    <com:Name xml:lang="en">Rwanda Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SAR" id="SAR">
+                    <com:Name xml:lang="en">Saudi Riyal</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SBD" id="SBD">
+                    <com:Name xml:lang="en">Solomon Islands Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SCR" id="SCR">
+                    <com:Name xml:lang="en">Seychelles Rupee</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SDG" id="SDG">
+                    <com:Name xml:lang="en">Sudanese Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SDR" id="SDR">
+                    <com:Name xml:lang="en">SDR</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SEK" id="SEK">
+                    <com:Name xml:lang="en">Swedish Krona</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SGD" id="SGD">
+                    <com:Name xml:lang="en">Singapore Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SHP" id="SHP">
+                    <com:Name xml:lang="en">Saint Helena Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SIT" id="SIT">
+                    <com:Name xml:lang="en">Slovenian Tolar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SKK" id="SKK">
+                    <com:Name xml:lang="en">Slovak Koruna</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SLL" id="SLL">
+                    <com:Name xml:lang="en">Sierra Leonean Leone</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SOS" id="SOS">
+                    <com:Name xml:lang="en">Somali Shilling</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SRD" id="SRD">
+                    <com:Name xml:lang="en">Surinam Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SSP" id="SSP">
+                    <com:Name xml:lang="en">South Sudanese Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).STD" id="STD">
+                    <com:Name xml:lang="en">Sao Tome Dobra</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SVC" id="SVC">
+                    <com:Name xml:lang="en">El Salvador Colon</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SYP" id="SYP">
+                    <com:Name xml:lang="en">Syrian Pound</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).SZL" id="SZL">
+                    <com:Name xml:lang="en">Swazi Lilangeni</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).THB" id="THB">
+                    <com:Name xml:lang="en">Thai Baht</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TJS" id="TJS">
+                    <com:Name xml:lang="en">Tajikistani Somoni</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TMT" id="TMT">
+                    <com:Name xml:lang="en">Turkmenistan Manat</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TND" id="TND">
+                    <com:Name xml:lang="en">Tunisian Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TO1" id="TO1">
+                    <com:Name xml:lang="en">All currencies</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TO2" id="TO2">
+                    <com:Name xml:lang="en">All currencies excluding USD, EUR and JPY</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TO3" id="TO3">
+                    <com:Name xml:lang="en">All currencies excluding USD, EUR, JPY, CHF and GBP</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TOP" id="TOP">
+                    <com:Name xml:lang="en">Tonga Pa'anga</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TRL" id="TRL">
+                    <com:Name xml:lang="en">Turkish Lira (old)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TRY" id="TRY">
+                    <com:Name xml:lang="en">Turkish Lira</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TTD" id="TTD">
+                    <com:Name xml:lang="en">Trinidad and Tobago Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TWD" id="TWD">
+                    <com:Name xml:lang="en">New Taiwan Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).TZS" id="TZS">
+                    <com:Name xml:lang="en">Tanzanian Shilling</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UAH" id="UAH">
+                    <com:Name xml:lang="en">Ukrainian Hryvnia</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UGX" id="UGX">
+                    <com:Name xml:lang="en">Uganda Shilling</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UN9" id="UN9">
+                    <com:Name xml:lang="en">Unallocated currencies</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).USD" id="USD">
+                    <com:Name xml:lang="en">US Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).USN" id="USN">
+                    <com:Name xml:lang="en">US Dollar (Next day)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).USS" id="USS">
+                    <com:Name xml:lang="en">US Dollar (Same day)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UYI" id="UYI">
+                    <com:Name xml:lang="en">Uruguay Peso en Unidades Indexadas (URUIURUI)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UYP" id="UYP">
+                    <com:Name xml:lang="en">Uruguayan Peso (historical)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UYU" id="UYU">
+                    <com:Name xml:lang="en">Uruguayan Peso</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).UZS" id="UZS">
+                    <com:Name xml:lang="en">Uzbekistan Sum</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).VEB" id="VEB">
+                    <com:Name xml:lang="en">Venezuela Bolivar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).VEF" id="VEF">
+                    <com:Name xml:lang="en">Bolivar Fuerte</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).VND" id="VND">
+                    <com:Name xml:lang="en">Viet Nam Dong</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).VUV" id="VUV">
+                    <com:Name xml:lang="en">Vanuatu Vatu</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).WST" id="WST">
+                    <com:Name xml:lang="en">Samoa Tala</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XAF" id="XAF">
+                    <com:Name xml:lang="en">CFA Franc BEAC</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XAG" id="XAG">
+                    <com:Name xml:lang="en">Silver</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XAU" id="XAU">
+                    <com:Name xml:lang="en">Gold Ounces</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XBA" id="XBA">
+                    <com:Name xml:lang="en">Bond Markets Unit European Composite Unit (EURCO)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XBB" id="XBB">
+                    <com:Name xml:lang="en">Bond Markets Unit European Monetary Unit (E.M.U.-6)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XBC" id="XBC">
+                    <com:Name xml:lang="en">Bond Markets Unit European Unit of Account 9 (E.U.A.-9)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XBD" id="XBD">
+                    <com:Name xml:lang="en">Bond Markets Unit European Unit of Account 17 (E.U.A.-17)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XCD" id="XCD">
+                    <com:Name xml:lang="en">East Caribbean Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XDR" id="XDR">
+                    <com:Name xml:lang="en">SDR</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XEU" id="XEU">
+                    <com:Name xml:lang="en">European Currency Unit</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XFU" id="XFU">
+                    <com:Name xml:lang="en">UIC-Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XFX" id="XFX">
+                    <com:Name xml:lang="en">All currencies other then domestic</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XOF" id="XOF">
+                    <com:Name xml:lang="en">CFA Franc BCEAO</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XPD" id="XPD">
+                    <com:Name xml:lang="en">Palladium</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XPF" id="XPF">
+                    <com:Name xml:lang="en">CFP Franc</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XPT" id="XPT">
+                    <com:Name xml:lang="en">Platinum</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XSU" id="XSU">
+                    <com:Name xml:lang="en">Sucre</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XTS" id="XTS">
+                    <com:Name xml:lang="en">Codes specifically reserved for testing purposes</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XUA" id="XUA">
+                    <com:Name xml:lang="en">ADB Unit of Account</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XWX" id="XWX">
+                    <com:Name xml:lang="en">ECB / SEC all currencies</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).XXX" id="XXX">
+                    <com:Name xml:lang="en">The codes assigned for transactions where no currency is involved</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).YER" id="YER">
+                    <com:Name xml:lang="en">Yemeni Rial</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).Z06" id="Z06">
+                    <com:Name xml:lang="en">ECB / SEC Non-MU currencies combined</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).Z07" id="Z07">
+                    <com:Name xml:lang="en">ECB / SEC All currencies other than domestic, Euro and MU currencies
+                    </com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).Z08" id="Z08">
+                    <com:Name xml:lang="en">ECB / SEC EU 15 currencies</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).Z12" id="Z12">
+                    <com:Name xml:lang="en">ECB / SEC Euro and Greek Drachma</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).Z16" id="Z16">
+                    <com:Name xml:lang="en">ECB / SEC Other currencies except Greek Drachma</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZAR" id="ZAR">
+                    <com:Name xml:lang="en">South African Rand</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZMK" id="ZMK">
+                    <com:Name xml:lang="en">Zambian Kwacha</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZWL" id="ZWL">
+                    <com:Name xml:lang="en">Zimbabwe Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZWN" id="ZWN">
+                    <com:Name xml:lang="en">New Zimbabwe Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZZZ" id="ZZZ">
+                    <com:Name xml:lang="en">Not applicable</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).YUM" id="YUM">
+                    <com:Name xml:lang="en">Yugoslav Dinar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZWD" id="ZWD">
+                    <com:Name xml:lang="en">Zimbabwe Dollar</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).BYN" id="BYN">
+                    <com:Name xml:lang="en">Belarusian Rouble</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ZMW" id="ZMW">
+                    <com:Name xml:lang="en">Zambian Kwacha</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_CURRENCY_3POS(1.0).ECS" id="ECS">
+                    <com:Name xml:lang="en">Ecuadorian Sucre</com:Name>
+                </str:Code>
+            </str:Codelist>
             <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_DECIMALS(1.0)"
                           isExternalReference="false" agencyID="BIS" id="CL_DECIMALS" isFinal="false" version="1.0">
                 <com:Name xml:lang="en">Decimals codelist (BIS, ECB)</com:Name>
@@ -3917,6 +4678,207 @@
                 </str:Code>
                 <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_ISSUE_MAT(1.0).2" id="2">
                     <com:Name xml:lang="en">Over 6 months</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_L_BANK_TYPE(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_L_BANK_TYPE" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Reporting Bank Type</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_BANK_TYPE(1.0).A" id="A">
+                    <com:Name xml:lang="en">All reporting banks/institutions (domestic, foreign, consortium and
+                        unclassified)
+                    </com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_BANK_TYPE(1.0).B" id="B">
+                    <com:Name xml:lang="en">Foreign branches</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_BANK_TYPE(1.0).D" id="D">
+                    <com:Name xml:lang="en">Domestic banks</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_BANK_TYPE(1.0).S" id="S">
+                    <com:Name xml:lang="en">Foreign subsidiaries</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_BANK_TYPE(1.0).U" id="U">
+                    <com:Name xml:lang="en">Consortium and unclassified</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_L_CURR_TYPE(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_L_CURR_TYPE" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Currency type</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_CURR_TYPE(1.0).A" id="A">
+                    <com:Name xml:lang="en">All currencies (=D+F+U)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_CURR_TYPE(1.0).D" id="D">
+                    <com:Name xml:lang="en">Domestic currency (ie currency of bank location country)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_CURR_TYPE(1.0).F" id="F">
+                    <com:Name xml:lang="en">Foreign currency (ie currencies foreign to bank location country)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_CURR_TYPE(1.0).U" id="U">
+                    <com:Name xml:lang="en">Unclassified currency</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_L_INSTR(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_L_INSTR" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Instrument</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).A" id="A">
+                    <com:Name xml:lang="en">All instruments</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).D" id="D">
+                    <com:Name xml:lang="en">Debt securities</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).E" id="E">
+                    <com:Name xml:lang="en">Risk-weighted assets</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).G" id="G">
+                    <com:Name xml:lang="en">Loans and deposits</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).I" id="I">
+                    <com:Name xml:lang="en">Other instruments</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).K" id="K">
+                    <com:Name xml:lang="en">Other instruments (excluding derivatives), and unallocated by instrument
+                    </com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).L" id="L">
+                    <com:Name xml:lang="en">Debt securities, long-term</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).M" id="M">
+                    <com:Name xml:lang="en">Debt securities, short-term</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).R" id="R">
+                    <com:Name xml:lang="en">Tier 1 capital</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).S" id="S">
+                    <com:Name xml:lang="en">Tier 2 capital</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).U" id="U">
+                    <com:Name xml:lang="en">Unallocated by instrument</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).V" id="V">
+                    <com:Name xml:lang="en">Derivatives</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_INSTR(1.0).B" id="B">
+                    <com:Name xml:lang="en">Credit (loans &amp; debt securities)</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_L_POSITION(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_L_POSITION" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Position type</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).B" id="B">
+                    <com:Name xml:lang="en">Local claims</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).C" id="C">
+                    <com:Name xml:lang="en">Total claims</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).D" id="D">
+                    <com:Name xml:lang="en">Cross-border claims</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).F" id="F">
+                    <com:Name xml:lang="en">Total assets (financial and non-financial)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).I" id="I">
+                    <com:Name xml:lang="en">International claims</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).J" id="J">
+                    <com:Name xml:lang="en">Claims on banks with head offices outside host country</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).K" id="K">
+                    <com:Name xml:lang="en">Capital / equity</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).L" id="L">
+                    <com:Name xml:lang="en">Total liabilities</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).M" id="M">
+                    <com:Name xml:lang="en">Local liabilities</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).N" id="N">
+                    <com:Name xml:lang="en">Net positions</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).S" id="S">
+                    <com:Name xml:lang="en">Foreign Claims</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).W" id="W">
+                    <com:Name xml:lang="en">Guarantees extended</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).X" id="X">
+                    <com:Name xml:lang="en">Credit commitments</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POSITION(1.0).Z" id="Z">
+                    <com:Name xml:lang="en">Other potential exposures</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_L_POS_TYPE(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_L_POS_TYPE" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Location</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POS_TYPE(1.0).A" id="A">
+                    <com:Name xml:lang="en">All</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POS_TYPE(1.0).N" id="N">
+                    <com:Name xml:lang="en">Cross-border</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POS_TYPE(1.0).R" id="R">
+                    <com:Name xml:lang="en">Local</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POS_TYPE(1.0).U" id="U">
+                    <com:Name xml:lang="en">Unallocated</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_POS_TYPE(1.0).I" id="I">
+                    <com:Name xml:lang="en">Cross-border &amp; Local in FCY</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_L_SECTOR(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_L_SECTOR" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Counterparty Sector</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).A" id="A">
+                    <com:Name xml:lang="en">All sectors</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).B" id="B">
+                    <com:Name xml:lang="en">Banks, total</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).C" id="C">
+                    <com:Name xml:lang="en">Non-financial corporations</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).F" id="F">
+                    <com:Name xml:lang="en">Non-bank financial institutions</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).G" id="G">
+                    <com:Name xml:lang="en">General government</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).H" id="H">
+                    <com:Name xml:lang="en">Households and NPISHs</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).I" id="I">
+                    <com:Name xml:lang="en">Banks, related offices</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).J" id="J">
+                    <com:Name xml:lang="en">Banks, unrelated banks</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).K" id="K">
+                    <com:Name xml:lang="en">Unallocated non-financial sectors</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).L" id="L">
+                    <com:Name xml:lang="en">Unallocated non-financial private sector</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).M" id="M">
+                    <com:Name xml:lang="en">Banks, central banks</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).N" id="N">
+                    <com:Name xml:lang="en">Non-banks, total</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).O" id="O">
+                    <com:Name xml:lang="en">Official sector</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).P" id="P">
+                    <com:Name xml:lang="en">Non-financial sectors</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).R" id="R">
+                    <com:Name xml:lang="en">Non-bank private sector</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).S" id="S">
+                    <com:Name xml:lang="en">Non-financial private sector</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_L_SECTOR(1.0).U" id="U">
+                    <com:Name xml:lang="en">Unallocated by sector</com:Name>
                 </str:Code>
             </str:Codelist>
             <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_MARKET_RISK(1.0)"
@@ -4430,6 +5392,26 @@
                     <com:Name xml:lang="en">Carrying amounts - net</com:Name>
                 </str:Code>
             </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_ORG_VISIBILITY(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_ORG_VISIBILITY" isFinal="false"
+                          version="1.0">
+                <com:Name xml:lang="en">Visibility</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_ORG_VISIBILITY(1.0).A" id="A">
+                    <com:Name xml:lang="en">CBs, ESRB and IMF</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_ORG_VISIBILITY(1.0).B" id="B">
+                    <com:Name xml:lang="en">CBs and ESRB</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_ORG_VISIBILITY(1.0).C" id="C">
+                    <com:Name xml:lang="en">CBs and IMF</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_ORG_VISIBILITY(1.0).D" id="D">
+                    <com:Name xml:lang="en">CBs only</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_ORG_VISIBILITY(1.0).E" id="E">
+                    <com:Name xml:lang="en">Public</com:Name>
+                </str:Code>
+            </str:Codelist>
             <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_RATING(1.0)"
                           isExternalReference="false" agencyID="BIS" id="CL_RATING" isFinal="false" version="1.0">
                 <com:Name xml:lang="en">Derivatives rating</com:Name>
@@ -4548,6 +5530,19 @@
                 </str:Code>
                 <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_SECTOR_UDL(1.0).N" id="N">
                     <com:Name xml:lang="en">Multiple Sectors</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_STOCK_FLOW(1.0)"
+                          isExternalReference="false" agencyID="BIS" id="CL_STOCK_FLOW" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Stock, flow</com:Name>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_STOCK_FLOW(1.0).F" id="F">
+                    <com:Name xml:lang="en">FX and break adjusted change (BIS calculated)</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_STOCK_FLOW(1.0).S" id="S">
+                    <com:Name xml:lang="en">Amounts outstanding / Stocks</com:Name>
+                </str:Code>
+                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=BIS:CL_STOCK_FLOW(1.0).R" id="R">
+                    <com:Name xml:lang="en">Revisions</com:Name>
                 </str:Code>
             </str:Codelist>
             <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=BIS:CL_TIME_FORMAT(1.0)"
@@ -5243,6 +6238,40 @@
                     <com:Name xml:lang="en">Title</com:Name>
                 </str:Concept>
             </str:ConceptScheme>
+            <str:ConceptScheme urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.ConceptScheme=BIS:BIS_REF_CONCEPTS(1.0)"
+                               isExternalReference="false" agencyID="BIS" id="BIS_REF_CONCEPTS" isFinal="false"
+                               version="1.0">
+                <com:Name xml:lang="en">BIS Metadata Concept Scheme</com:Name>
+                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).COVERAGE"
+                             id="COVERAGE">
+                    <com:Name xml:lang="en">Coverage</com:Name>
+                </str:Concept>
+                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).DATA_COMP"
+                             id="DATA_COMP">
+                    <com:Name xml:lang="en">Data compilation</com:Name>
+                </str:Concept>
+                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).DETAIL"
+                             id="DETAIL">
+                    <com:Name xml:lang="en">Detail</com:Name>
+                </str:Concept>
+                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).BREAKS"
+                             id="BREAKS">
+                    <com:Name xml:lang="en">Series break information</com:Name>
+                </str:Concept>
+                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).RELEASE"
+                             id="RELEASE">
+                    <com:Name xml:lang="en">Data release information</com:Name>
+                </str:Concept>
+                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).UNIT"
+                             id="UNIT">
+                    <com:Name xml:lang="en">Unit</com:Name>
+                </str:Concept>
+                <str:Concept
+                        urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=BIS:BIS_REF_CONCEPTS(1.0).COLLECTION"
+                        id="COLLECTION">
+                    <com:Name xml:lang="en">Collection</com:Name>
+                </str:Concept>
+            </str:ConceptScheme>
         </str:Concepts>
         <str:DataStructures>
             <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)"
@@ -5914,8 +6943,853 @@
                                      maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
-                                <str:TextFormat textType="BigInteger" maxLength="15"/>
+                                <str:TextFormat textType="String" maxLength="15"/>
                             </str:LocalRepresentation>
+                        </str:PrimaryMeasure>
+                    </str:MeasureList>
+                </str:DataStructureComponents>
+            </str:DataStructure>
+            <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_LBS_DISS(1.0)"
+                               isExternalReference="false" agencyID="BIS" id="BIS_LBS_DISS" isFinal="false"
+                               version="1.0">
+                <com:Name xml:lang="en">Locational Banking Statistics - disseminated data</com:Name>
+                <str:DataStructureComponents>
+                    <str:DimensionList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=BIS:BIS_LBS_DISS(1.0).DimensionDescriptor"
+                            id="DimensionDescriptor">
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).FREQ"
+                                id="FREQ" position="1">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="FREQ" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_FREQ" version="1.0" class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_MEASURE"
+                                id="L_MEASURE" position="2">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_MEASURE" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_STOCK_FLOW" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_POSITION"
+                                id="L_POSITION" position="3">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_POSITION" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_L_POSITION" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_INSTR"
+                                id="L_INSTR" position="4">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_INSTR" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_L_INSTR" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_DENOM"
+                                id="L_DENOM" position="5">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_DENOM" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_CURRENCY_3POS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="3" textType="String" maxLength="3"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_CURR_TYPE"
+                                id="L_CURR_TYPE" position="6">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_CURR_TYPE" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_L_CURR_TYPE" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_PARENT_CTY"
+                                id="L_PARENT_CTY" position="7">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_PARENT_CTY" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="2" textType="String" maxLength="2"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_REP_BANK_TYPE"
+                                id="L_REP_BANK_TYPE" position="8">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_REP_BANK_TYPE"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_L_BANK_TYPE" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_REP_CTY"
+                                id="L_REP_CTY" position="9">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_REP_CTY" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="2" textType="String" maxLength="2"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_CP_SECTOR"
+                                id="L_CP_SECTOR" position="10">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_CP_SECTOR" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_L_SECTOR" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_CP_COUNTRY"
+                                id="L_CP_COUNTRY" position="11">
+                            <com:Annotations>
+                                <com:Annotation>
+                                    <com:AnnotationTitle>HCL</com:AnnotationTitle>
+                                    <com:AnnotationType>
+                                        urn:sdmx:org.sdmx.infomodel.codelist.HierarchicalCodelist=BIS:HCL_COUNTRY(1.0)
+                                    </com:AnnotationType>
+                                </com:Annotation>
+                            </com:Annotations>
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_CP_COUNTRY" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="2" textType="String" maxLength="2"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_LBS_DISS(1.0).L_POS_TYPE"
+                                id="L_POS_TYPE" position="12">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="L_POS_TYPE" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_L_POS_TYPE" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:TimeDimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=BIS:BIS_LBS_DISS(1.0).TIME_PERIOD"
+                                id="TIME_PERIOD" position="13">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="TIME_PERIOD" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="ObservationalTimePeriod"/>
+                            </str:LocalRepresentation>
+                        </str:TimeDimension>
+                    </str:DimensionList>
+                    <str:Group
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.GroupDimensionDescriptor=BIS:BIS_LBS_DISS(1.0).Sibling"
+                            id="Sibling">
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_MEASURE"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_POSITION"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_INSTR"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_DENOM"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_CURR_TYPE"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_PARENT_CTY"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_REP_BANK_TYPE"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_REP_CTY"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_CP_SECTOR"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_CP_COUNTRY"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                        <str:GroupDimension>
+                            <str:DimensionReference>
+                                <Ref id="L_POS_TYPE"/>
+                            </str:DimensionReference>
+                        </str:GroupDimension>
+                    </str:Group>
+                    <str:AttributeList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=BIS:BIS_LBS_DISS(1.0).AttributeDescriptor"
+                            id="AttributeDescriptor">
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).TIME_FORMAT"
+                                assignmentStatus="Conditional" id="TIME_FORMAT">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="TIME_FORMAT" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_TIME_FORMAT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="3" textType="String" maxLength="3"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_POSITION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_INSTR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CURR_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_PARENT_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_REP_BANK_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_REP_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CP_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CP_COUNTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_POS_TYPE"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).OBS_STATUS"
+                                assignmentStatus="Mandatory" id="OBS_STATUS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_STATUS" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_OBS_STATUS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).OBS_CONF"
+                                assignmentStatus="Conditional" id="OBS_CONF">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_CONF" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_CONF_STATUS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).OBS_PRE_BREAK"
+                                assignmentStatus="Conditional" id="OBS_PRE_BREAK">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_PRE_BREAK" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat minLength="1" textType="String" maxLength="15"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).AVAILABILITY"
+                                assignmentStatus="Conditional" id="AVAILABILITY">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="AVAILABILITY" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_AVAILABILITY" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Group>
+                                    <Ref id="Sibling"/>
+                                </str:Group>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).COLLECTION"
+                                assignmentStatus="Conditional" id="COLLECTION">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="COLLECTION" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_COLLECTION" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_POSITION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_INSTR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CURR_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_PARENT_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_REP_BANK_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_REP_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CP_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CP_COUNTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_POS_TYPE"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).DECIMALS"
+                                assignmentStatus="Conditional" id="DECIMALS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="DECIMALS" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_DECIMALS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="BigInteger" maxLength="2"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:None/>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).ORG_VISIBILITY"
+                                assignmentStatus="Conditional" id="ORG_VISIBILITY">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="ORG_VISIBILITY"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_ORG_VISIBILITY" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_POSITION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_INSTR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CURR_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_PARENT_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_REP_BANK_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_REP_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CP_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_CP_COUNTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="L_POS_TYPE"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).TITLE_GRP"
+                                assignmentStatus="Conditional" id="TITLE_GRP">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="TITLE_GRP" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat minLength="1" textType="String" maxLength="200"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Group>
+                                    <Ref id="Sibling"/>
+                                </str:Group>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).UNIT_MEASURE"
+                                assignmentStatus="Conditional" id="UNIT_MEASURE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MEASURE" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_CURRENCY_3POS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="3" textType="String" maxLength="3"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:None/>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_LBS_DISS(1.0).UNIT_MULT"
+                                assignmentStatus="Conditional" id="UNIT_MULT">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MULT" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_UNIT_MULT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1" textType="String" maxLength="2"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:None/>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                    </str:AttributeList>
+                    <str:MeasureList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=BIS:BIS_LBS_DISS(1.0).MeasureDescriptor"
+                            id="MeasureDescriptor">
+                        <str:PrimaryMeasure
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=BIS:BIS_LBS_DISS(1.0).OBS_VALUE"
+                                id="OBS_VALUE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat minLength="1" textType="String" maxLength="15"/>
+                            </str:LocalRepresentation>
+                        </str:PrimaryMeasure>
+                    </str:MeasureList>
+                </str:DataStructureComponents>
+            </str:DataStructure>
+            <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_XR(1.0)"
+                               isExternalReference="false" agencyID="BIS" id="BIS_XR" isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Exchange rates series</com:Name>
+                <str:DataStructureComponents>
+                    <str:DimensionList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=BIS:BIS_XR(1.0).DimensionDescriptor"
+                            id="DimensionDescriptor">
+                        <str:Dimension urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_XR(1.0).FREQ"
+                                       id="FREQ" position="1">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="FREQ" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_FREQ" version="1.0" class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_XR(1.0).REF_AREA"
+                                id="REF_AREA" position="2">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="REF_AREA" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_XR(1.0).CURRENCY"
+                                id="CURRENCY" position="3">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="CURRENCY" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_CURRENCY_3POS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_XR(1.0).COLLECTION"
+                                id="COLLECTION" position="4">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_REF_CONCEPTS" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="COLLECTION" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_COLLECTION" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:TimeDimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=BIS:BIS_XR(1.0).TIME_PERIOD"
+                                id="TIME_PERIOD" position="5">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="TIME_PERIOD" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat/>
+                            </str:LocalRepresentation>
+                        </str:TimeDimension>
+                    </str:DimensionList>
+                    <str:AttributeList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=BIS:BIS_XR(1.0).AttributeDescriptor"
+                            id="AttributeDescriptor">
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).UNIT_MULT"
+                                assignmentStatus="Conditional" id="UNIT_MULT">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MULT" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_UNIT_MULT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COLLECTION"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).OBS_STATUS"
+                                assignmentStatus="Mandatory" id="OBS_STATUS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_STATUS" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_OBS_STATUS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).OBS_PRE_BREAK"
+                                assignmentStatus="Conditional" id="OBS_PRE_BREAK">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_PRE_BREAK" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).OBS_CONF"
+                                assignmentStatus="Conditional" id="OBS_CONF">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_CONF" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_CONF_STATUS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).DECIMALS"
+                                assignmentStatus="Mandatory" id="DECIMALS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="DECIMALS" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_DECIMALS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COLLECTION"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).AVAILABILITY"
+                                assignmentStatus="Conditional" id="AVAILABILITY">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="AVAILABILITY" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="BIS" id="CL_AVAILABILITY" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COLLECTION"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_XR(1.0).TITLE"
+                                assignmentStatus="Conditional" id="TITLE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="TITLE" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat minLength="1" textType="String" maxLength="255"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COLLECTION"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                    </str:AttributeList>
+                    <str:MeasureList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=BIS:BIS_XR(1.0).MeasureDescriptor"
+                            id="MeasureDescriptor">
+                        <str:PrimaryMeasure
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=BIS:BIS_XR(1.0).OBS_VALUE"
+                                id="OBS_VALUE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme"
+                                     maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/>
+                            </str:ConceptIdentity>
                         </str:PrimaryMeasure>
                     </str:MeasureList>
                 </str:DataStructureComponents>
