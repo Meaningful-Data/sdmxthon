@@ -11,7 +11,7 @@ from typing import List
 from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.utils.mappings import Locale_Codes, commonAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
-from .utils import stringSetter, boolSetter, genericSetter, setDateFromString
+from .utils import string_setter, bool_setter, generic_setter, set_date_from_string
 
 
 class LocalisedString(DataParser):
@@ -48,7 +48,7 @@ class LocalisedString(DataParser):
 
     @locale.setter
     def locale(self, value):
-        self._locale = stringSetter(value)
+        self._locale = string_setter(value)
 
     @property
     def label(self):
@@ -57,7 +57,7 @@ class LocalisedString(DataParser):
 
     @label.setter
     def label(self, value):
-        self._label = stringSetter(value)
+        self._label = string_setter(value)
 
     @property
     def content(self):
@@ -66,7 +66,7 @@ class LocalisedString(DataParser):
 
     @content.setter
     def content(self, value):
-        self._content = stringSetter(value)
+        self._content = string_setter(value)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -191,19 +191,19 @@ class Annotation(DataParser):
 
     @id.setter
     def id(self, value):
-        self._id = stringSetter(value)
+        self._id = string_setter(value)
 
     @title.setter
     def title(self, value):
-        self._title = stringSetter(value)
+        self._title = string_setter(value)
 
     @type.setter
     def type(self, value):
-        self._type = stringSetter(value)
+        self._type = string_setter(value)
 
     @url.setter
     def url(self, value):
-        self._url = stringSetter(value)
+        self._url = string_setter(value)
 
     @text.setter
     def text(self, value):
@@ -388,7 +388,7 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     @urn.setter
     def urn(self, value):
-        self._urn = genericSetter(value, str)
+        self._urn = generic_setter(value, str)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -482,11 +482,11 @@ class NameableArtefact(IdentifiableArtefact):
 
     @name.setter
     def name(self, value):
-        self._name = genericSetter(value, InternationalString)
+        self._name = generic_setter(value, InternationalString)
 
     @description.setter
     def description(self, value):
-        self._description = genericSetter(value, InternationalString)
+        self._description = generic_setter(value, InternationalString)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -557,17 +557,17 @@ class VersionableArtefact(NameableArtefact):
 
     @version.setter
     def version(self, value):
-        self._version = stringSetter(value, pattern="[0-9]+(.[0-9]+)*")
+        self._version = string_setter(value, pattern="[0-9]+(.[0-9]+)*")
 
     @validFrom.setter
     def validFrom(self, value):
-        self._validFrom = setDateFromString(value, "%Y-%m-%d")
+        self._validFrom = set_date_from_string(value, "%Y-%m-%d")
 
     #        self._validFrom = value
 
     @validTo.setter
     def validTo(self, value):
-        self._validTo = setDateFromString(value, "%Y-%m-%d")
+        self._validTo = set_date_from_string(value, "%Y-%m-%d")
         # self._validTo = value
 
     def _build_attributes(self, node, attrs, already_processed):
@@ -677,19 +677,19 @@ class MaintainableArtefact(VersionableArtefact):
 
     @isFinal.setter
     def isFinal(self, value):
-        self._isFinal = boolSetter(value)
+        self._isFinal = bool_setter(value)
 
     @isExternalReference.setter
     def isExternalReference(self, value):
-        self._isExternalReference = boolSetter(value)
+        self._isExternalReference = bool_setter(value)
 
     @serviceUrl.setter
     def serviceUrl(self, value):
-        self._serviceUrl = stringSetter(value)
+        self._serviceUrl = string_setter(value)
 
     @structureUrl.setter
     def structureUrl(self, value):
-        self._structureUrl = stringSetter(value)
+        self._structureUrl = string_setter(value)
 
     @maintainer.setter
     def maintainer(self, value):

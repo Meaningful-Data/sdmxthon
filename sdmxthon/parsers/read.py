@@ -3,7 +3,7 @@ from datetime import datetime
 
 import pandas as pd
 
-from SDMXThon.model.dataSet import DataSet
+from SDMXThon.model.dataset import Dataset
 from SDMXThon.utils.enums import MessageTypeEnum
 from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, makeWarnings
 from .gdscollector import GdsCollector
@@ -55,12 +55,12 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
             str_dict = xmlObj.header.structure[e.structureRef]
             if dsds is not None and str_dict['type'] == 'DataStructure' and str_dict['ID'] in dsds.keys():
                 dsd = dsds[str_dict['ID']]
-                item = DataSet(structure=dsd)
+                item = Dataset(structure=dsd)
             elif dataflows is not None and str_dict['type'] == 'DataFlow':
                 if str_dict['ID'] in dataflows.keys():
                     dataflow = dataflows[str_dict['ID']]
                     dsd = dataflow.structure
-                    item = DataSet(dataflow=dataflow)
+                    item = Dataset(dataflow=dataflow)
                 else:
                     warnings.warn(f'DataFlow {str_dict["ID"]} not found')
                     continue
@@ -79,18 +79,18 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
 
         # Default Attributes
 
-        item.datasetAttributes = dataset_attributes.copy()
+        item.dataset_attributes = dataset_attributes.copy()
 
         attached_attributes = {}
 
         for k, v in e.any_attributes.items():
-            if k in dsd.datasetAttributeCodes:
+            if k in dsd.dataset_attribute_codes:
                 attached_attributes[k] = v
 
-        item.attachedAttributes = attached_attributes
+        item.attached_attributes = attached_attributes
 
         if len(e.data) > 0:
-            item.data = pd.DataFrame(e.data)
+            item.data = pd.DataFrame(e.data).astype('category')
         datasets[dsd.unique_id] = item
     del xmlObj
     return datasets
@@ -104,12 +104,12 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
             str_dict = xmlObj.header.structure[e.structureRef]
             if dsds is not None and str_dict['type'] == 'DataStructure' and str_dict['ID'] in dsds.keys():
                 dsd = dsds[str_dict['ID']]
-                item = DataSet(structure=dsd)
+                item = Dataset(structure=dsd)
             elif dataflows is not None and str_dict['type'] == 'DataFlow':
                 if str_dict['ID'] in dataflows.keys():
                     dataflow = dataflows[str_dict['ID']]
                     dsd = dataflow.structure
-                    item = DataSet(dataflow=dataflow)
+                    item = Dataset(dataflow=dataflow)
                 else:
                     warnings.warn(f'DataFlow {str_dict["ID"]} not found')
                     continue
@@ -126,20 +126,20 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
                               'publicationYear': e.publication_year, 'publicationPeriod': e.publication_period,
                               'action': e.action, 'setId': dsd.id, 'dimensionAtObservation': str_dict['dimAtObs']}
 
-        item.datasetAttributes = dataset_attributes.copy()
+        item.dataset_attributes = dataset_attributes.copy()
 
         attached_attributes = {}
         if e.Attributes is not None:
             attached_attributes = e.Attributes.value_
 
-        item.attachedAttributes = attached_attributes.copy()
+        item.attached_attributes = attached_attributes.copy()
 
         if len(e.data) > 0:
-            temp = pd.DataFrame(e.data)
+            temp = pd.DataFrame(e.data).astype('category')
             if str_dict['dimAtObs'] == 'AllDimensions':
-                item.data = temp.rename(columns={'OBS_VALUE': dsd.measureCode})
+                item.data = temp.rename(columns={'OBS_VALUE': dsd.measure_code})
             else:
-                item.data = temp.rename(columns={'ObsDimension': str_dict['dimAtObs'], 'OBS_VALUE': dsd.measureCode})
+                item.data = temp.rename(columns={'ObsDimension': str_dict['dimAtObs'], 'OBS_VALUE': dsd.measure_code})
         datasets[dsd.unique_id] = item
     del xmlObj
     return datasets
@@ -162,7 +162,7 @@ def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
                               'action': e.action, 'setId': e.structureRef,
                               'dimensionAtObservation': str_dict['dimAtObs']}
 
-        item = DataSet(dataset_attributes=dataset_attributes)
+        item = Dataset(dataset_attributes=dataset_attributes)
 
         if type_ == MessageTypeEnum.GenericDataSet:
             attached_attributes = {}
@@ -181,12 +181,12 @@ def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
                 if k not in ['type', 'xsi:dim_type']:
                     attached_attributes[k] = v
 
-            item.attachedAttributes = attached_attributes
+            item.attached_attributes = attached_attributes
 
             if len(e.data) > 0:
                 item.data = pd.DataFrame(e.data)
 
-        item.attachedAttributes = attached_attributes
+        item.attached_attributes = attached_attributes
 
         datasets[e.structureRef] = item
     del xml_obj

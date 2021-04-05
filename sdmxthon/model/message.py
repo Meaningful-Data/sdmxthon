@@ -8,7 +8,7 @@ from typing import Dict
 from SDMXThon.parsers.message_parsers import Header, Structures
 from SDMXThon.parsers.write import writer
 from SDMXThon.utils.enums import MessageTypeEnum
-from .dataSet import DataSet
+from .dataset import Dataset
 from .header import Party, Sender
 
 
@@ -25,12 +25,12 @@ class Message:
     :type header: `Header`
     """
 
-    def __init__(self, message_type: MessageTypeEnum, payload: (Structures, Dict[str, DataSet], DataSet),
+    def __init__(self, message_type: MessageTypeEnum, payload: (Structures, Dict[str, Dataset], Dataset),
                  header: Header):
         self._type = message_type
         self._payload = payload
         if header is None:
-            self.headerCreation(id_='test')
+            self.header_creation(id_='test')
         else:
             self._header = header
 
@@ -66,7 +66,7 @@ class Message:
 
     @payload.setter
     def payload(self, value):
-        if not isinstance(value, (Structures, Dict[str, DataSet], DataSet)):
+        if not isinstance(value, (Structures, Dict[str, Dataset], Dataset)):
             raise TypeError('Payload must be a DataSet, a dict of DataSet or a Structures object')
         self._payload = value
 
@@ -91,7 +91,7 @@ class Message:
                 content['organisations'] = self.payload.organisations
 
             return content
-        elif isinstance(self.payload, DataSet):
+        elif isinstance(self.payload, Dataset):
             return {'datasets': {self.payload.unique_id, self.payload}}
         else:
             return {'datasets': self.payload}
@@ -110,7 +110,7 @@ class Message:
 
         self._header = value
 
-    def setDimensionAtObservation(self, dimAtObs):
+    def set_dimension_at_observation(self, dimAtObs):
         """Sets the dimensionAtObservation if the payload is formed by Datasets
 
         :param dimAtObs: Dimension At Observation
@@ -118,12 +118,12 @@ class Message:
 
         """
         for e in self.payload.values():
-            if isinstance(e, DataSet):
-                e.setDimensionAtObservation(dimAtObs)
+            if isinstance(e, Dataset):
+                e.set_dimension_at_observation(dimAtObs)
 
-    def headerCreation(self, id_: str, test: bool = False,
-                       senderId: str = "Unknown", receiverId: str = "not_supplied",
-                       datetimeStr=''):
+    def header_creation(self, id_: str, test: bool = False,
+                        senderId: str = "Unknown", receiverId: str = "not_supplied",
+                        datetimeStr=''):
         """
             Creates the header for a Message
 
@@ -169,26 +169,26 @@ class Message:
             TypeError: if the payload is not a DataSet or a dict of DataSets
         """
         validations = {}
-        if isinstance(self.payload, dict) and all(isinstance(n, DataSet) for n in self.payload.values()):
+        if isinstance(self.payload, dict) and all(isinstance(n, Dataset) for n in self.payload.values()):
             for e in self.payload.values():
-                list_errors = e.semanticValidation()
+                list_errors = e.semantic_validation()
                 if len(list_errors) > 0:
                     validations[e.structure.id] = list_errors
             if len(validations) is 0:
                 return None
             else:
                 return validations
-        elif isinstance(self.payload, DataSet):
-            return self.payload.semanticValidation()
+        elif isinstance(self.payload, Dataset):
+            return self.payload.semantic_validation()
         else:
             # TODO Validate Metadata
             raise TypeError('Wrong Payload. Must be of type DataSet or a dict of DataSet')
 
-    def toXML(self, outputPath: str = '', id_: str = 'test',
-              test: str = 'true',
-              prepared: datetime = None,
-              sender: str = 'Unknown',
-              receiver: str = 'Not_supplied') -> StringIO:
+    def to_xml(self, outputPath: str = '', id_: str = 'test',
+               test: str = 'true',
+               prepared: datetime = None,
+               sender: str = 'Unknown',
+               receiver: str = 'Not_supplied') -> StringIO:
         """Exports its payload to a XML file in SDMX-ML 2.1 format
 
         :param outputPath: Path to save the file, defaults to ''

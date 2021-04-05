@@ -35,7 +35,7 @@ pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
-pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_DATAFLOW.xml'
+pathToDataBIS = 'SDMXThon/outputTests/testDate.xml'
 # pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
 pathToDataSpe = 'SDMXThon/examples/Structure/test_str_BIS.xml'
@@ -54,18 +54,18 @@ def pretty(d, indent=0):
         else:
             print('\t' * (indent + 1) + str(value))
 
+
 def main():
     # Test Metadata From Different Sources Generator
     start = time()
     result = get_datasets(pathToDataBIS, pathToMetadataFile)
     end = time()
-    print(result)
     print(end - start)
+    print(result.semantic_validation())
 
     start = time()
-    errors = result.semanticValidation()
+    print(result.to_xml().getvalue())
     end = time()
-    print(errors)
     print(end - start)
     """
     # Test Reading Generator

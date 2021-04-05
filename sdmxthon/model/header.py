@@ -11,7 +11,7 @@ from SDMXThon.utils.handlers import add_indent
 from SDMXThon.utils.mappings import *
 from SDMXThon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, BaseStrType_
 from .base import InternationalString, LocalisedString
-from .utils import genericSetter, stringSetter, boolSetter, setDateFromString
+from .utils import generic_setter, string_setter, bool_setter, set_date_from_string
 
 
 class Contact(DataParser):
@@ -69,7 +69,7 @@ class Contact(DataParser):
 
     @name.setter
     def name(self, value):
-        self.name = genericSetter(value, InternationalString)
+        self.name = generic_setter(value, InternationalString)
 
     @property
     def department(self):
@@ -90,7 +90,7 @@ class Contact(DataParser):
 
     @department.setter
     def department(self, value):
-        self._department = genericSetter(value, InternationalString)
+        self._department = generic_setter(value, InternationalString)
 
     @property
     def role(self):
@@ -111,7 +111,7 @@ class Contact(DataParser):
 
     @role.setter
     def role(self, value):
-        self._role = genericSetter(value, InternationalString)
+        self._role = generic_setter(value, InternationalString)
 
     @property
     def telephone(self):
@@ -297,7 +297,7 @@ class Contact(DataParser):
 
             self._email.append(value_)
 
-    def to_XML(self, indent):
+    def to_xml(self, indent):
         outfile = ''
 
         prettyprint = indent != ''
@@ -450,7 +450,7 @@ class Sender(Party):
     def __init__(self, id_=None, name=None, contact=None, timezone=None, gds_collector_=None, **kwargs_):
         super(Sender, self).__init__(id_, name, contact, gds_collector_, **kwargs_)
         self._timezone = timezone
-        self.validate_TimezoneType(self._timezone)
+        self._validate_TimezoneType(self._timezone)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -466,7 +466,7 @@ class Sender(Party):
     def timezone(self, value):
         self._timezone = value
 
-    def validate_TimezoneType(self, value):
+    def _validate_TimezoneType(self, value):
         """Validate dim_type TimezoneType, a restriction on xs:string."""
         result = True
         validate_timezone_type_patterns_ = [['^(Z)$', '^((\\+|\\-)(14:00|((0[0-9]|1[0-3]):[0-5][0-9])))$']]
@@ -506,7 +506,7 @@ class Sender(Party):
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self._timezone = value_
-            self.validate_TimezoneType(self._timezone)
+            self._validate_TimezoneType(self._timezone)
         super(Sender, self)._build_children(child_, node, nodeName_, True)
 
 
@@ -581,7 +581,7 @@ class Header(DataParser):
 
     @id_.setter
     def id_(self, value):
-        self._ID = stringSetter(value)
+        self._ID = string_setter(value)
 
     @property
     def test(self):
@@ -590,7 +590,7 @@ class Header(DataParser):
 
     @test.setter
     def test(self, value):
-        self._Test = boolSetter(value)
+        self._Test = bool_setter(value)
 
     @property
     def prepared(self):
@@ -599,7 +599,7 @@ class Header(DataParser):
 
     @prepared.setter
     def prepared(self, value):
-        self._Prepared = setDateFromString(value)
+        self._Prepared = set_date_from_string(value)
 
     @property
     def sender(self):
@@ -608,7 +608,7 @@ class Header(DataParser):
 
     @sender.setter
     def sender(self, value):
-        self._Sender = genericSetter(value, Sender)
+        self._Sender = generic_setter(value, Sender)
 
     @property
     def receiver(self):
@@ -653,22 +653,22 @@ class Header(DataParser):
             raise TypeError('Structure must be a dict')
 
     @property
-    def dataProvider(self):
+    def data_provider(self):
         """Data provider of the Message"""
         return self._dataProvider
 
-    @dataProvider.setter
-    def dataProvider(self, value):
+    @data_provider.setter
+    def data_provider(self, value):
         self._dataProvider = value
 
     @property
-    def datasetAction(self):
+    def dataset_action(self):
         """Action of the Dataset"""
         return self._DataSetAction
 
-    @datasetAction.setter
-    def datasetAction(self, value):
-        self._DataSetAction = stringSetter(value)
+    @dataset_action.setter
+    def dataset_action(self, value):
+        self._DataSetAction = string_setter(value)
 
     @property
     def datasetID(self):
@@ -691,34 +691,34 @@ class Header(DataParser):
 
     @extracted.setter
     def extracted(self, value):
-        self._Extracted = setDateFromString(value)
+        self._Extracted = set_date_from_string(value)
 
     @property
-    def reportingBegin(self):
+    def reporting_begin(self):
         """Start of the reporting"""
         return self._ReportingBegin
 
-    @reportingBegin.setter
-    def reportingBegin(self, value):
-        self._ReportingBegin = stringSetter(value)
+    @reporting_begin.setter
+    def reporting_begin(self, value):
+        self._ReportingBegin = string_setter(value)
 
     @property
-    def reportingEnd(self):
+    def reporting_end(self):
         """End of the reporting"""
         return self._ReportingEnd
 
-    @reportingEnd.setter
-    def reportingEnd(self, value):
-        self._ReportingEnd = stringSetter(value)
+    @reporting_end.setter
+    def reporting_end(self, value):
+        self._ReportingEnd = string_setter(value)
 
     @property
-    def embargoDate(self):
+    def embargo_date(self):
         """Datetime of the Embargo (only in Data Messages)"""
         return self._EmbargoDate
 
-    @embargoDate.setter
-    def embargoDate(self, value):
-        self._EmbargoDate = setDateFromString(value)
+    @embargo_date.setter
+    def embargo_date(self, value):
+        self._EmbargoDate = set_date_from_string(value)
 
     @property
     def source(self):

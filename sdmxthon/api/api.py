@@ -120,7 +120,7 @@ def xml_to_csv(path_to_data, output_path):
         with ZipFile(output_path, 'w') as zipObj:
             # Add multiple files to the zip
             for record in message.payload.values():
-                zipObj.writestr(record.structure.id + '.csv', data=record.toCSV())
+                zipObj.writestr(record.structure.id + '.csv', data=record.to_csv())
 
     else:
         if len(message.payload) > 1:
@@ -132,7 +132,7 @@ def xml_to_csv(path_to_data, output_path):
             # Getting first value
             dataset = first_element_dict(message.payload)
 
-            return dataset.toCSV(output_path)
+            return dataset.to_csv(output_path)
         else:
             raise ValueError('No Datasets were parsed')
 

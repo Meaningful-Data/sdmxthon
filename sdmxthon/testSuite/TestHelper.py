@@ -6,7 +6,7 @@ import unittest
 
 import pandas as pd
 
-from SDMXThon.model.dataSet import DataSet
+from SDMXThon.model.dataset import Dataset
 from ..api.api import _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
 
 
@@ -26,7 +26,7 @@ class TestHelper(unittest.TestCase):
 
         dsd = read_sdmx(os.path.join(self.pathToMetadata, meta_file)).payload.dsds['BIS:BIS_DER(1.0)']
 
-        return DataSet(structure=dsd, data=df)
+        return Dataset(structure=dsd, data=df)
 
     def load_reference_data(self, reference_filename):
         with open(os.path.join(self.pathToReference, reference_filename)) as f:
@@ -45,13 +45,13 @@ class TestHelper(unittest.TestCase):
 
     def semantic_test(self, sqlite_db, sqlite_filename, limit, meta_file, reference_filename):
         dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, meta_file)
-        errors = dataset.semanticValidation()
+        errors = dataset.semantic_validation()
         reference_dict = self.load_reference_data(reference_filename)
         self.assert_equal_validation(json.loads(json.dumps(errors).replace("NaN", 'null')), reference_dict)
 
     def semantic_valid_test(self, sqlite_db, sqlite_filename, limit, pkl_filename):
         dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, pkl_filename)
-        errors = dataset.semanticValidation()
+        errors = dataset.semantic_validation()
         self.assert_equal_validation(errors, [])
 
     def metadata_test(self, reference_filename, path_to_data):

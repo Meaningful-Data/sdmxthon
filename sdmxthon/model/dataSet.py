@@ -15,7 +15,7 @@ from SDMXThon.utils.enums import MessageTypeEnum
 from .component import DataStructureDefinition, DataFlowDefinition
 
 
-class DataSet:
+class Dataset:
     """ An organised collection of data.
 
     :param structure: Associates the DataStructureDefinition to the DataSet
@@ -42,10 +42,10 @@ class DataSet:
         self.data = None
         self._dataflow = None
         self._structure = None
-        self.attachedAttributes = {}
+        self.attached_attributes = {}
 
         if attached_attributes is not None:
-            self.attachedAttributes = attached_attributes.copy()
+            self.attached_attributes = attached_attributes.copy()
 
         if structure is not None and dataflow is not None:
             raise ValueError('A Dataset cannot have a structure and a dataflow, use only one')
@@ -62,9 +62,9 @@ class DataSet:
                 self.data = pd.DataFrame(data)
 
         if dataset_attributes is None:
-            self.check_DA_keys({})
+            self._check_DA_keys({})
         else:
-            self.check_DA_keys(dataset_attributes)
+            self._check_DA_keys(dataset_attributes)
 
     def __str__(self):
         if self.structure is not None:
@@ -98,19 +98,19 @@ class DataSet:
         if isinstance(value, DataFlowDefinition) or value is None:
             self._dataflow = value
             if value is not None:
-                if len(self.attachedAttributes) > 0:
-                    attached_attributes = self.attachedAttributes.copy()
+                if len(self.attached_attributes) > 0:
+                    attached_attributes = self.attached_attributes.copy()
                     for k in attached_attributes.keys():
-                        if k not in value.structure.datasetAttributeCodes:
+                        if k not in value.structure.dataset_attribute_codes:
                             del self._attached_attributes[k]
 
-                    for k in value.structure.datasetAttributeCodes:
+                    for k in value.structure.dataset_attribute_codes:
                         if k not in attached_attributes.keys():
                             raise ValueError(f'Missing attribute {k} at a dataset level (attached_attributes)')
 
-                if 'OBS_VALUE' in self._data.columns and value.structure.measureCode != 'OBS_VALUE':
-                    self._data = self._data.rename({'OBS_VALUE': value.structure.measureCode})
-                self.datasetAttributes['setId'] = value.id
+                if 'OBS_VALUE' in self._data.columns and value.structure.measure_code != 'OBS_VALUE':
+                    self._data = self._data.rename({'OBS_VALUE': value.structure.measure_code})
+                self.dataset_attributes['setId'] = value.id
                 self._structure = value
                 self._structure = value.structure
         else:
@@ -134,23 +134,23 @@ class DataSet:
             raise ValueError('dataflow property is not None')
 
         if value is not None:
-            if len(self.attachedAttributes) > 0:
-                attached_attributes = self.attachedAttributes.copy()
+            if len(self.attached_attributes) > 0:
+                attached_attributes = self.attached_attributes.copy()
                 for k in attached_attributes.keys():
-                    if k not in value.datasetAttributeCodes:
+                    if k not in value.dataset_attribute_codes:
                         del self._attached_attributes[k]
 
-                for k in value.datasetAttributeCodes:
+                for k in value.dataset_attribute_codes:
                     if k not in attached_attributes.keys():
                         raise ValueError(f'Missing attribute {k} at a dataset level (attached_attributes)')
 
-            if 'OBS_VALUE' in self._data.columns and value.measureCode != 'OBS_VALUE':
-                self._data = self._data.rename({'OBS_VALUE': value.measureCode})
-            self.datasetAttributes['setId'] = value.id
+            if 'OBS_VALUE' in self._data.columns and value.measure_code != 'OBS_VALUE':
+                self._data = self._data.rename({'OBS_VALUE': value.measure_code})
+            self.dataset_attributes['setId'] = value.id
         self._structure = value
 
     @property
-    def datasetAttributes(self) -> dict:
+    def dataset_attributes(self) -> dict:
         """Contains all the attributes from the DataSet class of the `Information Model
         <https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf#page=85>`_
 
@@ -159,21 +159,21 @@ class DataSet:
         """
         return self._dataset_attributes
 
-    @datasetAttributes.setter
-    def datasetAttributes(self, value: dict):
-        self.check_DA_keys(value)
+    @dataset_attributes.setter
+    def dataset_attributes(self, value: dict):
+        self._check_DA_keys(value)
 
     @property
-    def attachedAttributes(self) -> dict:
+    def attached_attributes(self) -> dict:
         """Contains all the attributes at a Dataset level with NoSpecifiedRelationship"""
         return self._attached_attributes
 
-    @attachedAttributes.setter
-    def attachedAttributes(self, value: dict):
+    @attached_attributes.setter
+    def attached_attributes(self, value: dict):
         if self.structure is not None:
             temp = value.copy()
             for k in temp.keys():
-                if k not in self.structure.datasetAttributeCodes:
+                if k not in self.structure.dataset_attribute_codes:
                     raise ValueError(f'{k} not in the attributes at dataset level for DSD {self.structure.unique_id}')
 
         self._attached_attributes = value
@@ -194,7 +194,7 @@ class DataSet:
                 temp = pd.DataFrame(value)
             attached_attributes = {}
             if self._structure is not None:
-                for e in self.structure.datasetAttributeCodes:
+                for e in self.structure.dataset_attribute_codes:
                     if e in temp.keys():
                         attached_attributes[e] = temp.loc[0, e]
                         del temp[e]
@@ -202,14 +202,14 @@ class DataSet:
             self._data = temp
             if len(attached_attributes) > 0:
                 for k, v in attached_attributes.items():
-                    self.attachedAttributes[k] = str(v)
+                    self.attached_attributes[k] = str(v)
 
     @property
-    def dimAtObs(self):
+    def dim_at_obs(self):
         """Extracts the dimensionAtObservation from the dataset_attributes"""
-        return self.datasetAttributes.get('dimensionAtObservation')
+        return self.dataset_attributes.get('dimensionAtObservation')
 
-    def readCSV(self, pathToCSV: str):
+    def read_csv(self, pathToCSV: str):
         """Loads the data from a CSVCheck the
         `Pandas read_csv docs <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html>`_
 
@@ -219,7 +219,7 @@ class DataSet:
         """
         self._data = pd.read_csv(pathToCSV)
 
-    def readJSON(self, pathToJSON: str, orient: str = 'records'):
+    def read_json(self, pathToJSON: str, orient: str = 'records'):
         """Loads the data from a JSON with orientation as records. Check the
         `Pandas read_json docs <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_json.html>`_
 
@@ -231,7 +231,7 @@ class DataSet:
         """
         self._data = pd.read_json(pathToJSON, orient=orient)
 
-    def readExcel(self, pathToExcel: str):
+    def read_excel(self, pathToExcel: str):
         """Loads the data from a Excel file. Check the
         `Pandas read_excel docs <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_excel.html>`_
 
@@ -240,7 +240,7 @@ class DataSet:
         """
         self._data = pd.read_excel(pathToExcel)
 
-    def toCSV(self, pathToCSV: str = None):
+    def to_csv(self, pathToCSV: str = None):
         """Parses the data to a CSV file with comma separation and no header or index
 
         :param pathToCSV: Path to save as CSV file
@@ -249,7 +249,7 @@ class DataSet:
         """
         return self.data.to_csv(pathToCSV, sep=',', encoding='utf-8', index=False, header=True)
 
-    def toJSON(self, pathToJSON: str = None):
+    def to_json(self, pathToJSON: str = None):
         """Parses the data using the JSON Specification from the library documentation
 
         :param pathToJSON: Path to save as JSON file
@@ -259,11 +259,11 @@ class DataSet:
 
         element = {'structureRef': {"code": self.structure.id, "version": self.structure.version,
                                     "agencyID": self.structure.agencyID}}
-        if len(self.datasetAttributes) > 0:
-            element['dataset_attributes'] = self.datasetAttributes
+        if len(self.dataset_attributes) > 0:
+            element['dataset_attributes'] = self.dataset_attributes
 
-        if len(self.attachedAttributes) > 0:
-            element['attached_attributes'] = self.attachedAttributes
+        if len(self.attached_attributes) > 0:
+            element['attached_attributes'] = self.attached_attributes
 
         result = self.data.to_json(orient="records")
         element['data'] = json.loads(result).copy()
@@ -273,7 +273,7 @@ class DataSet:
             with open(pathToJSON, 'w') as f:
                 f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
-    def toFeather(self, pathToFeather: str):
+    def to_feather(self, pathToFeather: str):
         """Parses the data to an Apache Feather format
 
         :param pathToFeather: Path to Feather file
@@ -282,7 +282,7 @@ class DataSet:
         """
         self.data.to_feather(pathToFeather)
 
-    def semanticValidation(self):
+    def semantic_validation(self):
         """Performs a Semantic Validation on the Data.
 
         :returns:
@@ -294,17 +294,17 @@ class DataSet:
         else:
             raise ValueError('Data for dataset %s is not well formed' % self.structure.id)
 
-    def setDimensionAtObservation(self, dimAtObs):
+    def set_dimension_at_observation(self, dimAtObs):
         """Sets the dimensionAtObservation
             :param dimAtObs: Dimension At Observation
             :type dimAtObs: str
         """
-        if dimAtObs in self.structure.dimensionCodes or dimAtObs == 'AllDimensions':
-            self.datasetAttributes['dimensionAtObservation'] = dimAtObs
+        if dimAtObs in self.structure.dimension_codes or dimAtObs == 'AllDimensions':
+            self.dataset_attributes['dimensionAtObservation'] = dimAtObs
         else:
             raise ValueError('%s is not a dimension of dataset %s' % (dimAtObs, self.structure.id))
 
-    def check_DA_keys(self, attributes: dict):
+    def _check_DA_keys(self, attributes: dict):
         """Inputs default values to the dataset_attributes in case they are missing
 
         :param attributes: A dictionary with dataset_attributes
@@ -335,13 +335,13 @@ class DataSet:
 
         self._dataset_attributes = attributes.copy()
 
-    def toXML(self, message_type: MessageTypeEnum = MessageTypeEnum.StructureDataSet, outputPath: str = '',
-              id_: str = 'test',
-              test: str = 'true',
-              prepared: datetime = None,
-              sender: str = 'Unknown',
-              receiver: str = 'Not_supplied',
-              prettyprint=True):
+    def to_xml(self, message_type: MessageTypeEnum = MessageTypeEnum.StructureDataSet, outputPath: str = '',
+               id_: str = 'test',
+               test: str = 'true',
+               prepared: datetime = None,
+               sender: str = 'Unknown',
+               receiver: str = 'Not_supplied',
+               prettyprint=True):
         """Parses the data to SDMX-ML 2.1, specifying the Message_Type (StructureSpecific or Generic or Metadata)
 
         :param message_type: Format of the Message in SDMX-ML

@@ -14,7 +14,7 @@ from .base import IdentifiableArtefact, MaintainableArtefact, InternationalStrin
 # from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
 from .itemScheme import Concept
 from .representation import Representation
-from .utils import genericSetter, intSetter
+from .utils import generic_setter, int_setter
 
 
 class Component(IdentifiableArtefact):
@@ -44,7 +44,7 @@ class Component(IdentifiableArtefact):
 
     @local_representation.setter
     def local_representation(self, value: Representation):
-        self._local_representation = genericSetter(value, Representation)
+        self._local_representation = generic_setter(value, Representation)
 
     @property
     def concept_identity(self):
@@ -54,7 +54,7 @@ class Component(IdentifiableArtefact):
 
     @concept_identity.setter
     def concept_identity(self, value: Concept):
-        self._concept_identity = genericSetter(value, Concept)
+        self._concept_identity = generic_setter(value, Concept)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -120,7 +120,7 @@ class Component(IdentifiableArtefact):
 
             if self.local_representation.facets is not None:
                 for e in self.local_representation.facets:
-                    format_attributes += f' {e.facetType}="{e.facetValue}"'
+                    format_attributes += f' {e.facet_type}="{e.facet_value}"'
 
             outfile += f'{indent_enum}<{structureAbbr}:{label_format}{format_attributes}/>'
 
@@ -129,18 +129,18 @@ class Component(IdentifiableArtefact):
             if isinstance(self, Attribute):
                 outfile += f'{indent_child}<{structureAbbr}:AttributeRelationship>'
 
-                if isinstance(self.relatedTo, dict):
-                    for k in self.relatedTo.keys():
+                if isinstance(self.related_to, dict):
+                    for k in self.related_to.keys():
                         outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
                         outfile += f'{indent_ref}<Ref id="{k}"/>'
                         outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
-                elif isinstance(self.relatedTo, Dimension):
+                elif isinstance(self.related_to, Dimension):
                     outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
-                    outfile += f'{indent_ref}<Ref id="{self.relatedTo.id}"/>'
+                    outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
                     outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
-                elif isinstance(self.relatedTo, PrimaryMeasure):
+                elif isinstance(self.related_to, PrimaryMeasure):
                     outfile += f'{indent_enum}<{structureAbbr}:PrimaryMeasure>'
-                    outfile += f'{indent_ref}<Ref id="{self.relatedTo.id}"/>'
+                    outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
                     outfile += f'{indent_enum}</{structureAbbr}:PrimaryMeasure>'
                 else:
                     outfile += f'{indent_enum}<{structureAbbr}:None/>'
@@ -183,7 +183,7 @@ class Dimension(Component, DataParser):
 
     @position.setter
     def position(self, value):
-        self._position = intSetter(value)
+        self._position = int_setter(value)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -302,8 +302,8 @@ class Attribute(Component, DataParser):
         super(Attribute, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
                                         localRepresentation=localRepresentation)
 
-        self.usageStatus = usageStatus
-        self.relatedTo = relatedTo
+        self.usage_status = usageStatus
+        self.related_to = relatedTo
 
     def __eq__(self, other):
         if isinstance(other, Attribute):
@@ -318,24 +318,24 @@ class Attribute(Component, DataParser):
         return Attribute(*args_, **kwargs_)
 
     @property
-    def usageStatus(self):
+    def usage_status(self):
         """Defines the usage status of the Attribute (Mandatory, Conditional)"""
         return self._usageStatus
 
     @property
-    def relatedTo(self):
+    def related_to(self):
         """Association to a AttributeRelationship."""
         return self._relatedTo
 
-    @usageStatus.setter
-    def usageStatus(self, value):
+    @usage_status.setter
+    def usage_status(self, value):
         if value in ["Mandatory", "Conditional"] or value is None:
             self._usageStatus = value
         else:
             raise ValueError("The value for usageStatus has to be 'Mandatory' or 'Conditional'")
 
-    @relatedTo.setter
-    def relatedTo(self, value):
+    @related_to.setter
+    def related_to(self, value):
         if value is None:
             self._relatedTo = "NoSpecifiedRelationship"
         else:
@@ -348,7 +348,7 @@ class Attribute(Component, DataParser):
         value = find_attr_value_('assignmentStatus', node)
         if value is not None and 'assignmentStatus' not in already_processed:
             already_processed.add('assignmentStatus')
-            self.usageStatus = value
+            self.usage_status = value
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
@@ -358,9 +358,9 @@ class Attribute(Component, DataParser):
             obj_ = AttributeRelationshipType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             if obj_.ref_id is None:
-                self.relatedTo = None
+                self.related_to = None
             else:
-                self.relatedTo = {'id': obj_.ref_id, 'type': obj_.ref_type}
+                self.related_to = {'id': obj_.ref_id, 'type': obj_.ref_type}
 
 
 class PrimaryMeasure(Component, DataParser):
@@ -409,7 +409,7 @@ class ComponentList(IdentifiableArtefact):
         self._components = {}
         if components is not None:
             for c in components:
-                self.addComponent(c)
+                self.add_component(c)
 
     def __eq__(self, other):
         if isinstance(other, ComponentList):
@@ -422,7 +422,7 @@ class ComponentList(IdentifiableArtefact):
         """An aggregate association to one or more components which make up the list."""
         return self._components
 
-    def addComponent(self, value):
+    def add_component(self, value):
         """Method to add a Component to the ComponentList"""
         if isinstance(self, MeasureDescriptor) and len(self._components) == 1:
             raise ValueError('Measure Descriptor cannot have more than one Primary Measure')
@@ -508,11 +508,11 @@ class DimensionDescriptor(ComponentList, DataParser):
         if nodeName_ == 'Dimension':
             obj_ = Dimension._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.addComponent(obj_)
+            self.add_component(obj_)
         elif nodeName_ == 'TimeDimension':
             obj_ = TimeDimension._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.addComponent(obj_)
+            self.add_component(obj_)
 
 
 class AttributeDescriptor(ComponentList, DataParser):
@@ -549,7 +549,7 @@ class AttributeDescriptor(ComponentList, DataParser):
         if nodeName_ == 'Attribute':
             obj_ = Attribute._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.addComponent(obj_)
+            self.add_component(obj_)
 
 
 class MeasureDescriptor(ComponentList, DataParser):
@@ -585,7 +585,7 @@ class MeasureDescriptor(ComponentList, DataParser):
         if nodeName_ == 'PrimaryMeasure':
             obj_ = PrimaryMeasure._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.addComponent(obj_)
+            self.add_component(obj_)
 
 
 class GroupDimensionDescriptor(ComponentList, DataParser):
@@ -622,7 +622,7 @@ class GroupDimensionDescriptor(ComponentList, DataParser):
         if nodeName_ == 'GroupDimension':
             obj_ = GroupDimension._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.addComponent(obj_)
+            self.add_component(obj_)
 
 
 class DataStructureDefinition(MaintainableArtefact):
@@ -645,10 +645,10 @@ class DataStructureDefinition(MaintainableArtefact):
                                                       serviceUrl=serviceUrl, structureUrl=structureUrl,
                                                       maintainer=maintainer)
 
-        self.dimensionDescriptor = dimensionDescriptor
-        self.measureDescriptor = measureDescriptor
-        self.attributeDescriptor = attributeDescriptor
-        self.groupDimensionDescriptor = groupDimensionDescriptor
+        self.dimension_descriptor = dimensionDescriptor
+        self.measure_descriptor = measureDescriptor
+        self.attribute_descriptor = attributeDescriptor
+        self.group_dimension_descriptor = groupDimensionDescriptor
 
     def __eq__(self, other):
         if isinstance(other, DataStructureDefinition):
@@ -674,58 +674,58 @@ class DataStructureDefinition(MaintainableArtefact):
         return DataStructureDefinition(*args_, **kwargs_)
 
     @property
-    def dimensionDescriptor(self):
+    def dimension_descriptor(self):
         """An ordered set of metadata concepts that, combined, classify a statistical series,
            and whose values, when combined (the key) in an instance such as a data set,
            uniquely identify a specific observation"""
         return self._dimensionDescriptor
 
     @property
-    def measureDescriptor(self):
+    def measure_descriptor(self):
         """A metadata concept that defines the measure of a Data Structure Definition"""
         return self._measureDescriptor
 
     @property
-    def attributeDescriptor(self):
+    def attribute_descriptor(self):
         """A set metadata concepts that define the attributes of a Data Structure Definition."""
         return self._attributeDescriptor
 
     @property
-    def groupDimensionDescriptor(self):
+    def group_dimension_descriptor(self):
         """A set metadata concepts that define a partial key derived
            from the Dimension Descriptor in a Data Structure Definition."""
         return self._groupDimensionDescriptor
 
     @property
-    def dimensionCodes(self):
+    def dimension_codes(self):
         """Keys of the dimensionDescriptor components"""
-        return [k for k in self.dimensionDescriptor.components]
+        return [k for k in self.dimension_descriptor.components]
 
     @property
-    def attributeCodes(self):
+    def attribute_codes(self):
         """Keys of the attributeDescriptor components"""
-        if self.attributeDescriptor is not None:
-            return [k for k in self.attributeDescriptor.components]
+        if self.attribute_descriptor is not None:
+            return [k for k in self.attribute_descriptor.components]
         else:
             return []
 
     @property
-    def datasetAttributeCodes(self):
+    def dataset_attribute_codes(self):
         """Attributes with no specified relationship"""
         result = []
-        if self.attributeDescriptor is not None:
-            for k in self.attributeDescriptor.components:
-                if self.attributeDescriptor[k].relatedTo == "NoSpecifiedRelationship":
+        if self.attribute_descriptor is not None:
+            for k in self.attribute_descriptor.components:
+                if self.attribute_descriptor[k].related_to == "NoSpecifiedRelationship":
                     result.append(k)
         return result
 
     @property
-    def observationAttributeCodes(self):
+    def observation_attribute_codes(self):
         """Attributes related to a Primary Measure"""
         result = []
-        if self.attributeDescriptor is not None:
-            for k in self.attributeDescriptor.components:
-                if self.attributeDescriptor[k].relatedTo == "PrimaryMeasure":
+        if self.attribute_descriptor is not None:
+            for k in self.attribute_descriptor.components:
+                if self.attribute_descriptor[k].related_to == "PrimaryMeasure":
                     result.append(k)
         return result
 
@@ -734,7 +734,7 @@ class DataStructureDefinition(MaintainableArtefact):
         """Returns any component that has facets"""
         facets = {}
         type_ = {}
-        for k, v in self.dimensionDescriptor.components.items():
+        for k, v in self.dimension_descriptor.components.items():
             if v.local_representation is not None:
                 if v.local_representation.type_ is not None:
                     type_[k] = v.local_representation.type_
@@ -742,16 +742,16 @@ class DataStructureDefinition(MaintainableArtefact):
                 if len(v.local_representation.facets) > 0:
                     facets[k] = v.local_representation.facets
             elif v.concept_identity is not None and not \
-                    isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None:
+                    isinstance(v.concept_identity, dict) and v.concept_identity.core_representation is not None:
 
-                if v.concept_identity.coreRepresentation.type_ is not None:
-                    type_[k] = v.concept_identity.coreRepresentation.type_
+                if v.concept_identity.core_representation.type_ is not None:
+                    type_[k] = v.concept_identity.core_representation.type_
 
-                if len(v.concept_identity.coreRepresentation.facets) > 0:
-                    facets[k] = v.concept_identity.coreRepresentation.facets
+                if len(v.concept_identity.core_representation.facets) > 0:
+                    facets[k] = v.concept_identity.core_representation.facets
 
-        if self.attributeDescriptor is not None:
-            for k, v in self.attributeDescriptor.components.items():
+        if self.attribute_descriptor is not None:
+            for k, v in self.attribute_descriptor.components.items():
                 if v.local_representation is not None:
                     if v.local_representation.type_ is not None:
                         type_[k] = v.local_representation.type_
@@ -759,16 +759,16 @@ class DataStructureDefinition(MaintainableArtefact):
                     if len(v.local_representation.facets) > 0:
                         facets[k] = v.local_representation.facets
                 elif v.concept_identity is not None and not \
-                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None:
+                        isinstance(v.concept_identity, dict) and v.concept_identity.core_representation is not None:
 
-                    if v.concept_identity.coreRepresentation.type_ is not None:
-                        type_[k] = v.concept_identity.coreRepresentation.type_
+                    if v.concept_identity.core_representation.type_ is not None:
+                        type_[k] = v.concept_identity.core_representation.type_
 
-                    if len(v.concept_identity.coreRepresentation.facets) > 0:
-                        facets[k] = v.concept_identity.coreRepresentation.facets
+                    if len(v.concept_identity.core_representation.facets) > 0:
+                        facets[k] = v.concept_identity.core_representation.facets
 
-        if self.measureDescriptor is not None:
-            for k, v in self.measureDescriptor.components.items():
+        if self.measure_descriptor is not None:
+            for k, v in self.measure_descriptor.components.items():
                 if v.local_representation is not None:
                     if v.local_representation.type_ is not None:
                         type_[k] = v.local_representation.type_
@@ -776,42 +776,42 @@ class DataStructureDefinition(MaintainableArtefact):
                     if len(v.local_representation.facets) > 0:
                         facets[k] = v.local_representation.facets
                 elif v.concept_identity is not None and not \
-                        isinstance(v.concept_identity, dict) and v.concept_identity.coreRepresentation is not None:
+                        isinstance(v.concept_identity, dict) and v.concept_identity.core_representation is not None:
 
-                    if v.concept_identity.coreRepresentation.type_ is not None:
-                        type_[k] = v.concept_identity.coreRepresentation.type_
+                    if v.concept_identity.core_representation.type_ is not None:
+                        type_[k] = v.concept_identity.core_representation.type_
 
-                    if len(v.concept_identity.coreRepresentation.facets) > 0:
-                        facets[k] = v.concept_identity.coreRepresentation.facets
+                    if len(v.concept_identity.core_representation.facets) > 0:
+                        facets[k] = v.concept_identity.core_representation.facets
 
         return facets, type_
 
     @property
-    def measureCode(self):
+    def measure_code(self):
         """Key of the MeasureDescriptor component (PrimaryMeasure)"""
-        return list(self.measureDescriptor.components.keys())[0]
+        return list(self.measure_descriptor.components.keys())[0]
 
-    @dimensionDescriptor.setter
-    def dimensionDescriptor(self, value):
-        self._dimensionDescriptor = genericSetter(value, DimensionDescriptor)
+    @dimension_descriptor.setter
+    def dimension_descriptor(self, value):
+        self._dimensionDescriptor = generic_setter(value, DimensionDescriptor)
         if value is not None:
             value.dsd = self
 
-    @measureDescriptor.setter
-    def measureDescriptor(self, value):
-        self._measureDescriptor = genericSetter(value, MeasureDescriptor)
+    @measure_descriptor.setter
+    def measure_descriptor(self, value):
+        self._measureDescriptor = generic_setter(value, MeasureDescriptor)
         if value is not None:
             value.dsd = self
 
-    @attributeDescriptor.setter
-    def attributeDescriptor(self, value):
-        self._attributeDescriptor = genericSetter(value, AttributeDescriptor)
+    @attribute_descriptor.setter
+    def attribute_descriptor(self, value):
+        self._attributeDescriptor = generic_setter(value, AttributeDescriptor)
         if value is not None:
             value.dsd = self
 
-    @groupDimensionDescriptor.setter
-    def groupDimensionDescriptor(self, value):
-        self._groupDimensionDescriptor = genericSetter(value, GroupDimensionDescriptor)
+    @group_dimension_descriptor.setter
+    def group_dimension_descriptor(self, value):
+        self._groupDimensionDescriptor = generic_setter(value, GroupDimensionDescriptor)
         if value is not None:
             value.dsd = self
 
@@ -819,7 +819,7 @@ class DataStructureDefinition(MaintainableArtefact):
         """Formats the DataStructureDefinition as a VTL DataStructure"""
         dataset_name = self.id
         components = []
-        for c in self.dimensionDescriptor.components.values():
+        for c in self.dimension_descriptor.components.values():
 
             if c.local_representation is None:
                 type_ = "String"
@@ -832,7 +832,7 @@ class DataStructureDefinition(MaintainableArtefact):
                          "type": Data_Types_VTL[type_], "isNull": False}
 
             components.append(component)
-        for c in self.attributeDescriptor.components.values():
+        for c in self.attribute_descriptor.components.values():
             if c.local_representation is None:
                 type_ = "String"
             elif c.local_representation.type_ is None:
@@ -844,7 +844,7 @@ class DataStructureDefinition(MaintainableArtefact):
                          "type": Data_Types_VTL[type_], "isNull": True}
 
             components.append(component)
-        for c in self.measureDescriptor.components.values():
+        for c in self.measure_descriptor.components.values():
             if c.local_representation is None:
                 type_ = "String"
             elif c.local_representation.type_ is None:
@@ -961,7 +961,7 @@ class DataFlowDefinition(MaintainableArtefact):
 
     @structure.setter
     def structure(self, value):
-        self._structure = genericSetter(value, DataStructureDefinition)
+        self._structure = generic_setter(value, DataStructureDefinition)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""

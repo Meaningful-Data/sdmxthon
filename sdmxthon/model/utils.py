@@ -13,7 +13,7 @@ from lxml import etree
 # Convenience setters and getters
 #
 
-def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
+def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
     """Generic function to format a string to datetime
 
     Args:
@@ -37,7 +37,7 @@ def setDateFromString(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
     return dt
 
 
-def getDateString(date: datetime, format_: str = "%Y-%m-%d"):
+def get_date_string(date: datetime, format_: str = "%Y-%m-%d"):
     """Generic function to get a string from a datetime object
 
     Args:
@@ -56,7 +56,7 @@ def getDateString(date: datetime, format_: str = "%Y-%m-%d"):
         return datetime.strftime(date, format_)
 
 
-def stringSetter(value: str, pattern: str = None, enumeration: List[str] = None):
+def string_setter(value: str, pattern: str = None, enumeration: List[str] = None):
     """Generic function validating strings for setters
 
     Checks that the input is a string or integer.
@@ -97,7 +97,7 @@ def stringSetter(value: str, pattern: str = None, enumeration: List[str] = None)
         raise ValueError(f"Type should be a string, {type(value)} passed")
 
 
-def dateSetter(value: datetime):
+def date_setter(value: datetime):
     """Generic setter for datetime objects
 
     Args:
@@ -110,12 +110,12 @@ def dateSetter(value: datetime):
     if isinstance(value, datetime) or value is None:
         return value
     elif isinstance(value, str):
-        return setDateFromString(value)
+        return set_date_from_string(value)
     else:
         raise TypeError("Type should be datetime or date")
 
 
-def boolSetter(value: bool):
+def bool_setter(value: bool):
     """Generic setter for bool objects
 
         Args:
@@ -134,7 +134,7 @@ def boolSetter(value: bool):
         raise ValueError("Type should be bool")
 
 
-def genericSetter(value, class_):
+def generic_setter(value, class_):
     """Generic setter for class objects
 
         Args:
@@ -150,7 +150,7 @@ def genericSetter(value, class_):
         raise TypeError(f"The value has to be an instance of the {class_.__name__} class. {type(value)} passed")
 
 
-def intSetter(value: int):
+def int_setter(value: int):
     """Generic setter for integer objects
 
             Args:
@@ -182,7 +182,7 @@ NS = {
 }
 
 
-def qName(ns, name):
+def q_name(ns, name):
     """Return a fully-qualified tag *name* in namespace *ns*."""
     return etree.QName(NS[ns], name)
 
