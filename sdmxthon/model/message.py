@@ -26,7 +26,7 @@ class Message:
     """
 
     def __init__(self, message_type: MessageTypeEnum, payload: (Structures, Dict[str, Dataset], Dataset),
-                 header: Header):
+                 header: Header = None):
         self._type = message_type
         self._payload = payload
         if header is None:
@@ -71,7 +71,7 @@ class Message:
 
     @payload.setter
     def payload(self, value):
-        if not isinstance(value, (Structures, Dict[str, Dataset], Dataset)):
+        if not isinstance(value, (Structures, dict, Dataset)):
             raise TypeError('Payload must be a DataSet, a dict of DataSet or a Structures object')
         self._payload = value
 
@@ -147,25 +147,23 @@ class Message:
             :param datetimeStr: Datetime of the preparation of the Message. Format:  '%Y-%m-%dT%H:%M:%S'
             :type datetimeStr: datetime
         """
-        header = Header()
-
-        header.id_(id_)
-        header.test(header._gds_format_boolean(test))
+        header = Header(ID=id_)
+        header.test = header._gds_format_boolean(test)
         if datetimeStr == '':
-            header.prepared(datetime.now())
+            header.prepared = datetime.now()
         else:
-            header.prepared(header._gds_parse_datetime(datetimeStr))
+            header.prepared = header._gds_parse_datetime(datetimeStr)
 
         sender = Sender()
-        sender.id_(senderId)
+        sender.id_ = senderId
 
         receiver = Party()
-        receiver.id_(receiverId)
+        receiver.id_ = receiverId
 
-        header.sender(sender)
-        header.receiver(receiver)
+        header.sender = sender
+        header.receiver = receiver
 
-        self._header = header
+        self.header = header
 
     def validate(self):
         """Performs the semantic validation if the Payload is all Datasets
@@ -193,7 +191,8 @@ class Message:
                test: str = 'true',
                prepared: datetime = None,
                sender: str = 'Unknown',
-               receiver: str = 'Not_supplied') -> StringIO:
+               receiver: str = 'Not_supplied',
+               prettyprint=True) -> StringIO:
         """Exports its payload to a XML file in SDMX-ML 2.1 format
 
         :param outputPath: Path to save the file, defaults to ''
@@ -214,6 +213,9 @@ class Message:
         :param receiver: ID of the Receiver, defaults to 'Not_supplied'
         :type receiver: str
 
+        :param prettyprint: Specifies if the output file is formatted
+        :type prettyprint: bool
+
         :returns:
             StringIO object, if outputPath is ''
 
@@ -224,10 +226,10 @@ class Message:
 
         if outputPath == '':
             return writer(path=outputPath, dType=self.type, payload=self.payload, id_=id_, test=test,
-                          prepared=prepared, sender=sender, receiver=receiver)
+                          prepared=prepared, sender=sender, receiver=receiver, prettyprint=prettyprint)
         else:
             writer(path=outputPath, dType=self.type, payload=self.payload, id_=id_, test=test,
-                   prepared=prepared, sender=sender, receiver=receiver)
+                   prepared=prepared, sender=sender, receiver=receiver, prettyprint=prettyprint)
 
 
 if __name__ == '__main__':

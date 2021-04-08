@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import List
 
 from SDMXThon.parsers.references import RelationshipRefType
-from SDMXThon.utils.handlers import add_indent, export_intern_data
+from SDMXThon.utils.handlers import add_indent, export_intern_data, split_unique_id
 from SDMXThon.utils.mappings import structureAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, NameableArtefact, InternationalString
@@ -638,14 +638,10 @@ class Concept(Item):
             if self.core_representation.codelist is not None:
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
                 if isinstance(self.core_representation.codelist, str):
-                    data = self.core_representation.codelist.split(':', 1)
-                    agencyID = data[0]
-                    data = data[1].split('(', 1)
-                    id = data[0]
-                    version = data[1].split(')', 1)[0]
+                    agencyID, id_, version = split_unique_id(self.core_representation.codelist)
 
                     outfile += f'{indent_ref}<Ref package="codelist" agencyID="{agencyID}" ' \
-                               f'id="{id}" ' \
+                               f'id="{id_}" ' \
                                f'version="{version}" class="Codelist"/>'
                 else:
                     outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.core_representation.codelist.agencyID}" ' \

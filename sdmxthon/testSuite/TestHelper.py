@@ -3,9 +3,11 @@ import os
 import pickle
 import sqlite3
 import unittest
+from datetime import datetime
 
 import pandas as pd
 
+from SDMXThon import Message, MessageTypeEnum
 from ..api.api import _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
 from ..model.dataset import Dataset
 
@@ -102,6 +104,20 @@ class TestHelper(unittest.TestCase):
 
         self.assertEqual(dataset.semantic_validation(), [])
 
+    def header_writing(self, reference_filename):
+        obj_ = Message(message_type=MessageTypeEnum.Metadata, payload={})
+
+        result = obj_.to_xml('', prepared=datetime.fromisoformat('2021-04-08T17:27:28'), prettyprint=False).getvalue()
+
+        self.assertEqual(result, self.load_reference_text(reference_filename))
+
+    def metadata_agency_scheme_writing(self, reference_filename, data_filename):
+        obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
+
+        result = obj_.payload.organisations._parse_XML(indent='', label='str:AgencyScheme')
+
+        self.assertEqual(result, self.load_reference_text(reference_filename))
+
     def metadata_codelist_writing(self, reference_filename, data_filename, codelist_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
@@ -116,10 +132,19 @@ class TestHelper(unittest.TestCase):
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
+    def metadata_dataflow_writing(self, reference_filename, data_filename, dataflow_name):
+        obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
+
+        result = obj_.payload.dataflows[dataflow_name]._parse_XML(indent='', label='str:Dataflow')
+
+        self.assertEqual(result, self.load_reference_text(reference_filename))
+
     def metadata_dsd_writing(self, reference_filename, data_filename, dsd_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
         result = obj_.payload.dsds[dsd_name]._parse_XML(indent='', label='str:DataStructure')
+
+        print(result)
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 

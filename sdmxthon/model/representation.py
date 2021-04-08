@@ -145,7 +145,7 @@ class Representation(DataParser):
             obj_ = FormatType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self._type = obj_.type_
-            self._facets = obj_.facets
+            self.facets = obj_.facets
 
 
 class EnumerationType(DataParser):
@@ -299,4 +299,4 @@ class FormatType(DataParser):
         value = find_attr_value_('textType', node)
         if value is not None and 'textType' not in already_processed:
             already_processed.add('textType')
-            self._type = value
+            self.type_ = value

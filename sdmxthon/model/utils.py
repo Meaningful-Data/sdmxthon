@@ -6,8 +6,6 @@ import re
 from datetime import datetime
 from typing import List
 
-from lxml import etree
-
 
 #
 # Convenience setters and getters
@@ -180,12 +178,6 @@ NS = {
     'xml': 'http://www.w3.org/XML/1998/namespace',
     'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
 }
-
-
-def q_name(ns, name):
-    """Return a fully-qualified tag *name* in namespace *ns*."""
-    return etree.QName(NS[ns], name)
-
 
 ActionType = ['Delete, Replace, Append, Information']
 UsageStatus = ['UsageStatus', 'mandatory conditional']

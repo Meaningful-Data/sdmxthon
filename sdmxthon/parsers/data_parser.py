@@ -31,10 +31,6 @@ class DataParser(GenerateSuper):
         self.__validate_NCNameIDType_patterns = [['^([A-Za-z][A-Za-z0-9_\\-]*)$'], ['^([A-Za-z0-9_@$\\-]+)$'],
                                                  ['^([A-Za-z0-9_@$\\-]+(\\.[A-Za-z0-9_@$\\-]+)*)$']]
 
-    def _has_content_(self):
-        """Check if an element has any content for parsing purposes"""
-        return False
-
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory methods are provided to generate the desired class in order to parse any XML Element

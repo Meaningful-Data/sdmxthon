@@ -7,7 +7,7 @@ from datetime import datetime
 
 from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXThon.utils.handlers import export_intern_data, add_indent
+from SDMXThon.utils.handlers import export_intern_data, add_indent, split_unique_id
 from SDMXThon.utils.mappings import *
 from SDMXThon.utils.xml_base import find_attr_value_
 from .base import IdentifiableArtefact, MaintainableArtefact, InternationalString
@@ -92,7 +92,7 @@ class Component(IdentifiableArtefact):
         elif nodeName_ == 'LocalRepresentation':
             obj_ = Representation._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._local_representation = obj_
+            self.local_representation = obj_
 
     def _parse_XML(self, indent, head):
 
@@ -120,13 +120,9 @@ class Component(IdentifiableArtefact):
             outfile += f'{indent_child}<{structureAbbr}:ConceptIdentity>'
 
             if isinstance(self.concept_identity, dict):
-                data = self.concept_identity['CS'].split(':', 1)
-                agencyID = data[0]
-                data = data[1].split('(', 1)
-                id = data[0]
-                version = data[1].split(')', 1)[0]
+                agencyID, id_, version = split_unique_id(self.concept_identity['CS'])
 
-                outfile += f'{indent_ref}<Ref maintainableParentID="{id}" ' \
+                outfile += f'{indent_ref}<Ref maintainableParentID="{id_}" ' \
                            f'package="conceptscheme" ' \
                            f'maintainableParentVersion="{version}" ' \
                            f'agencyID="{agencyID}" id="{self.concept_identity["CON"]}" ' \
@@ -149,15 +145,11 @@ class Component(IdentifiableArtefact):
                 label_format = 'EnumerationFormat'
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
                 if isinstance(self.local_representation.codelist, str):
-                    data = self.local_representation.codelist.split(':', 1)
-                    agencyID = data[0]
-                    data = data[1].split('(', 1)
-                    id = data[0]
-                    version = data[1].split(')', 1)[0]
+                    agencyID, id_, version = split_unique_id(self.local_representation.codelist)
 
                     outfile += f'{indent_ref}<Ref package="codelist" ' \
                                f'agencyID="{agencyID}" ' \
-                               f'id="{id}" ' \
+                               f'id="{id_}" ' \
                                f'version="{version}" class="Codelist"/>'
                 else:
                     outfile += f'{indent_ref}<Ref package="codelist" ' \
@@ -838,26 +830,18 @@ class DataStructureDefinition(MaintainableArtefact):
     @dimension_descriptor.setter
     def dimension_descriptor(self, value):
         self._dimensionDescriptor = generic_setter(value, DimensionDescriptor)
-        if value is not None:
-            value.dsd = self
 
     @measure_descriptor.setter
     def measure_descriptor(self, value):
         self._measureDescriptor = generic_setter(value, MeasureDescriptor)
-        if value is not None:
-            value.dsd = self
 
     @attribute_descriptor.setter
     def attribute_descriptor(self, value):
         self._attributeDescriptor = generic_setter(value, AttributeDescriptor)
-        if value is not None:
-            value.dsd = self
 
     @group_dimension_descriptor.setter
     def group_dimension_descriptor(self, value):
         self._groupDimensionDescriptor = generic_setter(value, GroupDimensionDescriptor)
-        if value is not None:
-            value.dsd = self
 
     def to_vtl_json(self, path: str = None):
         """Formats the DataStructureDefinition as a VTL DataStructure"""
@@ -913,10 +897,10 @@ class DataStructureDefinition(MaintainableArtefact):
         if nodeName_ == 'DataStructureComponents':
             obj_ = DataStructureComponentType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._attributeDescriptor = obj_.attributeDescriptor
-            self._dimensionDescriptor = obj_.dimensionDescriptor
-            self._measureDescriptor = obj_.measureDescriptor
-            self._groupDimensionDescriptor = obj_.groupDimensionDescriptor
+            self.attribute_descriptor = obj_.attributeDescriptor
+            self.dimension_descriptor = obj_.dimensionDescriptor
+            self.measure_descriptor = obj_.measureDescriptor
+            self.group_dimension_descriptor = obj_.groupDimensionDescriptor
 
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
@@ -940,14 +924,14 @@ class DataStructureDefinition(MaintainableArtefact):
 
         outfile += f'{indent_child}<{structureAbbr}:DataStructureComponents>'
 
-        if self._dimensionDescriptor is not None:
-            outfile += self._dimensionDescriptor._parse_XML(indent_child, f'{structureAbbr}:DimensionList')
+        if self.dimension_descriptor is not None:
+            outfile += self.dimension_descriptor._parse_XML(indent_child, f'{structureAbbr}:DimensionList')
 
-        if self._attributeDescriptor is not None:
-            outfile += self._attributeDescriptor._parse_XML(indent_child, f'{structureAbbr}:AttributeList')
+        if self.attribute_descriptor is not None:
+            outfile += self.attribute_descriptor._parse_XML(indent_child, f'{structureAbbr}:AttributeList')
 
-        if self._measureDescriptor is not None:
-            outfile += self._measureDescriptor._parse_XML(indent_child, f'{structureAbbr}:MeasureList')
+        if self.measure_descriptor is not None:
+            outfile += self.measure_descriptor._parse_XML(indent_child, f'{structureAbbr}:MeasureList')
 
         outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>'
 
@@ -1037,8 +1021,15 @@ class DataFlowDefinition(MaintainableArtefact):
 
         if self.structure is not None:
             outfile += f'{indent_child}<{structureAbbr}:Structure>'
-            outfile += f'{indent_ref}<Ref id="{self.structure.id}" version="{self.structure.version}" ' \
-                       f'agencyID="{self.structure.agencyID}" package="datastructure" class="DataStructure"/>'
+
+            if isinstance(self.structure, str):
+                agencyID, id_, version = split_unique_id(self.structure)
+
+                outfile += f'{indent_ref}<Ref id="{id_}" version="{version}" ' \
+                           f'agencyID="{agencyID}" package="datastructure" class="DataStructure"/>'
+            else:
+                outfile += f'{indent_ref}<Ref id="{self.structure.id}" version="{self.structure.version}" ' \
+                           f'agencyID="{self.structure.agencyID}" package="datastructure" class="DataStructure"/>'
             outfile += f'{indent_child}</{structureAbbr}:Structure>'
 
         outfile += f'{indent}</{label}>'

@@ -330,13 +330,6 @@ class SeriesType(AnnotableArtefact):
     def any_attributes(self, value):
         self._anyAttributes_ = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._obs is not None or super(SeriesType, self)._has_content_():
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         self._anyAttributes_ = {}
@@ -638,15 +631,6 @@ class DataSetType(AnnotableArtefact):
         """Validate dim_type common:ObservationalTimePeriodType, a restriction on None."""
         pass
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (self._dataProvider is not None or
-                self._group is not None or
-                self._data is not None):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         self._anyAttributes_ = {}
@@ -663,40 +647,40 @@ class DataSetType(AnnotableArtefact):
 
         if value is not None and 'REPORTING_YEAR_START_DAY' not in already_processed:
             already_processed.add('REPORTING_YEAR_START_DAY')
-            self._reporting_year_start_day = value
+            self.reporting_year_start_day = value
 
         value = find_attr_value_('structureRef', self._anyAttributes_)
 
         if value is not None and 'structureRef' not in already_processed:
             already_processed.add('structureRef')
-            self._structureRef = value
+            self.structureRef = value
 
         value = find_attr_value_('setID', self._anyAttributes_)
 
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
-            self._setID = value
+            self.setID = value
             self._validate_id_type(self._setID)  # validate dim_type IDType
 
         value = find_attr_value_('action', self._anyAttributes_)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
-            self._action = value
+            self.action = value
             self._validate_action_type(self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', self._anyAttributes_)
 
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
-            self._reportingBeginDate = value
+            self.reporting_begin_date = value
             self._validate_BasicTimePeriodType(self._reportingBeginDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('reportingEndDate', self._anyAttributes_)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
-            self._reportingEndDate = value
+            self.reporting_end_date = value
             self._validate_BasicTimePeriodType(self._reportingEndDate)  # validate dim_type BasicTimePeriodType
 
         value = find_attr_value_('validFromDate', self._anyAttributes_)
@@ -704,7 +688,7 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'validFromDate' not in already_processed:
             already_processed.add('validFromDate')
             try:
-                self._validFromDate = self._gds_parse_datetime(value)
+                self.valid_from_date = self._gds_parse_datetime(value)
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
 
@@ -713,7 +697,7 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'validToDate' not in already_processed:
             already_processed.add('validToDate')
             try:
-                self._validToDate = self._gds_parse_datetime(value)
+                self.valid_to_date = self._gds_parse_datetime(value)
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
 
@@ -721,13 +705,13 @@ class DataSetType(AnnotableArtefact):
 
         if value is not None and 'publicationYear' not in already_processed:
             already_processed.add('publicationYear')
-            self._publicationYear = value
+            self.publication_year = value
 
         value = find_attr_value_('publicationPeriod', self._anyAttributes_)
 
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
-            self._publicationPeriod = value
+            self.publication_period = value
             self._validate_ObservationalTimePeriodType(self._publicationPeriod)
 
         value = find_attr_value_('dataScope', self._anyAttributes_)
@@ -749,11 +733,11 @@ class DataSetType(AnnotableArtefact):
         elif nodeName_ == 'Series':
             obj_ = SeriesType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._data += obj_.obs
+            self.data += obj_.obs
         elif nodeName_ == 'Obs':
             obj_ = ObsType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._data.append(obj_.any_attributes)
+            self.data.append(obj_.any_attributes)
         super(DataSetType, self)._build_children(child_, node, nodeName_, True)
 
 

@@ -50,16 +50,6 @@ class MessageType(DataParser):
     def footer(self, value):
         self._footer = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._header is not None or
-                self._footer is not None
-        ):
-            return True
-        else:
-            return False
-
 
 # end class MessageType
 
@@ -100,14 +90,6 @@ class GenericDataType(MessageType):
             self._dataSet = value
         else:
             raise TypeError('Dataset must be a list')
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (self._header is not None or self._dataSet or
-                self._footer is not None or super(GenericDataType, self)._has_content_()):
-            return True
-        else:
-            return False
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
@@ -160,13 +142,6 @@ class CodelistsType(DataParser):
     def codelists(self, value):
         self._codelists = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._codelists is not None or super(CodelistsType, self)._has_content_():
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Codelist':
@@ -205,13 +180,6 @@ class ConceptsType(DataParser):
     @concepts.setter
     def concepts(self, value):
         self._concepts = value
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if len(self.concepts) > 0 or super(ConceptsType, self)._has_content_():
-            return True
-        else:
-            return False
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
@@ -306,13 +274,6 @@ class OrganisationSchemesType(DataParser):
     @agencySchemes.setter
     def agencySchemes(self, value):
         self._agency_schemes = value
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._agency_schemes is not None or super(OrganisationSchemesType, self)._has_content_():
-            return True
-        else:
-            return False
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
@@ -460,14 +421,6 @@ class Structures(DataParser):
             self._errors = []
         self._errors.append(error)
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._concepts is not None or self._codelists or self._dsds is not None \
-                or super(Structures, self)._has_content_():
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'OrganisationSchemes':
@@ -573,14 +526,6 @@ class MetadataType(MessageType):
     def structures(self, value):
         self._structures = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (self._header is not None or self._structures or
-                self._footer is not None or super(MetadataType, self)._has_content_()):
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
@@ -642,14 +587,6 @@ class StructureSpecificDataType(MessageType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._header is not None or self._dataSet or self._footer is not None \
-                or super(MessageType, self)._has_content_():
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
@@ -700,14 +637,6 @@ class GenericTimeSeriesDataType(GenericDataType):
             self._dataSet = value
         else:
             raise TypeError('Dataset must be a list')
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (self._header is not None or self._dataSet or self._footer is not None
-                or super(GenericDataType, self)._has_content_()):
-            return True
-        else:
-            return False
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""

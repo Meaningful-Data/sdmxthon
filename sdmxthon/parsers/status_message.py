@@ -60,13 +60,6 @@ class StatusMessageType(DataParser):
     def code(self, value):
         self._code = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._text:
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('Code', node)

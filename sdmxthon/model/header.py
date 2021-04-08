@@ -1,8 +1,7 @@
 """
     header file contains the parsers for the Header
 """
-
-import datetime as datetime_
+from datetime import datetime
 
 from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
 from SDMXThon.parsers.payload_parser import GenericDataStructureType
@@ -21,21 +20,13 @@ class Contact(DataParser):
                  gds_collector_=None):
         super(Contact, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
-
         self._name = Name
-
         self._department = Department
-
         self._role = Role
-
         self._telephone = Telephone
-
         self._fax = Fax
-
         self._x400 = X400
-
         self._uri = URI
-
         self._email = Email
 
     def __eq__(self, other):
@@ -171,7 +162,7 @@ class Contact(DataParser):
             raise TypeError('X400 must be a list')
 
     @property
-    def URI(self):
+    def uri(self):
         """URI of the Contact"""
         if self._uri is None:
             return None
@@ -180,12 +171,13 @@ class Contact(DataParser):
         else:
             return self._uri
 
-    @URI.setter
-    def URI(self, value):
+    @uri.setter
+    def uri(self, value):
         if value is None:
             self._uri = []
         elif isinstance(value, list):
             self._uri = value
+
         else:
             raise TypeError('URI must be a list')
 
@@ -208,42 +200,26 @@ class Contact(DataParser):
         else:
             raise TypeError('Email must be a list')
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._name or
-                self._department or
-                self._role or
-                self._telephone or
-                self._fax or
-                self._x400 or
-                self._uri or
-                self._email
-        ):
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Name':
             obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            if self._name is None:
+            if self.name is None:
                 self._name = InternationalString()
             self._name.addLocalisedString(obj_)
 
         elif nodeName_ == 'Department':
             obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            if self._department is None:
+            if self.department is None:
                 self._department = InternationalString()
             self._department.addLocalisedString(obj_)
 
         elif nodeName_ == 'Role':
             obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            if self._role is None:
+            if self.role is None:
                 self._role = InternationalString()
             self._role.addLocalisedString(obj_)
 
@@ -252,7 +228,7 @@ class Contact(DataParser):
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
-            if self._telephone is None:
+            if self.telephone is None:
                 self._telephone = []
 
             self._telephone.append(value_)
@@ -265,7 +241,7 @@ class Contact(DataParser):
             if self._fax is None:
                 self._fax = []
 
-            self._fax.append(value_)
+            self.fax.append(value_)
 
         elif nodeName_ == 'X400':
             value_ = child_.text
@@ -275,14 +251,14 @@ class Contact(DataParser):
             if self._x400 is None:
                 self._x400 = []
 
-            self._x400.append(value_)
+            self.X400.append(value_)
 
         elif nodeName_ == 'URI':
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
-            if self._uri is None:
+            if self.uri is None:
                 self._uri = []
 
             self._uri.append(value_)
@@ -292,7 +268,7 @@ class Contact(DataParser):
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
-            if self._email is None:
+            if self.email is None:
                 self._email = []
 
             self._email.append(value_)
@@ -412,16 +388,6 @@ class Party(DataParser):
     def extensiontype(self, value):
         self._extensiontype_ = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._Name or
-                self._contact
-        ):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('id', node)
@@ -438,8 +404,7 @@ class Party(DataParser):
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Name':
-            class_obj_ = self._get_class_obj_(child_, LocalisedString)
-            obj_ = class_obj_._factory()
+            obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self._Name.append(obj_)
         elif nodeName_ == 'Contact':
@@ -494,16 +459,6 @@ class Sender(Party):
                 result = False
         return result
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._timezone is not None or
-                super(Sender, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         super(Sender, self)._build_attributes(node, attrs, already_processed)
@@ -524,8 +479,8 @@ class Header(DataParser):
 
     def __init__(self, ID=None, Test=False, Prepared=None, sender=None, Receiver=None, Name=None, Structure=None,
                  DataProvider=None, DataSetAction=None, DataSetID=None, Extracted=None, ReportingBegin=None,
-                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None, **kwargs_):
-        super(Header, self).__init__(gds_collector_, **kwargs_)
+                 ReportingEnd=None, EmbargoDate=None, Source=None, gds_collector_=None):
+        super(Header, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
         self._ID = ID
         self._validate_id_type(self._ID)
@@ -558,7 +513,7 @@ class Header(DataParser):
             self._DataSetID = DataSetID
 
         if isinstance(Extracted, BaseStrType_):
-            initvalue_ = datetime_.datetime.strptime(Extracted, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.strptime(Extracted, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = Extracted
 
@@ -567,7 +522,7 @@ class Header(DataParser):
         self._ReportingEnd = ReportingEnd
 
         if isinstance(EmbargoDate, BaseStrType_):
-            initvalue_ = datetime_.datetime.strptime(EmbargoDate, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.strptime(EmbargoDate, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = EmbargoDate
 
@@ -618,7 +573,7 @@ class Header(DataParser):
 
     @prepared.setter
     def prepared(self, value):
-        self._Prepared = set_date_from_string(value)
+        self._Prepared = generic_setter(value, datetime)
 
     @property
     def sender(self):
@@ -640,6 +595,8 @@ class Header(DataParser):
             self._Receiver = []
         elif isinstance(value, list):
             self._Receiver = value
+        elif isinstance(value, Party):
+            self._Receiver = [value]
         else:
             raise TypeError('Receiver must be a list')
 
@@ -753,61 +710,34 @@ class Header(DataParser):
         else:
             raise TypeError('Source must be a list')
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._ID is not None or
-                self._Test or
-                self._Prepared is not None or
-                self._Sender is not None or
-                self._Receiver or
-                self._Name or
-                self._structure or
-                self._dataProvider is not None or
-                self._DataSetAction is not None or
-                self._DataSetID or
-                self._Extracted is not None or
-                self._ReportingBegin is not None or
-                self._ReportingEnd is not None or
-                self._EmbargoDate is not None or
-                self._Source
-        ):
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ID':
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
-            self._ID = value_
+            self.id_ = value_
             self._validate_id_type(self._ID)
         elif nodeName_ == 'Test':
             sval_ = child_.text
             ival_ = self._gds_parse_boolean(sval_)
             ival_ = self._gds_validate_boolean(ival_)
-            self._Test = ival_
+            self.test = ival_
         elif nodeName_ == 'Prepared':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
-            value_ = self._gds_validate_string(value_)
-            self._Prepared = value_
+            self.prepared = self._gds_parse_datetime(value_)
         elif nodeName_ == 'Sender':
             obj_ = Sender._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._Sender = obj_
+            self.sender = obj_
         elif nodeName_ == 'Receiver':
-            class_obj_ = self._get_class_obj_(child_, Party)
-            obj_ = class_obj_._factory()
+            obj_ = Party._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._Receiver.append(obj_)
+            self.receiver.append(obj_)
         elif nodeName_ == 'Name':
-            class_obj_ = self._get_class_obj_(child_, LocalisedString)
-            obj_ = class_obj_._factory()
+            obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._Name.append(obj_)
+            self.name.append(obj_)
         elif nodeName_ == 'Structure':
             obj_ = GenericDataStructureType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
@@ -833,34 +763,33 @@ class Header(DataParser):
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
-            self._DataSetAction = value_
+            self.dataset_action = value_
             self._validate_action_type(self._DataSetAction)
         elif nodeName_ == 'DataSetID':
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
-            self._DataSetID.append(value_)
+            self.datasetID.append(value_)
             self._validate_id_type(self._DataSetID[-1])
         elif nodeName_ == 'Extracted':
             sval_ = child_.text
             dval_ = self._gds_parse_datetime(sval_)
-            self._Extracted = dval_
+            self.extracted = dval_
         elif nodeName_ == 'ReportingBegin':
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
-            self._ReportingBegin = value_
+            self.reporting_begin = value_
         elif nodeName_ == 'ReportingEnd':
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
-            self._ReportingEnd = value_
+            self.reporting_end = value_
         elif nodeName_ == 'EmbargoDate':
             sval_ = child_.text
             dval_ = self._gds_parse_datetime(sval_)
-            self._EmbargoDate = dval_
+            self.embargo_date = dval_
         elif nodeName_ == 'Source':
-            class_obj_ = self._get_class_obj_(child_, LocalisedString)
-            obj_ = class_obj_._factory()
+            obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._Source.append(obj_)
+            self.source.append(obj_)
