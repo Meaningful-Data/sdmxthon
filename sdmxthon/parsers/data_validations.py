@@ -17,25 +17,15 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
     if dsd.dimension_descriptor.components is not None:
 
         for element in dsd.dimension_descriptor.components.values():
-            if element.local_representation is not None and element.local_representation.codelist is not None:
-                if not isinstance(element.local_representation.codelist, str):
-                    data[element.id] = list(element.local_representation.codelist.items.keys())
-            elif element.concept_identity is not None:
-                if not isinstance(element.concept_identity, dict):
-                    if element.concept_identity.core_representation is not None and \
-                            element.concept_identity.core_representation.codelist is not None:
-                        data[element.id] = list(element.concept_identity.core_representation.codelist.items.keys())
+            if element.representation is not None and element.representation.codelist is not None and \
+                    not isinstance(element.representation.codelist, str):
+                data[element.id] = list(element.representation.codelist.items.keys())
 
     if dsd.attribute_descriptor is not None and dsd.attribute_descriptor.components is not None:
         for record in dsd.attribute_descriptor.components.values():
-            if record.local_representation is not None and record.local_representation.codelist is not None:
-                if not isinstance(record.local_representation.codelist, str):
-                    data[record.id] = list(record.local_representation.codelist.items.keys())
-            elif record.concept_identity is not None:
-                if not isinstance(record.concept_identity, dict):
-                    if record.concept_identity.core_representation is not None and \
-                            record.concept_identity.core_representation.codelist is not None:
-                        data[record.id] = list(record.concept_identity.core_representation.codelist.items.keys())
+            if record.representation is not None and record.representation.codelist is not None and \
+                    not isinstance(record.representation.codelist, str):
+                data[record.id] = list(record.representation.codelist.items.keys())
 
     return data
 
@@ -55,20 +45,6 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
 
 def time_period_valid(dt_str: str, type_: str):
     """Validates any time period"""
-    if type_ == "ReportingTimePeriod":
-        # Matching semester, quarter and trimester
-        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
-                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5])) '
-        match_specials = re.compile(regex_specials)
-
-        try:
-            res = match_specials.fullmatch(dt_str)
-            if res:
-                return True
-            else:
-                return False
-        except:
-            return False
 
     if type_ == "ObservationalTimePeriod" or type_ == "GregorianTimePeriod" or type_ == "BasicTimePeriod" \
             or type_ == "StandardTimePeriod":
@@ -91,7 +67,8 @@ def time_period_valid(dt_str: str, type_: str):
         # Matching daily and iso format
         duration = ""
         control_changed = False
-        if (type_ == "ObservationalTimePeriod" or type_ == "StandardTimePeriod") and '/' in dt_str:
+        if (type_ == "ObservationalTimePeriod" or type_ == "StandardTimePeriod" or type_ == "BasicTimePeriod") \
+                and '/' in dt_str:
             duration = dt_str.split('/', maxsplit=1)[1]
             dt_str = dt_str.split('/', maxsplit=1)[0]
 
@@ -110,6 +87,25 @@ def time_period_valid(dt_str: str, type_: str):
                 return False
             control_changed = True
 
+        # Matching semester, quarter and trimester
+        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
+                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5]))'
+        match_specials = re.compile(regex_specials)
+
+        try:
+            res = match_specials.fullmatch(dt_str)
+            if res:
+                return True
+        except:
+            return False
+
+        try:
+            res = datetime.strptime(dt_str, '%Y-%m-%d')
+            if res:
+                return True
+        except:
+            return False
+
         try:
             res = datetime.fromisoformat(dt_str)
             if not 1900 < res.year <= 9999:
@@ -122,20 +118,23 @@ def time_period_valid(dt_str: str, type_: str):
             return False
         if control_changed:
             dt_str += '/' + duration
+
+    if type_ == "ReportingTimePeriod" or type_ == "ObservationalTimePeriod" or type_ == "StandardTimePeriod":
+        # Matching semester, quarter and trimester
+        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
+                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5]))'
+        match_specials = re.compile(regex_specials)
+
+        try:
+            res = match_specials.fullmatch(dt_str)
+            if res:
+                return True
+            else:
+                return False
+        except:
+            return False
+
     return True
-
-
-def facet_error(error_level, obj_id, obj_type, rows, value, facetType, facetValue) -> dict:
-    return {'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{obj_id}', 'Type': f'{obj_type}',
-            'Rows': rows.copy(), 'Message': f'Value {value} is not compliant with {facetType} : {facetValue}'}
-
-
-def parse_datapoint(row):
-    string = ''
-    for k, v in row.items():
-        if k != 'OBS_VALUE':
-            string += f' ( {str(k)} : {str(v) if str(v) != "nan" else ""} ) '
-    return string
 
 
 def format_row(row):
@@ -177,7 +176,7 @@ def check_num_facets(facets, data_column, key, type_):
             min_ = int(f.facet_value)
             values = data_column[data_column < min_]
         elif f.facet_type is 'isSequence':
-            if f.facet_value.upper() is 'TRUE':
+            if f.facet_value.upper() == 'TRUE':
                 is_sequence = True
         elif f.facet_type is 'startValue':
             start = int(f.facet_value)
@@ -344,14 +343,16 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
                                'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
 
-        if mc in faceted:
-            facets = faceted[mc]
-            if pandas.api.types.is_numeric_dtype(data[mc]):
-                data_column = data[mc].unique().astype('float64')
-                errors += check_num_facets(facets, data_column, mc, type_)
-            else:
-                data_column = data[mc].unique().astype('str')
-                errors += check_str_facets(facets, data_column, mc, type_)
+    temp = data[mc].astype(object).replace('', np.nan).dropna()
+
+    if mc in faceted:
+        facets = faceted[mc]
+        if pandas.to_numeric(temp, errors='coerce').notnull().all():
+            data_column = temp.unique().astype('float64')
+            errors += check_num_facets(facets, data_column, mc, type_)
+        else:
+            data_column = data[mc].unique().astype('str')
+            errors += check_str_facets(facets, data_column, mc, type_)
 
     grouping_keys = []
 
@@ -377,7 +378,9 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
         is_numeric = False
 
-        if pandas.api.types.is_numeric_dtype(data[k]):
+        temp = data[k].astype(object).replace('', np.nan).dropna()
+
+        if pandas.to_numeric(temp, errors='coerce').notnull().all():
             data_column = data[k].unique().astype('float64')
             is_numeric = True
         else:

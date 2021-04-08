@@ -15,6 +15,15 @@ class Facet:
         self.facet_value = facetValue
         self.facet_value_type = facetValueType
 
+    def __str__(self):
+        return f'<{self.facet_type} - {self.facet_value}>'
+
+    def __unicode__(self):
+        return f'<{self.facet_type} - {self.facet_value}>'
+
+    def __repr__(self):
+        return f'<{self.facet_type} - {self.facet_value}>'
+
     @property
     def facet_type(self):
         """A specific content type which is constrained by the FacetType enumeration"""
@@ -75,6 +84,15 @@ class Representation(DataParser):
                    and self._type == other._type
         else:
             return False
+
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'
 
     @staticmethod
     def _factory(*args_, **kwargs_):

@@ -1,7 +1,7 @@
 import logging
-from time import time
 
-from SDMXThon.api.api import get_datasets
+import SDMXThon
+from SDMXThon.model.component import DataStructureDefinition
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -21,9 +21,10 @@ logger.addHandler(ch)
 
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
+pathToMetadataFile = 'SDMXThon/outputTests/cbd_dsd.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb_wdi.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
@@ -57,16 +58,13 @@ def pretty(d, indent=0):
 
 def main():
     # Test Metadata From Different Sources Generator
-    start = time()
-    result = get_datasets(pathToDataBIS, pathToMetadataFile)
-    end = time()
-    print(end - start)
-    print(result.semantic_validation())
+    sdmx_message = SDMXThon.read_sdmx(
+        'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/RBI/ASSET/1.0')
 
-    start = time()
-    print(result.to_xml().getvalue())
-    end = time()
-    print(end - start)
+    dsd = sdmx_message.content['dsds']['RBI:ASSET(1.0)']
+    dsd: DataStructureDefinition
+    print(dsd.to_vtl_json())
+
     """
     # Test Reading Generator
     

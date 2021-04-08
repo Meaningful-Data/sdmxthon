@@ -34,6 +34,11 @@ class Message:
         else:
             self._header = header
 
+    def __eq__(self, other):
+        if isinstance(other, Message):
+            return (self.type == other.type and self.payload == other.payload
+                    and self.header == other.header)
+
     @property
     def type(self):
         """Enumeration that withholds the Message type for writing purposes.

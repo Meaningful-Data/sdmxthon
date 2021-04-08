@@ -234,6 +234,15 @@ class Codelist(ItemScheme):
         else:
             return False
 
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory Method of Codelist"""
@@ -628,9 +637,21 @@ class Concept(Item):
             outfile += f'{indent_child}<{structureAbbr}:CoreRepresentation>'
             if self.core_representation.codelist is not None:
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
-                outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.core_representation.codelist.agencyID}" ' \
-                           f'id="{self.core_representation.codelist.id}" ' \
-                           f'version="{self.core_representation.codelist.version}" class="Codelist"/>'
+                if isinstance(self.core_representation.codelist, str):
+                    data = self.core_representation.codelist.split(':', 1)
+                    agencyID = data[0]
+                    data = data[1].split('(', 1)
+                    id = data[0]
+                    version = data[1].split(')', 1)[0]
+
+                    outfile += f'{indent_ref}<Ref package="codelist" agencyID="{agencyID}" ' \
+                               f'id="{id}" ' \
+                               f'version="{version}" class="Codelist"/>'
+                else:
+                    outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.core_representation.codelist.agencyID}" ' \
+                               f'id="{self.core_representation.codelist.id}" ' \
+                               f'version="{self.core_representation.codelist.version}" class="Codelist"/>'
+
                 outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
 
             outfile += f'{indent_child}</{structureAbbr}:CoreRepresentation>'

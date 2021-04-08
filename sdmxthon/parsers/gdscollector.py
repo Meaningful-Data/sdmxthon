@@ -180,7 +180,7 @@ class GenerateSuper(object):
         except (TypeError, ValueError):
             raise_parse_error(node, 'Requires decimal value')
 
-        return value
+        return input_data
 
     def _gds_format_decimal_list(self, input_data):
         return ' '.join([self._gds_format_decimal(item) for item in input_data])
@@ -219,7 +219,7 @@ class GenerateSuper(object):
         except (TypeError, ValueError):
             raise_parse_error(node, 'Requires double or float value')
 
-        return value
+        return input_data
 
     @staticmethod
     def _gds_format_double_list(input_data):

@@ -356,6 +356,11 @@ class Party(DataParser):
 
         self._extensiontype_ = extensiontype_
 
+    def __eq__(self, other):
+        if isinstance(other, Party):
+            return (self.name == other.name and self.contact == other.contact
+                    and self.id_ == other.id_ and self.extensiontype == other.extensiontype)
+
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory Method of Party"""
@@ -451,6 +456,10 @@ class Sender(Party):
         super(Sender, self).__init__(id_, name, contact, gds_collector_, **kwargs_)
         self._timezone = timezone
         self._validate_TimezoneType(self._timezone)
+
+    def __eq__(self, other):
+        if isinstance(other, Sender):
+            return self.timezone == other.timezone
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -568,6 +577,16 @@ class Header(DataParser):
             self._Source = []
         else:
             self._Source = Source
+
+    def __eq__(self, other):
+        if isinstance(other, Header):
+            return (self.name == other.name and self.id_ == other.id_
+                    and self.test == other.test and self.sender == other.sender
+                    and self.receiver == other.receiver and self.structure == other.structure
+                    and self.data_provider == other.data_provider and self.dataset_action == other.dataset_action
+                    and self.datasetID == other.datasetID and self.extracted == other.extracted
+                    and self.reporting_begin == other.reporting_begin and self.reporting_end == other.reporting_end
+                    and self.embargo_date == other.embargo_date and self.source == other.source)
 
     @staticmethod
     def _factory(*args_, **kwargs_):

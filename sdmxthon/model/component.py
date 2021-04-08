@@ -36,6 +36,15 @@ class Component(IdentifiableArtefact):
         else:
             return False
 
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
     @property
     def local_representation(self):
         """Association to the Representation of the Component if this is different from
@@ -55,6 +64,20 @@ class Component(IdentifiableArtefact):
     @concept_identity.setter
     def concept_identity(self, value: Concept):
         self._concept_identity = generic_setter(value, Concept)
+
+    @property
+    def representation(self):
+        """Extracts the representation from a Component"""
+        if self.local_representation is None and self.concept_identity is None:
+            return None
+
+        if self.local_representation is not None:
+            return self.local_representation
+
+        if isinstance(self.concept_identity, Concept) and self.concept_identity.core_representation is not None:
+            return self.concept_identity.core_representation
+        else:
+            return None
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -95,11 +118,27 @@ class Component(IdentifiableArtefact):
         if self.concept_identity is not None:
             indent_ref = add_indent(indent_child)
             outfile += f'{indent_child}<{structureAbbr}:ConceptIdentity>'
-            outfile += f'{indent_ref}<Ref maintainableParentID="{self.concept_identity.scheme.id}" ' \
-                       f'package="conceptscheme" ' \
-                       f'maintainableParentVersion="{self.concept_identity.scheme.version}" ' \
-                       f'agencyID="{self.concept_identity.scheme.agencyID}" id="{self.concept_identity.id}" ' \
-                       f'class="Concept"/>'
+
+            if isinstance(self.concept_identity, dict):
+                data = self.concept_identity['CS'].split(':', 1)
+                agencyID = data[0]
+                data = data[1].split('(', 1)
+                id = data[0]
+                version = data[1].split(')', 1)[0]
+
+                outfile += f'{indent_ref}<Ref maintainableParentID="{id}" ' \
+                           f'package="conceptscheme" ' \
+                           f'maintainableParentVersion="{version}" ' \
+                           f'agencyID="{agencyID}" id="{self.concept_identity["CON"]}" ' \
+                           f'class="Concept"/>'
+
+            else:
+                outfile += f'{indent_ref}<Ref maintainableParentID="{self.concept_identity.scheme.id}" ' \
+                           f'package="conceptscheme" ' \
+                           f'maintainableParentVersion="{self.concept_identity.scheme.version}" ' \
+                           f'agencyID="{self.concept_identity.scheme.agencyID}" id="{self.concept_identity.id}" ' \
+                           f'class="Concept"/>'
+
             outfile += f'{indent_child}</{structureAbbr}:ConceptIdentity>'
 
         if self.local_representation is not None:
@@ -109,14 +148,31 @@ class Component(IdentifiableArtefact):
             if self.local_representation.codelist is not None:
                 label_format = 'EnumerationFormat'
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
-                outfile += f'{indent_ref}<Ref package="codelist" ' \
-                           f'agencyID="{self.local_representation.codelist.agencyID}" ' \
-                           f'id="{self.local_representation.codelist.id}" ' \
-                           f'version="{self.local_representation.codelist.version}" class="Codelist"/>'
+                if isinstance(self.local_representation.codelist, str):
+                    data = self.local_representation.codelist.split(':', 1)
+                    agencyID = data[0]
+                    data = data[1].split('(', 1)
+                    id = data[0]
+                    version = data[1].split(')', 1)[0]
+
+                    outfile += f'{indent_ref}<Ref package="codelist" ' \
+                               f'agencyID="{agencyID}" ' \
+                               f'id="{id}" ' \
+                               f'version="{version}" class="Codelist"/>'
+                else:
+                    outfile += f'{indent_ref}<Ref package="codelist" ' \
+                               f'agencyID="{self.local_representation.codelist.agencyID}" ' \
+                               f'id="{self.local_representation.codelist.id}" ' \
+                               f'version="{self.local_representation.codelist.version}" class="Codelist"/>'
+
                 outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
             else:
                 label_format = 'TextFormat'
-            format_attributes = f' textType="{self.local_representation.type_}"'
+
+            format_attributes = f' '
+
+            if self.local_representation.type_ is not None:
+                format_attributes = f' textType="{self.local_representation.type_}"'
 
             if self.local_representation.facets is not None:
                 for e in self.local_representation.facets:
@@ -130,10 +186,22 @@ class Component(IdentifiableArtefact):
                 outfile += f'{indent_child}<{structureAbbr}:AttributeRelationship>'
 
                 if isinstance(self.related_to, dict):
-                    for k in self.related_to.keys():
-                        outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
-                        outfile += f'{indent_ref}<Ref id="{k}"/>'
-                        outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
+                    if 'id' in self.related_to.keys():
+
+                        if isinstance(self.related_to['id'], list):
+                            for k in self.related_to['id']:
+                                outfile += f'{indent_enum}<{structureAbbr}:{self.related_to["type"]}>'
+                                outfile += f'{indent_ref}<Ref id="{k}"/>'
+                                outfile += f'{indent_enum}</{structureAbbr}:{self.related_to["type"]}>'
+                        else:
+                            outfile += f'{indent_enum}<{structureAbbr}:{self.related_to["type"]}>'
+                            outfile += f'{indent_ref}<Ref id="{self.related_to["id"]}"/>'
+                            outfile += f'{indent_enum}</{structureAbbr}:{self.related_to["type"]}>'
+                    else:
+                        for k in self.related_to:
+                            outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
+                            outfile += f'{indent_ref}<Ref id="{k}"/>'
+                            outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
                 elif isinstance(self.related_to, Dimension):
                     outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
                     outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
@@ -735,54 +803,30 @@ class DataStructureDefinition(MaintainableArtefact):
         facets = {}
         type_ = {}
         for k, v in self.dimension_descriptor.components.items():
-            if v.local_representation is not None:
-                if v.local_representation.type_ is not None:
-                    type_[k] = v.local_representation.type_
+            if v.representation is not None:
+                if v.representation.type_ is not None:
+                    type_[k] = v.representation.type_
 
-                if len(v.local_representation.facets) > 0:
-                    facets[k] = v.local_representation.facets
-            elif v.concept_identity is not None and not \
-                    isinstance(v.concept_identity, dict) and v.concept_identity.core_representation is not None:
-
-                if v.concept_identity.core_representation.type_ is not None:
-                    type_[k] = v.concept_identity.core_representation.type_
-
-                if len(v.concept_identity.core_representation.facets) > 0:
-                    facets[k] = v.concept_identity.core_representation.facets
+                if len(v.representation.facets) > 0:
+                    facets[k] = v.representation.facets
 
         if self.attribute_descriptor is not None:
             for k, v in self.attribute_descriptor.components.items():
-                if v.local_representation is not None:
-                    if v.local_representation.type_ is not None:
-                        type_[k] = v.local_representation.type_
+                if v.representation is not None:
+                    if v.representation.type_ is not None:
+                        type_[k] = v.representation.type_
 
-                    if len(v.local_representation.facets) > 0:
-                        facets[k] = v.local_representation.facets
-                elif v.concept_identity is not None and not \
-                        isinstance(v.concept_identity, dict) and v.concept_identity.core_representation is not None:
-
-                    if v.concept_identity.core_representation.type_ is not None:
-                        type_[k] = v.concept_identity.core_representation.type_
-
-                    if len(v.concept_identity.core_representation.facets) > 0:
-                        facets[k] = v.concept_identity.core_representation.facets
+                    if len(v.representation.facets) > 0:
+                        facets[k] = v.representation.facets
 
         if self.measure_descriptor is not None:
             for k, v in self.measure_descriptor.components.items():
-                if v.local_representation is not None:
-                    if v.local_representation.type_ is not None:
-                        type_[k] = v.local_representation.type_
+                if v.representation is not None:
+                    if v.representation.type_ is not None:
+                        type_[k] = v.representation.type_
 
-                    if len(v.local_representation.facets) > 0:
-                        facets[k] = v.local_representation.facets
-                elif v.concept_identity is not None and not \
-                        isinstance(v.concept_identity, dict) and v.concept_identity.core_representation is not None:
-
-                    if v.concept_identity.core_representation.type_ is not None:
-                        type_[k] = v.concept_identity.core_representation.type_
-
-                    if len(v.concept_identity.core_representation.facets) > 0:
-                        facets[k] = v.concept_identity.core_representation.facets
+                    if len(v.representation.facets) > 0:
+                        facets[k] = v.representation.facets
 
         return facets, type_
 
@@ -821,36 +865,30 @@ class DataStructureDefinition(MaintainableArtefact):
         components = []
         for c in self.dimension_descriptor.components.values():
 
-            if c.local_representation is None:
-                type_ = "String"
-            elif c.local_representation.type_ is None:
-                type_ = "String"
-            else:
-                type_ = c.local_representation.type_
+            type_ = "String"
+
+            if c.representation is not None and c.representation.type_ is not None:
+                type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Identifier",
                          "type": Data_Types_VTL[type_], "isNull": False}
 
             components.append(component)
         for c in self.attribute_descriptor.components.values():
-            if c.local_representation is None:
-                type_ = "String"
-            elif c.local_representation.type_ is None:
-                type_ = "String"
-            else:
-                type_ = c.local_representation.type_
+            type_ = "String"
+
+            if c.representation is not None and c.representation.type_ is not None:
+                type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Attribute",
                          "type": Data_Types_VTL[type_], "isNull": True}
 
             components.append(component)
         for c in self.measure_descriptor.components.values():
-            if c.local_representation is None:
-                type_ = "String"
-            elif c.local_representation.type_ is None:
-                type_ = "String"
-            else:
-                type_ = c.local_representation.type_
+            type_ = "String"
+
+            if c.representation is not None and c.representation.type_ is not None:
+                type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Measure",
                          "type": Data_Types_VTL[type_], "isNull": True}
