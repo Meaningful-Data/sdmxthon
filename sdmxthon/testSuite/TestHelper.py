@@ -8,8 +8,8 @@ from datetime import datetime
 import pandas as pd
 
 from SDMXThon import Message, MessageTypeEnum
-from ..api.api import _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
-from ..model.dataset import Dataset
+from SDMXThon.api.api import _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
+from SDMXThon.model.dataset import Dataset
 
 
 def query_to_db(sqlite_db, limit):
@@ -79,7 +79,7 @@ class TestHelper(unittest.TestCase):
 
     def metadata_compare(self, reference_filename, data_filename, dsd_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
-        content = {'content': obj_.content, 'items': obj_.payload.dsds[dsd_name].dimension_descriptor.components,
+        content = {'content': obj_.content, 'items': obj_.payload.dsds[dsd_name].content,
                    'representation': obj_.payload.dsds[dsd_name].measure_descriptor.components[
                        'OBS_VALUE'].representation,
                    'errors': obj_.payload.errors}
@@ -143,8 +143,6 @@ class TestHelper(unittest.TestCase):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
         result = obj_.payload.dsds[dsd_name]._parse_XML(indent='', label='str:DataStructure')
-
-        print(result)
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 

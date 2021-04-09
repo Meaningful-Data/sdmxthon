@@ -1,7 +1,6 @@
 import logging
 
 import SDMXThon
-from SDMXThon import MessageTypeEnum
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -58,6 +57,11 @@ def pretty(d, indent=0):
 
 def main():
     # Test Metadata From Different Sources Generator
+    message = SDMXThon.read_sdmx(pathToMetadataFile)
+
+    print(message.content['dsds']['BIS:BIS_DER(1.0)'].content)
+
+    """
     sdmx_message = SDMXThon.read_sdmx(pathToMetadataFile)
 
     sdmx_message.type = MessageTypeEnum.Metadata
@@ -71,7 +75,7 @@ def main():
 
     sdmx_message.type = MessageTypeEnum.StructureDataSet
     sdmx_message.to_xml('')
-
+    """
     """
     # Test Reading Generator
     

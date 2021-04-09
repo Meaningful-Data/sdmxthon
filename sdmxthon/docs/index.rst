@@ -1,8 +1,3 @@
-.. SDMXhon documentation master file, created by
-sphinx-quickstart on Tue Mar 16 16:53:50 2021.
-You can adapt this file completely to your liking, but it should at least
-contain the root `toctree` directive.
-
 SDMXthon: the pythonic SDMX
 ###########################
 
@@ -29,6 +24,8 @@ The philosophy to build it was to provide a simple way to parse and access the d
 perform validations on it, modify the data if necessary using the Pandas infrastructure and
 provide an engine to write the SDMX-ML files.
 
+For a quickstart, please head to the :doc:`Walkthrough<./walkthrough>`
+
 Information Model
 *****************
 
@@ -50,5 +47,6 @@ Packages
 .. toctree::
    :maxdepth: 2
 
+   walkthrough
    packages/api
    packages/model

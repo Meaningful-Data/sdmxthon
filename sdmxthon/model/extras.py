@@ -3,7 +3,6 @@ from typing import List
 
 from .base import MaintainableArtefact, InternationalString
 from .component import ComponentList, Component
-from .timePeriods import ObservationalTimePeriod
 from .utils import generic_setter, ConstraintRoleType
 from ..parsers.data_generic import ComponentValueType
 from ..parsers.data_parser import DataParser
@@ -34,7 +33,7 @@ class MemberValue(ComponentValueType):
 
 
 class Period:
-    def __init__(self, isInclusive: bool, period: ObservationalTimePeriod):
+    def __init__(self, isInclusive: bool, period: datetime):
         self.isInclusive = isInclusive
         self.period = period
 

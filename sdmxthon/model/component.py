@@ -477,6 +477,15 @@ class ComponentList(IdentifiableArtefact):
         else:
             return False
 
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
     @property
     def components(self):
         """An aggregate association to one or more components which make up the list."""
@@ -780,13 +789,19 @@ class DataStructureDefinition(MaintainableArtefact):
         return result
 
     @property
-    def observation_attribute_codes(self):
-        """Attributes related to a Primary Measure"""
-        result = []
+    def content(self):
+        """Extracts the content of a DSD as a dict"""
+
+        result = {'dimensions': self.dimension_descriptor.components,
+                  'measure': self.measure_descriptor.components[self.measure_code]
+                  }
+
         if self.attribute_descriptor is not None:
-            for k in self.attribute_descriptor.components:
-                if self.attribute_descriptor[k].related_to == "PrimaryMeasure":
-                    result.append(k)
+            result['attributes'] = self.attribute_descriptor.components
+
+        if self.group_dimension_descriptor is not None:
+            result['groups'] = self.group_dimension_descriptor
+
         return result
 
     @property

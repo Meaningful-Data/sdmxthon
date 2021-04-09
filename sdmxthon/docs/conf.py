@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 project = 'SDMXThon'
 copyright = '2021, MeaningfulData'
 author = 'MeaningfulData'
+version = '0.1'
 
 # -- General configuration ---------------------------------------------------
 
@@ -30,8 +31,11 @@ extensions = [
     "sphinx_rtd_theme",
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
+    'rst2pdf.pdfbuilder'
 ]
+
+pdf_documents = [('index', u'rst2pdf', u'SDMXthon Documentation', u'MeaningfulData'), ]
 
 autosectionlabel_prefix_document = True
 

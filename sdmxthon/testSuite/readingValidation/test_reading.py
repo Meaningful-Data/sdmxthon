@@ -4,7 +4,7 @@ Reading Tests
 import os
 import unittest
 
-from .. import TestHelper
+from SDMXThon.testSuite import TestHelper
 
 
 class ReadingValidation(TestHelper.TestHelper):
