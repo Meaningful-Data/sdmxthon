@@ -1,6 +1,6 @@
 import logging
 
-from SDMXThon.api.api import read_sdmx
+import SDMXThon
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -20,27 +20,28 @@ logger.addHandler(ch)
 
 pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
+# pathToMetadataFile = 'SDMXThon/outputTests/cbd_dsd.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb_wdi.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/ecb.xml'
-pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
+# pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/imf.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
-pathToDataBIS = 'SDMXThon/outputTests/BIS_DER_DATAFLOW.xml'
+pathToDataBIS = 'SDMXThon/outputTests/testDate.xml'
 # pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
-pathToDataSpe = 'SDMXThon/examples/Structure/test_str_BIS.xml'
-pathToDataGen = 'SDMXThon/examples/Generic/test_gen_BIS.xml'
-pathToDataGenSer = 'SDMXThon/examples/Generic/test_gen_ser_BIS.xml'
-pathToDataSpeSer = 'SDMXThon/examples/Structure/test_str_ser_BIS.xml'
+pathToDataSpe = 'SDMXThon/outputTests/examples/Structure/test_str_BIS.xml'
+pathToDataGen = 'SDMXThon/outputTests/examples/Generic/test_gen_BIS.xml'
+pathToDataGenSer = 'SDMXThon/outputTests/examples/Generic/test_gen_ser_BIS.xml'
+pathToDataSpeSer = 'SDMXThon/outputTests/examples/Structure/test_str_ser_BIS.xml'
 
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
@@ -56,11 +57,25 @@ def pretty(d, indent=0):
 
 def main():
     # Test Metadata From Different Sources Generator
-    logger.debug('Start')
-    message = read_sdmx(pathToMetadataFile)
-    print(message.content['codelists']['ESTAT:GEO(1.5)'].items)
-    logger.debug('End')
+    message = SDMXThon.read_sdmx(pathToMetadataFile)
 
+    print(message.content['dsds']['BIS:BIS_DER(1.0)'].content)
+
+    """
+    sdmx_message = SDMXThon.read_sdmx(pathToMetadataFile)
+
+    sdmx_message.type = MessageTypeEnum.Metadata
+    sdmx_message.to_xml('')
+
+    datasets = SDMXThon.get_datasets(pathToDataSpe, pathToMetadataFile)
+
+    sdmx_message.payload = datasets
+    sdmx_message.type = MessageTypeEnum.GenericDataSet
+    sdmx_message.to_xml('')
+
+    sdmx_message.type = MessageTypeEnum.StructureDataSet
+    sdmx_message.to_xml('')
+    """
     """
     # Test Reading Generator
     

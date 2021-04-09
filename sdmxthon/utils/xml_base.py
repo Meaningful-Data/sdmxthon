@@ -20,7 +20,7 @@ BaseStrType_ = str
 #
 
 def parse_xml(infile, parser=None):
-    if validators.url(infile):
+    if isinstance(infile, str) and validators.url(infile):
         try:
             response = requests.get(infile)
             if response.status_code == 400:

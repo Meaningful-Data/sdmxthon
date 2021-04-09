@@ -1,7 +1,7 @@
-DataSet
+Dataset
 #######
 
-.. autoclass:: model.dataSet.DataSet
+.. autoclass:: model.dataset.Dataset
     :members:
     :show-inheritance:
     :undoc-members:

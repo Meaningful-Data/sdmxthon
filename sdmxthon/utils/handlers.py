@@ -9,6 +9,14 @@ def first_element_dict(obj_: dict):
     first_value = next(value_iterator)
     return first_value
 
+def split_unique_id(obj_: str):
+    data = obj_.split(':', 1)
+    agencyID = data[0]
+    data = data[1].split('(', 1)
+    id = data[0]
+    version = data[1].split(')', 1)[0]
+
+    return agencyID, id, version
 
 def get_outfile(obj_: dict, key='', indent=''):
     element = obj_.get(key) or []

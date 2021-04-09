@@ -37,13 +37,6 @@ class ReferenceType(DataParser):
         """Factory Method of ReferenceType"""
         return ReferenceType(*args_, **kwargs_)
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._ref is not None or self._urn is not None:
-            return True
-        else:
-            return False
-
     @property
     def ref(self):
         """Component Reference"""
@@ -352,56 +345,56 @@ class RefBaseType(DataParser):
 
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
-            self._agencyID = value
+            self.agencyID = value
             self._validate_nested_NC_name_id_type(self._agencyID)  # validate dim_type NestedNCNameIDType
 
         value = find_attr_value_('maintainableParentID', node)
         if value is not None and 'maintainableParentID' not in already_processed:
             already_processed.add('maintainableParentID')
-            self._maintainableParentID = value
+            self.maintainableParentID = value
             self._validate_id_type(self._maintainableParentID)  # validate dim_type IDType
 
         value = find_attr_value_('maintainableParentVersion', node)
         if value is not None and 'maintainableParentVersion' not in already_processed:
             already_processed.add('maintainableParentVersion')
-            self._maintainableParentVersion = value
+            self.maintainableParentVersion = value
             self._validate_version_type(self._maintainableParentVersion)  # validate dim_type VersionType
 
         value = find_attr_value_('containerID', node)
         if value is not None and 'containerID' not in already_processed:
             already_processed.add('containerID')
-            self._containerID = value
+            self.containerID = value
             self._validate_nested_id_type(self._containerID)  # validate dim_type NestedIDType
 
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
-            self._id = value
+            self.id_ = value
             self._validate_nested_id_type(self._id)  # validate dim_type NestedIDType
 
         value = find_attr_value_('version', node)
         if value is not None and 'version' not in already_processed:
             already_processed.add('version')
-            self._version = value
+            self.version = value
 
         value = find_attr_value_('local', node)
         if value is not None and 'local' not in already_processed:
             already_processed.add('local')
             if value in ('true', '1'):
-                self._local = True
+                self.local = True
             elif value in ('false', '0'):
-                self._local = False
+                self.local = False
             else:
                 raise_parse_error(node, 'Bad boolean attribute')
 
         value = find_attr_value_('class', node)
         if value is not None and 'class' not in already_processed:
             already_processed.add('class')
-            self._class_ = value
+            self.class_ = value
             self._validate_object_type_code_list_type(self._class_)
 
         value = find_attr_value_('package', node)
         if value is not None and 'package' not in already_processed:
             already_processed.add('package')
-            self._package = value
+            self.package = value
             self._validate_package_type_code_list_type(self._package)

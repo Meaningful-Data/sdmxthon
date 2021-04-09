@@ -4,7 +4,7 @@ Reading Tests
 import os
 import unittest
 
-from .. import TestHelper
+from SDMXThon.testSuite import TestHelper
 
 
 class ReadingValidation(TestHelper.TestHelper):
@@ -30,6 +30,11 @@ class ReadingValidation(TestHelper.TestHelper):
 
     def test_4(self):
         data_filename = 'str_ser.xml'
+
+        self.reading_test(data_filename)
+
+    def test_5(self):
+        data_filename = 'dataflow.xml'
 
         self.reading_test(data_filename)
 

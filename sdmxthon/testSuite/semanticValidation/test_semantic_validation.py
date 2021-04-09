@@ -4,7 +4,7 @@ Semantic Validation Tests
 import os
 import unittest
 
-from .. import TestHelper
+from SDMXThon.testSuite import TestHelper
 
 
 class SemanticValidation(TestHelper.TestHelper):

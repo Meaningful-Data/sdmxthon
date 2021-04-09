@@ -28,7 +28,7 @@ def addStructure(dataset, prettyprint, dType):
         outfile += f'namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
                    f'{dataset.structure.agencyID}:{dataset.structure.id}({dataset.structure.version})" '
 
-    outfile += f'dimensionAtObservation="{dataset.dimAtObs}">{nl}'
+    outfile += f'dimensionAtObservation="{dataset.dim_at_obs}">{nl}'
     outfile += f'{child3}<{commonAbbr}:Structure>{nl}{child4}<Ref agencyID="{dataset.structure.agencyID}" ' \
                f'id="{dataset.structure.id}" ' \
                f'version="{dataset.structure.version}" class="DataStructure"/>{nl}{child3}</{commonAbbr}:Structure>' \
@@ -55,11 +55,11 @@ def create_namespaces(dataTypeString, payload, dType, prettyprint):
                 count += 1
                 outfile += f'xmlns:ns{count}="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
                            f'{record.structure.agencyID}:{record.structure.id}({record.structure.version})' \
-                           f':ObsLevelDim:{record.dimAtObs}" '
+                           f':ObsLevelDim:{record.dim_at_obs}" '
         else:
             outfile += f'xmlns:ns1="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=' \
                        f'{payload.structure.agencyID}:{payload.structure.id}({payload.structure.version})' \
-                       f':ObsLevelDim:{payload.dimAtObs}" '
+                       f':ObsLevelDim:{payload.dim_at_obs}" '
     else:
         outfile += f'xmlns:{structureAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" '
     outfile += f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" ' \
@@ -119,13 +119,13 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
             count = 0
             for record in payload.values():
                 count += 1
-                if record.dimAtObs == "AllDimensions":
+                if record.dim_at_obs == "AllDimensions":
                     outfile += strWriting(record, prettyprint, count)
                 else:
                     outfile += strSerWriting(record, prettyprint, count)
                 record.data = None
         else:
-            if payload.dimAtObs == "AllDimensions":
+            if payload.dim_at_obs == "AllDimensions":
                 outfile += strWriting(payload, prettyprint)
             else:
                 outfile += strSerWriting(payload, prettyprint)
@@ -155,7 +155,7 @@ def strWriting(dataset, prettyprint=True, count=1):
         child1 = child2 = nl = ''
 
     attached_attributes_str = ''
-    for k, v in dataset.attachedAttributes.items():
+    for k, v in dataset.attached_attributes.items():
         attached_attributes_str += f'{k}="{v}" '
 
     # Datasets
@@ -179,7 +179,7 @@ def strWriting(dataset, prettyprint=True, count=1):
 
     obs_str = obs_str.replace('"nan"', '""')
 
-    for e in dataset.structure.attributeCodes:
+    for e in dataset.structure.attribute_codes:
         if e in df1.keys() and e not in man_att:
             obs_str = obs_str.replace(f'{e}="" ', '')
 
@@ -204,9 +204,9 @@ def genWriting(dataset, prettyprint=True):
         child1 = child2 = child3 = child4 = nl = ''
 
     outfile += f'{child1}<{messageAbbr}:DataSet structureRef="{dataset.structure.id}" action="Replace">{nl}'
-    if len(dataset.attachedAttributes) > 0:
+    if len(dataset.attached_attributes) > 0:
         outfile += f'{child2}<generic:Attributes>{nl}'
-        for k, v in dataset.attachedAttributes.items():
+        for k, v in dataset.attached_attributes.items():
             outfile += f'{child3}<generic:Value id="{k}" value="{v}"/>{nl}'
         outfile += f'{child2}</generic:Attributes>{nl}'
 
@@ -229,9 +229,9 @@ def genWriting(dataset, prettyprint=True):
     dim_codes = []
     att_codes = []
     for e in df_id.keys():
-        if e in dataset.structure.dimensionCodes:
+        if e in dataset.structure.dimension_codes:
             dim_codes.append(e)
-        elif e in dataset.structure.attributeCodes:
+        elif e in dataset.structure.attribute_codes:
             att_codes.append(e)
 
     all_codes = ['head']
@@ -259,7 +259,7 @@ def genWriting(dataset, prettyprint=True):
     obs_str = obs_str.replace('="nan"', '=""')
     man_att = get_mandatory_attributes(dataset.structure)
 
-    for e in dataset.structure.attributeCodes:
+    for e in dataset.structure.attribute_codes:
         if e in df_id.keys() and e not in man_att:
             obs_str = obs_str.replace(f'{child4}<generic:Value id="{e}" value=""/>{nl}', '')
 
@@ -287,10 +287,10 @@ def strSerWriting(dataset, prettyprint=True, count=1):
 
     mark_series = '//SeriesMark//'
 
-    dim_obs = dataset.dimAtObs
+    dim_obs = dataset.dim_at_obs
 
     attached_attributes_str = ''
-    for k, v in dataset.attachedAttributes.items():
+    for k, v in dataset.attached_attributes.items():
         attached_attributes_str += f'{k}="{v}" '
 
     dataset.data = dataset.data.dropna(axis=1, how="all")
@@ -301,13 +301,13 @@ def strSerWriting(dataset, prettyprint=True, count=1):
                f'action="Replace">{nl}'
 
     series_codes = []
-    obs_codes = [dim_obs, dataset.structure.measureCode]
-    for e in dataset.structure.attributeDescriptor.components.values():
-        if e.id in dataset.data.keys() and isinstance(e.relatedTo, PrimaryMeasure):
+    obs_codes = [dim_obs, dataset.structure.measure_code]
+    for e in dataset.structure.attribute_descriptor.components.values():
+        if e.id in dataset.data.keys() and isinstance(e.related_to, PrimaryMeasure):
             obs_codes.append(e.id)
     for e in dataset.data.keys():
-        if (e in dataset.structure.dimensionCodes and e != dim_obs) or (
-                e in dataset.structure.attributeCodes and e not in obs_codes):
+        if (e in dataset.structure.dimension_codes and e != dim_obs) or (
+                e in dataset.structure.attribute_codes and e not in obs_codes):
             series_codes.append(e)
     df = dataset.data.sort_values(series_codes, axis=0).astype('str')
     df = df.reset_index(drop=True)
@@ -349,7 +349,7 @@ def strSerWriting(dataset, prettyprint=True, count=1):
     temp_str = temp_str.replace('="nan"', '=""')
     temp_str = f'{nl}'.join(temp_str.splitlines())
 
-    obs_codes.remove(dataset.structure.measureCode)
+    obs_codes.remove(dataset.structure.measure_code)
 
     for e in obs_codes:
         temp_str = temp_str.replace(f'{e}="" ', '')

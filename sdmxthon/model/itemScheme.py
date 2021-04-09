@@ -7,13 +7,13 @@ from datetime import datetime
 from typing import List
 
 from SDMXThon.parsers.references import RelationshipRefType
-from SDMXThon.utils.handlers import add_indent, export_intern_data
+from SDMXThon.utils.handlers import add_indent, export_intern_data, split_unique_id
 from SDMXThon.utils.mappings import structureAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, NameableArtefact, InternationalString
 from .header import Contact
 from .representation import Representation
-from .utils import genericSetter, boolSetter
+from .utils import generic_setter, bool_setter
 
 
 class ItemScheme(MaintainableArtefact):
@@ -69,14 +69,14 @@ class ItemScheme(MaintainableArtefact):
         return self._items
 
     @property
-    def isPartial(self):
+    def is_partial(self):
         """Denotes whether the Item Scheme contains a sub set of the 
         full set of Items in the maintained scheme."""
         return self._isPartial
 
-    @isPartial.setter
-    def isPartial(self, value):
-        self._isPartial = boolSetter(value)
+    @is_partial.setter
+    def is_partial(self, value):
+        self._isPartial = bool_setter(value)
 
     def append(self, value):
 
@@ -89,7 +89,7 @@ class ItemScheme(MaintainableArtefact):
                 self._items[value.id] = value
                 value.scheme = self
                 if value.parent is not None and value.parent in self._items.keys():
-                    self._items[value.parent].addChild(value.id)
+                    self._items[value.parent].add_child(value.id)
                     value.parent = self._items[value.parent]
         else:
             raise TypeError(f"The object has to be of the type {self._itemType}")
@@ -102,7 +102,7 @@ class ItemScheme(MaintainableArtefact):
         if value is not None and 'isPartial' not in already_processed:
             already_processed.add('isPartial')
             value = self._gds_parse_boolean(value)
-            self.isPartial = value
+            self.is_partial = value
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
         """Builds the childs of the XML element"""
@@ -115,8 +115,8 @@ class ItemScheme(MaintainableArtefact):
 
         data = super(ItemScheme, self)._to_XML(prettyprint)
 
-        if self.isPartial is not None:
-            data['Attributes'] += f' isPartial="{str(self.isPartial).lower()}"'
+        if self.is_partial is not None:
+            data['Attributes'] += f' isPartial="{str(self.is_partial).lower()}"'
 
         outfile = ''
 
@@ -196,8 +196,8 @@ class ConceptScheme(ItemScheme):
         if nodeName_ == 'Concept':
             obj_ = Concept._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            if obj_.coreRepresentation is not None and obj_.coreRepresentation.codelist is not None:
-                self._cl_references[obj_.id] = obj_.coreRepresentation.codelist
+            if obj_.core_representation is not None and obj_.core_representation.codelist is not None:
+                self._cl_references[obj_.id] = obj_.core_representation.codelist
             self.append(obj_)
 
 
@@ -233,6 +233,15 @@ class Codelist(ItemScheme):
                 return True
         else:
             return False
+
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.id}>'
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -352,7 +361,7 @@ class Item(NameableArtefact):
         for c in childs:
             if c.urn not in urn_list:
                 urn_list.append(c.urn)
-                self.addChild(c)
+                self.add_child(c)
             else:
                 raise ValueError('Item cannot have two childs with same URN')
 
@@ -409,7 +418,7 @@ class Item(NameableArtefact):
             raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
         """
 
-    def addChild(self, value):
+    def add_child(self, value):
         """Adds a child to the Item"""
         self._childs.append(value)
 
@@ -521,7 +530,7 @@ class Agency(Item):
 
     @contacts.setter
     def contacts(self, value):
-        self._contacts = genericSetter(value, List[Contact])
+        self._contacts = generic_setter(value, List[Contact])
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -552,7 +561,7 @@ class Agency(Item):
             indent_child = add_indent(indent)
             for e in self.contacts:
                 outfile += f'{indent_child}<{structureAbbr}:Contact>'
-                outfile += e.to_XML(indent_child)
+                outfile += e.to_xml(indent_child)
                 outfile += f'{indent_child}</{structureAbbr}:Contact>'
 
         outfile += f'{indent}</{structureAbbr}:{head}>'
@@ -581,7 +590,7 @@ class Concept(Item):
                                       name=name, description=description,
                                       scheme=scheme, parent=parent, childs=childs)
 
-        self.coreRepresentation = coreRepresentation
+        self.core_representation = coreRepresentation
         self._ref = None  # Attribute for storing the references to codelists.
 
     def __eq__(self, other):
@@ -591,14 +600,14 @@ class Concept(Item):
             return False
 
     @property
-    def coreRepresentation(self):
+    def core_representation(self):
         """Associates a Representation"""
         return self._coreRepresentation
 
-    @coreRepresentation.setter
-    def coreRepresentation(self, value):
+    @core_representation.setter
+    def core_representation(self, value):
         from .representation import Representation
-        self._coreRepresentation = genericSetter(value, Representation)
+        self._coreRepresentation = generic_setter(value, Representation)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -615,22 +624,30 @@ class Concept(Item):
         if nodeName_ == 'CoreRepresentation':
             obj_ = Representation._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.coreRepresentation = obj_
+            self.core_representation = obj_
 
     def _parse_XML(self, indent, head):
         outfile = super(Concept, self)._parse_XML(indent, head)
 
         indent = add_indent(indent)
         indent_child = add_indent(indent)
-        if self.coreRepresentation is not None:
+        if self.core_representation is not None:
             indent_enum = add_indent(indent_child)
             indent_ref = add_indent(indent_enum)
             outfile += f'{indent_child}<{structureAbbr}:CoreRepresentation>'
-            if self.coreRepresentation.codelist is not None:
+            if self.core_representation.codelist is not None:
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
-                outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.coreRepresentation.codelist.agencyID}" ' \
-                           f'id="{self.coreRepresentation.codelist.id}" ' \
-                           f'version="{self.coreRepresentation.codelist.version}" class="Codelist"/>'
+                if isinstance(self.core_representation.codelist, str):
+                    agencyID, id_, version = split_unique_id(self.core_representation.codelist)
+
+                    outfile += f'{indent_ref}<Ref package="codelist" agencyID="{agencyID}" ' \
+                               f'id="{id_}" ' \
+                               f'version="{version}" class="Codelist"/>'
+                else:
+                    outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.core_representation.codelist.agencyID}" ' \
+                               f'id="{self.core_representation.codelist.id}" ' \
+                               f'version="{self.core_representation.codelist.version}" class="Codelist"/>'
+
                 outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
 
             outfile += f'{indent_child}</{structureAbbr}:CoreRepresentation>'

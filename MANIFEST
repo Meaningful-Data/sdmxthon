@@ -6,13 +6,12 @@ SDMXThon\api\api.py
 SDMXThon\model\__init__.py
 SDMXThon\model\base.py
 SDMXThon\model\component.py
-SDMXThon\model\dataSet.py
+SDMXThon\model\dataset.py
 SDMXThon\model\extras.py
 SDMXThon\model\header.py
 SDMXThon\model\itemScheme.py
 SDMXThon\model\message.py
 SDMXThon\model\representation.py
-SDMXThon\model\timePeriods.py
 SDMXThon\model\utils.py
 SDMXThon\parsers\__init__.py
 SDMXThon\parsers\data_generic.py

@@ -126,17 +126,6 @@ class PayloadStructureType(DataParser):
     def structureURL(self, value):
         self._structureURL = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._provisionAgreement is not None or
-                self._structureUsage is not None or
-                self._structure is not None
-        ):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('structureID', node)

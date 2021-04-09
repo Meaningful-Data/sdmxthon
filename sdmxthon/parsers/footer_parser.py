@@ -42,15 +42,6 @@ class FooterType(DataParser):
         else:
             raise TypeError('Message must be a list')
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._message
-        ):
-            return True
-        else:
-            return False
-
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Message':

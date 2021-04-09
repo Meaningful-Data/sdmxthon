@@ -30,10 +30,10 @@ def setOnComponent(comp, obj, missing_rep):
                     missing_rep['CL'].append(comp.local_representation.codelist)
                 control_errors = True
 
-        elif comp.local_representation.conceptScheme is not None:
-            if comp.local_representation.conceptScheme in obj.structures.concepts.keys():
-                comp.local_representation.conceptScheme = obj.structures.concepts[
-                    comp.local_representation.conceptScheme]
+        elif comp.local_representation.concept_scheme is not None:
+            if comp.local_representation.concept_scheme in obj.structures.concepts.keys():
+                comp.local_representation.concept_scheme = obj.structures.concepts[
+                    comp.local_representation.concept_scheme]
             else:
                 if comp.concept_identity['CS'] not in missing_rep['CS']:
                     missing_rep['CS'].append(comp.concept_identity['CS'])
@@ -43,36 +43,36 @@ def setOnComponent(comp, obj, missing_rep):
 
 
 def checkRelationship(att, dsd, obj):
-    if isinstance(att.relatedTo['id'], list) and att.relatedTo['type'] == 'Dimension':
-        relations = att.relatedTo['id'].copy()
-        att.relatedTo = {}
+    if isinstance(att.related_to['id'], list) and att.related_to['type'] == 'Dimension':
+        relations = att.related_to['id'].copy()
+        att.related_to = {}
         for i in relations:
-            if i in dsd.dimensionCodes:
-                att.relatedTo[i] = dsd.dimensionDescriptor.components[i]
+            if i in dsd.dimension_codes:
+                att.related_to[i] = dsd.dimension_descriptor.components[i]
             else:
                 obj.structures.add_error({'Code': 'MS04', 'ErrorLevel': 'CRITICAL',
-                                          'ObjectID': f'{dsd.unique_id}-{dsd.attributeDescriptor.id}',
+                                          'ObjectID': f'{dsd.unique_id}-{dsd.attribute_descriptor.id}',
                                           'ObjectType': f'Attribute',
                                           'Message': f'Missing Dimension {i} related to Attribute '
                                                      f'{att.id}'})
     else:
-        if att.relatedTo['type'] == 'Dimension':
-            if att.relatedTo['id'] in dsd.dimensionCodes:
-                att.relatedTo = dsd.dimensionDescriptor.components[att.relatedTo['id']]
+        if att.related_to['type'] == 'Dimension':
+            if att.related_to['id'] in dsd.dimension_codes:
+                att.related_to = dsd.dimension_descriptor.components[att.related_to['id']]
             else:
                 obj.structures.add_error({'Code': 'MS04', 'ErrorLevel': 'CRITICAL',
-                                          'ObjectID': f'{dsd.unique_id}-{dsd.attributeDescriptor.id}',
+                                          'ObjectID': f'{dsd.unique_id}-{dsd.attribute_descriptor.id}',
                                           'ObjectType': f'Attribute',
-                                          'Message': f'Missing Dimension {att.relatedTo["id"]} related to Attribute '
+                                          'Message': f'Missing Dimension {att.related_to["id"]} related to Attribute '
                                                      f'{att.id}'})
-        elif att.relatedTo['type'] == 'PrimaryMeasure':
-            if att.relatedTo['id'] in dsd.measureCode:
-                att.relatedTo = dsd.measureDescriptor.components[att.relatedTo['id']]
+        elif att.related_to['type'] == 'PrimaryMeasure':
+            if att.related_to['id'] in dsd.measure_code:
+                att.related_to = dsd.measure_descriptor.components[att.related_to['id']]
             else:
                 obj.structures.add_error({'Code': 'MS05', 'ErrorLevel': 'CRITICAL',
-                                          'ObjectID': f'{dsd.unique_id}-{dsd.attributeDescriptor.id}',
+                                          'ObjectID': f'{dsd.unique_id}-{dsd.attribute_descriptor.id}',
                                           'ObjectType': f'Attribute',
-                                          'Message': f'Missing Primary Measure {att.relatedTo["id"]} '
+                                          'Message': f'Missing Primary Measure {att.related_to["id"]} '
                                                      f'related to Attribute {att.id}'})
 
 
@@ -98,7 +98,7 @@ def setReferences(obj):
                 if con.id in sch.cl_references.keys():
                     cl = sch.cl_references[con.id]
                     if cl in obj.structures.codelists.keys():
-                        sch.items[con.id].coreRepresentation.codelist = obj.structures.codelists[cl]
+                        sch.items[con.id].core_representation.codelist = obj.structures.codelists[cl]
                     else:
                         obj.structures.add_error({'Code': 'MX04', 'ErrorLevel': 'CRITICAL',
                                                   'ObjectID': f'{sch.unique_id}-{con.id}', 'ObjectType': f'Concept',
@@ -111,8 +111,8 @@ def setReferences(obj):
             for key, dsd in obj.structures.dsds.items():
                 if dsd.maintainer in agencies.keys():
                     dsd.maintainer = agencies[dsd.maintainer]
-                if dsd.dimensionDescriptor is not None:
-                    for dim in dsd.dimensionDescriptor.components.values():
+                if dsd.dimension_descriptor is not None:
+                    for dim in dsd.dimension_descriptor.components.values():
                         control_errors = setOnComponent(comp=dim, obj=obj, missing_rep=missing_rep)
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
@@ -124,17 +124,17 @@ def setReferences(obj):
                                               'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
                                               'Message': f'DSD {dsd.unique_id} does not have a DimensionList'})
 
-                if dsd.attributeDescriptor is not None:
-                    for att in dsd.attributeDescriptor.components.values():
+                if dsd.attribute_descriptor is not None:
+                    for att in dsd.attribute_descriptor.components.values():
                         control_errors = setOnComponent(comp=att, obj=obj, missing_rep=missing_rep)
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
-                        if att.relatedTo is not None and att.relatedTo != 'NoSpecifiedRelationship':
+                        if att.related_to is not None and att.related_to != 'NoSpecifiedRelationship':
                             checkRelationship(att, dsd, obj)
 
-                if dsd.measureDescriptor is not None:
-                    if len(dsd.measureDescriptor.components) == 1:
-                        for meas in dsd.measureDescriptor.components.values():
+                if dsd.measure_descriptor is not None:
+                    if len(dsd.measure_descriptor.components) == 1:
+                        for meas in dsd.measure_descriptor.components.values():
                             control_errors = setOnComponent(comp=meas, obj=obj, missing_rep=missing_rep)
 
                             if control_errors and key not in keys_errors:
@@ -147,10 +147,10 @@ def setReferences(obj):
                                                   'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
                                                   'Message': f'DSD {dsd.unique_id} does not have a Primary Measure'})
 
-                if dsd.groupDimensionDescriptor is not None:
-                    for gr in dsd.groupDimensionDescriptor.components.keys():
-                        if gr in dsd.dimensionDescriptor.components.keys():
-                            dsd.groupDimensionDescriptor.components[gr] = dsd.dimensionDescriptor.components[gr]
+                if dsd.group_dimension_descriptor is not None:
+                    for gr in dsd.group_dimension_descriptor.components.keys():
+                        if gr in dsd.dimension_descriptor.components.keys():
+                            dsd.group_dimension_descriptor.components[gr] = dsd.dimension_descriptor.components[gr]
                         else:
                             # TODO Error Dimension not found
                             pass

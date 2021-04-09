@@ -1,18 +1,17 @@
 from datetime import datetime, date, timedelta
+from typing import List
 
 from .base import MaintainableArtefact, InternationalString
-from .component import ComponentList, List, Component
-from .timePeriods import ObservationalTimePeriod
-from .utils import genericSetter, ConstraintRoleType
+from .component import ComponentList, Component
+from .utils import generic_setter, ConstraintRoleType
+from ..parsers.data_generic import ComponentValueType
+from ..parsers.data_parser import DataParser
 
 
-class SelectionValue:
-    pass
-
-
-class MemberValue(SelectionValue):
+class MemberValue(ComponentValueType):
 
     def __init__(self, value: str, cascadeValues: bool):
+        super(ComponentValueType).__init__(value)
         self.value_ = value
         self.cascadeValue = cascadeValues
 
@@ -22,7 +21,7 @@ class MemberValue(SelectionValue):
 
     @value_.setter
     def value_(self, value):
-        self._value = genericSetter(value, str)
+        self._value = generic_setter(value, str)
 
     @property
     def cascadeValue(self):
@@ -30,15 +29,11 @@ class MemberValue(SelectionValue):
 
     @cascadeValue.setter
     def cascadeValue(self, value):
-        self._cascadeValue = genericSetter(value, bool)
-
-
-class TimeRangeValue(SelectionValue):
-    pass
+        self._cascadeValue = generic_setter(value, bool)
 
 
 class Period:
-    def __init__(self, isInclusive: bool, period: ObservationalTimePeriod):
+    def __init__(self, isInclusive: bool, period: datetime):
         self.isInclusive = isInclusive
         self.period = period
 
@@ -48,7 +43,7 @@ class Period:
 
     @isInclusive.setter
     def isInclusive(self, value):
-        self._isInclusive = genericSetter(value, bool)
+        self._isInclusive = generic_setter(value, bool)
 
     @property
     def period(self):
@@ -56,27 +51,12 @@ class Period:
 
     @period.setter
     def period(self, value):
-        self._period = genericSetter(value, ObservationalTimePeriod)
+        self._period = generic_setter(value, datetime)
 
 
-class BeforePeriod(Period):
-    pass
-
-
-class AfterPeriod(Period):
-    pass
-
-
-class StartPeriod(Period):
-    pass
-
-
-class EndPeriod(Period):
-    pass
-
-
-class RangePeriod(TimeRangeValue):
+class RangePeriod(ComponentValueType):
     def __init__(self, start: Period, end: Period):
+        super(RangePeriod).__init__()
         self.start = start
         self.end = end
 
@@ -86,7 +66,7 @@ class RangePeriod(TimeRangeValue):
 
     @start.setter
     def start(self, value):
-        self._start = genericSetter(value, StartPeriod)
+        self._start = generic_setter(value, datetime)
 
     @property
     def end(self):
@@ -94,12 +74,12 @@ class RangePeriod(TimeRangeValue):
 
     @end.setter
     def end(self, value):
-        self._end = genericSetter(value, EndPeriod)
+        self._end = generic_setter(value, datetime)
 
 
 class MemberSelection:
 
-    def __init__(self, isIncluded: bool = False, valuesFor: Component = None, selValue: List[SelectionValue] = None):
+    def __init__(self, isIncluded: bool = False, valuesFor: Component = None, selValue: list = None):
         self.isIncluded = isIncluded
         self.valuesFor = valuesFor
         self.selValue = selValue
@@ -110,7 +90,7 @@ class MemberSelection:
 
     @selValue.setter
     def selValue(self, value):
-        self._selValue = genericSetter(value, List[SelectionValue])
+        self._selValue = generic_setter(value, list)
 
     @property
     def valuesFor(self):
@@ -118,7 +98,7 @@ class MemberSelection:
 
     @valuesFor.setter
     def valuesFor(self, value):
-        self._valuesFor = genericSetter(value, Component)
+        self._valuesFor = generic_setter(value, Component)
 
     @property
     def isIncluded(self):
@@ -126,15 +106,21 @@ class MemberSelection:
 
     @isIncluded.setter
     def isIncluded(self, value):
-        self._isIncluded = genericSetter(value, bool)
+        self._isIncluded = generic_setter(value, bool)
 
 
-class CubeRegion:
+class CubeRegion(DataParser):
 
     def __init__(self, isIncluded: bool = False, member: MemberSelection = None):
+        super(CubeRegion).__init__()
         self.isIncluded = isIncluded
 
         self.member = member
+
+    @staticmethod
+    def _factory(*args_, **kwargs_):
+        """Factory Method of CubeRegion"""
+        return CubeRegion(*args_, **kwargs_)
 
     @property
     def member(self):
@@ -142,7 +128,7 @@ class CubeRegion:
 
     @member.setter
     def member(self, value):
-        self._member = genericSetter(value, MemberSelection)
+        self._member = generic_setter(value, MemberSelection)
 
     @property
     def isIncluded(self):
@@ -168,7 +154,7 @@ class MetadataTargetRegion:
 
     @member.setter
     def member(self, value):
-        self._member = genericSetter(value, MemberSelection)
+        self._member = generic_setter(value, MemberSelection)
 
     @property
     def compList(self):
@@ -176,7 +162,7 @@ class MetadataTargetRegion:
 
     @compList.setter
     def compList(self, value):
-        self._compList = genericSetter(value, ComponentList)
+        self._compList = generic_setter(value, ComponentList)
 
     @property
     def isIncluded(self):
@@ -184,7 +170,7 @@ class MetadataTargetRegion:
 
     @isIncluded.setter
     def isIncluded(self, value):
-        self._isIncluded = genericSetter(value, bool)
+        self._isIncluded = generic_setter(value, bool)
 
 
 class ReferencePeriod:
@@ -198,7 +184,7 @@ class ReferencePeriod:
 
     @startDate.setter
     def startDate(self, value):
-        self._start = genericSetter(value, date)
+        self._start = generic_setter(value, date)
 
     @property
     def endDate(self):
@@ -206,7 +192,7 @@ class ReferencePeriod:
 
     @endDate.setter
     def endDate(self, value):
-        self._end = genericSetter(value, date)
+        self._end = generic_setter(value, date)
 
 
 class ReleaseCalendar:
@@ -226,7 +212,7 @@ class ReleaseCalendar:
 
     @periodicity.setter
     def periodicity(self, value):
-        self._periodicity = genericSetter(value, timedelta)
+        self._periodicity = generic_setter(value, timedelta)
 
     @property
     def offset(self):
@@ -234,7 +220,7 @@ class ReleaseCalendar:
 
     @offset.setter
     def offset(self, value):
-        self._offset = genericSetter(value, timedelta)
+        self._offset = generic_setter(value, timedelta)
 
     @property
     def tolerance(self):
@@ -242,7 +228,7 @@ class ReleaseCalendar:
 
     @tolerance.setter
     def tolerance(self, value):
-        self._tolerance = genericSetter(value, timedelta)
+        self._tolerance = generic_setter(value, timedelta)
 
 
 class Constraint(MaintainableArtefact):
@@ -271,7 +257,7 @@ class Constraint(MaintainableArtefact):
 
     @dataContentRegion.setter
     def dataContentRegion(self, value):
-        self._dataContentRegion = genericSetter(value, List[CubeRegion])
+        self._dataContentRegion = generic_setter(value, List[CubeRegion])
 
     @property
     def metadataContentRegion(self):
@@ -279,7 +265,7 @@ class Constraint(MaintainableArtefact):
 
     @metadataContentRegion.setter
     def metadataContentRegion(self, value):
-        self._metadataContentRegion = genericSetter(value, List[MetadataTargetRegion])
+        self._metadataContentRegion = generic_setter(value, List[MetadataTargetRegion])
 
     @property
     def availableDates(self):
@@ -287,7 +273,7 @@ class Constraint(MaintainableArtefact):
 
     @availableDates.setter
     def availableDates(self, value):
-        self._availableDates = genericSetter(value, ReferencePeriod)
+        self._availableDates = generic_setter(value, ReferencePeriod)
 
     @property
     def calendar(self):
@@ -295,10 +281,18 @@ class Constraint(MaintainableArtefact):
 
     @calendar.setter
     def calendar(self, value):
-        self._calendar = genericSetter(value, ReleaseCalendar)
+        self._calendar = generic_setter(value, ReleaseCalendar)
+
+    def _build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
+        super(Constraint, self)._build_attributes(node, attrs, already_processed)
+
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
+        super(Constraint, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
 
 
-class AttachmentConstraint(Constraint):
+class AttachmentConstraint(DataParser):
     pass
 
 
@@ -336,10 +330,27 @@ class ContentConstraint(Constraint):
         else:
             self._role = value
 
+    def _build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
+        super(ContentConstraint, self)._build_attributes(node, attrs, already_processed)
 
-class ConstrainableArtifact:
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
+        super(ContentConstraint, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+
+        if nodeName_ == 'ConstraintAttachment':
+            obj_ = AttachmentConstraint._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
+
+        elif nodeName_ == 'CubeRegion':
+            obj_ = CubeRegion._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
+
+
+class ConstrainableArtifact(DataParser):
 
     def __init__(self, content: ContentConstraint, attachment: AttachmentConstraint):
+        super().__init__()
         self.content = content
         self.attachment = attachment
 
@@ -349,7 +360,7 @@ class ConstrainableArtifact:
 
     @content.setter
     def content(self, value):
-        self._content = genericSetter(value, ContentConstraint)
+        self._content = generic_setter(value, ContentConstraint)
 
     @property
     def attachment(self):
@@ -357,4 +368,4 @@ class ConstrainableArtifact:
 
     @attachment.setter
     def attachment(self, value):
-        self._attachment = genericSetter(value, AttachmentConstraint)
+        self._attachment = generic_setter(value, AttachmentConstraint)

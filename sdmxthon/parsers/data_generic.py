@@ -113,15 +113,6 @@ class ComponentValueType(BaseValueType):
         """Factory Method of ComponentValueType"""
         return ComponentValueType(*args_, **kwargs_)
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                super(ComponentValueType, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         super(ComponentValueType, self)._build_attributes(node, attrs, already_processed)
@@ -164,13 +155,6 @@ class ValuesType(DataParser):
             self._value = value
         else:
             raise TypeError('Value must be a dict')
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if self._value is not None:
-            return True
-        else:
-            return False
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
@@ -233,17 +217,6 @@ class GroupType(AnnotableArtefact):
     @type.setter
     def type(self, value):
         self._type_ = value
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._group_key is not None or
-                self._attributes is not None or
-                super(GroupType, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -310,18 +283,6 @@ class SeriesType(AnnotableArtefact):
     def value_(self, value):
         self._value = value
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._seriesKey is not None or
-                self._attributes is not None or
-                self._obs or
-                super(SeriesType, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         super(SeriesType, self)._build_attributes(node, attrs, already_processed)
@@ -380,18 +341,6 @@ class ObsOnlyType(AnnotableArtefact):
     @value_.setter
     def value_(self, value):
         self._value = value
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._obsKey is not None or
-                self._obsValue is not None or
-                self._attributes is not None or
-                super(ObsOnlyType, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -484,18 +433,6 @@ class ObsType(AnnotableArtefact):
     @value_.setter
     def value_(self, value):
         self._value = value
-
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self.obsDimension is not None or
-                self.obsValue is not None or
-                self.attributes is not None or
-                super(ObsType, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -731,52 +668,39 @@ class DataSetType(AnnotableArtefact):
                 result = False
         return result
 
-    def _has_content_(self):
-        """Check if it has any content"""
-        if (
-                self._dataProvider is not None or
-                self._Attributes is not None or
-                self._group or
-                self._data or
-                super(DataSetType, self)._has_content_()
-        ):
-            return True
-        else:
-            return False
-
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
         value = find_attr_value_('structureRef', node)
 
         if value is not None and 'structureRef' not in already_processed:
             already_processed.add('structureRef')
-            self._structureRef = value
+            self.structureRef = value
 
         value = find_attr_value_('setID', node)
 
         if value is not None and 'setID' not in already_processed:
             already_processed.add('setID')
-            self._setID = value
+            self.setID = value
             self._validate_id_type(self._setID)  # validate dim_type IDType
 
         value = find_attr_value_('action', node)
 
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
-            self._action = value
+            self.action = value
             self._validate_action_type(self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', node)
 
         if value is not None and 'reportingBeginDate' not in already_processed:
             already_processed.add('reportingBeginDate')
-            self._reportingBeginDate = value
+            self.reporting_begin_date = value
 
         value = find_attr_value_('reportingEndDate', node)
 
         if value is not None and 'reportingEndDate' not in already_processed:
             already_processed.add('reportingEndDate')
-            self._reportingEndDate = value
+            self.reporting_end_date = value
             # Validate reporting end date
 
         value = find_attr_value_('validFromDate', node)
@@ -784,7 +708,7 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'validFromDate' not in already_processed:
             already_processed.add('validFromDate')
             try:
-                self._validFromDate = self._gds_parse_datetime(value)
+                self.valid_from_date = self._gds_parse_datetime(value)
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
 
@@ -793,7 +717,7 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'validToDate' not in already_processed:
             already_processed.add('validToDate')
             try:
-                self._validToDate = self._gds_parse_datetime(value)
+                self.valid_to_date = self._gds_parse_datetime(value)
             except ValueError as exp:
                 raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
 
@@ -801,12 +725,12 @@ class DataSetType(AnnotableArtefact):
 
         if value is not None and 'publicationYear' not in already_processed:
             already_processed.add('publicationYear')
-            self._publicationYear = value
+            self.publication_year = value
 
         value = find_attr_value_('publicationPeriod', node)
         if value is not None and 'publicationPeriod' not in already_processed:
             already_processed.add('publicationPeriod')
-            self._publicationPeriod = value
+            self.publication_period = value
 
         super(DataSetType, self)._build_attributes(node, attrs, already_processed)
 
@@ -827,11 +751,11 @@ class DataSetType(AnnotableArtefact):
         elif nodeName_ == 'Series':
             obj_ = SeriesType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._data += obj_.obs
+            self.data += obj_.obs
         elif nodeName_ == 'Obs':
             obj_ = ObsOnlyType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._data.append(obj_.value_)
+            self.data.append(obj_.value_)
         super(DataSetType, self)._build_children(child_, node, nodeName_, True, gds_collector_)
 
 

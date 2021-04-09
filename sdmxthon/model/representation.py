@@ -1,6 +1,6 @@
 from typing import List
 
-from SDMXThon.model.utils import FacetType, stringSetter, FacetValueType
+from SDMXThon.model.utils import FacetType, string_setter, FacetValueType
 from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.parsers.references import RefBaseType
 from SDMXThon.utils.xml_base import find_attr_value_
@@ -11,28 +11,37 @@ class Facet:
        or metadata set."""
 
     def __init__(self, facetType: str = None, facetValue: str = None, facetValueType: str = None):
-        self.facetType = facetType
-        self.facetValue = facetValue
-        self.facetValueType = facetValueType
+        self.facet_type = facetType
+        self.facet_value = facetValue
+        self.facet_value_type = facetValueType
+
+    def __str__(self):
+        return f'<{self.facet_type} - {self.facet_value}>'
+
+    def __unicode__(self):
+        return f'<{self.facet_type} - {self.facet_value}>'
+
+    def __repr__(self):
+        return f'<{self.facet_type} - {self.facet_value}>'
 
     @property
-    def facetType(self):
+    def facet_type(self):
         """A specific content type which is constrained by the FacetType enumeration"""
         return self._facetType
 
     @property
-    def facetValue(self):
+    def facet_value(self):
         """The value of the Facet"""
         return self._facetValue
 
     @property
-    def facetValueType(self):
+    def facet_value_type(self):
         """The format of the value of a Component when reported in a data or metadata set.
             This is constrained by the FacetValueType enumeration."""
         return self._facetValueType
 
-    @facetType.setter
-    def facetType(self, value):
+    @facet_type.setter
+    def facet_type(self, value):
         if isinstance(value, str) or value is None:
             if value in FacetType or value is None:
                 self._facetType = value
@@ -41,12 +50,12 @@ class Facet:
         else:
             raise ValueError("Facet dim_type should be of the str dim_type")
 
-    @facetValue.setter
-    def facetValue(self, value):
-        self._facetValue = stringSetter(value)
+    @facet_value.setter
+    def facet_value(self, value):
+        self._facetValue = string_setter(value)
 
-    @facetValueType.setter
-    def facetValueType(self, value):
+    @facet_value_type.setter
+    def facet_value_type(self, value):
         if isinstance(value, str) or value is None:
             if value in FacetValueType or value is None:
                 self._facetValueType = value
@@ -62,12 +71,12 @@ class Representation(DataParser):
     def __init__(self, facets: List[Facet] = None, codelist=None, conceptScheme=None, gdscollector_=None):
         super().__init__(gds_collector_=gdscollector_)
         self.codelist = codelist
-        self.conceptScheme = conceptScheme
+        self.concept_scheme = conceptScheme
         self._type = None
         self._facets = []
         if facets is not None:
             for f in facets:
-                self.addFacet(f)
+                self.add_facet(f)
 
     def __eq__(self, other):
         if isinstance(other, Representation):
@@ -75,6 +84,15 @@ class Representation(DataParser):
                    and self._type == other._type
         else:
             return False
+
+    def __str__(self):
+        return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'
+
+    def __unicode__(self):
+        return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -92,7 +110,7 @@ class Representation(DataParser):
         return self._codelist
 
     @property
-    def conceptScheme(self):
+    def concept_scheme(self):
         """Reference to the ConceptScheme (only in MeasureDimension)"""
         return self._conceptScheme
 
@@ -100,15 +118,15 @@ class Representation(DataParser):
     def codelist(self, value):
         self._codelist = value
 
-    @conceptScheme.setter
-    def conceptScheme(self, value):
+    @concept_scheme.setter
+    def concept_scheme(self, value):
         self._conceptScheme = value
 
     @facets.setter
     def facets(self, value):
         self._facets = value
 
-    def addFacet(self, value):
+    def add_facet(self, value):
         """Add a facet to the list"""
         self._facets.append(value)
 
@@ -127,7 +145,7 @@ class Representation(DataParser):
             obj_ = FormatType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self._type = obj_.type_
-            self._facets = obj_.facets
+            self.facets = obj_.facets
 
 
 class EnumerationType(DataParser):
@@ -281,4 +299,4 @@ class FormatType(DataParser):
         value = find_attr_value_('textType', node)
         if value is not None and 'textType' not in already_processed:
             already_processed.add('textType')
-            self._type = value
+            self.type_ = value
