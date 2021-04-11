@@ -10,7 +10,7 @@ from SDMXThon.utils.handlers import add_indent
 from SDMXThon.utils.mappings import *
 from SDMXThon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, BaseStrType_
 from .base import InternationalString, LocalisedString
-from .utils import generic_setter, string_setter, bool_setter, set_date_from_string
+from .utils import generic_setter, string_setter, bool_setter
 
 
 class Contact(DataParser):
@@ -667,7 +667,7 @@ class Header(DataParser):
 
     @extracted.setter
     def extracted(self, value):
-        self._Extracted = set_date_from_string(value)
+        self._Extracted = generic_setter(value, datetime)
 
     @property
     def reporting_begin(self):
@@ -694,7 +694,7 @@ class Header(DataParser):
 
     @embargo_date.setter
     def embargo_date(self, value):
-        self._EmbargoDate = set_date_from_string(value)
+        self._EmbargoDate = generic_setter(value, datetime)
 
     @property
     def source(self):

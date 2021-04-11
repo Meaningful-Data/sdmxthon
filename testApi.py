@@ -35,7 +35,7 @@ pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/metaBIS.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure' \
               '/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
-pathToDataBIS = 'SDMXThon/outputTests/testDate.xml'
+pathToDataBIS = 'SDMXThon/outputTests/bis_data.xml'
 # pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
 pathToDataSpe = 'SDMXThon/outputTests/examples/Structure/test_str_BIS.xml'
@@ -57,9 +57,9 @@ def pretty(d, indent=0):
 
 def main():
     # Test Metadata From Different Sources Generator
-    message = SDMXThon.read_sdmx(pathToMetadataFile)
+    message = SDMXThon.get_datasets(pathToDataBIS, pathToMetadataFile)
 
-    print(message.content['dsds']['BIS:BIS_DER(1.0)'].content)
+    print(message)
 
     """
     sdmx_message = SDMXThon.read_sdmx(pathToMetadataFile)

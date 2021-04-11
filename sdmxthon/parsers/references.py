@@ -60,13 +60,14 @@ class ReferenceType(DataParser):
         if nodeName_ == 'Ref':
             obj_ = RefBaseType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._ref = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
+            self.ref = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
         elif nodeName_ == 'URN':
             value_ = child_.text
             value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             aux = value_.split("=", 1)[1]
-            self._ref = aux
+            self.ref = aux
+            self.urn = value_
 
 
 # end class ReferenceType
