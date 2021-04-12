@@ -88,6 +88,8 @@ class Message:
                 content['codelists'] = self.payload.codelists
             if self.payload.concepts is not None:
                 content['concepts'] = self.payload.concepts
+            if self.payload.constraints is not None:
+                content['constraints'] = self.payload.constraints
             if self.payload.dataflows is not None:
                 content['dataflows'] = self.payload.dataflows
             if self.payload.dsds is not None:

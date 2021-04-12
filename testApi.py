@@ -57,7 +57,8 @@ def pretty(d, indent=0):
 
 def main():
     # Test Metadata From Different Sources Generator
-    message = SDMXThon.get_datasets(pathToDataBIS, pathToMetadataFile)
+    # message = SDMXThon.read_sdmx('http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/contentconstraint/RBI/AALOE_AreaOp/1.0')
+    message = SDMXThon.read_sdmx(pathToMetadataFile)
 
     print(message)
 

@@ -272,7 +272,7 @@ class AnnotableArtefact(DataParser):
 
     def __init__(self, annotations: List[Annotation] = None, gds_collector=None):
 
-        super().__init__(gds_collector_=gds_collector)
+        super(AnnotableArtefact, self).__init__(gds_collector_=gds_collector)
         self._annotations = []
 
         if isinstance(annotations, list):

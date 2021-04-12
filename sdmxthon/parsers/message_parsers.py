@@ -2,7 +2,7 @@
     Message_parsers file contains all classes to parse a SDMX-ML Message
 """
 
-from SDMXThon.model.component import DataStructureDefinition, DataFlowDefinition
+from SDMXThon.model.component_list import DataStructureDefinition, DataFlowDefinition, ContentConstraint
 from SDMXThon.model.header import Header
 from SDMXThon.model.itemScheme import Codelist, AgencyScheme, ConceptScheme
 from SDMXThon.utils.handlers import add_indent
@@ -321,13 +321,51 @@ class DataflowsType(DataParser):
             self.dataflows[obj_.unique_id] = obj_
 
 
+class ConstraintsType(DataParser):
+    """ConstraintsType is the parser for the Constraint XML element"""
+
+    def __init__(self, constraints=None, gds_collector_=None):
+        super(ConstraintsType, self).__init__(gds_collector_)
+
+        if constraints is None:
+            self._constraints = {}
+        else:
+            self._constraints = constraints
+
+        if gds_collector_ is not None:
+            self._gds_collector = gds_collector_
+        else:
+            self._gds_collector = GdsCollector()
+
+    @staticmethod
+    def _factory(*args_, **kwargs_):
+        """Factory Method of ConstraintsType"""
+        return ConstraintsType(*args_, **kwargs_)
+
+    @property
+    def constraints(self):
+        """Dict of Dataflows"""
+        return self._constraints
+
+    @constraints.setter
+    def constraints(self, value):
+        self._constraints = value
+
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+        """Builds the childs of the XML element"""
+        if nodeName_ == 'ContentConstraint':
+            obj_ = ContentConstraint._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
+            self.constraints[obj_.unique_id] = obj_
+
+
 class Structures(DataParser):
     """Structures class is the Metadata holder to access all elements in a Structures SDMX_ML file"""
     __hash__ = DataParser.__hash__
 
-    def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, dataflows=None,
-                 gds_collector_=None, **kwargs_):
-        super(Structures, self).__init__(gds_collector_, **kwargs_)
+    def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, dataflows=None, constraints=None,
+                 gds_collector_=None):
+        super(Structures, self).__init__(gds_collector_)
 
         self._dataflows = dataflows
 
@@ -338,6 +376,8 @@ class Structures(DataParser):
         self._organisations = organisations
 
         self._concepts = concepts
+
+        self._constraints = constraints
 
         self._errors = None
 
@@ -411,6 +451,14 @@ class Structures(DataParser):
         self._concepts = value
 
     @property
+    def constraints(self):
+        return self._constraints
+
+    @constraints.setter
+    def constraints(self, value):
+        self._constraints = value
+
+    @property
     def errors(self):
         """List of Errors"""
         return self._errors
@@ -449,6 +497,11 @@ class Structures(DataParser):
             obj_ = DataflowsType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self._dataflows = obj_.dataflows
+
+        elif nodeName_ == 'Constraints':
+            obj_ = ConstraintsType._factory()
+            obj_._build(child_, gds_collector_=gds_collector_)
+            self._constraints = obj_.constraints
 
     def to_XML(self, prettyprint=True):
 

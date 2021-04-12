@@ -5,11 +5,11 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 
-from SDMXThon.model.component import PrimaryMeasure
 from SDMXThon.utils.enums import MessageTypeEnum
 from SDMXThon.utils.mappings import *
 from .data_validations import get_mandatory_attributes
 from .message_parsers import Structures
+from ..model.component import PrimaryMeasure
 
 
 def addStructure(dataset, prettyprint, dType):
