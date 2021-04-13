@@ -1,13 +1,13 @@
-"""
-    itemScheme file contains the classes for Item and ItemScheme and its derivatives
-"""
+"""itemScheme file contains the classes for Item and ItemScheme and its
+derivatives """
 
 import warnings
 from datetime import datetime
 from typing import List
 
 from SDMXThon.parsers.references import RelationshipRefType
-from SDMXThon.utils.handlers import add_indent, export_intern_data, split_unique_id
+from SDMXThon.utils.handlers import add_indent, export_intern_data, \
+    split_unique_id
 from SDMXThon.utils.mappings import structureAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, NameableArtefact, InternationalString
@@ -17,24 +17,33 @@ from .utils import generic_setter, bool_setter
 
 
 class ItemScheme(MaintainableArtefact):
-    """The descriptive information for an arrangement or division of objects into groups based
-        on characteristics, which the objects have in common.
+    """The descriptive information for an arrangement or division of objects
+    into groups based on characteristics, which the objects have in common.
     """
 
     _itemType = None
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
                  name: str = None, description: str = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None, isPartial: bool = None):
 
-        super(ItemScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                         name=name, description=description,
-                                         version=version, validFrom=validFrom, validTo=validTo,
-                                         isFinal=isFinal, isExternalReference=isExternalReference,
-                                         serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer)
+        super(ItemScheme, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name, description=description,
+                     version=version, validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     maintainer=maintainer)
 
         self._isPartial = isPartial
 
@@ -46,11 +55,13 @@ class ItemScheme(MaintainableArtefact):
                     urn_list.append(i.urn)
                     self.append(i)
                 else:
-                    raise ValueError('Item Scheme cannot have two items with same URN')
+                    raise ValueError(
+                        'Item Scheme cannot have two items with same URN')
 
     def __eq__(self, other):
         if isinstance(other, ItemScheme):
-            return super(ItemScheme, self).__eq__(other) and self._items == other._items
+            return super(ItemScheme, self).__eq__(
+                other) and self._items == other._items
         else:
             return False
 
@@ -88,15 +99,18 @@ class ItemScheme(MaintainableArtefact):
             if value.id not in self._items.keys():
                 self._items[value.id] = value
                 value.scheme = self
-                if value.parent is not None and value.parent in self._items.keys():
+                if (value.parent is not None and
+                        value.parent in self._items.keys()):
                     self._items[value.parent].add_child(value.id)
                     value.parent = self._items[value.parent]
         else:
-            raise TypeError(f"The object has to be of the type {self._itemType}")
+            raise TypeError(
+                f"The object has to be of the type {self._itemType}")
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ItemScheme, self)._build_attributes(node, attrs, already_processed)
+        super(ItemScheme, self)._build_attributes(node, attrs,
+                                                  already_processed)
 
         value = find_attr_value_('isPartial', node)
         if value is not None and 'isPartial' not in already_processed:
@@ -104,9 +118,11 @@ class ItemScheme(MaintainableArtefact):
             value = self._gds_parse_boolean(value)
             self.is_partial = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(ItemScheme, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(ItemScheme, self)._build_children(child_, node, nodeName_,
+                                                fromsubclass_, gds_collector_)
 
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
@@ -116,7 +132,8 @@ class ItemScheme(MaintainableArtefact):
         data = super(ItemScheme, self)._to_XML(prettyprint)
 
         if self.is_partial is not None:
-            data['Attributes'] += f' isPartial="{str(self.is_partial).lower()}"'
+            data[
+                'Attributes'] += f' isPartial="{str(self.is_partial).lower()}"'
 
         outfile = ''
 
@@ -138,8 +155,9 @@ class ItemScheme(MaintainableArtefact):
 
 
 class ConceptScheme(ItemScheme):
-    """ The descriptive information for an arrangement or division of concepts into groups based
-        on characteristics, which the objects have in common.
+    """ The descriptive information for an arrangement or division of
+    concepts into groups based on characteristics, which the objects have in
+    common.
 
         ItemType:
             :obj:`Concept`
@@ -148,21 +166,32 @@ class ConceptScheme(ItemScheme):
 
     _itemType = "Concept"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
         if annotations is None:
             annotations = []
         self._cl_references = {}
-        super(ConceptScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                            name=name, description=description,
-                                            version=version, validFrom=validFrom, validTo=validTo,
-                                            isFinal=isFinal, isExternalReference=isExternalReference,
-                                            serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
-                                            items=items)
+        super(ConceptScheme, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name, description=description,
+                     version=version,
+                     validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     maintainer=maintainer,
+                     items=items)
 
         self._checked = False
 
@@ -188,21 +217,28 @@ class ConceptScheme(ItemScheme):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ConceptScheme, self)._build_attributes(node, attrs, already_processed)
+        super(ConceptScheme, self)._build_attributes(node, attrs,
+                                                     already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(ConceptScheme, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(ConceptScheme, self)._build_children(child_, node, nodeName_,
+                                                   fromsubclass_,
+                                                   gds_collector_)
         if nodeName_ == 'Concept':
             obj_ = Concept._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            if obj_.core_representation is not None and obj_.core_representation.codelist is not None:
-                self._cl_references[obj_.id] = obj_.core_representation.codelist
+            if (obj_.core_representation is not None and
+                    obj_.core_representation.codelist is not None):
+                self._cl_references[
+                    obj_.id] = obj_.core_representation.codelist
             self.append(obj_)
 
 
 class Codelist(ItemScheme):
-    """ A list from which some statistical concepts (coded concepts) take their values.
+    """ A list from which some statistical concepts (coded concepts) take
+    their values.
 
         ItemType:
             :obj:`Code`
@@ -210,17 +246,25 @@ class Codelist(ItemScheme):
 
     _itemType = "Code"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
                  name: str = None, description: str = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
-        super(Codelist, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(Codelist, self).__init__(id_=id_, uri=uri, urn=urn,
+                                       annotations=annotations,
                                        name=name, description=description,
-                                       version=version, validFrom=validFrom, validTo=validTo,
-                                       isFinal=isFinal, isExternalReference=isExternalReference,
-                                       serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
+                                       version=version, validFrom=validFrom,
+                                       validTo=validTo,
+                                       isFinal=isFinal,
+                                       isExternalReference=isExternalReference,
+                                       serviceUrl=serviceUrl,
+                                       structureUrl=structureUrl,
+                                       maintainer=maintainer,
                                        items=items)
         self._checked = False
 
@@ -252,9 +296,11 @@ class Codelist(ItemScheme):
         """Builds the attributes present in the XML element"""
         super(Codelist, self)._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Codelist, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(Codelist, self)._build_children(child_, node, nodeName_,
+                                              fromsubclass_, gds_collector_)
 
         if nodeName_ == 'Code':
             obj_ = Code._factory()
@@ -265,20 +311,31 @@ class Codelist(ItemScheme):
 class OrganisationScheme(ItemScheme):
     """Abstract class. Used for structure messages"""
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
 
-        super(OrganisationScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                 name=name, description=description,
-                                                 version=version, validFrom=validFrom, validTo=validTo,
-                                                 isFinal=isFinal, isExternalReference=isExternalReference,
-                                                 serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                 maintainer=maintainer,
-                                                 items=items)
+        super(OrganisationScheme, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name,
+                     description=description,
+                     version=version,
+                     validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     maintainer=maintainer,
+                     items=items)
 
     def __eq__(self, other):
         if isinstance(other, OrganisationScheme):
@@ -296,19 +353,30 @@ class AgencyScheme(OrganisationScheme):
 
     _itemType = "Agency"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
 
-        super(AgencyScheme, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                           name=name, description=description,
-                                           version=version, validFrom=validFrom, validTo=validTo,
-                                           isFinal=isFinal, isExternalReference=isExternalReference,
-                                           serviceUrl=serviceUrl, structureUrl=structureUrl, maintainer=maintainer,
-                                           items=items)
+        super(AgencyScheme, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name, description=description,
+                     version=version,
+                     validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     maintainer=maintainer,
+                     items=items)
 
     def __eq__(self, other):
         if isinstance(other, AgencyScheme):
@@ -323,11 +391,15 @@ class AgencyScheme(OrganisationScheme):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(AgencyScheme, self)._build_attributes(node, attrs, already_processed)
+        super(AgencyScheme, self)._build_attributes(node, attrs,
+                                                    already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(AgencyScheme, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(AgencyScheme, self)._build_children(child_, node, nodeName_,
+                                                  fromsubclass_,
+                                                  gds_collector_)
         if nodeName_ == 'Agency':
             obj_ = Agency._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
@@ -335,21 +407,25 @@ class AgencyScheme(OrganisationScheme):
 
 
 class Item(NameableArtefact):
-    """The Item is an item of content in an Item Scheme. This may be a concept in
-       a concept scheme, a code in a codelist etc.
+    """The Item is an item of content in an Item Scheme. This may be a
+    concept in a concept scheme, a code in a codelist etc.
     """
 
     _schemeType = None
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None, scheme=None, parent=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None, scheme=None,
+                 parent=None,
                  childs=None):
 
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Item, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations, name=name,
+        super(Item, self).__init__(id_=id_, uri=uri, urn=urn,
+                                   annotations=annotations, name=name,
                                    description=description)
 
         self.scheme = scheme
@@ -403,7 +479,8 @@ class Item(NameableArtefact):
             value.append(self)
             self._scheme = value
         else:
-            raise TypeError(f"The scheme object has to be of the type {self._schemeType}")
+            raise TypeError(f"The scheme object has to be of the type "
+                            f"{self._schemeType}")
 
     @parent.setter
     def parent(self, value):
@@ -415,7 +492,8 @@ class Item(NameableArtefact):
             value.addChild(self)
             self._parent = value
         else:
-            raise TypeError(f"The parent of a {self._schemeType} has to be another {self._schemeType}  object")
+            raise TypeError(f"The parent of a {self._schemeType} has to be "
+                            f"another {self._schemeType}  object")
         """
 
     def add_child(self, value):
@@ -426,9 +504,12 @@ class Item(NameableArtefact):
         """Builds the attributes present in the XML element"""
         super(Item, self)._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Item, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(Item, self). \
+            _build_children(child_, node, nodeName_,
+                            fromsubclass_, gds_collector_)
 
         if nodeName_ == 'Parent':
             obj_ = RelationshipRefType._factory()
@@ -448,8 +529,8 @@ class Item(NameableArtefact):
 
 
 class Code(Item):
-    """ A language independent set of letters, numbers or symbols that represent
-        a concept whose meaning is described in a natural language
+    """ A language independent set of letters, numbers or symbols that
+    represent a concept whose meaning is described in a natural language
 
         SchemeType:
             :obj:`Codelist`
@@ -458,14 +539,17 @@ class Code(Item):
 
     _schemeType = "Codelist"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
                  scheme: ItemScheme = None, parent: Item = None, childs=None):
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Code, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(Code, self).__init__(id_=id_, uri=uri, urn=urn,
+                                   annotations=annotations,
                                    name=name, description=description,
                                    scheme=scheme, parent=parent, childs=childs)
 
@@ -484,9 +568,11 @@ class Code(Item):
         """Builds the attributes present in the XML element"""
         super(Code, self)._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Code, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(Code, self)._build_children(child_, node, nodeName_,
+                                          fromsubclass_, gds_collector_)
 
     def _parse_XML(self, indent, head):
         outfile = super(Code, self)._parse_XML(indent, head)
@@ -498,20 +584,24 @@ class Code(Item):
 
 
 class Agency(Item):
-    """ Provides identity to all derived classes. It also provides annotations to derived classes
-        because it is a subclass of AnnotableArtefact.
+    """ Provides identity to all derived classes. It also provides
+    annotations to derived classes because it is a subclass of
+    AnnotableArtefact.
 
         SchemeType:
             :obj:`AgencyScheme`
     """
     _schemeType = "AgencyScheme"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
                  scheme: ItemScheme = None, contacts: List[Contact] = None):
         if annotations is None:
             annotations = []
-        super(Agency, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(Agency, self).__init__(id_=id_, uri=uri, urn=urn,
+                                     annotations=annotations,
                                      name=name, description=description,
                                      scheme=scheme)
 
@@ -519,7 +609,8 @@ class Agency(Item):
 
     def __eq__(self, other):
         if isinstance(other, Agency):
-            return super(Agency, self).__eq__(other) and self._contacts == other._contacts
+            return super(Agency, self).__eq__(
+                other) and self._contacts == other._contacts
         else:
             return False
 
@@ -541,9 +632,11 @@ class Agency(Item):
         """Builds the attributes present in the XML element"""
         super(Agency, self)._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Agency, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(Agency, self)._build_children(child_, node, nodeName_,
+                                            fromsubclass_, gds_collector_)
 
         if nodeName_ == 'Contact':
             obj_ = Contact._factory()
@@ -570,7 +663,8 @@ class Agency(Item):
 
 
 class Concept(Item):
-    """ A concept is a unit of knowledge created by a unique combination of characteristics.
+    """ A concept is a unit of knowledge created by a unique combination of
+    characteristics.
 
         SchemeType:
             :obj:`ConceptScheme`
@@ -578,24 +672,29 @@ class Concept(Item):
 
     _schemeType = "ConceptScheme"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
                  scheme: ItemScheme = None, parent: Item = None, childs=None,
                  coreRepresentation: Representation = None):
         if childs is None:
             childs = []
         if annotations is None:
             annotations = []
-        super(Concept, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(Concept, self).__init__(id_=id_, uri=uri, urn=urn,
+                                      annotations=annotations,
                                       name=name, description=description,
-                                      scheme=scheme, parent=parent, childs=childs)
+                                      scheme=scheme, parent=parent,
+                                      childs=childs)
 
         self.core_representation = coreRepresentation
         self._ref = None  # Attribute for storing the references to codelists.
 
     def __eq__(self, other):
         if isinstance(other, Concept):
-            return super(Concept, self).__eq__(other) and self._coreRepresentation == other._coreRepresentation
+            return (super(Concept, self).__eq__(other) and
+                    self._coreRepresentation == other._coreRepresentation)
         else:
             return False
 
@@ -618,9 +717,11 @@ class Concept(Item):
         """Builds the attributes present in the XML element"""
         super(Concept, self)._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Concept, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(Concept, self)._build_children(child_, node, nodeName_,
+                                             fromsubclass_, gds_collector_)
         if nodeName_ == 'CoreRepresentation':
             obj_ = Representation._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
@@ -638,15 +739,22 @@ class Concept(Item):
             if self.core_representation.codelist is not None:
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
                 if isinstance(self.core_representation.codelist, str):
-                    agencyID, id_, version = split_unique_id(self.core_representation.codelist)
+                    agencyID, id_, version = split_unique_id(
+                        self.core_representation.codelist)
 
-                    outfile += f'{indent_ref}<Ref package="codelist" agencyID="{agencyID}" ' \
+                    outfile += f'{indent_ref}<Ref package="codelist" ' \
+                               f'agencyID="{agencyID}" ' \
                                f'id="{id_}" ' \
                                f'version="{version}" class="Codelist"/>'
                 else:
-                    outfile += f'{indent_ref}<Ref package="codelist" agencyID="{self.core_representation.codelist.agencyID}" ' \
-                               f'id="{self.core_representation.codelist.id}" ' \
-                               f'version="{self.core_representation.codelist.version}" class="Codelist"/>'
+                    agencyID = self.core_representation.codelist.agencyID
+                    id_ = self.core_representation.codelist.id
+                    version = self.core_representation.codelist.version
+
+                    outfile += f'{indent_ref}<Ref package="codelist" ' \
+                               f'agencyID="{agencyID}" ' \
+                               f'id="{id_}" ' \
+                               f'version="{version}" class="Codelist"/>'
 
                 outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
 

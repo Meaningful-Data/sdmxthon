@@ -42,7 +42,8 @@ class FooterType(DataParser):
         else:
             raise TypeError('Message must be a list')
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Message':
             obj_ = FooterMessageType._factory()
@@ -60,8 +61,10 @@ class FooterMessageType(CodedStatusMessageType):
     subclass = None
     superclass = CodedStatusMessageType
 
-    def __init__(self, code=None, Text=None, severity=None, gds_collector_=None, **kwargs_):
-        super(FooterMessageType, self).__init__(code, Text, gds_collector_, **kwargs_)
+    def __init__(self, code=None, Text=None, severity=None,
+                 gds_collector_=None, **kwargs_):
+        super(FooterMessageType, self).__init__(code, Text, gds_collector_,
+                                                **kwargs_)
         self._severity = severity
 
     @staticmethod
@@ -87,14 +90,16 @@ class FooterMessageType(CodedStatusMessageType):
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
+                    f'Value "{value}": {lineno} is not of the correct '
+                    f'base simple dim_type (str)')
                 return False
             value = value
             enumerations = ['Error', 'Warning', 'Information']
             if value not in enumerations:
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    f'Value "{value}": {lineno} does not match xsd enumeration restriction')
+                    f'Value "{value}": {lineno} does not match xsd '
+                    f'enumeration restriction')
                 result = False
         return result
 
@@ -105,5 +110,6 @@ class FooterMessageType(CodedStatusMessageType):
             already_processed.add('severity')
             self.severity = value
             self._validate_SeverityCodeType(self.severity)
-        super(FooterMessageType, self)._build_attributes(node, attrs, already_processed)
+        super(FooterMessageType, self)._build_attributes(node, attrs,
+                                                         already_processed)
 # end class FooterMessageType

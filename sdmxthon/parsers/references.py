@@ -3,25 +3,26 @@
 """
 
 from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
-from SDMXThon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, raise_parse_error
+from SDMXThon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, \
+    raise_parse_error
 
 
 class ReferenceType(DataParser):
-    """ReferenceType is an abstract base dim_type. It is used as the basis for all
-    references, to all for a top level generic object reference that can be
-    substituted with an explicit reference to any object. Any reference can
-    consist of a Ref (which contains all required reference fields
-    separately) and/or a URN. These must result in the identification of
-    the same object. Note that the Ref and URN elements are local and
+    """ReferenceType is an abstract base dim_type. It is used as the basis
+    for all references, to all for a top level generic object reference that
+    can be substituted with an explicit reference to any object. Any
+    reference can consist of a Ref (which contains all required reference
+    fields separately) and/or a URN. These must result in the identification
+    of the same object. Note that the Ref and URN elements are local and
     unqualified in order to allow for refinement of this structure outside
     of the namespace. This allows any reference to further refined by a
     different namespace. For example, a metadata structure definition
-    specific metadata set might wish to restrict the URN to only allow for
-    a value from an enumerated list. The general URN structure, for the
+    specific metadata set might wish to restrict the URN to only allow for a
+    value from an enumerated list. The general URN structure, for the
     purpose of mapping the reference fields is as follows:
     urn:sdmx:org.package-name.class-name=agency-id_:(maintainable-parent-
     object-id_[maintainable-parent-object-version].)?(container-object-
-    id_.)?object-id_([object-version])?."""
+    id_.)?object-id_([object-version])?. """
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = None
@@ -55,7 +56,8 @@ class ReferenceType(DataParser):
     def urn(self, value):
         self._urn = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefBaseType._factory()
@@ -73,8 +75,8 @@ class ReferenceType(DataParser):
 # end class ReferenceType
 
 class RelationshipRefType(DataParser):
-    """Parser of Relationships in the XML Element DimensionReference, PrimaryMeasure,
-     Dimension and Parent of an Item """
+    """Parser of Relationships in the XML Element DimensionReference,
+    PrimaryMeasure, Dimension and Parent of an Item """
 
     def __init__(self, gds_collector_=None):
         super().__init__(gds_collector_)
@@ -90,7 +92,8 @@ class RelationshipRefType(DataParser):
         """Reference to the Component as String"""
         return self._ref
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefIDType._factory()
@@ -124,65 +127,67 @@ class RefIDType(DataParser):
 
 
 class RefBaseType(DataParser):
-    """RefBaseType is an abstract base dim_type the defines the basis for any set
-    of complete reference fields. This should be refined by derived types
-    so that only the necessary fields are available and required as
+    """RefBaseType is an abstract base dim_type the defines the basis for
+    any set of complete reference fields. This should be refined by derived
+    types so that only the necessary fields are available and required as
     necessary. This can be used for both full and local references (when
     some of the values are implied from another context). A local reference
     is indicated with the local attribute. The values in this dim_type
-    correspond directly to the components of the URN structure, and thus
-    can be used to compose a URN when the local attribute value is false.
-    As this is the case, any reference components which are not part of the
-    URN structure should not be present in the derived types.The agencyID
+    correspond directly to the components of the URN structure, and thus can
+    be used to compose a URN when the local attribute value is false. As
+    this is the case, any reference components which are not part of the URN
+    structure should not be present in the derived types.The agencyID
     attribute identifies the maintenance agency for the object being
     referenced (agency-id_ in the URN structure). This is optional to allow
-    for local references (where the other reference fields are inferred
-    from another context), but all complete references will require
-    this.The maintainableParentID attribute identifies the maintainable
-    object in which the referenced object is defined, if applicable
-    (maintainable-parent-object-id_ in the URN structure). This is only used
-    in references where the referenced object is not itself
-    maintainable.The maintainableParentVersion attribute identifies the
-    version of the maintainable object in which the referenced object is
-    defined (maintainable-parent-object-version in the URN structure). This
-    is only used in references where the referenced object is not itself
+    for local references (where the other reference fields are inferred from
+    another context), but all complete references will require this.The
+    maintainableParentID attribute identifies the maintainable object in
+    which the referenced object is defined, if applicable (
+    maintainable-parent-object-id_ in the URN structure). This is only used
+    in references where the referenced object is not itself maintainable.The
+    maintainableParentVersion attribute identifies the version of the
+    maintainable object in which the referenced object is defined (
+    maintainable-parent-object-version in the URN structure). This is only
+    used in references where the referenced object is not itself
     maintainable. This should only be used when the maintainableParentID is
     present. If this is available, a default of 1.0 will always apply.The
-    containerID attribute identifies the object within a maintainable
-    object in which the referenced object is defined (container-object-id_
-    in the URN structure). This is only used in references where the
-    referenced object is not contained directly within a maintainable
-    object (e.g. a Component within a ComponentList, within a maintainable
-    Structure). If the container has a fixed identifier, this attribute
-    will not be present.The id_ attribute identifies the object being
-    referenced, and is therefore always required.The version attribute
-    identifies the version of the object being reference, if applicable. If
-    this is available, a default value of 1.0 will always apply.The local
-    attribute indicates whether this set of reference fields is meant for
-    local referencing, in which case some of the reference fields will be
-    implied from another context. Concrete instances of this class will
-    always fix this value to either true or false, depending on their
-    intended usage. If the value is fixed to true, then the complete set of
-    reference fields will be required and a URN can be fully composed from
-    the values.The class attribute indicates the class name of the object
+    containerID attribute identifies the object within a maintainable object
+    in which the referenced object is defined (container-object-id_ in the
+    URN structure). This is only used in references where the referenced
+    object is not contained directly within a maintainable object (e.g. a
+    Component within a ComponentList, within a maintainable Structure). If
+    the container has a fixed identifier, this attribute will not be
+    present.The id_ attribute identifies the object being referenced,
+    and is therefore always required.The version attribute identifies the
+    version of the object being reference, if applicable. If this is
+    available, a default value of 1.0 will always apply.The local attribute
+    indicates whether this set of reference fields is meant for local
+    referencing, in which case some of the reference fields will be implied
+    from another context. Concrete instances of this class will always fix
+    this value to either true or false, depending on their intended usage.
+    If the value is fixed to true, then the complete set of reference fields
+    will be required and a URN can be fully composed from the values.The
+    class attribute indicates the class name of the object being referenced.
+    This attribute allows any reference to be processed generically from
+    this definition. References derived from this should fix the value of
+    this attribute to indicate the dim_type of object that is being
+    referenced, or in the case that a reference which allows specific types
+    of fields, the representation should be sub-set to the appropriate
+    values.The package attribute indicates the package name for the object
     being referenced. This attribute allows any reference to be processed
     generically from this definition. References derived from this should
-    fix the value of this attribute to indicate the dim_type of object that is
-    being referenced, or in the case that a reference which allows specific
-    types of fields, the representation should be sub-set to the
-    appropriate values.The package attribute indicates the package name for
-    the object being referenced. This attribute allows any reference to be
-    processed generically from this definition. References derived from
-    this should fix the value of this attribute to indicate the dim_type of
-    object that is being referenced, or in the case that a reference which
-    allows specific types of fields, the representation should be sub-
-    set to the appropriate values."""
+    fix the value of this attribute to indicate the dim_type of object that
+    is being referenced, or in the case that a reference which allows
+    specific types of fields, the representation should be sub- set to the
+    appropriate values. """
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = None
 
-    def __init__(self, agencyID=None, maintainableParentID=None, maintainableParentVersion=None, containerID=None,
-                 idx=None, version=None, local=None, class_=None, package=None, gds_collector_=None, **kwargs_):
+    def __init__(self, agencyID=None, maintainableParentID=None,
+                 maintainableParentVersion=None, containerID=None,
+                 idx=None, version=None, local=None, class_=None, package=None,
+                 gds_collector_=None, **kwargs_):
         super(RefBaseType, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self._agencyID = agencyID
@@ -282,60 +287,87 @@ class RefBaseType(DataParser):
         self._package = value
 
     def _validate_object_type_code_list_type(self, value):
-        """Validate dim_type ObjectTypeCodelistType, a restriction on xs:string."""
+        """Validate dim_type ObjectTypeCodelistType, a restriction on
+        xs:string. """
         result = True
 
-        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
+        if (value is not None and Validate_simpletypes_ and
+                self.gds_collector_ is not None):
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
+                    f'Value "{value}":{lineno} is not of the correct '
+                    f'base simple dim_type (str)')
                 return False
 
             value = value
-            enumerations = ['Any', 'Agency', 'AgencyScheme', 'AttachmentConstraint', 'Attribute', 'AttributeDescriptor',
-                            'Categorisation', 'Category', 'CategorySchemeMap', 'CategoryScheme', 'Code', 'CodeMap',
-                            'Codelist', 'CodelistMap', 'ComponentMap', 'Concept', 'ConceptMap', 'ConceptScheme',
-                            'ConceptSchemeMap', 'Constraint', 'ConstraintTarget', 'ContentConstraint', 'Dataflow',
-                            'DataConsumer', 'DataConsumerScheme', 'DataProvider', 'DataProviderScheme', 'DataSetTarget',
-                            'DataStructure', 'Dimension', 'DimensionDescriptor', 'DimensionDescriptorValuesTarget',
-                            'GroupDimensionDescriptor', 'HierarchicalCode', 'HierarchicalCodelist', 'Hierarchy',
-                            'HybridCodelistMap', 'HybridCodeMap', 'IdentifiableObjectTarget', 'Level',
-                            'MeasureDescriptor', 'MeasureDimension', 'Metadataflow', 'MetadataAttribute', 'MetadataSet',
-                            'MetadataStructure', 'MetadataTarget', 'Organisation', 'OrganisationMap',
-                            'OrganisationScheme', 'OrganisationSchemeMap', 'OrganisationUnit', 'OrganisationUnitScheme',
-                            'PrimaryMeasure', 'Process', 'ProcessStep', 'ProvisionAgreement', 'ReportingCategory',
-                            'ReportingCategoryMap', 'ReportingTaxonomy', 'ReportingTaxonomyMap',
-                            'ReportingYearStartDay', 'ReportPeriodTarget', 'ReportStructure', 'StructureMap',
+            enumerations = ['Any', 'Agency', 'AgencyScheme',
+                            'AttachmentConstraint', 'Attribute',
+                            'AttributeDescriptor',
+                            'Categorisation', 'Category', 'CategorySchemeMap',
+                            'CategoryScheme', 'Code', 'CodeMap',
+                            'Codelist', 'CodelistMap', 'ComponentMap',
+                            'Concept', 'ConceptMap', 'ConceptScheme',
+                            'ConceptSchemeMap', 'Constraint',
+                            'ConstraintTarget', 'ContentConstraint',
+                            'Dataflow',
+                            'DataConsumer', 'DataConsumerScheme',
+                            'DataProvider', 'DataProviderScheme',
+                            'DataSetTarget',
+                            'DataStructure', 'Dimension',
+                            'DimensionDescriptor',
+                            'DimensionDescriptorValuesTarget',
+                            'GroupDimensionDescriptor', 'HierarchicalCode',
+                            'HierarchicalCodelist', 'Hierarchy',
+                            'HybridCodelistMap', 'HybridCodeMap',
+                            'IdentifiableObjectTarget', 'Level',
+                            'MeasureDescriptor', 'MeasureDimension',
+                            'Metadataflow', 'MetadataAttribute', 'MetadataSet',
+                            'MetadataStructure', 'MetadataTarget',
+                            'Organisation', 'OrganisationMap',
+                            'OrganisationScheme', 'OrganisationSchemeMap',
+                            'OrganisationUnit', 'OrganisationUnitScheme',
+                            'PrimaryMeasure', 'Process', 'ProcessStep',
+                            'ProvisionAgreement', 'ReportingCategory',
+                            'ReportingCategoryMap', 'ReportingTaxonomy',
+                            'ReportingTaxonomyMap',
+                            'ReportingYearStartDay', 'ReportPeriodTarget',
+                            'ReportStructure', 'StructureMap',
                             'StructureSet', 'TimeDimension', 'Transition']
 
             if value not in enumerations:
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match '
+                    f'xsd enumeration restriction')
                 result = False
 
         return result
 
     def _validate_package_type_code_list_type(self, value):
-        """Validate dim_type PackageTypeCodelistType, a restriction on xs:string."""
+        """Validate dim_type PackageTypeCodelistType, a restriction on
+        xs:string. """
         result = True
 
-        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
+        if (value is not None and Validate_simpletypes_ and
+                self.gds_collector_ is not None):
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    f'Value "{value}":{lineno} is not of the correct base simple dim_type (str)')
+                    f'Value "{value}":{lineno} is not of the correct '
+                    f'base simple dim_type (str)')
                 return False
 
             value = value
-            enumerations = ['base', 'datastructure', 'metadatastructure', 'process', 'registry', 'mapping', 'codelist',
+            enumerations = ['base', 'datastructure', 'metadatastructure',
+                            'process', 'registry', 'mapping', 'codelist',
                             'categoryscheme', 'conceptscheme']
 
             if value not in enumerations:
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
-                    f'Value "{encode_str_2_3(value)}":{lineno} does not match xsd enumeration restriction')
+                    f'Value "{encode_str_2_3(value)}":{lineno} does not match '
+                    f'xsd enumeration restriction')
                 result = False
 
         return result
@@ -347,31 +379,38 @@ class RefBaseType(DataParser):
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
             self.agencyID = value
-            self._validate_nested_NC_name_id_type(self._agencyID)  # validate dim_type NestedNCNameIDType
+            self._validate_nested_NC_name_id_type(
+                self._agencyID)  # validate dim_type NestedNCNameIDType
 
         value = find_attr_value_('maintainableParentID', node)
-        if value is not None and 'maintainableParentID' not in already_processed:
+        if (value is not None and
+                'maintainableParentID' not in already_processed):
             already_processed.add('maintainableParentID')
             self.maintainableParentID = value
-            self._validate_id_type(self._maintainableParentID)  # validate dim_type IDType
+            self._validate_id_type(
+                self._maintainableParentID)  # validate dim_type IDType
 
         value = find_attr_value_('maintainableParentVersion', node)
-        if value is not None and 'maintainableParentVersion' not in already_processed:
+        if (value is not None and
+                'maintainableParentVersion' not in already_processed):
             already_processed.add('maintainableParentVersion')
             self.maintainableParentVersion = value
-            self._validate_version_type(self._maintainableParentVersion)  # validate dim_type VersionType
+            self._validate_version_type(
+                self._maintainableParentVersion)
 
         value = find_attr_value_('containerID', node)
         if value is not None and 'containerID' not in already_processed:
             already_processed.add('containerID')
             self.containerID = value
-            self._validate_nested_id_type(self._containerID)  # validate dim_type NestedIDType
+            self._validate_nested_id_type(
+                self._containerID)  # validate dim_type NestedIDType
 
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self.id_ = value
-            self._validate_nested_id_type(self._id)  # validate dim_type NestedIDType
+            self._validate_nested_id_type(
+                self._id)  # validate dim_type NestedIDType
 
         value = find_attr_value_('version', node)
         if value is not None and 'version' not in already_processed:

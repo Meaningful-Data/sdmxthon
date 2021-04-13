@@ -7,10 +7,11 @@ from SDMXThon.utils.xml_base import find_attr_value_
 
 
 class Facet:
-    """Defines the format for the content of the Component when reported in a data
-       or metadata set."""
+    """Defines the format for the content of the Component when reported in
+    a data or metadata set. """
 
-    def __init__(self, facetType: str = None, facetValue: str = None, facetValueType: str = None):
+    def __init__(self, facetType: str = None, facetValue: str = None,
+                 facetValueType: str = None):
         self.facet_type = facetType
         self.facet_value = facetValue
         self.facet_value_type = facetValueType
@@ -26,7 +27,8 @@ class Facet:
 
     @property
     def facet_type(self):
-        """A specific content type which is constrained by the FacetType enumeration"""
+        """A specific content type which is constrained by the FacetType
+        enumeration """
         return self._facetType
 
     @property
@@ -36,8 +38,9 @@ class Facet:
 
     @property
     def facet_value_type(self):
-        """The format of the value of a Component when reported in a data or metadata set.
-            This is constrained by the FacetValueType enumeration."""
+        """The format of the value of a Component when reported in a data or
+        metadata set. This is constrained by the FacetValueType enumeration.
+        """
         return self._facetValueType
 
     @facet_type.setter
@@ -60,15 +63,18 @@ class Facet:
             if value in FacetValueType or value is None:
                 self._facetValueType = value
             else:
-                raise ValueError(f"The facet value dim_type {value} is not recognised")
+                raise ValueError(
+                    f"The facet value dim_type {value} is not recognised")
         else:
-            raise ValueError("Facet value dim_type should be of the str dim_type")
+            raise ValueError(
+                "Facet value dim_type should be of the str dim_type")
 
 
 class Representation(DataParser):
     """The allowable value or format for Component or Concept"""
 
-    def __init__(self, facets: List[Facet] = None, codelist=None, conceptScheme=None, gdscollector_=None):
+    def __init__(self, facets: List[Facet] = None, codelist=None,
+                 conceptScheme=None, gdscollector_=None):
         super().__init__(gds_collector_=gdscollector_)
         self.codelist = codelist
         self.concept_scheme = conceptScheme
@@ -80,8 +86,9 @@ class Representation(DataParser):
 
     def __eq__(self, other):
         if isinstance(other, Representation):
-            return self._codelist == other._codelist and self._conceptScheme == other._conceptScheme \
-                   and self._type == other._type
+            return (self._codelist == other._codelist and
+                    self._conceptScheme == other._conceptScheme and
+                    self._type == other._type)
         else:
             return False
 
@@ -135,7 +142,8 @@ class Representation(DataParser):
         """Specifies the basic type of the component (String, BigInteger...)"""
         return self._type
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Enumeration':
             obj_ = EnumerationType._factory()
@@ -169,7 +177,8 @@ class EnumerationType(DataParser):
     def codelist(self, value):
         self._codelist = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefBaseType._factory()
@@ -271,7 +280,8 @@ class FormatType(DataParser):
         if value is not None and 'timeInterval' not in already_processed:
             already_processed.add('timeInterval')
             value = self._gds_validate_duration(value)
-            self.facets.append(Facet(facetType='timeInterval', facetValue=value))
+            self.facets.append(
+                Facet(facetType='timeInterval', facetValue=value))
 
         value = find_attr_value_('decimals', node)
         if value is not None and 'decimals' not in already_processed:

@@ -2,12 +2,14 @@
     Message_parsers file contains all classes to parse a SDMX-ML Message
 """
 
-from SDMXThon.model.component_list import DataStructureDefinition, DataFlowDefinition, ContentConstraint
+from SDMXThon.model.component_list import DataStructureDefinition, \
+    DataFlowDefinition, ContentConstraint
 from SDMXThon.model.header import Header
 from SDMXThon.model.itemScheme import Codelist, AgencyScheme, ConceptScheme
 from SDMXThon.utils.handlers import add_indent
 from SDMXThon.utils.mappings import *
-from .data_generic import DataSetType as GenericDataSet, TimeSeriesDataSetType as GenericTimeSeriesDataSet
+from .data_generic import DataSetType as GenericDataSet, \
+    TimeSeriesDataSetType as GenericTimeSeriesDataSet
 from .data_parser import DataParser
 from .data_structure import DataSetType as StructureDataSet
 from .footer_parser import FooterType
@@ -15,13 +17,14 @@ from .gdscollector import GdsCollector
 
 
 class MessageType(DataParser):
-    """MessageType is an abstract dim_type which is used by all of the messages, to
-    allow inheritance of common features. Every message consists of a
-    mandatory header, followed by optional payload (which may occur
-    multiple times), and finally an optional footer section for conveying
-    error, warning, and informational messages."""
+    """MessageType is an abstract dim_type which is used by all of the
+    messages, to allow inheritance of common features. Every message
+    consists of a mandatory header, followed by optional payload (which may
+    occur multiple times), and finally an optional footer section for
+    conveying error, warning, and informational messages. """
 
-    def __init__(self, header=None, Footer=None, gds_collector_=None, **kwargs_):
+    def __init__(self, header=None, Footer=None, gds_collector_=None,
+                 **kwargs_):
         super(MessageType, self).__init__(gds_collector_, **kwargs_)
         self._gds_collector_ = gds_collector_
         self._header = header
@@ -59,8 +62,10 @@ class GenericDataType(MessageType):
     subclass = None
     superclass = MessageType
 
-    def __init__(self, header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericDataType, self).__init__(header, Footer, gds_collector_, **kwargs_)
+    def __init__(self, header=None, Footer=None, DataSet=None,
+                 gds_collector_=None, **kwargs_):
+        super(GenericDataType, self).__init__(header, Footer, gds_collector_,
+                                              **kwargs_)
 
         if DataSet is None:
             self._dataSet = []
@@ -91,7 +96,8 @@ class GenericDataType(MessageType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
             obj_ = Header._factory()
@@ -142,7 +148,8 @@ class CodelistsType(DataParser):
     def codelists(self, value):
         self._codelists = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Codelist':
             obj_ = Codelist._factory()
@@ -181,7 +188,8 @@ class ConceptsType(DataParser):
     def concepts(self, value):
         self._concepts = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ConceptScheme':
             obj_ = ConceptScheme._factory()
@@ -230,7 +238,8 @@ class DataStructuresType(DataParser):
             self._non_unique = []
         self._non_unique.append(id_)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'DataStructure':
             obj_ = DataStructureDefinition._factory()
@@ -246,10 +255,12 @@ class DataStructuresType(DataParser):
 
 
 class OrganisationSchemesType(DataParser):
-    """OrganisationSchemesType is the parser for the OrganisationScheme XML element"""
+    """OrganisationSchemesType is the parser for the OrganisationScheme XML
+    element """
 
     def __init__(self, agency_scheme=None, gds_collector_=None, **kwargs_):
-        super(OrganisationSchemesType, self).__init__(gds_collector_, **kwargs_)
+        super(OrganisationSchemesType, self).__init__(gds_collector_,
+                                                      **kwargs_)
 
         if agency_scheme is None:
             self._agency_schemes = []
@@ -275,7 +286,8 @@ class OrganisationSchemesType(DataParser):
     def agencySchemes(self, value):
         self._agency_schemes = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'AgencyScheme':
             obj_ = AgencyScheme._factory()
@@ -313,7 +325,8 @@ class DataflowsType(DataParser):
     def dataflows(self, value):
         self._dataflows = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Dataflow':
             obj_ = DataFlowDefinition._factory()
@@ -351,7 +364,8 @@ class ConstraintsType(DataParser):
     def constraints(self, value):
         self._constraints = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ContentConstraint':
             obj_ = ContentConstraint._factory()
@@ -360,10 +374,12 @@ class ConstraintsType(DataParser):
 
 
 class Structures(DataParser):
-    """Structures class is the Metadata holder to access all elements in a Structures SDMX_ML file"""
+    """Structures class is the Metadata holder to access all elements in a
+    Structures SDMX_ML file """
     __hash__ = DataParser.__hash__
 
-    def __init__(self, codelists=None, concepts=None, dsds=None, organisations=None, dataflows=None, constraints=None,
+    def __init__(self, codelists=None, concepts=None, dsds=None,
+                 organisations=None, dataflows=None, constraints=None,
                  gds_collector_=None):
         super(Structures, self).__init__(gds_collector_)
 
@@ -396,9 +412,12 @@ class Structures(DataParser):
                 for e in self.concepts.values():
                     e._checked = False
 
-            return (self._dataflows == other._dataflows and self._dsds == other._dsds
-                    and self._codelists == other._codelists and self._organisations == other._organisations
-                    and self._concepts == other._concepts and self._errors == other._errors)
+            return (self._dataflows == other._dataflows and
+                    self._dsds == other._dsds and
+                    self._codelists == other._codelists and
+                    self._organisations == other._organisations and
+                    self._concepts == other._concepts and
+                    self._errors == other._errors)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -469,7 +488,8 @@ class Structures(DataParser):
             self._errors = []
         self._errors.append(error)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'OrganisationSchemes':
             obj_ = OrganisationSchemesType._factory()
@@ -515,34 +535,39 @@ class Structures(DataParser):
         if self.organisations is not None:
             indent_child = newline + add_indent(indent)
             outfile += f'{indent_child}<{structureAbbr}:OrganisationSchemes>'
-            outfile += self.organisations._parse_XML(indent_child, f'{structureAbbr}:AgencyScheme')
+            outfile += self.organisations. \
+                _parse_XML(indent_child, f'{structureAbbr}:AgencyScheme')
             outfile += f'{indent_child}</{structureAbbr}:OrganisationSchemes>'
         if self.codelists is not None:
             indent_child = newline + add_indent(indent)
             outfile += f'{indent_child}<{structureAbbr}:Codelists>'
             for e in self.codelists.values():
-                outfile += e._parse_XML(indent_child, f'{structureAbbr}:Codelist')
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:Codelist')
             outfile += f'{indent_child}</{structureAbbr}:Codelists>'
 
         if self.concepts is not None:
             indent_child = newline + add_indent(indent)
             outfile += f'{indent_child}<{structureAbbr}:Concepts>'
             for e in self.concepts.values():
-                outfile += e._parse_XML(indent_child, f'{structureAbbr}:ConceptScheme')
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:ConceptScheme')
             outfile += f'{indent_child}</{structureAbbr}:Concepts>'
 
         if self.dsds is not None:
             indent_child = newline + add_indent(indent)
             outfile += f'{indent_child}<{structureAbbr}:DataStructures>'
             for e in self.dsds.values():
-                outfile += e._parse_XML(indent_child, f'{structureAbbr}:DataStructure')
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:DataStructure')
             outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
 
         if self.dataflows is not None:
             indent_child = newline + add_indent(indent)
             outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
             for e in self.dataflows.values():
-                outfile += e._parse_XML(indent_child, f'{structureAbbr}:Dataflow')
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:Dataflow')
             outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
 
         outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
@@ -551,12 +576,15 @@ class Structures(DataParser):
 
 
 class MetadataType(MessageType):
-    """MetadataType is a type of Message that starts with the tag Structure and contains the Metadata information"""
+    """MetadataType is a type of Message that starts with the tag Structure
+    and contains the Metadata information """
     __hash__ = DataParser.__hash__
     superclass = MessageType
 
-    def __init__(self, header=None, footer=None, structures=None, gds_collector_=None, **kwargs_):
-        super(MetadataType, self).__init__(header, footer, gds_collector_, **kwargs_)
+    def __init__(self, header=None, footer=None, structures=None,
+                 gds_collector_=None, **kwargs_):
+        super(MetadataType, self).__init__(header, footer, gds_collector_,
+                                           **kwargs_)
 
         self._structures = structures
 
@@ -579,7 +607,8 @@ class MetadataType(MessageType):
     def structures(self, value):
         self._structures = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
             obj_ = Header._factory()
@@ -597,18 +626,21 @@ class MetadataType(MessageType):
 
 class StructureSpecificDataType(MessageType):
     """StructureSpecificDataType defines the structure of the structure
-    specific data message. Note that the data set payload dim_type is abstract,
-    and therefore it will have to be assigned a dim_type in an instance. This
-    dim_type must be derived from the base dim_type referenced. This base dim_type
-    defines a general structure which can be followed to allow for generic
-    processing of the data even if the exact details of the data structure
-    specific format are not known."""
+    specific data message. Note that the data set payload dim_type is
+    abstract, and therefore it will have to be assigned a dim_type in an
+    instance. This dim_type must be derived from the base dim_type
+    referenced. This base dim_type defines a general structure which can be
+    followed to allow for generic processing of the data even if the exact
+    details of the data structure specific format are not known. """
     __hash__ = MessageType.__hash__
     subclass = None
     superclass = MessageType
 
-    def __init__(self, header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(StructureSpecificDataType, self).__init__(header, Footer, gds_collector_, **kwargs_)
+    def __init__(self, header=None, Footer=None, DataSet=None,
+                 gds_collector_=None, **kwargs_):
+        super(StructureSpecificDataType, self).__init__(header, Footer,
+                                                        gds_collector_,
+                                                        **kwargs_)
 
         if DataSet is None:
             self._dataSet = []
@@ -640,7 +672,8 @@ class StructureSpecificDataType(MessageType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
             obj_ = Header._factory()
@@ -668,8 +701,11 @@ class GenericTimeSeriesDataType(GenericDataType):
     subclass = None
     superclass = GenericDataType
 
-    def __init__(self, header=None, Footer=None, DataSet=None, gds_collector_=None, **kwargs_):
-        super(GenericTimeSeriesDataType, self).__init__(header, Footer, DataSet, gds_collector_,
+    def __init__(self, header=None, Footer=None, DataSet=None,
+                 gds_collector_=None, **kwargs_):
+        super(GenericTimeSeriesDataType, self).__init__(header, Footer,
+                                                        DataSet,
+                                                        gds_collector_,
                                                         **kwargs_)
 
     @staticmethod
@@ -691,7 +727,8 @@ class GenericTimeSeriesDataType(GenericDataType):
         else:
             raise TypeError('Dataset must be a list')
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Header':
             obj_ = Header._factory()

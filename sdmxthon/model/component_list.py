@@ -8,11 +8,15 @@ from typing import List
 
 from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXThon.utils.handlers import export_intern_data, add_indent, split_unique_id
+from SDMXThon.utils.handlers import export_intern_data, add_indent, \
+    split_unique_id
 from SDMXThon.utils.mappings import *
 from SDMXThon.utils.xml_base import find_attr_value_
-from .base import IdentifiableArtefact, MaintainableArtefact, InternationalString
-from .component import ReferencePeriod, ReleaseCalendar, Component, Dimension, TimeDimension, Attribute, PrimaryMeasure
+from .base import IdentifiableArtefact, MaintainableArtefact, \
+    InternationalString
+from .component import Component, Dimension, TimeDimension, Attribute, \
+    PrimaryMeasure
+from .extras import ReferencePeriod, ReleaseCalendar
 from .utils import generic_setter, ConstraintRoleType, bool_setter
 
 
@@ -39,7 +43,8 @@ class GroupDimension(DataParser):
         """Factory Method of GroupDimension"""
         return GroupDimension(*args_, **kwargs_)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_,
+                        fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'DimensionReference':
             obj_ = RelationshipRefType._factory()
@@ -54,10 +59,11 @@ class ComponentList(IdentifiableArtefact):
     """
     _componentType = None
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, components=None):
 
-        super(ComponentList, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations)
+        super(ComponentList, self).__init__(id_=id_, uri=uri, urn=urn,
+                                            annotations=annotations)
         self._components = {}
         if components is not None:
             for c in components:
@@ -65,7 +71,8 @@ class ComponentList(IdentifiableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, ComponentList):
-            return super(ComponentList, self).__eq__(other) and self._components == other._components
+            return (super(ComponentList, self).__eq__(other) and
+                    self._components == other._components)
         else:
             return False
 
@@ -80,13 +87,15 @@ class ComponentList(IdentifiableArtefact):
 
     @property
     def components(self):
-        """An aggregate association to one or more components which make up the list."""
+        """An aggregate association to one or more components
+        which make up the list."""
         return self._components
 
     def add_component(self, value):
         """Method to add a Component to the ComponentList"""
         if isinstance(self, MeasureDescriptor) and len(self._components) == 1:
-            raise ValueError('Measure Descriptor cannot have more than one Primary Measure')
+            raise ValueError('Measure Descriptor cannot have '
+                             'more than one Primary Measure')
         elif isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
             value.componentList = self
             self._components[value.id] = value
@@ -95,7 +104,8 @@ class ComponentList(IdentifiableArtefact):
             self._components[value.ref] = value
         else:
             raise TypeError(
-                f"The object has to be of the dim_type [Dimension, Attribute, PrimaryMeasure], "
+                f"The object has to be of the dim_type "
+                f"[Dimension, Attribute, PrimaryMeasure], "
                 f"{value.__class__.__name__} provided")
 
     def __len__(self):
@@ -106,7 +116,8 @@ class ComponentList(IdentifiableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ComponentList, self)._build_attributes(node, attrs, already_processed)
+        super(ComponentList, self)._build_attributes(node, attrs,
+                                                     already_processed)
 
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
@@ -135,18 +146,19 @@ class ComponentList(IdentifiableArtefact):
 
 
 class DimensionDescriptor(ComponentList, DataParser):
-    """An ordered set of metadata concepts that, combined, classify a statistical series,
-       and whose values, when combined (the key) in an instance such as a data set,
-       uniquely identify a specific observation
+    """An ordered set of metadata concepts that, combined, classify a
+    statistical series, and whose values, when combined (the key) in an
+    instance such as a data set, uniquely identify a specific observation
     """
     _componentType = "Dimension"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, components=None):
 
         if components is None:
             components = []
-        super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn,
+                                                  annotations=annotations,
                                                   components=components)
 
     @staticmethod
@@ -162,9 +174,11 @@ class DimensionDescriptor(ComponentList, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(DimensionDescriptor, self)._build_attributes(node, attrs, already_processed)
+        super(DimensionDescriptor, self). \
+            _build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Dimension':
             obj_ = Dimension._factory()
@@ -177,16 +191,18 @@ class DimensionDescriptor(ComponentList, DataParser):
 
 
 class AttributeDescriptor(ComponentList, DataParser):
-    """A set metadata concepts that define the attributes of a Data Structure Definition."""
+    """A set metadata concepts that define the attributes of a
+    Data Structure Definition."""
 
     _componentType = "Attribute"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, components=None):
         if components is None:
             components = []
 
-        super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, urn=urn,
+                                                  annotations=annotations,
                                                   components=components)
 
     @staticmethod
@@ -203,9 +219,11 @@ class AttributeDescriptor(ComponentList, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(AttributeDescriptor, self)._build_attributes(node, attrs, already_processed)
+        super(AttributeDescriptor, self). \
+            _build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Attribute':
             obj_ = Attribute._factory()
@@ -214,16 +232,18 @@ class AttributeDescriptor(ComponentList, DataParser):
 
 
 class MeasureDescriptor(ComponentList, DataParser):
-    """A metadata concept that defines the measure of a Data Structure Definition"""
+    """A metadata concept that defines the measure of a
+    Data Structure Definition"""
 
     _componentType = "PrimaryMeasure"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, components=None):
 
         if components is None:
             components = []
-        super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
+        super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, urn=urn,
+                                                annotations=annotations,
                                                 components=components)
 
     @staticmethod
@@ -239,9 +259,11 @@ class MeasureDescriptor(ComponentList, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(MeasureDescriptor, self)._build_attributes(node, attrs, already_processed)
+        super(MeasureDescriptor, self). \
+            _build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'PrimaryMeasure':
             obj_ = PrimaryMeasure._factory()
@@ -250,18 +272,19 @@ class MeasureDescriptor(ComponentList, DataParser):
 
 
 class GroupDimensionDescriptor(ComponentList, DataParser):
-    """A set metadata concepts that define a partial key derived from the Dimension Descriptor in a
-    Data Structure Definition.
+    """A set metadata concepts that define a partial key derived from the
+    Dimension Descriptor in a Data Structure Definition.
     """
 
     _componentType = "Dimension"
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, components=None):
         if components is None:
             components = []
-        super(GroupDimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                       components=components)
+        super(GroupDimensionDescriptor, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations, components=components)
 
     def __eq__(self, other):
         if isinstance(other, GroupDimensionDescriptor):
@@ -276,9 +299,11 @@ class GroupDimensionDescriptor(ComponentList, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(GroupDimensionDescriptor, self)._build_attributes(node, attrs, already_processed)
+        super(GroupDimensionDescriptor, self). \
+            _build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'GroupDimension':
             obj_ = GroupDimension._factory()
@@ -288,7 +313,8 @@ class GroupDimensionDescriptor(ComponentList, DataParser):
 
 class MemberSelection(DataParser):
 
-    def __init__(self, is_included: bool = False, values_for: Component = None, sel_value: list = None,
+    def __init__(self, is_included: bool = False,
+                 values_for: Component = None, sel_value: list = None,
                  gds_collector=None):
         super(MemberSelection, self).__init__(gds_collector_=gds_collector)
         self.is_included = is_included
@@ -339,7 +365,8 @@ class MemberSelection(DataParser):
             value = self._gds_parse_boolean(value)
             self.is_included = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
 
         if nodeName_ == 'Value':
@@ -348,7 +375,8 @@ class MemberSelection(DataParser):
 
 class CubeRegion(DataParser):
 
-    def __init__(self, is_included: bool = False, member: MemberSelection = None, gds_collector=None):
+    def __init__(self, is_included: bool = False,
+                 member: MemberSelection = None, gds_collector=None):
         super(CubeRegion, self).__init__(gds_collector_=gds_collector)
         self.is_included = is_included
 
@@ -383,7 +411,8 @@ class CubeRegion(DataParser):
             value = self._gds_parse_boolean(value)
             self.is_included = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
 
         if nodeName_ == 'KeyValue':
@@ -394,7 +423,8 @@ class CubeRegion(DataParser):
 
 class MetadataTargetRegion:
 
-    def __init__(self, comp_list: ComponentList, isIncluded: bool = False, member: MemberSelection = None):
+    def __init__(self, comp_list: ComponentList, isIncluded: bool = False,
+                 member: MemberSelection = None):
         self.is_included = isIncluded
 
         self.comp_list = comp_list
@@ -428,7 +458,8 @@ class MetadataTargetRegion:
 
 class DataKeySet(DataParser):
 
-    def __init__(self, keys: list = None, isIncluded: bool = None, gds_collector=None):
+    def __init__(self, keys: list = None, isIncluded: bool = None,
+                 gds_collector=None):
         super(DataKeySet, self).__init__(gds_collector_=gds_collector)
 
         self.keys = []
@@ -472,7 +503,8 @@ class DataKeySet(DataParser):
             value = self._gds_parse_boolean(value)
             self.is_included = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
 
         if nodeName_ == 'Key':
@@ -482,21 +514,32 @@ class DataKeySet(DataParser):
 
 
 class Constraint(MaintainableArtefact):
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, dataContentRegion: List[CubeRegion] = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
+                 structureUrl: str = None,
+                 dataContentRegion: List[CubeRegion] = None,
                  dataContentKeys: DataKeySet = None,
                  metadataContentRegion: List[MetadataTargetRegion] = None,
-                 availableDates: List[ReferencePeriod] = None, calendar: List[ReleaseCalendar] = None):
+                 availableDates: List[ReferencePeriod] = None,
+                 calendar: List[ReleaseCalendar] = None):
         if annotations is None:
             annotations = []
-        super(Constraint, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                         name=name, description=description,
-                                         version=version, validFrom=validFrom, validTo=validTo,
-                                         isFinal=isFinal, isExternalReference=isExternalReference,
-                                         serviceUrl=serviceUrl, structureUrl=structureUrl)
+        super(Constraint, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name, description=description,
+                     version=version, validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl)
         self.metadata_content_region = []
         self.data_content_region = []
         self.available_dates = []
@@ -567,11 +610,14 @@ class Constraint(MaintainableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(Constraint, self)._build_attributes(node, attrs, already_processed)
+        super(Constraint, self)._build_attributes(node, attrs,
+                                                  already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Constraint, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(Constraint, self)._build_children(child_, node, nodeName_,
+                                                fromsubclass_, gds_collector_)
 
         if nodeName_ == 'ConstraintAttachment':
             obj_ = AttachmentConstraintType._factory()
@@ -593,7 +639,8 @@ class Constraint(MaintainableArtefact):
 class AttachmentConstraintType(DataParser):
 
     def __init__(self, gds_collector=None):
-        super(AttachmentConstraintType, self).__init__(gds_collector_=gds_collector)
+        super(AttachmentConstraintType, self).__init__(
+            gds_collector_=gds_collector)
         self._ref = None
         self._type = None
 
@@ -610,7 +657,8 @@ class AttachmentConstraintType(DataParser):
     def type_(self):
         return self._type
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
 
         if nodeName_ == 'Dataflow' or nodeName_ == 'DataStructure':
@@ -635,7 +683,8 @@ class KeySetType(DataParser):
     def key(self):
         return self._key
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
 
         if nodeName_ == 'KeyValue':
@@ -645,26 +694,41 @@ class KeySetType(DataParser):
 
 
 class ContentConstraint(Constraint):
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, dataContentRegion: List[CubeRegion] = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
+                 structureUrl: str = None,
+                 dataContentRegion: List[CubeRegion] = None,
                  metadataContentRegion: List[MetadataTargetRegion] = None,
-                 availableDates: List[ReferencePeriod] = None, calendar: List[ReleaseCalendar] = None,
+                 availableDates: List[ReferencePeriod] = None,
+                 calendar: List[ReleaseCalendar] = None,
                  role: str = None):
         if annotations is None:
             annotations = []
-        super(ContentConstraint, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                name=name, description=description,
-                                                version=version, validFrom=validFrom, validTo=validTo,
-                                                isFinal=isFinal, isExternalReference=isExternalReference,
-                                                serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                dataContentRegion=dataContentRegion,
-                                                metadataContentRegion=metadataContentRegion,
-                                                availableDates=availableDates, calendar=calendar)
+        super(ContentConstraint, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name,
+                     description=description,
+                     version=version,
+                     validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     dataContentRegion=dataContentRegion,
+                     metadataContentRegion=metadataContentRegion,
+                     availableDates=availableDates,
+                     calendar=calendar)
         if role is not None and role not in ConstraintRoleType:
-            raise ValueError('ConstraintRole must be either "allowableContent" or "actualContent"')
+            raise ValueError('ConstraintRole must be either '
+                             '"allowableContent" or "actualContent"')
         self._role = role
 
     @staticmethod
@@ -679,38 +743,57 @@ class ContentConstraint(Constraint):
     @type_.setter
     def type_(self, value):
         if value not in ConstraintRoleType:
-            raise ValueError('ConstraintRole must be either "allowableContent" or "actualContent"')
+            raise ValueError('ConstraintRole must be either '
+                             '"allowableContent" or "actualContent"')
         else:
             self._role = value
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ContentConstraint, self)._build_attributes(node, attrs, already_processed)
+        super(ContentConstraint, self)._build_attributes(node, attrs,
+                                                         already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(ContentConstraint, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(ContentConstraint, self)._build_children(child_, node, nodeName_,
+                                                       fromsubclass_,
+                                                       gds_collector_)
 
 
 class DataStructureDefinition(MaintainableArtefact):
-    """A collection of metadata concepts, their structure and usage when used to collect
-       or disseminate data.
-    """
+    """A collection of metadata concepts, their structure and usage when used
+    to collect or disseminate data."""
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None, dimensionDescriptor: DimensionDescriptor = None,
-                 measureDescriptor: MeasureDescriptor = None, attributeDescriptor: AttributeDescriptor = None,
-                 groupDimensionDescriptor: GroupDimensionDescriptor = None, constraint: ContentConstraint = None):
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
+                 structureUrl: str = None, maintainer=None,
+                 dimensionDescriptor: DimensionDescriptor = None,
+                 measureDescriptor: MeasureDescriptor = None,
+                 attributeDescriptor: AttributeDescriptor = None,
+                 groupDimensionDescriptor: GroupDimensionDescriptor = None,
+                 constraint: ContentConstraint = None):
 
-        super(DataStructureDefinition, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                      name=name, description=description,
-                                                      version=version, validFrom=validFrom, validTo=validTo,
-                                                      isFinal=isFinal, isExternalReference=isExternalReference,
-                                                      serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                      maintainer=maintainer)
+        super(DataStructureDefinition, self). \
+            __init__(id_=id_, uri=uri,
+                     urn=urn,
+                     annotations=annotations,
+                     name=name,
+                     description=description,
+                     version=version,
+                     validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     maintainer=maintainer)
 
         self.dimension_descriptor = dimensionDescriptor
         self.measure_descriptor = measureDescriptor
@@ -720,21 +803,26 @@ class DataStructureDefinition(MaintainableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, DataStructureDefinition):
-            return super.__eq__(self, other) and self._dimensionDescriptor == other._dimensionDescriptor \
-                   and self._attributeDescriptor == other._attributeDescriptor \
-                   and self._measureDescriptor == other._measureDescriptor \
-                   and self._groupDimensionDescriptor == other._groupDimensionDescriptor
+            return (super.__eq__(self, other) and
+                    self._dimensionDescriptor == other._dimensionDescriptor and
+                    self._attributeDescriptor == other._attributeDescriptor and
+                    self._measureDescriptor == other._measureDescriptor and
+                    self._groupDimensionDescriptor ==
+                    other._groupDimensionDescriptor)
         else:
             return False
 
     def __str__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (
+            self.agencyID, self.id, self.version)
 
     def __unicode__(self):
-        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
+        return u'<DataStructureDefinition  - %s:%s(%s)>' % (
+            self.agencyID, self.id, self.version)
 
     def __repr__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
+        return '<DataStructureDefinition  - %s:%s(%s)>' % (
+            self.agencyID, self.id, self.version)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -743,19 +831,22 @@ class DataStructureDefinition(MaintainableArtefact):
 
     @property
     def dimension_descriptor(self):
-        """An ordered set of metadata concepts that, combined, classify a statistical series,
-           and whose values, when combined (the key) in an instance such as a data set,
-           uniquely identify a specific observation"""
+        """An ordered set of metadata concepts that, combined, classify a
+        statistical series, and whose values, when combined (the key)
+        in an instance such as a data set, uniquely identify a
+        specific observation"""
         return self._dimensionDescriptor
 
     @property
     def measure_descriptor(self):
-        """A metadata concept that defines the measure of a Data Structure Definition"""
+        """A metadata concept that defines the measure of a
+        Data Structure Definition"""
         return self._measureDescriptor
 
     @property
     def attribute_descriptor(self):
-        """A set metadata concepts that define the attributes of a Data Structure Definition."""
+        """A set metadata concepts that define the attributes of a Data
+        Structure Definition. """
         return self._attributeDescriptor
 
     @property
@@ -783,7 +874,8 @@ class DataStructureDefinition(MaintainableArtefact):
         result = []
         if self.attribute_descriptor is not None:
             for k in self.attribute_descriptor.components:
-                if self.attribute_descriptor[k].related_to == "NoSpecifiedRelationship":
+                if self.attribute_descriptor[k].related_to == \
+                        "NoSpecifiedRelationship":
                     result.append(k)
         return result
 
@@ -792,7 +884,8 @@ class DataStructureDefinition(MaintainableArtefact):
         """Extracts the content of a DSD as a dict"""
 
         result = {'dimensions': self.dimension_descriptor.components,
-                  'measure': self.measure_descriptor.components[self.measure_code]
+                  'measure': self.measure_descriptor.components[
+                      self.measure_code]
                   }
 
         if self.attribute_descriptor is not None:
@@ -855,7 +948,8 @@ class DataStructureDefinition(MaintainableArtefact):
 
     @group_dimension_descriptor.setter
     def group_dimension_descriptor(self, value):
-        self._groupDimensionDescriptor = generic_setter(value, GroupDimensionDescriptor)
+        self._groupDimensionDescriptor = \
+            generic_setter(value, GroupDimensionDescriptor)
 
     @property
     def constraint(self):
@@ -873,7 +967,8 @@ class DataStructureDefinition(MaintainableArtefact):
 
             type_ = "String"
 
-            if c.representation is not None and c.representation.type_ is not None:
+            if (c.representation is not None and
+                    c.representation.type_ is not None):
                 type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Identifier",
@@ -883,7 +978,8 @@ class DataStructureDefinition(MaintainableArtefact):
         for c in self.attribute_descriptor.components.values():
             type_ = "String"
 
-            if c.representation is not None and c.representation.type_ is not None:
+            if (c.representation is not None
+                    and c.representation.type_ is not None):
                 type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Attribute",
@@ -893,7 +989,8 @@ class DataStructureDefinition(MaintainableArtefact):
         for c in self.measure_descriptor.components.values():
             type_ = "String"
 
-            if c.representation is not None and c.representation.type_ is not None:
+            if (c.representation is not None
+                    and c.representation.type_ is not None):
                 type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Measure",
@@ -901,7 +998,8 @@ class DataStructureDefinition(MaintainableArtefact):
 
             components.append(component)
 
-        result = {"DataSet": {"name": dataset_name, "DataStructure": components}}
+        result = {
+            "DataSet": {"name": dataset_name, "DataStructure": components}}
         if path is not None:
             with open(path, 'w') as fp:
                 fp.write(json.dumps(result))
@@ -910,11 +1008,15 @@ class DataStructureDefinition(MaintainableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(DataStructureDefinition, self)._build_attributes(node, attrs, already_processed)
+        super(DataStructureDefinition, self). \
+            _build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(DataStructureDefinition, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
+        super(DataStructureDefinition, self). \
+            _build_children(child_, node, nodeName_, fromsubclass_,
+                            gds_collector_)
 
         if nodeName_ == 'DataStructureComponents':
             obj_ = DataStructureComponentType._factory()
@@ -947,13 +1049,16 @@ class DataStructureDefinition(MaintainableArtefact):
         outfile += f'{indent_child}<{structureAbbr}:DataStructureComponents>'
 
         if self.dimension_descriptor is not None:
-            outfile += self.dimension_descriptor._parse_XML(indent_child, f'{structureAbbr}:DimensionList')
+            outfile += self.dimension_descriptor. \
+                _parse_XML(indent_child, f'{structureAbbr}:DimensionList')
 
         if self.attribute_descriptor is not None:
-            outfile += self.attribute_descriptor._parse_XML(indent_child, f'{structureAbbr}:AttributeList')
+            outfile += self.attribute_descriptor. \
+                _parse_XML(indent_child, f'{structureAbbr}:AttributeList')
 
         if self.measure_descriptor is not None:
-            outfile += self.measure_descriptor._parse_XML(indent_child, f'{structureAbbr}:MeasureList')
+            outfile += self.measure_descriptor. \
+                _parse_XML(indent_child, f'{structureAbbr}:MeasureList')
 
         outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>'
 
@@ -967,24 +1072,37 @@ class DataFlowDefinition(MaintainableArtefact):
        that providers will provide for different reference periods.
     """
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None, structure: DataStructureDefinition = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 name: InternationalString = None,
+                 description: InternationalString = None,
+                 version: str = None, validFrom: datetime = None,
+                 validTo: datetime = None,
+                 isFinal: bool = None, isExternalReference: bool = None,
+                 serviceUrl: str = None,
+                 structureUrl: str = None, maintainer=None,
+                 structure: DataStructureDefinition = None,
                  constraint: ContentConstraint = None):
-        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                 name=name, description=description,
-                                                 version=version, validFrom=validFrom, validTo=validTo,
-                                                 isFinal=isFinal, isExternalReference=isExternalReference,
-                                                 serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                 maintainer=maintainer)
+        super(DataFlowDefinition, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     name=name,
+                     description=description,
+                     version=version,
+                     validFrom=validFrom,
+                     validTo=validTo,
+                     isFinal=isFinal,
+                     isExternalReference=isExternalReference,
+                     serviceUrl=serviceUrl,
+                     structureUrl=structureUrl,
+                     maintainer=maintainer)
         self.structure = structure
         self.constraint = constraint
 
     def __eq__(self, other):
         if isinstance(other, DataFlowDefinition):
-            return super(DataFlowDefinition, self).__eq__(other) and self._structure == other._structure
+            return super(DataFlowDefinition, self).__eq__(
+                other) and self._structure == other._structure
 
     def __str__(self):
         return f'<DataFlowDefinition - {self.unique_id}>'
@@ -1011,11 +1129,15 @@ class DataFlowDefinition(MaintainableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(DataFlowDefinition, self)._build_attributes(node, attrs, already_processed)
+        super(DataFlowDefinition, self)._build_attributes(node, attrs,
+                                                          already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(DataFlowDefinition, self)._build_children(child_, node, nodeName_, fromsubclass_=False,
+        super(DataFlowDefinition, self)._build_children(child_, node,
+                                                        nodeName_,
+                                                        fromsubclass_=False,
                                                         gds_collector_=None)
         if nodeName_ == 'Structure':
             obj_ = StructureType._factory()
@@ -1049,11 +1171,15 @@ class DataFlowDefinition(MaintainableArtefact):
             if isinstance(self.structure, str):
                 agencyID, id_, version = split_unique_id(self.structure)
 
-                outfile += f'{indent_ref}<Ref id="{id_}" version="{version}" ' \
-                           f'agencyID="{agencyID}" package="datastructure" class="DataStructure"/>'
+                outfile += f'{indent_ref}<Ref id="{id_}" ' \
+                           f'version="{version}" ' \
+                           f'agencyID="{agencyID}" ' \
+                           f'package="datastructure" class="DataStructure"/>'
             else:
-                outfile += f'{indent_ref}<Ref id="{self.structure.id}" version="{self.structure.version}" ' \
-                           f'agencyID="{self.structure.agencyID}" package="datastructure" class="DataStructure"/>'
+                outfile += f'{indent_ref}<Ref id="{self.structure.id}" ' \
+                           f'version="{self.structure.version}" ' \
+                           f'agencyID="{self.structure.agencyID}" ' \
+                           f'package="datastructure" class="DataStructure"/>'
             outfile += f'{indent_child}</{structureAbbr}:Structure>'
 
         outfile += f'{indent}</{label}>'
@@ -1078,7 +1204,8 @@ class StructureType(DataParser):
         """Reference to the DataStructureDefinition"""
         return self._ref
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefBaseType._factory()
@@ -1103,19 +1230,22 @@ class DataStructureComponentType(DataParser):
 
     @property
     def dimensionDescriptor(self):
-        """An ordered set of metadata concepts that, combined, classify a statistical series,
-           and whose values, when combined (the key) in an instance such as a data set,
-           uniquely identify a specific observation"""
+        """An ordered set of metadata concepts that, combined, classify a
+        statistical series, and whose values, when combined (the key) in an
+        instance such as a data set, uniquely identify a specific
+        observation """
         return self._dimension_descriptor
 
     @property
     def attributeDescriptor(self):
-        """A set metadata concepts that define the attributes of a Data Structure Definition."""
+        """A set metadata concepts that define the attributes of a Data
+        Structure Definition. """
         return self._attribute_descriptor
 
     @property
     def measureDescriptor(self):
-        """A metadata concept that defines the measure of a Data Structure Definition"""
+        """A metadata concept that defines the measure of a Data Structure
+        Definition """
         return self._measure_descriptor
 
     @property
@@ -1124,7 +1254,8 @@ class DataStructureComponentType(DataParser):
            from the Dimension Descriptor in a Data Structure Definition."""
         return self._groupDimensionDescriptor
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'DimensionList':
             obj_ = DimensionDescriptor._factory()

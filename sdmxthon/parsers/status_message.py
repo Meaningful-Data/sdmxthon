@@ -1,6 +1,5 @@
-"""
-    Status messages file withholds some extra MessageTypes for specific purposes
-"""
+"""Status messages file withholds some extra MessageTypes for specific
+purposes """
 
 from SDMXThon.model.base import LocalisedString, InternationalString
 from SDMXThon.parsers.data_parser import DataParser
@@ -19,7 +18,8 @@ class StatusMessageType(DataParser):
     subclass = None
     superclass = None
 
-    def __init__(self, code=None, Text: InternationalString = None, gds_collector_=None, **kwargs_):
+    def __init__(self, code=None, Text: InternationalString = None,
+                 gds_collector_=None, **kwargs_):
         super(StatusMessageType, self).__init__(None)
         self.gds_collector_ = gds_collector_
         self._code = code
@@ -67,7 +67,8 @@ class StatusMessageType(DataParser):
             already_processed.add('Code')
             self._code = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Text':
             obj_ = LocalisedString._factory()
@@ -88,7 +89,8 @@ class CodedStatusMessageType(StatusMessageType):
     superclass = StatusMessageType
 
     def __init__(self, code=None, Text=None, gds_collector_=None, **kwargs_):
-        super(CodedStatusMessageType, self).__init__(code, Text, gds_collector_, **kwargs_)
+        super(CodedStatusMessageType, self).__init__(code, Text,
+                                                     gds_collector_, **kwargs_)
         self._name = 'CodedStatusMessageType'
 
     @staticmethod
