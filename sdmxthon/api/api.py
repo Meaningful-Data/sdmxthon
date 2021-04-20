@@ -47,7 +47,7 @@ def get_datasets(path_to_data, path_to_metadata):
 
     :param path_to_metadata: Path or URL to the SDMX metadata file
 
-    :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of
+    :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of \
     :obj:`Datasets <model.dataSet.DataSet>`
     """
 
@@ -76,9 +76,9 @@ def get_pandas_df(path_to_data):
 
     :param path_to_data: Path or URL to the SDMX data file
 
-    :return: A `Pandas Dataframe
-    <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
-    or a dict of `Pandas Dataframe
+    :return: A `Pandas Dataframe \
+    <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_ or \
+    a dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
     obj_ = _read_xml(path_to_data)

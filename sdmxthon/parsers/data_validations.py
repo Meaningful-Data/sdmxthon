@@ -354,10 +354,17 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         every record of a dataset 
         SS07: Check if two data_points are the same 
         SS08: Check that the value inputted is compliant with Facets 
-        for the referred Representation """
+        for the referred Representation
+        SS09: Check if the value is compliant with the desired TimePeriod
+        SS10: Check if an attribute/dimension value that is associated 
+        to a Cube Region Constraint is valid
+        SS11: Check if a Series Constraint is valid
+        """
     errors = []
 
     faceted, types = dsd._facet_type
+
+    cubes, series_const = dsd._format_constraints
 
     mc = dsd.measure_code
     type_ = 'Measure'
@@ -398,6 +405,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         else:
             data_column = data[mc].unique().astype('str')
             errors += check_str_facets(facets, data_column, mc, type_)
+
+    del temp
 
     grouping_keys = []
 
@@ -480,7 +489,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 for e in data_column:
                     if not time_period_valid(e, types[k]):
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
                              'Component': f'{k}',
                              'Type': f'{type_}',
                              'Rows': None,
@@ -499,7 +508,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
                     if not check_date(e, format_):
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
                              'Component': f'{k}',
                              'Type': f'{type_}',
                              'Rows': None,
@@ -531,7 +540,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
                     if not check_reporting(e, format_):
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
                              'Component': f'{k}',
                              'Type': f'{type_}',
                              'Rows': None,
@@ -550,7 +559,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                         e = e.split('/', maxsplit=1)[0]
 
                         # Matching duration
-                        regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((\d+)D)?(T(?=.)((\d+)H)?((\d+)M)?' \
+                        regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((' \
+                                         r'\d+)D)?(T(?=.)((\d+)H)?((\d+)M)?' \
                                          r'(\d*(\.\d+)?S)?)?'
                         match_duration = re.compile(regex_duration)
 
@@ -572,16 +582,30 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
                     if invalid_date:
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
                              'Component': f'{k}',
                              'Type': f'{type_}',
                              'Rows': None,
-                             'Message': f'Value {e + duration} not compliant with '
-                                        f'type : {types[k]}'})
+                             'Message': f'Value {e + duration} not compliant '
+                                        f'with type : {types[k]}'})
                     if control_changed:
                         e += duration
 
-        if k in codelist_values.keys():
+        if k in cubes.keys():
+            code = 'SS10'
+            values = data_column[
+                np.isin(data_column, list(cubes[k]), invert=True)]
+            if len(values) > 0:
+                values = values[
+                    np.isin(values, ['nan', 'None', np.nan], invert=True)]
+                for v in values:
+                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
+                                   'Component': f'{k}', 'Type': f'{type_}',
+                                   'Rows': None,
+                                   'Message': f'Wrong value {v} for '
+                                              f'{type_.lower()} {k}'})
+
+        elif k in codelist_values.keys():
             code = 'SS04'
             values = data_column[
                 np.isin(data_column, codelist_values[k], invert=True)]
@@ -592,7 +616,21 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                     errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
                                    'Component': f'{k}', 'Type': f'{type_}',
                                    'Rows': None,
-                                   'Message': f'Wrong value {v} for {type_.lower()} {k}'})
+                                   'Message': f'Wrong value {v} for '
+                                              f'{type_.lower()} {k}'})
+
+    for e in series_const:
+        temp = data[list(e.keys())]
+        value = temp.loc[(temp[list(e)] == pandas.Series(e)).all(axis=1)]
+        if len(value) == 0:
+            errors.append({'Code': 'SS11',
+                           'ErrorLevel': 'WARNING',
+                           'Component': f'Series',
+                           'Type': f'Constraint',
+                           'Rows': None,
+                           'Message': f'Missing values'
+                                      f'{format_row(e)}'
+                           })
 
     duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
     if len(duplicated) > 0:
@@ -611,7 +649,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                            'Component': f'Duplicated',
                            'Type': f'Datapoint',
                            'Rows': rows.copy(),
-                           'Message': f'Duplicated datapoint {format_row(data_point)}'
+                           'Message': f'Duplicated datapoint '
+                                      f'{format_row(data_point)}'
                            })
 
     return errors

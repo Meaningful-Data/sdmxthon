@@ -99,9 +99,8 @@ class InternationalString(object):
     def __init__(self, localisedStrings: List[LocalisedString] = None):
         """Inits InternationalString with optional attributes."""
 
-        if localisedStrings is None:
-            self._items = {}
-        else:
+        self._items = {}
+        if localisedStrings is not None:
             for record in localisedStrings:
                 self.addLocalisedString(record)
 

@@ -31,7 +31,8 @@ class Dataset:
     :type attached_attributes: dict
 
     :param data: Any object compatible with pandas.DataFrame()
-    :type data: `Pandas Dataframe <https://pandas.pydata.org/pandas-docs/stable
+    :type data: `Pandas Dataframe \
+    <https://pandas.pydata.org/pandas-docs/stable \
     /reference/api/pandas.DataFrame.html>`_
     """
 

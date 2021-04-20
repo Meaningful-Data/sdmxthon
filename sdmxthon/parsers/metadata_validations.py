@@ -209,6 +209,19 @@ def setReferences(obj):
             if flow.structure in obj.structures.dsds.keys():
                 flow.structure = obj.structures.dsds[flow.structure]
 
+    if obj.structures.constraints is not None:
+        for const in obj.structures.constraints.values():
+            if (const.type_attach == 'DataStructure' and
+                    obj.structures.dsds is not None and
+                    const.ref_attach in obj.structures.dsds.keys()):
+                obj.structures.dsds[const.ref_attach].add_constraint(const)
+
+            elif (const.type_attach == 'Dataflow' and
+                  obj.structures.dataflows is not None and
+                  const.ref_attach in obj.structures.dataflows.keys()):
+                obj.structures.dataflows[const.ref_attach].add_constraint(
+                    const)
+
 
 def grouping_errors(missing_rep, obj, keys_errors):
     for k in keys_errors:

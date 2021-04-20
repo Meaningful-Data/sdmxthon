@@ -16,7 +16,7 @@ class Message:
     """ Message class holds the type of a SDMX Message, its payload and its
     header.
 
-    :param message_type: Enumeration that withholds the Message type for
+    :param message_type: Enumeration that withholds the Message type for \
     writing purposes
     :type message_type: `MessageTypeEnum`
 
@@ -155,8 +155,7 @@ class Message:
             :type receiverId: str
 
             :param datetimeStr: Datetime of the preparation of the Message.
-            Format:  '%Y-%m-%dT%H:%M:%S'
-            :type datetimeStr: datetime
+            :type datetimeStr: str Format:  '%Y-%m-%dT%H:%M:%S'
         """
         header = Header(ID=id_)
         header.test = header._gds_format_boolean(test)
@@ -217,7 +216,7 @@ class Message:
         :param test: Mark as test file, defaults to 'true'
         :type test: str
 
-        :param prepared: Datetime of the preparation of the Message,
+        :param prepared: Datetime of the preparation of the Message, \
         defaults to current date and time
         :type prepared: datetime
 

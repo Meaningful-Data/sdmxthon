@@ -538,6 +538,15 @@ class Structures(DataParser):
             outfile += self.organisations. \
                 _parse_XML(indent_child, f'{structureAbbr}:AgencyScheme')
             outfile += f'{indent_child}</{structureAbbr}:OrganisationSchemes>'
+
+        if self.dataflows is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
+            for e in self.dataflows.values():
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:Dataflow')
+            outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
+
         if self.codelists is not None:
             indent_child = newline + add_indent(indent)
             outfile += f'{indent_child}<{structureAbbr}:Codelists>'
@@ -561,14 +570,6 @@ class Structures(DataParser):
                 outfile += e._parse_XML(indent_child,
                                         f'{structureAbbr}:DataStructure')
             outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
-
-        if self.dataflows is not None:
-            indent_child = newline + add_indent(indent)
-            outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
-            for e in self.dataflows.values():
-                outfile += e._parse_XML(indent_child,
-                                        f'{structureAbbr}:Dataflow')
-            outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
 
         outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
 

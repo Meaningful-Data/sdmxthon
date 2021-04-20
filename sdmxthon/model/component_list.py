@@ -778,7 +778,7 @@ class DataStructureDefinition(MaintainableArtefact):
                  measureDescriptor: MeasureDescriptor = None,
                  attributeDescriptor: AttributeDescriptor = None,
                  groupDimensionDescriptor: GroupDimensionDescriptor = None,
-                 constraint: ContentConstraint = None):
+                 constraint: list = None):
 
         super(DataStructureDefinition, self). \
             __init__(id_=id_, uri=uri,
@@ -799,7 +799,7 @@ class DataStructureDefinition(MaintainableArtefact):
         self.measure_descriptor = measureDescriptor
         self.attribute_descriptor = attributeDescriptor
         self.group_dimension_descriptor = groupDimensionDescriptor
-        self.constraint = constraint
+        self._constraints = constraint
 
     def __eq__(self, other):
         if isinstance(other, DataStructureDefinition):
@@ -930,6 +930,27 @@ class DataStructureDefinition(MaintainableArtefact):
         return facets, type_
 
     @property
+    def _format_constraints(self):
+        """Returns the constraints in a formatted way for validation"""
+        cubes = {}
+        series = []
+
+        if self.constraints is not None:
+            for c in self.constraints:
+                if len(c.data_content_region) > 0:
+                    for e in c.data_content_region:
+                        if e.member.values_for not in cubes.keys():
+                            cubes[e.member.values_for] = set(
+                                e.member.sel_value)
+                        else:
+                            cubes[e.member.values_for].update(
+                                e.member.sel_value)
+                if c.data_content_keys is not None:
+                    series += c.data_content_keys.keys
+
+        return cubes, series
+
+    @property
     def measure_code(self):
         """Key of the MeasureDescriptor component (PrimaryMeasure)"""
         return list(self.measure_descriptor.components.keys())[0]
@@ -952,12 +973,13 @@ class DataStructureDefinition(MaintainableArtefact):
             generic_setter(value, GroupDimensionDescriptor)
 
     @property
-    def constraint(self):
-        return self._constraint
+    def constraints(self):
+        return self._constraints
 
-    @constraint.setter
-    def constraint(self, value):
-        self._constraint = generic_setter(value, ContentConstraint)
+    def add_constraint(self, value: ContentConstraint):
+        if self._constraints is None:
+            self._constraints = []
+        self._constraints.append(value)
 
     def to_vtl_json(self, path: str = None):
         """Formats the DataStructureDefinition as a VTL DataStructure"""
@@ -1082,7 +1104,7 @@ class DataFlowDefinition(MaintainableArtefact):
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  structure: DataStructureDefinition = None,
-                 constraint: ContentConstraint = None):
+                 constraints: list = None):
         super(DataFlowDefinition, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
@@ -1097,7 +1119,7 @@ class DataFlowDefinition(MaintainableArtefact):
                      structureUrl=structureUrl,
                      maintainer=maintainer)
         self.structure = structure
-        self.constraint = constraint
+        self._constraints = constraints
 
     def __eq__(self, other):
         if isinstance(other, DataFlowDefinition):
@@ -1126,6 +1148,9 @@ class DataFlowDefinition(MaintainableArtefact):
     @structure.setter
     def structure(self, value):
         self._structure = generic_setter(value, DataStructureDefinition)
+
+    def add_constraint(self, value: ContentConstraint):
+        self._constraints.append(value)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
