@@ -4,7 +4,8 @@
 
 from SDMXThon.model.base import AnnotableArtefact
 from SDMXThon.parsers.references import ReferenceType
-from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, encode_str_2_3
+from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
+    encode_str_2_3
 from .data_parser import DataParser, Validate_simpletypes_
 from .gdscollector import datetime_
 
@@ -56,7 +57,8 @@ class BaseValueType(DataParser):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self._validate_nc_name_id_type(self._id)  # validate dim_type NCNameIDType
+            self._validate_nc_name_id_type(
+                self._id)  # validate dim_type NCNameIDType
 
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
@@ -91,7 +93,8 @@ class ObsValueType(BaseValueType):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ObsValueType, self)._build_attributes(node, attrs, already_processed)
+        super(ObsValueType, self)._build_attributes(node, attrs,
+                                                    already_processed)
 
 
 # end class ObsValueType
@@ -115,7 +118,8 @@ class ComponentValueType(BaseValueType):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ComponentValueType, self)._build_attributes(node, attrs, already_processed)
+        super(ComponentValueType, self)._build_attributes(node, attrs,
+                                                          already_processed)
 
 
 class ValuesType(DataParser):
@@ -156,7 +160,8 @@ class ValuesType(DataParser):
         else:
             raise TypeError('Value must be a dict')
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Value':
             obj_ = ComponentValueType._factory()
@@ -178,7 +183,8 @@ class GroupType(AnnotableArtefact):
     in the constraint and apply the values provided for the attributes
     appropriately."""
 
-    def __init__(self, Annotations=None, type_=None, GroupKey=None, Attributes=None, gds_collector_=None):
+    def __init__(self, Annotations=None, type_=None, GroupKey=None,
+                 Attributes=None, gds_collector_=None):
         super(GroupType, self).__init__(Annotations, gds_collector_)
         self._type_ = cast(None, type_)
         self._group_key = GroupKey
@@ -224,9 +230,11 @@ class GroupType(AnnotableArtefact):
         if value is not None and 'dim_type' not in already_processed:
             already_processed.add('dim_type')
             self._type_ = value
-        super(GroupType, self)._build_attributes(node, attrs, already_processed)
+        super(GroupType, self)._build_attributes(node, attrs,
+                                                 already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'GroupKey':
             obj_ = ValuesType._factory()
@@ -236,7 +244,8 @@ class GroupType(AnnotableArtefact):
             obj_ = ValuesType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self._attributes = obj_
-        super(GroupType, self)._build_children(child_, node, nodeName_, True, gds_collector_)
+        super(GroupType, self)._build_children(child_, node, nodeName_, True,
+                                               gds_collector_)
 
 
 # end class GroupType
@@ -254,7 +263,8 @@ class SeriesType(AnnotableArtefact):
     series to contain only observations or only attribute values, or
     both."""
 
-    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None, Obs=None, gds_collector_=None, **kwargs_):
+    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None,
+                 Obs=None, gds_collector_=None, **kwargs_):
         super(SeriesType, self).__init__(Annotations, gds_collector_)
         self._seriesKey = SeriesKey
         self._attributes = Attributes
@@ -285,9 +295,11 @@ class SeriesType(AnnotableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(SeriesType, self)._build_attributes(node, attrs, already_processed)
+        super(SeriesType, self)._build_attributes(node, attrs,
+                                                  already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'SeriesKey':
             obj_ = ValuesType._factory()
@@ -308,7 +320,8 @@ class SeriesType(AnnotableArtefact):
             obj_._build(child_, gds_collector_=gds_collector_)
             self._value.update(obj_.value_)
             self._obs.append(self._value.copy())
-        super(SeriesType, self)._build_children(child_, node, nodeName_, True, gds_collector_)
+        super(SeriesType, self)._build_children(child_, node, nodeName_, True,
+                                                gds_collector_)
 
 
 # end class SeriesType
@@ -321,7 +334,8 @@ class ObsOnlyType(AnnotableArtefact):
     observation can contain an observed value and/or a collection of
     attribute values."""
 
-    def __init__(self, Annotations=None, ObsKey=None, ObsValue=None, Attributes=None, gds_collector_=None):
+    def __init__(self, Annotations=None, ObsKey=None, ObsValue=None,
+                 Attributes=None, gds_collector_=None):
         super(ObsOnlyType, self).__init__(Annotations, gds_collector_)
         self._obsKey = ObsKey
         self._obsValue = ObsValue
@@ -344,9 +358,11 @@ class ObsOnlyType(AnnotableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(ObsOnlyType, self)._build_attributes(node, attrs, already_processed)
+        super(ObsOnlyType, self)._build_attributes(node, attrs,
+                                                   already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ObsKey':
             obj_ = ValuesType._factory()
@@ -372,7 +388,8 @@ class ObsOnlyType(AnnotableArtefact):
             else:
                 self._value.update(obj_.value_)
 
-        super(ObsOnlyType, self)._build_children(child_, node, nodeName_, True, gds_collector_)
+        super(ObsOnlyType, self)._build_children(child_, node, nodeName_, True,
+                                                 gds_collector_)
 
 
 # end class ObsOnlyType
@@ -386,7 +403,8 @@ class ObsType(AnnotableArtefact):
     value). The observation can contain an observed value and/or attribute
     values."""
 
-    def __init__(self, Annotations=None, ObsDimension=None, ObsValue=None, Attributes=None, gds_collector_=None):
+    def __init__(self, Annotations=None, ObsDimension=None, ObsValue=None,
+                 Attributes=None, gds_collector_=None):
         super(ObsType, self).__init__(Annotations, gds_collector_)
         self._obsDimension = ObsDimension
         self._obsValue = ObsValue
@@ -438,7 +456,8 @@ class ObsType(AnnotableArtefact):
         """Builds the attributes present in the XML element"""
         super(ObsType, self)._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ObsDimension':
             obj_ = BaseValueType._factory()
@@ -458,7 +477,8 @@ class ObsType(AnnotableArtefact):
             obj_._build(child_, gds_collector_=gds_collector_)
             self.value_.update(obj_.value_)
 
-        super(ObsType, self)._build_children(child_, node, nodeName_, True, gds_collector_)
+        super(ObsType, self)._build_children(child_, node, nodeName_, True,
+                                             gds_collector_)
 
 
 # end class ObsType
@@ -483,9 +503,12 @@ class DataSetType(AnnotableArtefact):
     key might exist, but with not with the same purpose (i.e. to provide
     data or documentation) as the first series."""
 
-    def __init__(self, Annotations=None, structureRef=None, setID=None, action=None, reportingBeginDate=None,
-                 reportingEndDate=None, validFromDate=None, validToDate=None, publicationYear=None,
-                 publicationPeriod=None, DataProvider=None, Attributes=None, Group=None, Data=None,
+    def __init__(self, Annotations=None, structureRef=None, setID=None,
+                 action=None, reportingBeginDate=None,
+                 reportingEndDate=None, validFromDate=None, validToDate=None,
+                 publicationYear=None,
+                 publicationPeriod=None, DataProvider=None, Attributes=None,
+                 Group=None, Data=None,
                  gds_collector_=None, **kwargs_):
         super(DataSetType, self).__init__(Annotations, gds_collector_)
         self._structureRef = cast(None, structureRef)
@@ -495,12 +518,14 @@ class DataSetType(AnnotableArtefact):
         self._reportingBeginDate = cast(None, reportingBeginDate)
         self._reportingEndDate = cast(None, reportingEndDate)
         if isinstance(validFromDate, BaseStrType_):
-            initvalue_ = datetime_.datetime.strptime(validFromDate, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime_.datetime.strptime(validFromDate,
+                                                     '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = validFromDate
         self._validFromDate = initvalue_
         if isinstance(validToDate, BaseStrType_):
-            initvalue_ = datetime_.datetime.strptime(validToDate, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime_.datetime.strptime(validToDate,
+                                                     '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = validToDate
         self._validToDate = initvalue_
@@ -583,7 +608,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def action(self):
-        """The action attribute indicates whether the file is appending, replacing, or deleting."""
+        """The action attribute indicates whether the file is appending,
+        replacing, or deleting. """
         return self._action
 
     @action.setter
@@ -612,8 +638,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def valid_from_date(self):
-        """The validFromDate indicates the inclusive start time indicating the validity
-                of the information in the data or metadata set."""
+        """The validFromDate indicates the inclusive start time indicating
+        the validity of the information in the data or metadata set. """
         return self._validFromDate
 
     @valid_from_date.setter
@@ -622,8 +648,8 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def valid_to_date(self):
-        """The validToDate indicates the inclusive end time indicating the validity
-                of the information in the data or metadata set."""
+        """The validToDate indicates the inclusive end time indicating the
+        validity of the information in the data or metadata set. """
         return self._validToDate
 
     @valid_to_date.setter
@@ -641,9 +667,10 @@ class DataSetType(AnnotableArtefact):
 
     @property
     def publication_period(self):
-        """The publicationPeriod specifies the period of publication of the data or metadata in terms of whatever
-            provisioning agreements might be in force (i.e., "Q1 2005" if that is the time of
-            publication for a data set published on a quarterly basis). """
+        """The publicationPeriod specifies the period of publication of the
+        data or metadata in terms of whatever provisioning agreements might
+        be in force (i.e., "Q1 2005" if that is the time of publication for
+        a data set published on a quarterly basis). """
         return self._publicationPeriod
 
     @publication_period.setter
@@ -653,18 +680,22 @@ class DataSetType(AnnotableArtefact):
     def _validate_action_type(self, value):
         """Validate dim_type common:ActionType, a restriction on xs:NMTOKEN."""
         result = True
-        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
+        if (value is not None and Validate_simpletypes_ and
+                self.gds_collector_ is not None):
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
-                self.gds_collector_.add_message(
-                    f'Value "{value}": {lineno} is not of the correct base simple dim_type (str)')
+                self.gds_collector_.add_message(f'Value "{value}": {lineno} '
+                                                f'is not of the correct base '
+                                                f'simple dim_type (str)')
                 return False
             value = value
             enumerations = ['Append', 'Replace', 'Delete', 'Information']
             if value not in enumerations:
                 lineno = self._gds_get_node_line_number_()
-                self.gds_collector_.add_message(f'Value "{encode_str_2_3(value)}"{lineno} '
-                                                f'does not match xsd enumeration restriction on ActionType')
+                self.gds_collector_.add_message(
+                    f'Value "{encode_str_2_3(value)}"{lineno} '
+                    f'does not match xsd enumeration '
+                    f'restriction on ActionType')
                 result = False
         return result
 
@@ -688,7 +719,8 @@ class DataSetType(AnnotableArtefact):
         if value is not None and 'action' not in already_processed:
             already_processed.add('action')
             self.action = value
-            self._validate_action_type(self._action)  # validate dim_type ActionType
+            self._validate_action_type(
+                self._action)  # validate dim_type ActionType
 
         value = find_attr_value_('reportingBeginDate', node)
 
@@ -710,7 +742,8 @@ class DataSetType(AnnotableArtefact):
             try:
                 self.valid_from_date = self._gds_parse_datetime(value)
             except ValueError as exp:
-                raise ValueError('Bad date-time attribute (validFromDate): %s' % exp)
+                raise ValueError(
+                    'Bad date-time attribute (validFromDate): %s' % exp)
 
         value = find_attr_value_('validToDate', node)
 
@@ -719,7 +752,8 @@ class DataSetType(AnnotableArtefact):
             try:
                 self.valid_to_date = self._gds_parse_datetime(value)
             except ValueError as exp:
-                raise ValueError('Bad date-time attribute (validToDate): %s' % exp)
+                raise ValueError(
+                    'Bad date-time attribute (validToDate): %s' % exp)
 
         value = find_attr_value_('publicationYear', node)
 
@@ -732,9 +766,11 @@ class DataSetType(AnnotableArtefact):
             already_processed.add('publicationPeriod')
             self.publication_period = value
 
-        super(DataSetType, self)._build_attributes(node, attrs, already_processed)
+        super(DataSetType, self)._build_attributes(node, attrs,
+                                                   already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'DataProvider':
             obj_ = ReferenceType._factory()
@@ -756,7 +792,8 @@ class DataSetType(AnnotableArtefact):
             obj_ = ObsOnlyType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self.data.append(obj_.value_)
-        super(DataSetType, self)._build_children(child_, node, nodeName_, True, gds_collector_)
+        super(DataSetType, self)._build_children(child_, node, nodeName_, True,
+                                                 gds_collector_)
 
 
 # end class DataSetType
@@ -778,13 +815,22 @@ class TimeSeriesDataSetType(DataSetType):
     subclass = None
     superclass = DataSetType
 
-    def __init__(self, Annotations=None, structureRef=None, setID=None, action=None, reportingBeginDate=None,
-                 reportingEndDate=None, validFromDate=None, validToDate=None, publicationYear=None,
-                 publicationPeriod=None, DataProvider=None, Attributes=None, Group=None,
+    def __init__(self, Annotations=None, structureRef=None, setID=None,
+                 action=None, reportingBeginDate=None,
+                 reportingEndDate=None, validFromDate=None, validToDate=None,
+                 publicationYear=None,
+                 publicationPeriod=None, DataProvider=None, Attributes=None,
+                 Group=None,
                  gds_collector_=None, **kwargs_):
-        super(TimeSeriesDataSetType, self).__init__(Annotations, structureRef, setID, action, reportingBeginDate,
-                                                    reportingEndDate, validFromDate, validToDate, publicationYear,
-                                                    publicationPeriod, DataProvider, Attributes, Group,
+        super(TimeSeriesDataSetType, self).__init__(Annotations, structureRef,
+                                                    setID, action,
+                                                    reportingBeginDate,
+                                                    reportingEndDate,
+                                                    validFromDate, validToDate,
+                                                    publicationYear,
+                                                    publicationPeriod,
+                                                    DataProvider, Attributes,
+                                                    Group,
                                                     gds_collector_, **kwargs_)
 
 
@@ -802,8 +848,11 @@ class TimeSeriesType(SeriesType):
     subclass = None
     superclass = SeriesType
 
-    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None, Obs=None, gds_collector_=None, **kwargs_):
-        super(TimeSeriesType, self).__init__(Annotations, SeriesKey, Attributes, Obs, gds_collector_, **kwargs_)
+    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None,
+                 Obs=None, gds_collector_=None, **kwargs_):
+        super(TimeSeriesType, self).__init__(Annotations, SeriesKey,
+                                             Attributes, Obs, gds_collector_,
+                                             **kwargs_)
 
 
 class TimeSeriesObsType(ObsType):

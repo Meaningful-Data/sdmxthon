@@ -6,7 +6,7 @@ import numpy as np
 import pandas.api.types
 from pandas import DataFrame
 
-from SDMXThon.model.component import DataStructureDefinition
+from SDMXThon.model.component_list import DataStructureDefinition
 
 error_level_facets = 'WARNING'
 
@@ -17,15 +17,20 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
     if dsd.dimension_descriptor.components is not None:
 
         for element in dsd.dimension_descriptor.components.values():
-            if element.representation is not None and element.representation.codelist is not None and \
-                    not isinstance(element.representation.codelist, str):
-                data[element.id] = list(element.representation.codelist.items.keys())
+            if (element.representation is not None and
+                    element.representation.codelist is not None and
+                    not isinstance(element.representation.codelist, str)):
+                data[element.id] = list(element.representation.codelist.
+                                        items.keys())
 
-    if dsd.attribute_descriptor is not None and dsd.attribute_descriptor.components is not None:
+    if (dsd.attribute_descriptor is not None and
+            dsd.attribute_descriptor.components is not None):
         for record in dsd.attribute_descriptor.components.values():
-            if record.representation is not None and record.representation.codelist is not None and \
-                    not isinstance(record.representation.codelist, str):
-                data[record.id] = list(record.representation.codelist.items.keys())
+            if (record.representation is not None and
+                    record.representation.codelist is not None and
+                    not isinstance(record.representation.codelist, str)):
+                data[record.id] = list(record.representation.codelist.
+                                       items.keys())
 
     return data
 
@@ -33,11 +38,13 @@ def get_codelist_values(dsd: DataStructureDefinition) -> dict:
 def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
     data = []
 
-    if dsd.attribute_descriptor is None or dsd.attribute_descriptor.components is None:
+    if (dsd.attribute_descriptor is None or
+            dsd.attribute_descriptor.components is None):
         return []
 
     for record in dsd.attribute_descriptor.components.values():
-        if record.related_to is not None and record.usage_status == "Mandatory":
+        if (record.related_to is not None and
+                record.usage_status == "Mandatory"):
             data.append(record.id)
 
     return data
@@ -46,8 +53,10 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
 def time_period_valid(dt_str: str, type_: str):
     """Validates any time period"""
 
-    if type_ == "ObservationalTimePeriod" or type_ == "GregorianTimePeriod" or type_ == "BasicTimePeriod" \
-            or type_ == "StandardTimePeriod":
+    if (type_ == "ObservationalTimePeriod" or
+            type_ == "GregorianTimePeriod" or
+            type_ == "BasicTimePeriod" or
+            type_ == "StandardTimePeriod"):
         regex_monthly = r'(19|[2-9][0-9])\d{2}(-(0[1-9]|1[012]))?'
         match_monthly = re.compile(regex_monthly)
 
@@ -67,13 +76,15 @@ def time_period_valid(dt_str: str, type_: str):
         # Matching daily and iso format
         duration = ""
         control_changed = False
-        if (type_ == "ObservationalTimePeriod" or type_ == "StandardTimePeriod" or type_ == "BasicTimePeriod") \
-                and '/' in dt_str:
+        if ((type_ == "ObservationalTimePeriod" or
+             type_ == "StandardTimePeriod" or
+             type_ == "BasicTimePeriod") and '/' in dt_str):
             duration = dt_str.split('/', maxsplit=1)[1]
             dt_str = dt_str.split('/', maxsplit=1)[0]
 
             # Matching duration
-            regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((\d+)D)?(T(?=.)((\d+)H)?((\d+)M)?' \
+            regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((\d+)D)?(T(?=.)(' \
+                             r'(\d+)H)?((\d+)M)?' \
                              r'(\d*(\.\d+)?S)?)?'
             match_duration = re.compile(regex_duration)
 
@@ -88,8 +99,10 @@ def time_period_valid(dt_str: str, type_: str):
             control_changed = True
 
         # Matching semester, quarter and trimester
-        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
-                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5]))'
+        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[' \
+                         r'1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
+                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[' \
+                         r'0-5][0-9]|36[0-5]))'
         match_specials = re.compile(regex_specials)
 
         try:
@@ -119,10 +132,13 @@ def time_period_valid(dt_str: str, type_: str):
         if control_changed:
             dt_str += '/' + duration
 
-    if type_ == "ReportingTimePeriod" or type_ == "ObservationalTimePeriod" or type_ == "StandardTimePeriod":
+    if (type_ == "ReportingTimePeriod" or
+            type_ == "ObservationalTimePeriod" or
+            type_ == "StandardTimePeriod"):
         # Matching semester, quarter and trimester
-        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
-                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5]))'
+        regex_specials = r'''(19|[2-9][0-9])\d{2}-
+        (A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[1-9])|
+        D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5]))'''
         match_specials = re.compile(regex_specials)
 
         try:
@@ -190,9 +206,11 @@ def check_num_facets(facets, data_column, key, type_):
         if len(values) > 0:
             for v in values:
                 errors.append(
-                    {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}', 'Type': f'{type_}',
-                     'Rows': None, 'Message': f'Value {v} not compliant with '
-                                              f'{f.facet_type} : {f.facet_value}'})
+                    {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                     'Component': f'{key}', 'Type': f'{type_}',
+                     'Rows': None,
+                     'Message': f'Value {v} not compliant with '
+                                f'{f.facet_type} : {f.facet_value}'})
 
     if is_sequence is not None and start is not None and interval is not None:
         data_column = np.sort(data_column)
@@ -203,8 +221,11 @@ def check_num_facets(facets, data_column, key, type_):
             if len(values) > 0:
                 for v in values:
                     errors.append(
-                        {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}', 'Type': f'{type_}',
-                         'Rows': None, 'Message': f'Value {v} not compliant with startValue : {start}'})
+                        {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                         'Component': f'{key}', 'Type': f'{type_}',
+                         'Rows': None,
+                         'Message': f'Value {v} not compliant '
+                                    f'with startValue : {start}'})
 
         if end is not None and int(data_column[-1]) > end:
             control = False
@@ -212,8 +233,11 @@ def check_num_facets(facets, data_column, key, type_):
             if len(values) > 0:
                 for v in values:
                     errors.append(
-                        {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}', 'Type': f'{type_}',
-                         'Rows': None, 'Message': f'Value {v} not compliant with endValue : {end}'})
+                        {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                         'Component': f'{key}', 'Type': f'{type_}',
+                         'Rows': None,
+                         'Message': f'Value {v} not compliant '
+                                    f'with endValue : {end}'})
 
         if control:
             values = data_column[(data_column - start) % interval != 0]
@@ -221,25 +245,30 @@ def check_num_facets(facets, data_column, key, type_):
                 for v in values:
                     if end is not None:
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}',
+                            {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                             'Component': f'{key}',
                              'Type': f'{type_}',
                              'Rows': None,
                              'Message': f'Value {v} in {key} not compliant '
-                                        f'with sequence : {start}-{end} (interval: {interval})'})
+                                        f'with sequence : {start}-{end} '
+                                        f'(interval: {interval})'})
                     else:
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{key}',
+                            {'Code': 'SS08', 'ErrorLevel': error_level_facets,
+                             'Component': f'{key}',
                              'Type': f'{type_}',
                              'Rows': None,
                              'Message': f'Value {v} in {key} '
                                         f'not compliant with sequence : '
-                                        f'{start}-infinite (interval: {interval})'})
+                                        f'{start}-infinite '
+                                        f'(interval: {interval})'})
 
     return errors
 
 
 def check_str_facets(facets, data_column, key, type_):
-    data_column = data_column[np.isin(data_column, ['nan', 'None'], invert=True)].astype('str')
+    data_column = data_column[
+        np.isin(data_column, ['nan', 'None'], invert=True)].astype('str')
 
     error_level = 'WARNING'
     errors = []
@@ -263,7 +292,8 @@ def check_str_facets(facets, data_column, key, type_):
                 values = data_column[int(data_column) < min_]
 
         elif f.facet_type == 'pattern':
-            r = re.compile(str(f.facet_value).encode('unicode-escape').decode())
+            r = re.compile(
+                str(f.facet_value).encode('unicode-escape').decode())
             vec = np.vectorize(lambda x: bool(not r.fullmatch(x)))
             values = data_column[vec(data_column)]
         else:
@@ -271,9 +301,11 @@ def check_str_facets(facets, data_column, key, type_):
 
         if len(values) > 0:
             for v in values:
-                errors.append({'Code': 'SS08', 'ErrorLevel': error_level, 'Component': f'{key}', 'Type': f'{type_}',
-                               'Rows': None, 'Message': f'Value {v} not compliant with '
-                                                        f'{f.facet_type} : {f.facet_value}'})
+                errors.append({'Code': 'SS08', 'ErrorLevel': error_level,
+                               'Component': f'{key}', 'Type': f'{type_}',
+                               'Rows': None,
+                               'Message': f'Value {v} not compliant with '
+                                          f'{f.facet_type} : {f.facet_value}'})
     return errors
 
 
@@ -311,37 +343,57 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     """
         Validations stands for the next schema:
         
-        SS01: Check if all dimensions of a DSD exist in the dataset
-        SS02: Check if  OBS_VALUE exists in the datasets
-        SS03: Check if all mandatory attributes exit in the datasets
-        SS04: Check if an attribute/dimension value that is associated to a Codelist is valid
-        SS05: Check that all dimensions have values for every record of a dataset
-        SS06: Check that all mandatory attributes have values for every record of a dataset
-        SS07: Check if two data_points are the same
-        SS08: Check that the value inputted is compliant with Facets for the referred Representation
-    """
+        SS01: Check if all dimensions of a DSD exist in the dataset 
+        SS02: Check if  OBS_VALUE exists in the datasets 
+        SS03: Check if all mandatory attributes exit in the datasets 
+        SS04: Check if an attribute/dimension value that is associated 
+        to a Codelist is valid 
+        SS05: Check that all dimensions have values for every record of a 
+        dataset 
+        SS06: Check that all mandatory attributes have values for 
+        every record of a dataset 
+        SS07: Check if two data_points are the same 
+        SS08: Check that the value inputted is compliant with Facets 
+        for the referred Representation
+        SS09: Check if the value is compliant with the desired TimePeriod
+        SS10: Check if an attribute/dimension value that is associated 
+        to a Cube Region Constraint is valid
+        SS11: Check if a Series Constraint is valid
+        """
     errors = []
 
     faceted, types = dsd._facet_type
+
+    cubes, series_const = dsd._format_constraints
 
     mc = dsd.measure_code
     type_ = 'Measure'
 
     if mc not in data.keys() or data[mc].isnull().values.all():
-        errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}', 'Rows': None,
-                       'Message': f'Missing {mc}'})
+        errors.append(
+            {'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}',
+             'Type': f'{type_}', 'Rows': None,
+             'Message': f'Missing {mc}'})
     elif data[mc].isnull().values.any():
         if 'OBS_STATUS' in data.keys():
 
-            rows = data[(data[mc].isna()) & (data['OBS_STATUS'] != 'M')].to_dict('records')
+            rows = data[
+                (data[mc].isna()) & (data['OBS_STATUS'] != 'M')].to_dict(
+                'records')
             if len(rows) > 0:
-                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
-                               'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
+                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL',
+                               'Component': f'{mc}', 'Type': f'{type_}',
+                               'Rows': rows.copy(),
+                               'Message': f'Missing value in '
+                                          f'{type_.lower()} {mc}'})
         else:
             rows = data[data[mc].isna()].to_dict('records')
             if len(rows) > 0:
-                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL', 'Component': f'{mc}', 'Type': f'{type_}',
-                               'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {mc}'})
+                errors.append({'Code': 'SS02', 'ErrorLevel': 'CRITICAL',
+                               'Component': f'{mc}', 'Type': f'{type_}',
+                               'Rows': rows.copy(),
+                               'Message': f'Missing value in '
+                                          f'{type_.lower()} {mc}'})
 
     temp = data[mc].astype(object).replace('', np.nan).dropna()
 
@@ -353,6 +405,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         else:
             data_column = data[mc].unique().astype('str')
             errors += check_str_facets(facets, data_column, mc, type_)
+
+    del temp
 
     grouping_keys = []
 
@@ -368,11 +422,13 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         if k not in data.keys() or data[k].isnull().values.all():
             if k in mandatory:
                 errors.append(
-                    {'Code': 'SS03', 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'Attribute', 'Rows': None,
+                    {'Code': 'SS03', 'ErrorLevel': 'CRITICAL',
+                     'Component': f'{k}', 'Type': f'Attribute', 'Rows': None,
                      'Message': f'Missing {k}'})
             elif k in dsd.dimension_codes:
                 errors.append(
-                    {'Code': 'SS01', 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'Dimension', 'Rows': None,
+                    {'Code': 'SS01', 'ErrorLevel': 'CRITICAL',
+                     'Component': f'{k}', 'Type': f'Dimension', 'Rows': None,
                      'Message': f'Missing {k}'})
             continue
 
@@ -403,10 +459,14 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 if 'nan' in data_column:
                     control = True
             if control:
-                pos = data[(data[k] == 'nan') | (data[k].isnull())].index.values
+                pos = data[
+                    (data[k] == 'nan') | (data[k].isnull())].index.values
                 rows = data.iloc[pos, :].to_dict('records')
-                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
-                               'Rows': rows.copy(), 'Message': f'Missing value in {type_.lower()} {k}'})
+                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
+                               'Component': f'{k}', 'Type': f'{type_}',
+                               'Rows': rows.copy(),
+                               'Message': f'Missing value in '
+                                          f'{type_.lower()} {k}'})
 
         if k in faceted:
             facets = faceted[k]
@@ -421,17 +481,23 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             data_column = format_temp(data_column)
 
         if k in types:
-            if types[k] == 'ObservationalTimePeriod' or types[k] == 'ReportingTimePeriod' \
-                    or types[k] == 'GregorianTimePeriod' or types[k] == 'BasicTimePeriod' \
-                    or types[k] == "StandardTimePeriod":
+            if (types[k] == 'ObservationalTimePeriod' or
+                    types[k] == 'ReportingTimePeriod' or
+                    types[k] == 'GregorianTimePeriod' or
+                    types[k] == 'BasicTimePeriod' or
+                    types[k] == "StandardTimePeriod"):
                 for e in data_column:
                     if not time_period_valid(e, types[k]):
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{k}',
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
+                             'Component': f'{k}',
                              'Type': f'{type_}',
-                             'Rows': None, 'Message': f'Value {e} not compliant with '
-                                                      f'type : {types[k]}'})
-            elif types[k] == 'GregorianDay' or types[k] == 'GregorianYearMonth' or types[k] == 'GregorianYear':
+                             'Rows': None,
+                             'Message': f'Value {e} not compliant with '
+                                        f'type : {types[k]}'})
+            elif (types[k] == 'GregorianDay' or
+                  types[k] == 'GregorianYearMonth' or
+                  types[k] == 'GregorianYear'):
                 for e in data_column:
                     if types[k] == 'GregorianDay':
                         format_ = "%Y-%m-%d"
@@ -442,13 +508,18 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
                     if not check_date(e, format_):
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{k}',
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
+                             'Component': f'{k}',
                              'Type': f'{type_}',
-                             'Rows': None, 'Message': f'Value {e} not compliant with '
-                                                      f'type : {types[k]}'})
+                             'Rows': None,
+                             'Message': f'Value {e} not compliant with '
+                                        f'type : {types[k]}'})
 
-            elif types[k] == "ReportingYear" or types[k] == "ReportingSemester" or types[k] == "ReportingTrimester" or \
-                    types[k] == "ReportingQuarter" or types[k] == "ReportingMonth" or \
+            elif types[k] == "ReportingYear" or types[
+                k] == "ReportingSemester" or types[
+                k] == "ReportingTrimester" or \
+                    types[k] == "ReportingQuarter" or types[
+                k] == "ReportingMonth" or \
                     types[k] == "ReportingWeek" or types[k] == "ReportingDay":
                 for e in data_column:
                     if types[k] == 'ReportingYear':
@@ -464,14 +535,17 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                     elif types[k] == "ReportingWeek":
                         format_ = "W(5[0-3]|[1-4][0-9]|[1-9])"
                     else:
-                        format_ = "D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5])"
+                        format_ = "D((00[1-9]|0[1-9][0-9])?" \
+                                  "|[12][0-9][0-9]|3[0-5][0-9]|36[0-5])"
 
                     if not check_reporting(e, format_):
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{k}',
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
+                             'Component': f'{k}',
                              'Type': f'{type_}',
-                             'Rows': None, 'Message': f'Value {e} not compliant with '
-                                                      f'type : {types[k]}'})
+                             'Rows': None,
+                             'Message': f'Value {e} not compliant with '
+                                        f'type : {types[k]}'})
 
             elif types[k].lower() == "datetime" or types[k] == "TimeRange":
                 for e in data_column:
@@ -485,7 +559,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                         e = e.split('/', maxsplit=1)[0]
 
                         # Matching duration
-                        regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((\d+)D)?(T(?=.)((\d+)H)?((\d+)M)?' \
+                        regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((' \
+                                         r'\d+)D)?(T(?=.)((\d+)H)?((\d+)M)?' \
                                          r'(\d*(\.\d+)?S)?)?'
                         match_duration = re.compile(regex_duration)
 
@@ -507,28 +582,65 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
                     if invalid_date:
                         errors.append(
-                            {'Code': 'SS08', 'ErrorLevel': error_level_facets, 'Component': f'{k}',
+                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
+                             'Component': f'{k}',
                              'Type': f'{type_}',
-                             'Rows': None, 'Message': f'Value {e + duration} not compliant with '
-                                                      f'type : {types[k]}'})
+                             'Rows': None,
+                             'Message': f'Value {e + duration} not compliant '
+                                        f'with type : {types[k]}'})
                     if control_changed:
                         e += duration
 
-        if k in codelist_values.keys():
-            code = 'SS04'
-            values = data_column[np.isin(data_column, codelist_values[k], invert=True)]
+        if k in cubes.keys():
+            code = 'SS10'
+            values = data_column[
+                np.isin(data_column, list(cubes[k]), invert=True)]
             if len(values) > 0:
-                values = values[np.isin(values, ['nan', 'None', np.nan], invert=True)]
+                values = values[
+                    np.isin(values, ['nan', 'None', np.nan], invert=True)]
                 for v in values:
-                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL', 'Component': f'{k}', 'Type': f'{type_}',
-                                   'Rows': None, 'Message': f'Wrong value {v} for {type_.lower()} {k}'})
+                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
+                                   'Component': f'{k}', 'Type': f'{type_}',
+                                   'Rows': None,
+                                   'Message': f'Wrong value {v} for '
+                                              f'{type_.lower()} {k}'})
+
+        elif k in codelist_values.keys():
+            code = 'SS04'
+            values = data_column[
+                np.isin(data_column, codelist_values[k], invert=True)]
+            if len(values) > 0:
+                values = values[
+                    np.isin(values, ['nan', 'None', np.nan], invert=True)]
+                for v in values:
+                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
+                                   'Component': f'{k}', 'Type': f'{type_}',
+                                   'Rows': None,
+                                   'Message': f'Wrong value {v} for '
+                                              f'{type_.lower()} {k}'})
+
+    for e in series_const:
+        temp = data[list(e.keys())]
+        value = temp.loc[(temp[list(e)] == pandas.Series(e)).all(axis=1)]
+        if len(value) == 0:
+            errors.append({'Code': 'SS11',
+                           'ErrorLevel': 'WARNING',
+                           'Component': f'Series',
+                           'Type': f'Constraint',
+                           'Rows': None,
+                           'Message': f'Missing values'
+                                      f'{format_row(e)}'
+                           })
 
     duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
     if len(duplicated) > 0:
-        duplicated_indexes = duplicated[grouping_keys].drop_duplicates().index.values
+        duplicated_indexes = duplicated[
+            grouping_keys].drop_duplicates().index.values
         for v in duplicated_indexes:
             data_point = duplicated.loc[v, grouping_keys]
-            series = duplicated[grouping_keys].apply(lambda row: np.array_equal(row.values, data_point.values), axis=1)
+            series = duplicated[grouping_keys].apply(
+                lambda row: np.array_equal(row.values, data_point.values),
+                axis=1)
             pos = series[series].index.values
             rows = duplicated.loc[pos, :].to_dict('records')
             duplicated = duplicated.drop(pos)
@@ -537,7 +649,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                            'Component': f'Duplicated',
                            'Type': f'Datapoint',
                            'Rows': rows.copy(),
-                           'Message': f'Duplicated datapoint {format_row(data_point)}'
+                           'Message': f'Duplicated datapoint '
+                                      f'{format_row(data_point)}'
                            })
 
     return errors

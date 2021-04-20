@@ -21,6 +21,7 @@ def _gds_str_lower(in_string):
 
 class FixedOffsetTZ(datetime_.tzinfo):
     """Offset of a Timezone"""
+
     def __init__(self, offset, name):
         self.__offset = datetime_.timedelta(minutes=offset)
         self._name = name
@@ -40,6 +41,7 @@ class FixedOffsetTZ(datetime_.tzinfo):
 
 class GenerateSuper(object):
     """Class above all that has the GDS collector to get all messages"""
+
     def __init__(self, gds_collector):
         self.gds_element_tree_node_ = None
         if gds_collector is not None:
@@ -174,16 +176,16 @@ class GenerateSuper(object):
 
     @staticmethod
     def _gds_validate_decimal(input_data, node=None):
-        value = None
         try:
-            value = decimal_.Decimal(input_data)
+            decimal_.Decimal(input_data)
         except (TypeError, ValueError):
             raise_parse_error(node, 'Requires decimal value')
 
         return input_data
 
     def _gds_format_decimal_list(self, input_data):
-        return ' '.join([self._gds_format_decimal(item) for item in input_data])
+        return ' '.join(
+            [self._gds_format_decimal(item) for item in input_data])
 
     @staticmethod
     def _gds_validate_decimal_list(input_data, node=None):
@@ -213,9 +215,9 @@ class GenerateSuper(object):
 
     @staticmethod
     def _gds_validate_double(input_data, node=None):
-        value = None
+
         try:
-            value = float(input_data)
+            float(input_data)
         except (TypeError, ValueError):
             raise_parse_error(node, 'Requires double or float value')
 
@@ -233,7 +235,8 @@ class GenerateSuper(object):
             try:
                 float(value)
             except (TypeError, ValueError):
-                raise_parse_error(node, 'Requires sequence of double or float values')
+                raise_parse_error(node, 'Requires sequence of '
+                                        'double or float values')
 
         return values
 
@@ -256,7 +259,8 @@ class GenerateSuper(object):
     @staticmethod
     def _gds_validate_boolean(input_data, node=None):
         if input_data not in (True, 1, False, 0, 'false', 'true'):
-            raise_parse_error(node, 'Requires boolean value (one of True, 1, False, 0)')
+            raise_parse_error(node, 'Requires boolean value '
+                                    '(one of True, 1, False, 0)')
 
         return input_data
 
@@ -270,7 +274,8 @@ class GenerateSuper(object):
 
         for value in values:
             if value not in (True, 1, False, 0,):
-                raise_parse_error(node, 'Requires sequence of boolean values (one of True, 1, False, 0)')
+                raise_parse_error(node, 'Requires sequence of boolean '
+                                        'values (one of True, 1, False, 0)')
 
         return values
 
@@ -286,11 +291,13 @@ class GenerateSuper(object):
     def _gds_format_datetime(input_data):
         if input_data.microsecond == 0:
             _svalue = '%04d-%02d-%02dT%02d:%02d:%02d' % (
-                input_data.year, input_data.month, input_data.day, input_data.hour, input_data.minute,
+                input_data.year, input_data.month, input_data.day,
+                input_data.hour, input_data.minute,
                 input_data.second,)
         else:
             _svalue = '%04d-%02d-%02dT%02d:%02d:%02d.%s' % (
-                input_data.year, input_data.month, input_data.day, input_data.hour, input_data.minute,
+                input_data.year, input_data.month, input_data.day,
+                input_data.hour, input_data.minute,
                 input_data.second,
                 ('%f' % (float(input_data.microsecond) / 1000000))[2:],)
         if input_data.tzinfo is not None:
@@ -336,8 +343,10 @@ class GenerateSuper(object):
 
         if len(time_parts) > 1:
             micro_seconds = int(float('0.' + time_parts[1]) * 1000000)
-            input_data = '%s.%s' % (time_parts[0], "{}".format(micro_seconds).rjust(6, "0"),)
-            dt = datetime_.datetime.strptime(input_data, '%Y-%m-%dT%H:%M:%S.%f')
+            input_data = '%s.%s' % (
+                time_parts[0], "{}".format(micro_seconds).rjust(6, "0"),)
+            dt = datetime_.datetime.strptime(input_data,
+                                             '%Y-%m-%dT%H:%M:%S.%f')
         else:
             dt = datetime_.datetime.strptime(input_data, '%Y-%m-%dT%H:%M:%S')
 
@@ -350,7 +359,8 @@ class GenerateSuper(object):
 
     @staticmethod
     def _gds_format_date(input_data):
-        _svalue = '%04d-%02d-%02d' % (input_data.year, input_data.month, input_data.day)
+        _svalue = '%04d-%02d-%02d' % (
+            input_data.year, input_data.month, input_data.day)
         try:
             if input_data.tzinfo is not None:
                 tzoff = input_data.tzinfo.utcoffset(input_data)
@@ -405,10 +415,12 @@ class GenerateSuper(object):
     @staticmethod
     def _gds_format_time(input_data):
         if input_data.microsecond == 0:
-            _svalue = '%02d:%02d:%02d' % (input_data.hour, input_data.minute, input_data.second)
+            _svalue = '%02d:%02d:%02d' % (
+                input_data.hour, input_data.minute, input_data.second)
         else:
-            _svalue = '%02d:%02d:%02d.%s' % (input_data.hour, input_data.minute, input_data.second,
-                                             ('%f' % (float(input_data.microsecond) / 1000000))[2:])
+            _svalue = '%02d:%02d:%02d.%s' % (
+                input_data.hour, input_data.minute, input_data.second,
+                ('%f' % (float(input_data.microsecond) / 1000000))[2:])
 
         if input_data.tzinfo is not None:
             tzoff = input_data.tzinfo.utcoffset(input_data)
@@ -479,7 +491,8 @@ class GenerateSuper(object):
         dt = dt.replace(tzinfo=tz)
         return dt.time()
 
-    def _gds_check_cardinality_(self, value, input_name, min_occurs=0, max_occurs=1, required=None):
+    def _gds_check_cardinality_(self, value, input_name, min_occurs=0,
+                                max_occurs=1, required=None):
         if value is None:
             length = 0
         elif isinstance(value, list):
@@ -489,16 +502,23 @@ class GenerateSuper(object):
 
         if required is not None:
             if required and length < 1:
-                self.gds_collector_.add_message(f"Required value {input_name}"
-                                                f"{self._gds_get_node_line_number_()} is missing")
+                self.gds_collector_. \
+                    add_message(f"Required value {input_name}"
+                                f"{self._gds_get_node_line_number_()} "
+                                f"is missing")
 
         if length < min_occurs:
             self.gds_collector_.add_message(
-                f"Number of values for {input_name}{self._gds_get_node_line_number_()} "
-                f"is below the minimum allowed, expected at least {min_occurs}, found {length}")
+                f"Number of values for {input_name}"
+                f"{self._gds_get_node_line_number_()} "
+                f"is below the minimum allowed, "
+                f"expected at least {min_occurs}, found {length}")
         elif length > max_occurs:
-            self.gds_collector_.add_message(f"Number of values for {input_name}{self._gds_get_node_line_number_()} is "
-                                            f"above the maximum allowed, expected at most {max_occurs}, found {length}")
+            self.gds_collector_.add_message(
+                f"Number of values for {input_name}"
+                f"{self._gds_get_node_line_number_()} is "
+                f"above the maximum allowed, "
+                f"expected at most {max_occurs}, found {length}")
 
     def _gds_validate_builtin_st_(self, validator, value, input_name):
         if value is not None:
@@ -589,7 +609,8 @@ class GenerateSuper(object):
         pass
 
     def _gds_get_node_line_number_(self):
-        if hasattr(self, "gds_element_tree_node_") and self.gds_element_tree_node_ is not None:
+        if hasattr(self, "gds_element_tree_node_") and \
+                self.gds_element_tree_node_ is not None:
             return f' near line {self.gds_element_tree_node_.sourceline}'
         else:
             return ""
@@ -597,6 +618,7 @@ class GenerateSuper(object):
 
 class GdsCollector(object):
     """Collector of error messages"""
+
     def __init__(self, messages=None):
         if messages is None:
             self.messages = []

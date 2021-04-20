@@ -1,37 +1,32 @@
-"""
-    Component file holds the classes for the Component and its derivatives
-"""
-
-import json
-from datetime import datetime
-
+from SDMXThon.model.base import IdentifiableArtefact
+from SDMXThon.model.itemScheme import Concept
+from SDMXThon.model.representation import Representation
+from SDMXThon.model.utils import generic_setter, int_setter
 from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXThon.utils.handlers import export_intern_data, add_indent, split_unique_id
-from SDMXThon.utils.mappings import *
+from SDMXThon.utils.handlers import add_indent, export_intern_data, \
+    split_unique_id
+from SDMXThon.utils.mappings import structureAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
-from .base import IdentifiableArtefact, MaintainableArtefact, InternationalString
-# from .extras import ConstrainableArtifact, ContentConstraint, AttachmentConstraint
-from .itemScheme import Concept
-from .representation import Representation
-from .utils import generic_setter, int_setter
 
 
 class Component(IdentifiableArtefact):
-    """ A component is an abstract super class used to define qualitative and quantitative data
-        and metadata items that belong to a Component List and hence a Structure.
-        Component is refined through its sub-classes."""
+    """ A component is an abstract super class used to define qualitative and
+        quantitative data and metadata items that belong to a Component List
+        and hence a Structure. Component is refined through its sub-classes."""
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 localRepresentation: Representation = None):
-        super(Component, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations)
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, localRepresentation: Representation = None):
+        super(Component, self).__init__(id_=id_, uri=uri, urn=urn,
+                                        annotations=annotations)
 
         self._local_representation = localRepresentation
         self._concept_identity = None
 
     def __eq__(self, other):
         if isinstance(other, Component):
-            return super(Component, self).__eq__(other) and self._local_representation == other._local_representation \
+            return super(Component, self).__eq__(other) and \
+                   self._local_representation == other._local_representation \
                    and self._concept_identity == other._concept_identity
         else:
             return False
@@ -47,8 +42,9 @@ class Component(IdentifiableArtefact):
 
     @property
     def local_representation(self):
-        """Association to the Representation of the Component if this is different from
-        the coreRepresentation of the Concept which the Component uses (ConceptUsage) """
+        """Association to the Representation of the Component if this is
+        different from the coreRepresentation of the Concept which the
+        Component uses (ConceptUsage) """
         return self._local_representation
 
     @local_representation.setter
@@ -74,16 +70,20 @@ class Component(IdentifiableArtefact):
         if self.local_representation is not None:
             return self.local_representation
 
-        if isinstance(self.concept_identity, Concept) and self.concept_identity.core_representation is not None:
+        if isinstance(self.concept_identity, Concept) and \
+                self.concept_identity.core_representation is not None:
             return self.concept_identity.core_representation
         else:
             return None
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(Component, self)._build_attributes(node, attrs, already_processed)
+        super(Component, self)._build_attributes(node,
+                                                 attrs,
+                                                 already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ConceptIdentity':
             obj_ = ConceptIdentityType._factory()
@@ -106,9 +106,11 @@ class Component(IdentifiableArtefact):
         data = super(Component, self)._to_XML(prettyprint)
         indent = add_indent(indent)
         if isinstance(self, Dimension):
-            outfile = f'{indent}<{head}{data["Attributes"]} position="{self._position}">'
+            outfile = f'{indent}<{head}{data["Attributes"]} ' \
+                      f'position="{self._position}">'
         elif isinstance(self, Attribute):
-            outfile = f'{indent}<{head}{data["Attributes"]} assignmentStatus="{self._usageStatus}">'
+            outfile = f'{indent}<{head}{data["Attributes"]} ' \
+                      f'assignmentStatus="{self._usageStatus}">'
         else:
             outfile = f'{indent}<{head}{data["Attributes"]}>'
         outfile += export_intern_data(data, indent)
@@ -120,19 +122,26 @@ class Component(IdentifiableArtefact):
             outfile += f'{indent_child}<{structureAbbr}:ConceptIdentity>'
 
             if isinstance(self.concept_identity, dict):
-                agencyID, id_, version = split_unique_id(self.concept_identity['CS'])
+                agencyID, id_, version = \
+                    split_unique_id(self.concept_identity['CS'])
 
                 outfile += f'{indent_ref}<Ref maintainableParentID="{id_}" ' \
                            f'package="conceptscheme" ' \
                            f'maintainableParentVersion="{version}" ' \
-                           f'agencyID="{agencyID}" id="{self.concept_identity["CON"]}" ' \
+                           f'agencyID="{agencyID}" ' \
+                           f'id="{self.concept_identity["CON"]}" ' \
                            f'class="Concept"/>'
 
             else:
-                outfile += f'{indent_ref}<Ref maintainableParentID="{self.concept_identity.scheme.id}" ' \
+                outfile += f'{indent_ref}<Ref ' \
+                           f'maintainableParentID=' \
+                           f'"{self.concept_identity.scheme.id}" ' \
                            f'package="conceptscheme" ' \
-                           f'maintainableParentVersion="{self.concept_identity.scheme.version}" ' \
-                           f'agencyID="{self.concept_identity.scheme.agencyID}" id="{self.concept_identity.id}" ' \
+                           f'maintainableParentVersion=' \
+                           f'"{self.concept_identity.scheme.version}" ' \
+                           f'agencyID=' \
+                           f'"{self.concept_identity.scheme.agencyID}" ' \
+                           f'id="{self.concept_identity.id}" ' \
                            f'class="Concept"/>'
 
             outfile += f'{indent_child}</{structureAbbr}:ConceptIdentity>'
@@ -145,17 +154,20 @@ class Component(IdentifiableArtefact):
                 label_format = 'EnumerationFormat'
                 outfile += f'{indent_enum}<{structureAbbr}:Enumeration>'
                 if isinstance(self.local_representation.codelist, str):
-                    agencyID, id_, version = split_unique_id(self.local_representation.codelist)
+                    agencyID, id_, version = \
+                        split_unique_id(self.local_representation.codelist)
 
                     outfile += f'{indent_ref}<Ref package="codelist" ' \
                                f'agencyID="{agencyID}" ' \
                                f'id="{id_}" ' \
                                f'version="{version}" class="Codelist"/>'
                 else:
+                    agencyID = self.local_representation.codelist.agencyID
+                    id_ = self.local_representation.codelist.id
+                    version = self.local_representation.codelist.version
                     outfile += f'{indent_ref}<Ref package="codelist" ' \
-                               f'agencyID="{self.local_representation.codelist.agencyID}" ' \
-                               f'id="{self.local_representation.codelist.id}" ' \
-                               f'version="{self.local_representation.codelist.version}" class="Codelist"/>'
+                               f'agencyID="{agencyID}" id="{id_}" ' \
+                               f'version="{version}" class="Codelist"/>'
 
                 outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
             else:
@@ -164,70 +176,86 @@ class Component(IdentifiableArtefact):
             format_attributes = f' '
 
             if self.local_representation.type_ is not None:
-                format_attributes = f' textType="{self.local_representation.type_}"'
+                format_attributes = f' textType=' \
+                                    f'"{self.local_representation.type_}"'
 
             if self.local_representation.facets is not None:
                 for e in self.local_representation.facets:
                     format_attributes += f' {e.facet_type}="{e.facet_value}"'
 
-            outfile += f'{indent_enum}<{structureAbbr}:{label_format}{format_attributes}/>'
+            outfile += f'{indent_enum}<{structureAbbr}:' \
+                       f'{label_format}{format_attributes}/>'
 
             outfile += f'{indent_child}</{structureAbbr}:LocalRepresentation>'
 
             if isinstance(self, Attribute):
-                outfile += f'{indent_child}<{structureAbbr}:AttributeRelationship>'
+                outfile += f'{indent_child}<{structureAbbr}:' \
+                           f'AttributeRelationship>'
 
                 if isinstance(self.related_to, dict):
                     if 'id' in self.related_to.keys():
 
                         if isinstance(self.related_to['id'], list):
                             for k in self.related_to['id']:
-                                outfile += f'{indent_enum}<{structureAbbr}:{self.related_to["type"]}>'
+                                outfile += f'{indent_enum}<{structureAbbr}:' \
+                                           f'{self.related_to["type"]}>'
                                 outfile += f'{indent_ref}<Ref id="{k}"/>'
-                                outfile += f'{indent_enum}</{structureAbbr}:{self.related_to["type"]}>'
+                                outfile += f'{indent_enum}</{structureAbbr}:' \
+                                           f'{self.related_to["type"]}>'
                         else:
-                            outfile += f'{indent_enum}<{structureAbbr}:{self.related_to["type"]}>'
-                            outfile += f'{indent_ref}<Ref id="{self.related_to["id"]}"/>'
-                            outfile += f'{indent_enum}</{structureAbbr}:{self.related_to["type"]}>'
+                            outfile += f'{indent_enum}<{structureAbbr}:' \
+                                       f'{self.related_to["type"]}>'
+                            outfile += f'{indent_ref}<Ref ' \
+                                       f'id="{self.related_to["id"]}"/>'
+                            outfile += f'{indent_enum}</{structureAbbr}:' \
+                                       f'{self.related_to["type"]}>'
                     else:
                         for k in self.related_to:
-                            outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
+                            outfile += f'{indent_enum}<{structureAbbr}' \
+                                       f':Dimension>'
                             outfile += f'{indent_ref}<Ref id="{k}"/>'
-                            outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
+                            outfile += f'{indent_enum}</{structureAbbr}' \
+                                       f':Dimension>'
                 elif isinstance(self.related_to, Dimension):
                     outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
                     outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
                     outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
                 elif isinstance(self.related_to, PrimaryMeasure):
-                    outfile += f'{indent_enum}<{structureAbbr}:PrimaryMeasure>'
+                    outfile += f'{indent_enum}<{structureAbbr}' \
+                               f':PrimaryMeasure>'
                     outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
-                    outfile += f'{indent_enum}</{structureAbbr}:PrimaryMeasure>'
+                    outfile += f'{indent_enum}</{structureAbbr}' \
+                               f':PrimaryMeasure>'
                 else:
                     outfile += f'{indent_enum}<{structureAbbr}:None/>'
 
-                outfile += f'{indent_child}</{structureAbbr}:AttributeRelationship>'
+                outfile += f'{indent_child}</{structureAbbr}' \
+                           f':AttributeRelationship>'
 
         outfile += f'{indent}</{head}>'
         return outfile
 
 
 class Dimension(Component, DataParser):
-    """ A metadata concept used (most probably together with other metadata concepts)
-        to classify a statistical series, e.g. a statistical concept indicating a certain
-        economic activity or a geographical reference area.
-    """
+    """ A metadata concept used (most probably together with other metadata
+        concepts) to classify a statistical series, e.g. a statistical concept
+        indicating a certain economic activity or a geographical
+        reference area."""
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 localRepresentation: Representation = None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, localRepresentation: Representation = None,
                  position: int = None):
-        super(Dimension, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                        localRepresentation=localRepresentation)
+        super(Dimension, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     localRepresentation=localRepresentation)
 
         self.position = position
 
     def __eq__(self, other):
         if isinstance(other, Dimension):
-            return super(Dimension, self).__eq__(other) and self._position == other._position
+            return super(Dimension, self).__eq__(
+                other) and self._position == other._position
         else:
             return False
 
@@ -247,79 +275,20 @@ class Dimension(Component, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(Dimension, self)._build_attributes(node, attrs, already_processed)
+        super(Dimension, self)._build_attributes(node, attrs,
+                                                 already_processed)
 
         value = find_attr_value_('position', node)
         if value is not None and 'position' not in already_processed:
             already_processed.add('position')
             self.position = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Dimension, self)._build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
-
-
-class GroupDimension(DataParser):
-    """ Parser of a Dimension in a GroupDimensionDescriptor"""
-
-    def __init__(self, gds_collector=None):
-        super(GroupDimension, self).__init__(gds_collector)
-        self._ref = None
-
-    def __eq__(self, other):
-        if isinstance(other, GroupDimension):
-            return super(GroupDimension, self).__eq__(other)
-        else:
-            return False
-
-    @property
-    def ref(self):
-        """Reference to the dimension"""
-        return self._ref
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of GroupDimension"""
-        return GroupDimension(*args_, **kwargs_)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'DimensionReference':
-            obj_ = RelationshipRefType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._ref = obj_.ref
-
-
-class MeasureDimension(Dimension, DataParser):
-    """ A statistical concept that identifies the component in the key structure
-        that has an enumerated list of measures. This dimension has, as its representation
-        the Concept Scheme that enumerates the measure concepts.
-    """
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 localRepresentation: Representation = None,
-                 position: int = None):
-        super(MeasureDimension, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                               localRepresentation=localRepresentation, position=position)
-
-    def __eq__(self, other):
-        if isinstance(other, MeasureDimension):
-            return super(MeasureDimension, self).__eq__(other)
-        else:
-            return False
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of MeasureDimension"""
-        return MeasureDimension(*args_, **kwargs_)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(MeasureDimension, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(MeasureDimension, self)._build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+        super(Dimension, self)._build_children(child_, node, nodeName_,
+                                               fromsubclass_=False,
+                                               gds_collector_=None)
 
 
 class TimeDimension(Dimension, DataParser):
@@ -327,11 +296,15 @@ class TimeDimension(Dimension, DataParser):
        that has the role of “time”.
     """
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
                  localRepresentation: Representation = None,
                  position: int = None):
-        super(TimeDimension, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                            localRepresentation=localRepresentation, position=position)
+        super(TimeDimension, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     localRepresentation=localRepresentation,
+                     position=position)
 
     def __eq__(self, other):
         if isinstance(other, TimeDimension):
@@ -346,29 +319,38 @@ class TimeDimension(Dimension, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(TimeDimension, self)._build_attributes(node, attrs, already_processed)
+        super(TimeDimension, self) \
+            ._build_attributes(node, attrs, already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_,
+                        fromsubclass_=False, gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(TimeDimension, self)._build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+        super(TimeDimension, self) \
+            ._build_children(child_, node, nodeName_,
+                             fromsubclass_=False,
+                             gds_collector_=None)
 
 
 class Attribute(Component, DataParser):
     """A characteristic of an object or entity."""
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
                  localRepresentation: Representation = None,
                  usageStatus: str = None, relatedTo=None):
-        super(Attribute, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                        localRepresentation=localRepresentation)
+        super(Attribute, self) \
+            .__init__(id_=id_, uri=uri, urn=urn,
+                      annotations=annotations,
+                      localRepresentation=localRepresentation)
 
         self.usage_status = usageStatus
         self.related_to = relatedTo
 
     def __eq__(self, other):
         if isinstance(other, Attribute):
-            return super(Attribute, self).__eq__(other) and self._usageStatus == other._usageStatus \
-                   and self._relatedTo == other._relatedTo
+            return (super(Attribute, self).__eq__(other) and
+                    self._usageStatus == other._usageStatus and
+                    self._relatedTo == other._relatedTo)
         else:
             return False
 
@@ -379,7 +361,8 @@ class Attribute(Component, DataParser):
 
     @property
     def usage_status(self):
-        """Defines the usage status of the Attribute (Mandatory, Conditional)"""
+        """Defines the usage status of the Attribute
+        (Mandatory, Conditional)"""
         return self._usageStatus
 
     @property
@@ -392,7 +375,9 @@ class Attribute(Component, DataParser):
         if value in ["Mandatory", "Conditional"] or value is None:
             self._usageStatus = value
         else:
-            raise ValueError("The value for usageStatus has to be 'Mandatory' or 'Conditional'")
+            raise ValueError(
+                "The value for usageStatus has to be 'Mandatory' "
+                "or 'Conditional'")
 
     @related_to.setter
     def related_to(self, value):
@@ -403,16 +388,20 @@ class Attribute(Component, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(Attribute, self)._build_attributes(node, attrs, already_processed)
+        super(Attribute, self)._build_attributes(node, attrs,
+                                                 already_processed)
 
         value = find_attr_value_('assignmentStatus', node)
         if value is not None and 'assignmentStatus' not in already_processed:
             already_processed.add('assignmentStatus')
             self.usage_status = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(Attribute, self)._build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
+        super(Attribute, self)._build_children(child_, node, nodeName_,
+                                               fromsubclass_=False,
+                                               gds_collector_=None)
 
         if nodeName_ == 'AttributeRelationship':
             obj_ = AttributeRelationshipType._factory()
@@ -423,17 +412,60 @@ class Attribute(Component, DataParser):
                 self.related_to = {'id': obj_.ref_id, 'type': obj_.ref_type}
 
 
-class PrimaryMeasure(Component, DataParser):
-    """The metadata concept that is the phenomenon to be measured in a data set.
-       In a data set the instance of the measure is often called the observation.
-
+class MeasureDimension(Dimension, DataParser):
+    """ A statistical concept that identifies the component in the key
+        structure that has an enumerated list of measures. This dimension has,
+        as its representation the Concept Scheme that enumerates the
+        measure concepts.
     """
 
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
+                 localRepresentation: Representation = None,
+                 position: int = None):
+        super(MeasureDimension, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     localRepresentation=localRepresentation,
+                     position=position)
+
+    def __eq__(self, other):
+        if isinstance(other, MeasureDimension):
+            return super(MeasureDimension, self).__eq__(other)
+        else:
+            return False
+
+    @staticmethod
+    def _factory(*args_, **kwargs_):
+        """Factory Method of MeasureDimension"""
+        return MeasureDimension(*args_, **kwargs_)
+
+    def _build_attributes(self, node, attrs, already_processed):
+        """Builds the attributes present in the XML element"""
+        super(MeasureDimension, self)._build_attributes(node, attrs,
+                                                        already_processed)
+
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
+        """Builds the childs of the XML element"""
+        super(MeasureDimension, self)._build_children(child_, node, nodeName_,
+                                                      fromsubclass_=False,
+                                                      gds_collector_=None)
+
+
+class PrimaryMeasure(Component, DataParser):
+    """The metadata concept that is the phenomenon to be measured in a
+    data set. In a data set the instance of the measure is often called
+    the observation."""
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None,
                  localRepresentation: Representation = None):
 
-        super(PrimaryMeasure, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                             localRepresentation=localRepresentation)
+        super(PrimaryMeasure, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations,
+                     localRepresentation=localRepresentation)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -448,608 +480,15 @@ class PrimaryMeasure(Component, DataParser):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        super(PrimaryMeasure, self)._build_attributes(node, attrs, already_processed)
+        super(PrimaryMeasure, self)._build_attributes(node, attrs,
+                                                      already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
-        super(PrimaryMeasure, self)._build_children(child_, node, nodeName_, fromsubclass_=False, gds_collector_=None)
-
-
-class ComponentList(IdentifiableArtefact):
-    """An abstract definition of a list of components.
-       A concrete example is a Dimension Descriptor which defines
-       the list of Dimensions in a DataStructure Definition.
-    """
-    _componentType = None
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
-
-        super(ComponentList, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations)
-        self._components = {}
-        if components is not None:
-            for c in components:
-                self.add_component(c)
-
-    def __eq__(self, other):
-        if isinstance(other, ComponentList):
-            return super(ComponentList, self).__eq__(other) and self._components == other._components
-        else:
-            return False
-
-    def __str__(self):
-        return f'<{self.__class__.__name__} - {self.id}>'
-
-    def __unicode__(self):
-        return f'<{self.__class__.__name__} - {self.id}>'
-
-    def __repr__(self):
-        return f'<{self.__class__.__name__} - {self.id}>'
-
-    @property
-    def components(self):
-        """An aggregate association to one or more components which make up the list."""
-        return self._components
-
-    def add_component(self, value):
-        """Method to add a Component to the ComponentList"""
-        if isinstance(self, MeasureDescriptor) and len(self._components) == 1:
-            raise ValueError('Measure Descriptor cannot have more than one Primary Measure')
-        elif isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
-            value.componentList = self
-            self._components[value.id] = value
-        elif isinstance(value, GroupDimension):
-            value.componentList = self
-            self._components[value.ref] = value
-        else:
-            raise TypeError(
-                f"The object has to be of the dim_type [Dimension, Attribute, PrimaryMeasure], "
-                f"{value.__class__.__name__} provided")
-
-    def __len__(self):
-        return len(self.components)
-
-    def __getitem__(self, value):
-        return self.components[value]
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(ComponentList, self)._build_attributes(node, attrs, already_processed)
-
-    def _parse_XML(self, indent, label):
-        prettyprint = indent != ''
-
-        indent = add_indent(indent)
-
-        data = super(ComponentList, self)._to_XML(prettyprint)
-
-        outfile = ''
-
-        attributes = data.get('Attributes') or None
-
-        if attributes is not None:
-            outfile += f'{indent}<{label}{attributes}>'
-        else:
-            outfile += f'{indent}<{label}>'
-
-        outfile += export_intern_data(data, indent)
-
-        for i in self.components.values():
-            outfile += i._parse_XML(indent, self._componentType)
-
-        outfile += f'{indent}</{label}>'
-
-        return outfile
-
-
-class DimensionDescriptor(ComponentList, DataParser):
-    """An ordered set of metadata concepts that, combined, classify a statistical series,
-       and whose values, when combined (the key) in an instance such as a data set,
-       uniquely identify a specific observation
-    """
-    _componentType = "Dimension"
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
-
-        if components is None:
-            components = []
-        super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                  components=components)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of DimensionDescriptor"""
-        return DimensionDescriptor(*args_, **kwargs_)
-
-    def __eq__(self, other):
-        if isinstance(other, DimensionDescriptor):
-            return super(DimensionDescriptor, self).__eq__(other)
-        else:
-            return False
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(DimensionDescriptor, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'Dimension':
-            obj_ = Dimension._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.add_component(obj_)
-        elif nodeName_ == 'TimeDimension':
-            obj_ = TimeDimension._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.add_component(obj_)
-
-
-class AttributeDescriptor(ComponentList, DataParser):
-    """A set metadata concepts that define the attributes of a Data Structure Definition."""
-
-    _componentType = "Attribute"
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
-        if components is None:
-            components = []
-
-        super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                  components=components)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-
-        """Factory Method of AttributeDescriptor"""
-        return AttributeDescriptor(*args_, **kwargs_)
-
-    def __eq__(self, other):
-        if isinstance(other, AttributeDescriptor):
-            return super(AttributeDescriptor, self).__eq__(other)
-        else:
-            return False
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(AttributeDescriptor, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'Attribute':
-            obj_ = Attribute._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.add_component(obj_)
-
-
-class MeasureDescriptor(ComponentList, DataParser):
-    """A metadata concept that defines the measure of a Data Structure Definition"""
-
-    _componentType = "PrimaryMeasure"
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
-
-        if components is None:
-            components = []
-        super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                components=components)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of MeasureDescriptor"""
-        return MeasureDescriptor(*args_, **kwargs_)
-
-    def __eq__(self, other):
-        if isinstance(other, MeasureDescriptor):
-            return super(MeasureDescriptor, self).__eq__(other)
-        else:
-            return False
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(MeasureDescriptor, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'PrimaryMeasure':
-            obj_ = PrimaryMeasure._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.add_component(obj_)
-
-
-class GroupDimensionDescriptor(ComponentList, DataParser):
-    """A set metadata concepts that define a partial key derived from the Dimension Descriptor in a
-    Data Structure Definition.
-    """
-
-    _componentType = "Dimension"
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 components=None):
-        if components is None:
-            components = []
-        super(GroupDimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                       components=components)
-
-    def __eq__(self, other):
-        if isinstance(other, GroupDimensionDescriptor):
-            return super(GroupDimensionDescriptor, self).__eq__(other)
-        else:
-            return False
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of GroupDimensionDescriptor"""
-        return GroupDimensionDescriptor(*args_, **kwargs_)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(GroupDimensionDescriptor, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'GroupDimension':
-            obj_ = GroupDimension._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.add_component(obj_)
-
-
-class DataStructureDefinition(MaintainableArtefact):
-    """A collection of metadata concepts, their structure and usage when used to collect
-       or disseminate data.
-    """
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None, dimensionDescriptor: DimensionDescriptor = None,
-                 measureDescriptor: MeasureDescriptor = None, attributeDescriptor: AttributeDescriptor = None,
-                 groupDimensionDescriptor: GroupDimensionDescriptor = None):
-
-        super(DataStructureDefinition, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                      name=name, description=description,
-                                                      version=version, validFrom=validFrom, validTo=validTo,
-                                                      isFinal=isFinal, isExternalReference=isExternalReference,
-                                                      serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                      maintainer=maintainer)
-
-        self.dimension_descriptor = dimensionDescriptor
-        self.measure_descriptor = measureDescriptor
-        self.attribute_descriptor = attributeDescriptor
-        self.group_dimension_descriptor = groupDimensionDescriptor
-
-    def __eq__(self, other):
-        if isinstance(other, DataStructureDefinition):
-            return super.__eq__(self, other) and self._dimensionDescriptor == other._dimensionDescriptor \
-                   and self._attributeDescriptor == other._attributeDescriptor \
-                   and self._measureDescriptor == other._measureDescriptor \
-                   and self._groupDimensionDescriptor == other._groupDimensionDescriptor
-        else:
-            return False
-
-    def __str__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
-
-    def __unicode__(self):
-        return u'<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
-
-    def __repr__(self):
-        return '<DataStructureDefinition  - %s:%s(%s)>' % (self.agencyID, self.id, self.version)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of DataStructureDefinition"""
-        return DataStructureDefinition(*args_, **kwargs_)
-
-    @property
-    def dimension_descriptor(self):
-        """An ordered set of metadata concepts that, combined, classify a statistical series,
-           and whose values, when combined (the key) in an instance such as a data set,
-           uniquely identify a specific observation"""
-        return self._dimensionDescriptor
-
-    @property
-    def measure_descriptor(self):
-        """A metadata concept that defines the measure of a Data Structure Definition"""
-        return self._measureDescriptor
-
-    @property
-    def attribute_descriptor(self):
-        """A set metadata concepts that define the attributes of a Data Structure Definition."""
-        return self._attributeDescriptor
-
-    @property
-    def group_dimension_descriptor(self):
-        """A set metadata concepts that define a partial key derived
-           from the Dimension Descriptor in a Data Structure Definition."""
-        return self._groupDimensionDescriptor
-
-    @property
-    def dimension_codes(self):
-        """Keys of the dimensionDescriptor components"""
-        return [k for k in self.dimension_descriptor.components]
-
-    @property
-    def attribute_codes(self):
-        """Keys of the attributeDescriptor components"""
-        if self.attribute_descriptor is not None:
-            return [k for k in self.attribute_descriptor.components]
-        else:
-            return []
-
-    @property
-    def dataset_attribute_codes(self):
-        """Attributes with no specified relationship"""
-        result = []
-        if self.attribute_descriptor is not None:
-            for k in self.attribute_descriptor.components:
-                if self.attribute_descriptor[k].related_to == "NoSpecifiedRelationship":
-                    result.append(k)
-        return result
-
-    @property
-    def content(self):
-        """Extracts the content of a DSD as a dict"""
-
-        result = {'dimensions': self.dimension_descriptor.components,
-                  'measure': self.measure_descriptor.components[self.measure_code]
-                  }
-
-        if self.attribute_descriptor is not None:
-            result['attributes'] = self.attribute_descriptor.components
-
-        if self.group_dimension_descriptor is not None:
-            result['groups'] = self.group_dimension_descriptor
-
-        return result
-
-    @property
-    def _facet_type(self):
-        """Returns any component that has facets"""
-        facets = {}
-        type_ = {}
-        for k, v in self.dimension_descriptor.components.items():
-            if v.representation is not None:
-                if v.representation.type_ is not None:
-                    type_[k] = v.representation.type_
-
-                if len(v.representation.facets) > 0:
-                    facets[k] = v.representation.facets
-
-        if self.attribute_descriptor is not None:
-            for k, v in self.attribute_descriptor.components.items():
-                if v.representation is not None:
-                    if v.representation.type_ is not None:
-                        type_[k] = v.representation.type_
-
-                    if len(v.representation.facets) > 0:
-                        facets[k] = v.representation.facets
-
-        if self.measure_descriptor is not None:
-            for k, v in self.measure_descriptor.components.items():
-                if v.representation is not None:
-                    if v.representation.type_ is not None:
-                        type_[k] = v.representation.type_
-
-                    if len(v.representation.facets) > 0:
-                        facets[k] = v.representation.facets
-
-        return facets, type_
-
-    @property
-    def measure_code(self):
-        """Key of the MeasureDescriptor component (PrimaryMeasure)"""
-        return list(self.measure_descriptor.components.keys())[0]
-
-    @dimension_descriptor.setter
-    def dimension_descriptor(self, value):
-        self._dimensionDescriptor = generic_setter(value, DimensionDescriptor)
-
-    @measure_descriptor.setter
-    def measure_descriptor(self, value):
-        self._measureDescriptor = generic_setter(value, MeasureDescriptor)
-
-    @attribute_descriptor.setter
-    def attribute_descriptor(self, value):
-        self._attributeDescriptor = generic_setter(value, AttributeDescriptor)
-
-    @group_dimension_descriptor.setter
-    def group_dimension_descriptor(self, value):
-        self._groupDimensionDescriptor = generic_setter(value, GroupDimensionDescriptor)
-
-    def to_vtl_json(self, path: str = None):
-        """Formats the DataStructureDefinition as a VTL DataStructure"""
-        dataset_name = self.id
-        components = []
-        for c in self.dimension_descriptor.components.values():
-
-            type_ = "String"
-
-            if c.representation is not None and c.representation.type_ is not None:
-                type_ = c.representation.type_
-
-            component = {"name": c.id, "role": "Identifier",
-                         "type": Data_Types_VTL[type_], "isNull": False}
-
-            components.append(component)
-        for c in self.attribute_descriptor.components.values():
-            type_ = "String"
-
-            if c.representation is not None and c.representation.type_ is not None:
-                type_ = c.representation.type_
-
-            component = {"name": c.id, "role": "Attribute",
-                         "type": Data_Types_VTL[type_], "isNull": True}
-
-            components.append(component)
-        for c in self.measure_descriptor.components.values():
-            type_ = "String"
-
-            if c.representation is not None and c.representation.type_ is not None:
-                type_ = c.representation.type_
-
-            component = {"name": c.id, "role": "Measure",
-                         "type": Data_Types_VTL[type_], "isNull": True}
-
-            components.append(component)
-
-        result = {"DataSet": {"name": dataset_name, "DataStructure": components}}
-        if path is not None:
-            with open(path, 'w') as fp:
-                fp.write(json.dumps(result))
-        else:
-            return result
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(DataStructureDefinition, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(DataStructureDefinition, self)._build_children(child_, node, nodeName_, fromsubclass_, gds_collector_)
-
-        if nodeName_ == 'DataStructureComponents':
-            obj_ = DataStructureComponentType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.attribute_descriptor = obj_.attributeDescriptor
-            self.dimension_descriptor = obj_.dimensionDescriptor
-            self.measure_descriptor = obj_.measureDescriptor
-            self.group_dimension_descriptor = obj_.groupDimensionDescriptor
-
-    def _parse_XML(self, indent, label):
-        prettyprint = indent != ''
-
-        indent = add_indent(indent)
-
-        data = super(DataStructureDefinition, self)._to_XML(prettyprint)
-
-        outfile = ''
-
-        attributes = data.get('Attributes') or None
-
-        if attributes is not None:
-            outfile += f'{indent}<{label}{attributes}>'
-        else:
-            outfile += f'{indent}<{label}>'
-
-        outfile += export_intern_data(data, indent)
-
-        indent_child = add_indent(indent)
-
-        outfile += f'{indent_child}<{structureAbbr}:DataStructureComponents>'
-
-        if self.dimension_descriptor is not None:
-            outfile += self.dimension_descriptor._parse_XML(indent_child, f'{structureAbbr}:DimensionList')
-
-        if self.attribute_descriptor is not None:
-            outfile += self.attribute_descriptor._parse_XML(indent_child, f'{structureAbbr}:AttributeList')
-
-        if self.measure_descriptor is not None:
-            outfile += self.measure_descriptor._parse_XML(indent_child, f'{structureAbbr}:MeasureList')
-
-        outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>'
-
-        outfile += f'{indent}</{label}>'
-
-        return outfile
-
-
-class DataFlowDefinition(MaintainableArtefact):
-    """Abstract concept (i.e. the structure without any data) of a flow of data
-       that providers will provide for different reference periods.
-    """
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None, annotations=None,
-                 name: InternationalString = None, description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None, validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None, serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None, structure: DataStructureDefinition = None):
-        super(DataFlowDefinition, self).__init__(id_=id_, uri=uri, urn=urn, annotations=annotations,
-                                                 name=name, description=description,
-                                                 version=version, validFrom=validFrom, validTo=validTo,
-                                                 isFinal=isFinal, isExternalReference=isExternalReference,
-                                                 serviceUrl=serviceUrl, structureUrl=structureUrl,
-                                                 maintainer=maintainer)
-        self.structure = structure
-
-    def __eq__(self, other):
-        if isinstance(other, DataFlowDefinition):
-            return super(DataFlowDefinition, self).__eq__(other) and self._structure == other._structure
-
-    def __str__(self):
-        return f'<DataFlowDefinition - {self.unique_id}>'
-
-    def __unicode__(self):
-        return f'<DataFlowDefinition - {self.unique_id}>'
-
-    def __repr__(self):
-        return f'<DataFlowDefinition - {self.unique_id}>'
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of DataFlowDefinition"""
-        return DataFlowDefinition(*args_, **kwargs_)
-
-    @property
-    def structure(self):
-        """Associates a DataflowDefinition to the DataStructureDefinition."""
-        return self._structure
-
-    @structure.setter
-    def structure(self, value):
-        self._structure = generic_setter(value, DataStructureDefinition)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(DataFlowDefinition, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(DataFlowDefinition, self)._build_children(child_, node, nodeName_, fromsubclass_=False,
-                                                        gds_collector_=None)
-        if nodeName_ == 'Structure':
-            obj_ = StructureType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._structure = obj_.ref
-
-    def _parse_XML(self, indent, label):
-        prettyprint = indent != ''
-
-        indent = add_indent(indent)
-
-        data = super(DataFlowDefinition, self)._to_XML(prettyprint)
-
-        outfile = ''
-
-        attributes = data.get('Attributes') or None
-
-        if attributes is not None:
-            outfile += f'{indent}<{label}{attributes}>'
-        else:
-            outfile += f'{indent}<{label}>'
-
-        outfile += export_intern_data(data, indent)
-
-        indent_child = add_indent(indent)
-        indent_ref = add_indent(indent_child)
-
-        if self.structure is not None:
-            outfile += f'{indent_child}<{structureAbbr}:Structure>'
-
-            if isinstance(self.structure, str):
-                agencyID, id_, version = split_unique_id(self.structure)
-
-                outfile += f'{indent_ref}<Ref id="{id_}" version="{version}" ' \
-                           f'agencyID="{agencyID}" package="datastructure" class="DataStructure"/>'
-            else:
-                outfile += f'{indent_ref}<Ref id="{self.structure.id}" version="{self.structure.version}" ' \
-                           f'agencyID="{self.structure.agencyID}" package="datastructure" class="DataStructure"/>'
-            outfile += f'{indent_child}</{structureAbbr}:Structure>'
-
-        outfile += f'{indent}</{label}>'
-
-        return outfile
+        super(PrimaryMeasure, self)._build_children(child_, node, nodeName_,
+                                                    fromsubclass_=False,
+                                                    gds_collector_=None)
 
 
 class AttributeRelationshipType(DataParser):
@@ -1075,7 +514,8 @@ class AttributeRelationshipType(DataParser):
         """Type of the component referenced (Dimension, PrimaryMeasure)"""
         return self._ref_type
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'None':
             self._ref_id = None
@@ -1097,31 +537,6 @@ class AttributeRelationshipType(DataParser):
             self._ref_type = 'Dimension'
 
 
-class StructureType(DataParser):
-    """Parser of the Structure of a DataFlowDefinition"""
-
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._ref = None
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Structure"""
-        return StructureType(*args_, **kwargs_)
-
-    @property
-    def ref(self):
-        """Reference to the DataStructureDefinition"""
-        return self._ref
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'Ref':
-            obj_ = RefBaseType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._ref = f"{obj_.agencyID}:{obj_.id_}({obj_.version})"
-
-
 class ConceptIdentityType(DataParser):
     """Parser of the Concept Identity of a Component"""
 
@@ -1140,68 +555,12 @@ class ConceptIdentityType(DataParser):
         Concept Scheme unique ID and Concept ID in it"""
         return self._ref
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Ref':
             obj_ = RefBaseType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self._ref = {"CS": f"{obj_.agencyID}:{obj_.maintainableParentID}({obj_.maintainableParentVersion})",
+            self._ref = {"CS": f"{obj_.agencyID}:{obj_.maintainableParentID}"
+                               f"({obj_.maintainableParentVersion})",
                          "CON": f"{obj_.id_}"}
-
-
-class DataStructureComponentType(DataParser):
-    """Parser of the DataStructureComponent XML element"""
-
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._measure_descriptor = None
-        self._attribute_descriptor = None
-        self._dimension_descriptor = None
-        self._groupDimensionDescriptor = None
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of DataStructureComponentType"""
-        return DataStructureComponentType(*args_, **kwargs_)
-
-    @property
-    def dimensionDescriptor(self):
-        """An ordered set of metadata concepts that, combined, classify a statistical series,
-           and whose values, when combined (the key) in an instance such as a data set,
-           uniquely identify a specific observation"""
-        return self._dimension_descriptor
-
-    @property
-    def attributeDescriptor(self):
-        """A set metadata concepts that define the attributes of a Data Structure Definition."""
-        return self._attribute_descriptor
-
-    @property
-    def measureDescriptor(self):
-        """A metadata concept that defines the measure of a Data Structure Definition"""
-        return self._measure_descriptor
-
-    @property
-    def groupDimensionDescriptor(self):
-        """A set metadata concepts that define a partial key derived
-           from the Dimension Descriptor in a Data Structure Definition."""
-        return self._groupDimensionDescriptor
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'DimensionList':
-            obj_ = DimensionDescriptor._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._dimension_descriptor = obj_
-        elif nodeName_ == 'AttributeList':
-            obj_ = AttributeDescriptor._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._attribute_descriptor = obj_
-        elif nodeName_ == 'MeasureList':
-            obj_ = MeasureDescriptor._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._measure_descriptor = obj_
-        elif nodeName_ == 'Group':
-            obj_ = GroupDimensionDescriptor._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._groupDimensionDescriptor = obj_

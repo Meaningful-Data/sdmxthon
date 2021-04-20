@@ -13,9 +13,11 @@ from .header import Party, Sender
 
 
 class Message:
-    """ Message class holds the type of a SDMX Message, its payload and its header.
+    """ Message class holds the type of a SDMX Message, its payload and its
+    header.
 
-    :param message_type: Enumeration that withholds the Message type for writing purposes
+    :param message_type: Enumeration that withholds the Message type for \
+    writing purposes
     :type message_type: `MessageTypeEnum`
 
     :param payload: Information stored in the message (Datasets or structures)
@@ -25,7 +27,8 @@ class Message:
     :type header: `Header`
     """
 
-    def __init__(self, message_type: MessageTypeEnum, payload: (Structures, Dict[str, Dataset], Dataset),
+    def __init__(self, message_type: MessageTypeEnum,
+                 payload: (Structures, Dict[str, Dataset], Dataset),
                  header: Header = None):
         self._type = message_type
         self._payload = payload
@@ -52,13 +55,16 @@ class Message:
     def type(self, value):
         if not isinstance(value, MessageTypeEnum):
             raise TypeError('Type must be a MessageTypeEnum')
-        if isinstance(self.payload, Structures) and value != MessageTypeEnum.Metadata:
-            raise ValueError('On a Structures Payload, Type can only be MessageTypeEnum.Metadata')
+        if isinstance(self.payload,
+                      Structures) and value != MessageTypeEnum.Metadata:
+            raise ValueError('On a Structures Payload, '
+                             'Type can only be MessageTypeEnum.Metadata')
         self._type = value
 
     @property
     def payload(self):
-        """Information stored in the message (DataSet or Structure). A dictionary of datasets could also be used.
+        """Information stored in the message (DataSet or Structure). A
+        dictionary of datasets could also be used.
 
         :class: :doc:`Dataset<./dataset>`
         :class: `Dict [str, Dataset]`
@@ -72,7 +78,8 @@ class Message:
     @payload.setter
     def payload(self, value):
         if not isinstance(value, (Structures, dict, Dataset)):
-            raise TypeError('Payload must be a DataSet, a dict of DataSet or a Structures object')
+            raise TypeError('Payload must be a DataSet, '
+                            'a dict of DataSet or a Structures object')
         self._payload = value
 
     @property
@@ -88,6 +95,8 @@ class Message:
                 content['codelists'] = self.payload.codelists
             if self.payload.concepts is not None:
                 content['concepts'] = self.payload.concepts
+            if self.payload.constraints is not None:
+                content['constraints'] = self.payload.constraints
             if self.payload.dataflows is not None:
                 content['dataflows'] = self.payload.dataflows
             if self.payload.dsds is not None:
@@ -127,7 +136,8 @@ class Message:
                 e.set_dimension_at_observation(dimAtObs)
 
     def header_creation(self, id_: str, test: bool = False,
-                        senderId: str = "Unknown", receiverId: str = "not_supplied",
+                        senderId: str = "Unknown",
+                        receiverId: str = "not_supplied",
                         datetimeStr=''):
         """
             Creates the header for a Message
@@ -144,8 +154,8 @@ class Message:
             :param receiverId: ID of the Receiver
             :type receiverId: str
 
-            :param datetimeStr: Datetime of the preparation of the Message. Format:  '%Y-%m-%dT%H:%M:%S'
-            :type datetimeStr: datetime
+            :param datetimeStr: Datetime of the preparation of the Message.
+            :type datetimeStr: str Format:  '%Y-%m-%dT%H:%M:%S'
         """
         header = Header(ID=id_)
         header.test = header._gds_format_boolean(test)
@@ -172,7 +182,8 @@ class Message:
             TypeError: if the payload is not a DataSet or a dict of DataSets
         """
         validations = {}
-        if isinstance(self.payload, dict) and all(isinstance(n, Dataset) for n in self.payload.values()):
+        if (isinstance(self.payload, dict) and
+                all(isinstance(n, Dataset) for n in self.payload.values())):
             for e in self.payload.values():
                 list_errors = e.semantic_validation()
                 if len(list_errors) > 0:
@@ -185,7 +196,8 @@ class Message:
             return self.payload.semantic_validation()
         else:
             # TODO Validate Metadata
-            raise TypeError('Wrong Payload. Must be of type DataSet or a dict of DataSet')
+            raise TypeError('Wrong Payload. Must be of type '
+                            'DataSet or a dict of DataSet')
 
     def to_xml(self, outputPath: str = '', id_: str = 'test',
                test: str = 'true',
@@ -204,7 +216,8 @@ class Message:
         :param test: Mark as test file, defaults to 'true'
         :type test: str
 
-        :param prepared: Datetime of the preparation of the Message, defaults to current date and time
+        :param prepared: Datetime of the preparation of the Message, \
+        defaults to current date and time
         :type prepared: datetime
 
         :param sender: ID of the Sender, defaults to 'Unknown'
@@ -225,11 +238,15 @@ class Message:
             prepared = datetime.now()
 
         if outputPath == '':
-            return writer(path=outputPath, dType=self.type, payload=self.payload, id_=id_, test=test,
-                          prepared=prepared, sender=sender, receiver=receiver, prettyprint=prettyprint)
+            return writer(path=outputPath, dType=self.type,
+                          payload=self.payload, id_=id_, test=test,
+                          prepared=prepared, sender=sender, receiver=receiver,
+                          prettyprint=prettyprint)
         else:
-            writer(path=outputPath, dType=self.type, payload=self.payload, id_=id_, test=test,
-                   prepared=prepared, sender=sender, receiver=receiver, prettyprint=prettyprint)
+            writer(path=outputPath, dType=self.type, payload=self.payload,
+                   id_=id_, test=test,
+                   prepared=prepared, sender=sender, receiver=receiver,
+                   prettyprint=prettyprint)
 
 
 if __name__ == '__main__':

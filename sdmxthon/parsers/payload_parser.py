@@ -29,9 +29,12 @@ class PayloadStructureType(DataParser):
     observation level or the flat structure."""
     __hash__ = DataParser.__hash__
 
-    def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
-                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
-                 StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
+    def __init__(self, structureID=None, schemaURL=None, namespace=None,
+                 dimensionAtObservation=None,
+                 explicitMeasures=None, serviceURL=None, structureURL=None,
+                 ProvisionAgreement=None,
+                 StructureUsage=None, Structure=None, gds_collector_=None,
+                 **kwargs_):
         super(PayloadStructureType, self).__init__(gds_collector_, **kwargs_)
         self.gds_collector_ = gds_collector_
         self._structureID = cast(None, structureID)
@@ -148,7 +151,8 @@ class PayloadStructureType(DataParser):
 
         value = find_attr_value_('dimensionAtObservation', node)
 
-        if value is not None and 'dimensionAtObservation' not in already_processed:
+        if (value is not None and
+                'dimensionAtObservation' not in already_processed):
             already_processed.add('dimensionAtObservation')
             self._dimension_at_observation = value
 
@@ -175,7 +179,8 @@ class PayloadStructureType(DataParser):
             already_processed.add('structureURL')
             self._structureURL = value
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False, gds_collector_=None):
+    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
+                        gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ProvisionAgreement':
             obj_ = ReferenceType._factory()
@@ -196,18 +201,26 @@ class PayloadStructureType(DataParser):
 # end class PayloadStructureType
 
 class DataStructureType(PayloadStructureType):
-    """DataStructureType is an abstract base dim_type the forms the basis for the
-    structural information for a data set."""
+    """DataStructureType is an abstract base dim_type the forms the basis
+    for the structural information for a data set. """
     __hash__ = DataParser.__hash__
     subclass = None
     superclass = PayloadStructureType
 
-    def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
-                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
-                 StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
-        super(DataStructureType, self).__init__(structureID, schemaURL, namespace, dimensionAtObservation,
-                                                explicitMeasures, serviceURL, structureURL, ProvisionAgreement,
-                                                StructureUsage, Structure, **kwargs_)
+    def __init__(self, structureID=None, schemaURL=None, namespace=None,
+                 dimensionAtObservation=None,
+                 explicitMeasures=None, serviceURL=None, structureURL=None,
+                 ProvisionAgreement=None,
+                 StructureUsage=None, Structure=None, gds_collector_=None,
+                 **kwargs_):
+        super(DataStructureType, self).__init__(structureID, schemaURL,
+                                                namespace,
+                                                dimensionAtObservation,
+                                                explicitMeasures, serviceURL,
+                                                structureURL,
+                                                ProvisionAgreement,
+                                                StructureUsage, Structure,
+                                                **kwargs_)
         self._gds_collector = gds_collector_
 
     @staticmethod
@@ -224,12 +237,21 @@ class GenericDataStructureType(DataStructureType):
     through a dataflow or provision agreement is required as well as the
     dimension which occurs at the observation level."""
 
-    def __init__(self, structureID=None, schemaURL=None, namespace=None, dimensionAtObservation=None,
-                 explicitMeasures=None, serviceURL=None, structureURL=None, ProvisionAgreement=None,
-                 StructureUsage=None, Structure=None, gds_collector_=None, **kwargs_):
-        super(GenericDataStructureType, self).__init__(structureID, schemaURL, namespace, dimensionAtObservation,
-                                                       explicitMeasures, serviceURL, structureURL, ProvisionAgreement,
-                                                       StructureUsage, Structure, **kwargs_)
+    def __init__(self, structureID=None, schemaURL=None, namespace=None,
+                 dimensionAtObservation=None,
+                 explicitMeasures=None, serviceURL=None, structureURL=None,
+                 ProvisionAgreement=None,
+                 StructureUsage=None, Structure=None, gds_collector_=None,
+                 **kwargs_):
+        super(GenericDataStructureType, self).__init__(structureID, schemaURL,
+                                                       namespace,
+                                                       dimensionAtObservation,
+                                                       explicitMeasures,
+                                                       serviceURL,
+                                                       structureURL,
+                                                       ProvisionAgreement,
+                                                       StructureUsage,
+                                                       Structure, **kwargs_)
         self._gds_collector = gds_collector_
         self._name = 'GenericDataStructureType'
 

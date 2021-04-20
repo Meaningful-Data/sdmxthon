@@ -14,9 +14,8 @@ from typing import List
 def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
     """Generic function to format a string to datetime
 
-    Args:
-        value: The value to be validated.
-        format_: A regex pattern to validate if the string has a specific format
+    Args: value: The value to be validated.
+    format_: A regex pattern to validate if the string has a specific format
 
     Returns:
         A datetime object
@@ -30,7 +29,8 @@ def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
     try:
         dt = datetime.strptime(value, format_)
     except:
-        raise ValueError(f"Wrong date string format. The format {format_} should be followed. {str(value)} passed")
+        raise ValueError(f"Wrong date string format. The format {format_} "
+                         f"should be followed. {str(value)} passed")
 
     return dt
 
@@ -54,7 +54,8 @@ def get_date_string(date: datetime, format_: str = "%Y-%m-%d"):
         return datetime.strftime(date, format_)
 
 
-def string_setter(value: str, pattern: str = None, enumeration: List[str] = None):
+def string_setter(value: str, pattern: str = None,
+                  enumeration: List[str] = None):
     """Generic function validating strings for setters
 
     Checks that the input is a string or integer.
@@ -79,12 +80,15 @@ def string_setter(value: str, pattern: str = None, enumeration: List[str] = None
             if regex.match(value):
                 return value
             else:
-                raise ValueError(f"Error setting the string. Pattern '{pattern}' not respected")
+                raise ValueError(f"Error setting the string. Pattern "
+                                 f"'{pattern}' not respected")
         elif enumeration is not None:
             if value in enumeration:
                 return value
             else:
-                raise ValueError(f"Error setting the string. Enumeration {str(enumeration)} not respected")
+                raise ValueError(
+                    f"Error setting the string. Enumeration "
+                    f"{str(enumeration)} not respected")
         else:
             return value
     elif isinstance(value, int):
@@ -145,7 +149,8 @@ def generic_setter(value, class_):
     if isinstance(value, class_) or value is None:
         return value
     else:
-        raise TypeError(f"The value has to be an instance of the {class_.__name__} class. {type(value)} passed")
+        raise TypeError(f"The value has to be an instance of the "
+                        f"{class_.__name__} class. {type(value)} passed")
 
 
 def int_setter(value: int):
@@ -181,13 +186,20 @@ NS = {
 
 ActionType = ['Delete, Replace, Append, Information']
 UsageStatus = ['UsageStatus', 'mandatory conditional']
-FacetValueType = ['string', 'bigInteger', 'integer', 'long', 'short', 'decimal', 'float', 'double', 'boolean', 'uri',
-                  'count', 'inclusiveValueRange', 'alpha', 'alphaNumeric', 'numeric', 'exclusiveValueRange',
-                  'incremental', 'observationalTimePeriod', 'standardTimePeriod', 'basicTimePeriod',
-                  'gregorianTimePeriod', 'gregorianYear', 'gregorianMonth', 'gregorianYearMonth',
-                  'gregorianDay', 'reportingTimePeriod', 'reportingYear', 'reportingSemester',
-                  'reportingTrimester', 'reportingQuarter', 'reportingMonth', 'reportingWeek',
-                  'reportingDay', 'dateTime', 'timesRange', 'month', 'monthDay', 'day', 'time', 'duration', 'keyValues',
+FacetValueType = ['string', 'bigInteger', 'integer', 'long', 'short',
+                  'decimal', 'float', 'double', 'boolean', 'uri',
+                  'count', 'inclusiveValueRange', 'alpha', 'alphaNumeric',
+                  'numeric', 'exclusiveValueRange',
+                  'incremental', 'observationalTimePeriod',
+                  'standardTimePeriod', 'basicTimePeriod',
+                  'gregorianTimePeriod', 'gregorianYear', 'gregorianMonth',
+                  'gregorianYearMonth',
+                  'gregorianDay', 'reportingTimePeriod', 'reportingYear',
+                  'reportingSemester',
+                  'reportingTrimester', 'reportingQuarter', 'reportingMonth',
+                  'reportingWeek',
+                  'reportingDay', 'dateTime', 'timesRange', 'month',
+                  'monthDay', 'day', 'time', 'duration', 'keyValues',
                   'identifiableReference', 'dataSetReference', 'Xhtml']
 ConstraintRoleType = ['allowableContent', 'actualContent']
 FacetType = ['isSequence', 'minLength', 'maxLength', 'minValue', 'maxValue',
