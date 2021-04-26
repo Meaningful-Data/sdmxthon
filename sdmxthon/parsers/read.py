@@ -5,6 +5,7 @@ import pandas as pd
 
 from SDMXThon.model.dataset import Dataset
 from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXThon.utils.handlers import first_element_dict
 from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, \
     makeWarnings
 from .gdscollector import GdsCollector
@@ -219,7 +220,7 @@ def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
 
 
 def _sdmx_to_dataframe(xml_obj):
-    dataframes = []
+    dataframes = {}
 
     for e in xml_obj.dataset:
         if e.structureRef in xml_obj.header.structure.keys():
@@ -233,14 +234,14 @@ def _sdmx_to_dataframe(xml_obj):
         if len(e.data) > 0:
             temp = pd.DataFrame(e.data)
             if dim_obs == 'AllDimensions':
-                dataframes.append(temp)
+                dataframes[str_dict['ID']] = temp
             else:
-                dataframes.append(
-                    temp.rename(columns={'ObsDimension': dim_obs}))
+                dataframes[str_dict['ID']] = temp.rename(
+                    columns={'ObsDimension': dim_obs})
 
     del xml_obj
 
     if len(dataframes) == 1:
-        return dataframes[0]
+        return first_element_dict(dataframes)
     else:
         return dataframes

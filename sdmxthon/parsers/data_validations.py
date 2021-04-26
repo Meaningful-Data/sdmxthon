@@ -344,7 +344,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
         Validations stands for the next schema:
         
         SS01: Check if all dimensions of a DSD exist in the dataset 
-        SS02: Check if  OBS_VALUE exists in the datasets 
+        SS02: Check if OBS_VALUE exists in the datasets 
         SS03: Check if all mandatory attributes exit in the datasets 
         SS04: Check if an attribute/dimension value that is associated 
         to a Codelist is valid 
@@ -619,18 +619,17 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                    'Message': f'Wrong value {v} for '
                                               f'{type_.lower()} {k}'})
 
-    for e in series_const:
-        temp = data[list(e.keys())]
-        value = temp.loc[(temp[list(e)] == pandas.Series(e)).all(axis=1)]
-        if len(value) == 0:
-            errors.append({'Code': 'SS11',
-                           'ErrorLevel': 'WARNING',
-                           'Component': f'Series',
-                           'Type': f'Constraint',
-                           'Rows': None,
-                           'Message': f'Missing values'
-                                      f'{format_row(e)}'
-                           })
+    if len(series_const) > 0:
+        errors.append({'Code': 'SS11',
+                       'ErrorLevel': 'WARNING',
+                       'Component': f'Constraint',
+                       'Type': f'Series',
+                       'Rows': None,
+                       'Message': f'Found {len(series_const)} Series '
+                                  f'Constraints for {dsd.unique_id}. '
+                                  f'This feature is not '
+                                  f'yet implemented. Please check it manually.'
+                       })
 
     duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
     if len(duplicated) > 0:
