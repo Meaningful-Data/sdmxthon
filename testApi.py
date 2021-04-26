@@ -1,7 +1,7 @@
 import logging
 from time import time
 
-from SDMXThon.api.api import get_datasets
+from SDMXThon.api.api import get_pandas_df
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -37,6 +37,7 @@ urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/publi
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
 pathToConstraints = 'SDMXThon/outputTests/test_data_constraints.xml'
 pathToDataBIS = 'SDMXThon/outputTests/bis_data.xml'
+pathToDataBISHuge = 'SDMXThon/outputTests/out.xml'
 # pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
 pathToDataSpe = 'SDMXThon/outputTests/examples/Structure/test_str_BIS.xml'
@@ -61,13 +62,15 @@ def main():
     # 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/contentconstraint/RBI
     # /AALOE_AreaOp/1.0')
 
-    datasets = get_datasets(pathToConstraints,
-                            'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/structure/RBI/ASSET/latest/?format=sdmx-2.1&detail=full&references=all')
-
     start = time()
-    print(datasets.semantic_validation())
+
+    # dataset = get_datasets(pathToDataBISHuge,'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_LBS_DISS/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true')
+    message = get_pandas_df(pathToDataBIS)
     end = time()
+    print(message.info(memory_usage="deep")
+          )
     print(end - start)
+
     """
     sdmx_message = SDMXThon.read_sdmx(pathToMetadataFile)
 
