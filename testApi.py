@@ -1,7 +1,7 @@
 import logging
+from time import time
 
-from SDMXThon.model.base import InternationalString, LocalisedString
-from SDMXThon.model.itemScheme import Concept
+from SDMXThon.api.api import get_datasets
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -35,7 +35,7 @@ pathToMetadataFile = 'SDMXThon/outputTests/assetDSD.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/semanticValidation/data/metadata/test_delete_DSD_on_errors.xml'
 urlMetadata = 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_DER/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true'
 pathToDB = 'SDMXThon/outputTests/BIS_DER_OUTS.db'
-pathToConstraints = 'SDMXThon/outputTests/test_asset.xml'
+pathToConstraints = 'SDMXThon/outputTests/test_data_constraints.xml'
 pathToDataBIS = 'SDMXThon/outputTests/bis_data.xml'
 # pathToDataBIS = 'SDMXThon/outputTests/BIS_DER.xml'
 pathToDataIMF = 'SDMXThon/outputTests/BOP_Q_2020Q1-Q3_TOT+SPE_out - VTL_trans.csv'
@@ -60,18 +60,14 @@ def main():
     # Test Metadata From Different Sources Generator message = SDMXThon.read_sdmx(
     # 'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/contentconstraint/RBI
     # /AALOE_AreaOp/1.0')
-    name = InternationalString(
-        [LocalisedString('English', 'en', 'NEW_CONCEPT')])
 
-    concept = Concept('NEW_CONCEPT', name=name)
-    print(concept)
-    """
-    datasets = SDMXThon.get_datasets(pathToConstraints,pathToMetadataFile)
+    datasets = get_datasets(pathToConstraints,
+                            'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/structure/RBI/ASSET/latest/?format=sdmx-2.1&detail=full&references=all')
 
+    start = time()
     print(datasets.semantic_validation())
-
-    print(datasets)
-    """
+    end = time()
+    print(end - start)
     """
     sdmx_message = SDMXThon.read_sdmx(pathToMetadataFile)
 
