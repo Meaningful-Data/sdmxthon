@@ -191,14 +191,14 @@ def check_num_facets(facets, data_column, key, type_):
         elif f.facet_type == 'minValue':
             min_ = int(f.facet_value)
             values = data_column[data_column < min_]
-        elif f.facet_type is 'isSequence':
+        elif f.facet_type == 'isSequence':
             if f.facet_value.upper() == 'TRUE':
                 is_sequence = True
-        elif f.facet_type is 'startValue':
+        elif f.facet_type == 'startValue':
             start = int(f.facet_value)
-        elif f.facet_type is 'endValue':
+        elif f.facet_type == 'endValue':
             end = int(f.facet_value)
-        elif f.facet_type is 'interval':
+        elif f.facet_type == 'interval':
             interval = int(f.facet_value)
         else:
             continue

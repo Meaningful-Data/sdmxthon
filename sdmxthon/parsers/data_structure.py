@@ -3,6 +3,8 @@ Message """
 
 import re as re_
 
+import pandas as pd
+
 from SDMXThon.model.base import AnnotableArtefact
 from SDMXThon.parsers.references import ReferenceType
 from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
@@ -457,6 +459,8 @@ class DataSetType(AnnotableArtefact):
 
         self._anyAttributes_ = {}
 
+        self._dataframe = None
+
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory Method of DataSetType"""
@@ -496,6 +500,10 @@ class DataSetType(AnnotableArtefact):
     @data.setter
     def data(self, value):
         self._data = value
+
+    @property
+    def dataframe(self):
+        return self._dataframe
 
     @property
     def reporting_year_start_day(self):
@@ -766,6 +774,16 @@ class DataSetType(AnnotableArtefact):
             obj_ = ObsType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self.data.append(obj_.any_attributes)
+
+        if len(self.data) >= 50000:
+            if self.dataframe is not None:
+                self._dataframe = pd.concat([self._dataframe,
+                                             pd.DataFrame(self.data)],
+                                            ignore_index=True)
+            else:
+                self._dataframe = pd.DataFrame(self.data)
+            self.data = []
+
         super(DataSetType, self)._build_children(child_, node, nodeName_, True)
 
 

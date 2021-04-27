@@ -101,8 +101,19 @@ def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
 
         item.attached_attributes = attached_attributes
 
-        if len(e.data) > 0:
-            item.data = pd.DataFrame(e.data).astype('category')
+        if len(e.data) > 0 or e.dataframe is not None:
+
+            temp = None
+
+            if len(e.data) > 0:
+                temp = pd.DataFrame(e.data)
+
+            if e.dataframe is not None and temp is not None:
+                temp = pd.concat([temp, e.dataframe], ignore_index=True)
+            elif temp is None:
+                temp = e.dataframe
+
+            item.data = temp
         datasets[dsd.unique_id] = item
     del xmlObj
     return datasets
@@ -151,9 +162,18 @@ def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
             attached_attributes = e.Attributes.value_
 
         item.attached_attributes = attached_attributes.copy()
+        if len(e.data) > 0 or e.dataframe is not None:
 
-        if len(e.data) > 0:
-            temp = pd.DataFrame(e.data).astype('category')
+            temp = None
+
+            if len(e.data) > 0:
+                temp = pd.DataFrame(e.data)
+
+            if e.dataframe is not None and temp is not None:
+                temp = pd.concat([temp, e.dataframe], ignore_index=True)
+            elif temp is None:
+                temp = e.dataframe
+
             if str_dict['dimAtObs'] == 'AllDimensions':
                 item.data = temp.rename(
                     columns={'OBS_VALUE': dsd.measure_code})
@@ -194,8 +214,18 @@ def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
             if e.Attributes is not None:
                 attached_attributes = e.Attributes.value_
 
-            if len(e.data) > 0:
-                temp = pd.DataFrame(e.data)
+            if len(e.data) > 0 or e.dataframe is not None:
+
+                temp = None
+
+                if len(e.data) > 0:
+                    temp = pd.DataFrame(e.data)
+
+                if e.dataframe is not None and temp is not None:
+                    temp = pd.concat([temp, e.dataframe],
+                                     ignore_index=True)
+                elif temp is None:
+                    temp = e.dataframe
                 if str_dict['dimAtObs'] == 'AllDimensions':
                     item.data = temp
                 else:
@@ -209,8 +239,19 @@ def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
 
             item.attached_attributes = attached_attributes
 
-            if len(e.data) > 0:
-                item.data = pd.DataFrame(e.data)
+            if len(e.data) > 0 or e.dataframe is not None:
+
+                temp = None
+
+                if len(e.data) > 0:
+                    temp = pd.DataFrame(e.data)
+
+                if e.dataframe is not None and temp is not None:
+                    temp = pd.concat([temp, e.dataframe], ignore_index=True)
+                elif temp is None:
+                    temp = e.dataframe
+
+                item.data = temp
 
         item.attached_attributes = attached_attributes
 
@@ -219,7 +260,7 @@ def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
     return datasets
 
 
-def _sdmx_to_dataframe(xml_obj):
+def _sdmx_to_dataframe(xml_obj, type_: MessageTypeEnum):
     dataframes = {}
 
     for e in xml_obj.dataset:
@@ -229,15 +270,38 @@ def _sdmx_to_dataframe(xml_obj):
             warnings.warn(f'Structure {e.structureRef} not found')
             continue
 
-        dim_obs = str_dict['dimAtObs']
+        if type_ == MessageTypeEnum.GenericDataSet:
+            if len(e.data) > 0 or e.dataframe is not None:
 
-        if len(e.data) > 0:
-            temp = pd.DataFrame(e.data)
-            if dim_obs == 'AllDimensions':
+                temp = None
+
+                if len(e.data) > 0:
+                    temp = pd.DataFrame(e.data)
+
+                if e.dataframe is not None and temp is not None:
+                    temp = pd.concat([temp, e.dataframe],
+                                     ignore_index=True)
+                elif temp is None:
+                    temp = e.dataframe
+                if str_dict['dimAtObs'] == 'AllDimensions':
+                    dataframes[str_dict['ID']] = temp
+                else:
+                    dataframes[str_dict['ID']] = temp.rename(
+                        columns={'ObsDimension': str_dict['dimAtObs']})
+        else:
+            if len(e.data) > 0 or e.dataframe is not None:
+
+                temp = None
+
+                if len(e.data) > 0:
+                    temp = pd.DataFrame(e.data)
+
+                if e.dataframe is not None and temp is not None:
+                    temp = pd.concat([temp, e.dataframe], ignore_index=True)
+                elif temp is None:
+                    temp = e.dataframe
+
                 dataframes[str_dict['ID']] = temp
-            else:
-                dataframes[str_dict['ID']] = temp.rename(
-                    columns={'ObsDimension': dim_obs})
 
     del xml_obj
 

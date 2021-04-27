@@ -1,6 +1,7 @@
 """
         Data_generic contains all parsers for the data in a Generic Message
 """
+import pandas as pd
 
 from SDMXThon.model.base import AnnotableArtefact
 from SDMXThon.parsers.references import ReferenceType
@@ -541,6 +542,7 @@ class DataSetType(AnnotableArtefact):
             self._group = []
         else:
             self._group = Group
+        self._dataframe = None
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -587,6 +589,10 @@ class DataSetType(AnnotableArtefact):
     @data.setter
     def data(self, value):
         self._data = value
+
+    @property
+    def dataframe(self):
+        return self._dataframe
 
     @property
     def structureRef(self):
@@ -792,6 +798,16 @@ class DataSetType(AnnotableArtefact):
             obj_ = ObsOnlyType._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
             self.data.append(obj_.value_)
+
+        if len(self.data) >= 50000:
+            if self.dataframe is not None:
+                self._dataframe = pd.concat([self._dataframe,
+                                             pd.DataFrame(self.data)],
+                                            ignore_index=True)
+            else:
+                self._dataframe = pd.DataFrame(self.data)
+            self.data = []
+
         super(DataSetType, self)._build_children(child_, node, nodeName_, True,
                                                  gds_collector_)
 
