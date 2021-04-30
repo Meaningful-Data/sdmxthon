@@ -1,3 +1,4 @@
+######
 Header
 ######
 
@@ -7,6 +8,7 @@ Header
     :exclude-members: has_content_, build_attributes, build_children, factory
     :undoc-members:
 
+*****
 Party
 *****
 
@@ -16,6 +18,7 @@ Party
     :exclude-members: has_content_, build_attributes, build_children, factory
     :undoc-members:
 
+======
 Sender
 ======
 

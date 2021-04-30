@@ -1,3 +1,4 @@
+##########
 ItemScheme
 ##########
 
@@ -8,6 +9,7 @@ ItemScheme
     :undoc-members:
 
 
+*************
 ConceptScheme
 *************
 
@@ -17,6 +19,7 @@ ConceptScheme
     :exclude-members: parse_XML, cl_references, factory, build_attributes, build_children
     :undoc-members:
 
+********
 Codelist
 ********
 
@@ -26,6 +29,7 @@ Codelist
     :exclude-members: parse_XML, factory, build_attributes, build_children
     :undoc-members:
 
+******************
 OrganisationScheme
 ******************
 .. autoclass:: model.itemScheme.OrganisationScheme()
@@ -34,6 +38,7 @@ OrganisationScheme
     :exclude-members: parse_XML, factory, build_attributes, build_children
     :undoc-members:
 
+============
 AgencyScheme
 ============
 .. autoclass:: model.itemScheme.AgencyScheme()

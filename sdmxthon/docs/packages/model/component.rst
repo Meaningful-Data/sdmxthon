@@ -1,3 +1,4 @@
+#########
 Component
 #########
 
@@ -7,6 +8,7 @@ Component
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+*********
 Dimension
 *********
 .. autoclass:: model.component.Dimension
@@ -15,6 +17,7 @@ Dimension
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+=============
 TimeDimension
 =============
 .. autoclass:: model.component.TimeDimension()
@@ -23,6 +26,7 @@ TimeDimension
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+================
 MeasureDimension
 ================
 
@@ -32,6 +36,7 @@ MeasureDimension
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+*********
 Attribute
 *********
 .. autoclass:: model.component.Attribute
@@ -40,6 +45,7 @@ Attribute
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+**************
 PrimaryMeasure
 **************
 .. autoclass:: model.component.PrimaryMeasure()

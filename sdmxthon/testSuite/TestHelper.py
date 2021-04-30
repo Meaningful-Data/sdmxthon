@@ -8,7 +8,8 @@ from datetime import datetime
 import pandas as pd
 
 from SDMXThon import Message, MessageTypeEnum
-from SDMXThon.api.api import _read_xml, MetadataType, setReferences, read_sdmx, \
+from SDMXThon.api.api import _read_xml, MetadataType, _set_references, \
+    read_sdmx, \
     get_datasets
 from SDMXThon.model.dataset import Dataset
 
@@ -74,7 +75,7 @@ class TestHelper(unittest.TestCase):
     def metadata_valid_test(self, path_to_data):
         obj_ = _read_xml(os.path.join(self.pathToMetadata, path_to_data))
         if isinstance(obj_, MetadataType):
-            setReferences(obj_)
+            _set_references(obj_)
         errors = obj_.structures.errors
         if errors is None:
             errors = []

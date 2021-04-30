@@ -1,8 +1,10 @@
+############
 Base Package
 ############
 
 Please refer to the SDMX Base Package
 
+**********
 Annotation
 **********
 
@@ -12,6 +14,7 @@ Annotation
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+******************
 Annotable Artefact
 ******************
 
@@ -21,6 +24,7 @@ Annotable Artefact
     :exclude-members: to_XML, build_attributes, build_children, factory
     :undoc-members:
 
+*********************
 Identifiable Artefact
 *********************
 .. autoclass:: model.base.IdentifiableArtefact
@@ -29,6 +33,7 @@ Identifiable Artefact
     :exclude-members: to_XML, build_attributes, build_children, factory
     :undoc-members:
 
+*****************
 Nameable Artefact
 *****************
 .. autoclass:: model.base.NameableArtefact
@@ -37,6 +42,7 @@ Nameable Artefact
     :exclude-members: to_XML, build_attributes, build_children, factory
     :undoc-members:
 
+********************
 Versionable Artefact
 ********************
 .. autoclass:: model.base.VersionableArtefact
@@ -45,6 +51,7 @@ Versionable Artefact
     :exclude-members: to_XML, build_attributes, build_children, factory
     :undoc-members:
 
+*********************
 Maintainable Artefact
 *********************
 .. autoclass:: model.base.MaintainableArtefact
@@ -53,6 +60,7 @@ Maintainable Artefact
     :exclude-members: to_XML, build_attributes, build_children, factory
     :undoc-members:
 
+********************
 International String
 ********************
 .. autoclass:: model.base.InternationalString
@@ -61,6 +69,7 @@ International String
     :exclude-members: to_XML, build_attributes, build_children, factory
     :undoc-members:
 
+================
 Localised String
 ================
 

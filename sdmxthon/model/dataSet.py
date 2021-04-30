@@ -24,8 +24,9 @@ class Dataset:
     :param dataflow: Associates the DataFlowDefinition to the Dataset
     :type dataflow: class:`DataFlowDefinition`
 
-    :param dataset_attributes: Contains all the attributes from the DataSet
-    class of the Information Model :type dataset_attributes: dict
+    :param dataset_attributes: Contains all the attributes from the DataSet \
+    class of the Information Model
+    :type dataset_attributes: dict
 
     :param attached_attributes:  Contains all the attributes at a Dataset level
     :type attached_attributes: dict
@@ -392,7 +393,7 @@ class Dataset:
         :param test: Mark as test file, defaults to 'true'
         :type test: str
 
-        :param prepared: Datetime of the preparation of the Message,
+        :param prepared: Datetime of the preparation of the Message, \
         defaults to current date and time
         :type prepared: datetime
 
@@ -405,8 +406,7 @@ class Dataset:
         :param prettyprint: Saves the file formatted to be human readable
         :type prettyprint: bool
 
-        :returns:
-            StringIO object, if outputPath is ''
+        :returns: StringIO object, if outputPath is ''
         """
 
         if prepared is None:

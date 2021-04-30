@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger('logger')
 
 
-def setOnComponent(comp, obj, missing_rep):
+def _set_on_component(comp, obj, missing_rep):
     control_errors = False
     if comp.concept_identity is not None:
         if comp.concept_identity['CS'] in obj.structures.concepts.keys():
@@ -50,7 +50,7 @@ def setOnComponent(comp, obj, missing_rep):
     return control_errors
 
 
-def checkRelationship(att, dsd, obj):
+def _check_relationship(att, dsd, obj):
     if (isinstance(att.related_to['id'], list) and
             att.related_to['type'] == 'Dimension'):
         relations = att.related_to['id'].copy()
@@ -95,7 +95,43 @@ def checkRelationship(att, dsd, obj):
                                 f'related to Attribute {att.id}'})
 
 
-def setReferences(obj):
+def _set_references(obj):
+    """ Metadata validations stands for the next schema:
+
+        .. list-table:: Metadata validations
+            :widths: 20 80
+            :header-rows: 1
+
+            * - Code
+              - Description
+            * - MS01
+              - Check that the metadata file contains at least one DSD
+            * - MS02
+              - Check that the metadata file contains related codelists
+            * - MS03
+              - Check if the DSD metadata file contains the concepts needed \
+                for each DSD
+            * - MS04
+              - Check if the dimensions in Attribute Relationship are in \
+                DimensionList in DSD file
+            * - MS05
+              - Check if the primary measure in Attribute Relationship is in
+                MeasureList in DSD file
+            * - MS06
+              - Check if all DSDs present in the metadata file are unique
+            * - MS07
+              - Check if all Concept Scheme needed are present
+            * - MX01
+              - Check if minimum structural requirements for DSD xml are \
+                satisfied
+            * - MX02
+              - Check if every DSD has primary measure defined
+            * - MX04
+              - Check if every Codelist is defined in each reference from \
+                Concepts
+
+    """
+
     agencies = {}
     if obj.structures.organisations is not None and len(
             obj.structures.organisations.items) > 0:
@@ -136,9 +172,9 @@ def setReferences(obj):
                     dsd.maintainer = agencies[dsd.maintainer]
                 if dsd.dimension_descriptor is not None:
                     for dim in dsd.dimension_descriptor.components.values():
-                        control_errors = setOnComponent(comp=dim, obj=obj,
-                                                        missing_rep=missing_rep
-                                                        )
+                        control_errors = _set_on_component(comp=dim, obj=obj,
+                                                           missing_rep=missing_rep
+                                                           )
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
 
@@ -153,19 +189,19 @@ def setReferences(obj):
 
                 if dsd.attribute_descriptor is not None:
                     for att in dsd.attribute_descriptor.components.values():
-                        control_errors = setOnComponent(comp=att, obj=obj,
-                                                        missing_rep=missing_rep
-                                                        )
+                        control_errors = _set_on_component(comp=att, obj=obj,
+                                                           missing_rep=missing_rep
+                                                           )
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
                         if (att.related_to is not None and
                                 att.related_to != 'NoSpecifiedRelationship'):
-                            checkRelationship(att, dsd, obj)
+                            _check_relationship(att, dsd, obj)
 
                 if dsd.measure_descriptor is not None:
                     if len(dsd.measure_descriptor.components) == 1:
                         for meas in dsd.measure_descriptor.components.values():
-                            control_errors = setOnComponent(
+                            control_errors = _set_on_component(
                                 comp=meas, obj=obj, missing_rep=missing_rep)
 
                             if control_errors and key not in keys_errors:
@@ -190,7 +226,7 @@ def setReferences(obj):
                             # TODO Error Dimension not found
                             pass
 
-            grouping_errors(missing_rep, obj, keys_errors)
+            _grouping_errors(missing_rep, obj, keys_errors)
         else:
             obj.structures.add_error(
                 {'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
@@ -223,7 +259,7 @@ def setReferences(obj):
                     const)
 
 
-def grouping_errors(missing_rep, obj, keys_errors):
+def _grouping_errors(missing_rep, obj, keys_errors):
     for k in keys_errors:
         del obj.structures.dsds[k]
 
