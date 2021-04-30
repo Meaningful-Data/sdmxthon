@@ -6,7 +6,7 @@ setup(
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py',
                   'utils/*.py']),
-    version='0.8.14',
+    version='0.8.14.3',
     license='Apache 2.0',
     license_files='license.txt',
     description='Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation',

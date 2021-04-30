@@ -11,7 +11,6 @@ Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 CDATA_pattern_ = re_.compile(r'<!\[CDATA\[.*?]]>', re_.DOTALL)
 BaseStrType_ = str
 
-
 #
 # You can replace the following class definition by defining an
 # importable module named "generatedscollector" containing a class

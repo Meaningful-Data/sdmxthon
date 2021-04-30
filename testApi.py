@@ -1,7 +1,8 @@
 import logging
 from time import time
 
-from SDMXThon.api.api import get_pandas_df
+from SDMXThon import MessageTypeEnum
+from SDMXThon.api.api import get_datasets
 
 logger = logging.getLogger("logger")
 logger.setLevel(logging.DEBUG)
@@ -24,10 +25,10 @@ pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/cbd_dsd.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/assetDSD.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/assetDSD.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb_wdi.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
-# pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
+pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/ecb.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/estat.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/imf.xml'
@@ -65,12 +66,23 @@ def main():
     start = time()
 
     # dataset = get_datasets(pathToDataBISHuge,'http://fusionregistry.meaningfuldata.eu/MetadataRegistry/ws/public/sdmxapi/rest/datastructure/BIS/BIS_LBS_DISS/latest/?format=sdmx-2.1&detail=full&references=all&prettyPrint=true')
-    message = get_pandas_df(pathToDataBIS)
-    end = time()
-    print(message.info(memory_usage="deep")
-          )
-    print(end - start)
+    dataset = get_datasets(pathToDataBIS, pathToMetadataFile)
 
+    end = time()
+    print(f"Parsing: {end - start}")
+    start = time()
+    result = dataset.semantic_validation()
+    end = time()
+    print(f"Validation: {end - start}")
+    print(f"Validation Result: {result}")
+
+    start = time()
+    dataset.set_dimension_at_observation("AllDimensions")
+    dataset.to_xml(message_type=MessageTypeEnum.GenericDataSet,
+                   outputPath='test.xml')
+    end = time()
+
+    print(f"Writing: {end - start}")
     """
     sdmx_message = SDMXThon.read_sdmx(pathToMetadataFile)
 

@@ -131,7 +131,6 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         if isinstance(payload, dict):
             for record in payload.values():
                 outfile += genWriting(record, prettyprint)
-                record.data = None
         else:
             outfile += genWriting(payload, prettyprint)
     elif dType == MessageTypeEnum.StructureDataSet:
@@ -143,7 +142,6 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
                     outfile += strWriting(record, prettyprint, count)
                 else:
                     outfile += strSerWriting(record, prettyprint, count)
-                record.data = None
         else:
             if payload.dim_at_obs == "AllDimensions":
                 outfile += strWriting(payload, prettyprint)
@@ -169,14 +167,15 @@ def strWriting(dataset, prettyprint=True, count=1):
 
     if prettyprint:
         child1 = '\t'
-        child2 = '\t\t'
         nl = '\n'
     else:
-        child1 = child2 = nl = ''
+        child1 = nl = ''
 
     attached_attributes_str = ''
     for k, v in dataset.attached_attributes.items():
         attached_attributes_str += f'{k}="{v}" '
+
+    man_att = get_mandatory_attributes(dataset.structure)
 
     # Datasets
     outfile += f'{child1}<{messageAbbr}:DataSet {attached_attributes_str}' \
@@ -184,12 +183,47 @@ def strWriting(dataset, prettyprint=True, count=1):
                f'xsi:type="ns{count}:DataSetType" ' \
                f'ss:dataScope="DataStructure" ' \
                f'action="Replace">{nl}'
+
+    chunksize = 50000
+    length_ = len(dataset.data)
+    if len(dataset.data) > chunksize:
+        previous = 0
+        next_ = chunksize
+        while previous <= length_:
+
+            if next_ > length_:
+                outfile += obs_str(dataset.data.iloc[previous:],
+                                   dataset.structure.attribute_codes,
+                                   man_att, prettyprint)
+            else:
+                outfile += obs_str(dataset.data.iloc[previous:next_],
+                                   dataset.structure.attribute_codes,
+                                   man_att, prettyprint)
+                outfile += f'{nl}'
+            previous = next_
+            next_ += chunksize
+    else:
+        outfile += obs_str(dataset.data, dataset.structure.attribute_codes,
+                           man_att, prettyprint)
+
+    outfile += f'{nl}{child1}</{messageAbbr}:DataSet>{nl}'
+
+    return outfile
+
+
+def obs_str(data: pd.DataFrame, attribute_codes: list, man_att: list,
+            prettyprint=True):
+    if prettyprint:
+        child2 = '\t\t'
+        nl = '\n'
+    else:
+        child2 = nl = ''
     df1 = pd.DataFrame(
-        np.tile(np.array(dataset.data.columns), len(dataset.data.index))
-            .reshape(len(dataset.data.index), -1),
-        index=dataset.data.index,
-        columns=dataset.data.columns, dtype='str') + '='
-    df2 = '"' + dataset.data.astype('str') + '"'
+        np.tile(np.array(data.columns), len(data.index))
+            .reshape(len(data.index), -1),
+        index=data.index,
+        columns=data.columns, dtype='str') + '='
+    df2 = '"' + data.astype('str') + '"'
     df1 = df1.add(df2)
     df1.insert(0, 'head', f'{child2}<Obs')
     df1.insert(len(df1.keys()), 'end', '/>')
@@ -199,18 +233,13 @@ def strWriting(dataset, prettyprint=True, count=1):
     obs_str = obs_str.replace('\\', '')
     obs_str = f'{nl}'.join(obs_str.splitlines())
 
-    man_att = get_mandatory_attributes(dataset.structure)
-
     obs_str = obs_str.replace('"nan"', '""')
 
-    for e in dataset.structure.attribute_codes:
+    for e in attribute_codes:
         if e in df1.keys() and e not in man_att:
             obs_str = obs_str.replace(f'{e}="" ', '')
 
-    outfile += obs_str
-    outfile += f'{nl}{child1}</{messageAbbr}:DataSet>{nl}'
-
-    return outfile
+    return obs_str
 
 
 def genWriting(dataset, prettyprint=True):
@@ -230,37 +259,57 @@ def genWriting(dataset, prettyprint=True):
     outfile += f'{child1}<{messageAbbr}:DataSet ' \
                f'structureRef="{dataset.structure.id}" action="Replace">{nl}'
     if len(dataset.attached_attributes) > 0:
-        outfile += f'{child2}<generic:Attributes>{nl}'
+        outfile += f'{child2}<{genericAbbr}:Attributes>{nl}'
         for k, v in dataset.attached_attributes.items():
-            outfile += f'{child3}<generic:Value id="{k}" value="{v}"/>{nl}'
-        outfile += f'{child2}</generic:Attributes>{nl}'
+            outfile += f'{child3}<{genericAbbr}:Value id="{k}" value="{v}"/>{nl}'
+        outfile += f'{child2}</{genericAbbr}:Attributes>{nl}'
 
-    df_data = dataset.data.astype('str')
+    man_att = get_mandatory_attributes(dataset.structure)
+    outfile += obs_gen(dataset.data, dataset.structure.attribute_codes,
+                       dataset.structure.dimension_codes,
+                       man_att, prettyprint)
+
+    outfile += f'{nl}{child1}</{messageAbbr}:DataSet>{nl}'
+
+    return outfile
+
+
+def obs_gen(data: pd.DataFrame, attribute_codes: list, dimension_codes: list,
+            man_att: list,
+            prettyprint=True):
+    if prettyprint:
+        child2 = '\t\t'
+        child3 = '\t\t\t'
+        child4 = '\t\t\t\t'
+        nl = '\n'
+    else:
+        child2 = child3 = child4 = nl = ''
+    df_data = data.astype('str')
     obs_value_data = df_data['OBS_VALUE'].astype('str')
     del df_data['OBS_VALUE']
-    df_id = f'{child4}<generic:Value id="' + pd.DataFrame(
+    df_id = f'{child4}<{genericAbbr}:Value id="' + pd.DataFrame(
         np.tile(np.array(df_data.columns), len(df_data.index)).reshape(
             len(df_data.index), -1),
         index=df_data.index,
         columns=df_data.columns, dtype='str') + '" value="'
     df_value = df_data + '"/>'
     df_id: pd.DataFrame = df_id.add(df_value)
-    df_obs_value = f'{child3}<generic:ObsValue value="' + \
+    df_obs_value = f'{child3}<{genericAbbr}:ObsValue value="' + \
                    obs_value_data + '"/>'
     df_obs_value = df_obs_value.replace(
-        f'{child3}<generic:ObsValue value="nan"/>',
-        f'{child3}<generic:ObsValue />')
+        f'{child3}<{genericAbbr}:ObsValue value="nan"/>',
+        f'{child3}<{genericAbbr}:ObsValue />')
     df_id['OBS_VALUE'] = df_obs_value
 
-    df_id.insert(0, 'head', f'{child2}<generic:Obs>')
-    df_id.insert(len(df_id.keys()), 'end', f'{child2}</generic:Obs>')
+    df_id.insert(0, 'head', f'{child2}<{genericAbbr}:Obs>')
+    df_id.insert(len(df_id.keys()), 'end', f'{child2}</{genericAbbr}:Obs>')
 
     dim_codes = []
     att_codes = []
     for e in df_id.keys():
-        if e in dataset.structure.dimension_codes:
+        if e in dimension_codes:
             dim_codes.append(e)
-        elif e in dataset.structure.attribute_codes:
+        elif e in attribute_codes:
             att_codes.append(e)
 
     all_codes = ['head']
@@ -272,41 +321,37 @@ def genWriting(dataset, prettyprint=True):
 
     df_dim = df_id[dim_codes]
     last_dim = len(df_dim.columns) - 1
-    df_id.loc[:, df_dim.columns[0]] = f'{child3}<generic:ObsKey>{nl}' + \
+    df_id.loc[:, df_dim.columns[0]] = f'{child3}<{genericAbbr}:ObsKey>{nl}' + \
                                       df_dim.loc[:, df_dim.columns[0]]
     df_id.loc[:, df_dim.columns[last_dim]] = \
         df_dim.loc[:, df_dim.columns[last_dim]] + \
-        f'{nl}{child3}</generic:ObsKey>'
+        f'{nl}{child3}</{genericAbbr}:ObsKey>'
 
     df_att = df_id[att_codes]
     last_att = len(df_att.columns) - 1
-    df_id.loc[:, df_att.columns[0]] = f'{child3}<generic:Attributes>{nl}' + \
+    df_id.loc[:, df_att.columns[0]] = f'{child3}<{genericAbbr}:' \
+                                      f'Attributes>{nl}' + \
                                       df_att.loc[:, df_att.columns[0]]
     df_id.loc[:, df_att.columns[last_att]] = \
         df_att.loc[:, df_att.columns[last_att]] + \
-        f'{nl}{child3}</generic:Attributes>'
+        f'{nl}{child3}</{genericAbbr}:Attributes>'
 
-    obs_str = ''
-    obs_str += df_id.to_csv(path_or_buf=None, sep='\n', header=False,
-                            index=False, quoting=csv.QUOTE_NONE,
-                            escapechar='\\')
-    obs_str = obs_str.replace('\\', '')
-    obs_str = obs_str.replace('="nan"', '=""')
-    man_att = get_mandatory_attributes(dataset.structure)
+    obs_string = ''
+    obs_string += df_id.to_csv(path_or_buf=None, sep='\n', header=False,
+                               index=False, quoting=csv.QUOTE_NONE,
+                               escapechar='\\')
+    obs_string = obs_string.replace('\\', '')
+    obs_string = obs_string.replace('="nan"', '=""')
 
-    for e in dataset.structure.attribute_codes:
+    for e in attribute_codes:
         if e in df_id.keys() and e not in man_att:
-            obs_str = obs_str.replace(
-                f'{child4}<generic:Value id="{e}" value=""/>{nl}', '')
-
-    obs_str = f'{nl}'.join(obs_str.splitlines())
-
-    outfile += obs_str
-    outfile += f'{nl}{child1}</{messageAbbr}:DataSet>{nl}'
+            obs_string = obs_string.replace(
+                f'{child4}<{genericAbbr}:Value id="{e}" value=""/>{nl}', '')
 
     df_data.add(obs_value_data)
+    obs_string = f'{nl}'.join(obs_string.splitlines())
 
-    return outfile
+    return obs_string
 
 
 def strSerWriting(dataset, prettyprint=True, count=1):

@@ -418,6 +418,7 @@ Data_Types_VTL = {
     "GregorianYear": "Date",
     "GregorianYearMonth": "Date",
     "GregorianMonth": "Date",
+    "GregorianDay": "Date",
     "ReportingTimePeriod": "TimePeriod",
     "ReportingYear": "TimePeriod",
     "ReportingSemester": "TimePeriod",

@@ -191,14 +191,14 @@ def check_num_facets(facets, data_column, key, type_):
         elif f.facet_type == 'minValue':
             min_ = int(f.facet_value)
             values = data_column[data_column < min_]
-        elif f.facet_type is 'isSequence':
+        elif f.facet_type == 'isSequence':
             if f.facet_value.upper() == 'TRUE':
                 is_sequence = True
-        elif f.facet_type is 'startValue':
+        elif f.facet_type == 'startValue':
             start = int(f.facet_value)
-        elif f.facet_type is 'endValue':
+        elif f.facet_type == 'endValue':
             end = int(f.facet_value)
-        elif f.facet_type is 'interval':
+        elif f.facet_type == 'interval':
             interval = int(f.facet_value)
         else:
             continue
@@ -395,9 +395,9 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                'Message': f'Missing value in '
                                           f'{type_.lower()} {mc}'})
 
-    temp = data[mc].astype(object).replace('', np.nan).dropna()
+    if mc in data.keys() and mc in faceted:
+        temp = data[mc].astype(object).replace('', np.nan).dropna()
 
-    if mc in faceted:
         facets = faceted[mc]
         if pandas.to_numeric(temp, errors='coerce').notnull().all():
             data_column = temp.unique().astype('float64')
@@ -406,7 +406,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             data_column = data[mc].unique().astype('str')
             errors += check_str_facets(facets, data_column, mc, type_)
 
-    del temp
+        del temp
 
     grouping_keys = []
 
@@ -631,25 +631,26 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                   f'yet implemented. Please check it manually.'
                        })
 
-    duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
-    if len(duplicated) > 0:
-        duplicated_indexes = duplicated[
-            grouping_keys].drop_duplicates().index.values
-        for v in duplicated_indexes:
-            data_point = duplicated.loc[v, grouping_keys]
-            series = duplicated[grouping_keys].apply(
-                lambda row: np.array_equal(row.values, data_point.values),
-                axis=1)
-            pos = series[series].index.values
-            rows = duplicated.loc[pos, :].to_dict('records')
-            duplicated = duplicated.drop(pos)
-            errors.append({'Code': 'SS07',
-                           'ErrorLevel': 'WARNING',
-                           'Component': f'Duplicated',
-                           'Type': f'Datapoint',
-                           'Rows': rows.copy(),
-                           'Message': f'Duplicated datapoint '
-                                      f'{format_row(data_point)}'
-                           })
+    if len(grouping_keys) > 0:
+        duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
+        if len(duplicated) > 0:
+            duplicated_indexes = duplicated[
+                grouping_keys].drop_duplicates().index.values
+            for v in duplicated_indexes:
+                data_point = duplicated.loc[v, grouping_keys]
+                series = duplicated[grouping_keys].apply(
+                    lambda row: np.array_equal(row.values, data_point.values),
+                    axis=1)
+                pos = series[series].index.values
+                rows = duplicated.loc[pos, :].to_dict('records')
+                duplicated = duplicated.drop(pos)
+                errors.append({'Code': 'SS07',
+                               'ErrorLevel': 'WARNING',
+                               'Component': f'Duplicated',
+                               'Type': f'Datapoint',
+                               'Rows': rows.copy(),
+                               'Message': f'Duplicated datapoint '
+                                          f'{format_row(data_point)}'
+                               })
 
     return errors

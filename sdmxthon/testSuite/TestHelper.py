@@ -8,7 +8,8 @@ from datetime import datetime
 import pandas as pd
 
 from SDMXThon import Message, MessageTypeEnum
-from SDMXThon.api.api import _read_xml, MetadataType, setReferences, read_sdmx, get_datasets
+from SDMXThon.api.api import _read_xml, MetadataType, setReferences, read_sdmx, \
+    get_datasets
 from SDMXThon.model.dataset import Dataset
 
 
@@ -47,7 +48,9 @@ class TestHelper(unittest.TestCase):
         dataset = get_datasets(os.path.join(self.pathToDB, data_filename), metadata_filename)
         reference = pd.read_json(os.path.join(self.pathToReference, "df.json"), orient='records').astype('str')
         dataframe: pd.DataFrame = dataset.data.astype('str')
-        pd.testing.assert_frame_equal(dataframe.fillna(''), reference.replace('nan', ''), check_like=True)
+        pd.testing.assert_frame_equal(dataframe.fillna('').replace('nan', ''),
+                                      reference.replace('nan', ''),
+                                      check_like=True)
 
     def semantic_test(self, sqlite_db, sqlite_filename, limit, meta_file, reference_filename):
         dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, meta_file)

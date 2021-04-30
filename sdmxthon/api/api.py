@@ -87,7 +87,15 @@ def get_pandas_df(path_to_data):
         raise TypeError('No data available in a Structure file. '
                         'You should use read_sdmx method')
 
-    return _sdmx_to_dataframe(obj_)
+    if obj_.original_tag_name_ == 'GenericData':
+        type_ = MessageTypeEnum.GenericDataSet
+    elif obj_.original_tag_name_ == 'StructureSpecificData':
+        type_ = MessageTypeEnum.StructureDataSet
+    else:
+        raise ValueError('No data available in a Structure file. '
+                         'You should use read_sdmx method')
+
+    return _sdmx_to_dataframe(obj_, type_)
 
 
 '''

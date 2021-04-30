@@ -188,7 +188,7 @@ class Message:
                 list_errors = e.semantic_validation()
                 if len(list_errors) > 0:
                     validations[e.structure.id] = list_errors
-            if len(validations) is 0:
+            if len(validations) == 0:
                 return None
             else:
                 return validations
