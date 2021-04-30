@@ -5,7 +5,6 @@ import pandas as pd
 
 from SDMXThon.model.dataset import Dataset
 from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.handlers import first_element_dict
 from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, \
     makeWarnings
 from .gdscollector import GdsCollector
@@ -305,7 +304,4 @@ def _sdmx_to_dataframe(xml_obj, type_: MessageTypeEnum):
 
     del xml_obj
 
-    if len(dataframes) == 1:
-        return first_element_dict(dataframes)
-    else:
-        return dataframes
+    return dataframes

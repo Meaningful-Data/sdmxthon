@@ -2,7 +2,7 @@ from zipfile import ZipFile
 
 from SDMXThon.model.message import Message
 from SDMXThon.parsers.message_parsers import MetadataType
-from SDMXThon.parsers.metadata_validations import setReferences
+from SDMXThon.parsers.metadata_validations import _set_references
 from SDMXThon.parsers.read import _read_xml, _sdmx_gen_to_dataset, \
     _sdmx_str_to_dataset, _sdmx_to_dataframe, \
     _sdmx_to_dataset_no_metadata
@@ -21,7 +21,7 @@ def read_sdmx(path_to_sdmx_file) -> Message:
 
     obj_ = _read_xml(path_to_sdmx_file)
     if isinstance(obj_, MetadataType):
-        setReferences(obj_)
+        _set_references(obj_)
 
     header = obj_.header
     if obj_.original_tag_name_ == 'GenericData':
@@ -76,9 +76,7 @@ def get_pandas_df(path_to_data):
 
     :param path_to_data: Path or URL to the SDMX data file
 
-    :return: A `Pandas Dataframe \
-    <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_ or \
-    a dict of `Pandas Dataframe \
+    :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
     obj_ = _read_xml(path_to_data)

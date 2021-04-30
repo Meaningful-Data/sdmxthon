@@ -1,5 +1,4 @@
 import re
-import warnings
 from datetime import datetime
 
 import numpy as np
@@ -335,31 +334,47 @@ def check_reporting(e, format_):
 
 
 def validate_data(data: DataFrame, dsd: DataStructureDefinition):
+    """
+        Data validations stands for the next schema:
+
+        .. list-table:: Data validations
+            :widths: 20 80
+            :header-rows: 1
+
+            * - Code
+              - Description
+            * - SS01
+              - Check if all dimensions of the DSD exist in the dataframe
+            * - SS02
+              - Check if the measure code exists in the dataframe
+            * - SS03
+              - Check if all mandatory attributes exist in the dataframe
+            * - SS04
+              - Check if an attribute/dimension value that is associated \
+                to a Codelist is valid
+            * - SS05
+              - Check that all dimensions have values for every record of a \
+                dataframe
+            * - SS06
+              - Check that all mandatory attributes have values for every \
+                record of a dataset
+            * - SS07
+              - Check if two datapoints have the same values
+            * - SS08
+              - Check that the value inputted is compliant with Facets \
+                for the referred Representation
+            * - SS09
+              - Check if the value is compliant with the desired Time Format
+            * - SS10
+              - Check if an attribute/dimension value associated to a \
+                Cube Region Constraint is valid
+            * - SS11
+              - Check if a Series Constraint is valid (NOT IMPLEMENTED)
+    """
+
     mandatory = get_mandatory_attributes(dsd)
     codelist_values = get_codelist_values(dsd)
 
-    warnings.simplefilter(action='ignore', category=FutureWarning)
-
-    """
-        Validations stands for the next schema:
-        
-        SS01: Check if all dimensions of a DSD exist in the dataset 
-        SS02: Check if OBS_VALUE exists in the datasets 
-        SS03: Check if all mandatory attributes exit in the datasets 
-        SS04: Check if an attribute/dimension value that is associated 
-        to a Codelist is valid 
-        SS05: Check that all dimensions have values for every record of a 
-        dataset 
-        SS06: Check that all mandatory attributes have values for 
-        every record of a dataset 
-        SS07: Check if two data_points are the same 
-        SS08: Check that the value inputted is compliant with Facets 
-        for the referred Representation
-        SS09: Check if the value is compliant with the desired TimePeriod
-        SS10: Check if an attribute/dimension value that is associated 
-        to a Cube Region Constraint is valid
-        SS11: Check if a Series Constraint is valid
-        """
     errors = []
 
     faceted, types = dsd._facet_type

@@ -1,3 +1,4 @@
+###########################
 SDMXthon: the pythonic SDMX
 ###########################
 
@@ -14,6 +15,7 @@ Main features of the library:
 - Pandas Dataframe to SDMX
 - All SDMX-ML 2.1 formats supported
 
+############
 Introduction
 ############
 
@@ -26,6 +28,7 @@ provide an engine to write the SDMX-ML files.
 
 For a quickstart, please head to the :doc:`Walkthrough<./walkthrough>`
 
+*****************
 Information Model
 *****************
 
@@ -33,6 +36,7 @@ The library is based on the `SDMX Information model
 <https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf>`_.
 Same names for classes and properties have been used.
 
+***************************************
 Access to the main features of SDMXthon
 ***************************************
 
@@ -40,7 +44,7 @@ All access to parse the SDMX files are in the :doc:`Api package<./packages/api>`
 
 Classes of the library are in the :doc:`Model package<./packages/model>`
 
-
+********
 Packages
 ********
 
@@ -50,3 +54,6 @@ Packages
    walkthrough
    packages/api
    packages/model
+   packages/parsers
+   validations
+

@@ -1,3 +1,4 @@
+##############
 Representation
 ##############
 
@@ -7,6 +8,7 @@ Representation
     :exclude-members: parse_XML, build_attributes, build_children, factory
     :undoc-members:
 
+*****
 Facet
 *****
 
