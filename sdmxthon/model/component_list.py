@@ -488,7 +488,7 @@ class DataKeySet(DataParser):
 
     @is_included.setter
     def is_included(self, value):
-        self.is_included = bool_setter(value)
+        self._isIncluded = bool_setter(value)
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
@@ -497,9 +497,9 @@ class DataKeySet(DataParser):
             already_processed.add('id')
             self._valuesFor = value
 
-        value = find_attr_value_('include', node)
-        if value is not None and 'include' not in already_processed:
-            already_processed.add('include')
+        value = find_attr_value_('isIncluded', node)
+        if value is not None and 'isIncluded' not in already_processed:
+            already_processed.add('isIncluded')
             value = self._gds_parse_boolean(value)
             self.is_included = value
 
@@ -574,7 +574,7 @@ class Constraint(MaintainableArtefact):
 
     @data_content_keys.setter
     def data_content_keys(self, value):
-        self._data_content_keys = value
+        self._data_content_keys = generic_setter(value, DataKeySet)
 
     @property
     def metadata_content_region(self):
@@ -737,14 +737,14 @@ class ContentConstraint(Constraint):
         return ContentConstraint(*args_, **kwargs_)
 
     @property
-    def type_(self):
+    def role(self):
         return self._role
 
-    @type_.setter
-    def type_(self, value):
+    @role.setter
+    def role(self, value):
         if value not in ConstraintRoleType:
             raise ValueError('ConstraintRole must be either '
-                             '"allowableContent" or "actualContent"')
+                             '"Allowed" or "Actual"')
         else:
             self._role = value
 
@@ -753,12 +753,88 @@ class ContentConstraint(Constraint):
         super(ContentConstraint, self)._build_attributes(node, attrs,
                                                          already_processed)
 
+        value = find_attr_value_('type', node)
+        if value is not None and 'type' not in already_processed:
+            already_processed.add('type')
+            self.role = value
+
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
                         gds_collector_=None):
         """Builds the childs of the XML element"""
         super(ContentConstraint, self)._build_children(child_, node, nodeName_,
                                                        fromsubclass_,
                                                        gds_collector_)
+
+    def _parse_XML(self, indent, label):
+        prettyprint = indent != ''
+
+        indent = add_indent(indent)
+
+        data = super(Constraint, self)._to_XML(prettyprint)
+
+        outfile = ''
+
+        attributes = data.get('Attributes') or None
+
+        if attributes is not None:
+            outfile += f'{indent}<{label}{attributes} type="{self.role}">'
+        else:
+            outfile += f'{indent}<{label}>'
+
+        outfile += export_intern_data(data, indent)
+
+        indent_child = add_indent(indent)
+        indent_child_2 = add_indent(indent_child)
+        indent_ref = add_indent(indent_child_2)
+        indent_value = add_indent(indent_ref)
+
+        outfile += f'{indent_child}<{structureAbbr}:ConstraintAttachment>'
+        outfile += f'{indent_child_2}<{structureAbbr}:{self.type_attach}>'
+
+        agencyID, id_, version = split_unique_id(self.ref_attach)
+
+        outfile += f'{indent_ref}<Ref id="{id_}" ' \
+                   f'version="{version}" ' \
+                   f'agencyID="{agencyID}" ' \
+                   f'package="datastructure" class="{self.type_attach}"/>'
+
+        outfile += f'{indent_child_2}</{structureAbbr}:{self.type_attach}>'
+        outfile += f'{indent_child}</{structureAbbr}:ConstraintAttachment>'
+
+        if self.data_content_keys is not None:
+
+            outfile += f'{indent_child}<{structureAbbr}:DataKeySet ' \
+                       f'isIncluded="{str(self.data_content_keys.is_included).lower()}">'
+
+            for e in self.data_content_keys.keys:
+                outfile += f'{indent_child_2}<{structureAbbr}:Key>'
+
+                for k, v in e.items():
+                    outfile += f'{indent_ref}<{commonAbbr}:KeyValue id="{k}">'
+                    outfile += f'{indent_value}<{commonAbbr}:Value>{v}' \
+                               f'</{commonAbbr}:Value>'
+                    outfile += f'{indent_ref}</{commonAbbr}:KeyValue>'
+
+                outfile += f'{indent_child_2}</{structureAbbr}:Key>'
+
+            outfile += f'{indent_child}</{structureAbbr}:DataKeySet>'
+
+        if self.data_content_region is not None:
+
+            for e in self.data_content_region:
+                outfile += f'{indent_child}<{structureAbbr}:CubeRegion ' \
+                           f'isIncluded="{str(e.is_included).lower()}">'
+                outfile += f'{indent_child_2}<{commonAbbr}:KeyValue ' \
+                           f'id="{e.member.values_for}">'
+                for j in e.member.sel_value:
+                    outfile += f'{indent_ref}<{commonAbbr}:Value>{j}' \
+                               f'</{commonAbbr}:Value>'
+                outfile += f'{indent_child_2}</{commonAbbr}:KeyValue>'
+                outfile += f'{indent_child}</{structureAbbr}:CubeRegion>'
+
+        outfile += f'{indent}</{label}>'
+
+        return outfile
 
 
 class DataStructureDefinition(MaintainableArtefact):
@@ -945,7 +1021,9 @@ class DataStructureDefinition(MaintainableArtefact):
                         else:
                             cubes[e.member.values_for].update(
                                 e.member.sel_value)
-                if c.data_content_keys is not None:
+                if c.data_content_keys is not None and \
+                        c.role is not None and \
+                        c.role == "Allowed":
                     series += c.data_content_keys.keys
 
         return cubes, series

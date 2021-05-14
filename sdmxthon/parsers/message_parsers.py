@@ -571,6 +571,14 @@ class Structures(DataParser):
                                         f'{structureAbbr}:DataStructure')
             outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
 
+        if self.constraints is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:Constraints>'
+            for e in self.constraints.values():
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:ContentConstraint')
+            outfile += f'{indent_child}</{structureAbbr}:Constraints>'
+
         outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
 
         return outfile

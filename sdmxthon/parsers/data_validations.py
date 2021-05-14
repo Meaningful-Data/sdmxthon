@@ -637,9 +637,10 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     if len(series_const) > 0:
         lookup = pd.DataFrame(series_const)
 
-        lookup['membership_series_const'] = True
-
         columns = lookup.columns[lookup.isna().any()].tolist()
+        all_columns = lookup.columns.tolist()
+
+        lookup['membership_series_const'] = True
 
         dict_wild = {}
 
@@ -647,10 +648,11 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             dict_wild[e] = lookup[lookup[e].isna()]
             dict_wild[e].pop(e)
 
-        res = data.merge(lookup, how="left")
+        res = data[all_columns].merge(lookup, how="left")
 
         for k in dict_wild:
-            res.update(data.merge(dict_wild[k], how="left"), overwrite=False)
+            res.update(data[all_columns].merge(dict_wild[k], how="left"),
+                       overwrite=False)
 
         indexes = res[res['membership_series_const'].isna()].index.tolist()
 

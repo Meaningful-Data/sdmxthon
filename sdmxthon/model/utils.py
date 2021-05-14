@@ -201,7 +201,7 @@ FacetValueType = ['string', 'bigInteger', 'integer', 'long', 'short',
                   'reportingDay', 'dateTime', 'timesRange', 'month',
                   'monthDay', 'day', 'time', 'duration', 'keyValues',
                   'identifiableReference', 'dataSetReference', 'Xhtml']
-ConstraintRoleType = ['allowableContent', 'actualContent']
+ConstraintRoleType = ['Allowed', 'Actual']
 FacetType = ['isSequence', 'minLength', 'maxLength', 'minValue', 'maxValue',
              'startValue', 'endValue', 'interval', 'timeInterval', 'decimals',
              'pattern', 'startTime', 'endTime']
