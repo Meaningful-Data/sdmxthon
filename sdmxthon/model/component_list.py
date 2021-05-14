@@ -997,17 +997,18 @@ class DataStructureDefinition(MaintainableArtefact):
                          "type": Data_Types_VTL[type_], "isNull": False}
 
             components.append(component)
-        for c in self.attribute_descriptor.components.values():
-            type_ = "String"
+        if self.attribute_descriptor is not None:
+            for c in self.attribute_descriptor.components.values():
+                type_ = "String"
 
-            if (c.representation is not None
-                    and c.representation.type_ is not None):
-                type_ = c.representation.type_
+                if (c.representation is not None
+                        and c.representation.type_ is not None):
+                    type_ = c.representation.type_
 
-            component = {"name": c.id, "role": "Attribute",
-                         "type": Data_Types_VTL[type_], "isNull": True}
+                component = {"name": c.id, "role": "Attribute",
+                             "type": Data_Types_VTL[type_], "isNull": True}
 
-            components.append(component)
+                components.append(component)
         for c in self.measure_descriptor.components.values():
             type_ = "String"
 
