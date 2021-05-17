@@ -65,7 +65,8 @@ class TestHelper(unittest.TestCase):
         self.assert_equal_validation(errors, [])
 
     def metadata_test(self, reference_filename, path_to_data):
-        obj_ = read_sdmx(os.path.join(self.pathToMetadata, path_to_data))
+        obj_ = read_sdmx(os.path.join(self.pathToMetadata, path_to_data),
+                         validate=False)
         reference = self.load_reference_data(reference_filename)
         errors = obj_.payload.errors
         if errors is None:

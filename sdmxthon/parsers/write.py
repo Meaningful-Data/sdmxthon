@@ -298,7 +298,7 @@ def obs_gen(data: pd.DataFrame, attribute_codes: list, dimension_codes: list,
                    obs_value_data + '"/>'
     df_obs_value = df_obs_value.replace(
         f'{child3}<{genericAbbr}:ObsValue value="nan"/>',
-        f'{child3}<{genericAbbr}:ObsValue />')
+        f'{child3}<{genericAbbr}:ObsValue value=""/>')
     df_id['OBS_VALUE'] = df_obs_value
 
     df_id.insert(0, 'head', f'{child2}<{genericAbbr}:Obs>')

@@ -1,7 +1,10 @@
+import os
 import warnings
 from datetime import datetime
 
 import pandas as pd
+from lxml import etree as etree_
+from lxml.etree import DocumentInvalid
 
 from SDMXThon.model.dataset import Dataset
 from SDMXThon.utils.enums import MessageTypeEnum
@@ -22,8 +25,10 @@ StructureDataConstant = '{http://www.sdmx.org/resources/sdmxml' \
 MetadataConstant = '{http://www.sdmx.org/resources/sdmxml' \
                    '/schemas/v2_1/message}Structure'
 
+pathToSchema = '../schemas/SDMXMessage.xsd'
 
-def _read_xml(inFileName, print_warning=True):
+
+def _read_xml(inFileName, print_warning=True, validate=True):
     # TODO Check if the message has been loaded correctly
 
     global CapturedNsmap_
@@ -43,6 +48,22 @@ def _read_xml(inFileName, print_warning=True):
         root_class = MetadataType
     else:
         return None
+
+    if validate:
+        schema = os.path.join(pathToSchema)
+        xmlschema_doc = etree_.parse(schema)
+        xmlschema = etree_.XMLSchema(xmlschema_doc)
+
+        if not xmlschema.validate(doc):
+            try:
+                xmlschema.assertValid(doc)
+            except DocumentInvalid as e:
+                if len(e.args) == 1 and \
+                        'xsi:type' in e.args[0] or \
+                        'abstract' in e.args[0]:
+                    pass
+                else:
+                    raise e
     root_obj = root_class._factory()
     root_obj.original_tag_name_ = root_tag
     root_obj._build(root_node, gds_collector_=gds_collector)
