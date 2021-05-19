@@ -8,7 +8,7 @@ from lxml.etree import DocumentInvalid
 
 from SDMXThon.model.dataset import Dataset
 from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.xml_base import get_required_ns_prefix_defs, parse_xml, \
+from SDMXThon.utils.xml_base import parse_xml, \
     makeWarnings
 from .gdscollector import GdsCollector
 from .message_parsers import GenericDataType, StructureSpecificDataType, \
@@ -25,7 +25,7 @@ StructureDataConstant = '{http://www.sdmx.org/resources/sdmxml' \
 MetadataConstant = '{http://www.sdmx.org/resources/sdmxml' \
                    '/schemas/v2_1/message}Structure'
 
-pathToSchema = '../schemas/SDMXMessage.xsd'
+pathToSchema = 'schemas/SDMXMessage.xsd'
 
 
 def _read_xml(inFileName, print_warning=True, validate=True):
@@ -50,7 +50,8 @@ def _read_xml(inFileName, print_warning=True, validate=True):
         return None
 
     if validate:
-        schema = os.path.join(pathToSchema)
+        base_path = os.path.dirname(os.path.dirname(__file__))
+        schema = os.path.join(base_path, pathToSchema)
         xmlschema_doc = etree_.parse(schema)
         xmlschema = etree_.XMLSchema(xmlschema_doc)
 
@@ -67,8 +68,6 @@ def _read_xml(inFileName, print_warning=True, validate=True):
     root_obj = root_class._factory()
     root_obj.original_tag_name_ = root_tag
     root_obj._build(root_node, gds_collector_=gds_collector)
-    CapturedNsmap_, namespacedefs = get_required_ns_prefix_defs(root_node)
-    root_obj._namespace_def = namespacedefs
     makeWarnings(print_warning, gds_collector)
 
     return root_obj

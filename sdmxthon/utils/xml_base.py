@@ -90,22 +90,6 @@ def cast(typ, value):
     return typ(value)
 
 
-def get_required_ns_prefix_defs(rootNode):
-    """Get all name space prefix definitions required in this XML doc.
-    Return a dictionary of definitions and a char string of definitions.
-    """
-    nsmap = {
-        prefix: uri
-        for node in rootNode.iter()
-        for (prefix, uri) in node.nsmap.items()
-        if prefix is not None
-    }
-
-    namespacedefs = ' '.join([f'xmlns:{prefix}="{uri}"' for prefix, uri in nsmap.items()])
-
-    return nsmap, namespacedefs
-
-
 def makeWarnings(print_warnings, gds_collector):
     if print_warnings and len(gds_collector.get_messages()) > 0:
         separator = ('-' * 50) + '\n'

@@ -4,6 +4,7 @@ Message """
 import re as re_
 
 import pandas as pd
+from lxml.etree import DocumentInvalid
 
 from SDMXThon.model.base import AnnotableArtefact
 from SDMXThon.parsers.references import ReferenceType
@@ -339,25 +340,23 @@ class SeriesType(AnnotableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        self._anyAttributes_ = {}
-
-        for name, value in attrs.items():
-            if name not in already_processed:
-                self._anyAttributes_[name] = value
-
-        super(SeriesType, self)._build_attributes(node, attrs,
-                                                  already_processed)
+        self._anyAttributes_ = dict(attrs)
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
                         gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Obs':
-            obj_ = ObsType._factory(parent_object_=self)
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._anyAttributes_.update(obj_.any_attributes)
+            any_attributes = dict(child_.attrib)
+            if 'dim_type' in any_attributes.keys():
+                del any_attributes['dim_type']
+            self._anyAttributes_.update(any_attributes)
             self.obs.append(self._anyAttributes_.copy())
-
-        super(SeriesType, self)._build_children(child_, node, nodeName_, True)
+        elif nodeName_ == 'Annotations':
+            super(SeriesType, self)._build_children(child_, node, nodeName_,
+                                                    True)
+        else:
+            raise DocumentInvalid(
+                f"Element {nodeName_} not expected, line {node.sourceline}")
 
 
 class DataSetType(AnnotableArtefact):
@@ -771,9 +770,16 @@ class DataSetType(AnnotableArtefact):
             obj_._build(child_, gds_collector_=gds_collector_)
             self.data += obj_.obs
         elif nodeName_ == 'Obs':
-            obj_ = ObsType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.data.append(obj_.any_attributes)
+            any_attributes = dict(child_.attrib)
+            if 'dim_type' in any_attributes.keys():
+                del any_attributes['dim_type']
+            self.data.append(any_attributes)
+        elif nodeName_ == 'Annotations':
+            super(DataSetType, self)._build_children(child_, node,
+                                                     nodeName_, True)
+        else:
+            raise DocumentInvalid(
+                f"Element {nodeName_} not expected, line {node.sourceline}")
 
         if len(self.data) >= 50000:
             if self.dataframe is not None:
@@ -783,8 +789,6 @@ class DataSetType(AnnotableArtefact):
             else:
                 self._dataframe = pd.DataFrame(self.data)
             self.data = []
-
-        super(DataSetType, self)._build_children(child_, node, nodeName_, True)
 
 
 class TimeSeriesDataSetType(DataSetType):
