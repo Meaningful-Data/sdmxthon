@@ -4,7 +4,7 @@ import pickle
 import sqlite3
 import unittest
 from datetime import datetime
-from io import StringIO
+from io import StringIO, BytesIO
 
 import pandas as pd
 
@@ -27,9 +27,13 @@ class TestHelper(unittest.TestCase):
 
     def load_input_data(self, sqlite_db, sqlite_filename, limit, meta_file):
         conn = sqlite3.connect(os.path.join(self.pathToDB, sqlite_filename))
-        df = pd.read_sql(query_to_db(sqlite_db, limit), conn).astype('category')
+        df = pd.read_sql(query_to_db(sqlite_db, limit), conn).astype(
+            'category')
 
-        dsd = read_sdmx(os.path.join(self.pathToMetadata, meta_file)).payload.dsds['BIS:BIS_DER(1.0)']
+        dsd = \
+            read_sdmx(
+                os.path.join(self.pathToMetadata, meta_file)).payload.dsds[
+                'BIS:BIS_DER(1.0)']
 
         return Dataset(structure=dsd, data=df)
 
@@ -38,30 +42,40 @@ class TestHelper(unittest.TestCase):
             return json.loads(f.read())
 
     def load_reference_pickle(self, reference_filename):
-        with open(os.path.join(self.pathToReference, reference_filename), 'rb') as f:
+        with open(os.path.join(self.pathToReference, reference_filename),
+                  'rb') as f:
             return pickle.loads(f.read())
 
     def load_reference_text(self, reference_filename):
-        with open(os.path.join(self.pathToReference, reference_filename), 'r', encoding="utf-8") as f:
+        with open(os.path.join(self.pathToReference, reference_filename), 'r',
+                  encoding="utf-8") as f:
             return f.read().replace('\n', '').replace("\\'", '\'')
 
     def reading_test(self, data_filename):
         metadata_filename = os.path.join(self.pathToMetadata, "metadata.xml")
-        dataset = get_datasets(os.path.join(self.pathToDB, data_filename), metadata_filename)
-        reference = pd.read_json(os.path.join(self.pathToReference, "df.json"), orient='records').astype('str')
+        dataset = get_datasets(os.path.join(self.pathToDB, data_filename),
+                               metadata_filename)
+        reference = pd.read_json(os.path.join(self.pathToReference, "df.json"),
+                                 orient='records').astype('str')
         dataframe: pd.DataFrame = dataset.data.astype('str')
         pd.testing.assert_frame_equal(dataframe.fillna('').replace('nan', ''),
                                       reference.replace('nan', ''),
                                       check_like=True)
 
-    def semantic_test(self, sqlite_db, sqlite_filename, limit, meta_file, reference_filename):
-        dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, meta_file)
+    def semantic_test(self, sqlite_db, sqlite_filename, limit, meta_file,
+                      reference_filename):
+        dataset = self.load_input_data(sqlite_db, sqlite_filename, limit,
+                                       meta_file)
         errors = dataset.semantic_validation()
         reference_dict = self.load_reference_data(reference_filename)
-        self.assert_equal_validation(json.loads(json.dumps(errors).replace("NaN", 'null')), reference_dict)
+        self.assert_equal_validation(
+            json.loads(json.dumps(errors).replace("NaN", 'null')),
+            reference_dict)
 
-    def semantic_valid_test(self, sqlite_db, sqlite_filename, limit, pkl_filename):
-        dataset = self.load_input_data(sqlite_db, sqlite_filename, limit, pkl_filename)
+    def semantic_valid_test(self, sqlite_db, sqlite_filename, limit,
+                            pkl_filename):
+        dataset = self.load_input_data(sqlite_db, sqlite_filename, limit,
+                                       pkl_filename)
         errors = dataset.semantic_validation()
         self.assert_equal_validation(errors, [])
 
@@ -85,12 +99,15 @@ class TestHelper(unittest.TestCase):
 
     def metadata_compare(self, reference_filename, data_filename, dsd_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
-        content = {'content': obj_.content, 'items': obj_.payload.dsds[dsd_name].content,
-                   'representation': obj_.payload.dsds[dsd_name].measure_descriptor.components[
+        content = {'content': obj_.content,
+                   'items': obj_.payload.dsds[dsd_name].content,
+                   'representation': obj_.payload.dsds[
+                       dsd_name].measure_descriptor.components[
                        'OBS_VALUE'].representation,
                    'errors': obj_.payload.errors}
 
-        self.assertEqual(f'{content}', self.load_reference_text(reference_filename))
+        self.assertEqual(f'{content}',
+                         self.load_reference_text(reference_filename))
 
     def metadata_equality(self, data_filename):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
@@ -104,30 +121,60 @@ class TestHelper(unittest.TestCase):
 
         self.assertEqual(obj_2 != obj_, True)
 
-    def datasets_validation(self, data_filename, metadata_filename):
+    def datasets_validation(self, data_filename, metadata_filename,
+                            reference_filename=None):
         dataset = get_datasets(os.path.join(self.pathToDB, data_filename),
                                os.path.join(self.pathToMetadata,
                                             metadata_filename))
-
-        print(dataset.semantic_validation())
-
-        # self.assertEqual(dataset.semantic_validation(), [])
+        if reference_filename is None:
+            self.assertEqual(dataset.semantic_validation(), [])
+        else:
+            reference_dict = self.load_reference_data(reference_filename)
+            self.assert_equal_validation(json.loads(
+                json.dumps(dataset.semantic_validation()).replace("NaN",
+                                                                  'null')),
+                reference_dict)
 
     def header_writing(self, reference_filename):
         obj_ = Message(message_type=MessageTypeEnum.Metadata, payload={})
 
-        result = obj_.to_xml('', prepared=datetime.fromisoformat('2021-04-08T17:27:28'), prettyprint=False).getvalue()
+        result = obj_.to_xml('', prepared=datetime.fromisoformat(
+            '2021-04-08T17:27:28'), prettyprint=False).getvalue()
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
-    def metadata_agency_scheme_writing(self, reference_filename, data_filename):
+    def data_writing(self, dtype: MessageTypeEnum, series=False):
+        message = read_sdmx(os.path.join(self.pathToMetadata, 'bis.xml'))
+        dataset = Dataset(data=pd.read_json(
+            os.path.join(self.pathToDB, "df.json"),
+            orient='records').astype('str'),
+                          structure=message.payload.dsds['BIS:BIS_DER(1.0)'])
+
+        if series:
+            dataset.set_dimension_at_observation('TIME_PERIOD')
+
+        result = dataset.to_xml(dtype, '', prepared=datetime.fromisoformat(
+            '2000-01-01T00:00:01'), prettyprint=False).getvalue()
+
+        df = first_element_dict(
+            get_pandas_df(BytesIO(bytes(result, encoding='UTF-8'))))
+
+        pd.testing.assert_frame_equal(
+            df.fillna('').replace('nan', ''),
+            dataset.data.replace('nan', ''),
+            check_like=True)
+
+    def metadata_agency_scheme_writing(self, reference_filename,
+                                       data_filename):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.organisations._parse_XML(indent='', label='str:AgencyScheme')
+        result = obj_.payload.organisations._parse_XML(indent='',
+                                                       label='str:AgencyScheme')
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
-    def metadata_codelist_writing(self, reference_filename, data_filename, codelist_name):
+    def metadata_codelist_writing(self, reference_filename, data_filename,
+                                  codelist_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
         result = obj_.payload.codelists[codelist_name]._parse_XML(indent='',

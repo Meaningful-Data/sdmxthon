@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message:StructureSpecificData
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+        xmlns:ss="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific"
+        xmlns:ns21="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:AALOE(1.0):ObsLevelDim:AllDimensions"
+        xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+        xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+    <message:Header>
+        <message:ID>TEST</message:ID>
+        <message:Test>false</message:Test>
+        <message:Prepared>2021-03-16T17:18:44</message:Prepared>
+        <message:Sender id="111"/>
+        <message:Receiver id="Not_supplied"/>
+        <message:Structure structureID="AALOE"
+                           namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:AALOE(1.0)"
+                           dimensionAtObservation="AllDimensions">
+            <common:Structure>
+                <Ref agencyID="RBI" id="AALOE" version="1.0"
+                     class="DataStructure"/>
+            </common:Structure>
+        </message:Structure>
+    </message:Header>
+    <message:DataSet ss:structureRef="AALOE" xsi:type="ns21:DataSetType"
+                     ss:dataScope="DataStructure" action="Replace">
+        <Obs DEPENDENCY_TYPE="INDEPENDENT" Area_Operation="OVR_OP"
+             Entry_Type="DEBIT" RECO_PER="M6M12" Measure_Type="N_A"
+             Currency="N_A" AUDST="UNAUDITED" COMMENT="N_A" DMID="N_A"
+             TIME_PERIOD="2020-03-30" OBS_VALUE="01.0"/>
+        <Obs DEPENDENCY_TYPE="INDEPENDENT" Area_Operation="GL_OP"
+             Entry_Type="ADEBIT" RECO_PER="M6M12" Measure_Type="N_A"
+             Currency="INR" AUDST="UNAUDITED" COMMENT="N_A" DMID="N_A"
+             TIME_PERIOD="2020-03" OBS_VALUE="02.0"/>
+        <Obs DEPENDENCY_TYPE="INDEPENDENT" Area_Operation="GL_OP"
+             Entry_Type="CREDIT" RECO_PER="M6M12" Measure_Type="N_A"
+             Currency="N_A" AUDST="UNAUDITED" COMMENT="N_A" DMID="N_A"
+             TIME_PERIOD="2020-S1" OBS_VALUE="03.0"/>
+        <Obs DEPENDENCY_TYPE="INDEPENDENT" Area_Operation="GL_OP"
+             Entry_Type="ACREDIT" RECO_PER="M6M12" Measure_Type="N_A"
+             Currency="INR" AUDST="UNAUDITED" COMMENT="N_A" DMID="N_A"
+             TIME_PERIOD="2020-03-30" OBS_VALUE="04.0"/>
+    </message:DataSet>
+</message:StructureSpecificData>
