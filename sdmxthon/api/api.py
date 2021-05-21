@@ -127,14 +127,14 @@ def xml_to_json(pathToXML, path_to_metadata, output_path):
 '''
 
 
-def xml_to_csv(path_to_data, output_path, validate=True):
+def xml_to_csv(path_to_data, output_path=None, validate=True):
     """
     XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or
     .zip of CSV. If the SDMX data file has only a Dataset and output_path is
     '', it returns a StringIO object.
 
     :param path_to_data: Path or URL to the SDMX data file
-    :param output_path: Path to save the CSV
+    :param output_path: Path to save the CSV (default: None)
     :param validate: Validation of the XML file against the XSD (default: True)
     :return: A StringIO object if output_path is ''
     """
@@ -142,7 +142,7 @@ def xml_to_csv(path_to_data, output_path, validate=True):
     if message.type == MessageTypeEnum.Metadata:
         raise TypeError('Metadata files are not allowed here')
 
-    if '.zip' in output_path:
+    if output_path is not None and '.zip' in output_path:
         with ZipFile(output_path, 'w') as zipObj:
             # Add multiple files to the zip
             for record in message.payload.values():
@@ -154,7 +154,7 @@ def xml_to_csv(path_to_data, output_path, validate=True):
             raise ValueError('Cannot introduce several Datasets in a CSV. '
                              'Consider using .zip in output path')
         elif len(message.payload) is 1:
-            if '.zip' in output_path:
+            if output_path is not None and '.zip' in output_path:
                 filename = output_path.split('.')[0]
                 output_path = filename + '.csv'
             # Getting first value

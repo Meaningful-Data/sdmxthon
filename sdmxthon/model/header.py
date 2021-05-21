@@ -231,7 +231,6 @@ class Contact(DataParser):
 
         elif nodeName_ == 'Telephone':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
             if self.telephone is None:
@@ -241,7 +240,6 @@ class Contact(DataParser):
 
         elif nodeName_ == 'Fax':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
             if self._fax is None:
@@ -251,7 +249,6 @@ class Contact(DataParser):
 
         elif nodeName_ == 'X400':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
             if self._x400 is None:
@@ -261,7 +258,6 @@ class Contact(DataParser):
 
         elif nodeName_ == 'URI':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
             if self.uri is None:
@@ -271,7 +267,6 @@ class Contact(DataParser):
 
         elif nodeName_ == 'Email':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
 
             if self.email is None:
@@ -491,7 +486,6 @@ class Sender(Party):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Timezone':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self._timezone = value_
             self._validate_TimezoneType(self._timezone)
@@ -747,14 +741,12 @@ class Header(DataParser):
         """Builds the childs of the XML element"""
         if nodeName_ == 'ID':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self.id_ = value_
             self._validate_id_type(self._ID)
         elif nodeName_ == 'Test':
             sval_ = child_.text
             ival_ = self._gds_parse_boolean(sval_)
-            ival_ = self._gds_validate_boolean(ival_)
             self.test = ival_
         elif nodeName_ == 'Prepared':
             value_ = child_.text
@@ -798,13 +790,11 @@ class Header(DataParser):
             self._dataProvider = obj_
         elif nodeName_ == 'DataSetAction':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self.dataset_action = value_
             self._validate_action_type(self._DataSetAction)
         elif nodeName_ == 'DataSetID':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self.datasetID.append(value_)
             self._validate_id_type(self._DataSetID[-1])
@@ -814,12 +804,10 @@ class Header(DataParser):
             self.extracted = dval_
         elif nodeName_ == 'ReportingBegin':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self.reporting_begin = value_
         elif nodeName_ == 'ReportingEnd':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self.reporting_end = value_
         elif nodeName_ == 'EmbargoDate':

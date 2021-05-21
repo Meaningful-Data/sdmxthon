@@ -65,7 +65,6 @@ class ReferenceType(DataParser):
             self.ref = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
         elif nodeName_ == 'URN':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             aux = value_.split("=", 1)[1]
             self.ref = aux
@@ -379,8 +378,6 @@ class RefBaseType(DataParser):
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
             self.agencyID = value
-            self._validate_nested_NC_name_id_type(
-                self._agencyID)  # validate dim_type NestedNCNameIDType
 
         value = find_attr_value_('maintainableParentID', node)
         if (value is not None and
@@ -402,15 +399,11 @@ class RefBaseType(DataParser):
         if value is not None and 'containerID' not in already_processed:
             already_processed.add('containerID')
             self.containerID = value
-            self._validate_nested_id_type(
-                self._containerID)  # validate dim_type NestedIDType
 
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self.id_ = value
-            self._validate_nested_id_type(
-                self._id)  # validate dim_type NestedIDType
 
         value = find_attr_value_('version', node)
         if value is not None and 'version' not in already_processed:

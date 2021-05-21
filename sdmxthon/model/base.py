@@ -237,17 +237,14 @@ class Annotation(DataParser):
         """Builds the attributes present in the XML element"""
         if nodeName_ == 'AnnotationTitle':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self._title = value_
         elif nodeName_ == 'AnnotationType':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self._type = value_
         elif nodeName_ == 'AnnotationURL':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             self._url = value_.strip()
         elif nodeName_ == 'AnnotationText':

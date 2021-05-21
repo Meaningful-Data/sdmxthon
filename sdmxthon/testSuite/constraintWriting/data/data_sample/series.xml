@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mes:Structure xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xml="http://www.w3.org/XML/1998/namespace"
+               xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+               xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+               xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+               xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+    <mes:Header>
+        <mes:ID>IREF647759</mes:ID>
+        <mes:Test>false</mes:Test>
+        <mes:Prepared>2021-04-15T05:32:52Z</mes:Prepared>
+        <mes:Sender id="Unknown"/>
+        <mes:Receiver id="not_supplied"/>
+    </mes:Header>
+    <mes:Structures>
+        <str:Constraints>
+            <str:ContentConstraint
+                    urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=RBI:DMIDvalidity_ASSET(1.0)"
+                    isExternalReference="false" agencyID="RBI"
+                    id="DMIDvalidity_ASSET" isFinal="false" type="Allowed"
+                    version="1.0">
+                <com:Name xml:lang="en">DMID Validity ASSET</com:Name>
+                <str:ConstraintAttachment>
+                    <str:DataStructure>
+                        <Ref package="datastructure" agencyID="RBI" id="ASSET"
+                             version="1.0" class="DataStructure"/>
+                    </str:DataStructure>
+                </str:ConstraintAttachment>
+                <str:DataKeySet isIncluded="true">
+                    <str:Key>
+                        <com:KeyValue id="DEPENDENCY_TYPE">
+                            <com:Value>INDEPENDENT</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="Area_Operation">
+                            <com:Value>DOM_OP</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="Measure_Type">
+                            <com:Value>TOTAL</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="Asset_List">
+                            <com:Value>CIH</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="Fixed_Assets">
+                            <com:Value>N_A</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="FA_DET">
+                            <com:Value>N_A</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="Other_Assets">
+                            <com:Value>N_A</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="TIME_SPAN">
+                            <com:Value>N_A</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="BRNAME">
+                            <com:Value>N_A</com:Value>
+                        </com:KeyValue>
+                        <com:KeyValue id="ASETTY">
+                            <com:Value>N_A</com:Value>
+                        </com:KeyValue>
+                    </str:Key>
+                </str:DataKeySet>
+            </str:ContentConstraint>
+        </str:Constraints>
+    </mes:Structures>
+</mes:Structure>
