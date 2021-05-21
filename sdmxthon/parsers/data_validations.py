@@ -636,38 +636,44 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
     if len(series_const) > 0:
         lookup = pd.DataFrame(series_const)
-
-        columns = lookup.columns[lookup.isna().any()].tolist()
         all_columns = lookup.columns.tolist()
 
-        lookup['membership_series_const'] = True
+        result = all(elem in data.columns.tolist() for elem in all_columns)
 
-        dict_wild = {}
+        if result:
+            columns = lookup.columns[lookup.isna().any()].tolist()
 
-        for e in columns:
-            dict_wild[e] = lookup[lookup[e].isna()]
-            dict_wild[e].pop(e)
+            lookup['membership_series_const'] = True
 
-        res = data[all_columns].merge(lookup, how="left")
+            dict_wild = {}
 
-        for k in dict_wild:
-            res.update(data[all_columns].merge(dict_wild[k], how="left"),
-                       overwrite=False)
+            for e in columns:
+                dict_wild[e] = lookup[lookup[e].isna()]
+                dict_wild[e].pop(e)
 
-        indexes = res[res['membership_series_const'].isna()].index.tolist()
+            res = data[all_columns].merge(lookup, how="left")
 
-        del res
-        del dict_wild
+            for k in dict_wild:
+                res.update(data[all_columns].merge(dict_wild[k], how="left"),
+                           overwrite=False)
 
-        if len(indexes) > 0:
-            rows = data.loc[indexes, :].to_dict('records')
-            errors.append({'Code': 'SS11',
-                           'ErrorLevel': 'WARNING',
-                           'Component': f'Series',
-                           'Type': f'Constraint',
-                           'Rows': rows.copy(),
-                           'Message': f'Found disallowed rows'
-                           })
+            indexes = res[res['membership_series_const'].isna()].index.tolist()
+
+            del res
+            del dict_wild
+
+            if len(indexes) > 0:
+                rows = data.loc[indexes, :].to_dict('records')
+                errors.append({'Code': 'SS11',
+                               'ErrorLevel': 'WARNING',
+                               'Component': f'Series',
+                               'Type': f'Constraint',
+                               'Rows': rows.copy(),
+                               'Message': f'Found disallowed rows'
+                               })
+        else:
+            del lookup
+            del all_columns
 
     if len(grouping_keys) > 0:
         duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
