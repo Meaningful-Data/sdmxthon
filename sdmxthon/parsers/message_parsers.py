@@ -2,7 +2,7 @@
     Message_parsers file contains all classes to parse a SDMX-ML Message
 """
 
-from SDMXThon.model.component_list import DataStructureDefinition, \
+from SDMXThon.model.definitions import DataStructureDefinition, \
     DataFlowDefinition, ContentConstraint
 from SDMXThon.model.header import Header
 from SDMXThon.model.itemScheme import Codelist, AgencyScheme, ConceptScheme

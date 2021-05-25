@@ -13,7 +13,7 @@ overview of the most used classes from the user´s perspective.
    ./model/dataset
    ./model/message
    ./model/component
-   ./model/componentList
+   ./model/descriptors
    ./model/item
    ./model/itemScheme
    ./model/dataStructure

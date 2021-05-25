@@ -9,6 +9,9 @@ pylint = "*"
 flake8 = "*"
 twine = "*"
 wheel = "*"
+sphinx = "*"
+sphinx-autobuild = "*"
+sphinx-rtd-theme = "*"
 
 [packages]
 lxml = { version = "4.6.1", index = "pypi" }
