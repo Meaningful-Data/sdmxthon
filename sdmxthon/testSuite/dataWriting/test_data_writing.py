@@ -4,8 +4,8 @@ Data Writing Tests
 import os
 import unittest
 
-from SDMXThon import MessageTypeEnum
 from SDMXThon.testSuite import TestHelper
+from SDMXThon.utils.enums import MessageTypeEnum
 
 
 class DataWriting(TestHelper.TestHelper):

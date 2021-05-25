@@ -81,7 +81,7 @@ class ItemScheme(MaintainableArtefact):
 
     @property
     def is_partial(self):
-        """Denotes whether the Item Scheme contains a sub set of the 
+        """Denotes whether the Item Scheme contains a sub set of the
         full set of Items in the maintained scheme."""
         return self._isPartial
 
@@ -132,8 +132,8 @@ class ItemScheme(MaintainableArtefact):
         data = super(ItemScheme, self)._to_XML(prettyprint)
 
         if self.is_partial is not None:
-            data[
-                'Attributes'] += f' isPartial="{str(self.is_partial).lower()}"'
+            data['Attributes'] += f' isPartial="' \
+                                  f'{str(self.is_partial).lower()}"'
 
         outfile = ''
 
@@ -523,7 +523,7 @@ class Item(NameableArtefact):
 
         data = super(Item, self)._to_XML(prettyprint)
         indent = add_indent(indent)
-        outfile = f'{indent}<{head} {data["Attributes"]}>'
+        outfile = f'{indent}<{head}{data["Attributes"]}>'
         outfile += export_intern_data(data, indent)
         return outfile
 

@@ -33,9 +33,9 @@ class LocalisedString(DataParser):
 
     def __eq__(self, other):
         if isinstance(other, LocalisedString):
-            return self._locale == other._locale \
-                   and self._content == other._content \
-                   and self._label == other._label
+            return (self._locale == other._locale and
+                    self._content == other._content and
+                    self._label == other._label)
         else:
             return False
 
@@ -167,9 +167,9 @@ class Annotation(DataParser):
 
     def __eq__(self, other):
         if isinstance(other, Annotation):
-            return self._id == other._id and self._title == other._title and \
-                   self._type == other._type and self._url == other._url \
-                   and self._text == other._text
+            return (self._id == other._id and self._title == other._title and
+                    self._type == other._type and self._url == other._url and
+                    self._text == other._text)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -344,13 +344,13 @@ class AnnotableArtefact(DataParser):
                 if e.title is not None and e.title != '':
                     outfile.append(
                         f'{child2}<{commonAbbr}:AnnotationTitle>'
-                        f'{e.title.replace("&", "&amp;")}'
+                        f'{e.title.replace("&", "&amp;").rstrip()}'
                         f'</{commonAbbr}:AnnotationTitle>')
 
                 if e.type is not None and e.type != '':
                     outfile.append(
                         f'{child2}<{commonAbbr}:AnnotationType>'
-                        f'{e.type.replace("&", "&amp;")}'
+                        f'{e.type.replace("&", "&amp;").rstrip()}'
                         f'</{commonAbbr}:AnnotationType>')
 
                 if e.url is not None and e.url != '':
@@ -386,9 +386,9 @@ class IdentifiableArtefact(AnnotableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, IdentifiableArtefact):
-            return super(IdentifiableArtefact, self).__eq__(
-                other) and self._id == other._id \
-                   and self._uri == other._uri and self._urn == other._urn
+            return (super(IdentifiableArtefact, self).__eq__(other) and
+                    self._id == other._id and
+                    self._uri == other._uri and self._urn == other._urn)
         else:
             return False
 
@@ -480,9 +480,9 @@ class NameableArtefact(IdentifiableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, NameableArtefact):
-            return super(NameableArtefact, self).__eq__(
-                other) and self._name == other._name \
-                   and self._description == other._description
+            return (super(NameableArtefact, self).__eq__(other) and
+                    self._name == other._name and
+                    self._description == other._description)
         else:
             return False
 
@@ -587,10 +587,10 @@ class VersionableArtefact(NameableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, VersionableArtefact):
-            return super(VersionableArtefact, self).__eq__(
-                other) and self._version == other._version \
-                   and self._validFrom == other._validFrom \
-                   and self._validTo == other._validTo
+            return (super(VersionableArtefact, self).__eq__(other) and
+                    self._version == other._version and
+                    self._validFrom == other._validFrom and
+                    self._validTo == other._validTo)
         else:
             return False
 
@@ -700,12 +700,12 @@ class MaintainableArtefact(VersionableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, MaintainableArtefact):
-            return super(MaintainableArtefact, self).__eq__(
-                other) and self._isFinal == other._isFinal \
-                   and self._isExternalReference == other._isExternalReference \
-                   and self._serviceUrl == other._serviceUrl \
-                   and self._structureUrl == other._structureUrl \
-                   and self._maintainer == other._maintainer
+            return (super(MaintainableArtefact, self).__eq__(other) and
+                    self._isFinal == other._isFinal and
+                    self._isExternalReference == other._isExternalReference and
+                    self._serviceUrl == other._serviceUrl and
+                    self._structureUrl == other._structureUrl and
+                    self._maintainer == other._maintainer)
         else:
             return False
 
@@ -787,7 +787,8 @@ class MaintainableArtefact(VersionableArtefact):
             self._maintainer = value
 
         value = find_attr_value_('isExternalReference', node)
-        if value is not None and 'isExternalReference' not in already_processed:
+        if value is not None and 'isExternalReference' not in \
+                already_processed:
             already_processed.add('isExternalReference')
             value = self._gds_parse_boolean(value)
             self.isExternalReference = value

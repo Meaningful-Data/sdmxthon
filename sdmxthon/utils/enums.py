@@ -1,8 +1,4 @@
-try:
-    from enum import Enum
-    from enum import IntEnum
-except ImportError:
-    Enum = object
+from enum import Enum
 
 
 class ActionType(str, Enum):
@@ -17,24 +13,30 @@ class ActionType(str, Enum):
 
     APPEND = 'Append'
 
-    """Append - this is an incremental update for an existing data/metadata set or the provision of new data 
-    or documentation (attribute values) formerly absent. If any of the supplied data or metadata is already present, 
-    it will not replace that data or metadata. This corresponds to the "Update" value found in version 1.0 of the 
-    SDMX Technical Standards."""
+    """Append - this is an incremental update for an existing data/metadata
+    set or the provision of new data or documentation (attribute values)
+    formerly absent. If any of the supplied data or metadata is already
+    present, it will not replace that data or metadata. This corresponds to
+    the "Update" value found in version 1.0 of the SDMX Technical Standards.
+    """
 
     REPLACE = 'Replace'
-    """Replace - data/metadata is to be replaced, and may also include additional data/metadata to be appended. 
-    The replacement occurs at the level of the observation - that is, it is not possible to replace an entire series."""
+    """Replace - data/metadata is to be replaced, and may also include
+    additional data/metadata to be appended. The replacement occurs at the
+    level of the observation - that is, it is not possible to replace an
+    entire series. """
 
     DELETE = 'Delete'
-    """Delete - data/metadata is to be deleted. Deletion occurs at the lowest level object. 
-    For instance, if a delete data message contains a series with no observations, 
-    then the entire series will be deleted. If the series contains observations, then only those observations specified 
-    will be deleted. The same basic concept applies for attributes. If a series or observation in a delete message 
-    contains attributes, then only those attributes will be deleted."""
+    """Delete - data/metadata is to be deleted. Deletion occurs at the
+    lowest level object. For instance, if a delete data message contains a
+    series with no observations, then the entire series will be deleted. If
+    the series contains observations, then only those observations specified
+    will be deleted. The same basic concept applies for attributes. If a
+    series or observation in a delete message contains attributes, then only
+    those attributes will be deleted. """
 
     INFORMATION = 'Information'
-    """Informational - data/metadata is being exchanged for informational 
+    """Informational - data/metadata is being exchanged for informational
     purposes only, and not meant to update a system."""
 
 
@@ -220,7 +222,8 @@ class ContentConstraintTypeCodeType(str, Enum):
     """The constraint contains the allowed values for attachable object."""
 
     ACTUAL = 'Actual'
-    """The constraints contains the actual data present for the attachable object."""
+    """The constraints contains the actual data present for the attachable
+    object. """
 
 
 class DataReturnDetailType(str, Enum):
@@ -228,19 +231,23 @@ class DataReturnDetailType(str, Enum):
     much detail should be returned for a data set."""
 
     FULL = 'Full'
-    """The entire data set (including all data, documentation, and annotations) will be returned."""
+    """The entire data set (including all data, documentation,
+    and annotations) will be returned. """
 
     DATA_ONLY = 'DataOnly'
-    """Only the observed values and their keys will be returned. 
-    Annotations and documentation (i.e. Attributes) and therefore Groups, will be excluded."""
+    """Only the observed values and their keys will be returned. Annotations
+    and documentation (i.e. Attributes) and therefore Groups, will be
+    excluded. """
 
     SERIES_KEY_ONLY = 'SeriesKeyOnly'
-    """Only the series elements and the values for the dimensions will be returned. 
-    Annotations, documentation, and observations will be excluded."""
+    """Only the series elements and the values for the dimensions will be
+    returned. Annotations, documentation, and observations will be excluded.
+    """
 
     NO_DATA = 'NoData'
-    """Returns all documentation at the DataSet, Group, and Series level without any Observations 
-    (therefore, Observation level documentation is not returned). Annotations are not returned."""
+    """Returns all documentation at the DataSet, Group, and Series level
+    without any Observations (therefore, Observation level documentation is
+    not returned). Annotations are not returned. """
 
 
 class DataScopeType(str, Enum):
@@ -249,17 +256,20 @@ class DataScopeType(str, Enum):
     to be valid."""
 
     DATA_STRUCTURE = 'DataStructure'
-    """The data set conforms simply to the data structure definition as it is defined, 
-    without regard to any constraints."""
+    """The data set conforms simply to the data structure definition as it
+    is defined, without regard to any constraints. """
 
     CONSTRAINED_DATA_STRUCTURE = 'ConstrainedDataStructure'
-    """The data set conforms to the known allowable content constraints applied to the data structure definition."""
+    """The data set conforms to the known allowable content constraints
+    applied to the data structure definition. """
 
     DATAFLOW = 'Dataflow'
-    """The data set conforms to the known allowable content constraints applied to the dataflow."""
+    """The data set conforms to the known allowable content constraints
+    applied to the dataflow. """
 
     PROVISION_AGREEMENT = 'ProvisionAgreement'
-    """The data set conforms to the known allowable content constraints applied to the provision agreement."""
+    """The data set conforms to the known allowable content constraints
+    applied to the provision agreement. """
 
 
 class DataStructureComponentTypeCodelistType(str, Enum):
@@ -277,39 +287,49 @@ class DataType(str, Enum):
     """DataTypeType provides an enumerated list of the types of data formats
     allowed as the for the representation of an object."""
     STRING = 'String'
-    """A string datatype corresponding to W3C XML Schema's xs:string datatype."""
+    """A string datatype corresponding to W3C XML Schema's xs:string
+    datatype. """
 
     ALPHA = 'Alpha'
-    """A string datatype which only allows for the simple alphabetic character set of A-Z, a-z."""
+    """A string datatype which only allows for the simple alphabetic
+    character set of A-Z, a-z. """
 
     ALPHA_NUMERIC = 'AlphaNumeric'
-    """A string datatype which only allows for the simple alphabetic character set of A-Z, 
-    a-z plus the simple numeric character set of 0-9."""
+    """A string datatype which only allows for the simple alphabetic
+    character set of A-Z, a-z plus the simple numeric character set of 0-9. """
 
     NUMERIC = 'Numeric'
-    """A string datatype which only allows for the simple numeric character set of 0-9. 
-    This format is not treated as an integer, and therefore can having leading zeros."""
+    """A string datatype which only allows for the simple numeric character
+    set of 0-9. This format is not treated as an integer, and therefore can
+    having leading zeros. """
 
     BIG_INTEGER = 'BigInteger'
-    """An integer datatype corresponding to W3C XML Schema's xs:integer datatype."""
+    """An integer datatype corresponding to W3C XML Schema's xs:integer
+    datatype. """
 
     INTEGER = 'Integer'
-    """An integer datatype corresponding to W3C XML Schema's xs:int datatype."""
+    """An integer datatype corresponding to W3C XML Schema's xs:int
+    datatype. """
 
     LONG = 'Long'
-    """A numeric datatype corresponding to W3C XML Schema's xs:long datatype."""
+    """A numeric datatype corresponding to W3C XML Schema's xs:long
+    datatype. """
 
     SHORT = 'Short'
-    """A numeric datatype corresponding to W3C XML Schema's xs:short datatype."""
+    """A numeric datatype corresponding to W3C XML Schema's xs:short
+    datatype. """
 
     DECIMAL = 'Decimal'
-    """A numeric datatype corresponding to W3C XML Schema's xs:decimal datatype."""
+    """A numeric datatype corresponding to W3C XML Schema's xs:decimal
+    datatype. """
 
     FLOAT = 'Float'
-    """A numeric datatype corresponding to W3C XML Schema's xs:float datatype."""
+    """A numeric datatype corresponding to W3C XML Schema's xs:float
+    datatype. """
 
     DOUBLE = 'Double'
-    """A numeric datatype corresponding to W3C XML Schema's xs:double datatype."""
+    """A numeric datatype corresponding to W3C XML Schema's xs:double
+    datatype. """
 
     BOOLEAN = 'Boolean'
     """A datatype corresponding to W3C XML Schema's xs:boolean datatype."""
@@ -318,91 +338,111 @@ class DataType(str, Enum):
     """A datatype corresponding to W3C XML Schema's xs:anyURI datatype."""
 
     COUNT = 'Count'
-    """A simple incrementing Integer dim_type. The isSequence facet must be set to true, 
-    and the interval facet must be set to "1"."""
+    """A simple incrementing Integer dim_type. The isSequence facet must be
+    set to true, and the interval facet must be set to "1". """
 
     INCLUSIVE_VALUE_RANGE = 'InclusiveValueRange'
-    """This value indicates that the startValue and endValue attributes provide the inclusive 
-    boundaries of a numeric range of dim_type xs:decimal."""
+    """This value indicates that the startValue and endValue attributes
+    provide the inclusive boundaries of a numeric range of dim_type
+    xs:decimal. """
 
     EXCLUSIVE_VALUE_RANGE = 'ExclusiveValueRange'
-    """This value indicates that the startValue and endValue attributes provide the exclusive 
-    boundaries of a numeric range, of dim_type xs:decimal."""
+    """This value indicates that the startValue and endValue attributes
+    provide the exclusive boundaries of a numeric range, of dim_type
+    xs:decimal. """
 
     INCREMENTAL = 'Incremental'
-    """This value indicates that the value increments according to the value provided in the 
-    interval facet, and has a true value for the isSequence facet."""
+    """This value indicates that the value increments according to the value
+    provided in the interval facet, and has a true value for the isSequence
+    facet. """
 
     OBSERVATIONAL_TIME_PERIOD = 'ObservationalTimePeriod'
-    """Observational time periods are the superset of all time periods in SDMX. 
-    It is the union of the standard time periods 
-    (i.e. Gregorian time periods, the reporting time periods, and date time) and a time range."""
+    """Observational time periods are the superset of all time periods in
+    SDMX. It is the union of the standard time periods (i.e. Gregorian time
+    periods, the reporting time periods, and date time) and a time range. """
 
     STANDARD_TIME_PERIOD = 'StandardTimePeriod'
-    """Standard time periods is a superset of distinct time period in SDMX. 
-    It is the union of the basic time periods (i.e. the Gregorian time periods and date time) 
-    and the reporting time periods."""
+    """Standard time periods is a superset of distinct time period in SDMX.
+    It is the union of the basic time periods (i.e. the Gregorian time
+    periods and date time) and the reporting time periods. """
 
     BASIC_TIME_PERIOD = 'BasicTimePeriod'
-    """BasicTimePeriod time periods is a superset of the Gregorian time periods and a date time."""
+    """BasicTimePeriod time periods is a superset of the Gregorian time
+    periods and a date time. """
 
     GREGORIAN_TIME_PERIOD = 'GregorianTimePeriod'
-    """Gregorian time periods correspond to calendar periods and are represented in ISO-8601 formats. 
-    This is the union of the year, year month, and date formats."""
+    """Gregorian time periods correspond to calendar periods and are
+    represented in ISO-8601 formats. This is the union of the year,
+    year month, and date formats. """
 
     GREGORIAN_YEAR = 'GregorianYear'
-    """A Gregorian time period corresponding to W3C XML Schema's xs:gYear datatype, which is based on ISO-8601."""
+    """A Gregorian time period corresponding to W3C XML Schema's xs:gYear
+    datatype, which is based on ISO-8601. """
 
     GREGORIAN_YEAR_MONTH = 'GregorianYearMonth'
-    """A time datatype corresponding to W3C XML Schema's xs:gYearMonth datatype, which is based on ISO-8601."""
+    """A time datatype corresponding to W3C XML Schema's xs:gYearMonth
+    datatype, which is based on ISO-8601. """
 
     GREGORIAN_DAY = 'GregorianDay'
-    """A time datatype corresponding to W3C XML Schema's xs:date datatype, which is based on ISO-8601."""
+    """A time datatype corresponding to W3C XML Schema's xs:date datatype,
+    which is based on ISO-8601. """
 
     REPORTING_TIME_PERIOD = 'ReportingTimePeriod'
-    """Reporting time periods represent periods of a standard length within a reporting year, where to start 
-    of the year (defined as a month and day) must be defined elsewhere or it is assumed to be January 1. 
-    This is the union of the reporting year, semester, trimester, quarter, month, week, and day."""
+    """Reporting time periods represent periods of a standard length within
+    a reporting year, where to start of the year (defined as a month and
+    day) must be defined elsewhere or it is assumed to be January 1. This is
+    the union of the reporting year, semester, trimester, quarter, month,
+    week, and day. """
 
     REPORTING_YEAR = 'ReportingYear'
-    """A reporting year represents a period of 1 year (P1Y) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingYearType."""
+    """A reporting year represents a period of 1 year (P1Y) from the start
+    date of the reporting year. This is expressed as using the SDMX specific
+    ReportingYearType. """
 
     REPORTING_SEMESTER = 'ReportingSemester'
-    """A reporting semester represents a period of 6 months (P6M) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingSemesterType."""
+    """A reporting semester represents a period of 6 months (P6M) from the
+    start date of the reporting year. This is expressed as using the SDMX
+    specific ReportingSemesterType. """
 
     REPORTING_TRIMESTER = 'ReportingTrimester'
-    """A reporting trimester represents a period of 4 months (P4M) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingTrimesterType."""
+    """A reporting trimester represents a period of 4 months (P4M) from the
+    start date of the reporting year. This is expressed as using the SDMX
+    specific ReportingTrimesterType. """
 
     REPORTING_QUARTER = 'ReportingQuarter'
-    """A reporting quarter represents a period of 3 months (P3M) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingQuarterType."""
+    """A reporting quarter represents a period of 3 months (P3M) from the
+    start date of the reporting year. This is expressed as using the SDMX
+    specific ReportingQuarterType. """
 
     REPORTING_MONTH = 'ReportingMonth'
-    """A reporting month represents a period of 1 month (P1M) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingMonthType."""
+    """A reporting month represents a period of 1 month (P1M) from the start
+    date of the reporting year. This is expressed as using the SDMX specific
+    ReportingMonthType. """
 
     REPORTING_WEEK = 'ReportingWeek'
-    """A reporting week represents a period of 7 days (P7D) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingWeekType."""
+    """A reporting week represents a period of 7 days (P7D) from the start
+    date of the reporting year. This is expressed as using the SDMX specific
+    ReportingWeekType. """
 
     REPORTING_DAY = 'ReportingDay'
-    """A reporting day represents a period of 1 day (P1D) from the start date of the reporting year. 
-    This is expressed as using the SDMX specific ReportingDayType."""
+    """A reporting day represents a period of 1 day (P1D) from the start
+    date of the reporting year. This is expressed as using the SDMX specific
+    ReportingDayType. """
 
     DATE_TIME = 'DateTime'
-    """A time datatype corresponding to W3C XML Schema's xs:dateTime datatype."""
+    """A time datatype corresponding to W3C XML Schema's xs:dateTime
+    datatype. """
 
     TIME_RANGE = 'TimeRange'
-    """TimeRange defines a time period by providing a distinct start (date or date time) and a duration."""
+    """TimeRange defines a time period by providing a distinct start (date
+    or date time) and a duration. """
 
     MONTH = 'Month'
     """A time datatype corresponding to W3C XML Schema's xs:gMonth datatype."""
 
     MONTH_DAY = 'MonthDay'
-    """A time datatype corresponding to W3C XML Schema's xs:gMonthDay datatype."""
+    """A time datatype corresponding to W3C XML Schema's xs:gMonthDay
+    datatype. """
 
     DAY = 'Day'
     """A time datatype corresponding to W3C XML Schema's xs:gDay datatype."""
@@ -411,33 +451,38 @@ class DataType(str, Enum):
     """A time datatype corresponding to W3C XML Schema's xs:time datatype."""
 
     DURATION = 'Duration'
-    """A time datatype corresponding to W3C XML Schema's xs:duration datatype."""
+    """A time datatype corresponding to W3C XML Schema's xs:duration
+    datatype. """
 
     XHTML = 'XHTML'
-    """This value indicates that the content of the component can contain XHTML markup."""
+    """This value indicates that the content of the component can contain
+    XHTML markup. """
 
     KEY_VALUES = 'KeyValues'
-    """This value indicates that the content of the component will be data key 
+    """This value indicates that the content of the component will be data key
     (a set of dimension references and values for the dimensions)."""
 
     IDENTIFIABLE_REFERENCE = 'IdentifiableReference'
-    """This value indicates that the content of the component will be complete reference 
-    (either URN or full set of reference fields) to an Identifiable object in the SDMX Information Model."""
+    """This value indicates that the content of the component will be
+    complete reference (either URN or full set of reference fields) to an
+    Identifiable object in the SDMX Information Model. """
 
     DATA_SET_REFERENCE = 'DataSetReference'
-    """This value indicates that the content of the component will be reference to a data provider, 
-    which is actually a formal reference to a data provider and a data set identifier value."""
+    """This value indicates that the content of the component will be
+    reference to a data provider, which is actually a formal reference to a
+    data provider and a data set identifier value. """
 
     ATTACHMENT_CONSTRAINT_REFERENCE = 'AttachmentConstraintReference'
-    """This value indicates that the content of the component will be reference to an attachment constraint, 
-    which is actually a combination of a collection of full or partial key values and a reference to a data set 
-    or data structure, usage, or provision agreement."""
+    """This value indicates that the content of the component will be
+    reference to an attachment constraint, which is actually a combination
+    of a collection of full or partial key values and a reference to a data
+    set or data structure, usage, or provision agreement. """
 
 
 class DimensionEnumerationSchemeTypeCodelistType(str, Enum):
-    """DimensionEnumerationSchemeTypeCodelistType provides an enumeration of all
-    item schemes which are allowable as the representation of a data
-    structure definition component."""
+    """DimensionEnumerationSchemeTypeCodelistType provides an enumeration of
+    all item schemes which are allowable as the representation of a data
+    structure definition component. """
     CODELIST = 'Codelist'
     CONCEPT_SCHEME = 'ConceptScheme'
 
@@ -473,7 +518,8 @@ class InputOutputTypeCodeType(str, Enum):
     """Output - referenced object is an output to the process step."""
 
     ANY = 'Any'
-    """Any - referenced object is either an input or an output to the process step."""
+    """Any - referenced object is either an input or an output to the
+    process step. """
 
 
 class ItemSchemePackageTypeCodelistType(str, Enum):
@@ -664,7 +710,7 @@ class ObsDimensionsCodeType(str, Enum):
     "TimeDimension" and "AllDimensions" """
     ALL_DIMENSIONS = 'AllDimensions'
 
-    """AllDimensions notes that the cross sectional format shall be flat; 
+    """AllDimensions notes that the cross sectional format shall be flat;
     that is all dimensions should be contained at the observation level.
     """
 
@@ -677,7 +723,8 @@ class ObservationActionCodeType(str, Enum):
     returned."""
 
     ACTIVE = 'Active'
-    """Active observations, regardless of when they were added or updated will be returned."""
+    """Active observations, regardless of when they were added or updated
+    will be returned. """
 
     ADDED = 'Added'
     """Only newly added observations will be returned."""
@@ -768,7 +815,8 @@ class SeverityCodeType(str, Enum):
     """Warning indicates that the status message corresponds to a warning."""
 
     INFORMATION = 'Information'
-    """Information indicates that the status message corresponds to an informational message."""
+    """Information indicates that the status message corresponds to an
+    informational message. """
 
 
 class SimpleCodeDataType(str, Enum):
@@ -873,30 +921,6 @@ class StructurePackageTypeCodelistType(str, Enum):
     METADATASTRUCTURE = 'metadatastructure'
 
 
-class StructureReturnDetailType(str, Enum):
-    """StructureReturnDetailType contains a set of enumerations that indicate
-    how much detail should be returned for an object."""
-
-    STUB = 'Stub'
-    """Only the identification information and name should be returned."""
-
-    COMPLETE_STUB = 'CompleteStub'
-    """Identification information, name, description, and annotations should be returned."""
-
-    FULL = 'Full'
-    """The entire detail of the object should be returned."""
-
-    MATCHED_ITEMS = 'MatchedItems'
-    """For an item scheme, only the items matching the item where parameters will be returned. 
-    In the case that items are hierarchical, the entire hierarchy leading to the matched item 
-    will have to be returned."""
-
-    CASCADED_MATCHED_ITEMS = 'CascadedMatchedItems'
-    """For an item scheme, only the items matching the item where parameters, 
-    and their hierarchical child items will be returned. In the case that items are hierarchical, 
-    the entire hierarchy leading to the matched item will have to be returned."""
-
-
 class StructureTypeCodelistType(str, Enum):
     """StructureTypeCodelistType provides an enumeration all structure
     objects"""
@@ -992,13 +1016,16 @@ class ToValueTypeType(str, Enum):
     """ToValueTypeType provides an enumeration of available text-equivalents
     for translation of coded values into textual formats."""
     VALUE = 'Value'
-    """Code or other tokenized value, as provided in the representation scheme."""
+    """Code or other tokenized value, as provided in the representation
+    scheme. """
 
     NAME = 'Name'
-    """The human-readable name of the Value, as provided in the representation scheme."""
+    """The human-readable name of the Value, as provided in the
+    representation scheme. """
 
     DESCRIPTION = 'Description'
-    """The human-readable description of the Value, as provided in the representation scheme."""
+    """The human-readable description of the Value, as provided in the
+    representation scheme. """
 
 
 class UnboundedCodeType(str, Enum):
@@ -1014,9 +1041,11 @@ class UsageStatusType(str, Enum):
     whether reporting a given attribute is mandatory or conditional."""
 
     MANDATORY = 'Mandatory'
-    """Reporting the associated attribute is mandatory - a value must be supplied."""
+    """Reporting the associated attribute is mandatory - a value must be
+    supplied. """
     CONDITIONAL = 'Conditional'
-    """Reporting the associated attribute is not mandatory - a value may be supplied, but is not required."""
+    """Reporting the associated attribute is not mandatory - a value may be
+    supplied, but is not required. """
 
 
 class WildCardValueType(str, Enum):

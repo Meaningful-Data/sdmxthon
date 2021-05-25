@@ -28,7 +28,7 @@ def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
         return None
     try:
         dt = datetime.strptime(value, format_)
-    except:
+    except Exception:
         raise ValueError(f"Wrong date string format. The format {format_} "
                          f"should be followed. {str(value)} passed")
 
@@ -168,7 +168,7 @@ def int_setter(value: int):
     else:
         try:
             return int(value)
-        except:
+        except Exception:
             raise ValueError("Type should be int")
 
 

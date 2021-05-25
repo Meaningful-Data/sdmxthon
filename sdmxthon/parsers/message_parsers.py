@@ -7,7 +7,7 @@ from SDMXThon.model.component_list import DataStructureDefinition, \
 from SDMXThon.model.header import Header
 from SDMXThon.model.itemScheme import Codelist, AgencyScheme, ConceptScheme
 from SDMXThon.utils.handlers import add_indent
-from SDMXThon.utils.mappings import *
+from SDMXThon.utils.mappings import messageAbbr, structureAbbr
 from .data_generic import DataSetType as GenericDataSet
 from .data_parser import DataParser
 from .data_structure import DataSetType as StructureDataSet
@@ -508,7 +508,7 @@ class Structures(DataParser):
             if obj_.non_unique is not None:
                 for e in obj_.non_unique:
                     self.add_error({'Code': 'MS06', 'ErrorLevel': 'CRITICAL',
-                                    'ObjectID': f'{e}', 'ObjectType': f'DSD',
+                                    'ObjectID': f'{e}', 'ObjectType': 'DSD',
                                     'Message': f'DSD {e} is not unique'})
             self._dsds = obj_.dsds
 

@@ -6,7 +6,8 @@ with open('Readme.rst', encoding='utf-8') as f:
 setup(
     name='SDMXThon',
     packages=['SDMXThon'],
-    description='Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation',
+    description='Library with SDMX to Pandas, Pandas to SDMX, '
+                'SDMX validation and SDMX metadata validation',
     long_description=long_description,
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py',

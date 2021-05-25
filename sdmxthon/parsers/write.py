@@ -6,7 +6,8 @@ import numpy as np
 import pandas as pd
 
 from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.mappings import *
+from SDMXThon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
+    structureSpecificAbbr, structureAbbr
 from .data_validations import get_mandatory_attributes
 from .message_parsers import Structures
 from ..model.component import PrimaryMeasure
@@ -74,7 +75,7 @@ def create_namespaces(dataTypeString, payload, dType, prettyprint):
                            f':ObsLevelDim:{record.dim_at_obs}" '
         else:
             if payload.structure is None:
-                raise Exception(f'Dataset has no structure defined')
+                raise Exception('Dataset has no structure defined')
             outfile += f'xmlns:ns1="urn:sdmx:org.sdmx.infomodel' \
                        f'.datastructure.DataStructure=' \
                        f'{payload.structure.agencyID}:{payload.structure.id}' \
@@ -88,6 +89,49 @@ def create_namespaces(dataTypeString, payload, dType, prettyprint):
                f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml' \
                f'/schemas/v2_1/message ' \
                f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">{nl}'
+
+    return outfile
+
+
+def write_from_header(header, prettyprint):
+    if prettyprint:
+        child1 = '\t'
+        child2 = '\t\t'
+        nl = '\n'
+    else:
+        child1 = child2 = nl = ''
+
+    outfile = f'{child1}<{messageAbbr}:Header>{nl}'
+    if header.id_ is not None:
+        outfile += f'{child2}<{messageAbbr}:ID>{header.id_}</{messageAbbr}:ID>'
+    else:
+        outfile += f'{child2}<{messageAbbr}:ID>test</{messageAbbr}:ID>'
+    outfile += f'{nl}{child2}<{messageAbbr}:Test>'
+    if header.test is not None:
+        outfile += f'{str(header.test).lower()}'
+    else:
+        outfile += 'true'
+    outfile += f'</{messageAbbr}:Test>'
+    outfile += f'{nl}{child2}<{messageAbbr}:Prepared>'
+    if header.prepared is not None:
+        outfile += f'{header.prepared.strftime("%Y-%m-%dT%H:%M:%S")}'
+    else:
+        outfile += f'{datetime.now().strftime("%Y-%m-%dT%H:%M:%S")}'
+    outfile += f'</{messageAbbr}:Prepared>'
+
+    outfile += f'{nl}{child2}<{messageAbbr}:Sender '
+    if header.sender is not None:
+        outfile += f'id="{header.sender.id_}"/>'
+    else:
+        outfile += 'id="Unknown"/>'
+
+    if header.receiver is not None and len(header.receiver) > 0:
+        for receiver in header.receiver:
+            outfile += f'{nl}{child2}<{messageAbbr}:Receiver '
+            outfile += f'id="{receiver.id_}"/>'
+    else:
+        outfile += f'{nl}{child2}<{messageAbbr}:Receiver '
+        outfile += 'id="Not_supplied"/>'
 
     return outfile
 
@@ -118,24 +162,15 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     if header is None:
         outfile += f'{child1}<{messageAbbr}:Header>{nl}' \
                    f'{child2}<{messageAbbr}:ID>{id_}</{messageAbbr}:ID>' \
-                   f'{nl}{child2}<{messageAbbr}:Test>{test}</{messageAbbr}:Test>' \
+                   f'{nl}{child2}<{messageAbbr}:Test>{test}' \
+                   f'</{messageAbbr}:Test>' \
                    f'{nl}{child2}<{messageAbbr}:Prepared>' \
                    f'{prepared.strftime("%Y-%m-%dT%H:%M:%S")}' \
                    f'</{messageAbbr}:Prepared>' \
                    f'{nl}{child2}<{messageAbbr}:Sender id="{sender}"/>' \
                    f'{nl}{child2}<{messageAbbr}:Receiver id="{receiver}"/>'
     else:
-        outfile += f'{child1}<{messageAbbr}:Header>{nl}' \
-                   f'{child2}<{messageAbbr}:ID>{header.id_ if header.id_ is not None else "test"}</{messageAbbr}:ID>' \
-                   f'{nl}{child2}<{messageAbbr}:Test>' \
-                   f'{str(header.test).lower() if header.test is not None else "true"}</{messageAbbr}:Test>' \
-                   f'{nl}{child2}<{messageAbbr}:Prepared>' \
-                   f'{header.prepared.strftime("%Y-%m-%dT%H:%M:%S") if header.prepared is not None else datetime.now().strftime("%Y-%m-%dT%H:%M:%S")}' \
-                   f'</{messageAbbr}:Prepared>' \
-                   f'{nl}{child2}<{messageAbbr}:Sender ' \
-                   f'id="{header.sender.id_ if header.sender is not None else "Unknown"}"/>' \
-                   f'{nl}{child2}<{messageAbbr}:Receiver ' \
-                   f'id="{header.receiver[0].id_ if header.receiver is not None and len(header.receiver) > 0 else "Not_supplied"}"/>'
+        outfile += write_from_header(header, prettyprint)
 
     if isinstance(payload, dict) and dType is not MessageTypeEnum.Metadata:
         for record in payload.values():
@@ -145,7 +180,8 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
 
     if dType is not MessageTypeEnum.Metadata and header is not None:
         if header.dataset_action is not None:
-            outfile += f'{nl}{child2}<{messageAbbr}:DataSetAction>{header.dataset_action}</{messageAbbr}:DataSetAction>'
+            outfile += f'{nl}{child2}<{messageAbbr}:DataSetAction>' \
+                       f'{header.dataset_action}</{messageAbbr}:DataSetAction>'
     if header is not None:
         if header.source is not None:
             list_names = header.source._to_XML(name=f'{messageAbbr}:Source',
@@ -259,19 +295,20 @@ def obs_str(data: pd.DataFrame, attribute_codes: list, man_att: list,
     df1 = df1.add(df2)
     df1.insert(0, 'head', f'{child2}<Obs')
     df1.insert(len(df1.keys()), 'end', '/>')
-    obs_str = ''
-    obs_str += df1.to_csv(path_or_buf=None, sep=' ', header=False, index=False,
-                          quoting=csv.QUOTE_NONE, escapechar='\\')
-    obs_str = obs_str.replace('\\', '')
-    obs_str = f'{nl}'.join(obs_str.splitlines())
+    obs_string = ''
+    obs_string += df1.to_csv(path_or_buf=None, sep=' ', header=False,
+                             index=False, quoting=csv.QUOTE_NONE,
+                             escapechar='\\')
+    obs_string = obs_string.replace('\\', '')
+    obs_string = f'{nl}'.join(obs_string.splitlines())
 
-    obs_str = obs_str.replace('"nan"', '""')
+    obs_string = obs_string.replace('"nan"', '""')
 
     for e in attribute_codes:
         if e in df1.keys() and e not in man_att:
-            obs_str = obs_str.replace(f'{e}="" ', '')
+            obs_string = obs_string.replace(f'{e}="" ', '')
 
-    return obs_str
+    return obs_string
 
 
 def genWriting(dataset, prettyprint=True):
@@ -283,17 +320,17 @@ def genWriting(dataset, prettyprint=True):
         child1 = '\t'
         child2 = '\t\t'
         child3 = '\t\t\t'
-        child4 = '\t\t\t\t'
         nl = '\n'
     else:
-        child1 = child2 = child3 = child4 = nl = ''
+        child1 = child2 = child3 = nl = ''
 
     outfile += f'{child1}<{messageAbbr}:DataSet ' \
                f'structureRef="{dataset.structure.id}" action="Replace">{nl}'
     if len(dataset.attached_attributes) > 0:
         outfile += f'{child2}<{genericAbbr}:Attributes>{nl}'
         for k, v in dataset.attached_attributes.items():
-            outfile += f'{child3}<{genericAbbr}:Value id="{k}" value="{v}"/>{nl}'
+            outfile += f'{child3}<{genericAbbr}:Value id="{k}" ' \
+                       f'value="{v}"/>{nl}'
         outfile += f'{child2}</{genericAbbr}:Attributes>{nl}'
 
     man_att = get_mandatory_attributes(dataset.structure)
