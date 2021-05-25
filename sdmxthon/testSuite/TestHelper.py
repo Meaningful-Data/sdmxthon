@@ -192,9 +192,6 @@ class TestHelper(unittest.TestCase):
         result = obj_.payload.concepts[concept_name] \
             ._parse_XML(indent='', label='str:ConceptScheme')
 
-        with open('test_CW1', 'w') as f:
-            f.write(result)
-
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
     def metadata_constraint_writing(self, reference_filename, data_filename):

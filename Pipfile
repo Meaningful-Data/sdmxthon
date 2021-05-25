@@ -7,6 +7,8 @@ verify_ssl = true
 coverage = "*"
 pylint = "*"
 flake8 = "*"
+twine = "*"
+wheel = "*"
 
 [packages]
 lxml = { version = "4.6.1", index = "pypi" }
