@@ -1,0 +1,23 @@
+.. image:: http://www.repostatus.org/badges/latest/active.svg
+    :target: http://www.repostatus.org/#active
+    :alt: Project Status: Active — The project has reached a stable, usable
+          state and is being actively developed.
+
+
+########
+SDMXthon
+########
+
+SDMXthon is an open source Python library implementing the `SDMX 2.1 information model <https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf>`_
+
+Documentation can be found in the `Docs page <https://docs.sdmxthon.meaningfuldata.eu/>`_
+
+========
+Features
+========
+
+1. SDMX message reader/writer
+2. Pandas connector (SDMX to Pandas, Pandas to SDMX)
+3. SDMX data validation
+4. SDMX metadata validation
+
