@@ -26,4 +26,4 @@ jobs:
           pipenv install --deploy --dev
       - name: Run test suite
         run: |
-          echo pwd && python -m unittest discover -s sdmxthon/testSuite
+          pipenv run python -m unittest discover -s sdmxthon/testSuite
