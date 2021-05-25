@@ -661,6 +661,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
 
             del res
             del dict_wild
+            del lookup
+            del all_columns
 
             if len(indexes) > 0:
                 rows = data.loc[indexes, :].to_dict('records')
@@ -671,6 +673,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                'Rows': rows.copy(),
                                'Message': f'Found disallowed rows'
                                })
+                del rows
         else:
             del lookup
             del all_columns

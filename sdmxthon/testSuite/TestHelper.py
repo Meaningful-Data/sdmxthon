@@ -243,7 +243,9 @@ class TestHelper(unittest.TestCase):
             check_like=True)
 
     def xml_to_csv_data(self, data_filename):
-        text_csv = xml_to_csv(os.path.join(self.pathToDB, data_filename))
+        text_csv = xml_to_csv(os.path.join(self.pathToDB, data_filename),
+                              sep=',', encoding='utf-8', index=False,
+                              header=True)
         dataframe = pd.read_csv(StringIO(text_csv)).astype('str')
         reference = pd.read_json(
             os.path.join(self.pathToReference, "df.json"),

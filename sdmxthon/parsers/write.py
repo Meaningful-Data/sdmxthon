@@ -10,6 +10,7 @@ from SDMXThon.utils.mappings import *
 from .data_validations import get_mandatory_attributes
 from .message_parsers import Structures
 from ..model.component import PrimaryMeasure
+from ..model.header import Header
 
 
 def addStructure(dataset, prettyprint, dType):
@@ -23,7 +24,7 @@ def addStructure(dataset, prettyprint, dType):
     else:
         child2 = child3 = child4 = nl = ''
 
-    outfile += f'{child2}<{messageAbbr}:Structure ' \
+    outfile += f'{nl}{child2}<{messageAbbr}:Structure ' \
                f'structureID="{dataset.structure.id}" '
     if dType != MessageTypeEnum.GenericDataSet:
         outfile += f'namespace="urn:sdmx:org.sdmx.infomodel.' \
@@ -38,7 +39,7 @@ def addStructure(dataset, prettyprint, dType):
                f'version="{dataset.structure.version}" ' \
                f'class="DataStructure"/>' \
                f'{nl}{child3}</{commonAbbr}:Structure>' \
-               f'{nl}{child2}</{messageAbbr}:Structure>{nl}'
+               f'{nl}{child2}</{messageAbbr}:Structure>'
 
     return outfile
 
@@ -61,8 +62,10 @@ def create_namespaces(dataTypeString, payload, dType, prettyprint):
                    f'/resources/sdmxml/schemas/v2_1/data/structurespecific" '
         if isinstance(payload, dict):
             count = 0
-            for record in payload.values():
+            for key, record in payload.items():
                 count += 1
+                if record.structure is None:
+                    raise Exception(f'Dataset {key} has no structure defined')
                 outfile += f'xmlns:ns{count}="urn:sdmx:org.sdmx.infomodel' \
                            f'.datastructure.DataStructure=' \
                            f'{record.structure.agencyID}:' \
@@ -70,6 +73,8 @@ def create_namespaces(dataTypeString, payload, dType, prettyprint):
                            f'({record.structure.version})' \
                            f':ObsLevelDim:{record.dim_at_obs}" '
         else:
+            if payload.structure is None:
+                raise Exception(f'Dataset has no structure defined')
             outfile += f'xmlns:ns1="urn:sdmx:org.sdmx.infomodel' \
                        f'.datastructure.DataStructure=' \
                        f'{payload.structure.agencyID}:{payload.structure.id}' \
@@ -91,7 +96,8 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
            test='true',
            prepared=datetime.now(),
            sender='Unknown',
-           receiver='Not_supplied'):
+           receiver='Not_supplied',
+           header: Header = None):
     if prettyprint:
         child1 = '\t'
         child2 = '\t\t'
@@ -109,14 +115,27 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     # Header
     outfile = create_namespaces(data_type_string, payload, dType, prettyprint)
 
-    outfile += f'{child1}<{messageAbbr}:Header>{nl}' \
-               f'{child2}<{messageAbbr}:ID>{id_}</{messageAbbr}:ID>' \
-               f'{nl}{child2}<{messageAbbr}:Test>{test}</{messageAbbr}:Test>' \
-               f'{nl}{child2}<{messageAbbr}:Prepared>' \
-               f'{prepared.strftime("%Y-%m-%dT%H:%M:%S")}' \
-               f'</{messageAbbr}:Prepared>' \
-               f'{nl}{child2}<{messageAbbr}:Sender id="{sender}"/>' \
-               f'{nl}{child2}<{messageAbbr}:Receiver id="{receiver}"/>{nl}'
+    if header is None:
+        outfile += f'{child1}<{messageAbbr}:Header>{nl}' \
+                   f'{child2}<{messageAbbr}:ID>{id_}</{messageAbbr}:ID>' \
+                   f'{nl}{child2}<{messageAbbr}:Test>{test}</{messageAbbr}:Test>' \
+                   f'{nl}{child2}<{messageAbbr}:Prepared>' \
+                   f'{prepared.strftime("%Y-%m-%dT%H:%M:%S")}' \
+                   f'</{messageAbbr}:Prepared>' \
+                   f'{nl}{child2}<{messageAbbr}:Sender id="{sender}"/>' \
+                   f'{nl}{child2}<{messageAbbr}:Receiver id="{receiver}"/>'
+    else:
+        outfile += f'{child1}<{messageAbbr}:Header>{nl}' \
+                   f'{child2}<{messageAbbr}:ID>{header.id_ if header.id_ is not None else "test"}</{messageAbbr}:ID>' \
+                   f'{nl}{child2}<{messageAbbr}:Test>' \
+                   f'{str(header.test).lower() if header.test is not None else "true"}</{messageAbbr}:Test>' \
+                   f'{nl}{child2}<{messageAbbr}:Prepared>' \
+                   f'{header.prepared.strftime("%Y-%m-%dT%H:%M:%S") if header.prepared is not None else datetime.now().strftime("%Y-%m-%dT%H:%M:%S")}' \
+                   f'</{messageAbbr}:Prepared>' \
+                   f'{nl}{child2}<{messageAbbr}:Sender ' \
+                   f'id="{header.sender.id_ if header.sender is not None else "Unknown"}"/>' \
+                   f'{nl}{child2}<{messageAbbr}:Receiver ' \
+                   f'id="{header.receiver[0].id_ if header.receiver is not None and len(header.receiver) > 0 else "Not_supplied"}"/>'
 
     if isinstance(payload, dict) and dType is not MessageTypeEnum.Metadata:
         for record in payload.values():
@@ -124,7 +143,20 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     elif dType is not MessageTypeEnum.Metadata:
         outfile += addStructure(payload, prettyprint, dType)
 
-    outfile += f'{child1}</{messageAbbr}:Header>{nl}'
+    if dType is not MessageTypeEnum.Metadata and header is not None:
+        if header.dataset_action is not None:
+            outfile += f'{nl}{child2}<{messageAbbr}:DataSetAction>{header.dataset_action}</{messageAbbr}:DataSetAction>'
+    if header is not None:
+        if header.source is not None:
+            list_names = header.source._to_XML(name=f'{messageAbbr}:Source',
+                                               prettyprint=True)
+            for elem in list_names:
+                outfile += f'{nl}{child1}' + elem
+        else:
+            outfile += f'{nl}{child2}<{messageAbbr}:Source xml:lang="en">' \
+                       f'SDMXthon</{messageAbbr}:Source>'
+
+    outfile += f'{nl}{child1}</{messageAbbr}:Header>{nl}'
 
     # Dataset
     if dType == MessageTypeEnum.GenericDataSet:

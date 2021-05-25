@@ -127,11 +127,11 @@ def xml_to_json(pathToXML, path_to_metadata, output_path):
 '''
 
 
-def xml_to_csv(path_to_data, output_path=None, validate=True):
+def xml_to_csv(path_to_data, output_path=None, validate=True, **kwargs):
     """
     XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or
     .zip of CSV. If the SDMX data file has only a Dataset and output_path is
-    '', it returns a StringIO object.
+    '', it returns a StringIO object. Kwargs are supported.
 
     :param path_to_data: Path or URL to the SDMX data file
     :param output_path: Path to save the CSV (default: None)
@@ -147,7 +147,7 @@ def xml_to_csv(path_to_data, output_path=None, validate=True):
             # Add multiple files to the zip
             for record in message.payload.values():
                 zipObj.writestr(record.structure.id + '.csv',
-                                data=record.to_csv())
+                                data=record.to_csv(**kwargs))
 
     else:
         if len(message.payload) > 1:
@@ -160,7 +160,7 @@ def xml_to_csv(path_to_data, output_path=None, validate=True):
             # Getting first value
             dataset = first_element_dict(message.payload)
 
-            return dataset.to_csv(output_path)
+            return dataset.to_csv(output_path, **kwargs)
         else:
             raise ValueError('No Datasets were parsed')
 

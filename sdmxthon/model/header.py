@@ -549,10 +549,7 @@ class Header(DataParser):
 
         self._EmbargoDate = initvalue_
 
-        if Source is None:
-            self._Source = []
-        else:
-            self._Source = Source
+        self._Source = Source
 
     def __eq__(self, other):
         if isinstance(other, Header):
@@ -729,12 +726,7 @@ class Header(DataParser):
 
     @source.setter
     def source(self, value):
-        if value is None:
-            self._Source = []
-        elif isinstance(value, list):
-            self._Source = value
-        else:
-            raise TypeError('Source must be a list')
+        self._Source = generic_setter(value, InternationalString)
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
                         gds_collector_=None):
@@ -817,4 +809,6 @@ class Header(DataParser):
         elif nodeName_ == 'Source':
             obj_ = LocalisedString._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.source.append(obj_)
+            if self.source is None:
+                self.source = InternationalString()
+            self.source.addLocalisedString(obj_)
