@@ -3,7 +3,8 @@
     :alt: Project Status: Active — The project has reached a stable, usable
           state and is being actively developed.
 
-
+.. image:: https://img.shields.io/codefactor/grade/github/Meaningful-Data/sdmxthon/master
+    :alt: CodeFactor Grade
 
 ########
 SDMXthon
