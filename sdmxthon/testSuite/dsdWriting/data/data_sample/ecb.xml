@@ -1,0 +1,1255 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mes:Structure xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xml="http://www.w3.org/XML/1998/namespace"
+               xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+               xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+               xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+               xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+    <mes:Header>
+        <mes:ID>IREF086653</mes:ID>
+        <mes:Test>false</mes:Test>
+        <mes:Prepared>2021-01-08T12:24:25Z</mes:Prepared>
+        <mes:Sender id="Unknown"/>
+        <mes:Receiver id="not_supplied"/>
+    </mes:Header>
+    <mes:Structures>
+        <str:DataStructures>
+            <str:DataStructure id="BOP"
+                               uri="/default/namespace/might/get/from/SDMXRegistry/when/available"
+                               urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=IMF:BOP(1.9)"
+                               version="1.9"
+                               isExternalReference="false" isFinal="false"
+                               agencyID="IMF">
+                <com:Name xml:lang="en">Balance of Payments, I.I.P. and Reserve
+                    Assets
+                </com:Name>
+                <str:DataStructureComponents>
+                    <str:DimensionList id="DimensionDescriptor"
+                                       urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=IMF:BOP(1.9).DimensionDescriptor">
+                        <str:Dimension id="FREQ"
+                                       urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).FREQ"
+                                       position="1">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="FREQ" class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_FREQ" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat textType="String"
+                                                       minLength="1"
+                                                       maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension id="ADJUSTMENT"
+                                       urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).ADJUSTMENT"
+                                       position="2">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="ADJUSTMENT"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_ADJUSTMENT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat textType="String"
+                                                       minLength="1"
+                                                       maxLength="7"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension id="REF_AREA"
+                                       urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).REF_AREA"
+                                       position="3">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="REF_AREA"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_AREA" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat textType="String"
+                                                       minLength="1"
+                                                       maxLength="5"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension id="COUNTERPART_AREA"
+                                       urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).COUNTERPART_AREA"
+                                       position="4">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="COUNTERPART_AREA"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_AREA" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="5"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).REF_SECTOR"
+                                id="REF_SECTOR" position="5">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="REF_SECTOR"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_SECTOR" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="7"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).COUNTERPART_SECTOR"
+                                id="COUNTERPART_SECTOR" position="6">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="COUNTERPART_SECTOR"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_SECTOR" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="7"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).FLOW_STOCK_ENTRY"
+                                id="FLOW_STOCK_ENTRY" position="7">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="FLOW_STOCK_ENTRY"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_FSENTRY" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="3"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).ACCOUNTING_ENTRY"
+                                id="ACCOUNTING_ENTRY" position="8">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="ACCOUNTING_ENTRY"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_ACCOUNT_ENTRY" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="5"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).INT_ACC_ITEM"
+                                id="INT_ACC_ITEM" position="9">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="INT_ACC_ITEM"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_ACCOUNTS_ITEM" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="8"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).FUNCTIONAL_CAT"
+                                id="FUNCTIONAL_CAT" position="10">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="FUNCTIONAL_CAT"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_FUNCTIONAL_CAT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="6"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).INSTR_ASSET"
+                                id="INSTR_ASSET" position="11">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="INSTR_ASSET"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_INSTR_ASSET" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="7"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).MATURITY"
+                                id="MATURITY" position="12">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="MATURITY"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_MATURITY" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="6"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).UNIT_MEASURE"
+                                id="UNIT_MEASURE" position="13">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="UNIT_MEASURE"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_UNIT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="15"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).CURRENCY_DENOM"
+                                id="CURRENCY_DENOM" position="14">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="CURRENCY_DENOM"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_UNIT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="15"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).VALUATION"
+                                id="VALUATION" position="15">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="VALUATION"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_VALUATION" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="2"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=IMF:BOP(1.9).COMP_METHOD"
+                                id="COMP_METHOD" position="16">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="COMP_METHOD"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_COMP_METHOD" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="1"/>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:TimeDimension
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=IMF:BOP(1.9).TIME_PERIOD"
+                                id="TIME_PERIOD" position="17">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="TIME_PERIOD"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat
+                                        textType="ObservationalTimePeriod"/>
+                            </str:LocalRepresentation>
+                        </str:TimeDimension>
+                    </str:DimensionList>
+                    <str:AttributeList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=IMF:BOP(1.9).AttributeDescriptor"
+                            id="AttributeDescriptor">
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).TIME_FORMAT"
+                                assignmentStatus="Mandatory" id="TIME_FORMAT">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="TIME_FORMAT"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="3"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).OBS_STATUS"
+                                assignmentStatus="Mandatory" id="OBS_STATUS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="OBS_STATUS"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_OBS_STATUS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).CONF_STATUS"
+                                assignmentStatus="Mandatory" id="CONF_STATUS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="CONF_STATUS"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_CONF_STATUS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).PRE_BREAK_VALUE"
+                                assignmentStatus="Conditional"
+                                id="PRE_BREAK_VALUE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="PRE_BREAK_VALUE"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="15"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).COMMENT_OBS"
+                                assignmentStatus="Conditional"
+                                id="COMMENT_OBS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="COMMENT_OBS"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="4000"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).COMMENT_TS"
+                                assignmentStatus="Conditional" id="COMMENT_TS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="COMMENT_TS"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="1050"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).COMPILING_ORG"
+                                assignmentStatus="Conditional"
+                                id="COMPILING_ORG">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="COMPILING_ORG"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_ORGANISATION" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="6"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).DATA_COMP"
+                                assignmentStatus="Conditional" id="DATA_COMP">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="DATA_COMP"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="4000"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).DECIMALS"
+                                assignmentStatus="Mandatory" id="DECIMALS">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="DECIMALS"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_DECIMALS" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="BigInteger"
+                                                       maxLength="2"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).DISS_ORG"
+                                assignmentStatus="Conditional" id="DISS_ORG">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="DISS_ORG"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_ORGANISATION" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="6"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).REF_PERIOD_DETAIL"
+                                assignmentStatus="Conditional"
+                                id="REF_PERIOD_DETAIL">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="REF_PERIOD_DETAIL"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_REF_PERIOD_DTL" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="3"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute id="TIME_PER_COLLECT"
+                                       urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).TIME_PER_COLLECT"
+                                       assignmentStatus="Mandatory">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="TIME_PER_COLLECT"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_TIME_COLLECT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="1"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).TITLE"
+                                assignmentStatus="Conditional" id="TITLE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="TITLE"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="200"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).TITLE_COMPL"
+                                assignmentStatus="Conditional"
+                                id="TITLE_COMPL">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="TITLE_COMPL"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="4000"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=IMF:BOP(1.9).UNIT_MULT"
+                                assignmentStatus="Mandatory" id="UNIT_MULT">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="UNIT_MULT"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref package="codelist" agencyID="IMF"
+                                         id="CL_UNIT_MULT" version="1.0"
+                                         class="Codelist"/>
+                                </str:Enumeration>
+                                <str:EnumerationFormat minLength="1"
+                                                       textType="String"
+                                                       maxLength="3"/>
+                            </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ADJUSTMENT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_AREA"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="REF_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COUNTERPART_SECTOR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FLOW_STOCK_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="ACCOUNTING_ENTRY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INT_ACC_ITEM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="FUNCTIONAL_CAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="INSTR_ASSET"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="MATURITY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="UNIT_MEASURE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="CURRENCY_DENOM"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="VALUATION"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="COMP_METHOD"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                    </str:AttributeList>
+                    <str:MeasureList
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=IMF:BOP(1.9).MeasureDescriptor"
+                            id="MeasureDescriptor">
+                        <str:PrimaryMeasure
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=IMF:BOP(1.9).OBS_VALUE"
+                                id="OBS_VALUE">
+                            <str:ConceptIdentity>
+                                <Ref maintainableParentID="IMF_CONCEPTS"
+                                     package="conceptscheme"
+                                     maintainableParentVersion="1.0"
+                                     agencyID="IMF" id="OBS_VALUE"
+                                     class="Concept"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="String"
+                                                maxLength="15"/>
+                            </str:LocalRepresentation>
+                        </str:PrimaryMeasure>
+                    </str:MeasureList>
+                </str:DataStructureComponents>
+            </str:DataStructure>
+        </str:DataStructures>
+    </mes:Structures>
+</mes:Structure>

@@ -58,8 +58,6 @@ class BaseValueType(DataParser):
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self._id = value
-            self._validate_nc_name_id_type(
-                self._id)  # validate dim_type NCNameIDType
 
         value = find_attr_value_('value', node)
         if value is not None and 'value' not in already_processed:
@@ -407,42 +405,12 @@ class ObsType(AnnotableArtefact):
     def __init__(self, Annotations=None, ObsDimension=None, ObsValue=None,
                  Attributes=None, gds_collector_=None):
         super(ObsType, self).__init__(Annotations, gds_collector_)
-        self._obsDimension = ObsDimension
-        self._obsValue = ObsValue
-        self._attributes = Attributes
         self._value = {}
 
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory Method of ObsType"""
         return ObsType(*args_, **kwargs_)
-
-    @property
-    def obsDimension(self):
-        """Dimension at Observation value"""
-        return self._obsDimension
-
-    @obsDimension.setter
-    def obsDimension(self, value):
-        self._obsDimension = value
-
-    @property
-    def obsValue(self):
-        """Observation value"""
-        return self._obsValue
-
-    @obsValue.setter
-    def obsValue(self, value):
-        self._obsValue = value
-
-    @property
-    def attributes(self):
-        """Attributes at Observation Level"""
-        return self._attributes
-
-    @attributes.setter
-    def attributes(self, value):
-        self._attributes = value
 
     @property
     def value_(self):
@@ -848,51 +816,3 @@ class TimeSeriesDataSetType(DataSetType):
                                                     DataProvider, Attributes,
                                                     Group,
                                                     gds_collector_, **kwargs_)
-
-
-class TimeSeriesType(SeriesType):
-    """TimeSeriesType defines a structure which is used to group a collection
-    of observations which have a key in common, organised by time. The key
-    for a series is every dimension defined in the data structure
-    definition, save the time dimension. In addition to observations,
-    values can be provided for attributes which are associated with the
-    dimensions which make up this series key (so long as the attributes do
-    not specify a group attachment or also have an relationship with the
-    time dimension). It is possible for the series to contain only
-    observations or only attribute values, or both."""
-    __hash__ = SeriesType.__hash__
-    subclass = None
-    superclass = SeriesType
-
-    def __init__(self, Annotations=None, SeriesKey=None, Attributes=None,
-                 Obs=None, gds_collector_=None, **kwargs_):
-        super(TimeSeriesType, self).__init__(Annotations, SeriesKey,
-                                             Attributes, Obs, gds_collector_,
-                                             **kwargs_)
-
-
-class TimeSeriesObsType(ObsType):
-    """TimeSeriesObsType defines the structure of a time series observation.
-    The observation must be provided a value for the time dimension. This
-    time value should disambiguate the observation within the series in
-    which it is defined (i.e. there should not be another observation with
-    the same time value). The observation can contain an observed value
-    and/or attribute values."""
-    __hash__ = ObsType.__hash__
-    subclass = None
-    superclass = ObsType
-
-
-class TimeValueType(BaseValueType):
-    """TimeValueType is a derivation of the BaseValueType which is used to
-    provide a value for the time dimension. Since the identifier for the
-    time dimension is fixed, the component reference for this structure is
-    fixed. Note that this means that it is not necessary to provide a value
-    in an instance as the fixed value will be provided in the post
-    validation information set."""
-    __hash__ = BaseValueType.__hash__
-    subclass = None
-    superclass = BaseValueType
-
-    def __init__(self, idx=None, value=None):
-        super(TimeValueType, self).__init__(idx, value, None)

@@ -32,10 +32,7 @@ class Message:
                  header: Header = None):
         self._type = message_type
         self._payload = payload
-        if header is None:
-            self.header_creation(id_='test')
-        else:
-            self._header = header
+        self._header = header
 
     def __eq__(self, other):
         if isinstance(other, Message):
@@ -195,11 +192,12 @@ class Message:
         elif isinstance(self.payload, Dataset):
             return self.payload.semantic_validation()
         else:
-            # TODO Validate Metadata
             raise TypeError('Wrong Payload. Must be of type '
                             'DataSet or a dict of DataSet')
 
-    def to_xml(self, outputPath: str = '', id_: str = 'test',
+    def to_xml(self, outputPath: str = '',
+               header: Header = None,
+               id_: str = 'test',
                test: str = 'true',
                prepared: datetime = None,
                sender: str = 'Unknown',
@@ -209,6 +207,17 @@ class Message:
 
         :param outputPath: Path to save the file, defaults to ''
         :type outputPath: str
+
+        :param prettyprint: Specifies if the output file is formatted
+        :type prettyprint: bool
+
+        :param header: Header to be written, defaults to None
+        :type header: Header
+
+        .. important::
+
+            If the header argument is not None, rest of the below arguments
+            will not be used
 
         :param id_: ID of the Header, defaults to 'test'
         :type id_: str
@@ -226,9 +235,6 @@ class Message:
         :param receiver: ID of the Receiver, defaults to 'Not_supplied'
         :type receiver: str
 
-        :param prettyprint: Specifies if the output file is formatted
-        :type prettyprint: bool
-
         :returns:
             StringIO object, if outputPath is ''
 
@@ -241,10 +247,10 @@ class Message:
             return writer(path=outputPath, dType=self.type,
                           payload=self.payload, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver,
-                          prettyprint=prettyprint)
+                          header=header, prettyprint=prettyprint)
         else:
             writer(path=outputPath, dType=self.type, payload=self.payload,
-                   id_=id_, test=test,
+                   id_=id_, test=test, header=header,
                    prepared=prepared, sender=sender, receiver=receiver,
                    prettyprint=prettyprint)
 

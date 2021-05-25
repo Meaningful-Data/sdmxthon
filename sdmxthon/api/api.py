@@ -10,16 +10,18 @@ from SDMXThon.utils.enums import MessageTypeEnum
 from SDMXThon.utils.handlers import first_element_dict
 
 
-def read_sdmx(path_to_sdmx_file) -> Message:
+def read_sdmx(path_to_sdmx_file, validate=True) -> Message:
     """
     Read SDMX performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
 
     :param path_to_sdmx_file: Path or URL to the SDMX data file
+    :param validate: Validation of the XML file against the XSD (default: True)
+
     :return: A :obj:`Message <model.message.Message>` object
     """
 
-    obj_ = _read_xml(path_to_sdmx_file)
+    obj_ = _read_xml(path_to_sdmx_file, validate=validate)
     if isinstance(obj_, MetadataType):
         _set_references(obj_)
 
@@ -38,7 +40,7 @@ def read_sdmx(path_to_sdmx_file) -> Message:
     return Message(type_, data, header)
 
 
-def get_datasets(path_to_data, path_to_metadata):
+def get_datasets(path_to_data, path_to_metadata, validate=True):
     """
     GetDatasets performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
@@ -47,13 +49,16 @@ def get_datasets(path_to_data, path_to_metadata):
 
     :param path_to_metadata: Path or URL to the SDMX metadata file
 
+    :param validate: Validation of the XML file against the XSD (default: True)
+
+
     :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of \
     :obj:`Datasets <model.dataSet.DataSet>`
     """
 
-    obj_ = _read_xml(path_to_data)
+    obj_ = _read_xml(path_to_data, validate=validate)
 
-    metadata = read_sdmx(path_to_metadata)
+    metadata = read_sdmx(path_to_metadata, validate=validate)
 
     if obj_.original_tag_name_ == 'GenericData':
         datasets = _sdmx_gen_to_dataset(obj_, metadata.payload.dsds,
@@ -70,16 +75,18 @@ def get_datasets(path_to_data, path_to_metadata):
         return datasets
 
 
-def get_pandas_df(path_to_data):
+def get_pandas_df(path_to_data, validate=True):
     """
     GetPandasDF reads all observations in a SDMX file as Pandas Dataframe(s)
 
     :param path_to_data: Path or URL to the SDMX data file
 
+    :param validate: Validation of the XML file against the XSD (default: True)
+
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    obj_ = _read_xml(path_to_data)
+    obj_ = _read_xml(path_to_data, validate=validate)
 
     if isinstance(obj_, MetadataType):
         raise TypeError('No data available in a Structure file. '
@@ -120,39 +127,40 @@ def xml_to_json(pathToXML, path_to_metadata, output_path):
 '''
 
 
-def xml_to_csv(path_to_data, output_path):
+def xml_to_csv(path_to_data, output_path=None, validate=True, **kwargs):
     """
     XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or
     .zip of CSV. If the SDMX data file has only a Dataset and output_path is
-    '', it returns a StringIO object.
+    '', it returns a StringIO object. Kwargs are supported.
 
     :param path_to_data: Path or URL to the SDMX data file
-    :param output_path: Path to save the CSV
+    :param output_path: Path to save the CSV (default: None)
+    :param validate: Validation of the XML file against the XSD (default: True)
     :return: A StringIO object if output_path is ''
     """
-    message = read_sdmx(path_to_data)
+    message = read_sdmx(path_to_data, validate=validate)
     if message.type == MessageTypeEnum.Metadata:
         raise TypeError('Metadata files are not allowed here')
 
-    if '.zip' in output_path:
+    if output_path is not None and '.zip' in output_path:
         with ZipFile(output_path, 'w') as zipObj:
             # Add multiple files to the zip
             for record in message.payload.values():
                 zipObj.writestr(record.structure.id + '.csv',
-                                data=record.to_csv())
+                                data=record.to_csv(**kwargs))
 
     else:
         if len(message.payload) > 1:
             raise ValueError('Cannot introduce several Datasets in a CSV. '
                              'Consider using .zip in output path')
         elif len(message.payload) is 1:
-            if '.zip' in output_path:
+            if output_path is not None and '.zip' in output_path:
                 filename = output_path.split('.')[0]
                 output_path = filename + '.csv'
             # Getting first value
             dataset = first_element_dict(message.payload)
 
-            return dataset.to_csv(output_path)
+            return dataset.to_csv(output_path, **kwargs)
         else:
             raise ValueError('No Datasets were parsed')
 

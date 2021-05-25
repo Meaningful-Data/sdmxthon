@@ -2,6 +2,7 @@ import re
 from datetime import datetime
 
 import numpy as np
+import pandas as pd
 import pandas.api.types
 from pandas import DataFrame
 
@@ -291,8 +292,7 @@ def check_str_facets(facets, data_column, key, type_):
                 values = data_column[int(data_column) < min_]
 
         elif f.facet_type == 'pattern':
-            r = re.compile(
-                str(f.facet_value).encode('unicode-escape').decode())
+            r = re.compile(str(f.facet_value))
             vec = np.vectorize(lambda x: bool(not r.fullmatch(x)))
             values = data_column[vec(data_column)]
         else:
@@ -369,7 +369,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
               - Check if an attribute/dimension value associated to a \
                 Cube Region Constraint is valid
             * - SS11
-              - Check if a Series Constraint is valid (NOT IMPLEMENTED)
+              - Check if each row is compliant with the Series Constraints
     """
 
     mandatory = get_mandatory_attributes(dsd)
@@ -635,16 +635,48 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                               f'{type_.lower()} {k}'})
 
     if len(series_const) > 0:
-        errors.append({'Code': 'SS11',
-                       'ErrorLevel': 'WARNING',
-                       'Component': f'Constraint',
-                       'Type': f'Series',
-                       'Rows': None,
-                       'Message': f'Found {len(series_const)} Series '
-                                  f'Constraints for {dsd.unique_id}. '
-                                  f'This feature is not '
-                                  f'yet implemented. Please check it manually.'
-                       })
+        lookup = pd.DataFrame(series_const)
+        all_columns = lookup.columns.tolist()
+
+        result = all(elem in data.columns.tolist() for elem in all_columns)
+
+        if result:
+            columns = lookup.columns[lookup.isna().any()].tolist()
+
+            lookup['membership_series_const'] = True
+
+            dict_wild = {}
+
+            for e in columns:
+                dict_wild[e] = lookup[lookup[e].isna()]
+                dict_wild[e].pop(e)
+
+            res = data[all_columns].merge(lookup, how="left")
+
+            for k in dict_wild:
+                res.update(data[all_columns].merge(dict_wild[k], how="left"),
+                           overwrite=False)
+
+            indexes = res[res['membership_series_const'].isna()].index.tolist()
+
+            del res
+            del dict_wild
+            del lookup
+            del all_columns
+
+            if len(indexes) > 0:
+                rows = data.loc[indexes, :].to_dict('records')
+                errors.append({'Code': 'SS11',
+                               'ErrorLevel': 'WARNING',
+                               'Component': f'Series',
+                               'Type': f'Constraint',
+                               'Rows': rows.copy(),
+                               'Message': f'Found disallowed rows'
+                               })
+                del rows
+        else:
+            del lookup
+            del all_columns
 
     if len(grouping_keys) > 0:
         duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]

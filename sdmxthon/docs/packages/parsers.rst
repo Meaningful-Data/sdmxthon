@@ -81,7 +81,7 @@ Data validations
 =================
 
 Data validations file includes functions for validating data in a Dataset.
-Please refer to the Validations Page for more details.
+Please refer to the :doc:`Validations Page<../validations>` for more details.
 
 =====================
 Metadata validations
