@@ -23,8 +23,8 @@ pathToJSON = 'SDMXThon/outputTests/test.json'
 pathToCSV = 'SDMXThon/outputTests/csv.zip'
 # pathToMetadataFile = 'SDMXThon/outputTests/cbd_dsd.xml'
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_202012240033006_0701.xml'
-# pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
-pathToMetadataFile = 'SDMXThon/outputTests/dsd_constraints.xml'
+pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/DSD_FILE_04FEB21.xml'
+# pathToMetadataFile = 'SDMXThon/outputTests/dsd_constraints.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/wb_wdi.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/fow_vols.xml'
 # pathToMetadataFile = 'SDMXThon/testSuite/metadataFromDiferentSources/data/data_sample/bis.xml'
@@ -47,7 +47,7 @@ pathToDataSpeSer = 'SDMXThon/outputTests/examples/Structure/test_str_ser_BIS.xml
 
 pathToSchema = 'SDMXThon/schemas/SDMXMessage.xsd'
 pathToTestValidation = 'SDMXThon/outputTests/test.xml'
-
+test_source = 'SDMXThon/outputTests/test_source.xml'
 
 # pathToMetadataFile = 'SDMXThon/outputTests/metadata/sampleFiles/BIS_BIS_DER.xml'
 
@@ -64,7 +64,19 @@ def main():
     # message = read_sdmx(pathToMetadataFile)
     # message = read_sdmx(pathToDataGen)
     start = time()
-    message = read_sdmx(pathToMetadataFile)
+    message = read_sdmx(test_source)
+
+    metadata = read_sdmx(pathToMetadataFile)
+
+    message.payload['RBI_ASSETS_EX_LNA_SLR_1_0'].structure = \
+    metadata.payload.dsds['RBI:ASSETS_EX_LNA_SLR(1.0)']
+
+    message.header.receiver = None
+
+    print(message.to_xml(header=message.header).getvalue())
+
+    test = read_sdmx('test_out.xml')
+
     end = time()
     print(end - start)
     """
