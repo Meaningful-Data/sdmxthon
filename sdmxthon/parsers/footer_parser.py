@@ -86,7 +86,8 @@ class FooterMessageType(CodedStatusMessageType):
     def _validate_SeverityCodeType(self, value):
         """Validate dim_type SeverityCodeType, a restriction on xs:string."""
         result = True
-        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
+        if value is not None and Validate_simpletypes_ and \
+                self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(

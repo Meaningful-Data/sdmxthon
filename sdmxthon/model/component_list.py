@@ -10,7 +10,7 @@ from SDMXThon.parsers.data_parser import DataParser
 from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
 from SDMXThon.utils.handlers import export_intern_data, add_indent, \
     split_unique_id
-from SDMXThon.utils.mappings import *
+from SDMXThon.utils.mappings import structureAbbr, Data_Types_VTL, commonAbbr
 from SDMXThon.utils.xml_base import find_attr_value_
 from .base import IdentifiableArtefact, MaintainableArtefact, \
     InternationalString
@@ -804,7 +804,8 @@ class ContentConstraint(Constraint):
         if self.data_content_keys is not None:
 
             outfile += f'{indent_child}<{structureAbbr}:DataKeySet ' \
-                       f'isIncluded="{str(self.data_content_keys.is_included).lower()}">'
+                       f'isIncluded="' \
+                       f'{str(self.data_content_keys.is_included).lower()}">'
 
             for e in self.data_content_keys.keys:
                 outfile += f'{indent_child_2}<{structureAbbr}:Key>'
@@ -1079,8 +1080,8 @@ class DataStructureDefinition(MaintainableArtefact):
             for c in self.attribute_descriptor.components.values():
                 type_ = "String"
 
-                if (c.representation is not None
-                        and c.representation.type_ is not None):
+                if (c.representation is not None and
+                        c.representation.type_ is not None):
                     type_ = c.representation.type_
 
                 component = {"name": c.id, "role": "Attribute",
@@ -1090,8 +1091,8 @@ class DataStructureDefinition(MaintainableArtefact):
         for c in self.measure_descriptor.components.values():
             type_ = "String"
 
-            if (c.representation is not None
-                    and c.representation.type_ is not None):
+            if (c.representation is not None and
+                    c.representation.type_ is not None):
                 type_ = c.representation.type_
 
             component = {"name": c.id, "role": "Measure",

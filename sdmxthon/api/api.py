@@ -106,7 +106,7 @@ def get_pandas_df(path_to_data, validate=True):
 '''
 def xml_to_json(pathToXML, path_to_metadata, output_path):
     """
-    XML to JSON transforms a SDMX file into a JSON in the shape of the JSON 
+    XML to JSON transforms a SDMX file into a JSON in the shape of the JSON
     Specification. Saves the file on disk.
 
     :param pathToXML: Path or URL to the SDMX data file
@@ -153,7 +153,7 @@ def xml_to_csv(path_to_data, output_path=None, validate=True, **kwargs):
         if len(message.payload) > 1:
             raise ValueError('Cannot introduce several Datasets in a CSV. '
                              'Consider using .zip in output path')
-        elif len(message.payload) is 1:
+        elif len(message.payload) == 1:
             if output_path is not None and '.zip' in output_path:
                 filename = output_path.split('.')[0]
                 output_path = filename + '.csv'
@@ -169,19 +169,19 @@ def xml_to_csv(path_to_data, output_path=None, validate=True, **kwargs):
 def read_json(path_to_json, dsds) -> dict:
     """
 
-    Transforms a JSON file in the shape of the JSON Specification into a 
-    dict of :obj:`Dataset <model.dataset.DataSet>`. 
-
-    :param path_to_json: Path to the JSON file. :param dsds: A dict of 
-    DataStructureDefinition :return: A dict of :obj:`Datasets 
-    <model.dataSet.DataSet>`. """ datasets = {} if isinstance(path_to_json, 
-    str): with open(path_to_json, 'r') as f: parsed = json.loads(f.read()) 
-    else: parsed = json.loads(path_to_json.read()) for e in parsed: code = 
+    Transforms a JSON file in the shape of the JSON Specification into a
+    dict of :obj:`Dataset <model.dataset.DataSet>`.
+    :param path_to_json: Path to the JSON file.
+    :param dsds: A dict of
+    DataStructureDefinition :return: A dict of :obj:`Datasets
+    <model.dataSet.DataSet>`. """ datasets = {} if isinstance(path_to_json,
+    str): with open(path_to_json, 'r') as f: parsed = json.loads(f.read())
+    else: parsed = json.loads(path_to_json.read()) for e in parsed: code =
     e.get('structureRef').get('code') version = e.get('structureRef').get(
     'version') agency_id = e.get('structureRef').get('agencyID') dsdid = f"{
-    agency_id}:{code}({version})" if dsdid not in dsds.keys(): raise 
-    ValueError('Could not find any dsd matching to DSDID: %s' % dsdid) 
-    datasets[code] = DataSet(structure=dsds[dsdid], 
-    dataset_attributes=e.get('dataset_attributes'), 
-    attached_attributes=e.get('attached_attributes'), data=e.get('data')) 
+    agency_id}:{code}({version})" if dsdid not in dsds.keys(): raise
+    ValueError('Could not find any dsd matching to DSDID: %s' % dsdid)
+    datasets[code] = DataSet(structure=dsds[dsdid],
+    dataset_attributes=e.get('dataset_attributes'),
+    attached_attributes=e.get('attached_attributes'), data=e.get('data'))
     return datasets '''

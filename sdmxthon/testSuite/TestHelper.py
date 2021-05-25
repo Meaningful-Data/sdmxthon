@@ -8,11 +8,13 @@ from io import StringIO, BytesIO
 
 import pandas as pd
 
-from SDMXThon import Message, MessageTypeEnum, first_element_dict
 from SDMXThon.api.api import _read_xml, MetadataType, _set_references, \
     read_sdmx, \
     get_datasets, get_pandas_df, xml_to_csv
 from SDMXThon.model.dataset import Dataset
+from SDMXThon.model.message import Message
+from SDMXThon.utils.enums import MessageTypeEnum
+from SDMXThon.utils.handlers import first_element_dict
 
 
 def query_to_db(sqlite_db, limit):
@@ -145,10 +147,11 @@ class TestHelper(unittest.TestCase):
 
     def data_writing(self, dtype: MessageTypeEnum, series=False):
         message = read_sdmx(os.path.join(self.pathToMetadata, 'bis.xml'))
-        dataset = Dataset(data=pd.read_json(
-            os.path.join(self.pathToDB, "df.json"),
-            orient='records').astype('str'),
+        path = os.path.join(self.pathToDB, "df.json")
+        dataset = Dataset(data=pd.read_json(path, orient='records'),
                           structure=message.payload.dsds['BIS:BIS_DER(1.0)'])
+
+        dataset.data = dataset.data.astype('str')
 
         if series:
             dataset.set_dimension_at_observation('TIME_PERIOD')
@@ -168,8 +171,8 @@ class TestHelper(unittest.TestCase):
                                        data_filename):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.organisations._parse_XML(indent='',
-                                                       label='str:AgencyScheme')
+        result = obj_.payload.organisations. \
+            _parse_XML(indent='', label='str:AgencyScheme')
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
@@ -177,8 +180,8 @@ class TestHelper(unittest.TestCase):
                                   codelist_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.codelists[codelist_name]._parse_XML(indent='',
-                                                                  label='str:Codelist')
+        result = obj_.payload.codelists[codelist_name]. \
+            _parse_XML(indent='', label='str:Codelist')
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
@@ -186,8 +189,11 @@ class TestHelper(unittest.TestCase):
                                  concept_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.concepts[concept_name]._parse_XML(indent='',
-                                                                label='str:ConceptScheme')
+        result = obj_.payload.concepts[concept_name] \
+            ._parse_XML(indent='', label='str:ConceptScheme')
+
+        with open('test_CW1', 'w') as f:
+            f.write(result)
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
@@ -204,8 +210,8 @@ class TestHelper(unittest.TestCase):
                                   dataflow_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.dataflows[dataflow_name]._parse_XML(indent='',
-                                                                  label='str:Dataflow')
+        result = obj_.payload.dataflows[dataflow_name]. \
+            _parse_XML(indent='', label='str:Dataflow')
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
@@ -213,10 +219,11 @@ class TestHelper(unittest.TestCase):
                              dsd_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.dsds[dsd_name]._parse_XML(indent='',
-                                                        label='str:DataStructure')
+        result = obj_.payload.dsds[dsd_name]. \
+            _parse_XML(indent='', label='str:DataStructure')
 
-        self.assertEqual(result, self.load_reference_text(reference_filename))
+        self.assertEqual(result.replace('\n', ''),
+                         self.load_reference_text(reference_filename))
 
     def read_sdmx_data(self, data_filename):
         message = read_sdmx(os.path.join(self.pathToDB, data_filename))

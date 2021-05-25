@@ -25,9 +25,9 @@ class Component(IdentifiableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, Component):
-            return super(Component, self).__eq__(other) and \
-                   self._local_representation == other._local_representation \
-                   and self._concept_identity == other._concept_identity
+            return (super(Component, self).__eq__(other) and
+                    self.local_representation == other.local_representation and
+                    self._concept_identity == other._concept_identity)
         else:
             return False
 
@@ -173,7 +173,7 @@ class Component(IdentifiableArtefact):
             else:
                 label_format = 'TextFormat'
 
-            format_attributes = f' '
+            format_attributes = ' '
 
             if self.local_representation.type_ is not None:
                 format_attributes = f' textType=' \

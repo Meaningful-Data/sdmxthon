@@ -63,7 +63,7 @@ def _check_relationship(att, dsd, obj):
                     {'Code': 'MS04', 'ErrorLevel': 'CRITICAL',
                      'ObjectID': f'{dsd.unique_id}-'
                                  f'{dsd.attribute_descriptor.id}',
-                     'ObjectType': f'Attribute',
+                     'ObjectType': 'Attribute',
                      'Message': f'Missing Dimension {i} related to Attribute '
                                 f'{att.id}'})
     else:
@@ -76,7 +76,7 @@ def _check_relationship(att, dsd, obj):
                     {'Code': 'MS04', 'ErrorLevel': 'CRITICAL',
                      'ObjectID': f'{dsd.unique_id}-'
                                  f'{dsd.attribute_descriptor.id}',
-                     'ObjectType': f'Attribute',
+                     'ObjectType': 'Attribute',
                      'Message': f'Missing Dimension {att.related_to["id"]} '
                                 f'related to Attribute '
                                 f'{att.id}'})
@@ -89,8 +89,8 @@ def _check_relationship(att, dsd, obj):
                     {'Code': 'MS05', 'ErrorLevel': 'CRITICAL',
                      'ObjectID': f'{dsd.unique_id}-'
                                  f'{dsd.attribute_descriptor.id}',
-                     'ObjectType': f'Attribute',
-                     'Message': f'Missing Primary Measure '
+                     'ObjectType': 'Attribute',
+                     'Message': 'Missing Primary Measure '
                                 f'{att.related_to["id"]} '
                                 f'related to Attribute {att.id}'})
 
@@ -160,12 +160,12 @@ def _set_references(obj):
                         obj.structures.add_error(
                             {'Code': 'MX04', 'ErrorLevel': 'CRITICAL',
                              'ObjectID': f'{sch.unique_id}-{con.id}',
-                             'ObjectType': f'Concept',
+                             'ObjectType': 'Concept',
                              'Message': f'Codelist {cl} not found for '
                                         f'Concept {sch.unique_id}-{con.id}'})
 
         if obj.structures.dsds is not None:
-            missing_rep = {'CS': [], 'CL': [], 'CON': []}
+            mr = {'CS': [], 'CL': [], 'CON': []}
             keys_errors = []
             for key, dsd in obj.structures.dsds.items():
                 if dsd.maintainer in agencies.keys():
@@ -173,8 +173,7 @@ def _set_references(obj):
                 if dsd.dimension_descriptor is not None:
                     for dim in dsd.dimension_descriptor.components.values():
                         control_errors = _set_on_component(comp=dim, obj=obj,
-                                                           missing_rep=missing_rep
-                                                           )
+                                                           missing_rep=mr)
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
 
@@ -183,14 +182,14 @@ def _set_references(obj):
                         keys_errors.append(key)
                     obj.structures.add_error(
                         {'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
-                         'ObjectID': f'{dsd.unique_id}', 'ObjectType': f'DSD',
+                         'ObjectID': f'{dsd.unique_id}', 'ObjectType': 'DSD',
                          'Message': f'DSD {dsd.unique_id} does not have '
                                     f'a DimensionList'})
 
                 if dsd.attribute_descriptor is not None:
                     for att in dsd.attribute_descriptor.components.values():
                         control_errors = _set_on_component(comp=att, obj=obj,
-                                                           missing_rep=missing_rep
+                                                           missing_rep=mr
                                                            )
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
@@ -202,7 +201,7 @@ def _set_references(obj):
                     if len(dsd.measure_descriptor.components) == 1:
                         for meas in dsd.measure_descriptor.components.values():
                             control_errors = _set_on_component(
-                                comp=meas, obj=obj, missing_rep=missing_rep)
+                                comp=meas, obj=obj, missing_rep=mr)
 
                             if control_errors and key not in keys_errors:
                                 keys_errors.append(key)
@@ -213,7 +212,7 @@ def _set_references(obj):
                         obj.structures.add_error(
                             {'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
                              'ObjectID': f'{dsd.unique_id}',
-                             'ObjectType': f'DSD',
+                             'ObjectType': 'DSD',
                              'Message': f'DSD {dsd.unique_id} does not have'
                                         f' a Primary Measure'})
 
@@ -226,18 +225,18 @@ def _set_references(obj):
                             # TODO Error Dimension not found
                             pass
 
-            _grouping_errors(missing_rep, obj, keys_errors)
+            _grouping_errors(mr, obj, keys_errors)
         else:
             obj.structures.add_error(
                 {'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
-                 'ObjectType': f'DSD',
-                 'Message': f'Not found any DSD in this file'})
+                 'ObjectType': 'DSD',
+                 'Message': 'Not found any DSD in this file'})
 
     elif obj.structures.dsds is None:
         obj.structures.add_error(
             {'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
-             'ObjectType': f'DSD',
-             'Message': f'Not found any DSD in this file'})
+             'ObjectType': 'DSD',
+             'Message': 'Not found any DSD in this file'})
 
     if (obj.structures.dsds is not None and
             obj.structures.dataflows is not None):
@@ -267,14 +266,14 @@ def _grouping_errors(missing_rep, obj, keys_errors):
         for e in missing_rep['CL']:
             obj.structures.add_error({'Code': 'MS02', 'ErrorLevel': 'CRITICAL',
                                       'ObjectID': f'{e}',
-                                      'ObjectType': f'Codelist',
+                                      'ObjectType': 'Codelist',
                                       'Message': f'Missing Codelist {e}'})
 
     if len(missing_rep['CS']) > 0:
         for e in missing_rep['CS']:
             obj.structures.add_error({'Code': 'MS07', 'ErrorLevel': 'CRITICAL',
                                       'ObjectID': f'{e}',
-                                      'ObjectType': f'Concept',
+                                      'ObjectType': 'Concept',
                                       'Message': f'Missing Concept Scheme {e}'}
                                      )
 
@@ -282,5 +281,5 @@ def _grouping_errors(missing_rep, obj, keys_errors):
         for e in missing_rep['CON']:
             obj.structures.add_error({'Code': 'MS03', 'ErrorLevel': 'CRITICAL',
                                       'ObjectID': f'{e}',
-                                      'ObjectType': f'Concept',
+                                      'ObjectType': 'Concept',
                                       'Message': f'Missing Concept {e}'})

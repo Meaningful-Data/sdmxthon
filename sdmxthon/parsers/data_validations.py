@@ -66,7 +66,7 @@ def time_period_valid(dt_str: str, type_: str):
             res = match_monthly.fullmatch(dt_str)
             if res:
                 return True
-        except:
+        except Exception:
             return False
 
         # Checks for datetime string in GregorianTimePeriod type
@@ -93,7 +93,7 @@ def time_period_valid(dt_str: str, type_: str):
                 if not res:
                     dt_str += '/' + duration
                     return False
-            except:
+            except Exception:
                 dt_str += '/' + duration
                 return False
             control_changed = True
@@ -109,14 +109,14 @@ def time_period_valid(dt_str: str, type_: str):
             res = match_specials.fullmatch(dt_str)
             if res:
                 return True
-        except:
+        except Exception:
             return False
 
         try:
             res = datetime.strptime(dt_str, '%Y-%m-%d')
             if res:
                 return True
-        except:
+        except Exception:
             return False
 
         try:
@@ -125,7 +125,7 @@ def time_period_valid(dt_str: str, type_: str):
                 if control_changed:
                     dt_str += '/' + duration
                 return False
-        except:
+        except Exception:
             if control_changed:
                 dt_str += '/' + duration
             return False
@@ -147,7 +147,7 @@ def time_period_valid(dt_str: str, type_: str):
                 return True
             else:
                 return False
-        except:
+        except Exception:
             return False
 
     return True
@@ -328,7 +328,7 @@ def check_reporting(e, format_):
         res = match_specials.fullmatch(e)
         if not res:
             return False
-    except:
+    except Exception:
         return False
     return True
 
@@ -438,12 +438,12 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             if k in mandatory:
                 errors.append(
                     {'Code': 'SS03', 'ErrorLevel': 'CRITICAL',
-                     'Component': f'{k}', 'Type': f'Attribute', 'Rows': None,
+                     'Component': f'{k}', 'Type': 'Attribute', 'Rows': None,
                      'Message': f'Missing {k}'})
             elif k in dsd.dimension_codes:
                 errors.append(
                     {'Code': 'SS01', 'ErrorLevel': 'CRITICAL',
-                     'Component': f'{k}', 'Type': f'Dimension', 'Rows': None,
+                     'Component': f'{k}', 'Type': 'Dimension', 'Rows': None,
                      'Message': f'Missing {k}'})
             continue
 
@@ -583,7 +583,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                             res = match_duration.fullmatch(duration)
                             if not res:
                                 invalid_date = True
-                        except:
+                        except Exception:
                             invalid_date = True
                         duration = '/' + duration
                         control_changed = True
@@ -592,7 +592,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                         res = datetime.fromisoformat(e)
                         if not 1900 < res.year <= 9999:
                             invalid_date = True
-                    except:
+                    except Exception:
                         invalid_date = True
 
                     if invalid_date:
@@ -668,10 +668,10 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 rows = data.loc[indexes, :].to_dict('records')
                 errors.append({'Code': 'SS11',
                                'ErrorLevel': 'WARNING',
-                               'Component': f'Series',
-                               'Type': f'Constraint',
+                               'Component': 'Series',
+                               'Type': 'Constraint',
                                'Rows': rows.copy(),
-                               'Message': f'Found disallowed rows'
+                               'Message': 'Found disallowed rows'
                                })
                 del rows
         else:
@@ -693,8 +693,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                 duplicated = duplicated.drop(pos)
                 errors.append({'Code': 'SS07',
                                'ErrorLevel': 'WARNING',
-                               'Component': f'Duplicated',
-                               'Type': f'Datapoint',
+                               'Component': 'Duplicated',
+                               'Type': 'Datapoint',
                                'Rows': rows.copy(),
                                'Message': f'Duplicated datapoint '
                                           f'{format_row(data_point)}'
