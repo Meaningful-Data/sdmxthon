@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 coverage = "*"
 pylint = "*"
+flake8 = "*"
 
 [packages]
 lxml = { version = "4.6.1", index = "pypi" }

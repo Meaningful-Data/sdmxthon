@@ -14,6 +14,10 @@
 .. image:: https://img.shields.io/pypi/pyversions/sdmxthon
     :alt: Python Version
 
+.. image:: https://github.com/Meaningful-Data/sdmxthon/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/Meaningful-Data/sdmxthon/actions/workflows/ci.yml
+    :alt: Tests
+
 ########
 SDMXthon
 ########
