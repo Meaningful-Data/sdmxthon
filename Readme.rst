@@ -11,6 +11,8 @@
    :target: https://opensource.org/licenses/Apache-2.0
    :alt: License
 
+.. image:: https://img.shields.io/pypi/pyversions/sdmxthon
+    :alt: Python Version
 
 ########
 SDMXthon
