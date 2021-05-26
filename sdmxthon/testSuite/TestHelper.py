@@ -2,12 +2,9 @@ import json
 import os
 import pickle
 import sqlite3
-import sys
 import unittest
 from datetime import datetime
 from io import StringIO, BytesIO
-
-print(sys.path)
 
 import pandas as pd
 
