@@ -27,6 +27,11 @@ jobs:
       - name: Run test suite
         run: |
           cd sdmxthon
+          ls
           pipenv run python -m unittest discover -s sdmxthon/testSuite
+          cd ..
+      - name: Run test suite
+        run: |
+          cd sdmxthon
           pipenv run flake8
           cd ..
