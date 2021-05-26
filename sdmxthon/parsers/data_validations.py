@@ -6,7 +6,7 @@ import pandas as pd
 import pandas.api.types
 from pandas import DataFrame
 
-from SDMXThon.model.component_list import DataStructureDefinition
+from SDMXThon.model.definitions import DataStructureDefinition
 
 error_level_facets = 'WARNING'
 
