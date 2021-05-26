@@ -20,14 +20,6 @@ class MetadataDifferent(TestHelper.TestHelper):
         self.metadata_compare(reference, data, dsd_name)
 
     def test_2(self):
-        data = 'ecb.xml'
-        reference = 'ecb.txt'
-
-        dsd_name = 'IMF:BOP(1.9)'
-
-        self.metadata_compare(reference, data, dsd_name)
-
-    def test_3(self):
         data = 'estat.xml'
         reference = 'estat.txt'
 
@@ -35,7 +27,7 @@ class MetadataDifferent(TestHelper.TestHelper):
 
         self.metadata_compare(reference, data, dsd_name)
 
-    def test_4(self):
+    def test_3(self):
         data = 'imf.xml'
         reference = 'imf.txt'
 
@@ -43,7 +35,7 @@ class MetadataDifferent(TestHelper.TestHelper):
 
         self.metadata_compare(reference, data, dsd_name)
 
-    def test_5(self):
+    def test_4(self):
         data = 'wb.xml'
         reference = 'wb.txt'
 

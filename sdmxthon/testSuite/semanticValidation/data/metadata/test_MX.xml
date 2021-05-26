@@ -12,106 +12,42 @@
         <mes:Receiver id="not_supplied"/>
     </mes:Header>
     <mes:Structures>
-        <str:OrganisationSchemes>
-            <str:AgencyScheme urn="urn:sdmx:org.sdmx.infomodel.base.AgencyScheme=SDMX:AGENCIES(1.0)"
-                              isExternalReference="false" agencyID="SDMX" id="AGENCIES" isFinal="false" version="1.0">
-                <com:Name xml:lang="en">SDMX Agency Scheme</com:Name>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=SDMX" id="SDMX">
-                    <com:Name xml:lang="en">SDMX</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=BIS" id="BIS">
-                    <com:Name xml:lang="en">BIS</com:Name>
-                </str:Agency>
-                <str:Agency urn="urn:sdmx:org.sdmx.infomodel.base.Agency=RBI" id="RBI">
-                    <com:Name xml:lang="en">RBI</com:Name>
-                </str:Agency>
-            </str:AgencyScheme>
-        </str:OrganisationSchemes>
         <str:Codelists>
-            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=RBI:CL_Entry_Type(1.0)"
-                          isExternalReference="false" agencyID="RBI" id="CL_Entry_Type" isFinal="false" version="1.0">
-                <com:Name xml:lang="en">Entry Type</com:Name>
-                <com:Description xml:lang="en">Refers to type of accounting journal entries in the books of accounts
+            <str:Codelist
+                    urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=MD:TEST_1(1.0)"
+                    isExternalReference="false" agencyID="MD" id="TEST_1"
+                    isFinal="false" version="1.0">
+                <com:Name xml:lang="en">TEST_1</com:Name>
+                <com:Description xml:lang="en">TEST_1 Description
                 </com:Description>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_Entry_Type(1.0).DEBIT" id="DEBIT">
-                    <com:Name xml:lang="en">Debit entries</com:Name>
-                    <com:Description xml:lang="en">Debit entries</com:Description>
-                </str:Code>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_Entry_Type(1.0).ADEBIT" id="ADEBIT">
-                    <com:Name xml:lang="en">Amount of debit entries</com:Name>
-                    <com:Description xml:lang="en">Amount of debit entries</com:Description>
-                </str:Code>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_Entry_Type(1.0).CREDIT" id="CREDIT">
-                    <com:Name xml:lang="en">Credit entries</com:Name>
-                    <com:Description xml:lang="en">Credit entries</com:Description>
-                </str:Code>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_Entry_Type(1.0).ACREDIT" id="ACREDIT">
-                    <com:Name xml:lang="en">Amount of credit entries</com:Name>
-                    <com:Description xml:lang="en">Amount of credit entries</com:Description>
-                </str:Code>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_Entry_Type(1.0).N_A" id="N_A">
-                    <com:Name xml:lang="en">Not applicable</com:Name>
-                    <com:Description xml:lang="en">Not applicable</com:Description>
-                </str:Code>
             </str:Codelist>
-            <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=RBI:CL_DEPENDENCY_TYPE(1.0)"
-                          isExternalReference="false" agencyID="RBI" id="CL_DEPENDENCY_TYPE" isFinal="false"
-                          version="1.0">
-                <com:Name xml:lang="en">Type dependency</com:Name>
-                <com:Description xml:lang="en">Refers to category to determine whether the data point considered for
-                    reporting purpose is (I) dependent (i.e., whether its reportable fact values is derived from other
-                    data points) or is (ii) Independent (i.e. whether the reportable fact values is not derived from
-                    other data points)
+            <str:Codelist
+                    urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=MD:TEST_2(1.0)"
+                    isExternalReference="false" agencyID="MD" id="TEST_2"
+                    isFinal="false"
+                    version="1.0">
+                <com:Name xml:lang="en">TEST_2 Name</com:Name>
+                <com:Description xml:lang="en">TEST_2 Description
                 </com:Description>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_DEPENDENCY_TYPE(1.0).DEPENDENT"
-                          id="DEPENDENT">
-                    <com:Name xml:lang="en">Dependent item</com:Name>
-                    <com:Description xml:lang="en">Dependent item</com:Description>
-                </str:Code>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_DEPENDENCY_TYPE(1.0).INDEPENDENT"
-                          id="INDEPENDENT">
-                    <com:Name xml:lang="en">Independent item</com:Name>
-                    <com:Description xml:lang="en">Independent item</com:Description>
-                </str:Code>
-                <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=RBI:CL_DEPENDENCY_TYPE(1.0).N_A" id="N_A">
-                    <com:Name xml:lang="en">Not applicable</com:Name>
-                    <com:Description xml:lang="en">Not applicable</com:Description>
-                </str:Code>
             </str:Codelist>
         </str:Codelists>
         <str:Concepts>
-            <str:ConceptScheme urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.ConceptScheme=RBI:RBI_CIMS_SCM(1.0)"
-                               isExternalReference="false" agencyID="RBI" id="RBI_CIMS_SCM" isFinal="false"
-                               version="1.0">
-                <com:Name xml:lang="en">RBI_CIMS Scheme</com:Name>
-                <com:Description xml:lang="en">This is text description</com:Description>
+            <str:ConceptScheme
+                    urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.ConceptScheme=MD:MD_CS(1.0)"
+                    isExternalReference="false" agencyID="MD" id="MD_CS"
+                    isFinal="false"
+                    version="1.0">
+                <com:Name xml:lang="en">Test name CS</com:Name>
+                <com:Description xml:lang="en">This is text description
+                </com:Description>
                 <str:Concept
-                        urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=RBI:RBI_CIMS_SCM(1.0).Area_Operation"
-                        id="Area_Operation">
-                    <com:Name xml:lang="en">Area of Operation</com:Name>
+                        urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=MD:MD_CS(1.0).TEST_1"
+                        id="TEST_1">
+                    <com:Name xml:lang="en">Test name</com:Name>
                     <str:CoreRepresentation>
                         <str:Enumeration>
-                            <Ref package="codelist" agencyID="RBI" id="CL_Area_Operation" version="1.0"
-                                 class="Codelist"/>
-                        </str:Enumeration>
-                    </str:CoreRepresentation>
-                </str:Concept>
-                <str:Concept urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=RBI:RBI_CIMS_SCM(1.0).Entry_Type"
-                             id="Entry_Type">
-                    <com:Name xml:lang="en">Entry Type</com:Name>
-                    <str:CoreRepresentation>
-                        <str:Enumeration>
-                            <Ref package="codelist" agencyID="RBI" id="CL_Entry_Type" version="1.0" class="Codelist"/>
-                        </str:Enumeration>
-                    </str:CoreRepresentation>
-                </str:Concept>
-                <str:Concept
-                        urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=RBI:RBI_CIMS_SCM(1.0).DEPENDENCY_TYPE"
-                        id="DEPENDENCY_TYPE">
-                    <com:Name xml:lang="en">Type dependency</com:Name>
-                    <str:CoreRepresentation>
-                        <str:Enumeration>
-                            <Ref package="codelist" agencyID="RBI" id="CL_DEPENDENCY_TYPE" version="1.0"
+                            <Ref package="codelist" agencyID="MD"
+                                 id="CL_TEST_1" version="1.0"
                                  class="Codelist"/>
                         </str:Enumeration>
                     </str:CoreRepresentation>
@@ -145,33 +81,37 @@
             </str:ConceptScheme>
         </str:Concepts>
         <str:DataStructures>
-            <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:TEST(1.0)"
-                               isExternalReference="false" agencyID="RBI" id="TEST" isFinal="false" version="1.0">
-                <com:Name xml:lang="en">Ageing analysis of long outstanding entries</com:Name>
+            <str:DataStructure
+                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=MD:TEST(1.0)"
+                    isExternalReference="false" agencyID="MD" id="TEST"
+                    isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Test name</com:Name>
                 <str:DataStructureComponents>
                     <str:MeasureList
-                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=RBI:TEST(1.0).MeasureDescriptor"
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=MD:TEST(1.0).MeasureDescriptor"
                             id="MeasureDescriptor">
                     </str:MeasureList>
                 </str:DataStructureComponents>
             </str:DataStructure>
-            <str:DataStructure urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=RBI:TESTMX4(1.0)"
-                               isExternalReference="false" agencyID="RBI" id="TESTMX4" isFinal="false" version="1.0">
-                <com:Name xml:lang="en">Ageing analysis of long outstanding entries</com:Name>
+            <str:DataStructure
+                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=MD:TESTMX4(1.0)"
+                    isExternalReference="false" agencyID="MD" id="TESTMX4"
+                    isFinal="false" version="1.0">
+                <com:Name xml:lang="en">Test name</com:Name>
                 <str:DataStructureComponents>
                     <str:DimensionList
-                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=RBI:TEST(1.0).DimensionDescriptor"
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=MD:TEST(1.0).DimensionDescriptor"
                             id="DimensionDescriptor">
                     </str:DimensionList>
                     <str:AttributeList
-                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=RBI:TEST(1.0).AttributeDescriptor"
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=MD:TEST(1.0).AttributeDescriptor"
                             id="AttributeDescriptor">
                     </str:AttributeList>
                     <str:MeasureList
-                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=RBI:TEST(1.0).MeasureDescriptor"
+                            urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=MD:TEST(1.0).MeasureDescriptor"
                             id="MeasureDescriptor">
                         <str:PrimaryMeasure
-                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=RBI:TEST(1.0).OBS_VALUE"
+                                urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=MD:TEST(1.0).OBS_VALUE"
                                 id="OBS_VALUE">
                             <str:ConceptIdentity>
                                 <Ref maintainableParentID="CROSS_DOMAIN_CONCEPTS" package="conceptscheme"

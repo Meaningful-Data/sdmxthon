@@ -15,48 +15,24 @@
     <mes:Structures>
         <str:Constraints>
             <str:ContentConstraint
-                    urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=RBI:DMIDvalidity_ASSET(1.0)"
-                    isExternalReference="false" agencyID="RBI"
-                    id="DMIDvalidity_ASSET" isFinal="false" type="Allowed"
+                    urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=MD:Test_series(1.0)"
+                    isExternalReference="false" agencyID="MD"
+                    id="Test_series" isFinal="false" type="Allowed"
                     version="1.0">
-                <com:Name xml:lang="en">DMID Validity ASSET</com:Name>
+                <com:Name xml:lang="en">Test series</com:Name>
                 <str:ConstraintAttachment>
                     <str:DataStructure>
-                        <Ref package="datastructure" agencyID="RBI" id="ASSET"
+                        <Ref package="datastructure" agencyID="MD" id="TEST"
                              version="1.0" class="DataStructure"/>
                     </str:DataStructure>
                 </str:ConstraintAttachment>
                 <str:DataKeySet isIncluded="true">
                     <str:Key>
-                        <com:KeyValue id="DEPENDENCY_TYPE">
-                            <com:Value>INDEPENDENT</com:Value>
+                        <com:KeyValue id="TEST_1">
+                            <com:Value>TEST_1-Value</com:Value>
                         </com:KeyValue>
-                        <com:KeyValue id="Area_Operation">
-                            <com:Value>DOM_OP</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="Measure_Type">
-                            <com:Value>TOTAL</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="Asset_List">
-                            <com:Value>CIH</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="Fixed_Assets">
-                            <com:Value>N_A</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="FA_DET">
-                            <com:Value>N_A</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="Other_Assets">
-                            <com:Value>N_A</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="TIME_SPAN">
-                            <com:Value>N_A</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="BRNAME">
-                            <com:Value>N_A</com:Value>
-                        </com:KeyValue>
-                        <com:KeyValue id="ASETTY">
-                            <com:Value>N_A</com:Value>
+                        <com:KeyValue id="TEST_2">
+                            <com:Value>TEST_2-Value</com:Value>
                         </com:KeyValue>
                     </str:Key>
                 </str:DataKeySet>
