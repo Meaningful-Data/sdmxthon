@@ -1,13 +1,13 @@
-from SDMXThon.model.base import IdentifiableArtefact
-from SDMXThon.model.itemScheme import Concept
-from SDMXThon.model.representation import Representation
-from SDMXThon.model.utils import generic_setter, int_setter
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXThon.utils.handlers import add_indent, export_intern_data, \
+from sdmxthon.model.base import IdentifiableArtefact
+from sdmxthon.model.itemScheme import Concept
+from sdmxthon.model.representation import Representation
+from sdmxthon.model.utils import generic_setter, int_setter
+from sdmxthon.parsers.data_parser import DataParser
+from sdmxthon.parsers.references import RelationshipRefType, RefBaseType
+from sdmxthon.utils.handlers import add_indent, export_intern_data, \
     split_unique_id
-from SDMXThon.utils.mappings import structureAbbr
-from SDMXThon.utils.xml_base import find_attr_value_
+from sdmxthon.utils.mappings import structureAbbr
+from sdmxthon.utils.xml_base import find_attr_value_
 
 
 class Component(IdentifiableArtefact):

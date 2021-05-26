@@ -6,7 +6,7 @@ import datetime as datetime_
 import decimal as decimal_
 import re as re_
 
-from SDMXThon.utils.xml_base import raise_parse_error
+from sdmxthon.utils.xml_base import raise_parse_error
 
 ExternalEncoding = ''
 

@@ -5,11 +5,11 @@ from datetime import datetime
 from io import StringIO
 from typing import Dict
 
-from SDMXThon.parsers.message_parsers import Header, Structures
-from SDMXThon.parsers.write import writer
-from SDMXThon.utils.enums import MessageTypeEnum
-from .dataset import Dataset
-from .header import Party, Sender
+from sdmxthon.model.dataset import Dataset
+from sdmxthon.model.header import Party, Sender
+from sdmxthon.parsers.message_parsers import Header, Structures
+from sdmxthon.parsers.write import writer
+from sdmxthon.utils.enums import MessageTypeEnum
 
 
 class Message:
