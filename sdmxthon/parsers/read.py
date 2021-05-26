@@ -6,9 +6,9 @@ import pandas as pd
 from lxml import etree as etree_
 from lxml.etree import DocumentInvalid
 
-from SDMXThon.model.dataset import Dataset
-from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.xml_base import parse_xml, \
+from sdmxthon.model.dataset import Dataset
+from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.xml_base import parse_xml, \
     makeWarnings
 from .gdscollector import GdsCollector
 from .message_parsers import GenericDataType, StructureSpecificDataType, \

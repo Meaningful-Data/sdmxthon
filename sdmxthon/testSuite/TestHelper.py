@@ -8,13 +8,13 @@ from io import StringIO, BytesIO
 
 import pandas as pd
 
-from SDMXThon.api.api import _read_xml, MetadataType, _set_references, \
+from sdmxthon.api.api import _read_xml, MetadataType, _set_references, \
     read_sdmx, \
     get_datasets, get_pandas_df, xml_to_csv
-from SDMXThon.model.dataset import Dataset
-from SDMXThon.model.message import Message
-from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.handlers import first_element_dict
+from sdmxthon.model.dataset import Dataset
+from sdmxthon.model.message import Message
+from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import first_element_dict
 
 
 def query_to_db(sqlite_db, limit):

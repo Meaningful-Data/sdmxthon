@@ -1,9 +1,9 @@
-from SDMXThon.model.base import IdentifiableArtefact
-from SDMXThon.model.component import Dimension, Attribute, PrimaryMeasure, \
+from sdmxthon.model.base import IdentifiableArtefact
+from sdmxthon.model.component import Dimension, Attribute, PrimaryMeasure, \
     TimeDimension
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.parsers.references import RelationshipRefType, RefBaseType
-from SDMXThon.utils.handlers import add_indent, export_intern_data
+from sdmxthon.parsers.data_parser import DataParser
+from sdmxthon.parsers.references import RelationshipRefType, RefBaseType
+from sdmxthon.utils.handlers import add_indent, export_intern_data
 
 
 class GroupDimension(DataParser):

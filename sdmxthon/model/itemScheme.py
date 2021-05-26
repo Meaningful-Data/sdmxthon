@@ -5,11 +5,11 @@ import warnings
 from datetime import datetime
 from typing import List
 
-from SDMXThon.parsers.references import RelationshipRefType
-from SDMXThon.utils.handlers import add_indent, export_intern_data, \
+from sdmxthon.parsers.references import RelationshipRefType
+from sdmxthon.utils.handlers import add_indent, export_intern_data, \
     split_unique_id
-from SDMXThon.utils.mappings import structureAbbr
-from SDMXThon.utils.xml_base import find_attr_value_
+from sdmxthon.utils.mappings import structureAbbr
+from sdmxthon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, NameableArtefact, InternationalString
 from .header import Contact
 from .representation import Representation

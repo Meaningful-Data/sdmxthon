@@ -2,9 +2,9 @@
     Data_Structure has the parsers for the information of data sets
 """
 
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.parsers.references import ReferenceType
-from SDMXThon.utils.xml_base import cast, find_attr_value_, raise_parse_error
+from sdmxthon.parsers.data_parser import DataParser
+from sdmxthon.parsers.references import ReferenceType
+from sdmxthon.utils.xml_base import cast, find_attr_value_, raise_parse_error
 
 
 class PayloadStructureType(DataParser):

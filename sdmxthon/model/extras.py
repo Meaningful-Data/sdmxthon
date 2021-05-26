@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta
 
-from SDMXThon.model.utils import generic_setter
-from SDMXThon.parsers.data_generic import ComponentValueType
+from sdmxthon.model.utils import generic_setter
+from sdmxthon.parsers.data_generic import ComponentValueType
 
 
 class Period:

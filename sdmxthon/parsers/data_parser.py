@@ -2,7 +2,7 @@
     Data parser file contains only the DataParser class
 """
 
-from SDMXThon.utils.xml_base import encode_str_2_3, Tag_pattern_
+from sdmxthon.utils.xml_base import encode_str_2_3, Tag_pattern_
 from .gdscollector import GenerateSuper
 
 Validate_simpletypes_ = True

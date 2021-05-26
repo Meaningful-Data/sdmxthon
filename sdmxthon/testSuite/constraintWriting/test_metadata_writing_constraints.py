@@ -4,7 +4,7 @@ Constraints writing Tests
 import os
 import unittest
 
-from SDMXThon.testSuite import TestHelper
+from sdmxthon.testSuite import TestHelper
 
 
 class ConstraintWriting(TestHelper.TestHelper):

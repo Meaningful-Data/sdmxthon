@@ -5,8 +5,8 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 
-from SDMXThon.utils.enums import MessageTypeEnum
-from SDMXThon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
+from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
 from .data_validations import get_mandatory_attributes
 from .message_parsers import Structures

@@ -6,11 +6,11 @@ import json
 from datetime import datetime
 from typing import List
 
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.utils.handlers import export_intern_data, add_indent, \
+from sdmxthon.parsers.data_parser import DataParser
+from sdmxthon.utils.handlers import export_intern_data, add_indent, \
     split_unique_id
-from SDMXThon.utils.mappings import structureAbbr, Data_Types_VTL, commonAbbr
-from SDMXThon.utils.xml_base import find_attr_value_
+from sdmxthon.utils.mappings import structureAbbr, Data_Types_VTL, commonAbbr
+from sdmxthon.utils.xml_base import find_attr_value_
 from .base import MaintainableArtefact, \
     InternationalString
 from .component import Component

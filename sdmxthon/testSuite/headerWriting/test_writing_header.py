@@ -4,7 +4,7 @@ Header Writing Tests
 import os
 import unittest
 
-from SDMXThon.testSuite import TestHelper
+from sdmxthon.testSuite import TestHelper
 
 
 class HeaderWriting(TestHelper.TestHelper):

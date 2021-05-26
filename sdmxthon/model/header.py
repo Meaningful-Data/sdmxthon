@@ -3,12 +3,12 @@
 """
 from datetime import datetime
 
-from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
-from SDMXThon.parsers.payload_parser import GenericDataStructureType
-from SDMXThon.parsers.references import ReferenceType
-from SDMXThon.utils.handlers import add_indent
-from SDMXThon.utils.mappings import commonAbbr, structureAbbr
-from SDMXThon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, \
+from sdmxthon.parsers.data_parser import DataParser, Validate_simpletypes_
+from sdmxthon.parsers.payload_parser import GenericDataStructureType
+from sdmxthon.parsers.references import ReferenceType
+from sdmxthon.utils.handlers import add_indent
+from sdmxthon.utils.mappings import commonAbbr, structureAbbr
+from sdmxthon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, \
     BaseStrType_
 from .base import InternationalString, LocalisedString
 from .utils import generic_setter, string_setter, bool_setter

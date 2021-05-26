@@ -6,9 +6,9 @@ import re as re_
 import pandas as pd
 from lxml.etree import DocumentInvalid
 
-from SDMXThon.model.base import AnnotableArtefact
-from SDMXThon.parsers.references import ReferenceType
-from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
+from sdmxthon.model.base import AnnotableArtefact
+from sdmxthon.parsers.references import ReferenceType
+from sdmxthon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
     encode_str_2_3
 from .data_parser import Validate_simpletypes_
 from .gdscollector import datetime_
