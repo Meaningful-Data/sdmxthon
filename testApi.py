@@ -27,7 +27,8 @@ def pretty(d, indent=0):
 
 
 def main():
-    pass
+    import os
+    print(os.path.dirname(os.getcwd()))
 
 
 if __name__ == '__main__':
