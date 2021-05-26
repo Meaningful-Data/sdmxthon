@@ -1,6 +1,7 @@
 """
     Message file contains the Message class for the use of external assets
 """
+import os
 from datetime import datetime
 from io import StringIO
 from typing import Dict
@@ -11,6 +12,7 @@ from sdmxthon.parsers.message_parsers import Header, Structures
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 
+print(os.getcwd())
 
 class Message:
     """ Message class holds the type of a SDMX Message, its payload and its
