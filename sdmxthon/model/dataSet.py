@@ -9,11 +9,12 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
+from sdmxthon.model.definitions import DataStructureDefinition, \
+    DataFlowDefinition
+from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
-from .definitions import DataStructureDefinition, DataFlowDefinition
-from .header import Header
 
 
 class Dataset:
