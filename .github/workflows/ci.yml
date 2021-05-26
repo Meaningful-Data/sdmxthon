@@ -26,9 +26,7 @@ jobs:
           pipenv install --deploy --dev
       - name: Run test suite
         run: |
-          ls
           pipenv run python -m unittest discover -s sdmxthon/testSuite
       - name: Run Flake
         run: |
-          ls
           pipenv run flake8

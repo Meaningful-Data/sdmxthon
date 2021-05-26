@@ -7,11 +7,11 @@ import pandas as pd
 from lxml.etree import DocumentInvalid
 
 from sdmxthon.model.base import AnnotableArtefact
+from sdmxthon.parsers.data_parser import Validate_simpletypes_
+from sdmxthon.parsers.gdscollector import datetime_
 from sdmxthon.parsers.references import ReferenceType
 from sdmxthon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
     encode_str_2_3
-from .data_parser import Validate_simpletypes_
-from .gdscollector import datetime_
 
 
 class ObsType(AnnotableArtefact):

@@ -5,13 +5,13 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 
+from sdmxthon.model.component import PrimaryMeasure
+from sdmxthon.model.header import Header
+from sdmxthon.parsers.data_validations import get_mandatory_attributes
+from sdmxthon.parsers.message_parsers import Structures
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
-from .data_validations import get_mandatory_attributes
-from .message_parsers import Structures
-from ..model.component import PrimaryMeasure
-from ..model.header import Header
 
 
 def addStructure(dataset, prettyprint, dType):

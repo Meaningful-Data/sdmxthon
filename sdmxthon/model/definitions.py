@@ -6,19 +6,20 @@ import json
 from datetime import datetime
 from typing import List
 
+from sdmxthon.model.base import MaintainableArtefact, \
+    InternationalString
+from sdmxthon.model.component import Component
+from sdmxthon.model.descriptors import ComponentList, DimensionDescriptor, \
+    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor, \
+    StructureType, DataStructureComponentType
+from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
+from sdmxthon.model.utils import generic_setter, ConstraintRoleType, \
+    bool_setter
 from sdmxthon.parsers.data_parser import DataParser
 from sdmxthon.utils.handlers import export_intern_data, add_indent, \
     split_unique_id
 from sdmxthon.utils.mappings import structureAbbr, Data_Types_VTL, commonAbbr
 from sdmxthon.utils.xml_base import find_attr_value_
-from .base import MaintainableArtefact, \
-    InternationalString
-from .component import Component
-from .descriptors import ComponentList, DimensionDescriptor, \
-    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor, \
-    StructureType, DataStructureComponentType
-from .extras import ReferencePeriod, ReleaseCalendar
-from .utils import generic_setter, ConstraintRoleType, bool_setter
 
 
 class MemberSelection(DataParser):
