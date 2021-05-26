@@ -6,13 +6,14 @@ from datetime import datetime
 from io import StringIO
 from typing import Dict
 
+print(os.getcwd())
+
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.header import Party, Sender
 from sdmxthon.parsers.message_parsers import Header, Structures
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 
-print(os.getcwd())
 
 class Message:
     """ Message class holds the type of a SDMX Message, its payload and its
