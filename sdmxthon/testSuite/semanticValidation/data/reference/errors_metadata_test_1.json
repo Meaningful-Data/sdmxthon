@@ -2,43 +2,43 @@
   {
     "Code": "MS02",
     "ErrorLevel": "CRITICAL",
-    "Message": "Missing Codelist SDMX:TEST_ERROR(1.0)",
-    "ObjectID": "SDMX:TEST_ERROR(1.0)",
-    "ObjectType": "Codelist"
+    "ObjectID": "MD:TEST_ERROR(1.0)",
+    "ObjectType": "Codelist",
+    "Message": "Missing Codelist MD:TEST_ERROR(1.0)"
   },
   {
     "Code": "MS03",
     "ErrorLevel": "CRITICAL",
-    "Message": "Missing Concept DEPENDENCY_TYPE",
-    "ObjectID": "DEPENDENCY_TYPE",
-    "ObjectType": "Concept"
+    "ObjectID": "TEST_ERROR",
+    "ObjectType": "Concept",
+    "Message": "Missing Concept TEST_ERROR"
   },
   {
     "Code": "MS04",
     "ErrorLevel": "CRITICAL",
-    "Message": "Missing Dimension TEST_ERROR related to Attribute DEPENDENCY_TYPE",
-    "ObjectID": "RBI:TEST(1.0)-AttributeDescriptor",
-    "ObjectType": "Attribute"
+    "ObjectID": "MD:DS1(1.0)-AttributeDescriptor",
+    "ObjectType": "Attribute",
+    "Message": "Missing Dimension TEST_ERROR related to Attribute TEST_ATTR_2"
   },
   {
     "Code": "MS05",
     "ErrorLevel": "CRITICAL",
-    "Message": "Missing Primary Measure TEST_ERROR related to Attribute DMID",
-    "ObjectID": "RBI:WRT_OFF_ACC_1CR(1.0)-AttributeDescriptor",
-    "ObjectType": "Attribute"
+    "ObjectID": "MD:DS1(1.0)-AttributeDescriptor",
+    "ObjectType": "Attribute",
+    "Message": "Missing Primary Measure TEST_ERROR related to Attribute TEST_ATTR_1"
   },
   {
     "Code": "MS06",
     "ErrorLevel": "CRITICAL",
-    "Message": "DSD RBI:WRT_OFF_ACC_1CR(1.0) is not unique",
-    "ObjectID": "RBI:WRT_OFF_ACC_1CR(1.0)",
-    "ObjectType": "DSD"
+    "ObjectID": "MD:DS2(1.0)",
+    "ObjectType": "DSD",
+    "Message": "DSD MD:DS2(1.0) is not unique"
   },
   {
     "Code": "MS07",
     "ErrorLevel": "CRITICAL",
-    "Message": "Missing Concept Scheme RBI:TEST_ERROR(1.0)",
-    "ObjectID": "RBI:TEST_ERROR(1.0)",
-    "ObjectType": "Concept"
+    "ObjectID": "MD:TEST_ERROR(1.0)",
+    "ObjectType": "Concept",
+    "Message": "Missing Concept Scheme MD:TEST_ERROR(1.0)"
   }
 ]

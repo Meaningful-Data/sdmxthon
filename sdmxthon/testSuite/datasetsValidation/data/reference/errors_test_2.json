@@ -2,10 +2,10 @@
   {
     "Code": "SS10",
     "ErrorLevel": "CRITICAL",
-    "Component": "Area_Operation",
+    "Component": "TEST_2",
     "Type": "Dimension",
     "Rows": null,
-    "Message": "Wrong value OVR_OP for dimension Area_Operation"
+    "Message": "Wrong value TEST_VALUE_3 for dimension TEST_2"
   },
   {
     "Code": "SS11",
@@ -14,17 +14,10 @@
     "Type": "Constraint",
     "Rows": [
       {
-        "DEPENDENCY_TYPE": "INDEPENDENT",
-        "Area_Operation": "OVR_OP",
-        "Entry_Type": "DEBIT",
-        "RECO_PER": "M6M12",
-        "Measure_Type": "N_A",
-        "Currency": "N_A",
-        "AUDST": "UNAUDITED",
-        "COMMENT": "N_A",
-        "DMID": "N_A",
+        "TEST_1": "TEST_VALUE_2",
+        "TEST_2": "TEST_VALUE_3",
         "TIME_PERIOD": "2020-03-30",
-        "OBS_VALUE": "01.0"
+        "OBS_VALUE": "04.0"
       }
     ],
     "Message": "Found disallowed rows"

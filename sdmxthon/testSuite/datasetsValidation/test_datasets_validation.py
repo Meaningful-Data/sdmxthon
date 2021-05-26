@@ -14,13 +14,13 @@ class DatasetsValidation(TestHelper.TestHelper):
     pathToReference = os.path.join(os.path.join(path, "data"), "reference")
 
     def test_1(self):
-        data = 'aaloe.xml'
-        metadata = 'rbi.xml'
+        data = 'valid.xml'
+        metadata = 'metadata.xml'
         self.datasets_validation(data, metadata)
 
     def test_2(self):
-        data = 'bad_aaloe.xml'
-        metadata = 'rbi.xml'
+        data = 'invalid.xml'
+        metadata = 'metadata.xml'
         reference_filename = "errors_test_2.json"
         self.datasets_validation(data, metadata, reference_filename)
 

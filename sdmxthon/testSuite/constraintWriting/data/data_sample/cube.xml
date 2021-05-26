@@ -15,22 +15,23 @@
     <mes:Structures>
         <str:Constraints>
             <str:ContentConstraint
-                    urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=RBI:AALOE_AreaOp(1.0)"
-                    isExternalReference="false" agencyID="RBI"
-                    id="AALOE_AreaOp" isFinal="false" type="Allowed"
+                    urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=MD:Test_cube(1.0)"
+                    isExternalReference="false" agencyID="MD"
+                    id="Test_cube" isFinal="false" type="Allowed"
                     version="1.0">
                 <com:Name xml:lang="en">AALOE_AreaOp</com:Name>
                 <str:ConstraintAttachment>
                     <str:Dataflow>
-                        <Ref package="datastructure" agencyID="RBI" id="AALOE"
+                        <Ref package="datastructure" agencyID="MD"
+                             id="Test_cube"
                              version="1.0" class="Dataflow"/>
                     </str:Dataflow>
                 </str:ConstraintAttachment>
                 <str:CubeRegion include="true">
-                    <com:KeyValue id="Area_Operation">
-                        <com:Value>OVR_OP</com:Value>
-                        <com:Value>GL_OP</com:Value>
-                        <com:Value>DOM_OP</com:Value>
+                    <com:KeyValue id="Test_cube">
+                        <com:Value>TEST_1</com:Value>
+                        <com:Value>TEST_2</com:Value>
+                        <com:Value>TEST_3</com:Value>
                     </com:KeyValue>
                 </str:CubeRegion>
             </str:ContentConstraint>

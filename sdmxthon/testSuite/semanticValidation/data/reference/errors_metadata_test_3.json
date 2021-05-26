@@ -2,22 +2,22 @@
   {
     "Code": "MX01",
     "ErrorLevel": "CRITICAL",
-    "Message": "DSD RBI:TEST(1.0) does not have a DimensionList",
-    "ObjectID": "RBI:TEST(1.0)",
+    "Message": "DSD MD:TEST(1.0) does not have a DimensionList",
+    "ObjectID": "MD:TEST(1.0)",
     "ObjectType": "DSD"
   },
   {
     "Code": "MX02",
     "ErrorLevel": "CRITICAL",
-    "Message": "DSD RBI:TEST(1.0) does not have a Primary Measure",
-    "ObjectID": "RBI:TEST(1.0)",
+    "Message": "DSD MD:TEST(1.0) does not have a Primary Measure",
+    "ObjectID": "MD:TEST(1.0)",
     "ObjectType": "DSD"
   },
   {
     "Code": "MX04",
     "ErrorLevel": "CRITICAL",
-    "Message": "Codelist RBI:CL_Area_Operation(1.0) not found for Concept RBI:RBI_CIMS_SCM(1.0)-Area_Operation",
-    "ObjectID": "RBI:RBI_CIMS_SCM(1.0)-Area_Operation",
+    "Message": "Codelist MD:CL_TEST_1(1.0) not found for Concept MD:MD_CS(1.0)-TEST_1",
+    "ObjectID": "MD:MD_CS(1.0)-TEST_1",
     "ObjectType": "Concept"
   }
 ]

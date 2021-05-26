@@ -6,7 +6,8 @@ logger = logging.getLogger('logger')
 def _set_on_component(comp, obj, missing_rep):
     control_errors = False
     if comp.concept_identity is not None:
-        if comp.concept_identity['CS'] in obj.structures.concepts.keys():
+        if (obj.structures.concepts is not None and
+                comp.concept_identity['CS'] in obj.structures.concepts.keys()):
             if (comp.concept_identity['CON'] in
                     obj.structures.concepts[
                         comp.concept_identity['CS']].items.keys()):
@@ -25,7 +26,8 @@ def _set_on_component(comp, obj, missing_rep):
 
     if comp.local_representation is not None:
         if comp.local_representation.codelist is not None:
-            if (comp.local_representation.codelist in
+            if (obj.structures.codelists is not None and
+                    comp.local_representation.codelist in
                     obj.structures.codelists.keys()):
                 comp.local_representation.codelist = obj.structures.codelists[
                     comp.local_representation.codelist]
@@ -37,7 +39,8 @@ def _set_on_component(comp, obj, missing_rep):
                 control_errors = True
 
         elif comp.local_representation.concept_scheme is not None:
-            if (comp.local_representation.concept_scheme in
+            if (obj.structures.concepts is not None and
+                    comp.local_representation.concept_scheme in
                     obj.structures.concepts.keys()):
                 comp.local_representation.concept_scheme = \
                     obj.structures.concepts[
@@ -145,15 +148,15 @@ def _set_references(obj):
             if cl.maintainer in agencies.keys():
                 cl.maintainer = agencies[cl.maintainer]
 
-    if (obj.structures.codelists is not None and
-            obj.structures.concepts is not None):
+    if obj.structures.concepts is not None:
         for sch in obj.structures.concepts.values():
             if sch.maintainer in agencies.keys():
                 sch.maintainer = agencies[sch.maintainer]
             for con in sch.items.values():
                 if con.id in sch.cl_references.keys():
                     cl = sch.cl_references[con.id]
-                    if cl in obj.structures.codelists.keys():
+                    if obj.structures.codelists is not None and \
+                            cl in obj.structures.codelists.keys():
                         sch.items[con.id].core_representation.codelist = \
                             obj.structures.codelists[cl]
                     else:
@@ -164,16 +167,45 @@ def _set_references(obj):
                              'Message': f'Codelist {cl} not found for '
                                         f'Concept {sch.unique_id}-{con.id}'})
 
-        if obj.structures.dsds is not None:
-            mr = {'CS': [], 'CL': [], 'CON': []}
-            keys_errors = []
-            for key, dsd in obj.structures.dsds.items():
-                if dsd.maintainer in agencies.keys():
-                    dsd.maintainer = agencies[dsd.maintainer]
-                if dsd.dimension_descriptor is not None:
-                    for dim in dsd.dimension_descriptor.components.values():
-                        control_errors = _set_on_component(comp=dim, obj=obj,
-                                                           missing_rep=mr)
+    if obj.structures.dsds is not None:
+        mr = {'CS': [], 'CL': [], 'CON': []}
+        keys_errors = []
+        for key, dsd in obj.structures.dsds.items():
+            if dsd.maintainer in agencies.keys():
+                dsd.maintainer = agencies[dsd.maintainer]
+            if dsd.dimension_descriptor is not None:
+                for dim in dsd.dimension_descriptor.components.values():
+                    control_errors = _set_on_component(comp=dim, obj=obj,
+                                                       missing_rep=mr)
+                    if control_errors and key not in keys_errors:
+                        keys_errors.append(key)
+
+            else:
+                if key not in keys_errors:
+                    keys_errors.append(key)
+                obj.structures.add_error(
+                    {'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
+                     'ObjectID': f'{dsd.unique_id}', 'ObjectType': 'DSD',
+                     'Message': f'DSD {dsd.unique_id} does not have '
+                                f'a DimensionList'})
+
+            if dsd.attribute_descriptor is not None:
+                for att in dsd.attribute_descriptor.components.values():
+                    control_errors = _set_on_component(comp=att, obj=obj,
+                                                       missing_rep=mr
+                                                       )
+                    if control_errors and key not in keys_errors:
+                        keys_errors.append(key)
+                    if (att.related_to is not None and
+                            att.related_to != 'NoSpecifiedRelationship'):
+                        _check_relationship(att, dsd, obj)
+
+            if dsd.measure_descriptor is not None:
+                if len(dsd.measure_descriptor.components) == 1:
+                    for meas in dsd.measure_descriptor.components.values():
+                        control_errors = _set_on_component(
+                            comp=meas, obj=obj, missing_rep=mr)
+
                         if control_errors and key not in keys_errors:
                             keys_errors.append(key)
 
@@ -181,58 +213,23 @@ def _set_references(obj):
                     if key not in keys_errors:
                         keys_errors.append(key)
                     obj.structures.add_error(
-                        {'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
-                         'ObjectID': f'{dsd.unique_id}', 'ObjectType': 'DSD',
-                         'Message': f'DSD {dsd.unique_id} does not have '
-                                    f'a DimensionList'})
+                        {'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
+                         'ObjectID': f'{dsd.unique_id}',
+                         'ObjectType': 'DSD',
+                         'Message': f'DSD {dsd.unique_id} does not have'
+                                    f' a Primary Measure'})
 
-                if dsd.attribute_descriptor is not None:
-                    for att in dsd.attribute_descriptor.components.values():
-                        control_errors = _set_on_component(comp=att, obj=obj,
-                                                           missing_rep=mr
-                                                           )
-                        if control_errors and key not in keys_errors:
-                            keys_errors.append(key)
-                        if (att.related_to is not None and
-                                att.related_to != 'NoSpecifiedRelationship'):
-                            _check_relationship(att, dsd, obj)
-
-                if dsd.measure_descriptor is not None:
-                    if len(dsd.measure_descriptor.components) == 1:
-                        for meas in dsd.measure_descriptor.components.values():
-                            control_errors = _set_on_component(
-                                comp=meas, obj=obj, missing_rep=mr)
-
-                            if control_errors and key not in keys_errors:
-                                keys_errors.append(key)
-
+            if dsd.group_dimension_descriptor is not None:
+                for gr in dsd.group_dimension_descriptor.components.keys():
+                    if gr in dsd.dimension_descriptor.components.keys():
+                        dsd.group_dimension_descriptor.components[gr] = \
+                            dsd.dimension_descriptor.components[gr]
                     else:
-                        if key not in keys_errors:
-                            keys_errors.append(key)
-                        obj.structures.add_error(
-                            {'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
-                             'ObjectID': f'{dsd.unique_id}',
-                             'ObjectType': 'DSD',
-                             'Message': f'DSD {dsd.unique_id} does not have'
-                                        f' a Primary Measure'})
+                        # TODO Error Dimension not found
+                        pass
 
-                if dsd.group_dimension_descriptor is not None:
-                    for gr in dsd.group_dimension_descriptor.components.keys():
-                        if gr in dsd.dimension_descriptor.components.keys():
-                            dsd.group_dimension_descriptor.components[gr] = \
-                                dsd.dimension_descriptor.components[gr]
-                        else:
-                            # TODO Error Dimension not found
-                            pass
-
-            _grouping_errors(mr, obj, keys_errors)
-        else:
-            obj.structures.add_error(
-                {'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
-                 'ObjectType': 'DSD',
-                 'Message': 'Not found any DSD in this file'})
-
-    elif obj.structures.dsds is None:
+        _grouping_errors(mr, obj, keys_errors)
+    else:
         obj.structures.add_error(
             {'Code': 'MS01', 'ErrorLevel': 'CRITICAL', 'ObjectID': None,
              'ObjectType': 'DSD',

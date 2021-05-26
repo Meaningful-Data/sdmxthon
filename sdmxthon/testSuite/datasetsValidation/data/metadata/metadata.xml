@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mes:Structure xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+  <mes:Header>
+    <mes:ID>TEST</mes:ID>
+    <mes:Test>false</mes:Test>
+      <mes:Prepared>2021-05-21T08:58:38</mes:Prepared>
+    <mes:Sender id="Unknown"/>
+    <mes:Receiver id="not_supplied"/>
+  </mes:Header>
+  <mes:Structures>
+      <str:Codelists>
+          <str:Codelist
+                  urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=MD:CL_TEST_2(1.0)"
+                  isExternalReference="false" agencyID="MD" id="CL_TEST_2"
+                  isFinal="false" version="1.0">
+              <com:Name xml:lang="en">TEST_2 Codelist</com:Name>
+              <str:Code
+                      urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=MD:CL_TEST_2(1.0).TEST_VALUE_1"
+                      id="TEST_VALUE_1">
+                  <com:Name xml:lang="en">Test Value 1 Code name</com:Name>
+              </str:Code>
+              <str:Code
+                      urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=MD:CL_TEST_2(1.0).TEST_VALUE_2"
+                      id="TEST_VALUE_2">
+                  <com:Name xml:lang="en">Test Value 2 Code name</com:Name>
+              </str:Code>
+              <str:Code
+                      urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=MD:CL_TEST_2(1.0).TEST_VALUE_3"
+                      id="TEST_VALUE_3">
+                  <com:Name xml:lang="en">Test Value 3 Code name</com:Name>
+              </str:Code>
+          </str:Codelist>
+      </str:Codelists>
+      <str:Concepts>
+          <str:ConceptScheme
+                  urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.ConceptScheme=MD:MD_CS(1.0)"
+                  isExternalReference="false" agencyID="MD" id="MD_CS"
+                  isFinal="true" version="1.0">
+              <com:Name xml:lang="en">MD Test concept scheme</com:Name>
+              <com:Description xml:lang="en">MD Test concept scheme
+                  description
+              </com:Description>
+              <str:Concept
+                      urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=MD:MD_CS(1.0).TEST_1"
+                      id="TEST_1">
+                  <com:Name xml:lang="en">Test 1 concept name</com:Name>
+                  <com:Description xml:lang="en">Test 1 concept description
+                  </com:Description>
+              </str:Concept>
+              <str:Concept
+                      urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=MD:MD_CS(1.0).TEST_2"
+                      id="TEST_2">
+                  <com:Name xml:lang="en">Test 2 concept name</com:Name>
+                  <com:Description xml:lang="en">Test 2 concept description
+                  </com:Description>
+              </str:Concept>
+          </str:ConceptScheme>
+          <str:ConceptScheme
+                  urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.ConceptScheme=SDMX:CROSS_DOMAIN_CONCEPTS(1.0)"
+                  isExternalReference="false" agencyID="SDMX"
+                  id="CROSS_DOMAIN_CONCEPTS" isFinal="true" version="1.0">
+              <com:Name xml:lang="en">SDMX Cross Domain Concept Scheme
+              </com:Name>
+              <com:Description xml:lang="en">Cross-domain concepts in the SDMX
+                  framework describe concepts relevant to many, if not all,
+                  statistical domains. SDMX recommends using these concepts
+                  whenever feasible in SDMX structures and messages to promote
+                  re-usability and exchange of statistical information and
+                  their related metadata between organiTEST_VALUE_1ations.
+                  Whenever used, these concepts should conform to the specified
+                  names, roles, and representations defined in the SDMX
+                  Content-Oriented Guidelines.
+              </com:Description>
+              <str:Concept
+                      urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=SDMX:CROSS_DOMAIN_CONCEPTS(1.0).OBS_VALUE"
+                      id="OBS_VALUE">
+                  <com:Annotations>
+                      <com:Annotation>
+                          <com:AnnotationType>CONTEXT</com:AnnotationType>
+                          <com:AnnotationText xml:lang="en">The "observation
+                              value" is the field which holds the data.
+                          </com:AnnotationText>
+                      </com:Annotation>
+                  </com:Annotations>
+                  <com:Name xml:lang="en">Observation</com:Name>
+                  <com:Description xml:lang="en">The value of a particular
+                      variable at a particular period.
+                  </com:Description>
+              </str:Concept>
+              <str:Concept
+                      urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=SDMX:CROSS_DOMAIN_CONCEPTS(1.0).TIME_PERIOD"
+                      id="TIME_PERIOD">
+                  <com:Annotations>
+                      <com:Annotation>
+                          <com:AnnotationType>CONTEXT</com:AnnotationType>
+                          <com:AnnotationText xml:lang="en">The measurement
+                              represented by each observation corresponds to a
+                              specific point in time (e.g. a single day) or a
+                              period (e.g. a month, a fiscal year, or a
+                              calendar year). This is used as a time stamp and
+                              is of particular importance for time series data.
+                              In cases where the actual time period of the data
+                              differs from the target reference period, “time
+                              period” refers to the actual period.
+                          </com:AnnotationText>
+                      </com:Annotation>
+                  </com:Annotations>
+                  <com:Name xml:lang="en">Time period</com:Name>
+                  <com:Description xml:lang="en">The period of time or point in
+                      time to which the measured observation refers.
+                  </com:Description>
+              </str:Concept>
+          </str:ConceptScheme>
+      </str:Concepts>
+      <str:DataStructures>
+          <str:DataStructure
+                  urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=MD:DS1(1.0)"
+                  isExternalReference="false" agencyID="MD" id="DS1"
+                  isFinal="false" version="1.0">
+              <com:Name xml:lang="en">Test for dataset validation</com:Name>
+              <com:Description xml:lang="en">Test for dataset validation
+                  description
+              </com:Description>
+              <str:DataStructureComponents>
+                  <str:DimensionList
+                          urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=MD:DS1(1.0).DimensionDescriptor"
+                          id="DimensionDescriptor">
+                      <str:Dimension
+                              urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=MD:DS1(1.0).TEST_1"
+                              id="TEST_1" position="1">
+                          <str:ConceptIdentity>
+                              <Ref maintainableParentID="MD_CS"
+                                   package="conceptscheme"
+                                   maintainableParentVersion="1.0"
+                                   agencyID="MD" id="TEST_1"
+                                   class="Concept"/>
+                          </str:ConceptIdentity>
+                      </str:Dimension>
+                      <str:Dimension
+                              urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=MD:DS1(1.0).TEST_2"
+                              id="TEST_2" position="2">
+                          <str:ConceptIdentity>
+                              <Ref maintainableParentID="MD_CS"
+                                   package="conceptscheme"
+                                   maintainableParentVersion="1.0"
+                                   agencyID="MD" id="TEST_2"
+                                   class="Concept"/>
+                          </str:ConceptIdentity>
+                          <str:LocalRepresentation>
+                              <str:Enumeration>
+                                  <Ref package="codelist" agencyID="MD"
+                                       id="CL_TEST_2" version="1.0"
+                                       class="Codelist"/>
+                              </str:Enumeration>
+                              <str:EnumerationFormat isSequence="false"
+                                                     minLength="1"
+                                                     textType="String"
+                                                     maxLength="12"/>
+                          </str:LocalRepresentation>
+                      </str:Dimension>
+                      <str:TimeDimension
+                              urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=MD:DS1(1.0).TIME_PERIOD"
+                              id="TIME_PERIOD" position="3">
+                          <str:ConceptIdentity>
+                              <Ref maintainableParentID="CROSS_DOMAIN_CONCEPTS"
+                                   package="conceptscheme"
+                                   maintainableParentVersion="1.0"
+                                   agencyID="SDMX" id="TIME_PERIOD"
+                                   class="Concept"/>
+                          </str:ConceptIdentity>
+                          <str:LocalRepresentation>
+                              <str:TextFormat
+                                      textType="ObservationalTimePeriod"/>
+                          </str:LocalRepresentation>
+                      </str:TimeDimension>
+                  </str:DimensionList>
+                  <str:MeasureList
+                          urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=MD:DS1(1.0).MeasureDescriptor"
+                          id="MeasureDescriptor">
+                      <str:PrimaryMeasure
+                              urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=MD:DS1(1.0).OBS_VALUE"
+                              id="OBS_VALUE">
+                          <str:ConceptIdentity>
+                              <Ref maintainableParentID="CROSS_DOMAIN_CONCEPTS"
+                                   package="conceptscheme"
+                                   maintainableParentVersion="1.0"
+                                   agencyID="SDMX" id="OBS_VALUE"
+                                   class="Concept"/>
+                          </str:ConceptIdentity>
+                      </str:PrimaryMeasure>
+                  </str:MeasureList>
+              </str:DataStructureComponents>
+      </str:DataStructure>
+    </str:DataStructures>
+      <str:Constraints>
+          <str:ContentConstraint
+                  urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=MD:Test_series(1.0)"
+                  isExternalReference="false" agencyID="MD" id="Test_series"
+                  isFinal="false" type="Allowed" version="1.0">
+              <com:Name xml:lang="en">Test for series constraint</com:Name>
+              <str:ConstraintAttachment>
+                  <str:DataStructure>
+                      <Ref package="datastructure" agencyID="MD" id="DS1"
+                           version="1.0" class="DataStructure"/>
+                  </str:DataStructure>
+              </str:ConstraintAttachment>
+              <str:DataKeySet isIncluded="true">
+                  <str:Key>
+                      <com:KeyValue id="TEST_1">
+                          <com:Value>TEST_VALUE_1</com:Value>
+                      </com:KeyValue>
+                      <com:KeyValue id="TEST_2">
+                          <com:Value>TEST_VALUE_1</com:Value>
+                      </com:KeyValue>
+                  </str:Key>
+                  <str:Key>
+                      <com:KeyValue id="TEST_1">
+                          <com:Value>TEST_VALUE_1</com:Value>
+                      </com:KeyValue>
+                      <com:KeyValue id="TEST_2">
+                          <com:Value>TEST_VALUE_2</com:Value>
+                      </com:KeyValue>
+                  </str:Key>
+                  <str:Key>
+                      <com:KeyValue id="TEST_1">
+                          <com:Value>TEST_VALUE_2</com:Value>
+                      </com:KeyValue>
+                      <com:KeyValue id="TEST_2">
+                          <com:Value>TEST_VALUE_2</com:Value>
+                      </com:KeyValue>
+                  </str:Key>
+                  <str:Key>
+                      <com:KeyValue id="TEST_1">
+                          <com:Value>TEST_VALUE_2</com:Value>
+                      </com:KeyValue>
+                      <com:KeyValue id="TEST_2">
+                          <com:Value>TEST_VALUE_1</com:Value>
+                      </com:KeyValue>
+                  </str:Key>
+              </str:DataKeySet>
+          </str:ContentConstraint>
+          <str:ContentConstraint
+                  urn="urn:sdmx:org.sdmx.infomodel.registry.ContentConstraint=MD:Test_cube(1.0)"
+                  isExternalReference="false" agencyID="MD" id="Test_cube"
+                  isFinal="false" type="Allowed" version="1.0">
+              <com:Name xml:lang="en">Test for cube region</com:Name>
+              <str:ConstraintAttachment>
+                  <str:DataStructure>
+                      <Ref package="datastructure" agencyID="MD" id="DS1"
+                           version="1.0" class="DataStructure"/>
+                  </str:DataStructure>
+              </str:ConstraintAttachment>
+              <str:CubeRegion include="true">
+                  <com:KeyValue id="TEST_2">
+                      <com:Value>TEST_VALUE_1</com:Value>
+                      <com:Value>TEST_VALUE_2</com:Value>
+                  </com:KeyValue>
+              </str:CubeRegion>
+          </str:ContentConstraint>
+      </str:Constraints>
+  </mes:Structures>
+</mes:Structure>
