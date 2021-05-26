@@ -1,5 +1,4 @@
-# .github/workflows/app.yaml
-name: SDMXThon
+name: library tests
 on: push
 jobs:
   test:
