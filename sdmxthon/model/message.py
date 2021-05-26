@@ -1,12 +1,9 @@
 """
     Message file contains the Message class for the use of external assets
 """
-import os
 from datetime import datetime
 from io import StringIO
 from typing import Dict
-
-print(os.getcwd())
 
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.header import Party, Sender
