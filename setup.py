@@ -1,14 +1,10 @@
-from distutils.core import setup
+import setuptools
 
 with open('README.rst', encoding='utf-8') as f:
     long_description = f.read()
 
-setup(
+setuptools.setup(
     name='SDMXThon',
-    project_urls={
-        'documentation': 'https://docs.sdmxthon.meaningfuldata.eu',
-        'source': 'https://github.com/Meaningful-Data/sdmxthon'
-    },
     packages=['SDMXThon'],
     description='Library with SDMX to Pandas, Pandas to SDMX, '
                 'SDMX validation and SDMX metadata validation',
@@ -17,12 +13,16 @@ setup(
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py',
                   'utils/*.py', 'schemas/*']),
-    version='0.9.5',
+    version='0.9.7',
     license='Apache 2.0',
     license_files='license.txt',
     author='MeaningfulData',
     author_email='javier.hernandez@meaningfuldata.eu',
-    url='https://github.com/Meaningful-Data/sdmxthon',
+    project_urls={
+        'Bug Tracker': 'https://github.com/Meaningful-Data/sdmxthon/issues',
+        'Documentation': 'https://docs.sdmxthon.meaningfuldata.eu',
+        'Source Code': 'https://github.com/Meaningful-Data/sdmxthon'
+    },
     keywords=['SDMX', 'Pandas', 'Validation'],
     install_requires=[
         'lxml',
@@ -40,5 +40,5 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9'
-    ],
+    ]
 )

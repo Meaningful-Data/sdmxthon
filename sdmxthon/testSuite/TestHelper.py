@@ -1,6 +1,5 @@
 import json
 import os
-import pickle
 import sqlite3
 import unittest
 from datetime import datetime
@@ -32,21 +31,14 @@ class TestHelper(unittest.TestCase):
         df = pd.read_sql(query_to_db(sqlite_db, limit), conn).astype(
             'category')
 
-        dsd = \
-            read_sdmx(
-                os.path.join(self.pathToMetadata, meta_file)).payload.dsds[
-                'BIS:BIS_DER(1.0)']
+        dsd = read_sdmx(os.path.join(self.pathToMetadata, meta_file)). \
+            payload.dsds['BIS:BIS_DER(1.0)']
 
         return Dataset(structure=dsd, data=df)
 
     def load_reference_data(self, reference_filename):
         with open(os.path.join(self.pathToReference, reference_filename)) as f:
             return json.loads(f.read())
-
-    def load_reference_pickle(self, reference_filename):
-        with open(os.path.join(self.pathToReference, reference_filename),
-                  'rb') as f:
-            return pickle.loads(f.read())
 
     def load_reference_text(self, reference_filename):
         with open(os.path.join(self.pathToReference, reference_filename), 'r',
