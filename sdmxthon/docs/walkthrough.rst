@@ -21,13 +21,9 @@ Features
 Installation
 ************
 
-.. warning::
-    SDMXthon is currently loaded in test.pypi until a stable release. It will be uploaded on PyPi on
-    version 0.9
-
 .. code-block:: text
 
-    pip install -i https://test.pypi.org/simple/ SDMXThon
+    pip install SDMXthon
 
 ************************************
 Use of SDMXthon for common use cases
@@ -43,8 +39,8 @@ API method to read an SDMX file or URL:
 
 .. code-block:: python
 
-    >>> import SDMXThon
-    >>> sdmx_message = SDMXThon.read_sdmx('sdmxFiles/cbd_dsd.sdmx')
+    >>> import sdmxthon
+    >>> sdmx_message = sdmxthon.read_sdmx('sdmxFiles/cbd_dsd.sdmx')
 
 
 
@@ -115,7 +111,7 @@ The input to the read_sdmx method can be a file or an URL. An example with a URL
 
 .. code-block:: python
 
-     sdmx_data_message = SDMXThon.read_sdmx('http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011')
+     sdmx_data_message = sdmxthon.read_sdmx('http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011')
 
 
 ==============
@@ -134,7 +130,7 @@ Datasets objects:
 
 .. code-block:: python
 
-     >>> sdmx_data_message = SDMXThon.read_sdmx('http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011')
+     >>> sdmx_data_message = sdmxthon.read_sdmx('http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011')
      >>> sdmx_data_message.content
 
      {'datasets': {'ESTAT_DSD_nama_10_gdp_1_0': <DataSet - No Structure found>}}
@@ -164,7 +160,7 @@ SDMXthon provides an API method to read data and the related metadata:
 
 .. code-block:: python
 
-     >>> sdmx_data = SDMXThon.get_datasets(
+     >>> sdmx_data = sdmxthon.get_datasets(
             path_to_data='https://sdw-wsrest.ecb.europa.eu/service/data/EXR/M.USD.EUR.SP00.A',
             path_to_metadata='https://sdw-wsrest.ecb.europa.eu/service/datastructure/ECB/ECB_EXR1/1.0?references=children')
 
@@ -186,12 +182,12 @@ This method returns a DataSet object, which contains the related DSD in the *str
     2      M      USD            EUR  ...     1999-03  1.088295652173913          A
     3      M      USD            EUR  ...     1999-04  1.070440909090909          A
     4      M      USD            EUR  ...     1999-05  1.062809523809524          A
-    ..   ...      ...            ...  ...         ...                ...        ...
-262    M      USD            EUR  ...     2020-11  1.183790476190476          A
-263    M      USD            EUR  ...     2020-12  1.216972727272728          A
-264    M      USD            EUR  ...     2021-01           1.217085          A
-265    M      USD            EUR  ...     2021-02            1.20979          A
-266    M      USD            EUR  ...     2021-03  1.189908695652174          A
+    ...
+    262    M      USD            EUR  ...     2020-11  1.183790476190476          A
+    263    M      USD            EUR  ...     2020-12  1.216972727272728          A
+    264    M      USD            EUR  ...     2021-01           1.217085          A
+    265    M      USD            EUR  ...     2021-02            1.20979          A
+    266    M      USD            EUR  ...     2021-03  1.189908695652174          A
 
     [267 rows x 16 columns]
 
