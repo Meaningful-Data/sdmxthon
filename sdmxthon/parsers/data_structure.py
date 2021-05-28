@@ -4,13 +4,14 @@ Message """
 import re as re_
 
 import pandas as pd
+from lxml.etree import DocumentInvalid
 
-from SDMXThon.model.base import AnnotableArtefact
-from SDMXThon.parsers.references import ReferenceType
-from SDMXThon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
+from sdmxthon.model.base import AnnotableArtefact
+from sdmxthon.parsers.data_parser import Validate_simpletypes_
+from sdmxthon.parsers.gdscollector import datetime_
+from sdmxthon.parsers.references import ReferenceType
+from sdmxthon.utils.xml_base import cast, BaseStrType_, find_attr_value_, \
     encode_str_2_3
-from .data_parser import Validate_simpletypes_
-from .gdscollector import datetime_
 
 
 class ObsType(AnnotableArtefact):
@@ -339,25 +340,23 @@ class SeriesType(AnnotableArtefact):
 
     def _build_attributes(self, node, attrs, already_processed):
         """Builds the attributes present in the XML element"""
-        self._anyAttributes_ = {}
-
-        for name, value in attrs.items():
-            if name not in already_processed:
-                self._anyAttributes_[name] = value
-
-        super(SeriesType, self)._build_attributes(node, attrs,
-                                                  already_processed)
+        self._anyAttributes_ = dict(attrs)
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
                         gds_collector_=None):
         """Builds the childs of the XML element"""
         if nodeName_ == 'Obs':
-            obj_ = ObsType._factory(parent_object_=self)
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._anyAttributes_.update(obj_.any_attributes)
+            any_attributes = dict(child_.attrib)
+            if 'dim_type' in any_attributes.keys():
+                del any_attributes['dim_type']
+            self._anyAttributes_.update(any_attributes)
             self.obs.append(self._anyAttributes_.copy())
-
-        super(SeriesType, self)._build_children(child_, node, nodeName_, True)
+        elif nodeName_ == 'Annotations':
+            super(SeriesType, self)._build_children(child_, node, nodeName_,
+                                                    True)
+        else:
+            raise DocumentInvalid(
+                f"Element {nodeName_} not expected, line {node.sourceline}")
 
 
 class DataSetType(AnnotableArtefact):
@@ -771,9 +770,16 @@ class DataSetType(AnnotableArtefact):
             obj_._build(child_, gds_collector_=gds_collector_)
             self.data += obj_.obs
         elif nodeName_ == 'Obs':
-            obj_ = ObsType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.data.append(obj_.any_attributes)
+            any_attributes = dict(child_.attrib)
+            if 'dim_type' in any_attributes.keys():
+                del any_attributes['dim_type']
+            self.data.append(any_attributes)
+        elif nodeName_ == 'Annotations':
+            super(DataSetType, self)._build_children(child_, node,
+                                                     nodeName_, True)
+        else:
+            raise DocumentInvalid(
+                f"Element {nodeName_} not expected, line {node.sourceline}")
 
         if len(self.data) >= 50000:
             if self.dataframe is not None:
@@ -783,125 +789,3 @@ class DataSetType(AnnotableArtefact):
             else:
                 self._dataframe = pd.DataFrame(self.data)
             self.data = []
-
-        super(DataSetType, self)._build_children(child_, node, nodeName_, True)
-
-
-class TimeSeriesDataSetType(DataSetType):
-    """TimeSeriesDataSetType is the abstract type which defines the base
-    structure for any data structure definition specific time series based
-    data set. A derived data set type will be created that is specific to a
-    data structure definition. Unlike the base format, only one variation
-    of this is allowed for a data structure definition. This variation is
-    the time dimension as the observation dimension. Data is organised into
-    a collection of time series. Because this derivation is achieved using
-    restriction, data sets conforming to this type will inherently conform
-    to the base data set structure as well. In fact, data structure
-    specific here will be identical to data in the base data set when the
-    time dimension is the observation dimension, even for the derived data
-    set types. This means that the data contained in this structure can be
-    processed in exactly the same manner as the base structure. The same
-    rules for derivation as the base data set type apply to this
-    specialized data set."""
-    __hash__ = DataSetType.__hash__
-    subclass = None
-    superclass = DataSetType
-
-    def __init__(self, Annotations=None, REPORTING_YEAR_START_DAY=None,
-                 structureRef=None, setID=None, action=None,
-                 reportingBeginDate=None, reportingEndDate=None,
-                 validFromDate=None, validToDate=None,
-                 publicationYear=None, publicationPeriod=None,
-                 DataProvider=None, Group=None, Data=None):
-        super(TimeSeriesDataSetType, self).__init__(Annotations,
-                                                    REPORTING_YEAR_START_DAY,
-                                                    structureRef, setID,
-                                                    action,
-                                                    reportingBeginDate,
-                                                    reportingEndDate,
-                                                    validFromDate, validToDate,
-                                                    publicationYear,
-                                                    publicationPeriod,
-                                                    DataProvider, Group, Data)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of TimeSeriesDataSetType"""
-        return TimeSeriesDataSetType(*args_, **kwargs_)
-
-
-class TimeSeriesType(SeriesType):
-    """TimeSeriesType defines an abstract structure which is used to group a
-    collection of observations which have a key in common, organised by
-    time. The key for a series is every dimension defined in the data
-    structure definition, save the time dimension. In addition to
-    observations, values can be provided for attributes which are
-    associated with the dimensions which make up this series key (so long
-    as the attributes do not specify a group attachment or also have an
-    relationship with the time dimension). It is possible for the series to
-    contain only observations or only attribute values, or both. The same
-    rules for derivation as the base series type apply to this specialized
-    series."""
-
-    def __init__(self, Annotations=None, TIME_PERIOD=None, Data=None,
-                 gds_collector_=None):
-        super(TimeSeriesType, self).__init__(Annotations, TIME_PERIOD, None,
-                                             Data, gds_collector_)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of TimeSeriesType"""
-        return TimeSeriesType(*args_, **kwargs_)
-
-    @property
-    def reporting_year_start_day(self):
-        """ The REPORTING_YEAR_START_DAY attribute is an explict attribute
-        for the reporting year start day, which provides context to the time
-        dimension when its value contains a reporting period (e.g. 2010-Q1).
-        This attribute is used to state the month and day that the reporting
-        year begins (e.g. --07-01 for July 1st). In the absence of an
-        explicit value provided in this attribute, all reporting period
-        values will be assumed to be based on a reporting year start day of
-        January 1. This is declared in the base schema since it has a fixed
-        identifier and representation. """
-        return self._reporting_year_start_day
-
-    @reporting_year_start_day.setter
-    def reporting_year_start_day(self, value):
-        self._reporting_year_start_day = value
-
-
-class TimeSeriesObsType(ObsType):
-    """TimeSeriesObsType defines the abstract structure of a time series
-    observation. The observation must be provided a value for the time
-    dimension. This time value should disambiguate the observation within
-    the series in which it is defined (i.e. there should not be another
-    observation with the same time value). The observation can contain an
-    observed value and/or attribute values. The same rules for derivation
-    as the base observation type apply to this specialized observation."""
-    __hash__ = ObsType.__hash__
-    subclass = None
-    superclass = ObsType
-
-    def __init__(self, Annotations=None, type_=None,
-                 REPORTING_YEAR_START_DAY=None, OBS_VALUE=None,
-                 gds_collector_=None, **kwargs_):
-        super(TimeSeriesObsType, self).__init__(Annotations, type_, None,
-                                                REPORTING_YEAR_START_DAY,
-                                                OBS_VALUE,
-                                                gds_collector_, **kwargs_)
-
-    @property
-    def time_period(self):
-        """The TIME_PERIOD attribute is an explicit attribute for the time
-        dimension. This is declared in the base schema since it has a fixed
-        identifier and representation. Since this data is structured to be
-        time series only, this attribute is always required. If the time
-        dimension specifies a more specific representation of time the
-        derived type will restrict the type definition to the appropriate
-        type. """
-        return self._time_period
-
-    @time_period.setter
-    def time_period(self, value):
-        self._time_period = value

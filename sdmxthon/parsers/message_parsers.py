@@ -2,18 +2,17 @@
     Message_parsers file contains all classes to parse a SDMX-ML Message
 """
 
-from SDMXThon.model.component_list import DataStructureDefinition, \
+from sdmxthon.model.definitions import DataStructureDefinition, \
     DataFlowDefinition, ContentConstraint
-from SDMXThon.model.header import Header
-from SDMXThon.model.itemScheme import Codelist, AgencyScheme, ConceptScheme
-from SDMXThon.utils.handlers import add_indent
-from SDMXThon.utils.mappings import *
-from .data_generic import DataSetType as GenericDataSet, \
-    TimeSeriesDataSetType as GenericTimeSeriesDataSet
-from .data_parser import DataParser
-from .data_structure import DataSetType as StructureDataSet
-from .footer_parser import FooterType
-from .gdscollector import GdsCollector
+from sdmxthon.model.header import Header
+from sdmxthon.model.itemScheme import Codelist, AgencyScheme, ConceptScheme
+from sdmxthon.parsers.data_generic import DataSetType as GenericDataSet
+from sdmxthon.parsers.data_parser import DataParser
+from sdmxthon.parsers.data_structure import DataSetType as StructureDataSet
+from sdmxthon.parsers.footer_parser import FooterType
+from sdmxthon.parsers.gdscollector import GdsCollector
+from sdmxthon.utils.handlers import add_indent
+from sdmxthon.utils.mappings import messageAbbr, structureAbbr
 
 
 class MessageType(DataParser):
@@ -509,7 +508,7 @@ class Structures(DataParser):
             if obj_.non_unique is not None:
                 for e in obj_.non_unique:
                     self.add_error({'Code': 'MS06', 'ErrorLevel': 'CRITICAL',
-                                    'ObjectID': f'{e}', 'ObjectType': f'DSD',
+                                    'ObjectID': f'{e}', 'ObjectType': 'DSD',
                                     'Message': f'DSD {e} is not unique'})
             self._dsds = obj_.dsds
 
@@ -570,6 +569,14 @@ class Structures(DataParser):
                 outfile += e._parse_XML(indent_child,
                                         f'{structureAbbr}:DataStructure')
             outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
+
+        if self.constraints is not None:
+            indent_child = newline + add_indent(indent)
+            outfile += f'{indent_child}<{structureAbbr}:Constraints>'
+            for e in self.constraints.values():
+                outfile += e._parse_XML(indent_child,
+                                        f'{structureAbbr}:ContentConstraint')
+            outfile += f'{indent_child}</{structureAbbr}:Constraints>'
 
         outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
 
@@ -694,55 +701,3 @@ class StructureSpecificDataType(MessageType):
 
 
 # end class StructureSpecificDataType
-
-
-class GenericTimeSeriesDataType(GenericDataType):
-    """GenericDataType defines the contents of a generic data message."""
-    __hash__ = GenericDataType.__hash__
-    subclass = None
-    superclass = GenericDataType
-
-    def __init__(self, header=None, Footer=None, DataSet=None,
-                 gds_collector_=None, **kwargs_):
-        super(GenericTimeSeriesDataType, self).__init__(header, Footer,
-                                                        DataSet,
-                                                        gds_collector_,
-                                                        **kwargs_)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of GenericTimeSeriesDataType"""
-        return GenericTimeSeriesDataType(*args_, **kwargs_)
-
-    @property
-    def dataset(self):
-        """List of Datasets in a Generic Time Series Message"""
-        return self._dataSet
-
-    @dataset.setter
-    def dataset(self, value):
-        if value is None:
-            self._dataSet = []
-        elif isinstance(value, list):
-            self._dataSet = value
-        else:
-            raise TypeError('Dataset must be a list')
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'Header':
-            obj_ = Header._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._header = obj_
-            obj_.original_tagname_ = 'Header'
-        elif nodeName_ == 'DataSet':
-            obj_ = GenericTimeSeriesDataSet._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._dataSet.append(obj_)
-            obj_.original_tag_name_ = 'DataSet'
-        elif nodeName_ == 'Footer':
-            obj_ = FooterType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._footer = obj_
-            obj_.original_tag_name_ = 'Footer'

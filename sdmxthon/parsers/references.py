@@ -2,8 +2,8 @@
     References file withholds all the Reference classes needed for parsing
 """
 
-from SDMXThon.parsers.data_parser import DataParser, Validate_simpletypes_
-from SDMXThon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, \
+from sdmxthon.parsers.data_parser import DataParser, Validate_simpletypes_
+from sdmxthon.utils.xml_base import find_attr_value_, cast, encode_str_2_3, \
     raise_parse_error
 
 
@@ -65,7 +65,6 @@ class ReferenceType(DataParser):
             self.ref = f'{obj_.agencyID}:{obj_.id_}({obj_.version})'
         elif nodeName_ == 'URN':
             value_ = child_.text
-            value_ = self._gds_parse_string(value_)
             value_ = self._gds_validate_string(value_)
             aux = value_.split("=", 1)[1]
             self.ref = aux
@@ -291,8 +290,8 @@ class RefBaseType(DataParser):
         xs:string. """
         result = True
 
-        if (value is not None and Validate_simpletypes_ and
-                self.gds_collector_ is not None):
+        if value is not None and Validate_simpletypes_ \
+                and self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(
@@ -379,8 +378,6 @@ class RefBaseType(DataParser):
         if value is not None and 'agencyID' not in already_processed:
             already_processed.add('agencyID')
             self.agencyID = value
-            self._validate_nested_NC_name_id_type(
-                self._agencyID)  # validate dim_type NestedNCNameIDType
 
         value = find_attr_value_('maintainableParentID', node)
         if (value is not None and
@@ -402,15 +399,11 @@ class RefBaseType(DataParser):
         if value is not None and 'containerID' not in already_processed:
             already_processed.add('containerID')
             self.containerID = value
-            self._validate_nested_id_type(
-                self._containerID)  # validate dim_type NestedIDType
 
         value = find_attr_value_('id', node)
         if value is not None and 'id' not in already_processed:
             already_processed.add('id')
             self.id_ = value
-            self._validate_nested_id_type(
-                self._id)  # validate dim_type NestedIDType
 
         value = find_attr_value_('version', node)
         if value is not None and 'version' not in already_processed:

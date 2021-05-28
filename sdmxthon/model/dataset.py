@@ -9,10 +9,12 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from SDMXThon.parsers.data_validations import validate_data
-from SDMXThon.parsers.write import writer
-from SDMXThon.utils.enums import MessageTypeEnum
-from .component_list import DataStructureDefinition, DataFlowDefinition
+from sdmxthon.model.definitions import DataStructureDefinition, \
+    DataFlowDefinition
+from sdmxthon.model.header import Header
+from sdmxthon.parsers.data_validations import validate_data
+from sdmxthon.parsers.write import writer
+from sdmxthon.utils.enums import MessageTypeEnum
 
 
 class Dataset:
@@ -133,6 +135,8 @@ class Dataset:
         :class: `DataStructureDefinition`
 
         """
+        if self._structure is None and self.dataflow is not None:
+            return self.dataflow.structure
         return self._structure
 
     @structure.setter
@@ -228,51 +232,46 @@ class Dataset:
         """Extracts the dimensionAtObservation from the dataset_attributes"""
         return self.dataset_attributes.get('dimensionAtObservation')
 
-    def read_csv(self, pathToCSV: str):
-        """Loads the data from a CSVCheck the `Pandas read_csv docs
+    def read_csv(self, pathToCSV: str, **kwargs):
+        """Loads the data from a CSV. Check the `Pandas read_csv docs
         <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas
-        .read_csv.html>`_
+        .read_csv.html>`_ Kwargs are supported
 
         :param pathToCSV: Path to CSV file
         :type pathToCSV: str
 
         """
-        self._data = pd.read_csv(pathToCSV)
+        self._data = pd.read_csv(pathToCSV, **kwargs)
 
-    def read_json(self, pathToJSON: str, orient: str = 'records'):
-        """Loads the data from a JSON with orientation as records. Check the
+    def read_json(self, pathToJSON: str, **kwargs):
+        """Loads the data from a JSON. Check the
         `Pandas read_json docs
         <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas
-        .read_json.html>`_
+        .read_json.html>`_. Kwargs are supported
 
         :param pathToJSON: Path to JSON file
         :type pathToJSON: str
-
-        :param orient: Orientation of the file
-        :type orient: str
         """
-        self._data = pd.read_json(pathToJSON, orient=orient)
+        self._data = pd.read_json(pathToJSON, **kwargs)
 
-    def read_excel(self, pathToExcel: str):
+    def read_excel(self, pathToExcel: str, **kwargs):
         """Loads the data from a Excel file. Check the `Pandas read_excel
         docs <https://pandas.pydata.org/pandas-docs/stable/reference/api
-        /pandas.read_excel.html>`_
+        /pandas.read_excel.html>`_. Kwargs are supported
 
         :param pathToExcel: Path to Excel file
         :type pathToExcel: str
         """
-        self._data = pd.read_excel(pathToExcel)
+        self._data = pd.read_excel(pathToExcel, **kwargs)
 
-    def to_csv(self, pathToCSV: str = None):
-        """Parses the data to a CSV file with comma separation and no header
-        or index
+    def to_csv(self, pathToCSV: str = None, **kwargs):
+        """Parses the data to a CSV file. Kwargs are supported
 
         :param pathToCSV: Path to save as CSV file
         :type pathToCSV: str
 
         """
-        return self.data.to_csv(pathToCSV, sep=',', encoding='utf-8',
-                                index=False, header=True)
+        return self.data.to_csv(pathToCSV, **kwargs)
 
     def to_json(self, pathToJSON: str = None):
         """Parses the data using the JSON Specification from the library
@@ -300,14 +299,14 @@ class Dataset:
             with open(pathToJSON, 'w') as f:
                 f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
-    def to_feather(self, pathToFeather: str):
-        """Parses the data to an Apache Feather format
+    def to_feather(self, pathToFeather: str, **kwargs):
+        """Parses the data to an Apache Feather format. Kwargs are supported.
 
         :param pathToFeather: Path to Feather file
         :type pathToFeather: str
 
         """
-        self.data.to_feather(pathToFeather)
+        self.data.to_feather(pathToFeather, **kwargs)
 
     def semantic_validation(self):
         """Performs a Semantic Validation on the Data.
@@ -372,6 +371,7 @@ class Dataset:
                message_type: MessageTypeEnum =
                MessageTypeEnum.StructureDataSet,
                outputPath: str = '',
+               header: Header = None,
                id_: str = 'test',
                test: str = 'true',
                prepared: datetime = None,
@@ -386,6 +386,17 @@ class Dataset:
 
         :param outputPath: Path to save the file, defaults to ''
         :type outputPath: str
+
+        :param prettyprint: Saves the file formatted to be human readable
+        :type prettyprint: bool
+
+        :param header: Header to be written, defaults to None
+        :type header: Header
+
+        .. important::
+
+            If the header argument is not None, rest of the below arguments
+            will not be used
 
         :param id_: ID of the Header, defaults to 'test'
         :type id_: str
@@ -403,9 +414,6 @@ class Dataset:
         :param receiver: ID of the Receiver, defaults to 'Not_supplied'
         :type receiver: str
 
-        :param prettyprint: Saves the file formatted to be human readable
-        :type prettyprint: bool
-
         :returns: StringIO object, if outputPath is ''
         """
 
@@ -414,10 +422,10 @@ class Dataset:
 
         if outputPath == '':
             return writer(path=outputPath, dType=message_type, payload=self,
-                          id_=id_, test=test,
+                          id_=id_, test=test, header=header,
                           prepared=prepared, sender=sender, receiver=receiver)
         else:
             writer(path=outputPath, dType=message_type, payload=self, id_=id_,
-                   test=test,
+                   test=test, header=header,
                    prepared=prepared, sender=sender, receiver=receiver,
                    prettyprint=prettyprint)

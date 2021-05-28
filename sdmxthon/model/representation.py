@@ -1,9 +1,9 @@
 from typing import List
 
-from SDMXThon.model.utils import FacetType, string_setter, FacetValueType
-from SDMXThon.parsers.data_parser import DataParser
-from SDMXThon.parsers.references import RefBaseType
-from SDMXThon.utils.xml_base import find_attr_value_
+from sdmxthon.model.utils import FacetType, string_setter, FacetValueType
+from sdmxthon.parsers.data_parser import DataParser
+from sdmxthon.parsers.references import RefBaseType
+from sdmxthon.utils.xml_base import find_attr_value_
 
 
 class Facet:
@@ -279,7 +279,6 @@ class FormatType(DataParser):
         value = find_attr_value_('timeInterval', node)
         if value is not None and 'timeInterval' not in already_processed:
             already_processed.add('timeInterval')
-            value = self._gds_validate_duration(value)
             self.facets.append(
                 Facet(facetType='timeInterval', facetValue=value))
 
@@ -297,13 +296,11 @@ class FormatType(DataParser):
         value = find_attr_value_('startTime', node)
         if value is not None and 'startTime' not in already_processed:
             already_processed.add('startTime')
-            value = self._gds_validate_date(value)
             self.facets.append(Facet(facetType='startTime', facetValue=value))
 
         value = find_attr_value_('endTime', node)
         if value is not None and 'endTime' not in already_processed:
             already_processed.add('endTime')
-            value = self._gds_validate_date(value)
             self.facets.append(Facet(facetType='endTime', facetValue=value))
 
         value = find_attr_value_('textType', node)

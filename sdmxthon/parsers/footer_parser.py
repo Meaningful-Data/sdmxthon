@@ -2,9 +2,9 @@
     Footer_parser file define the classes for parsing the footer of a Message
 """
 
-from SDMXThon.parsers.status_message import CodedStatusMessageType
-from SDMXThon.utils.xml_base import find_attr_value_
-from .data_parser import DataParser, Validate_simpletypes_
+from sdmxthon.parsers.data_parser import DataParser, Validate_simpletypes_
+from sdmxthon.parsers.status_message import CodedStatusMessageType
+from sdmxthon.utils.xml_base import find_attr_value_
 
 
 class FooterType(DataParser):
@@ -86,7 +86,8 @@ class FooterMessageType(CodedStatusMessageType):
     def _validate_SeverityCodeType(self, value):
         """Validate dim_type SeverityCodeType, a restriction on xs:string."""
         result = True
-        if value is not None and Validate_simpletypes_ and self.gds_collector_ is not None:
+        if value is not None and Validate_simpletypes_ and \
+                self.gds_collector_ is not None:
             if not isinstance(value, str):
                 lineno = self._gds_get_node_line_number_()
                 self.gds_collector_.add_message(

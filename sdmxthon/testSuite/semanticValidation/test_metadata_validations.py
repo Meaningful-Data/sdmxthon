@@ -4,7 +4,7 @@ Metadata Validation Tests
 import os
 import unittest
 
-from SDMXThon.testSuite import TestHelper
+from sdmxthon.testSuite import TestHelper
 
 
 class MetadataValidation(TestHelper.TestHelper):
@@ -13,7 +13,7 @@ class MetadataValidation(TestHelper.TestHelper):
     pathToReference = os.path.join(os.path.join(path, "data"), "reference")
 
     def test_1(self):
-        path_to_data = 'test_errors.xml'
+        path_to_data = 'metadata_errors.xml'
         reference_filename = 'errors_metadata_test_1.json'
 
         self.metadata_test(reference_filename, path_to_data)
@@ -31,6 +31,10 @@ class MetadataValidation(TestHelper.TestHelper):
         self.metadata_test(reference_filename, path_to_data)
 
     def test_4(self):
+        path_to_data = 'metadata_valid.xml'
+        self.metadata_valid_test(path_to_data)
+
+    def test_5(self):
         path_to_data = 'test_valid.xml'
         self.metadata_valid_test(path_to_data)
 

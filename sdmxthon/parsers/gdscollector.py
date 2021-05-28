@@ -2,15 +2,11 @@
     GDS collector file contains all structural classes
 """
 
-import base64
 import datetime as datetime_
 import decimal as decimal_
 import re as re_
-import sys
 
-from lxml import etree as etree_
-
-from SDMXThon.utils.xml_base import raise_parse_error, GDSParseError
+from sdmxthon.utils.xml_base import raise_parse_error
 
 ExternalEncoding = ''
 
@@ -50,41 +46,11 @@ class GenerateSuper(object):
             self.gds_collector_ = GdsCollector()
 
     @staticmethod
-    def _gds_format_string(input_data):
-        return input_data
-
-    @staticmethod
-    def _gds_parse_string(input_data):
-        return input_data
-
-    @staticmethod
     def _gds_validate_string(input_data):
         if not input_data:
             return ''
         else:
             return input_data
-
-    @staticmethod
-    def _gds_format_base64(input_data):
-        return base64.b64encode(input_data)
-
-    @staticmethod
-    def _gds_validate_base64(input_data):
-        return input_data
-
-    @staticmethod
-    def _gds_format_integer(input_data):
-        return '%d' % input_data
-
-    @staticmethod
-    def _gds_parse_integer(input_data, node=None):
-        i_val = None
-        try:
-            i_val = int(input_data)
-        except (TypeError, ValueError):
-            raise_parse_error(node, f'Requires integer value')
-
-        return i_val
 
     @staticmethod
     def _gds_validate_integer(input_data, node=None):
@@ -97,84 +63,6 @@ class GenerateSuper(object):
         return value
 
     @staticmethod
-    def _gds_format_integer_list(input_data):
-        return '%s' % ' '.join(input_data)
-
-    @staticmethod
-    def _gds_validate_integer_list(input_data, node=None):
-        values = input_data.split()
-
-        for value in values:
-            try:
-                int(value)
-            except (TypeError, ValueError):
-                raise_parse_error(node, 'Requires sequence of integer values')
-
-        return values
-
-    @staticmethod
-    def _gds_format_float(input_data):
-        return f'{input_data}'.rstrip('0')
-
-    @staticmethod
-    def _gds_parse_float(input_data, node=None):
-        float_val_ = None
-        try:
-            float_val_ = float(input_data)
-        except (TypeError, ValueError):
-            raise_parse_error(node, 'Requires float or double value')
-
-        return float_val_
-
-    @staticmethod
-    def _gds_validate_float(input_data, node=None):
-        value = None
-        try:
-            value = float(input_data)
-        except (TypeError, ValueError):
-            raise_parse_error(node, 'Requires float value')
-
-        return value
-
-    @staticmethod
-    def _gds_format_float_list(input_data):
-        return '%s' % ' '.join(input_data)
-
-    @staticmethod
-    def _gds_validate_float_list(input_data, node=None):
-        values = input_data.split()
-
-        for value in values:
-            try:
-                float(value)
-            except (TypeError, ValueError):
-                raise_parse_error(node, 'Requires sequence of float values')
-
-        return values
-
-    @staticmethod
-    def _gds_format_decimal(input_data):
-        return_value = f'{input_data}'
-
-        if '.' in return_value:
-            return_value = return_value.rstrip('0')
-
-            if return_value.endswith('.'):
-                return_value = return_value.rstrip('.')
-
-        return return_value
-
-    @staticmethod
-    def _gds_parse_decimal(input_data, node=None):
-        decimal_value = None
-        try:
-            decimal_value = decimal_.Decimal(input_data)
-        except (TypeError, ValueError):
-            raise_parse_error(node, 'Requires decimal value')
-
-        return decimal_value
-
-    @staticmethod
     def _gds_validate_decimal(input_data, node=None):
         try:
             decimal_.Decimal(input_data)
@@ -182,36 +70,6 @@ class GenerateSuper(object):
             raise_parse_error(node, 'Requires decimal value')
 
         return input_data
-
-    def _gds_format_decimal_list(self, input_data):
-        return ' '.join(
-            [self._gds_format_decimal(item) for item in input_data])
-
-    @staticmethod
-    def _gds_validate_decimal_list(input_data, node=None):
-        values = input_data.split()
-
-        for value in values:
-            try:
-                decimal_.Decimal(value)
-            except (TypeError, ValueError):
-                raise_parse_error(node, 'Requires sequence of decimal values')
-
-        return values
-
-    @staticmethod
-    def _gds_format_double(input_data):
-        return float(input_data)
-
-    @staticmethod
-    def _gds_parse_double(input_data, node=None):
-        value = None
-        try:
-            value = float(input_data)
-        except (TypeError, ValueError):
-            raise_parse_error(node, 'Requires double or float value')
-
-        return value
 
     @staticmethod
     def _gds_validate_double(input_data, node=None):
@@ -223,22 +81,12 @@ class GenerateSuper(object):
 
         return input_data
 
-    @staticmethod
-    def _gds_format_double_list(input_data):
-        return ' '.join(str(input_data))
-
-    @staticmethod
-    def _gds_validate_double_list(input_data, node=None):
-        values = input_data.split()
-
-        for value in values:
-            try:
-                float(value)
-            except (TypeError, ValueError):
-                raise_parse_error(node, 'Requires sequence of '
-                                        'double or float values')
-
-        return values
+    def _gds_get_node_line_number_(self):
+        if hasattr(self, "gds_element_tree_node_") and \
+                self.gds_element_tree_node_ is not None:
+            return f' near line {self.gds_element_tree_node_.sourceline}'
+        else:
+            return ""
 
     @staticmethod
     def _gds_format_boolean(input_data):
@@ -263,61 +111,6 @@ class GenerateSuper(object):
                                     '(one of True, 1, False, 0)')
 
         return input_data
-
-    @staticmethod
-    def _gds_format_boolean_list(input_data):
-        return ' '.join(str(input_data))
-
-    @staticmethod
-    def _gds_validate_boolean_list(input_data, node=None):
-        values = input_data.split()
-
-        for value in values:
-            if value not in (True, 1, False, 0,):
-                raise_parse_error(node, 'Requires sequence of boolean '
-                                        'values (one of True, 1, False, 0)')
-
-        return values
-
-    @staticmethod
-    def _gds_validate_datetime(input_data):
-        return input_data
-
-    @staticmethod
-    def _gds_validate_duration(input_data):
-        return input_data
-
-    @staticmethod
-    def _gds_format_datetime(input_data):
-        if input_data.microsecond == 0:
-            _svalue = '%04d-%02d-%02dT%02d:%02d:%02d' % (
-                input_data.year, input_data.month, input_data.day,
-                input_data.hour, input_data.minute,
-                input_data.second,)
-        else:
-            _svalue = '%04d-%02d-%02dT%02d:%02d:%02d.%s' % (
-                input_data.year, input_data.month, input_data.day,
-                input_data.hour, input_data.minute,
-                input_data.second,
-                ('%f' % (float(input_data.microsecond) / 1000000))[2:],)
-        if input_data.tzinfo is not None:
-            tzoff = input_data.tzinfo.utcoffset(input_data)
-
-            if tzoff is not None:
-                total_seconds = tzoff.seconds + (86400 * tzoff.days)
-                if total_seconds == 0:
-                    _svalue += 'Z'
-                else:
-                    if total_seconds < 0:
-                        _svalue += '-'
-                        total_seconds *= -1
-                    else:
-                        _svalue += '+'
-                    hours = total_seconds // 3600
-                    minutes = (total_seconds - (hours * 3600)) // 60
-                    _svalue += '{0:02d}:{1:02d}'.format(hours, minutes)
-
-        return _svalue
 
     @classmethod
     def _gds_parse_datetime(cls, input_data):
@@ -354,95 +147,6 @@ class GenerateSuper(object):
         return dt
 
     @staticmethod
-    def _gds_validate_date(input_data):
-        return input_data
-
-    @staticmethod
-    def _gds_format_date(input_data):
-        _svalue = '%04d-%02d-%02d' % (
-            input_data.year, input_data.month, input_data.day)
-        try:
-            if input_data.tzinfo is not None:
-                tzoff = input_data.tzinfo.utcoffset(input_data)
-
-                if tzoff is not None:
-                    total_seconds = tzoff.seconds + (86400 * tzoff.days)
-
-                    if total_seconds == 0:
-                        _svalue += 'Z'
-                    else:
-                        if total_seconds < 0:
-                            _svalue += '-'
-                            total_seconds *= -1
-                        else:
-                            _svalue += '+'
-
-                        hours = total_seconds // 3600
-                        minutes = (total_seconds - (hours * 3600)) // 60
-                        _svalue += '{0:02d}:{1:02d}'.format(hours, minutes)
-
-        except AttributeError:
-            pass
-        return _svalue
-
-    @classmethod
-    def _gds_parse_date(cls, input_data):
-        tz = None
-        tz_off_pattern = re_.compile(r'([+\-])((0\d|1[0-3]):[0-5]\d|14:00)$')
-        if input_data[-1] == 'Z':
-            tz = FixedOffsetTZ(0, 'UTC')
-            input_data = input_data[:-1]
-        else:
-            results = tz_off_pattern.search(input_data)
-
-            if results is not None:
-                tzoff_parts = results.group(2).split(':')
-                tzoff = int(tzoff_parts[0]) * 60 + int(tzoff_parts[1])
-
-                if results.group(1) == '-':
-                    tzoff *= -1
-                tz = FixedOffsetTZ(tzoff, results.group(0))
-                input_data = input_data[:-6]
-
-        dt = datetime_.datetime.strptime(input_data, '%Y-%m-%d')
-        dt = dt.replace(tzinfo=tz)
-        return dt.date()
-
-    @staticmethod
-    def _gds_validate_time(input_data):
-        return input_data
-
-    @staticmethod
-    def _gds_format_time(input_data):
-        if input_data.microsecond == 0:
-            _svalue = '%02d:%02d:%02d' % (
-                input_data.hour, input_data.minute, input_data.second)
-        else:
-            _svalue = '%02d:%02d:%02d.%s' % (
-                input_data.hour, input_data.minute, input_data.second,
-                ('%f' % (float(input_data.microsecond) / 1000000))[2:])
-
-        if input_data.tzinfo is not None:
-            tzoff = input_data.tzinfo.utcoffset(input_data)
-
-            if tzoff is not None:
-                total_seconds = tzoff.seconds + (86400 * tzoff.days)
-
-                if total_seconds == 0:
-                    _svalue += 'Z'
-                else:
-                    if total_seconds < 0:
-                        _svalue += '-'
-                        total_seconds *= -1
-                    else:
-                        _svalue += '+'
-                    hours = total_seconds // 3600
-                    minutes = (total_seconds - (hours * 3600)) // 60
-                    _svalue += '{0:02d}:{1:02d}'.format(hours, minutes)
-
-        return _svalue
-
-    @staticmethod
     def _gds_validate_simple_patterns(patterns, target):
         # pat is a list of lists of strings/patterns.
         # The target value must match at least one of the patterns
@@ -463,157 +167,6 @@ class GenerateSuper(object):
                 break
 
         return found1
-
-    @classmethod
-    def _gds_parse_time(cls, input_data):
-        tz = None
-        tz_off_pattern = re_.compile(r'([+\-])((0\d|1[0-3]):[0-5]\d|14:00)$')
-        if input_data[-1] == 'Z':
-            tz = FixedOffsetTZ(0, 'UTC')
-            input_data = input_data[:-1]
-        else:
-            results = tz_off_pattern.search(input_data)
-            if results is not None:
-                tzoff_parts = results.group(2).split(':')
-                tzoff = int(tzoff_parts[0]) * 60 + int(tzoff_parts[1])
-
-                if results.group(1) == '-':
-                    tzoff *= -1
-
-                tz = FixedOffsetTZ(tzoff, results.group(0))
-                input_data = input_data[:-6]
-
-        if len(input_data.split('.')) > 1:
-            dt = datetime_.datetime.strptime(input_data, '%H:%M:%S.%f')
-        else:
-            dt = datetime_.datetime.strptime(input_data, '%H:%M:%S')
-
-        dt = dt.replace(tzinfo=tz)
-        return dt.time()
-
-    def _gds_check_cardinality_(self, value, input_name, min_occurs=0,
-                                max_occurs=1, required=None):
-        if value is None:
-            length = 0
-        elif isinstance(value, list):
-            length = len(value)
-        else:
-            length = 1
-
-        if required is not None:
-            if required and length < 1:
-                self.gds_collector_. \
-                    add_message(f"Required value {input_name}"
-                                f"{self._gds_get_node_line_number_()} "
-                                f"is missing")
-
-        if length < min_occurs:
-            self.gds_collector_.add_message(
-                f"Number of values for {input_name}"
-                f"{self._gds_get_node_line_number_()} "
-                f"is below the minimum allowed, "
-                f"expected at least {min_occurs}, found {length}")
-        elif length > max_occurs:
-            self.gds_collector_.add_message(
-                f"Number of values for {input_name}"
-                f"{self._gds_get_node_line_number_()} is "
-                f"above the maximum allowed, "
-                f"expected at most {max_occurs}, found {length}")
-
-    def _gds_validate_builtin_st_(self, validator, value, input_name):
-        if value is not None:
-            try:
-                validator(value, input_name=input_name)
-            except GDSParseError as parse_error:
-                self.gds_collector_.add_message(str(parse_error))
-
-    def _gds_validate_defined_st_(self, validator, value):
-
-        if value is not None:
-            try:
-                validator(value)
-            except GDSParseError as parse_error:
-                self.gds_collector_.add_message(str(parse_error))
-
-    def _get_path_(self, node):
-        path_list = []
-        self._get_path_list_(node, path_list)
-        path_list.reverse()
-        path = '/'.join(path_list)
-        return path
-
-    def _get_path_list_(self, node, path_list):
-        if node is None:
-            return
-        tag_strip_pattern_ = re_.compile(r'{.*}')
-
-        tag = tag_strip_pattern_.sub('', node.tag)
-
-        if tag:
-            path_list.append(tag)
-
-        self._get_path_list_(node.getparent(), path_list)
-
-    @staticmethod
-    def _get_class_obj_(node, default_class=None):
-        class_obj1 = default_class
-
-        if 'xsi' in node.nsmap:
-            class_name = node.get('{%s}dim_type' % node.nsmap['xsi'])
-            if class_name is not None:
-                names = class_name.split(':')
-                if len(names) == 2:
-                    class_name = names[1]
-                class_obj2 = globals().get(class_name)
-                if class_obj2 is not None:
-                    class_obj1 = class_obj2
-
-        return class_obj1
-
-    @staticmethod
-    def _gds_build_any(node):
-        # provide default value in case option --disable-xml is used.
-        content = etree_.tostring(node, encoding="unicode")
-        return content
-
-    @classmethod
-    def _gds_reverse_node_mapping(cls, mapping):
-        return dict(((v, k) for k, v in mapping.items()))
-
-    @staticmethod
-    def _gds_encode(in_string):
-        if sys.version_info.major == 2:
-            if ExternalEncoding:
-                encoding = ExternalEncoding
-            else:
-                encoding = 'utf-8'
-            return in_string.encode(encoding)
-        else:
-            return in_string
-
-    # Django ETL transform hooks.
-
-    def _gds_djo_etl_transform(self):
-        pass
-
-    def _gds_djo_etl_transform_db_obj(self, dbobj):
-        pass
-
-    # SQLAlchemy ETL transform hooks.
-
-    @staticmethod
-    def _gds_sqa_etl_transform():
-        return 0, None
-
-    def _gds_sqa_etl_transform_db_obj(self, dbobj):
-        pass
-
-    def _gds_get_node_line_number_(self):
-        if hasattr(self, "gds_element_tree_node_") and \
-                self.gds_element_tree_node_ is not None:
-            return f' near line {self.gds_element_tree_node_.sourceline}'
-        else:
-            return ""
 
 
 class GdsCollector(object):

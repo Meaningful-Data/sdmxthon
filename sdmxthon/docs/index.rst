@@ -56,4 +56,5 @@ Packages
    packages/model
    packages/parsers
    validations
+   developers
 

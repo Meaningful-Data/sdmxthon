@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta
 
-from SDMXThon.model.utils import generic_setter
-from SDMXThon.parsers.data_generic import ComponentValueType
+from sdmxthon.model.utils import generic_setter
+from sdmxthon.parsers.data_generic import ComponentValueType
 
 
 class Period:
@@ -73,8 +73,9 @@ class ReferencePeriod:
 
 class ReleaseCalendar:
     """
-        javax.xml.datatype.Duration is substituted in this method with datetime.timedelta, as they have a similar
-        meaning for the parsing methods used
+    javax.xml.datatype.Duration is substituted in this method with
+    datetime.timedelta, as they have a similar meaning for the parsing
+    methods used
     """
 
     def __init__(self, periodicity: timedelta, offset: timedelta,

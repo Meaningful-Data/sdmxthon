@@ -4,7 +4,7 @@ Semantic Validation Tests
 import os
 import unittest
 
-from SDMXThon.testSuite import TestHelper
+from sdmxthon.testSuite import TestHelper
 
 
 class SemanticValidation(TestHelper.TestHelper):
@@ -20,7 +20,8 @@ class SemanticValidation(TestHelper.TestHelper):
         meta_file = 'test_valid.xml'
         reference_filename = 'errors_test_1.json'
 
-        self.semantic_test(sqlite_db, sqlite_filename, limit, meta_file, reference_filename)
+        self.semantic_test(sqlite_db, sqlite_filename, limit, meta_file,
+                           reference_filename)
 
     def test_2(self):
         sqlite_db = 'BIS_DER'
@@ -35,7 +36,8 @@ class SemanticValidation(TestHelper.TestHelper):
         limit = 15
         meta_file = 'test_valid.xml'
         reference_filename = 'errors_test_3.json'
-        self.semantic_test(sqlite_db, sqlite_filename, limit, meta_file, reference_filename)
+        self.semantic_test(sqlite_db, sqlite_filename, limit, meta_file,
+                           reference_filename)
 
 
 if __name__ == '__main__':

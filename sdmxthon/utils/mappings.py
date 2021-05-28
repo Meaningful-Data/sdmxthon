@@ -1,5 +1,6 @@
 MessageNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}'
-StructureSpecificNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/metadata/structurespecific}'
+StructureSpecificNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1' \
+                      '/metadata/structurespecific} '
 QueryNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/query}'
 RegistryNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/registry}'
 StructureNS = '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}'
@@ -115,7 +116,8 @@ ClassToNode = {
     'DataQueryType': 'StructureSpecificDataQuery',
     'StructureSpecificMetadataType': 'StructureSpecificMetadata',
     'StructureSpecificTimeSeriesDataType': 'StructureSpecificTimeSeriesData',
-    'StructureSpecificTimeSeriesDataQueryType': 'StructureSpecificTimeSeriesDataQuery',
+    'StructureSpecificTimeSeriesDataQueryType': 'StructureSpecific'
+                                                'TimeSeriesDataQuery',
     'XHTMLType': 'StructuredText',
     'StructuresType': 'Structures',
     'StructuresQueryType': 'StructuresQuery',
@@ -170,8 +172,10 @@ RenameMappings_ = {
     f"{MessageNS}DataStructureQueryType": "DataStructureQueryType43",
     f"{MessageNS}DataflowQueryType": "DataflowQueryType41",
     f"{MessageNS}GenericDataQueryType": "GenericDataQueryType35",
-    f"{MessageNS}GenericTimeSeriesDataQueryType": "GenericTimeSeriesDataQueryType36",
-    f"{MessageNS}HierarchicalCodelistQueryType": "HierarchicalCodelistQueryType48",
+    f"{MessageNS}GenericTimeSeriesDataQueryType": "GenericTimeSeries"
+                                                  "DataQueryType36",
+    f"{MessageNS}HierarchicalCodelistQueryType": "HierarchicalCodelist"
+                                                 "QueryType48",
     f"{MessageNS}MetadataQueryType": "MetadataQueryType37",
     f"{MessageNS}MetadataSchemaQueryType": "MetadataSchemaQueryType39",
     f"{MessageNS}MetadataStructureQueryType": "MetadataStructureQueryType44",
@@ -180,20 +184,28 @@ RenameMappings_ = {
     f"{MessageNS}OrganisationSchemeQueryType": "OrganisationSchemeQueryType49",
     f"{MessageNS}ProcessQueryType": "ProcessQueryType52",
     f"{MessageNS}ProvisionAgreementQueryType": "ProvisionAgreementQueryType54",
-    f"{MessageNS}QueryRegistrationRequestType": "QueryRegistrationRequestType25",
-    f"{MessageNS}QueryRegistrationResponseType": "QueryRegistrationResponseType26",
-    f"{MessageNS}QuerySubscriptionRequestType": "QuerySubscriptionRequestType31",
-    f"{MessageNS}QuerySubscriptionResponseType": "QuerySubscriptionResponseType32",
+    f"{MessageNS}QueryRegistrationRequestType": "QueryRegistration"
+                                                "RequestType25",
+    f"{MessageNS}QueryRegistrationResponseType": "QueryRegistration"
+                                                 "ResponseType26",
+    f"{MessageNS}QuerySubscriptionRequestType": "QuerySubscription"
+                                                "RequestType31",
+    f"{MessageNS}QuerySubscriptionResponseType": "QuerySubscription"
+                                                 "ResponseType32",
     f"{MessageNS}ReportingTaxonomyQueryType": "ReportingTaxonomyQueryType50",
     f"{MessageNS}StructureSetQueryType": "StructureSetQueryType51",
     f"{MessageNS}StructureType": "StructureType22",
     f"{MessageNS}StructuresQueryType": "StructuresQueryType40",
-    f"{MessageNS}SubmitRegistrationsRequestType": "SubmitRegistrationsRequestType23",
-    f"{MessageNS}SubmitRegistrationsResponseType": "SubmitRegistrationsResponseType24",
+    f"{MessageNS}SubmitRegistrationsRequestType": "SubmitRegistrations"
+                                                  "RequestType23",
+    f"{MessageNS}SubmitRegistrationsResponseType": "SubmitRegistrations"
+                                                   "ResponseType24",
     f"{MessageNS}SubmitStructureRequestType": "SubmitStructureRequestType27",
     f"{MessageNS}SubmitStructureResponseType": "SubmitStructureResponseType28",
-    f"{MessageNS}SubmitSubscriptionsRequestType": "SubmitSubscriptionsRequestType29",
-    f"{MessageNS}SubmitSubscriptionsResponseType": "SubmitSubscriptionsResponseType30",
+    f"{MessageNS}SubmitSubscriptionsRequestType": "SubmitSubscriptions"
+                                                  "RequestType29",
+    f"{MessageNS}SubmitSubscriptionsResponseType": "SubmitSubscriptions"
+                                                   "ResponseType30",
     f"{StructureSpecificNS}MetadataSetType": "MetadataSetType17",
     f"{StructureSpecificNS}ReferenceValueType": "ReferenceValueType20",
     f"{StructureSpecificNS}ReportType": "ReportType18",
@@ -217,41 +229,64 @@ commonAbbr = 'com'
 structureAbbr = 'str'
 structureSpecificAbbr = 'ss'
 
-GenerateDSNamespaceDefs = {
-    'GenericDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                       f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                       f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
-                       f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                       f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                       f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                         f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                         f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" '
-                         f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                         f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                         f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'GenericTimeSeriesDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                                 f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                                 f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data'
-                                 f'/generic" '
-                                 f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                                 f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                                 f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-    'StructureTimeSeriesDataType': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                                   f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                                   f'xmlns:{genericAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data'
-                                   f'/generic" '
-                                   f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                                   f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                                   f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
-
-    'Structure': f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                 f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" '
-                 f'xmlns:{structureAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" '
-                 f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" '
-                 f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message '
-                 f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"'
-}
+GenerateDSNamespaceDefs = dict(
+    GenericDataType=f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                    f'xmlns:{messageAbbr}="http://www.sdmx.org/resources'
+                    f'/sdmxml/schemas/v2_1/message" '
+                    f'xmlns:{genericAbbr}="http://www.sdmx.org/resources'
+                    f'/sdmxml/schemas/v2_1/data/generic" '
+                    f'xmlns:{commonAbbr}="http://www.sdmx.org/resources'
+                    f'/sdmxml/schemas/v2_1/common" '
+                    f'xsi:schemaLocation="http://www.sdmx.org/resources'
+                    f'/sdmxml/schemas/v2_1/message '
+                    f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"',
+    StructureDataType=f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                      f'xmlns:{messageAbbr}="http://www.sdmx.org/resources'
+                      f'/sdmxml/schemas/v2_1/message" '
+                      f'xmlns:{genericAbbr}="http://www.sdmx.org/resources'
+                      f'/sdmxml/schemas/v2_1/data/generic" '
+                      f'xmlns:{commonAbbr}="http://www.sdmx.org/resources'
+                      f'/sdmxml/schemas/v2_1/common" '
+                      f'xsi:schemaLocation="http://www.sdmx.org/resources'
+                      f'/sdmxml/schemas/v2_1/message '
+                      f'https://registry.sdmx.org/schemas/v2_1/'
+                      f'SDMXMessage.xsd"',
+    GenericTimeSeriesDataType=f'xmlns:xsi="http://www.w3.org/2001/XMLSchema'
+                              f'-instance" '
+                              f'xmlns:{messageAbbr}="http://www.sdmx.org'
+                              f'/resources/sdmxml/schemas/v2_1/message" '
+                              f'xmlns:{genericAbbr}="http://www.sdmx.org'
+                              f'/resources/sdmxml/schemas/v2_1/data '
+                              f'/generic" '
+                              f'xmlns:{commonAbbr}="http://www.sdmx.org'
+                              f'/resources/sdmxml/schemas/v2_1/common" '
+                              f'xsi:schemaLocation="http://www.sdmx.org'
+                              f'/resources/sdmxml/schemas/v2_1/message '
+                              f'https://registry.sdmx.org/schemas/v2_1'
+                              f'/SDMXMessage.xsd"',
+    StructureTimeSeriesDataType=f'xmlns:xsi="http://www.w3.org/2001'
+                                f'/XMLSchema-instance" '
+                                f'xmlns:{messageAbbr}="http://www.sdmx.org'
+                                f'/resources/sdmxml/schemas/v2_1/message" '
+                                f'xmlns:{genericAbbr}="http://www.sdmx.org'
+                                f'/resources/sdmxml/schemas/v2_1/data '
+                                f'/generic" '
+                                f'xmlns:{commonAbbr}="http://www.sdmx.org'
+                                f'/resources/sdmxml/schemas/v2_1/common" '
+                                f'xsi:schemaLocation="http://www.sdmx.org'
+                                f'/resources/sdmxml/schemas/v2_1/message '
+                                f'https://registry.sdmx.org/schemas/v2_1'
+                                f'/SDMXMessage.xsd"',
+    Structure=f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+              f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml'
+              f'/schemas/v2_1/message" '
+              f'xmlns:{structureAbbr}="http://www.sdmx.org/resources/sdmxml'
+              f'/schemas/v2_1/structure" '
+              f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml'
+              f'/schemas/v2_1/common" '
+              f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml'
+              f'/schemas/v2_1/message '
+              f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd"')
 
 ClassToPrefix = {
     'AgencyType': 'Agency',
@@ -363,7 +398,8 @@ ClassToPrefix = {
     'DataQueryType': 'StructureSpecificDataQuery',
     'StructureSpecificMetadataType': 'StructureSpecificMetadata',
     'StructureSpecificTimeSeriesDataType': 'StructureSpecificTimeSeriesData',
-    'StructureSpecificTimeSeriesDataQueryType': 'StructureSpecificTimeSeriesDataQuery',
+    'StructureSpecificTimeSeriesDataQueryType': 'StructureSpecific'
+                                                'TimeSeriesDataQuery',
     'XHTMLType': 'StructuredText',
     'StructuresType': 'Structures',
     'StructuresQueryType': 'StructuresQuery',

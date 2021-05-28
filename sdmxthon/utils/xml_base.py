@@ -11,6 +11,7 @@ Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 CDATA_pattern_ = re_.compile(r'<!\[CDATA\[.*?]]>', re_.DOTALL)
 BaseStrType_ = str
 
+
 #
 # You can replace the following class definition by defining an
 # importable module named "generatedscollector" containing a class
@@ -18,15 +19,18 @@ BaseStrType_ = str
 # clues about the possible content of that class.
 #
 
+
 def parse_xml(infile, parser=None):
     if isinstance(infile, str) and validators.url(infile):
         try:
             response = requests.get(infile)
             if response.status_code == 400:
-                raise requests.ConnectionError(f'Invalid URL. Response from server: {response.text}')
+                raise requests.ConnectionError(
+                    f'Invalid URL. Response from server: {response.text}')
             infile = BytesIO(response.content)
         except requests.ConnectionError:
-            raise requests.ConnectionError(f'Invalid URL. No response from server')
+            raise requests.ConnectionError(
+                'Invalid URL. No response from server')
     else:
         try:
             if isinstance(infile, os.PathLike):
@@ -90,27 +94,13 @@ def cast(typ, value):
     return typ(value)
 
 
-def get_required_ns_prefix_defs(rootNode):
-    """Get all name space prefix definitions required in this XML doc.
-    Return a dictionary of definitions and a char string of definitions.
-    """
-    nsmap = {
-        prefix: uri
-        for node in rootNode.iter()
-        for (prefix, uri) in node.nsmap.items()
-        if prefix is not None
-    }
-
-    namespacedefs = ' '.join([f'xmlns:{prefix}="{uri}"' for prefix, uri in nsmap.items()])
-
-    return nsmap, namespacedefs
-
-
 def makeWarnings(print_warnings, gds_collector):
     if print_warnings and len(gds_collector.get_messages()) > 0:
         separator = ('-' * 50) + '\n'
         sys.stderr.write(separator)
-        sys.stderr.write(f'----- Warnings -- count: {len(gds_collector.get_messages())} -----\n')
+        sys.stderr.write(
+            f'----- Warnings -- count: {len(gds_collector.get_messages())} '
+            f'-----\n')
         gds_collector.write_messages(sys.stderr)
         sys.stderr.write(separator)
 

@@ -5,11 +5,11 @@ from datetime import datetime
 from io import StringIO
 from typing import Dict
 
-from SDMXThon.parsers.message_parsers import Header, Structures
-from SDMXThon.parsers.write import writer
-from SDMXThon.utils.enums import MessageTypeEnum
-from .dataset import Dataset
-from .header import Party, Sender
+from sdmxthon.model.dataset import Dataset
+from sdmxthon.model.header import Party, Sender
+from sdmxthon.parsers.message_parsers import Header, Structures
+from sdmxthon.parsers.write import writer
+from sdmxthon.utils.enums import MessageTypeEnum
 
 
 class Message:
@@ -32,15 +32,13 @@ class Message:
                  header: Header = None):
         self._type = message_type
         self._payload = payload
-        if header is None:
-            self.header_creation(id_='test')
-        else:
-            self._header = header
+        self._header = header
 
     def __eq__(self, other):
         if isinstance(other, Message):
-            return (self.type == other.type and self.payload == other.payload
-                    and self.header == other.header)
+            return (self.type == other.type and
+                    self.payload == other.payload and
+                    self.header == other.header)
 
     @property
     def type(self):
@@ -195,11 +193,12 @@ class Message:
         elif isinstance(self.payload, Dataset):
             return self.payload.semantic_validation()
         else:
-            # TODO Validate Metadata
             raise TypeError('Wrong Payload. Must be of type '
                             'DataSet or a dict of DataSet')
 
-    def to_xml(self, outputPath: str = '', id_: str = 'test',
+    def to_xml(self, outputPath: str = '',
+               header: Header = None,
+               id_: str = 'test',
                test: str = 'true',
                prepared: datetime = None,
                sender: str = 'Unknown',
@@ -209,6 +208,17 @@ class Message:
 
         :param outputPath: Path to save the file, defaults to ''
         :type outputPath: str
+
+        :param prettyprint: Specifies if the output file is formatted
+        :type prettyprint: bool
+
+        :param header: Header to be written, defaults to None
+        :type header: Header
+
+        .. important::
+
+            If the header argument is not None, rest of the below arguments
+            will not be used
 
         :param id_: ID of the Header, defaults to 'test'
         :type id_: str
@@ -226,9 +236,6 @@ class Message:
         :param receiver: ID of the Receiver, defaults to 'Not_supplied'
         :type receiver: str
 
-        :param prettyprint: Specifies if the output file is formatted
-        :type prettyprint: bool
-
         :returns:
             StringIO object, if outputPath is ''
 
@@ -241,10 +248,10 @@ class Message:
             return writer(path=outputPath, dType=self.type,
                           payload=self.payload, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver,
-                          prettyprint=prettyprint)
+                          header=header, prettyprint=prettyprint)
         else:
             writer(path=outputPath, dType=self.type, payload=self.payload,
-                   id_=id_, test=test,
+                   id_=id_, test=test, header=header,
                    prepared=prepared, sender=sender, receiver=receiver,
                    prettyprint=prettyprint)
 

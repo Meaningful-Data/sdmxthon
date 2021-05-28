@@ -1,0 +1,25 @@
+[
+  {
+    "Code": "SS10",
+    "ErrorLevel": "CRITICAL",
+    "Component": "TEST_2",
+    "Type": "Dimension",
+    "Rows": null,
+    "Message": "Wrong value TEST_VALUE_3 for dimension TEST_2"
+  },
+  {
+    "Code": "SS11",
+    "ErrorLevel": "WARNING",
+    "Component": "Series",
+    "Type": "Constraint",
+    "Rows": [
+      {
+        "TEST_1": "TEST_VALUE_2",
+        "TEST_2": "TEST_VALUE_3",
+        "TIME_PERIOD": "2020-03-30",
+        "OBS_VALUE": "04.0"
+      }
+    ],
+    "Message": "Found disallowed rows"
+  }
+]

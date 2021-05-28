@@ -31,13 +31,12 @@ extensions = [
     "sphinx_rtd_theme",
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.autosectionlabel',
-    'rst2pdf.pdfbuilder'
+    'sphinx.ext.autosectionlabel'
 ]
 
-pdf_documents = [('index', u'rst2pdf', u'SDMXthon Documentation', u'MeaningfulData'), ]
-
 autosectionlabel_prefix_document = True
+
+html_show_sourcelink = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
