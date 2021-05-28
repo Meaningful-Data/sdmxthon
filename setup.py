@@ -12,7 +12,7 @@ setuptools.setup(
     long_description_content_type='text/x-rst',
     package_data=dict(
         SDMXThon=['*.py', 'api/*.py', 'model/*.py', 'parsers/*.py',
-                  'utils/*.py', 'schemas/*']),
+                  'utils/*.py', 'schemas/*.xsd']),
     version='0.9.7',
     license='Apache 2.0',
     license_files='license.txt',
