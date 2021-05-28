@@ -3,7 +3,8 @@ Developers Guide
 ################
 
 This guide has been created to help developers to build applications using the
-library as an engine, or contribute to the library through our `GitHub`.
+library as an engine, or contribute to the library through our
+`GitHub <https://github.com/Meaningful-Data/sdmxthon>`_.
 Unless specified, all files that are referred in this guide belong to the
 Parsers package. No data is modified in the validations or the writing process.
 
@@ -54,8 +55,6 @@ of DataParser and its implementations in each class.
 
 Depending on the content of each XML file, we will go through different classes
 to parse it through these two methods.
-
-`DIAGRAMS FOR PARSING METHODS`
 
 ===========
 Validations

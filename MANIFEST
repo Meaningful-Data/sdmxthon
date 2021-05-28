@@ -7,8 +7,9 @@ SDMXThon\api\api.py
 SDMXThon\model\__init__.py
 SDMXThon\model\base.py
 SDMXThon\model\component.py
-SDMXThon\model\component_list.py
 SDMXThon\model\dataset.py
+SDMXThon\model\definitions.py
+SDMXThon\model\descriptors.py
 SDMXThon\model\extras.py
 SDMXThon\model\header.py
 SDMXThon\model\itemScheme.py
