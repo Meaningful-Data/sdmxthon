@@ -21,22 +21,32 @@ BaseStrType_ = str
 
 
 def parse_xml(infile, parser=None):
-    if isinstance(infile, str) and validators.url(infile):
-        try:
-            response = requests.get(infile)
-            if response.status_code == 400:
-                raise requests.ConnectionError(
-                    f'Invalid URL. Response from server: {response.text}')
-            infile = BytesIO(response.content)
-        except requests.ConnectionError:
-            raise requests.ConnectionError(
-                'Invalid URL. No response from server')
-    else:
-        try:
-            if isinstance(infile, os.PathLike):
+    if isinstance(infile, str):
+        if validators.url(infile):
+            try:
+                response = requests.get(infile)
+                if response.status_code == 400:
+                    raise requests.ConnectionError(
+                        f'Invalid URL. Response from server: {response.text}')
+                infile = BytesIO(response.content)
+            except requests.ConnectionError:
+                raise requests.ConnectionError('Invalid URL. No response from server')
+        elif infile[0] == '<':
+            infile = BytesIO(bytes(infile, 'utf-8'))
+        elif '/' in infile or '\\' in infile:
+            try:
                 infile = os.path.join(infile)
-        except AttributeError:
-            pass
+            except AttributeError:
+                infile = BytesIO(bytes(infile, 'utf-8'))
+        else:
+            raise ValueError(f'Unable to parse {infile}')
+    else:
+        if isinstance(infile, os.PathLike):
+            try:
+                infile = os.path.join(infile)
+            except AttributeError:
+                pass
+
     if parser is None:
         # Use the lxml ElementTree compatible parser so that, e.g.,
         #   we ignore comments.

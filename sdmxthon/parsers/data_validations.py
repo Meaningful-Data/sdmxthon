@@ -635,7 +635,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                               f'{type_.lower()} {k}'})
 
     if len(series_const) > 0:
-        lookup = pd.DataFrame(series_const)
+        lookup = pd.DataFrame(series_const).drop_duplicates().reset_index(drop=True)
         all_columns = lookup.columns.tolist()
 
         result = all(elem in data.columns.tolist() for elem in all_columns)
@@ -654,8 +654,7 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
             res = data[all_columns].merge(lookup, how="left")
 
             for k in dict_wild:
-                res.update(data[all_columns].merge(dict_wild[k], how="left"),
-                           overwrite=False)
+                res.update(data[all_columns].merge(dict_wild[k], how="left"), overwrite=False)
 
             indexes = res[res['membership_series_const'].isna()].index.tolist()
 

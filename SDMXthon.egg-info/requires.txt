@@ -1,0 +1,5 @@
+lxml
+pandas
+numpy
+validators
+requests
