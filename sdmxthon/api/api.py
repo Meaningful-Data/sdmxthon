@@ -10,18 +10,18 @@ from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 
 
-def read_sdmx(path_to_sdmx_file, validate=True) -> Message:
+def read_sdmx(sdmx_file, validate=True) -> Message:
     """
     Read SDMX performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
 
-    :param path_to_sdmx_file: Path or URL to the SDMX data file
+    :param sdmx_file: Path, URL or SDMX file as string
     :param validate: Validation of the XML file against the XSD (default: True)
 
     :return: A :obj:`Message <model.message.Message>` object
     """
 
-    obj_ = _read_xml(path_to_sdmx_file, validate=validate)
+    obj_ = _read_xml(sdmx_file, validate=validate)
     if isinstance(obj_, MetadataType):
         _set_references(obj_)
 
@@ -40,12 +40,12 @@ def read_sdmx(path_to_sdmx_file, validate=True) -> Message:
     return Message(type_, data, header)
 
 
-def get_datasets(path_to_data, path_to_metadata, validate=True):
+def get_datasets(data, path_to_metadata, validate=True):
     """
     GetDatasets performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
 
-    :param path_to_data: Path or URL to the SDMX data file
+    :param data: Path, URL or SDMX data file as string
 
     :param path_to_metadata: Path or URL to the SDMX metadata file
 
@@ -56,7 +56,7 @@ def get_datasets(path_to_data, path_to_metadata, validate=True):
     :obj:`Datasets <model.dataSet.DataSet>`
     """
 
-    obj_ = _read_xml(path_to_data, validate=validate)
+    obj_ = _read_xml(data, validate=validate)
 
     metadata = read_sdmx(path_to_metadata, validate=validate)
 
@@ -75,18 +75,18 @@ def get_datasets(path_to_data, path_to_metadata, validate=True):
         return datasets
 
 
-def get_pandas_df(path_to_data, validate=True):
+def get_pandas_df(data, validate=True):
     """
     GetPandasDF reads all observations in a SDMX file as Pandas Dataframe(s)
 
-    :param path_to_data: Path or URL to the SDMX data file
+    :param data: Path, URL or SDMX data file as string
 
     :param validate: Validation of the XML file against the XSD (default: True)
 
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    obj_ = _read_xml(path_to_data, validate=validate)
+    obj_ = _read_xml(data, validate=validate)
 
     if isinstance(obj_, MetadataType):
         raise TypeError('No data available in a Structure file. '
@@ -127,18 +127,18 @@ def xml_to_json(pathToXML, path_to_metadata, output_path):
 '''
 
 
-def xml_to_csv(path_to_data, output_path=None, validate=True, **kwargs):
+def xml_to_csv(data, output_path=None, validate=True, **kwargs):
     """
     XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or
     .zip of CSV. If the SDMX data file has only a Dataset and output_path is
     '', it returns a StringIO object. Kwargs are supported.
 
-    :param path_to_data: Path or URL to the SDMX data file
+    :param data: Path, URL or SDMX file as string
     :param output_path: Path to save the CSV (default: None)
     :param validate: Validation of the XML file against the XSD (default: True)
     :return: A StringIO object if output_path is ''
     """
-    message = read_sdmx(path_to_data, validate=validate)
+    message = read_sdmx(data, validate=validate)
     if message.type == MessageTypeEnum.Metadata:
         raise TypeError('Metadata files are not allowed here')
 
