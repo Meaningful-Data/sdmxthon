@@ -30,7 +30,8 @@ def parse_xml(infile, parser=None):
                         f'Invalid URL. Response from server: {response.text}')
                 infile = BytesIO(response.content)
             except requests.ConnectionError:
-                raise requests.ConnectionError('Invalid URL. No response from server')
+                raise requests.ConnectionError('Invalid URL. '
+                                               'No response from server')
         elif infile[0] == '<':
             infile = BytesIO(bytes(infile, 'utf-8'))
         elif '/' in infile or '\\' in infile:
@@ -104,7 +105,7 @@ def cast(typ, value):
     return typ(value)
 
 
-def makeWarnings(print_warnings, gds_collector):
+def make_warnings(print_warnings, gds_collector):
     if print_warnings and len(gds_collector.get_messages()) > 0:
         separator = ('-' * 50) + '\n'
         sys.stderr.write(separator)
