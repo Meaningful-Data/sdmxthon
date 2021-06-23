@@ -635,7 +635,8 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                                               f'{type_.lower()} {k}'})
 
     if len(series_const) > 0:
-        lookup = pd.DataFrame(series_const)
+        lookup = pd.DataFrame(series_const).drop_duplicates() \
+            .reset_index(drop=True)
         all_columns = lookup.columns.tolist()
 
         result = all(elem in data.columns.tolist() for elem in all_columns)

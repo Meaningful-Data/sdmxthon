@@ -13,7 +13,7 @@ from sdmxthon.parsers.message_parsers import GenericDataType, \
     MetadataType
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.xml_base import parse_xml, \
-    makeWarnings
+    make_warnings
 
 CapturedNsmap_ = {}
 print_warnings = True
@@ -69,7 +69,7 @@ def _read_xml(inFileName, print_warning=True, validate=True):
     root_obj = root_class._factory()
     root_obj.original_tag_name_ = root_tag
     root_obj._build(root_node, gds_collector_=gds_collector)
-    makeWarnings(print_warning, gds_collector)
+    make_warnings(print_warning, gds_collector)
 
     return root_obj
 
