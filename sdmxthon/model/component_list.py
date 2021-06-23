@@ -10,7 +10,6 @@ from sdmxthon.parsers.data_parser import DataParser
 from sdmxthon.parsers.references import RelationshipRefType, RefBaseType
 from sdmxthon.utils.handlers import export_intern_data, add_indent, \
     split_unique_id
-from sdmxthon.utils.mappings import *
 from sdmxthon.utils.xml_base import find_attr_value_
 from .base import IdentifiableArtefact, MaintainableArtefact, \
     InternationalString
@@ -18,6 +17,7 @@ from .component import Component, Dimension, TimeDimension, Attribute, \
     PrimaryMeasure
 from .extras import ReferencePeriod, ReleaseCalendar
 from .utils import generic_setter, ConstraintRoleType, bool_setter
+from ..utils.mappings import Data_Types_VTL, structureAbbr
 
 
 class GroupDimension(DataParser):
