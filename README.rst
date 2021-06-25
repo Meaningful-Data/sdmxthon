@@ -36,3 +36,4 @@ Features
 3. SDMX data validation
 4. SDMX metadata validation
 
+`View Changelog <https://github.com/Meaningful-Data/sdmxthon/blob/master/Changelog.rst>`_
