@@ -20,7 +20,8 @@ setuptools.setup(
         'Bug Tracker': 'https://github.com/Meaningful-Data/sdmxthon/issues',
         'Documentation': 'https://docs.sdmxthon.meaningfuldata.eu',
         'Source Code': 'https://github.com/Meaningful-Data/sdmxthon',
-        'Changelog': 'https://github.com/Meaningful-Data/sdmxthon/blob/master/Changelog.rst'
+        'Changelog': 'https://github.com/Meaningful-Data/sdmxthon/blob'
+                     '/master/Changelog.rst '
     },
     keywords=['SDMX', 'Pandas', 'Validation'],
     install_requires=[
