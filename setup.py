@@ -11,7 +11,7 @@ setuptools.setup(
     long_description_content_type='text/x-rst',
     packages=setuptools.find_packages(),
     include_package_data=True,
-    version='1.0.1',
+    version='1.0.2',
     license='Apache 2.0',
     license_files='license.txt',
     author='MeaningfulData',
