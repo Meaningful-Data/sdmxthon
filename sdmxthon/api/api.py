@@ -102,7 +102,7 @@ def get_pandas_df(data, validate=True):
 
     return _sdmx_to_dataframe(obj_, type_)
 
-
+  
 def xml_to_csv(data, output_path=None, validate=True, **kwargs):
     """
     XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or
