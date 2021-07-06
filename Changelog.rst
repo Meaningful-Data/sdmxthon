@@ -2,6 +2,17 @@
 Changelog
 #########
 
+1.0.2 (2021-07-06)
+------------------
+
+**Added**
+
+**Changes**
+
+**Bugfixes**
+
+- Fixed bug on Generic writing with only one dimension or attribute.
+
 1.0.1 (2021-06-23)
 ------------------
 

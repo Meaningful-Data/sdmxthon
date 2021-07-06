@@ -392,18 +392,29 @@ def obs_gen(data: pd.DataFrame, attribute_codes: list, dimension_codes: list,
     last_dim = len(df_dim.columns) - 1
     df_id.loc[:, df_dim.columns[0]] = f'{child3}<{genericAbbr}:ObsKey>{nl}' + \
                                       df_dim.loc[:, df_dim.columns[0]]
-    df_id.loc[:, df_dim.columns[last_dim]] = \
-        df_dim.loc[:, df_dim.columns[last_dim]] + \
-        f'{nl}{child3}</{genericAbbr}:ObsKey>'
+    if len(dim_codes) == 1:
+        df_id.loc[:, df_dim.columns[last_dim]] = \
+            df_id.loc[:, df_dim.columns[last_dim]] + \
+            f'{nl}{child3}</{genericAbbr}:ObsKey>'
+    else:
+        df_id.loc[:, df_dim.columns[last_dim]] = \
+            df_dim.loc[:, df_dim.columns[last_dim]] + \
+            f'{nl}{child3}</{genericAbbr}:ObsKey>'
 
-    df_att = df_id[att_codes]
-    last_att = len(df_att.columns) - 1
-    df_id.loc[:, df_att.columns[0]] = f'{child3}<{genericAbbr}:' \
-                                      f'Attributes>{nl}' + \
-                                      df_att.loc[:, df_att.columns[0]]
-    df_id.loc[:, df_att.columns[last_att]] = \
-        df_att.loc[:, df_att.columns[last_att]] + \
-        f'{nl}{child3}</{genericAbbr}:Attributes>'
+    if len(att_codes) > 0:
+        df_att = df_id[att_codes]
+        df_id.loc[:, df_att.columns[0]] = f'{child3}<{genericAbbr}:' \
+                                          f'Attributes>{nl}' + \
+                                          df_att.loc[:, df_att.columns[0]]
+        if len(att_codes) == 1:
+            df_id.loc[:, df_att.columns[0]] = \
+                df_id.loc[:, df_att.columns[0]] + \
+                f'{nl}{child3}</{genericAbbr}:Attributes>'
+        else:
+            last_att = len(df_att.columns) - 1
+            df_id.loc[:, df_att.columns[last_att]] = \
+                df_att.loc[:, df_att.columns[last_att]] + \
+                f'{nl}{child3}</{genericAbbr}:Attributes>'
 
     obs_string = ''
     obs_string += df_id.to_csv(path_or_buf=None, sep='\n', header=False,
