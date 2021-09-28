@@ -941,6 +941,8 @@ class DataFlowDefinition(MaintainableArtefact):
         self._structure = generic_setter(value, DataStructureDefinition)
 
     def add_constraint(self, value: ContentConstraint):
+        if self._constraints is None:
+            self._constraints = []
         self._constraints.append(value)
 
     def _build_attributes(self, node, attrs, already_processed):
