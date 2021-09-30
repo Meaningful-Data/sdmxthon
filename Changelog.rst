@@ -2,6 +2,17 @@
 Changelog
 #########
 
+1.0.3 (2021-09-30)
+------------------
+
+**Added**
+
+**Changes**
+
+**Bugfixes**
+
+- Fixed bug on Dataflow with constraints parsing.
+
 1.0.2 (2021-07-06)
 ------------------
 
