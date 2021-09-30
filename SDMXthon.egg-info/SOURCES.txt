@@ -13,6 +13,7 @@ sdmxthon/api/api.py
 sdmxthon/model/__init__.py
 sdmxthon/model/base.py
 sdmxthon/model/component.py
+sdmxthon/model/component_list.py
 sdmxthon/model/dataset.py
 sdmxthon/model/definitions.py
 sdmxthon/model/descriptors.py
