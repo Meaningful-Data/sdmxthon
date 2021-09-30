@@ -13,6 +13,7 @@ Changelog
 
 - Fixed bug on Dataflow with constraints parsing.
 
+=======
 1.0.2 (2021-07-06)
 ------------------
 
