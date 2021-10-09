@@ -1,10 +1,7 @@
-import os
 import warnings
 from datetime import datetime
 
 import pandas as pd
-from lxml import etree as etree_
-from lxml.etree import DocumentInvalid
 
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.parsers.gdscollector import GdsCollector
@@ -13,7 +10,7 @@ from sdmxthon.parsers.message_parsers import GenericDataType, \
     MetadataType
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.xml_base import parse_xml, \
-    make_warnings
+    make_warnings, validate_doc
 
 CapturedNsmap_ = {}
 print_warnings = True
@@ -51,21 +48,7 @@ def _read_xml(inFileName, print_warning=True, validate=True):
         return None
 
     if validate:
-        base_path = os.path.dirname(os.path.dirname(__file__))
-        schema = os.path.join(base_path, pathToSchema)
-        xmlschema_doc = etree_.parse(schema)
-        xmlschema = etree_.XMLSchema(xmlschema_doc)
-
-        if not xmlschema.validate(doc):
-            try:
-                xmlschema.assertValid(doc)
-            except DocumentInvalid as e:
-                if len(e.args) == 1 and \
-                        'xsi:type' in e.args[0] or \
-                        'abstract' in e.args[0]:
-                    pass
-                else:
-                    raise e
+        validate_doc(doc)
     root_obj = root_class._factory()
     root_obj.original_tag_name_ = root_tag
     root_obj._build(root_node, gds_collector_=gds_collector)

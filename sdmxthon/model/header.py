@@ -17,19 +17,19 @@ from sdmxthon.utils.xml_base import cast, find_attr_value_, encode_str_2_3, \
 class Contact(DataParser):
     """Contact provides defines the contact information about a party."""
 
-    def __init__(self, Name=None, Department=None, Role=None, Telephone=None,
-                 Fax=None, X400=None, URI=None, Email=None,
+    def __init__(self, name=None, department=None, role=None, telephone=None,
+                 fax=None, X400=None, uri=None, email=None,
                  gds_collector_=None):
         super(Contact, self).__init__(gds_collector_)
         self.gds_collector_ = gds_collector_
-        self._name = Name
-        self._department = Department
-        self._role = Role
-        self._telephone = Telephone
-        self._fax = Fax
+        self._name = name
+        self._department = department
+        self._role = role
+        self._telephone = telephone
+        self._fax = fax
         self._x400 = X400
-        self._uri = URI
-        self._email = Email
+        self._uri = uri
+        self._email = email
 
     def __eq__(self, other):
         if isinstance(other, Contact):

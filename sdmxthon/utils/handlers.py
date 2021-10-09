@@ -45,3 +45,13 @@ def add_indent(indent: str):
     else:
         indent += '\t'
         return indent
+
+
+def add_list(element: any):
+    if not isinstance(element, list):
+        element = [element]
+    return element
+
+
+def unique_id(agencyID, id_, version):
+    return f"{agencyID}:{id_}({version})"

@@ -74,11 +74,11 @@ class Representation(DataParser):
     """The allowable value or format for Component or Concept"""
 
     def __init__(self, facets: List[Facet] = None, codelist=None,
-                 conceptScheme=None, gdscollector_=None):
+                 conceptScheme=None, gdscollector_=None, text_type=None):
         super().__init__(gds_collector_=gdscollector_)
         self.codelist = codelist
         self.concept_scheme = conceptScheme
-        self._type = None
+        self._type = text_type
         self._facets = []
         if facets is not None:
             for f in facets:
@@ -104,7 +104,7 @@ class Representation(DataParser):
     @staticmethod
     def _factory(*args_, **kwargs_):
         """Factory Method of Representation"""
-        return Representation(*args_, **kwargs_)
+        return Representation(**kwargs_)
 
     @property
     def facets(self):

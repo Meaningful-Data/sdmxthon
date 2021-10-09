@@ -318,9 +318,11 @@ class OrganisationScheme(ItemScheme):
                  description: InternationalString = None,
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None,
+                 isFinal: bool = None,
+                 isExternalReference: bool = None,
                  serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None,
+                 structureUrl: str = None,
+                 maintainer=None,
                  items=None):
 
         super(OrganisationScheme, self). \
@@ -678,7 +680,7 @@ class Concept(Item):
                  name: InternationalString = None,
                  description: InternationalString = None,
                  scheme: ItemScheme = None, parent: Item = None, childs=None,
-                 coreRepresentation: Representation = None):
+                 core_representation: Representation = None):
         if childs is None:
             childs = []
         if annotations is None:
@@ -689,7 +691,7 @@ class Concept(Item):
                                       scheme=scheme, parent=parent,
                                       childs=childs)
 
-        self.core_representation = coreRepresentation
+        self.core_representation = core_representation
         self._ref = None  # Attribute for storing the references to codelists.
 
     def __eq__(self, other):
