@@ -40,13 +40,14 @@ def main():
     print(f'Old data read: {end - start}')
 
     start = time()
-    metadata = sdmxthon.read_sdmx(file_meta, validate=False)
-    end = time()
-    print(f'Old metadata read: {end - start}')
-    start = time()
     metadata = read_xml(file_meta, validate=False)
     end = time()
     print(f'New metadata read: {end - start}')
+    start = time()
+    metadata_2 = sdmxthon.read_sdmx(file_meta, validate=False)
+    end = time()
+    print(f'Old metadata read: {end - start}')
+    print(metadata_2 == metadata)
 
 
 if __name__ == '__main__':

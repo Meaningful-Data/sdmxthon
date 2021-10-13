@@ -243,12 +243,12 @@ class Dimension(Component, DataParser):
         reference area."""
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
-                 annotations=None, localRepresentation: Representation = None,
+                 annotations=None, local_representation: Representation = None,
                  position: int = None):
         super(Dimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
-                     localRepresentation=localRepresentation)
+                     localRepresentation=local_representation)
 
         self.position = position
 
@@ -298,12 +298,12 @@ class TimeDimension(Dimension, DataParser):
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
-                 localRepresentation: Representation = None,
+                 local_representation: Representation = None,
                  position: int = None):
         super(TimeDimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
-                     localRepresentation=localRepresentation,
+                     local_representation=local_representation,
                      position=position)
 
     def __eq__(self, other):
@@ -336,14 +336,14 @@ class Attribute(Component, DataParser):
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
-                 localRepresentation: Representation = None,
-                 usageStatus: str = None, relatedTo=None):
+                 local_representation: Representation = None,
+                 assignmentStatus: str = None, relatedTo=None):
         super(Attribute, self) \
             .__init__(id_=id_, uri=uri, urn=urn,
                       annotations=annotations,
-                      localRepresentation=localRepresentation)
+                      localRepresentation=local_representation)
 
-        self.usage_status = usageStatus
+        self.assignment_status = assignmentStatus
         self.related_to = relatedTo
 
     def __eq__(self, other):
@@ -360,7 +360,7 @@ class Attribute(Component, DataParser):
         return Attribute(*args_, **kwargs_)
 
     @property
-    def usage_status(self):
+    def assignment_status(self):
         """Defines the usage status of the Attribute
         (Mandatory, Conditional)"""
         return self._usageStatus
@@ -370,8 +370,8 @@ class Attribute(Component, DataParser):
         """Association to a AttributeRelationship."""
         return self._relatedTo
 
-    @usage_status.setter
-    def usage_status(self, value):
+    @assignment_status.setter
+    def assignment_status(self, value):
         if value in ["Mandatory", "Conditional"] or value is None:
             self._usageStatus = value
         else:
@@ -394,7 +394,7 @@ class Attribute(Component, DataParser):
         value = find_attr_value_('assignmentStatus', node)
         if value is not None and 'assignmentStatus' not in already_processed:
             already_processed.add('assignmentStatus')
-            self.usage_status = value
+            self.assignment_status = value
 
     def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
                         gds_collector_=None):
@@ -421,12 +421,12 @@ class MeasureDimension(Dimension, DataParser):
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
-                 localRepresentation: Representation = None,
+                 local_representation: Representation = None,
                  position: int = None):
         super(MeasureDimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
-                     localRepresentation=localRepresentation,
+                     local_representation=local_representation,
                      position=position)
 
     def __eq__(self, other):
@@ -460,12 +460,12 @@ class PrimaryMeasure(Component, DataParser):
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
-                 localRepresentation: Representation = None):
+                 local_representation: Representation = None):
 
         super(PrimaryMeasure, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
-                     localRepresentation=localRepresentation)
+                     localRepresentation=local_representation)
 
     @staticmethod
     def _factory(*args_, **kwargs_):

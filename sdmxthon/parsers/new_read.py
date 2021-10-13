@@ -3,8 +3,8 @@ import xmltodict
 from sdmxthon.parsers.new_data_read import create_dataset
 from sdmxthon.parsers.new_matadata_read import create_metadata
 from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
-    STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, ID, \
-    VERSION, DIM_OBS, ALL_DIM, STRUCTURES
+    STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
+    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES
 from sdmxthon.utils.xml_base import parse_xml, validate_doc
 
 

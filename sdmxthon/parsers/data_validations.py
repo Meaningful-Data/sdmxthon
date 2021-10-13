@@ -44,7 +44,7 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
 
     for record in dsd.attribute_descriptor.components.values():
         if (record.related_to is not None and
-                record.usage_status == "Mandatory"):
+                record.assignment_status == "Mandatory"):
             data.append(record.id)
 
     return data

@@ -18,9 +18,10 @@ from sdmxthon.utils.parsing_words import ORGS, AGENCIES, AGENCY, ID, \
     CODE, CONCEPTS, CS, CON, ANNOTATIONS, ANNOTATION, ANNOTATION_TITLE, \
     TITLE, ANNOTATION_TYPE, TYPE, ANNOTATION_TEXT, TEXT, CORE_REP, \
     CORE_REP_LOW, ENUM, REF, XMLNS, ENUM_FORMAT, TEXT_FORMAT, \
-    TEXT_TYPE, TEXT_TYPE_LOW, FACETS, DSDS, DSD, DSD_COMPS, DIM_LIST, ATT_LIST, \
-    ME_LIST, GROUP, DIM_LIST_LOW, ATT_LIST_LOW, ME_LIST_LOW, DIM, TIME_DIM, \
-    ATT, MEASURE, COMPS
+    TEXT_TYPE, TEXT_TYPE_LOW, FACETS, DSDS, DSD, DSD_COMPS, DIM_LIST, \
+    ATT_LIST, ME_LIST, GROUP, DIM_LIST_LOW, ATT_LIST_LOW, ME_LIST_LOW, DIM, \
+    TIME_DIM, ATT, COMPS, CON_ID, PAR_ID, PAR_VER, CS_LOW, LOCAL_REP, \
+    LOCAL_REP_LOW, ATT_REL, REL_TO, PRIM_MEASURE, DATAFLOWS
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
@@ -32,16 +33,15 @@ comp_lists_classes = {DIM_LIST: DimensionDescriptor,
 comp_classes = {DIM: Dimension,
                 TIME_DIM: TimeDimension,
                 ATT: Attribute,
-                MEASURE: PrimaryMeasure}
+                PRIM_MEASURE: PrimaryMeasure}
 
 comp_lists_names = {DIM_LIST: DIM_LIST_LOW,
                     ATT_LIST: ATT_LIST_LOW,
-                    ME_LIST: ME_LIST_LOW,
-                    GROUP: GROUP.lower()}
+                    ME_LIST: ME_LIST_LOW}
 
 comp_lists_items = {DIM_LIST: [DIM, TIME_DIM],
                     ATT_LIST: [ATT],
-                    ME_LIST: [MEASURE]}
+                    ME_LIST: [PRIM_MEASURE]}
 
 # Global dict to be used in all elements
 metadata = {}
@@ -213,12 +213,58 @@ def create_organisations(json_orgs):
     return orgs
 
 
+def format_con_id(json_ref):
+    rep = {}
+    full_cs_id = unique_id(json_ref[AGENCY_ID],
+                           json_ref[PAR_ID],
+                           json_ref[PAR_VER])
+
+    if full_cs_id in concepts:
+        if json_ref[ID] in concepts[full_cs_id].items:
+            rep[CS_LOW] = concepts[full_cs_id]
+            core_rep = concepts[full_cs_id].items[json_ref[ID]]. \
+                core_representation
+            if core_rep is not None:
+                cl = core_rep.codelist
+                if cl is not None:
+                    rep[CODELISTS.lower()] = cl
+        else:
+            raise Exception
+    else:
+        raise Exception
+
+    return rep
+
+
 def format_component(json_comp, comp) -> Component:
-    raise NotImplementedError("Continuar aqui")
+    json_comp = format_id(json_comp)
+    json_comp = format_annotations(json_comp)
+    rep = {}
+    rep_class = None
+    if LOCAL_REP in json_comp:
+        rep_class = format_representation(json_comp[LOCAL_REP])
+        del json_comp[LOCAL_REP]
+    if CON_ID in json_comp:
+        rep = format_con_id(json_comp[CON_ID][REF])
+        del json_comp[CON_ID]
+    if rep_class is None:
+        rep_class = Representation(**rep)
+    elif CS_LOW in rep:
+        rep_class.concept_scheme = rep[CS_LOW]
+
+    json_comp[LOCAL_REP_LOW] = rep_class
+
+    # Attribute Handling
+    if ATT_REL in json_comp:
+        json_comp[REL_TO] = json_comp.pop(ATT_REL)
+
+    return comp(**json_comp)
 
 
 def format_component_lists(json_comp_lists, comp_list, comp):
     components = {}
+    json_comp_lists = format_annotations(json_comp_lists)
+    json_comp_lists = format_id(json_comp_lists)
     for e in comp:
         if e in json_comp_lists:
             json_comp_lists[e] = add_list(json_comp_lists[e])
@@ -233,13 +279,17 @@ def format_component_lists(json_comp_lists, comp_list, comp):
 
 
 def format_dsd_comps(json_comps):
-    node = [DIM_LIST, ATT_LIST, ME_LIST, GROUP]
+    node = [DIM_LIST, ATT_LIST, ME_LIST]
     comps = json_comps[DSD_COMPS]
     for e in node:
         name = comp_lists_names[e]
         json_comps[name] = format_component_lists(comps[e],
                                                   comp_lists_classes[e],
                                                   comp_lists_items[e])
+
+    del json_comps[DSD_COMPS]
+
+    return json_comps
 
 
 def create_datastructures(json_dsds):
@@ -256,7 +306,7 @@ def create_datastructures(json_dsds):
             element = format_name_description(element)
             if DSD_COMPS in element:
                 element = format_dsd_comps(element)
-                del element[DSD_COMPS]
+
             full_id = unique_id(element[AGENCY_ID],
                                 element[ID],
                                 element[VERSION])
@@ -272,6 +322,10 @@ def create_datastructures(json_dsds):
     return elements
 
 
+def create_dataflows(json_dfs):
+    print(json_dfs)
+
+
 def create_metadata(json_meta):
     if ORGS in json_meta:
         metadata[ORGS] = create_organisations(json_meta[ORGS])
@@ -283,4 +337,6 @@ def create_metadata(json_meta):
         concepts.update(metadata[CONCEPTS])
     if DSDS in json_meta:
         metadata[DSDS] = create_datastructures(json_meta[DSDS])
+    if DATAFLOWS in json_meta:
+        metadata[DATAFLOWS] = create_dataflows(json_meta[DATAFLOWS])
     return metadata

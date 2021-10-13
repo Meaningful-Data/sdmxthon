@@ -66,7 +66,7 @@ class ComponentList(IdentifiableArtefact):
                                             annotations=annotations)
         self._components = {}
         if components is not None:
-            for c in components:
+            for c in components.values():
                 self.add_component(c)
 
     def __eq__(self, other):
