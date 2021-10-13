@@ -174,6 +174,7 @@ class ConceptScheme(ItemScheme):
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
@@ -189,6 +190,7 @@ class ConceptScheme(ItemScheme):
                      validTo=validTo,
                      isFinal=isFinal,
                      isExternalReference=isExternalReference,
+                     isPartial=isPartial,
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl,
                      maintainer=maintainer,
@@ -253,6 +255,7 @@ class Codelist(ItemScheme):
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
@@ -266,6 +269,7 @@ class Codelist(ItemScheme):
                                        serviceUrl=serviceUrl,
                                        structureUrl=structureUrl,
                                        maintainer=maintainer,
+                                       isPartial=isPartial,
                                        items=items)
         self._checked = False
 
@@ -320,6 +324,7 @@ class OrganisationScheme(ItemScheme):
                  validTo: datetime = None,
                  isFinal: bool = None,
                  isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None,
                  maintainer=None,
@@ -335,6 +340,7 @@ class OrganisationScheme(ItemScheme):
                      validTo=validTo,
                      isFinal=isFinal,
                      isExternalReference=isExternalReference,
+                     isPartial=isPartial,
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl,
                      maintainer=maintainer,

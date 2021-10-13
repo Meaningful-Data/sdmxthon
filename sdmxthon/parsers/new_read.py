@@ -1,15 +1,15 @@
 import xmltodict
 
 from sdmxthon.parsers.new_data_read import create_dataset
-from sdmxthon.parsers.new_matadata_read import create_metadata
+from sdmxthon.parsers.new_metadata_read import create_metadata
 from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
-    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES
+    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE
 from sdmxthon.utils.xml_base import parse_xml, validate_doc
 
 
 def parse_sdmx(result):
-    datasets = {}
+    datasets = dict()
 
     if STRSPE in result:
         global_mode = STRSPE
@@ -73,9 +73,14 @@ def read_xml(xml, validate=True):
 
 
 def get_elements_from_structure(structure):
-    agency_id = structure[STRUCTURE][REF][AGENCY_ID]
-    id_ = structure[STRUCTURE][REF][ID]
-    version = structure[STRUCTURE][REF][VERSION]
+    if STRUCTURE in structure:
+        agency_id = structure[STRUCTURE][REF][AGENCY_ID]
+        id_ = structure[STRUCTURE][REF][ID]
+        version = structure[STRUCTURE][REF][VERSION]
+    else:
+        agency_id = structure[STR_USAGE][REF][AGENCY_ID]
+        id_ = structure[STR_USAGE][REF][ID]
+        version = structure[STR_USAGE][REF][VERSION]
     return agency_id, id_, version
 
 

@@ -562,10 +562,10 @@ class DataStructureDefinition(MaintainableArtefact):
                  isFinal: bool = None, isExternalReference: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
-                 dimensionDescriptor: DimensionDescriptor = None,
-                 measureDescriptor: MeasureDescriptor = None,
-                 attributeDescriptor: AttributeDescriptor = None,
-                 groupDimensionDescriptor: GroupDimensionDescriptor = None,
+                 dimension_list: DimensionDescriptor = None,
+                 measure_list: MeasureDescriptor = None,
+                 attribute_list: AttributeDescriptor = None,
+                 group_dimension_descriptor: GroupDimensionDescriptor = None,
                  constraint: list = None):
 
         super(DataStructureDefinition, self). \
@@ -583,10 +583,10 @@ class DataStructureDefinition(MaintainableArtefact):
                      structureUrl=structureUrl,
                      maintainer=maintainer)
 
-        self.dimension_descriptor = dimensionDescriptor
-        self.measure_descriptor = measureDescriptor
-        self.attribute_descriptor = attributeDescriptor
-        self.group_dimension_descriptor = groupDimensionDescriptor
+        self.dimension_descriptor = dimension_list
+        self.measure_descriptor = measure_list
+        self.attribute_descriptor = attribute_list
+        self.group_dimension_descriptor = group_dimension_descriptor
         self._constraints = constraint
 
     def __eq__(self, other):
@@ -916,6 +916,8 @@ class DataFlowDefinition(MaintainableArtefact):
         if isinstance(other, DataFlowDefinition):
             return super(DataFlowDefinition, self).__eq__(
                 other) and self._structure == other._structure
+        else:
+            return False
 
     def __str__(self):
         return f'<DataFlowDefinition - {self.unique_id}>'

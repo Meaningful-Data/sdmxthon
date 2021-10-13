@@ -2,9 +2,9 @@ from sdmxthon.model.base import InternationalString, LocalisedString, \
     Annotation
 from sdmxthon.model.component import Component, Dimension, TimeDimension, \
     Attribute, PrimaryMeasure
-from sdmxthon.model.component_list import DataStructureDefinition, \
+from sdmxthon.model.definitions import DataStructureDefinition, \
     DimensionDescriptor, AttributeDescriptor, MeasureDescriptor, \
-    GroupDimensionDescriptor
+    GroupDimensionDescriptor, DataFlowDefinition
 from sdmxthon.model.header import Contact
 from sdmxthon.model.itemScheme import Agency, AgencyScheme, Codelist, Code, \
     Item, ConceptScheme, Concept
@@ -21,7 +21,8 @@ from sdmxthon.utils.parsing_words import ORGS, AGENCIES, AGENCY, ID, \
     TEXT_TYPE, TEXT_TYPE_LOW, FACETS, DSDS, DSD, DSD_COMPS, DIM_LIST, \
     ATT_LIST, ME_LIST, GROUP, DIM_LIST_LOW, ATT_LIST_LOW, ME_LIST_LOW, DIM, \
     TIME_DIM, ATT, COMPS, CON_ID, PAR_ID, PAR_VER, CS_LOW, LOCAL_REP, \
-    LOCAL_REP_LOW, ATT_REL, REL_TO, PRIM_MEASURE, DATAFLOWS
+    LOCAL_REP_LOW, ATT_REL, REL_TO, PRIM_MEASURE, DATAFLOWS, ANNOTATION_URL, \
+    URL, CON_ID_LOW, PARENT, GROUP_DIM_LOW, GROUP_DIM, DIM_REF, DF, STRUCTURE
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
@@ -43,21 +44,26 @@ comp_lists_items = {DIM_LIST: [DIM, TIME_DIM],
                     ATT_LIST: [ATT],
                     ME_LIST: [PRIM_MEASURE]}
 
+dimensions = {}
+measures = {}
+
 # Global dict to be used in all elements
-metadata = {}
 agencies = {}
 codelists = {}
 concepts = {}
+datastructures = {}
 
 
 def create_int_str(json_int) -> InternationalString:
     json_int = add_list(json_int)
-    locals = []
+    locals_list = []
     for e in json_int:
-        locals.append(LocalisedString(locale=Locale_Codes[e[LANG]],
-                                      label=e[LANG],
-                                      content=e[XML_TEXT]))
-    return InternationalString(localisedStrings=locals)
+        if e[XML_TEXT].strip() not in ['', '\n']:
+            e[XML_TEXT] = " ".join(e[XML_TEXT].split())
+        locals_list.append(LocalisedString(locale=Locale_Codes[e[LANG]],
+                                           label=e[LANG],
+                                           content=e[XML_TEXT]))
+    return InternationalString(localisedStrings=locals_list)
 
 
 def create_contact(json_contact) -> Contact:
@@ -70,7 +76,7 @@ def create_contact(json_contact) -> Contact:
             del json_contact[e]
     for e in node_str:
         if e in json_contact:
-            json_contact[e.lower()] = json_contact.pop(e)
+            json_contact[e.lower()] = add_list(json_contact.pop(e))
 
     return Contact(**json_contact)
 
@@ -90,8 +96,10 @@ def format_id(element: any):
 
 
 def format_maintainer(element: any):
-    agency = Agency(element[AGENCY_ID])
-    element[MAINTAINER] = agency
+    if element[AGENCY_ID] in agencies:
+        element[MAINTAINER] = agencies[element[AGENCY_ID]]
+    else:
+        element[MAINTAINER] = Agency(element[AGENCY_ID])
     del element[AGENCY_ID]
     return element
 
@@ -110,6 +118,8 @@ def format_annotations(item_elem: any):
                 if ANNOTATION_TEXT in e:
                     e[TEXT] = create_int_str(e[ANNOTATION_TEXT])
                     del e[ANNOTATION_TEXT]
+                if ANNOTATION_URL in e:
+                    e[URL] = e.pop(ANNOTATION_URL)
 
                 annotations.append(Annotation(**e))
 
@@ -121,6 +131,8 @@ def format_annotations(item_elem: any):
 
 def format_facets(json_fac) -> dict:
     fac = {FACETS: []}
+    if json_fac is None:
+        return fac
     if TEXT_TYPE in json_fac:
         fac[TEXT_TYPE_LOW] = json_fac.pop(TEXT_TYPE)
     for e in json_fac:
@@ -149,9 +161,11 @@ def format_representation(json_rep) -> Representation:
 def create_item(item_elem, item) -> Item:
     if XMLNS in item_elem:
         del item_elem[XMLNS]
+
     item_elem = format_annotations(item_elem)
     item_elem = format_name_description(item_elem)
     item_elem = format_id(item_elem)
+
     if CONTACT in item_elem and item == AGENCY:
         item_elem[CONTACT] = add_list(item_elem[CONTACT])
         contacts = []
@@ -159,9 +173,14 @@ def create_item(item_elem, item) -> Item:
             contacts.append(create_contact(e))
         item_elem[CONTACT.lower() + 's'] = contacts
         del item_elem[CONTACT]
+
     if CORE_REP in item_elem and item == CON:
         item_elem[CORE_REP_LOW] = format_representation(item_elem[CORE_REP])
         del item_elem[CORE_REP]
+
+    if PARENT in item_elem:
+        item_elem[PARENT.lower()] = item_elem.pop(PARENT)[REF][ID]
+
     return items_classes[item](**item_elem)
 
 
@@ -185,6 +204,8 @@ def create_scheme(json_elem, scheme, item):
                     items.append(create_item(item_elem, item))
                 del element[item]
                 element['items'] = items
+                if scheme == AGENCIES:
+                    agencies.update({e.id: e for e in items})
             else:
                 element['items'] = []
             full_id = unique_id(element[AGENCY_ID],
@@ -204,7 +225,6 @@ def create_organisations(json_orgs):
     if AGENCIES in json_orgs:
         if len(json_orgs) == 1 and isinstance(json_orgs[AGENCIES], dict):
             ag_sch = create_scheme(json_orgs, AGENCIES, AGENCY)
-            agencies.update(ag_sch.items())
             return ag_sch
         else:
             for e in json_orgs[AGENCIES]:
@@ -221,19 +241,40 @@ def format_con_id(json_ref):
 
     if full_cs_id in concepts:
         if json_ref[ID] in concepts[full_cs_id].items:
-            rep[CS_LOW] = concepts[full_cs_id]
+            # rep[CS_LOW] = concepts[full_cs_id]
+            rep[CON] = concepts[full_cs_id].items[json_ref[ID]]
             core_rep = concepts[full_cs_id].items[json_ref[ID]]. \
                 core_representation
             if core_rep is not None:
                 cl = core_rep.codelist
                 if cl is not None:
-                    rep[CODELISTS.lower()] = cl
+                    rep[CL.lower()] = cl
         else:
             raise Exception
-    else:
-        raise Exception
+    # else:
+    #     raise Exception
 
     return rep
+
+
+def format_relationship(json_rel, node=DIM):
+    rels = {}
+    if node in json_rel:
+        for e in json_rel[node]:
+            if DIM_REF in e:
+                element = e[DIM_REF][REF][ID]
+            else:
+                element = e[REF][ID]
+            if element in dimensions:
+                rels[element] = dimensions[element]
+            else:
+                raise Exception
+    elif PRIM_MEASURE in json_rel:
+        if json_rel[PRIM_MEASURE][REF][ID] in measures:
+            rels = measures[json_rel[PRIM_MEASURE][REF][ID]]
+    else:
+        rels = 'NoSpecifiedRelationship'
+    return rels
 
 
 def format_component(json_comp, comp) -> Component:
@@ -246,6 +287,8 @@ def format_component(json_comp, comp) -> Component:
         del json_comp[LOCAL_REP]
     if CON_ID in json_comp:
         rep = format_con_id(json_comp[CON_ID][REF])
+        if CON in rep:
+            json_comp[CON_ID_LOW] = rep.pop(CON)
         del json_comp[CON_ID]
     if rep_class is None:
         rep_class = Representation(**rep)
@@ -256,7 +299,8 @@ def format_component(json_comp, comp) -> Component:
 
     # Attribute Handling
     if ATT_REL in json_comp:
-        json_comp[REL_TO] = json_comp.pop(ATT_REL)
+        json_comp[REL_TO] = format_relationship(json_comp[ATT_REL])
+        del json_comp[ATT_REL]
 
     return comp(**json_comp)
 
@@ -273,19 +317,40 @@ def format_component_lists(json_comp_lists, comp_list, comp):
                 components[new_element.id] = new_element
             del json_comp_lists[e]
 
+    if comp == comp_lists_items[DIM_LIST]:
+        dimensions.update(components)
+    elif comp == comp_lists_items[ME_LIST]:
+        measures.update(components)
+
     json_comp_lists[COMPS] = components
 
     return comp_list(**json_comp_lists)
 
 
+def format_group_dim(json_group):
+    if GROUP_DIM in json_group:
+        json_group[COMPS] = format_relationship(json_group, GROUP_DIM)
+    else:
+        json_group[COMPS] = None
+
+    del json_group[GROUP_DIM]
+    json_group = format_id(json_group)
+
+    return GroupDimensionDescriptor(**json_group)
+
+
 def format_dsd_comps(json_comps):
-    node = [DIM_LIST, ATT_LIST, ME_LIST]
+    node = [DIM_LIST, ME_LIST, ATT_LIST]
     comps = json_comps[DSD_COMPS]
     for e in node:
-        name = comp_lists_names[e]
-        json_comps[name] = format_component_lists(comps[e],
-                                                  comp_lists_classes[e],
-                                                  comp_lists_items[e])
+        if e in comps:
+            name = comp_lists_names[e]
+            json_comps[name] = format_component_lists(comps[e],
+                                                      comp_lists_classes[e],
+                                                      comp_lists_items[e])
+
+    if GROUP in comps:
+        json_comps[GROUP_DIM_LOW] = format_group_dim(comps[GROUP])
 
     del json_comps[DSD_COMPS]
 
@@ -298,7 +363,8 @@ def create_datastructures(json_dsds):
     if DSD in json_dsds:
         json_dsds[DSD] = add_list(json_dsds[DSD])
         for element in json_dsds[DSD]:
-
+            dimensions.clear()
+            measures.clear()
             if XMLNS in element:
                 del element[XMLNS]
 
@@ -323,10 +389,47 @@ def create_datastructures(json_dsds):
 
 
 def create_dataflows(json_dfs):
-    print(json_dfs)
+    elements = {}
+    if DF in json_dfs:
+        json_dfs[DF] = add_list(json_dfs[DF])
+        for element in json_dfs[DF]:
+            if XMLNS in element:
+                del element[XMLNS]
+
+            element = format_annotations(element)
+            element = format_name_description(element)
+
+            if STRUCTURE in element:
+                agency_id = element[STRUCTURE][REF][AGENCY_ID]
+                id_ = element[STRUCTURE][REF][ID]
+                version = element[STRUCTURE][REF][VERSION]
+
+                str_id = unique_id(agency_id, id_, version)
+
+                if str_id in datastructures:
+                    element[STRUCTURE.lower()] = datastructures[str_id]
+
+                del element[STRUCTURE]
+
+            full_id = unique_id(element[AGENCY_ID],
+                                element[ID],
+                                element[VERSION])
+
+            element = format_maintainer(element)
+            element = format_id(element)
+            # Creation of DSD
+            if full_id not in elements:
+                elements[full_id] = DataFlowDefinition(**element)
+            else:
+                raise Exception
+
+    return elements
 
 
 def create_metadata(json_meta):
+    # Reset dict to store metadata
+    metadata = dict()
+
     if ORGS in json_meta:
         metadata[ORGS] = create_organisations(json_meta[ORGS])
     if CODELISTS in json_meta:
@@ -337,6 +440,13 @@ def create_metadata(json_meta):
         concepts.update(metadata[CONCEPTS])
     if DSDS in json_meta:
         metadata[DSDS] = create_datastructures(json_meta[DSDS])
+        datastructures.update(metadata[DSDS])
     if DATAFLOWS in json_meta:
         metadata[DATAFLOWS] = create_dataflows(json_meta[DATAFLOWS])
+
+    # Reset global variables
+    agencies.clear()
+    concepts.clear()
+    codelists.clear()
+    datastructures.clear()
     return metadata

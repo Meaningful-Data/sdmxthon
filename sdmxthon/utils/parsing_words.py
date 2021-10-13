@@ -19,6 +19,7 @@ OBSKEY = 'ObsKey'
 # Header
 STRREF = 'structureRef'
 STRUCTURE = 'Structure'
+STR_USAGE = 'StructureUsage'
 STRID = 'structureID'
 DIM_OBS = 'dimensionAtObservation'
 ALL_DIM = "AllDimensions"
@@ -38,7 +39,7 @@ AGENCIES = 'AgencyScheme'
 CODELISTS = 'Codelists'
 CONCEPTS = 'Concepts'
 DSDS = 'DataStructures'
-DATAFLOWS = 'DataFlows'
+DATAFLOWS = 'Dataflows'
 
 # Individual
 AGENCY = 'Agency'
@@ -52,6 +53,7 @@ DSD = 'DataStructure'
 # DSD components
 DSD_COMPS = 'DataStructureComponents'
 CON_ID = 'ConceptIdentity'
+CON_ID_LOW = 'concept_identity'
 # Dimension
 DIM_LIST = 'DimensionList'
 DIM_LIST_LOW = 'dimension_list'
@@ -68,19 +70,26 @@ ME_LIST = 'MeasureList'
 ME_LIST_LOW = 'measure_list'
 MEASURE = 'Measure'
 PRIM_MEASURE = 'PrimaryMeasure'
+# Group Dimension
 GROUP = 'Group'
+GROUP_DIM_LOW = 'group_dimension_descriptor'
 GROUP_DIM = 'GroupDimension'
 DIM_REF = 'DimensionReference'
+
+# Dataflows
+DF = 'Dataflow'
 
 # Annotation
 ANNOTATION = 'Annotation'
 ANNOTATION_TITLE = 'AnnotationTitle'
 ANNOTATION_TYPE = 'AnnotationType'
 ANNOTATION_TEXT = 'AnnotationText'
+ANNOTATION_URL = 'AnnotationURL'
 
 TITLE = 'title'
-TYPE = 'title'
+TYPE = 'type_'
 TEXT = 'text'
+URL = 'url'
 
 # Representation
 CORE_REP = 'CoreRepresentation'
@@ -110,9 +119,11 @@ FAX = 'Fax'
 MAINTAINER = 'maintainer'
 XMLNS = 'xmlns'
 COMPS = 'components'
+PARENT = 'Parent'
 PAR_ID = 'maintainableParentID'
 PAR_VER = 'maintainableParentVersion'
 REL_TO = 'relatedTo'
+NO_REL = 'NoSpecifiedRelationship'
 
 # Schemas
 pathToSchema = 'schemas/SDMXMessage.xsd'

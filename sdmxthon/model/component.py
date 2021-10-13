@@ -16,12 +16,13 @@ class Component(IdentifiableArtefact):
         and hence a Structure. Component is refined through its sub-classes."""
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
-                 annotations=None, localRepresentation: Representation = None):
+                 annotations=None, local_representation: Representation = None,
+                 concept_identity: Concept = None):
         super(Component, self).__init__(id_=id_, uri=uri, urn=urn,
                                         annotations=annotations)
 
-        self._local_representation = localRepresentation
-        self._concept_identity = None
+        self._local_representation = local_representation
+        self._concept_identity = concept_identity
 
     def __eq__(self, other):
         if isinstance(other, Component):
@@ -244,11 +245,13 @@ class Dimension(Component, DataParser):
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None, local_representation: Representation = None,
+                 concept_identity: Concept = None,
                  position: int = None):
         super(Dimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
-                     localRepresentation=local_representation)
+                     local_representation=local_representation,
+                     concept_identity=concept_identity)
 
         self.position = position
 
@@ -299,11 +302,13 @@ class TimeDimension(Dimension, DataParser):
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
                  local_representation: Representation = None,
+                 concept_identity: Concept = None,
                  position: int = None):
         super(TimeDimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
                      local_representation=local_representation,
+                     concept_identity=concept_identity,
                      position=position)
 
     def __eq__(self, other):
@@ -337,11 +342,13 @@ class Attribute(Component, DataParser):
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
                  local_representation: Representation = None,
+                 concept_identity: Concept = None,
                  assignmentStatus: str = None, relatedTo=None):
         super(Attribute, self) \
             .__init__(id_=id_, uri=uri, urn=urn,
                       annotations=annotations,
-                      localRepresentation=local_representation)
+                      local_representation=local_representation,
+                      concept_identity=concept_identity)
 
         self.assignment_status = assignmentStatus
         self.related_to = relatedTo
@@ -422,11 +429,13 @@ class MeasureDimension(Dimension, DataParser):
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
                  local_representation: Representation = None,
+                 concept_identity: Concept = None,
                  position: int = None):
         super(MeasureDimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
                      local_representation=local_representation,
+                     concept_identity=concept_identity,
                      position=position)
 
     def __eq__(self, other):
@@ -460,12 +469,14 @@ class PrimaryMeasure(Component, DataParser):
 
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None,
-                 local_representation: Representation = None):
+                 local_representation: Representation = None,
+                 concept_identity: Concept = None):
 
         super(PrimaryMeasure, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
-                     localRepresentation=local_representation)
+                     concept_identity=concept_identity,
+                     local_representation=local_representation)
 
     @staticmethod
     def _factory(*args_, **kwargs_):
