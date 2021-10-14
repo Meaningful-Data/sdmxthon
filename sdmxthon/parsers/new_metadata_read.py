@@ -3,8 +3,9 @@ from sdmxthon.model.base import InternationalString, LocalisedString, \
 from sdmxthon.model.component import Component, Dimension, TimeDimension, \
     Attribute, PrimaryMeasure
 from sdmxthon.model.definitions import DataStructureDefinition, \
-    DimensionDescriptor, AttributeDescriptor, MeasureDescriptor, \
-    GroupDimensionDescriptor, DataFlowDefinition
+    DataFlowDefinition
+from sdmxthon.model.descriptors import DimensionDescriptor, \
+    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor
 from sdmxthon.model.header import Contact
 from sdmxthon.model.itemScheme import Agency, AgencyScheme, Codelist, Code, \
     Item, ConceptScheme, Concept
@@ -290,9 +291,7 @@ def format_component(json_comp, comp) -> Component:
         if CON in rep:
             json_comp[CON_ID_LOW] = rep.pop(CON)
         del json_comp[CON_ID]
-    if rep_class is None:
-        rep_class = Representation(**rep)
-    elif CS_LOW in rep:
+    if CS_LOW in rep:
         rep_class.concept_scheme = rep[CS_LOW]
 
     json_comp[LOCAL_REP_LOW] = rep_class

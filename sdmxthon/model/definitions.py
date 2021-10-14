@@ -914,8 +914,8 @@ class DataFlowDefinition(MaintainableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, DataFlowDefinition):
-            return super(DataFlowDefinition, self).__eq__(
-                other) and self._structure == other._structure
+            return (super(DataFlowDefinition, self).__eq__(other) and
+                    self._structure == other._structure)
         else:
             return False
 
