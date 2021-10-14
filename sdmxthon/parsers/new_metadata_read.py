@@ -23,7 +23,8 @@ from sdmxthon.utils.parsing_words import ORGS, AGENCIES, AGENCY, ID, \
     ATT_LIST, ME_LIST, GROUP, DIM_LIST_LOW, ATT_LIST_LOW, ME_LIST_LOW, DIM, \
     TIME_DIM, ATT, COMPS, CON_ID, PAR_ID, PAR_VER, CS_LOW, LOCAL_REP, \
     LOCAL_REP_LOW, ATT_REL, REL_TO, PRIM_MEASURE, DATAFLOWS, ANNOTATION_URL, \
-    URL, CON_ID_LOW, PARENT, GROUP_DIM_LOW, GROUP_DIM, DIM_REF, DF, STRUCTURE
+    URL, CON_ID_LOW, PARENT, GROUP_DIM_LOW, GROUP_DIM, DIM_REF, DF, \
+    STRUCTURE, STR_URL, STR_URL_LOW, SER_URL, SER_URL_LOW
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
@@ -159,6 +160,14 @@ def format_representation(json_rep) -> Representation:
     return Representation(**rep)
 
 
+def format_urls(json_elem):
+    if STR_URL in json_elem:
+        json_elem[STR_URL_LOW] = json_elem.pop(STR_URL)
+    if SER_URL in json_elem:
+        json_elem[SER_URL_LOW] = json_elem.pop(SER_URL)
+    return json_elem
+
+
 def create_item(item_elem, item) -> Item:
     if XMLNS in item_elem:
         del item_elem[XMLNS]
@@ -212,7 +221,7 @@ def create_scheme(json_elem, scheme, item):
             full_id = unique_id(element[AGENCY_ID],
                                 element[ID],
                                 element[VERSION])
-
+            element = format_urls(element)
             element = format_maintainer(element)
             element = format_id(element)
             # Dynamic creation with specific class
@@ -375,6 +384,7 @@ def create_datastructures(json_dsds):
             full_id = unique_id(element[AGENCY_ID],
                                 element[ID],
                                 element[VERSION])
+            element = format_urls(element)
 
             element = format_maintainer(element)
             element = format_id(element)
@@ -413,6 +423,7 @@ def create_dataflows(json_dfs):
             full_id = unique_id(element[AGENCY_ID],
                                 element[ID],
                                 element[VERSION])
+            element = format_urls(element)
 
             element = format_maintainer(element)
             element = format_id(element)

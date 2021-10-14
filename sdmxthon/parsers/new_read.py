@@ -1,3 +1,9 @@
+import os
+from io import BytesIO
+from xml.parsers.expat import ExpatError
+
+import requests
+import validators
 import xmltodict
 
 from sdmxthon.parsers.new_data_read import create_dataset
@@ -6,6 +12,11 @@ from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
     ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE
 from sdmxthon.utils.xml_base import parse_xml, validate_doc
+
+options = {'process_namespaces': True,
+           'namespaces': namespaces,
+           'dict_constructor': dict,
+           'attr_prefix': ''}
 
 
 def parse_sdmx(result):
@@ -57,16 +68,46 @@ def parse_sdmx(result):
     return datasets
 
 
-def read_xml(xml, validate=True):
+def read_xml(infile, validate=True):
     if validate:
-        doc = parse_xml(xml, None)
+        doc = parse_xml(infile, None)
         validate_doc(doc)
 
-    result = xmltodict.parse(xml,
-                             process_namespaces=True,
-                             namespaces=namespaces,
-                             dict_constructor=dict,
-                             attr_prefix='')
+    if isinstance(infile, str):
+        if validators.url(infile):
+            try:
+                response = requests.get(infile)
+                if response.status_code == 400:
+                    raise requests.ConnectionError(
+                        f'Invalid URL. Response from server: {response.text}')
+                infile = BytesIO(response.content)
+            except requests.ConnectionError:
+                raise requests.ConnectionError('Invalid URL. '
+                                               'No response from server')
+        elif infile[0] == '<':
+            infile = BytesIO(bytes(infile, 'utf-8'))
+        elif '/' in infile or '\\' in infile:
+            try:
+                infile = os.path.join(infile)
+                with open(infile, "r", errors='ignore') as f:
+                    infile = f.read()
+            except AttributeError:
+                infile = BytesIO(bytes(infile, 'utf-8'))
+        else:
+            raise ValueError(f'Unable to parse {infile}')
+    else:
+        if isinstance(infile, os.PathLike):
+            try:
+                infile = os.path.join(infile)
+                with open(infile, "r", errors='ignore') as f:
+                    infile = f.read()
+            except AttributeError:
+                pass
+
+    try:
+        result = xmltodict.parse(infile, **options)
+    except ExpatError:  # UTF-8 BOM
+        result = xmltodict.parse(infile[3:], **options)
 
     datasets = parse_sdmx(result)
     return datasets
