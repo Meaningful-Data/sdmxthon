@@ -99,7 +99,7 @@ def read_xml(infile, validate=True):
         if isinstance(infile, os.PathLike):
             try:
                 infile = os.path.join(infile)
-                with open(infile, "r", errors='ignore') as f:
+                with open(infile, "r", errors='replace') as f:
                     infile = f.read()
             except AttributeError:
                 pass

@@ -615,13 +615,13 @@ class VersionableArtefact(NameableArtefact):
 
     @validFrom.setter
     def validFrom(self, value):
-        self._validFrom = set_date_from_string(value, "%Y-%m-%d")
+        self._validFrom = set_date_from_string(value)
 
     #        self._validFrom = value
 
     @validTo.setter
     def validTo(self, value):
-        self._validTo = set_date_from_string(value, "%Y-%m-%d")
+        self._validTo = set_date_from_string(value)
         # self._validTo = value
 
     def _build_attributes(self, node, attrs, already_processed):

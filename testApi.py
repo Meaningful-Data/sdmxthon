@@ -3,29 +3,41 @@ from time import time
 import pandas as pd
 
 import sdmxthon
+from sdmxthon.model.dataset import Dataset
 from sdmxthon.parsers.new_read import read_xml
 from sdmxthon.utils.handlers import first_element_dict
 
-file_str_all = open(
-    "sdmxthon/testSuite/readingValidation/data/data_sample/str_all.xml").read()
-file_str_ser = open(
-    "sdmxthon/testSuite/readingValidation/data/data_sample/str_ser.xml").read()
-file_gen_all = open(
-    "sdmxthon/testSuite/readingValidation/data/data_sample/gen_all.xml").read()
-file_gen_ser = open(
-    "sdmxthon/testSuite/readingValidation/data/data_sample/gen_ser.xml").read()
-file_data_df = open("sdmxthon/outputTests/BIS_DER_DATAFLOW.xml").read()
-file_meta_bis = open("sdmxthon/outputTests/bis.xml").read()
-file_meta_ecb = open("sdmxthon/testSuite/metadataFromDiferentSources/data"
-                     "/data_sample/ecb.xml").read()
-file_meta_estat = open("sdmxthon/testSuite/metadataFromDiferentSources/data"
-                       "/data_sample/estat.xml").read()
-file_meta_rbi = open("sdmxthon/outputTests/DSD_28APRIL21_updated.xml").read()
-file_meta_df = open("sdmxthon/outputTests/metadata.xml").read()
+file_str_all = "sdmxthon/testSuite/readingValidation/data/data_sample" \
+               "/str_all.xml "
+file_str_ser = "sdmxthon/testSuite/readingValidation/data/data_sample" \
+               "/str_ser.xml "
+file_gen_all = "sdmxthon/testSuite/readingValidation/data/data_sample" \
+               "/gen_all.xml "
+file_gen_ser = "sdmxthon/testSuite/readingValidation/data/data_sample" \
+               "/gen_ser.xml "
+file_data_df = "sdmxthon/outputTests/BIS_DER_DATAFLOW.xml"
+file_meta_bis = "sdmxthon/outputTests/bis.xml"
+file_meta_ecb = "sdmxthon/testSuite/metadataFromDiferentSources/data" \
+                "/data_sample/ecb.xml "
+file_meta_estat = "sdmxthon/testSuite/metadataFromDiferentSources/data" \
+                  "/data_sample/estat.xml "
+file_meta_rbi = "sdmxthon/outputTests/DSD_28APRIL21_updated.xml"
+file_meta_df = "sdmxthon/outputTests/metadata.xml"
 
 
 def main():
     start = time()
+
+    dataset: Dataset = read_xml(file_str_ser, validate=False)[
+        'BIS:BIS_DER(1.0)']
+    dsd = first_element_dict(
+        read_xml(file_meta_bis, validate=False)['DataStructures'])
+    dsd_2 = first_element_dict(read_xml(
+        "https://sdw-wsrest.ecb.europa.eu/service/datastructure/ECB/ECB_EXR1/1.0?references=children",
+        validate=False)['DataStructures'])
+    dataset.structure = dsd
+
+    dataset.semantic_validation()
 
     df1 = read_xml(file_str_all, validate=False)['BIS:BIS_DER(1.0)']
     df2 = read_xml(file_str_ser, validate=False)['BIS:BIS_DER(1.0)']
@@ -65,17 +77,6 @@ def main():
     meta_old5 = sdmxthon.read_sdmx(file_meta_df, validate=False)
     end = time()
     print(f'Old metadata read: {end - start}')
-    print('------------Metadata 1-----------------')
-    print(first_element_dict(meta_old1.content['dsds']) == first_element_dict(
-        metadata1['DataStructures']))
-    print('------------Metadata 2-----------------')
-    print(first_element_dict(meta_old2.content['dsds']) == first_element_dict(
-        metadata2['DataStructures']))
-    print('------------Metadata 5-----------------')
-    print(first_element_dict(meta_old5.content['dsds']) == first_element_dict(
-        metadata5['DataStructures']))
-
-    pass
 
 
 if __name__ == '__main__':
