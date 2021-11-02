@@ -4,6 +4,7 @@ from io import StringIO
 
 import numpy as np
 import pandas as pd
+import xmltodict
 
 from sdmxthon.model.component import PrimaryMeasure
 from sdmxthon.model.header import Header
@@ -206,15 +207,10 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
             count = 0
             for record in payload.values():
                 count += 1
-                if record.dim_at_obs == "AllDimensions":
-                    outfile += strWriting(record, prettyprint, count)
-                else:
-                    outfile += strSerWriting(record, prettyprint, count)
+                outfile += strWriting(record, prettyprint, count,
+                                      record.dim_at_obs)
         else:
-            if payload.dim_at_obs == "AllDimensions":
-                outfile += strWriting(payload, prettyprint)
-            else:
-                outfile += strSerWriting(payload, prettyprint)
+            outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif dType == MessageTypeEnum.Metadata and isinstance(payload, Structures):
         outfile += payload.to_XML(prettyprint)
     outfile += f'</{messageAbbr}:{data_type_string}>'
@@ -228,7 +224,7 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         return f
 
 
-def strWriting(dataset, prettyprint=True, count=1):
+def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     outfile = ''
 
     dataset.data = dataset.data.dropna(axis=1, how="all")
@@ -243,72 +239,103 @@ def strWriting(dataset, prettyprint=True, count=1):
     for k, v in dataset.attached_attributes.items():
         attached_attributes_str += f'{k}="{v}" '
 
-    man_att = get_mandatory_attributes(dataset.structure)
-
     # Datasets
     outfile += f'{child1}<{messageAbbr}:DataSet {attached_attributes_str}' \
                f'ss:structureRef="{dataset.structure.id}" ' \
                f'xsi:type="ns{count}:DataSetType" ' \
                f'ss:dataScope="DataStructure" ' \
                f'action="Replace">{nl}'
+    man_att = get_mandatory_attributes(dataset.structure)
+    opt_att_codes = [att for att in dataset.structure.attribute_codes
+                     if att not in man_att]
 
-    chunksize = 50000
-    length_ = len(dataset.data)
-    if len(dataset.data) > chunksize:
-        previous = 0
-        next_ = chunksize
-        while previous <= length_:
+    if dim == "AllDimensions":
 
-            if next_ > length_:
-                outfile += obs_str(dataset.data.iloc[previous:],
-                                   dataset.structure.attribute_codes,
-                                   man_att, prettyprint)
-            else:
-                outfile += obs_str(dataset.data.iloc[previous:next_],
-                                   dataset.structure.attribute_codes,
-                                   man_att, prettyprint)
-                outfile += f'{nl}'
-            previous = next_
-            next_ += chunksize
+        chunksize = 50000
+        length_ = len(dataset.data)
+        if len(dataset.data) > chunksize:
+            previous = 0
+            next_ = chunksize
+            while previous <= length_:
+
+                if next_ > length_:
+                    outfile += obs_str(dataset.data.iloc[previous:],
+                                       opt_att_codes, prettyprint)
+                else:
+                    outfile += obs_str(dataset.data.iloc[previous:next_],
+                                       opt_att_codes, prettyprint)
+                    outfile += f'{nl}'
+                previous = next_
+                next_ += chunksize
+        else:
+            outfile += obs_str(dataset.data, opt_att_codes, prettyprint)
+
     else:
-        outfile += obs_str(dataset.data, dataset.structure.attribute_codes,
-                           man_att, prettyprint)
+        series_codes = []
+        obs_codes = [dim, dataset.structure.measure_code]
+        for e in dataset.structure.attribute_descriptor.components.values():
+            if e.id in dataset.data.keys() and isinstance(e.related_to,
+                                                          PrimaryMeasure):
+                obs_codes.append(e.id)
+        for e in dataset.data.keys():
+            if ((e in dataset.structure.dimension_codes and e != dim)
+                    or (e in dataset.structure.attribute_codes and
+                        e not in obs_codes)):
+                series_codes.append(e)
+        outfile += ser_str(dataset.data, opt_att_codes, series_codes,
+                           obs_codes, prettyprint)
 
-    outfile += f'{nl}{child1}</{messageAbbr}:DataSet>{nl}'
+    outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
     return outfile
 
 
-def obs_str(data: pd.DataFrame, attribute_codes: list, man_att: list,
+def obs_str(data: pd.DataFrame,
+            codes: list,
             prettyprint=True):
-    if prettyprint:
-        child2 = '\t\t'
-        nl = '\n'
-    else:
-        child2 = nl = ''
-    df1 = pd.DataFrame(
-        np.tile(np.array(data.columns), len(data.index))
-            .reshape(len(data.index), -1),
-        index=data.index,
-        columns=data.columns, dtype='str') + '='
-    df2 = '"' + data.astype('str') + '"'
-    df1 = df1.add(df2)
-    df1.insert(0, 'head', f'{child2}<Obs')
-    df1.insert(len(df1.keys()), 'end', '/>')
-    obs_string = ''
-    obs_string += df1.to_csv(path_or_buf=None, sep=' ', header=False,
-                             index=False, quoting=csv.QUOTE_NONE,
-                             escapechar='\\')
-    obs_string = obs_string.replace('\\', '')
-    obs_string = f'{nl}'.join(obs_string.splitlines())
+    data_dict = {
+        'Obs': data.add_prefix('@').astype('str').replace('nan', '').to_dict(
+            orient='records')}
+    out = xmltodict.unparse(input_dict=data_dict, short_empty_elements=True,
+                            pretty=prettyprint, depth=2, full_document=False)
 
-    obs_string = obs_string.replace('"nan"', '""')
+    del data_dict
 
-    for e in attribute_codes:
-        if e in df1.keys() and e not in man_att:
-            obs_string = obs_string.replace(f'{e}="" ', '')
+    for c in codes:
+        out = out.replace(f'{c}="" ', '')
 
-    return obs_string
+    return out
+
+
+def ser_str(data: pd.DataFrame,
+            opt_att_codes: list,
+            series_codes: list,
+            obs_codes: list,
+            prettyprint=True):
+    obs_codes = [f'@{v}' for v in obs_codes]
+
+    # Getting each datapoint from data and creating dict
+
+    data_dict = {'Series': data.sort_values(series_codes, axis=0)[
+        series_codes].add_prefix('@').astype('str').replace('nan', '')
+        .drop_duplicates().reset_index(drop=True).to_dict(orient="records")}
+
+    for e in data_dict['Series']:
+        # Filter each datapoint and get the obs as dict
+        e['Obs'] = data.add_prefix('@').loc[
+            (data.add_prefix('@')[list(e)] == pd.Series(e)).all(axis=1)][
+            obs_codes].astype('str').replace('nan', '').to_dict(
+            orient="records")
+
+    out = xmltodict.unparse(input_dict=data_dict, short_empty_elements=True,
+                            pretty=prettyprint, depth=2, full_document=False)
+
+    del data_dict
+
+    for c in opt_att_codes:
+        out = out.replace(f'{c}="" ', '')
+
+    return out
 
 
 def genWriting(dataset, prettyprint=True):
@@ -432,104 +459,3 @@ def obs_gen(data: pd.DataFrame, attribute_codes: list, dimension_codes: list,
     obs_string = f'{nl}'.join(obs_string.splitlines())
 
     return obs_string
-
-
-def strSerWriting(dataset, prettyprint=True, count=1):
-    outfile = ''
-
-    if prettyprint:
-        child1 = '\t'
-        child2 = '\t\t'
-        child3 = '\t\t\t'
-        child5 = '\t\t\t\t\t'
-        nl = '\n'
-    else:
-        child1 = child2 = child3 = child5 = nl = ''
-
-    mark_series = '//SeriesMark//'
-
-    dim_obs = dataset.dim_at_obs
-
-    attached_attributes_str = ''
-    for k, v in dataset.attached_attributes.items():
-        attached_attributes_str += f'{k}="{v}" '
-
-    dataset.data = dataset.data.dropna(axis=1, how="all")
-
-    # Datasets
-    outfile += f'{child1}<{messageAbbr}:DataSet {attached_attributes_str}' \
-               f'ss:structureRef="{dataset.structure.id}" ' \
-               f'xsi:type="ns{count}:DataSetType" ' \
-               f'ss:dataScope="DataStructure" ' \
-               f'action="Replace">{nl}'
-
-    series_codes = []
-    obs_codes = [dim_obs, dataset.structure.measure_code]
-    for e in dataset.structure.attribute_descriptor.components.values():
-        if e.id in dataset.data.keys() and isinstance(e.related_to,
-                                                      PrimaryMeasure):
-            obs_codes.append(e.id)
-    for e in dataset.data.keys():
-        if (e in dataset.structure.dimension_codes and e != dim_obs) or (
-                e in dataset.structure.attribute_codes and e not in obs_codes):
-            series_codes.append(e)
-    df = dataset.data.sort_values(series_codes, axis=0).astype('str')
-    df = df.reset_index(drop=True)
-    df_series: pd.DataFrame = df[series_codes].drop_duplicates()
-
-    df1_series = pd.DataFrame(
-        np.tile(np.array(series_codes), len(df_series.index)).reshape(
-            len(df_series.index), -1),
-        index=df_series.index,
-        columns=series_codes, dtype='str') + '='
-    df2_series = '"' + df_series.astype('str') + '"'
-    df1_series = df1_series + df2_series
-    df1_series.insert(0, 'head', f'{child2}<Series')
-    df1_series.insert(len(df1_series.keys()), 'end', f'>{nl}')
-
-    df1_obs = pd.DataFrame(
-        np.tile(np.array(obs_codes), len(df[obs_codes].index)).reshape(
-            len(df[obs_codes].index), -1),
-        index=df[obs_codes].index,
-        columns=obs_codes, dtype='str') + '='
-    df2_obs = '"' + df[obs_codes].astype('str') + '"'
-    df1_obs = df1_obs + df2_obs
-    df1_obs.insert(0, 'head', f'{child3}<Obs')
-    df1_obs.insert(len(df1_obs.keys()), 'end', '/>')
-
-    del df
-    df1_obs.iloc[df_series.index, 0] = f'{mark_series}' + df1_obs.iloc[
-        df_series.index, 0]
-
-    series_str = ''
-    temp_str = ''
-    series_str += df1_series.to_csv(path_or_buf=None, sep=' ', header=False,
-                                    index=False, quoting=csv.QUOTE_NONE,
-                                    escapechar='\\')
-    series_str = series_str.replace('\\', '')
-    series_str = series_str.replace('\r\n', '')
-    series_str.replace('> ', '>')
-    list_series = series_str.split('<')
-    list_series = list_series[1:]
-    temp_str += df1_obs.to_csv(path_or_buf=None, sep=' ', header=False,
-                               index=False, quoting=csv.QUOTE_NONE,
-                               escapechar='\\')
-    temp_str = temp_str.replace('\\', '')
-    temp_str = temp_str.replace('="nan"', '=""')
-    temp_str = f'{nl}'.join(temp_str.splitlines())
-
-    obs_codes.remove(dataset.structure.measure_code)
-
-    for e in obs_codes:
-        temp_str = temp_str.replace(f'{e}="" ', '')
-
-    list_obs = temp_str.split(mark_series)
-    list_obs = list_obs[1:]
-
-    end_series = f'{nl}{child2}</Series>{nl}'
-    outfile += ''.join([f"{child2}<" + str(a) + b + end_series for a, b in
-                        zip(list_series, list_obs)])
-    outfile = outfile.replace(f'{child5}', f'{child3}')
-    outfile = outfile.replace(f'{nl}{nl}', f'{nl}')
-    outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
-    return outfile
