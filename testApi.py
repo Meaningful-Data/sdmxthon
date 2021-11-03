@@ -1,6 +1,10 @@
 # flake8: noqa
+import sqlite3
 from time import time
 
+import pandas as pd
+
+import sdmxthon
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.parsers.new_read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
@@ -22,20 +26,49 @@ file_meta_estat = "sdmxthon/testSuite/metadataFromDiferentSources/data" \
                   "/data_sample/estat.xml "
 file_meta_rbi = "sdmxthon/outputTests/DSD_28APRIL21_updated.xml"
 file_meta_df = "sdmxthon/outputTests/metadata.xml"
+file_big_bis = "sdmxthon/outputTests/BIS_DER.xml"
+db_path = "sdmxthon/outputTests/BIS_DER_OUTS.db"
 
 
 def main():
+    limit = 3
     start = time()
-
-    dataset: Dataset = read_xml(file_str_all, validate=False)[
-        'BIS:BIS_DER(1.0)']
+    conn = sqlite3.connect(db_path)
+    df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn).astype(
+        'category')
     dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
                              ['DataStructures'])
-    dataset.structure = dsd
+    dataset = Dataset(structure=dsd, data=df)
+    end = time()
+    print(f"-------- Loaded {limit} in {end - start} ----------")
 
-    print(dataset.semantic_validation())
+    start = time()
+    test1 = dataset.to_xml(MessageTypeEnum.GenericDataSet)
+    step_1 = time()
+    test2 = dataset.to_xml(MessageTypeEnum.StructureDataSet)
+    step_2 = time()
     dataset.set_dimension_at_observation("TIME_PERIOD")
-    dataset.to_xml(MessageTypeEnum.StructureDataSet)
+    test3 = dataset.to_xml(MessageTypeEnum.GenericDataSet)
+    step_3 = time()
+    test4 = dataset.to_xml(MessageTypeEnum.StructureDataSet)
+    end = time()
+    message = f"""
+    ------- Time: ---------
+    Generic All: {step_1 - start}
+    Structure Specific All: {step_2 - step_1}
+    Generic Series : {step_3 - step_2}
+    Structure Specific Series: {end - step_3}
+    """
+    test1.seek(0)
+    test2.seek(0)
+    test3.seek(0)
+    test4.seek(0)
+    sdmxthon.read_sdmx(test1.read(), True)
+    sdmxthon.read_sdmx(test2.read(), True)
+    sdmxthon.read_sdmx(test3.read(), True)
+    sdmxthon.read_sdmx(test4.read(), True)
+
+    print(message)
 
     # df1 = read_xml(file_str_all, validate=False)['BIS:BIS_DER(1.0)']
     # df2 = read_xml(file_str_ser, validate=False)['BIS:BIS_DER(1.0)']

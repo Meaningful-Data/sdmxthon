@@ -1,8 +1,6 @@
-import csv
 from datetime import datetime
 from io import StringIO
 
-import numpy as np
 import pandas as pd
 import xmltodict
 
@@ -13,6 +11,14 @@ from sdmxthon.parsers.message_parsers import Structures
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
+
+"""
+     --------------------------------------------
+    |                                            |
+    |                   Common                   |
+    |                                            |
+     --------------------------------------------
+"""
 
 
 def addStructure(dataset, prettyprint, dType):
@@ -199,9 +205,9 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     if dType == MessageTypeEnum.GenericDataSet:
         if isinstance(payload, dict):
             for record in payload.values():
-                outfile += genWriting(record, prettyprint)
+                outfile += genWriting(record, prettyprint, record.dim_at_obs)
         else:
-            outfile += genWriting(payload, prettyprint)
+            outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif dType == MessageTypeEnum.StructureDataSet:
         if isinstance(payload, dict):
             count = 0
@@ -222,6 +228,15 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         f = StringIO()
         f.write(outfile)
         return f
+
+
+"""
+     --------------------------------------------
+    |                                            |
+    |              Structure Specific            |
+    |                                            |
+     --------------------------------------------
+"""
 
 
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
@@ -313,32 +328,52 @@ def ser_str(data: pd.DataFrame,
             obs_codes: list,
             prettyprint=True):
     obs_codes = [f'@{v}' for v in obs_codes]
+    series_codes = [f'@{v}' for v in series_codes]
 
     # Getting each datapoint from data and creating dict
+    data = data.add_prefix('@').sort_values(series_codes, axis=0).astype(
+        'str').replace('nan', '')
+    data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
+        drop=True).to_dict(orient="records")}
 
-    data_dict = {'Series': data.sort_values(series_codes, axis=0)[
-        series_codes].add_prefix('@').astype('str').replace('nan', '')
-        .drop_duplicates().reset_index(drop=True).to_dict(orient="records")}
+    indexes = data[series_codes].drop_duplicates().index.tolist()
 
-    for e in data_dict['Series']:
+    previous = 0
+    next_ = indexes[1]
+    count = 1
+    while count < len(indexes):
         # Filter each datapoint and get the obs as dict
-        e['Obs'] = data.add_prefix('@').loc[
-            (data.add_prefix('@')[list(e)] == pd.Series(e)).all(axis=1)][
-            obs_codes].astype('str').replace('nan', '').to_dict(
-            orient="records")
+        data_dict['Series'][count - 1]['Obs'] = data.loc[previous:next_ - 1][
+            obs_codes].to_dict(orient="records")
+        previous = next_
+        count += 1
+        if count == len(indexes):
+            data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
+                data)][obs_codes].to_dict(orient="records")
+        else:
+            next_ = indexes[count]
 
     out = xmltodict.unparse(input_dict=data_dict, short_empty_elements=True,
                             pretty=prettyprint, depth=2, full_document=False)
 
-    del data_dict
-
     for c in opt_att_codes:
         out = out.replace(f'{c}="" ', '')
+
+    data.columns = data.columns.str.lstrip('@')
 
     return out
 
 
-def genWriting(dataset, prettyprint=True):
+"""
+     --------------------------------------------
+    |                                            |
+    |                   Generic                  |
+    |                                            |
+     --------------------------------------------
+"""
+
+
+def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     outfile = ''
 
     dataset.data = dataset.data.dropna(axis=1, how="all")
@@ -360,19 +395,49 @@ def genWriting(dataset, prettyprint=True):
                        f'value="{v}"/>{nl}'
         outfile += f'{child2}</{genericAbbr}:Attributes>{nl}'
 
-    man_att = get_mandatory_attributes(dataset.structure)
-    outfile += obs_gen(dataset.data, dataset.structure.attribute_codes,
-                       dataset.structure.dimension_codes,
-                       man_att, prettyprint)
+    dim_codes = [v for v in dataset.structure.dimension_codes if
+                 v in dataset.data.columns]
+    att_codes = [v for v in dataset.structure.attribute_codes if
+                 v in dataset.data.columns]
 
-    outfile += f'{nl}{child1}</{messageAbbr}:DataSet>{nl}'
+    if dim == "AllDimensions":
+
+        outfile += obs_gen(dataset.data,
+                           dim_codes=dim_codes,
+                           att_codes=att_codes,
+                           measure_code=dataset.structure.measure_code,
+                           prettyprint=prettyprint)
+    else:
+        series_codes = []
+        obs_codes = [dim, dataset.structure.measure_code]
+        for e in dataset.structure.attribute_descriptor.components.values():
+            if e.id in dataset.data.keys() and isinstance(e.related_to,
+                                                          PrimaryMeasure):
+                obs_codes.append(e.id)
+        for e in dataset.data.keys():
+            if ((e in dataset.structure.dimension_codes and e != dim)
+                    or (e in dataset.structure.attribute_codes and
+                        e not in obs_codes)):
+                series_codes.append(e)
+
+        outfile += ser_gen(dataset.data,
+                           dim_codes=dim_codes,
+                           att_codes=att_codes,
+                           measure_code=dataset.structure.measure_code,
+                           prettyprint=prettyprint,
+                           series_codes=series_codes,
+                           obs_codes=obs_codes)
+
+    outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
     return outfile
 
 
-def obs_gen(data: pd.DataFrame, attribute_codes: list, dimension_codes: list,
-            man_att: list,
-            prettyprint=True):
+def format_obs(data: dict,
+               dim_codes: list,
+               att_codes: list,
+               measure_code: str,
+               prettyprint=True):
     if prettyprint:
         child2 = '\t\t'
         child3 = '\t\t\t'
@@ -380,82 +445,183 @@ def obs_gen(data: pd.DataFrame, attribute_codes: list, dimension_codes: list,
         nl = '\n'
     else:
         child2 = child3 = child4 = nl = ''
-    df_data = data.astype('str')
-    obs_value_data = df_data['OBS_VALUE'].astype('str')
-    del df_data['OBS_VALUE']
-    df_id = f'{child4}<{genericAbbr}:Value id="' + pd.DataFrame(
-        np.tile(np.array(df_data.columns), len(df_data.index)).reshape(
-            len(df_data.index), -1),
-        index=df_data.index,
-        columns=df_data.columns, dtype='str') + '" value="'
-    df_value = df_data + '"/>'
-    df_id: pd.DataFrame = df_id.add(df_value)
-    df_obs_value = f'{child3}<{genericAbbr}:ObsValue value="' + \
-                   obs_value_data + '"/>'
-    df_obs_value = df_obs_value.replace(
-        f'{child3}<{genericAbbr}:ObsValue value="nan"/>',
-        f'{child3}<{genericAbbr}:ObsValue value=""/>')
-    df_id['OBS_VALUE'] = df_obs_value
 
-    df_id.insert(0, 'head', f'{child2}<{genericAbbr}:Obs>')
-    df_id.insert(len(df_id.keys()), 'end', f'{child2}</{genericAbbr}:Obs>')
+    out = f"{child2}<{genericAbbr}:Obs>{nl}"
 
-    dim_codes = []
-    att_codes = []
-    for e in df_id.keys():
-        if e in dimension_codes:
-            dim_codes.append(e)
-        elif e in attribute_codes:
-            att_codes.append(e)
+    out += f"{child3}<{genericAbbr}:ObsKey>{nl}"
 
-    all_codes = ['head']
-    all_codes += dim_codes.copy()
-    all_codes.append('OBS_VALUE')
-    all_codes += att_codes
-    all_codes.append('end')
-    df_id = df_id.reindex(all_codes, axis=1)
+    for k in dim_codes:
+        out += f'{child4}<{genericAbbr}:Value id="{k}" value="{data[k]}"/>{nl}'
 
-    df_dim = df_id[dim_codes]
-    last_dim = len(df_dim.columns) - 1
-    df_id.loc[:, df_dim.columns[0]] = f'{child3}<{genericAbbr}:ObsKey>{nl}' + \
-                                      df_dim.loc[:, df_dim.columns[0]]
-    if len(dim_codes) == 1:
-        df_id.loc[:, df_dim.columns[last_dim]] = \
-            df_id.loc[:, df_dim.columns[last_dim]] + \
-            f'{nl}{child3}</{genericAbbr}:ObsKey>'
+    out += f"{child3}</{genericAbbr}:ObsKey>{nl}"
+
+    if measure_code != "OBS_VALUE":
+        out += f'{child3}<{genericAbbr}:ObsValue id="{measure_code}" ' \
+               f'value="{data[measure_code]}"/>{nl}'
     else:
-        df_id.loc[:, df_dim.columns[last_dim]] = \
-            df_dim.loc[:, df_dim.columns[last_dim]] + \
-            f'{nl}{child3}</{genericAbbr}:ObsKey>'
+        out += f'{child3}<{genericAbbr}:ObsValue ' \
+               f'value="{data[measure_code]}"/>{nl}'
 
     if len(att_codes) > 0:
-        df_att = df_id[att_codes]
-        df_id.loc[:, df_att.columns[0]] = f'{child3}<{genericAbbr}:' \
-                                          f'Attributes>{nl}' + \
-                                          df_att.loc[:, df_att.columns[0]]
-        if len(att_codes) == 1:
-            df_id.loc[:, df_att.columns[0]] = \
-                df_id.loc[:, df_att.columns[0]] + \
-                f'{nl}{child3}</{genericAbbr}:Attributes>'
+        out += f"{child3}<{genericAbbr}:Attributes>{nl}"
+
+        for k in att_codes:
+            if data[k] != '':
+                out += f'{child4}<{genericAbbr}:Value id="{k}" ' \
+                       f'value="{data[k]}"/>{nl}'
+
+        out += f"{child3}</{genericAbbr}:Attributes>{nl}"
+
+    out += f"{child2}</{genericAbbr}:Obs>{nl}"
+
+    return out
+
+
+def obs_gen(data: pd.DataFrame,
+            dim_codes: list,
+            att_codes: list,
+            measure_code: str,
+            prettyprint=True):
+    data_dict = data.astype('str').replace('nan', '').to_dict(orient='records')
+
+    out = ""
+
+    for e in data_dict:
+        out += format_obs(e, dim_codes, att_codes, measure_code, prettyprint)
+    del data_dict
+
+    return out
+
+
+def format_ser(data: dict,
+               measure_code: str,
+               series_key: list,
+               series_attr: list,
+               obs_attr: list,
+               dim: str,
+               prettyprint=True):
+    if prettyprint:
+        child2 = '\t\t'
+        child3 = '\t\t\t'
+        child4 = '\t\t\t\t'
+        child5 = '\t\t\t\t\t'
+        nl = '\n'
+    else:
+        child2 = child3 = child4 = child5 = nl = ''
+
+    out = f"{child2}<{genericAbbr}:Series>{nl}"
+    # --------------  Series --------------
+    # Series Keys
+
+    out += f"{child3}<{genericAbbr}:SeriesKey>{nl}"
+
+    for k in series_key:
+        out += f'{child4}<{genericAbbr}:Value id="{k}" value="{data[k]}"/>{nl}'
+
+    out += f"{child3}</{genericAbbr}:SeriesKey>{nl}"
+
+    # Series Attributes
+
+    if len(series_attr) > 0:
+        out += f"{child3}<{genericAbbr}:Attributes>{nl}"
+
+        for k in series_attr:
+            if data[k] != '':
+                out += f'{child4}<{genericAbbr}:Value id="{k}" ' \
+                       f'value="{data[k]}"/>{nl}'
+
+        out += f"{child3}</{genericAbbr}:Attributes>{nl}"
+
+    # --------------  Obs  --------------
+
+    for obs in data['Obs']:
+        out += f"{child3}<{genericAbbr}:Obs>{nl}"
+        # Obs Elements
+        if dim in obs:
+            out += f'{child4}<{genericAbbr}:ObsDimension ' \
+                   f'value="{obs[dim]}"/>{nl}'
+
+        if measure_code != "OBS_VALUE":
+            out += f'{child4}<{genericAbbr}:ObsValue id="{measure_code}" ' \
+                   f'value="{obs[measure_code]}"/>{nl}'
         else:
-            last_att = len(df_att.columns) - 1
-            df_id.loc[:, df_att.columns[last_att]] = \
-                df_att.loc[:, df_att.columns[last_att]] + \
-                f'{nl}{child3}</{genericAbbr}:Attributes>'
+            out += f'{child4}<{genericAbbr}:ObsValue ' \
+                   f'value="{obs[measure_code]}"/>{nl}'
 
-    obs_string = ''
-    obs_string += df_id.to_csv(path_or_buf=None, sep='\n', header=False,
-                               index=False, quoting=csv.QUOTE_NONE,
-                               escapechar='\\')
-    obs_string = obs_string.replace('\\', '')
-    obs_string = obs_string.replace('="nan"', '=""')
+        # Obs Attributes
+        if len(obs_attr) > 0:
+            out += f"{child4}<{genericAbbr}:Attributes>{nl}"
 
-    for e in attribute_codes:
-        if e in df_id.keys() and e not in man_att:
-            obs_string = obs_string.replace(
-                f'{child4}<{genericAbbr}:Value id="{e}" value=""/>{nl}', '')
+            for k in obs_attr:
+                if obs[k] != '':
+                    out += f'{child5}<{genericAbbr}:Value id="{k}" ' \
+                           f'value="{obs[k]}"/>{nl}'
 
-    df_data.add(obs_value_data)
-    obs_string = f'{nl}'.join(obs_string.splitlines())
+            out += f"{child4}</{genericAbbr}:Attributes>{nl}"
 
-    return obs_string
+        out += f"{child3}</{genericAbbr}:Obs>{nl}"
+
+    out += f"{child2}</{genericAbbr}:Series>{nl}"
+
+    return out
+
+
+def ser_gen(data: pd.DataFrame,
+            dim_codes: list,
+            att_codes: list,
+            measure_code: str,
+            obs_codes: list,
+            series_codes: list,
+            prettyprint=True):
+    # Getting each datapoint from data and creating dict
+
+    out = ""
+
+    series_key = [v for v in series_codes if v in dim_codes]
+    series_att = [v for v in series_codes if v in att_codes]
+    dim = obs_codes[0]
+    if len(obs_codes) == 2:
+        obs_att = []
+    else:
+        obs_att = obs_codes[2:]
+
+    data = data.sort_values(series_codes, axis=0) \
+        .astype('str').replace('nan', '')
+
+    data_dict = {}
+
+    data_dict['Series'] = data[series_codes].drop_duplicates().reset_index(
+        drop=True).to_dict(orient="records")
+
+    indexes = data[series_codes].drop_duplicates().index.tolist()
+
+    previous = 0
+    next_ = indexes[1]
+    count = 1
+    while count < len(indexes):
+        # Filter each datapoint and get the obs as dict
+        data_dict['Series'][count - 1]['Obs'] = data.loc[previous:next_ - 1][
+            obs_codes].to_dict(orient="records")
+        previous = next_
+        count += 1
+        if count == len(indexes):
+            data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
+                data)][obs_codes].to_dict(orient="records")
+        else:
+            next_ = indexes[count]
+
+    for e in data_dict['Series']:
+        # Filter each datapoint and get the obs as dict
+        out += format_ser(data=e,
+                          measure_code=measure_code,
+                          series_key=series_key,
+                          series_attr=series_att,
+                          obs_attr=obs_att,
+                          dim=dim,
+                          prettyprint=prettyprint)
+
+        del e['Obs']
+
+    del data_dict
+
+    return out

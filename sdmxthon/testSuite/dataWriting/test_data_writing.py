@@ -18,9 +18,12 @@ class DataWriting(TestHelper.TestHelper):
         self.data_writing(MessageTypeEnum.GenericDataSet)
 
     def test_2(self):
-        self.data_writing(MessageTypeEnum.StructureDataSet)
+        self.data_writing(MessageTypeEnum.GenericDataSet, series=True)
 
     def test_3(self):
+        self.data_writing(MessageTypeEnum.StructureDataSet)
+
+    def test_4(self):
         self.data_writing(MessageTypeEnum.StructureDataSet, series=True)
 
 
