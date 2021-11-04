@@ -2,7 +2,6 @@ from datetime import datetime
 from io import StringIO
 
 import pandas as pd
-import xmltodict
 
 from sdmxthon.model.component import PrimaryMeasure
 from sdmxthon.model.header import Header
@@ -230,6 +229,33 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         return f
 
 
+def series_process(data, data_dict, series_codes, obs_codes):
+    indexes = data[series_codes].drop_duplicates().index.tolist()
+
+    if len(indexes) > 1:
+        previous = 0
+        next_ = indexes[1]
+        count = 1
+        while count < len(indexes):
+            # Filter each datapoint and get the obs as dict
+            data_dict['Series'][count - 1]['Obs'] = \
+                data.loc[previous:next_ - 1][
+                    obs_codes].to_dict(orient="records")
+            previous = next_
+            count += 1
+            if count == len(indexes):
+                data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
+                    data)][obs_codes].to_dict(orient="records")
+            else:
+                next_ = indexes[count]
+
+    elif len(indexes) == 1:
+        data_dict['Series'][0]['Obs'] = data.loc[0:1][
+            obs_codes].to_dict(orient="records")
+
+    return data_dict
+
+
 """
      --------------------------------------------
     |                                            |
@@ -266,22 +292,21 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
 
     if dim == "AllDimensions":
 
-        chunksize = 50000
+        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
             next_ = chunksize
             while previous <= length_:
-
-                if next_ > length_:
-                    outfile += obs_str(dataset.data.iloc[previous:],
-                                       opt_att_codes, prettyprint)
-                else:
-                    outfile += obs_str(dataset.data.iloc[previous:next_],
-                                       opt_att_codes, prettyprint)
-                    outfile += f'{nl}'
+                outfile += obs_str(dataset.data.iloc[previous:next_],
+                                   opt_att_codes, prettyprint)
                 previous = next_
                 next_ += chunksize
+
+                if next_ >= length_:
+                    outfile += obs_str(dataset.data.iloc[previous:],
+                                       opt_att_codes, prettyprint)
+                    previous = next_
         else:
             outfile += obs_str(dataset.data, opt_att_codes, prettyprint)
 
@@ -305,19 +330,63 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     return outfile
 
 
+def format_obs_str(data: dict, prettyprint: bool) -> str:
+    if prettyprint:
+        child2 = '\t\t'
+        nl = '\n'
+    else:
+        child2 = nl = ''
+
+    out = f"{child2}<Obs "
+
+    for k, v in data.items():
+        out += f'{k}="{v}" '
+
+    out += f"/>{nl}"
+
+    return out
+
+
 def obs_str(data: pd.DataFrame,
             codes: list,
-            prettyprint=True):
-    data_dict = {
-        'Obs': data.add_prefix('@').astype('str').replace('nan', '').to_dict(
-            orient='records')}
-    out = xmltodict.unparse(input_dict=data_dict, short_empty_elements=True,
-                            pretty=prettyprint, depth=2, full_document=False)
+            prettyprint=True) -> str:
+    parser = lambda x: format_obs_str(x, prettyprint)  # noqa: E731
 
-    del data_dict
+    iterator = map(parser, data.astype('str').replace('nan', '').to_dict(
+        orient='records'))
+    out = ''.join(iterator)
 
     for c in codes:
         out = out.replace(f'{c}="" ', '')
+
+    return out
+
+
+def format_ser_str(data: dict, prettyprint: bool) -> str:
+    if prettyprint:
+        child2 = '\t\t'
+        child3 = '\t\t\t'
+        nl = '\n'
+    else:
+        child2 = child3 = nl = ''
+
+    out = f"{child2}<Series "
+
+    for k, v in data.items():
+        if k != 'Obs':
+            out += f'{k}="{v}" '
+
+    out += f">{nl}"
+
+    for obs in data['Obs']:
+        out += f"{child3}<Obs "
+
+        for k, v in obs.items():
+            out += f'{k}="{v}" '
+
+        out += f"/>{nl}"
+
+    out += f"{child2}</Series>{nl}"
 
     return out
 
@@ -326,40 +395,23 @@ def ser_str(data: pd.DataFrame,
             opt_att_codes: list,
             series_codes: list,
             obs_codes: list,
-            prettyprint=True):
-    obs_codes = [f'@{v}' for v in obs_codes]
-    series_codes = [f'@{v}' for v in series_codes]
-
+            prettyprint=True) -> str:
     # Getting each datapoint from data and creating dict
-    data = data.add_prefix('@').sort_values(series_codes, axis=0).astype(
-        'str').replace('nan', '')
+    data = data.sort_values(series_codes, axis=0).astype('str') \
+        .replace('nan', '')
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    indexes = data[series_codes].drop_duplicates().index.tolist()
+    data_dict = series_process(data=data, data_dict=data_dict,
+                               series_codes=series_codes, obs_codes=obs_codes)
 
-    previous = 0
-    next_ = indexes[1]
-    count = 1
-    while count < len(indexes):
-        # Filter each datapoint and get the obs as dict
-        data_dict['Series'][count - 1]['Obs'] = data.loc[previous:next_ - 1][
-            obs_codes].to_dict(orient="records")
-        previous = next_
-        count += 1
-        if count == len(indexes):
-            data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
-                data)][obs_codes].to_dict(orient="records")
-        else:
-            next_ = indexes[count]
+    parser = lambda x: format_ser_str(x, prettyprint)  # noqa: E731
 
-    out = xmltodict.unparse(input_dict=data_dict, short_empty_elements=True,
-                            pretty=prettyprint, depth=2, full_document=False)
+    iterator = map(parser, data_dict['Series'])
+    out = ''.join(iterator)
 
     for c in opt_att_codes:
         out = out.replace(f'{c}="" ', '')
-
-    data.columns = data.columns.str.lstrip('@')
 
     return out
 
@@ -399,14 +451,37 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
                  v in dataset.data.columns]
     att_codes = [v for v in dataset.structure.attribute_codes if
                  v in dataset.data.columns]
+    measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
 
-        outfile += obs_gen(dataset.data,
-                           dim_codes=dim_codes,
-                           att_codes=att_codes,
-                           measure_code=dataset.structure.measure_code,
-                           prettyprint=prettyprint)
+        chunksize = 100000
+        length_ = len(dataset.data)
+        if len(dataset.data) > chunksize:
+            previous = 0
+            next_ = chunksize
+            while previous <= length_:
+                outfile += obs_gen(dataset.data.iloc[previous:next_],
+                                   dim_codes=dim_codes,
+                                   att_codes=att_codes,
+                                   measure_code=measure_code,
+                                   prettyprint=prettyprint)
+                previous = next_
+                next_ += chunksize
+
+                if next_ >= length_:
+                    outfile += obs_gen(dataset.data.iloc[previous:length_],
+                                       dim_codes=dim_codes,
+                                       att_codes=att_codes,
+                                       measure_code=measure_code,
+                                       prettyprint=prettyprint)
+                    previous = next_
+        else:
+            outfile += obs_gen(dataset.data,
+                               dim_codes=dim_codes,
+                               att_codes=att_codes,
+                               measure_code=measure_code,
+                               prettyprint=prettyprint)
     else:
         series_codes = []
         obs_codes = [dim, dataset.structure.measure_code]
@@ -423,7 +498,7 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
         outfile += ser_gen(dataset.data,
                            dim_codes=dim_codes,
                            att_codes=att_codes,
-                           measure_code=dataset.structure.measure_code,
+                           measure_code=measure_code,
                            prettyprint=prettyprint,
                            series_codes=series_codes,
                            obs_codes=obs_codes)
@@ -482,13 +557,12 @@ def obs_gen(data: pd.DataFrame,
             att_codes: list,
             measure_code: str,
             prettyprint=True):
-    data_dict = data.astype('str').replace('nan', '').to_dict(orient='records')
+    parser = lambda x: format_obs(x, dim_codes, att_codes,  # noqa: E731
+                                  measure_code, prettyprint)
 
-    out = ""
-
-    for e in data_dict:
-        out += format_obs(e, dim_codes, att_codes, measure_code, prettyprint)
-    del data_dict
+    iterator = map(parser, data.astype('str').replace('nan', '')
+                   .to_dict(orient='records'))
+    out = ''.join(iterator)
 
     return out
 
@@ -563,6 +637,8 @@ def format_ser(data: dict,
 
     out += f"{child2}</{genericAbbr}:Series>{nl}"
 
+    del data['Obs']
+
     return out
 
 
@@ -588,39 +664,22 @@ def ser_gen(data: pd.DataFrame,
     data = data.sort_values(series_codes, axis=0) \
         .astype('str').replace('nan', '')
 
-    data_dict = {}
+    data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
+        drop=True).to_dict(orient="records")}
 
-    data_dict['Series'] = data[series_codes].drop_duplicates().reset_index(
-        drop=True).to_dict(orient="records")
+    data_dict = series_process(data=data, data_dict=data_dict,
+                               series_codes=series_codes, obs_codes=obs_codes)
 
-    indexes = data[series_codes].drop_duplicates().index.tolist()
+    parser = lambda x: format_ser(data=x,  # noqa: E731
+                                  measure_code=measure_code,
+                                  series_key=series_key,
+                                  series_attr=series_att,
+                                  obs_attr=obs_att,
+                                  dim=dim,
+                                  prettyprint=prettyprint)
 
-    previous = 0
-    next_ = indexes[1]
-    count = 1
-    while count < len(indexes):
-        # Filter each datapoint and get the obs as dict
-        data_dict['Series'][count - 1]['Obs'] = data.loc[previous:next_ - 1][
-            obs_codes].to_dict(orient="records")
-        previous = next_
-        count += 1
-        if count == len(indexes):
-            data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
-                data)][obs_codes].to_dict(orient="records")
-        else:
-            next_ = indexes[count]
-
-    for e in data_dict['Series']:
-        # Filter each datapoint and get the obs as dict
-        out += format_ser(data=e,
-                          measure_code=measure_code,
-                          series_key=series_key,
-                          series_attr=series_att,
-                          obs_attr=obs_att,
-                          dim=dim,
-                          prettyprint=prettyprint)
-
-        del e['Obs']
+    iterator = map(parser, data_dict['Series'])
+    out += ''.join(iterator)
 
     del data_dict
 

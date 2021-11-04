@@ -31,11 +31,10 @@ db_path = "sdmxthon/outputTests/BIS_DER_OUTS.db"
 
 
 def main():
-    limit = 3
+    limit = 100000
     start = time()
     conn = sqlite3.connect(db_path)
-    df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn).astype(
-        'category')
+    df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn)
     dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
                              ['DataStructures'])
     dataset = Dataset(structure=dsd, data=df)
@@ -59,16 +58,31 @@ def main():
     Generic Series : {step_3 - step_2}
     Structure Specific Series: {end - step_3}
     """
+    print(message)
+    start = time()
     test1.seek(0)
     test2.seek(0)
     test3.seek(0)
     test4.seek(0)
-    sdmxthon.read_sdmx(test1.read(), True)
-    sdmxthon.read_sdmx(test2.read(), True)
-    sdmxthon.read_sdmx(test3.read(), True)
-    sdmxthon.read_sdmx(test4.read(), True)
+    sdmxthon.read_sdmx(test1.read(), False)
+    step_1 = time()
+    sdmxthon.read_sdmx(test2.read(), False)
+    step_2 = time()
+    sdmxthon.read_sdmx(test3.read(), False)
+    step_3 = time()
+    sdmxthon.read_sdmx(test4.read(), False)
+    end = time()
 
+    message = f"""
+    ------- Reading Time: ---------
+    Generic All: {step_1 - start}
+    Structure Specific All: {step_2 - step_1}
+    Generic Series : {step_3 - step_2}
+    Structure Specific Series: {end - step_3}
+    """
     print(message)
+
+    print(f"Validation: {end - start}")
 
     # df1 = read_xml(file_str_all, validate=False)['BIS:BIS_DER(1.0)']
     # df2 = read_xml(file_str_ser, validate=False)['BIS:BIS_DER(1.0)']
