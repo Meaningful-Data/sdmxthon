@@ -44,6 +44,7 @@ CODELISTS = 'Codelists'
 CONCEPTS = 'Concepts'
 DSDS = 'DataStructures'
 DATAFLOWS = 'Dataflows'
+CONSTRAINTS = 'Constraints'
 
 # Individual
 AGENCY = 'Agency'
@@ -83,6 +84,18 @@ DIM_REF = 'DimensionReference'
 # Dataflows
 DF = 'Dataflow'
 
+# Constraints
+CON_CONS = 'ContentConstraint'
+CONS_ATT = 'ConstraintAttachment'
+CUBE_REGION = 'CubeRegion'
+CONTENT_REGION = 'dataContentRegion'
+KEY = 'Key'
+KEY_VALUE = 'KeyValue'
+DATA_KEY_SET = 'DataKeySet'
+DATA_KEY_SET_LOW = 'dataKeySet'
+INCLUDED = 'isIncluded'
+INCLUDE = 'include'
+
 # Annotation
 ANNOTATION = 'Annotation'
 ANNOTATION_TITLE = 'AnnotationTitle'
@@ -91,7 +104,8 @@ ANNOTATION_TEXT = 'AnnotationText'
 ANNOTATION_URL = 'AnnotationURL'
 
 TITLE = 'title'
-TYPE = 'type_'
+TYPE_ = 'type_'
+TYPE = 'type'
 TEXT = 'text'
 URL = 'url'
 

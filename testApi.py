@@ -2,6 +2,10 @@
 import sqlite3
 from time import time
 
+import pandas as pd
+
+import sdmxthon
+from sdmxthon.model.dataset import Dataset
 from sdmxthon.parsers.new_read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
@@ -32,31 +36,31 @@ url_bis = "https://stats.bis.org/api/v1/datastructure/BIS/BIS_LBS_DISS" \
 
 
 def main():
-    # limit = 10000
-    # conn = sqlite3.connect(db_path)
-    # df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn)
-    # dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
-    #                          ['DataStructures'])
-    # dataset = Dataset(structure=dsd, data=df)
-    start = time()
-    dsd = first_element_dict(read_xml(url_bis, validate=False)
-                             ['DataStructures'])
-    dataset = read_xml(file_huge_bis, False)['BIS:BIS_LBS_DISS(1.0)']
+    limit = 100
     conn = sqlite3.connect(db_path)
-    dataset.structure = dsd
-    end = time()
-    print(f"-------- Loaded {len(dataset.data)} in {end - start} ----------")
-    dataset.data.to_sql("BIS_LBS_DISS", conn, index=False, if_exists='replace')
-    end_2 = time()
-    print(f"-------- Dump to database in {end_2 - end}")
+    df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn)
+    dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
+                             ['DataStructures'])
+    dataset = Dataset(structure=dsd, data=df)
+    # start = time()
+    # dsd = first_element_dict(read_xml(url_bis, validate=False)
+    #                          ['DataStructures'])
+    # dataset = read_xml(file_huge_bis, False)['BIS:BIS_LBS_DISS(1.0)']
+    # conn = sqlite3.connect(db_path)
+    # dataset.structure = dsd
+    # end = time()
+    # print(f"-------- Loaded {len(dataset.data)} in {end - start} ----------")
+    # dataset.data.to_sql("BIS_LBS_DISS", conn, index=False, if_exists='replace')
+    # end_2 = time()
+    # print(f"-------- Dump to database in {end_2 - end}")
 
     start = time()
-    # dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_1.xml")
+    dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_1.xml")
     step_1 = time()
     dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_2.xml")
     step_2 = time()
     dataset.set_dimension_at_observation("TIME_PERIOD")
-    # dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_3.xml")
+    dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_3.xml")
     step_3 = time()
     dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_4.xml")
     end = time()
@@ -126,19 +130,19 @@ def main():
     # end = time()
     # print(f'Old data read: {end - start}')
     #
-    # start = time()
-    # metadata1 = read_xml(file_meta_bis, validate=False)
-    # metadata2 = read_xml(file_meta_estat, validate=False)
-    # metadata5 = read_xml(file_meta_df, validate=False)
-    # end = time()
-    # print(f'New metadata read: {end - start}')
-    #
-    # start = time()
-    # meta_old1 = sdmxthon.read_sdmx(file_meta_bis, validate=False)
-    # meta_old2 = sdmxthon.read_sdmx(file_meta_estat, validate=False)
-    # meta_old5 = sdmxthon.read_sdmx(file_meta_df, validate=False)
-    # end = time()
-    # print(f'Old metadata read: {end - start}')
+    start = time()
+    metadata1 = read_xml(file_meta_bis, validate=False)
+    metadata2 = read_xml(file_meta_estat, validate=False)
+    metadata5 = read_xml(file_meta_df, validate=False)
+    end = time()
+    print(f'New metadata read: {end - start}')
+
+    start = time()
+    meta_old1 = sdmxthon.read_sdmx(file_meta_bis, validate=False)
+    meta_old2 = sdmxthon.read_sdmx(file_meta_estat, validate=False)
+    meta_old5 = sdmxthon.read_sdmx(file_meta_df, validate=False)
+    end = time()
+    print(f'Old metadata read: {end - start}')
 
 
 if __name__ == '__main__':

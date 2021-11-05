@@ -3,7 +3,8 @@ from sdmxthon.model.base import InternationalString, LocalisedString, \
 from sdmxthon.model.component import Component, Dimension, TimeDimension, \
     Attribute, PrimaryMeasure
 from sdmxthon.model.definitions import DataStructureDefinition, \
-    DataFlowDefinition
+    DataFlowDefinition, ContentConstraint, DataKeySet, \
+    MemberSelection, CubeRegion
 from sdmxthon.model.descriptors import DimensionDescriptor, \
     AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor
 from sdmxthon.model.header import Contact
@@ -17,14 +18,16 @@ from sdmxthon.utils.parsing_words import ORGS, AGENCIES, AGENCY, ID, \
     AGENCY_ID, VERSION, NAME, DESC, LANG, XML_TEXT, URI, EMAIL, ROLE, \
     DEPARTMENT, TELEPHONE, FAX, CONTACT, MAINTAINER, CODELISTS, CL, \
     CODE, CONCEPTS, CS, CON, ANNOTATIONS, ANNOTATION, ANNOTATION_TITLE, \
-    TITLE, ANNOTATION_TYPE, TYPE, ANNOTATION_TEXT, TEXT, CORE_REP, \
+    TITLE, ANNOTATION_TYPE, TYPE_, ANNOTATION_TEXT, TEXT, CORE_REP, \
     CORE_REP_LOW, ENUM, REF, XMLNS, ENUM_FORMAT, TEXT_FORMAT, \
     TEXT_TYPE, TEXT_TYPE_LOW, FACETS, DSDS, DSD, DSD_COMPS, DIM_LIST, \
     ATT_LIST, ME_LIST, GROUP, DIM_LIST_LOW, ATT_LIST_LOW, ME_LIST_LOW, DIM, \
     TIME_DIM, ATT, COMPS, CON_ID, PAR_ID, PAR_VER, CS_LOW, LOCAL_REP, \
     LOCAL_REP_LOW, ATT_REL, REL_TO, PRIM_MEASURE, DATAFLOWS, ANNOTATION_URL, \
     URL, CON_ID_LOW, PARENT, GROUP_DIM_LOW, GROUP_DIM, DIM_REF, DF, \
-    STRUCTURE, STR_URL, STR_URL_LOW, SER_URL, SER_URL_LOW
+    STRUCTURE, STR_URL, STR_URL_LOW, SER_URL, SER_URL_LOW, CONSTRAINTS, \
+    CON_CONS, CONS_ATT, DATA_KEY_SET, DATA_KEY_SET_LOW, CUBE_REGION, \
+    KEY_VALUE, KEY, VALUE, TYPE, INCLUDED, INCLUDE, CONTENT_REGION
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
@@ -55,6 +58,7 @@ agencies = {}
 codelists = {}
 concepts = {}
 datastructures = {}
+dataflows = {}
 
 
 def create_int_str(json_int) -> InternationalString:
@@ -117,7 +121,7 @@ def format_annotations(item_elem: any):
                 if ANNOTATION_TITLE in e:
                     e[TITLE] = e.pop(ANNOTATION_TITLE)
                 if ANNOTATION_TYPE in e:
-                    e[TYPE] = e.pop(ANNOTATION_TYPE)
+                    e[TYPE_] = e.pop(ANNOTATION_TYPE)
                 if ANNOTATION_TEXT in e:
                     e[TEXT] = create_int_str(e[ANNOTATION_TEXT])
                     del e[ANNOTATION_TEXT]
@@ -381,11 +385,11 @@ def create_datastructures(json_dsds):
             if XMLNS in element:
                 del element[XMLNS]
 
-            element = format_annotations(element)
-            element = format_name_description(element)
             if DSD_COMPS in element:
                 element = format_dsd_comps(element)
 
+            element = format_annotations(element)
+            element = format_name_description(element)
             full_id = unique_id(element[AGENCY_ID],
                                 element[ID],
                                 element[VERSION])
@@ -441,6 +445,120 @@ def create_dataflows(json_dfs):
     return elements
 
 
+def format_key_set(json_key_set):
+    json_key_set[KEY_VALUE] = add_list(json_key_set[KEY_VALUE])
+    key_set = {}
+    for e in json_key_set[KEY_VALUE]:
+        key_set[e[ID]] = e[VALUE]
+
+    return key_set
+
+
+def format_restrictions(json_cons) -> dict:
+    if DATA_KEY_SET in json_cons:
+        json_cons[DATA_KEY_SET] = add_list(json_cons[DATA_KEY_SET])
+        json_cons[DATA_KEY_SET_LOW] = []
+        for element in json_cons[DATA_KEY_SET]:
+            list_keys = []
+            element[KEY] = add_list(element[KEY])
+            for e in element[KEY]:
+                list_keys.append(format_key_set(e))
+
+            json_cons[DATA_KEY_SET_LOW].append(DataKeySet(keys=list_keys,
+                                                          isIncluded=element[
+                                                              INCLUDED]))
+        del json_cons[DATA_KEY_SET]
+    if CUBE_REGION in json_cons:
+        json_cons[CUBE_REGION] = add_list(json_cons[CUBE_REGION])
+        cubes = []
+        for element in json_cons[CUBE_REGION]:
+
+            is_included = element[INCLUDE]
+            keys = format_key_set(element)
+            members = []
+            for e in keys:
+                members.append(MemberSelection(is_included,
+                                               values_for=e,
+                                               sel_value=keys[e]))
+
+            cubes.append(CubeRegion(is_included=is_included, member=members))
+
+        json_cons[CONTENT_REGION] = cubes
+        del json_cons[CUBE_REGION]
+
+    return json_cons
+
+
+def create_constraints(json_cons):
+    elements = {}
+    if CON_CONS in json_cons:
+        json_cons[CON_CONS] = add_list(json_cons[CON_CONS])
+        for element in json_cons[CON_CONS]:
+            attachment = None
+            references = []
+            if XMLNS in element:
+                del element[XMLNS]
+
+            element = format_annotations(element)
+            element = format_name_description(element)
+            full_id = unique_id(element[AGENCY_ID],
+                                element[ID],
+                                element[VERSION])
+            element = format_urls(element)
+
+            element = format_maintainer(element)
+            element = format_id(element)
+
+            if CONS_ATT in element:
+                if DSD in element[CONS_ATT]:
+                    agency_id = element[CONS_ATT][DSD][REF][AGENCY_ID]
+                    id_ = element[CONS_ATT][DSD][REF][ID]
+                    version = element[CONS_ATT][DSD][REF][VERSION]
+
+                    str_id = unique_id(agency_id, id_, version)
+
+                    references = [str_id, DSD]
+
+                    if str_id in datastructures:
+                        attachment = datastructures[str_id]
+
+                elif DF in element[CONS_ATT]:
+                    agency_id = element[CONS_ATT][DF][REF][AGENCY_ID]
+                    id_ = element[CONS_ATT][DF][REF][ID]
+                    version = element[CONS_ATT][DF][REF][VERSION]
+
+                    str_id = unique_id(agency_id, id_, version)
+
+                    references = [str_id, DF]
+
+                    if str_id in dataflows:
+                        attachment = dataflows[str_id]
+                del element[CONS_ATT]
+
+            if TYPE in element:
+                element[ROLE.lower()] = element.pop(TYPE)
+
+            element = format_restrictions(element)
+
+            # Creation of Constraint
+            if full_id not in elements:
+                elements[full_id] = ContentConstraint(**element)
+            else:
+                raise Exception
+
+            if attachment is not None:
+                attachment.constraints.append(elements[full_id])
+                del attachment
+
+            # TODO Delete once we change constraints
+
+            if len(references) > 0:
+                elements[full_id]._ref_attach = references[0]
+                elements[full_id]._type_attach = references[1]
+
+    return elements
+
+
 def create_metadata(json_meta):
     # Reset dict to store metadata
     metadata = dict()
@@ -458,10 +576,14 @@ def create_metadata(json_meta):
         datastructures.update(metadata[DSDS])
     if DATAFLOWS in json_meta:
         metadata[DATAFLOWS] = create_dataflows(json_meta[DATAFLOWS])
+        dataflows.update(metadata[DATAFLOWS])
+    if CONSTRAINTS in json_meta:
+        metadata[CONSTRAINTS] = create_constraints(json_meta[CONSTRAINTS])
 
     # Reset global variables
     agencies.clear()
     concepts.clear()
     codelists.clear()
     datastructures.clear()
+    dataflows.clear()
     return metadata
