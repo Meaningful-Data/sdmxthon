@@ -2,8 +2,8 @@ from xml.parsers.expat import ExpatError
 
 import xmltodict
 
-from sdmxthon.parsers.new_data_read import create_dataset
-from sdmxthon.parsers.new_metadata_read import create_metadata
+from sdmxthon.parsers.data_read import create_dataset
+from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
     ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE

@@ -6,7 +6,7 @@ import pandas as pd
 
 import sdmxthon
 from sdmxthon.model.dataset import Dataset
-from sdmxthon.parsers.new_read import read_xml
+from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 

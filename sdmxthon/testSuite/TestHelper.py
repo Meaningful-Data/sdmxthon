@@ -11,7 +11,7 @@ from sdmxthon.api.api import read_sdmx, \
     get_datasets, get_pandas_df, xml_to_csv
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.message import Message
-from sdmxthon.parsers.new_read import read_xml
+from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 

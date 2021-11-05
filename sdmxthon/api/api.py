@@ -2,7 +2,7 @@ from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.message import Message
-from sdmxthon.parsers.new_read import read_xml
+from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 
