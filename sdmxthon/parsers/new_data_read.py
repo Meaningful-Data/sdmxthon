@@ -4,9 +4,12 @@ import numpy as np
 import pandas as pd
 
 from sdmxthon.model.dataset import Dataset
+from sdmxthon.utils.handlers import add_list
 from sdmxthon.utils.parsing_words import SERIES, OBS, ID, STRSPE, GENERIC, \
     SERIESKEY, ATTRIBUTES, VALUE, OBS_DIM, OBSVALUE, OBSKEY, DIM_OBS, \
     exc_attributes
+
+chunksize = 50000
 
 
 def get_element_to_list(data, mode):
@@ -19,9 +22,22 @@ def get_element_to_list(data, mode):
     return obs
 
 
-def reading_generic_series(dataset):
+def process_df(test_list: list, df: pd.DataFrame):
+    if len(test_list) > 0:
+        if df is not None:
+            df = pd.concat([df, pd.DataFrame(test_list)], ignore_index=True)
+        else:
+            df = pd.DataFrame(test_list)
+
+    del test_list[:]
+
+    return test_list, df
+
+
+def reading_generic_series(dataset) -> pd.DataFrame:
     # Generic Series
     test_list = []
+    df = None
     for series in dataset[SERIES]:
         keys = dict()
         # Series Keys
@@ -43,13 +59,18 @@ def reading_generic_series(dataset):
             if ATTRIBUTES in data:
                 obs = {**obs, **get_element_to_list(data, mode=ATTRIBUTES)}
             test_list.append({**keys, **obs})
+        if len(test_list) > chunksize:
+            test_list, df = process_df(test_list, df)
 
-    return test_list
+    test_list, df = process_df(test_list, df)
+
+    return df
 
 
-def reading_generic_all(dataset):
+def reading_generic_all(dataset) -> pd.DataFrame:
     # Generic All Dimensions
     test_list = []
+    df = None
     for data in dataset[OBS]:
         obs = dict()
         obs = {**obs, **get_element_to_list(data, mode=OBSKEY)}
@@ -59,21 +80,31 @@ def reading_generic_all(dataset):
             obs[OBSVALUE.upper()] = data[OBSVALUE][VALUE.lower()]
         obs = {**obs, **get_element_to_list(data, mode=ATTRIBUTES)}
         test_list.append({**obs})
+        if len(test_list) > chunksize:
+            test_list, df = process_df(test_list, df)
 
-    return test_list
+    test_list, df = process_df(test_list, df)
+
+    return df
 
 
-def reading_str_series(dataset):
+def reading_str_series(dataset) -> pd.DataFrame:
     # Structure Specific Series
     test_list = []
+    df = None
+    dataset[SERIES] = add_list(dataset[SERIES])
     for data in dataset[SERIES]:
         keys = dict(itertools.islice(data.items(), len(data) - 1))
         if not isinstance(data[OBS], list):
             data[OBS] = [data[OBS]]
         for j in data[OBS]:
             test_list.append({**keys, **j})
+        if len(test_list) > chunksize:
+            test_list, df = process_df(test_list, df)
 
-    return test_list
+    test_list, df = process_df(test_list, df)
+
+    return df
 
 
 def get_at_att_str(dataset):
@@ -96,11 +127,10 @@ def create_dataset(dataset, metadata, global_mode):
         # Parsing data
         if SERIES in dataset:
             # Structure Specific Series
-            df = pd.DataFrame(reading_str_series(dataset))
+            df = reading_str_series(dataset)
         else:
             # Structure Specific All dimensions
-            df = pd.DataFrame(dataset[OBS])
-            df.replace(np.nan, '', inplace=True)
+            df = pd.DataFrame(dataset[OBS]).replace(np.nan, '')
     elif GENERIC == global_mode:
 
         # Dataset info
@@ -109,13 +139,13 @@ def create_dataset(dataset, metadata, global_mode):
         # Parsing data
         if SERIES in dataset:
             # Generic Series
-            df = pd.DataFrame(reading_generic_series(dataset))
+            df = reading_generic_series(dataset)
             renames = {'OBSVALUE': 'OBS_VALUE',
                        'ObsDimension': metadata[DIM_OBS]}
             df.rename(columns=renames, inplace=True)
         elif OBS in dataset:
             # Generic All Dimensions
-            df = pd.DataFrame(reading_generic_all(dataset))
+            df = reading_generic_all(dataset)
             df.replace(np.nan, '', inplace=True)
             df.rename(columns={'OBSVALUE': 'OBS_VALUE'}, inplace=True)
         else:

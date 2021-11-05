@@ -109,6 +109,8 @@ def read_xml(infile, validate=True):
     except ExpatError:  # UTF-8 BOM
         result = xmltodict.parse(infile[3:], **options)
 
+    del infile
+
     datasets = parse_sdmx(result)
     return datasets
 

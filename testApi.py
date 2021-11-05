@@ -2,10 +2,6 @@
 import sqlite3
 from time import time
 
-import pandas as pd
-
-import sdmxthon
-from sdmxthon.model.dataset import Dataset
 from sdmxthon.parsers.new_read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
@@ -27,62 +23,83 @@ file_meta_estat = "sdmxthon/testSuite/metadataFromDiferentSources/data" \
 file_meta_rbi = "sdmxthon/outputTests/DSD_28APRIL21_updated.xml"
 file_meta_df = "sdmxthon/outputTests/metadata.xml"
 file_big_bis = "sdmxthon/outputTests/BIS_DER.xml"
+file_huge_bis = "sdmxthon/outputTests/out.xml"
+file_test_bis = "sdmxthon/outputTests/test_huge.xml"
 db_path = "sdmxthon/outputTests/BIS_DER_OUTS.db"
+
+url_bis = "https://stats.bis.org/api/v1/datastructure/BIS/BIS_LBS_DISS" \
+          "/1.0?references=all"
 
 
 def main():
-    limit = 100000
+    # limit = 10000
+    # conn = sqlite3.connect(db_path)
+    # df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn)
+    # dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
+    #                          ['DataStructures'])
+    # dataset = Dataset(structure=dsd, data=df)
     start = time()
-    conn = sqlite3.connect(db_path)
-    df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn)
-    dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
+    dsd = first_element_dict(read_xml(url_bis, validate=False)
                              ['DataStructures'])
-    dataset = Dataset(structure=dsd, data=df)
+    dataset = read_xml(file_huge_bis, False)['BIS:BIS_LBS_DISS(1.0)']
+    conn = sqlite3.connect(db_path)
+    dataset.structure = dsd
     end = time()
-    print(f"-------- Loaded {limit} in {end - start} ----------")
+    print(f"-------- Loaded {len(dataset.data)} in {end - start} ----------")
+    dataset.data.to_sql("BIS_LBS_DISS", conn, index=False, if_exists='replace')
+    end_2 = time()
+    print(f"-------- Dump to database in {end_2 - end}")
 
     start = time()
-    test1 = dataset.to_xml(MessageTypeEnum.GenericDataSet)
+    # dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_1.xml")
     step_1 = time()
-    test2 = dataset.to_xml(MessageTypeEnum.StructureDataSet)
+    dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_2.xml")
     step_2 = time()
     dataset.set_dimension_at_observation("TIME_PERIOD")
-    test3 = dataset.to_xml(MessageTypeEnum.GenericDataSet)
+    # dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_3.xml")
     step_3 = time()
-    test4 = dataset.to_xml(MessageTypeEnum.StructureDataSet)
+    dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_4.xml")
     end = time()
     message = f"""
-    ------- Time: ---------
+    ------- Writing Time: ---------
     Generic All: {step_1 - start}
     Structure Specific All: {step_2 - step_1}
     Generic Series : {step_3 - step_2}
     Structure Specific Series: {end - step_3}
     """
     print(message)
-    start = time()
-    test1.seek(0)
-    test2.seek(0)
-    test3.seek(0)
-    test4.seek(0)
-    sdmxthon.read_sdmx(test1.read(), False)
-    step_1 = time()
-    sdmxthon.read_sdmx(test2.read(), False)
-    step_2 = time()
-    sdmxthon.read_sdmx(test3.read(), False)
-    step_3 = time()
-    sdmxthon.read_sdmx(test4.read(), False)
-    end = time()
-
-    message = f"""
-    ------- Reading Time: ---------
-    Generic All: {step_1 - start}
-    Structure Specific All: {step_2 - step_1}
-    Generic Series : {step_3 - step_2}
-    Structure Specific Series: {end - step_3}
-    """
-    print(message)
-
-    print(f"Validation: {end - start}")
+    #
+    # del df
+    # del dsd
+    # del dataset
+    #
+    # start = time()
+    # test1 = read_xml("./test_1.xml", False)['BIS:BIS_DER(1.0)']
+    # step_1 = time()
+    # test2 =read_xml("./test_2.xml", False)['BIS:BIS_DER(1.0)']
+    # step_2 = time()
+    # test3 =read_xml("./test_3.xml", False)['BIS:BIS_DER(1.0)']
+    # step_3 = time()
+    # test4 =read_xml("./test_4.xml", False)['BIS:BIS_DER(1.0)']
+    # end = time()
+    #
+    # pd.testing.assert_frame_equal(test1.data.sort_index(axis=1),
+    #                               test2.data.sort_index(axis=1))
+    # pd.testing.assert_frame_equal(test2.data.sort_index(axis=1),
+    #                               test3.data.sort_index(axis=1))
+    # pd.testing.assert_frame_equal(test3.data.sort_index(axis=1),
+    #                               test4.data.sort_index(axis=1))
+    #
+    # message = f"""
+    # ------- Reading Time: ---------
+    # Generic All: {step_1 - start}
+    # Structure Specific All: {step_2 - step_1}
+    # Generic Series : {step_3 - step_2}
+    # Structure Specific Series: {end - step_3}
+    # """
+    # print(message)
+    #
+    # print(f"Validation: {end - start}")
 
     # df1 = read_xml(file_str_all, validate=False)['BIS:BIS_DER(1.0)']
     # df2 = read_xml(file_str_ser, validate=False)['BIS:BIS_DER(1.0)']

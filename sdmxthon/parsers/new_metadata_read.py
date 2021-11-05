@@ -48,6 +48,7 @@ comp_lists_items = {DIM_LIST: [DIM, TIME_DIM],
 
 dimensions = {}
 measures = {}
+groups = {}
 
 # Global dict to be used in all elements
 agencies = {}
@@ -282,6 +283,9 @@ def format_relationship(json_rel, node=DIM):
     elif PRIM_MEASURE in json_rel:
         if json_rel[PRIM_MEASURE][REF][ID] in measures:
             rels = measures[json_rel[PRIM_MEASURE][REF][ID]]
+    elif GROUP in json_rel:
+        if json_rel[GROUP][REF][ID] in groups:
+            rels = groups[json_rel[GROUP][REF][ID]]
     else:
         rels = 'NoSpecifiedRelationship'
     return rels
@@ -342,23 +346,23 @@ def format_group_dim(json_group):
         json_group[COMPS] = None
 
     del json_group[GROUP_DIM]
+    groups.update({json_group[ID]: json_group[COMPS]})
     json_group = format_id(json_group)
 
     return GroupDimensionDescriptor(**json_group)
 
 
 def format_dsd_comps(json_comps):
-    node = [DIM_LIST, ME_LIST, ATT_LIST]
+    node = [DIM_LIST, ME_LIST, GROUP, ATT_LIST]
     comps = json_comps[DSD_COMPS]
     for e in node:
-        if e in comps:
+        if e == GROUP and e in comps:
+            json_comps[GROUP_DIM_LOW] = format_group_dim(comps[GROUP])
+        elif e in comps:
             name = comp_lists_names[e]
             json_comps[name] = format_component_lists(comps[e],
                                                       comp_lists_classes[e],
                                                       comp_lists_items[e])
-
-    if GROUP in comps:
-        json_comps[GROUP_DIM_LOW] = format_group_dim(comps[GROUP])
 
     del json_comps[DSD_COMPS]
 
@@ -373,6 +377,7 @@ def create_datastructures(json_dsds):
         for element in json_dsds[DSD]:
             dimensions.clear()
             measures.clear()
+            groups.clear()
             if XMLNS in element:
                 del element[XMLNS]
 
