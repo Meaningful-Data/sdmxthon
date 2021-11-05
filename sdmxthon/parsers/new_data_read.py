@@ -134,7 +134,10 @@ def create_dataset(dataset, metadata, global_mode):
     elif GENERIC == global_mode:
 
         # Dataset info
-        attached_attributes = get_at_att_gen(dataset)
+        if ATTRIBUTES in dataset:
+            attached_attributes = get_at_att_gen(dataset)
+        else:
+            attached_attributes = {}
 
         # Parsing data
         if SERIES in dataset:

@@ -6,8 +6,7 @@ from io import StringIO
 from typing import Dict
 
 from sdmxthon.model.dataset import Dataset
-from sdmxthon.model.header import Party, Sender
-from sdmxthon.parsers.message_parsers import Header, Structures
+from sdmxthon.model.header import Party, Sender, Header
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 
@@ -28,7 +27,7 @@ class Message:
     """
 
     def __init__(self, message_type: MessageTypeEnum,
-                 payload: (Structures, Dict[str, Dataset], Dataset),
+                 payload: (Dict[str, dict], Dict[str, Dataset], Dataset),
                  header: Header = None):
         self._type = message_type
         self._payload = payload
@@ -51,12 +50,6 @@ class Message:
 
     @type.setter
     def type(self, value):
-        if not isinstance(value, MessageTypeEnum):
-            raise TypeError('Type must be a MessageTypeEnum')
-        if isinstance(self.payload,
-                      Structures) and value != MessageTypeEnum.Metadata:
-            raise ValueError('On a Structures Payload, '
-                             'Type can only be MessageTypeEnum.Metadata')
         self._type = value
 
     @property
@@ -75,9 +68,9 @@ class Message:
 
     @payload.setter
     def payload(self, value):
-        if not isinstance(value, (Structures, dict, Dataset)):
+        if not isinstance(value, (dict, Dataset)):
             raise TypeError('Payload must be a DataSet, '
-                            'a dict of DataSet or a Structures object')
+                            'a dict of DataSet or Metadata')
         self._payload = value
 
     @property
@@ -87,22 +80,8 @@ class Message:
         :class: `Dict`
 
         """
-        if isinstance(self.payload, Structures):
-            content = {}
-            if self.payload.codelists is not None:
-                content['codelists'] = self.payload.codelists
-            if self.payload.concepts is not None:
-                content['concepts'] = self.payload.concepts
-            if self.payload.constraints is not None:
-                content['constraints'] = self.payload.constraints
-            if self.payload.dataflows is not None:
-                content['dataflows'] = self.payload.dataflows
-            if self.payload.dsds is not None:
-                content['dsds'] = self.payload.dsds
-            if self.payload.organisations is not None:
-                content['organisations'] = self.payload.organisations
-
-            return content
+        if isinstance(self.payload, dict):
+            return self.payload
         elif isinstance(self.payload, Dataset):
             return {'datasets': {self.payload.unique_id, self.payload}}
         else:

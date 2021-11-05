@@ -10,24 +10,19 @@ from sdmxthon.model.base import MaintainableArtefact, \
     InternationalString
 from sdmxthon.model.component import Component
 from sdmxthon.model.descriptors import ComponentList, DimensionDescriptor, \
-    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor, \
-    StructureType, DataStructureComponentType
+    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor
 from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
 from sdmxthon.model.utils import generic_setter, ConstraintRoleType, \
     bool_setter
-from sdmxthon.parsers.data_parser import DataParser
 from sdmxthon.utils.handlers import export_intern_data, add_indent, \
     split_unique_id
 from sdmxthon.utils.mappings import structureAbbr, Data_Types_VTL, commonAbbr
-from sdmxthon.utils.xml_base import find_attr_value_
 
 
-class MemberSelection(DataParser):
+class MemberSelection(object):
 
     def __init__(self, is_included: bool = False,
-                 values_for: Component = None, sel_value: list = None,
-                 gds_collector=None):
-        super(MemberSelection, self).__init__(gds_collector_=gds_collector)
+                 values_for: Component = None, sel_value: list = None):
         self.is_included = is_included
         self.values_for = values_for
         self.sel_value = []
@@ -63,32 +58,11 @@ class MemberSelection(DataParser):
     def is_included(self, value):
         self._is_included = bool_setter(value)
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._values_for = value
 
-        value = find_attr_value_('include', node)
-        if value is not None and 'include' not in already_processed:
-            already_processed.add('include')
-            value = self._gds_parse_boolean(value)
-            self.is_included = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-
-        if nodeName_ == 'Value':
-            self.sel_value.append(child_.text)
-
-
-class CubeRegion(DataParser):
+class CubeRegion(object):
 
     def __init__(self, is_included: bool = False,
-                 member: List[MemberSelection] = None, gds_collector=None):
-        super(CubeRegion, self).__init__(gds_collector_=gds_collector)
+                 member: List[MemberSelection] = None):
         self.is_included = is_included
 
         self.member = member
@@ -113,25 +87,6 @@ class CubeRegion(DataParser):
     @is_included.setter
     def is_included(self, value):
         self._is_included = bool_setter(value)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        value = find_attr_value_('include', node)
-        if value is not None and 'include' not in already_processed:
-            already_processed.add('include')
-            value = self._gds_parse_boolean(value)
-            self.is_included = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-
-        if nodeName_ == 'KeyValue':
-            obj_ = MemberSelection._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if self.member is None:
-                self.member = []
-            self.member.append(obj_)
 
 
 class MetadataTargetRegion:
@@ -169,12 +124,9 @@ class MetadataTargetRegion:
         self._isIncluded = generic_setter(value, bool)
 
 
-class DataKeySet(DataParser):
+class DataKeySet(object):
 
-    def __init__(self, keys: list = None, isIncluded: bool = None,
-                 gds_collector=None):
-        super(DataKeySet, self).__init__(gds_collector_=gds_collector)
-
+    def __init__(self, keys: list = None, isIncluded: bool = None):
         self.keys = []
 
         if keys is not None:
@@ -202,28 +154,6 @@ class DataKeySet(DataParser):
     @is_included.setter
     def is_included(self, value):
         self._isIncluded = bool_setter(value)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._valuesFor = value
-
-        value = find_attr_value_('isIncluded', node)
-        if value is not None and 'isIncluded' not in already_processed:
-            already_processed.add('isIncluded')
-            value = self._gds_parse_boolean(value)
-            self.is_included = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-
-        if nodeName_ == 'Key':
-            obj_ = KeySetType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.keys.append(obj_.key)
 
 
 class Constraint(MaintainableArtefact):
@@ -325,91 +255,14 @@ class Constraint(MaintainableArtefact):
     def type_attach(self):
         return self._type_attach
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(Constraint, self)._build_attributes(node, attrs,
-                                                  already_processed)
 
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(Constraint, self)._build_children(child_, node, nodeName_,
-                                                fromsubclass_, gds_collector_)
-
-        if nodeName_ == 'ConstraintAttachment':
-            obj_ = AttachmentConstraintType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._ref_attach = obj_.ref
-            self._type_attach = obj_.type_
-
-        elif nodeName_ == 'CubeRegion':
-            obj_ = CubeRegion._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.data_content_region.append(obj_)
-
-        elif nodeName_ == 'DataKeySet':
-            obj_ = DataKeySet._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if self.data_content_keys is None:
-                self.data_content_keys = []
-            self.data_content_keys.append(obj_)
-
-
-class AttachmentConstraintType(DataParser):
-
-    def __init__(self, gds_collector=None):
-        super(AttachmentConstraintType, self).__init__(
-            gds_collector_=gds_collector)
-        self._ref = None
-        self._type = None
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of AttachmentConstraintType"""
-        return AttachmentConstraintType(*args_, **kwargs_)
-
-    @property
-    def ref(self):
-        return self._ref
-
-    @property
-    def type_(self):
-        return self._type
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-
-        if nodeName_ == 'Dataflow' or nodeName_ == 'DataStructure':
-            obj_ = StructureType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._ref = obj_.ref
-            self._type = nodeName_
-
-
-class KeySetType(DataParser):
-    def __init__(self, gds_collector=None):
-        super(KeySetType, self).__init__(gds_collector_=gds_collector)
-
+class KeySetType(object):
+    def __init__(self):
         self._key = {}
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of KeySetType"""
-        return KeySetType(*args_, **kwargs_)
 
     @property
     def key(self):
         return self._key
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-
-        if nodeName_ == 'KeyValue':
-            obj_ = MemberSelection._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._key[obj_.values_for] = obj_.sel_value[0]
 
 
 class ContentConstraint(Constraint):
@@ -455,11 +308,6 @@ class ContentConstraint(Constraint):
                              '"allowableContent" or "actualContent"')
         self._role = role
 
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of ContentConstraint"""
-        return ContentConstraint(*args_, **kwargs_)
-
     @property
     def role(self):
         return self._role
@@ -471,23 +319,6 @@ class ContentConstraint(Constraint):
                              '"Allowed" or "Actual"')
         else:
             self._role = value
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(ContentConstraint, self)._build_attributes(node, attrs,
-                                                         already_processed)
-
-        value = find_attr_value_('type', node)
-        if value is not None and 'type' not in already_processed:
-            already_processed.add('type')
-            self.role = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(ContentConstraint, self)._build_children(child_, node, nodeName_,
-                                                       fromsubclass_,
-                                                       gds_collector_)
 
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
@@ -626,11 +457,6 @@ class DataStructureDefinition(MaintainableArtefact):
     def __repr__(self):
         return '<DataStructureDefinition  - %s:%s(%s)>' % (
             self.agencyID, self.id, self.version)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of DataStructureDefinition"""
-        return DataStructureDefinition(*args_, **kwargs_)
 
     @property
     def dimension_descriptor(self):
@@ -836,26 +662,6 @@ class DataStructureDefinition(MaintainableArtefact):
         else:
             return result
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(DataStructureDefinition, self). \
-            _build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(DataStructureDefinition, self). \
-            _build_children(child_, node, nodeName_, fromsubclass_,
-                            gds_collector_)
-
-        if nodeName_ == 'DataStructureComponents':
-            obj_ = DataStructureComponentType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.attribute_descriptor = obj_.attributeDescriptor
-            self.dimension_descriptor = obj_.dimensionDescriptor
-            self.measure_descriptor = obj_.measureDescriptor
-            self.group_dimension_descriptor = obj_.groupDimensionDescriptor
-
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
 
@@ -963,23 +769,6 @@ class DataFlowDefinition(MaintainableArtefact):
         if self._constraints is None:
             self._constraints = []
         self._constraints.append(value)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(DataFlowDefinition, self)._build_attributes(node, attrs,
-                                                          already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(DataFlowDefinition, self)._build_children(child_, node,
-                                                        nodeName_,
-                                                        fromsubclass_=False,
-                                                        gds_collector_=None)
-        if nodeName_ == 'Structure':
-            obj_ = StructureType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._structure = obj_.ref
 
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''

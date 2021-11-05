@@ -16,14 +16,14 @@
   {
     "Code": "MS04",
     "ErrorLevel": "CRITICAL",
-    "ObjectID": "MD:DS1(1.0)-AttributeDescriptor",
+    "ObjectID": "MD:DS1(1.0)",
     "ObjectType": "Attribute",
     "Message": "Missing Dimension TEST_ERROR related to Attribute TEST_ATTR_2"
   },
   {
     "Code": "MS05",
     "ErrorLevel": "CRITICAL",
-    "ObjectID": "MD:DS1(1.0)-AttributeDescriptor",
+    "ObjectID": "MD:DS1(1.0)",
     "ObjectType": "Attribute",
     "Message": "Missing Primary Measure TEST_ERROR related to Attribute TEST_ATTR_1"
   },

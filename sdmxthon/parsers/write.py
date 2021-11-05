@@ -6,7 +6,6 @@ import pandas as pd
 from sdmxthon.model.component import PrimaryMeasure
 from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
-from sdmxthon.parsers.message_parsers import Structures
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
@@ -216,8 +215,10 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
                                       record.dim_at_obs)
         else:
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
-    elif dType == MessageTypeEnum.Metadata and isinstance(payload, Structures):
-        outfile += payload.to_XML(prettyprint)
+    elif dType == MessageTypeEnum.Metadata:
+        # TODO Write to metadata ??
+        if len(payload) > 0:
+            outfile += payload.to_XML(prettyprint)
     outfile += f'</{messageAbbr}:{data_type_string}>'
 
     if path != '':

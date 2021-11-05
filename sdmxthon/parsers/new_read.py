@@ -1,9 +1,5 @@
-import os
-from io import BytesIO
 from xml.parsers.expat import ExpatError
 
-import requests
-import validators
 import xmltodict
 
 from sdmxthon.parsers.new_data_read import create_dataset
@@ -11,7 +7,8 @@ from sdmxthon.parsers.new_metadata_read import create_metadata
 from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
     ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE
-from sdmxthon.utils.xml_base import parse_xml, validate_doc
+from sdmxthon.utils.xml_base import validate_doc, \
+    process_string_to_read
 
 options = {'process_namespaces': True,
            'namespaces': namespaces,
@@ -48,7 +45,7 @@ def parse_sdmx(result):
                 else:
                     metadata = get_dataset_metadata(structures[str_ref],
                                                     str_ref,
-                                                    mode=SERIES)
+                                                    mode=OBS)
                 ds = create_dataset(single_dataset, metadata,
                                     global_mode)
                 datasets[metadata[STRID]] = ds
@@ -68,48 +65,25 @@ def parse_sdmx(result):
     return datasets
 
 
-def read_xml(infile, validate=True):
+def read_xml(infile, mode=None, validate=True):
+    infile = process_string_to_read(infile)
+
     if validate:
-        doc = parse_xml(infile, None)
-        validate_doc(doc)
-
-    if isinstance(infile, str):
-        if validators.url(infile):
-            try:
-                response = requests.get(infile)
-                if response.status_code == 400:
-                    raise requests.ConnectionError(
-                        f'Invalid URL. Response from server: {response.text}')
-                infile = BytesIO(response.content)
-            except requests.ConnectionError:
-                raise requests.ConnectionError('Invalid URL. '
-                                               'No response from server')
-        elif infile[0] == '<':
-            infile = BytesIO(bytes(infile, 'utf-8'))
-        elif '/' in infile or '\\' in infile:
-            try:
-                infile = os.path.join(infile)
-                with open(infile, "r", errors='ignore') as f:
-                    infile = f.read()
-            except AttributeError:
-                infile = BytesIO(bytes(infile, 'utf-8'))
-        else:
-            raise ValueError(f'Unable to parse {infile}')
-    else:
-        if isinstance(infile, os.PathLike):
-            try:
-                infile = os.path.join(infile)
-                with open(infile, "r", errors='replace') as f:
-                    infile = f.read()
-            except AttributeError:
-                pass
-
+        validate_doc(infile)
     try:
         result = xmltodict.parse(infile, **options)
     except ExpatError:  # UTF-8 BOM
         result = xmltodict.parse(infile[3:], **options)
 
     del infile
+
+    if mode is not None:
+        if mode == "Data" and STRUCTURE in result:
+            raise TypeError("Unable to parse metadata file as data file")
+        elif mode == "Metadata" and (STRSPE in result or GENERIC in result):
+            raise TypeError("Unable to parse data file as metadata file")
+        elif mode not in ["Data", "Metadata"]:
+            raise ValueError("Wrong mode")
 
     datasets = parse_sdmx(result)
     return datasets
