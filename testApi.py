@@ -4,8 +4,8 @@ from time import time
 
 import pandas as pd
 
+from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.dataset import Dataset
-from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 
@@ -36,10 +36,10 @@ url_bis = "https://stats.bis.org/api/v1/datastructure/BIS/BIS_LBS_DISS" \
 
 def main():
     start = time()
-    limit = 1000000
+    limit = 110000
     conn = sqlite3.connect(db_path)
-    df = pd.read_sql(f'SELECT * from main.BIS_DER LIMIT {limit}', conn)
-    dsd = first_element_dict(read_xml(file_meta_bis, validate=False)
+    df = pd.read_sql(f'SELECT * from main.BIS_LBS_DISS LIMIT {limit}', conn)
+    dsd = first_element_dict(read_sdmx(url_bis, validate=False).payload
                              ['DataStructures'])
     dataset = Dataset(structure=dsd, data=df)
     end = time()
@@ -49,23 +49,25 @@ def main():
     # dataset = read_xml(file_huge_bis, False)['BIS:BIS_LBS_DISS(1.0)']
     # conn = sqlite3.connect(db_path)
     # dataset.structure = dsd
-    # dataset.data.to_sql("BIS_LBS_DISS", conn, index=False, if_exists='replace')
+    # dataset.data.to_sql("BIS_LBS_DISS", conn, index=False,
+    # if_exists='replace')
     # end_2 = time()
     # print(f"-------- Dump to database in {end_2 - end}")
 
     start = time()
-    # dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_1.xml")
+    dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_1.xml")
     step_1 = time()
-    # dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_2.xml")
+    dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_2.xml")
     step_2 = time()
     dataset.set_dimension_at_observation("TIME_PERIOD")
-    dataset.to_xml(MessageTypeEnum.GenericDataSet)
+    dataset.to_xml(MessageTypeEnum.GenericDataSet, outputPath="test_3.xml")
     step_3 = time()
-    dataset.to_xml(MessageTypeEnum.StructureDataSet)
+    dataset.to_xml(MessageTypeEnum.StructureDataSet, outputPath="test_4.xml")
     end = time()
     # test4 = read_sdmx("./test_4.xml", False).payload['BIS:BIS_DER(1.0)']
     # pd.testing.assert_frame_equal(dataset.data.astype(str).sort_index(axis=1),
-    #                               test4.data.sort_index(axis=1), check_dtype=False)
+    #                               test4.data.sort_index(axis=1),
+    #                               check_dtype=False)
     message = f"""
     ------- Writing Time: ---------
     Generic All: {step_1 - start}
@@ -78,32 +80,36 @@ def main():
     # del df
     # del dsd
     # del dataset
-    #
-    # start = time()
-    # test1 = read_xml("./test_1.xml", False)['BIS:BIS_DER(1.0)']
-    # step_1 = time()
-    # test2 =read_xml("./test_2.xml", False)['BIS:BIS_DER(1.0)']
-    # step_2 = time()
-    # test3 =read_xml("./test_3.xml", False)['BIS:BIS_DER(1.0)']
-    # step_3 = time()
-    # test4 =read_xml("./test_4.xml", False)['BIS:BIS_DER(1.0)']
-    # end = time()
-    #
-    # pd.testing.assert_frame_equal(test1.data.sort_index(axis=1),
-    #                               test2.data.sort_index(axis=1))
-    # pd.testing.assert_frame_equal(test2.data.sort_index(axis=1),
-    #                               test3.data.sort_index(axis=1))
-    # pd.testing.assert_frame_equal(test3.data.sort_index(axis=1),
-    #                               test4.data.sort_index(axis=1))
-    #
-    # message = f"""
-    # ------- Reading Time: ---------
-    # Generic All: {step_1 - start}
-    # Structure Specific All: {step_2 - step_1}
-    # Generic Series : {step_3 - step_2}
-    # Structure Specific Series: {end - step_3}
-    # """
-    # print(message)
+
+    start = time()
+    test1 = first_element_dict(read_sdmx("./test_1.xml", False).payload)
+    step_1 = time()
+    test2 = first_element_dict(read_sdmx("./test_2.xml", False).payload)
+    step_2 = time()
+    test3 = first_element_dict(read_sdmx("./test_3.xml", False).payload)
+    step_3 = time()
+    test4 = first_element_dict(read_sdmx("./test_4.xml", False).payload)
+    end = time()
+
+    message = f"""
+    ------- Reading Time: ---------
+    Generic All: {step_1 - start}
+    Structure Specific All: {step_2 - step_1}
+    Generic Series : {step_3 - step_2}
+    Structure Specific Series: {end - step_3}
+    """
+    print(message)
+
+    pd.testing.assert_frame_equal(dataset.data.astype(str).sort_index(axis=1),
+                                  test4.data.sort_index(axis=1),
+                                  check_dtype=False)
+    pd.testing.assert_frame_equal(test1.data.sort_index(axis=1),
+                                  test2.data.sort_index(axis=1))
+    pd.testing.assert_frame_equal(test2.data.sort_index(axis=1),
+                                  test3.data.sort_index(axis=1))
+    pd.testing.assert_frame_equal(test3.data.sort_index(axis=1),
+                                  test4.data.sort_index(axis=1))
+
     #
     # print(f"Validation: {end - start}")
 

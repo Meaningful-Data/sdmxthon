@@ -18,7 +18,9 @@ def process_string_to_read(infile: str):
                 if response.status_code == 400:
                     raise requests.ConnectionError(
                         f'Invalid URL. Response from server: {response.text}')
-                infile = BytesIO(response.content)
+                infile = io.TextIOWrapper(BytesIO(response.content),
+                                          encoding='UTF-8',
+                                          errors="replace").read()
             except requests.ConnectionError:
                 raise requests.ConnectionError('Invalid URL. '
                                                'No response from server')

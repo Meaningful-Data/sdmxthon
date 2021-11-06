@@ -38,6 +38,7 @@ def reading_generic_series(dataset) -> pd.DataFrame:
     # Generic Series
     test_list = []
     df = None
+    dataset[SERIES] = add_list(dataset[SERIES])
     for series in dataset[SERIES]:
         keys = dict()
         # Series Keys
@@ -71,6 +72,7 @@ def reading_generic_all(dataset) -> pd.DataFrame:
     # Generic All Dimensions
     test_list = []
     df = None
+    dataset[OBS] = add_list(dataset[OBS])
     for data in dataset[OBS]:
         obs = dict()
         obs = {**obs, **get_element_to_list(data, mode=OBSKEY)}

@@ -10,6 +10,8 @@ from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
 
+chunksize = 100000
+
 """
      --------------------------------------------
     |                                            |
@@ -256,7 +258,8 @@ def series_process(parser, data, data_dict, series_codes, obs_codes):
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     outfile = ''
 
-    dataset.data = dataset.data.dropna(axis=1, how="all")
+    dataset.data = dataset.data.dropna(axis=1, how="all").astype('str') \
+        .replace('nan', '')
 
     if prettyprint:
         child1 = '\t'
@@ -280,7 +283,6 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
 
     if dim == "AllDimensions":
 
-        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
@@ -340,8 +342,7 @@ def obs_str(data: pd.DataFrame,
             prettyprint=True) -> str:
     parser = lambda x: format_obs_str(x, prettyprint)  # noqa: E731
 
-    iterator = map(parser, data.astype('str').replace('nan', '').to_dict(
-        orient='records'))
+    iterator = map(parser, data.to_dict(orient='records'))
     out = ''.join(iterator)
 
     for c in codes:
@@ -385,12 +386,12 @@ def ser_str(data: pd.DataFrame,
             obs_codes: list,
             prettyprint=True) -> str:
     # Getting each datapoint from data and creating dict
-    data = data.sort_values(series_codes, axis=0) \
-        .astype('str').replace('nan', '')
+    data = data.sort_values(series_codes, axis=0)
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    parser = lambda x: format_ser_str(data=x, prettyprint=prettyprint)
+    parser = lambda x: format_ser_str(data=x,  # noqa: E731
+                                      prettyprint=prettyprint)
 
     out = series_process(parser=parser, data=data, data_dict=data_dict,
                          series_codes=series_codes, obs_codes=obs_codes)
@@ -439,8 +440,6 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
-
-        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
