@@ -230,22 +230,18 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         return f
 
 
-count = 0
+def format_dict_ser(out, parser, data_dict, obs):
+    data_dict['Series'][0]['Obs'] = obs.to_dict(orient="records")
+    out.append(parser(data_dict['Series'][0]))
+    del data_dict['Series'][0]
 
 
-def format_dict_ser(data_dict, obs):
-    global count
-    data_dict['Series'][count]['Obs'] = obs.to_dict(orient="records")
-    count += 1
-
-
-def series_process(data, data_dict, series_codes, obs_codes):
+def series_process(parser, data, data_dict, series_codes, obs_codes):
+    out = []
     data.groupby(by=series_codes)[obs_codes].apply(
-        lambda x: format_dict_ser(data_dict, x))
-    global count
-    count = 0
+        lambda x: format_dict_ser(out, parser, data_dict, x))
 
-    return data_dict
+    return ''.join(out)
 
 
 """
@@ -394,13 +390,10 @@ def ser_str(data: pd.DataFrame,
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    data_dict = series_process(data=data, data_dict=data_dict,
-                               series_codes=series_codes, obs_codes=obs_codes)
+    parser = lambda x: format_ser_str(data=x, prettyprint=prettyprint)
 
-    parser = lambda x: format_ser_str(x, prettyprint)  # noqa: E731
-
-    iterator = map(parser, data_dict['Series'])
-    out = ''.join(iterator)
+    out = series_process(parser=parser, data=data, data_dict=data_dict,
+                         series_codes=series_codes, obs_codes=obs_codes)
 
     for c in opt_att_codes:
         out = out.replace(f'{c}="" ', '')
@@ -642,9 +635,6 @@ def ser_gen(data: pd.DataFrame,
             series_codes: list,
             prettyprint=True):
     # Getting each datapoint from data and creating dict
-
-    out = ""
-
     series_key = [v for v in series_codes if v in dim_codes]
     series_att = [v for v in series_codes if v in att_codes]
     dim = obs_codes[0]
@@ -659,9 +649,6 @@ def ser_gen(data: pd.DataFrame,
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    data_dict = series_process(data=data, data_dict=data_dict,
-                               series_codes=series_codes, obs_codes=obs_codes)
-
     parser = lambda x: format_ser(data=x,  # noqa: E731
                                   measure_code=measure_code,
                                   series_key=series_key,
@@ -669,9 +656,8 @@ def ser_gen(data: pd.DataFrame,
                                   obs_attr=obs_att,
                                   dim=dim,
                                   prettyprint=prettyprint)
-
-    iterator = map(parser, data_dict['Series'])
-    out += ''.join(iterator)
+    out = series_process(parser=parser, data=data, data_dict=data_dict,
+                         series_codes=series_codes, obs_codes=obs_codes)
 
     del data_dict
 
