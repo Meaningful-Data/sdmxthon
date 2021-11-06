@@ -230,29 +230,20 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         return f
 
 
+count = 0
+
+
+def format_dict_ser(data_dict, obs):
+    global count
+    data_dict['Series'][count]['Obs'] = obs.to_dict(orient="records")
+    count += 1
+
+
 def series_process(data, data_dict, series_codes, obs_codes):
-    indexes = data[series_codes].drop_duplicates().index.tolist()
-
-    if len(indexes) > 1:
-        previous = 0
-        next_ = indexes[1]
-        count = 1
-        while count < len(indexes):
-            # Filter each datapoint and get the obs as dict
-            data_dict['Series'][count - 1]['Obs'] = \
-                data.loc[previous:next_ - 1][
-                    obs_codes].to_dict(orient="records")
-            previous = next_
-            count += 1
-            if count == len(indexes):
-                data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
-                    data)][obs_codes].to_dict(orient="records")
-            else:
-                next_ = indexes[count]
-
-    elif len(indexes) == 1:
-        data_dict['Series'][0]['Obs'] = data.loc[0:1][
-            obs_codes].to_dict(orient="records")
+    data.groupby(by=series_codes)[obs_codes].apply(
+        lambda x: format_dict_ser(data_dict, x))
+    global count
+    count = 0
 
     return data_dict
 
@@ -398,8 +389,8 @@ def ser_str(data: pd.DataFrame,
             obs_codes: list,
             prettyprint=True) -> str:
     # Getting each datapoint from data and creating dict
-    data = data.sort_values(series_codes, axis=0).astype('str') \
-        .replace('nan', '')
+    data = data.sort_values(series_codes, axis=0) \
+        .astype('str').replace('nan', '')
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 

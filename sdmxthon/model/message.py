@@ -135,7 +135,7 @@ class Message:
             :type datetimeStr: str Format:  '%Y-%m-%dT%H:%M:%S'
         """
         header = Header(ID=id_)
-        header.test = header._gds_format_boolean(test)
+        header.test = test
         if datetimeStr == '':
             header.prepared = datetime.now()
         else:
