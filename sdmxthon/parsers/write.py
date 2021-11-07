@@ -143,6 +143,11 @@ def write_from_header(header, prettyprint):
     return outfile
 
 
+def process_dataset(dataset):
+    dataset.data = dataset.data.fillna(value='')
+    return dataset
+
+
 def writer(path, payload, dType, prettyprint=True, id_='test',
            test='true',
            prepared=datetime.now(),
@@ -205,17 +210,21 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     if dType == MessageTypeEnum.GenericDataSet:
         if isinstance(payload, dict):
             for record in payload.values():
+                record = process_dataset(record)
                 outfile += genWriting(record, prettyprint, record.dim_at_obs)
         else:
+            payload = process_dataset(payload)
             outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif dType == MessageTypeEnum.StructureDataSet:
         if isinstance(payload, dict):
             count = 0
             for record in payload.values():
                 count += 1
+                record = process_dataset(record)
                 outfile += strWriting(record, prettyprint, count,
                                       record.dim_at_obs)
         else:
+            payload = process_dataset(payload)
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif dType == MessageTypeEnum.Metadata:
         # TODO Write to metadata ??
@@ -257,9 +266,6 @@ def series_process(parser, data, data_dict, series_codes, obs_codes):
 
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     outfile = ''
-
-    dataset.data = dataset.data.dropna(axis=1, how="all").astype('str') \
-        .replace('nan', '')
 
     if prettyprint:
         child1 = '\t'
@@ -414,8 +420,6 @@ def ser_str(data: pd.DataFrame,
 def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     outfile = ''
 
-    dataset.data = dataset.data.dropna(axis=1, how="all")
-
     if prettyprint:
         child1 = '\t'
         child2 = '\t\t'
@@ -544,8 +548,7 @@ def obs_gen(data: pd.DataFrame,
     parser = lambda x: format_obs(x, dim_codes, att_codes,  # noqa: E731
                                   measure_code, prettyprint)
 
-    iterator = map(parser, data.astype('str').replace('nan', '')
-                   .to_dict(orient='records'))
+    iterator = map(parser, data.to_dict(orient='records'))
     out = ''.join(iterator)
 
     return out
@@ -642,8 +645,7 @@ def ser_gen(data: pd.DataFrame,
     else:
         obs_att = obs_codes[2:]
 
-    data = data.sort_values(series_codes, axis=0) \
-        .astype('str').replace('nan', '')
+    data = data.sort_values(series_codes, axis=0)
 
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
