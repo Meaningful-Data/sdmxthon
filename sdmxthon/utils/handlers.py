@@ -1,7 +1,6 @@
 """
     Handlers file provide functions to make the code more readable
 """
-import inspect
 
 
 def first_element_dict(obj_: dict):
