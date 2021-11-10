@@ -26,13 +26,16 @@ def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
 
     if value is None:
         return None
-    try:
-        dt = datetime.strptime(value, format_)
-    except Exception:
-        raise ValueError(f"Wrong date string format. The format {format_} "
-                         f"should be followed. {str(value)} passed")
+    if isinstance(value, datetime):
+        return value
+    for fmt in (format_, "%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"):
+        try:
+            return datetime.strptime(value, fmt)
+        except ValueError:
+            pass
 
-    return dt
+    raise ValueError(f"Wrong date string format. The format {format_} "
+                     f"should be followed. {str(value)} passed")
 
 
 def get_date_string(date: datetime, format_: str = "%Y-%m-%d"):

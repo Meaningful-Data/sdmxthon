@@ -7,11 +7,11 @@ from io import StringIO, BytesIO
 
 import pandas as pd
 
-from sdmxthon.api.api import _read_xml, MetadataType, _set_references, \
-    read_sdmx, \
+from sdmxthon.api.api import read_sdmx, \
     get_datasets, get_pandas_df, xml_to_csv
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.message import Message
+from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 
@@ -32,7 +32,7 @@ class TestHelper(unittest.TestCase):
             'category')
 
         dsd = read_sdmx(os.path.join(self.pathToMetadata, meta_file)). \
-            payload.dsds['BIS:BIS_DER(1.0)']
+            payload['DataStructures']['BIS:BIS_DER(1.0)']
 
         return Dataset(structure=dsd, data=df)
 
@@ -77,16 +77,18 @@ class TestHelper(unittest.TestCase):
         obj_ = read_sdmx(os.path.join(self.pathToMetadata, path_to_data),
                          validate=False)
         reference = self.load_reference_data(reference_filename)
-        errors = obj_.payload.errors
+        errors = obj_.payload['errors']
         if errors is None:
             errors = []
         self.assert_equal_validation(errors, reference)
 
     def metadata_valid_test(self, path_to_data):
-        obj_ = _read_xml(os.path.join(self.pathToMetadata, path_to_data))
-        if isinstance(obj_, MetadataType):
-            _set_references(obj_)
-        errors = obj_.structures.errors
+        if 'http' in path_to_data:
+            path = path_to_data
+        else:
+            path = os.path.join(self.pathToMetadata, path_to_data)
+        obj_ = read_xml(path, mode="Metadata")
+        errors = obj_['errors']
         if errors is None:
             errors = []
         self.assert_equal_validation(errors, [])
@@ -94,14 +96,13 @@ class TestHelper(unittest.TestCase):
     def metadata_compare(self, reference_filename, data_filename, dsd_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
         content = {'content': obj_.content,
-                   'items': obj_.payload.dsds[dsd_name].content,
-                   'representation': obj_.payload.dsds[
+                   'items': obj_.payload['DataStructures'][dsd_name].content,
+                   'representation': obj_.payload['DataStructures'][
                        dsd_name].measure_descriptor.components[
-                       'OBS_VALUE'].representation,
-                   'errors': obj_.payload.errors}
+                       'OBS_VALUE'].representation}
 
-        self.assertEqual(f'{content}',
-                         self.load_reference_text(reference_filename))
+        self.assertEqual(self.load_reference_text(reference_filename),
+                         f'{content}')
 
     def metadata_equality(self, data_filename):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
@@ -135,13 +136,14 @@ class TestHelper(unittest.TestCase):
         result = obj_.to_xml('', prepared=datetime.fromisoformat(
             '2021-04-08T17:27:28'), prettyprint=False).getvalue()
 
-        self.assertEqual(result, self.load_reference_text(reference_filename))
+        self.assertEqual(self.load_reference_text(reference_filename), result)
 
     def data_writing(self, dtype: MessageTypeEnum, series=False):
         message = read_sdmx(os.path.join(self.pathToMetadata, 'bis.xml'))
         path = os.path.join(self.pathToDB, "df.json")
         dataset = Dataset(data=pd.read_json(path, orient='records'),
-                          structure=message.payload.dsds['BIS:BIS_DER(1.0)'])
+                          structure=message.payload['DataStructures']
+                          ['BIS:BIS_DER(1.0)'])
 
         dataset.data = dataset.data.astype('str')
 
@@ -163,34 +165,34 @@ class TestHelper(unittest.TestCase):
                                        data_filename):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.organisations. \
+        result = first_element_dict(obj_.payload['OrganisationSchemes']). \
             _parse_XML(indent='', label='str:AgencyScheme')
 
-        self.assertEqual(result, self.load_reference_text(reference_filename))
+        self.assertEqual(self.load_reference_text(reference_filename), result)
 
     def metadata_codelist_writing(self, reference_filename, data_filename,
                                   codelist_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.codelists[codelist_name]. \
+        result = obj_.payload['Codelists'][codelist_name]. \
             _parse_XML(indent='', label='str:Codelist')
 
-        self.assertEqual(result, self.load_reference_text(reference_filename))
+        self.assertEqual(self.load_reference_text(reference_filename), result)
 
     def metadata_concept_writing(self, reference_filename, data_filename,
                                  concept_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.concepts[concept_name] \
+        result = obj_.payload['Concepts'][concept_name] \
             ._parse_XML(indent='', label='str:ConceptScheme')
 
-        self.assertEqual(result, self.load_reference_text(reference_filename))
+        self.assertEqual(self.load_reference_text(reference_filename), result)
 
     def metadata_constraint_writing(self, reference_filename, data_filename):
-        obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename),
-                         validate=True)
+        obj_ = read_xml(os.path.join(self.pathToDB, data_filename),
+                        validate=True)
 
-        result = first_element_dict(obj_.payload.constraints)._parse_XML(
+        result = first_element_dict(obj_['Constraints'])._parse_XML(
             indent='', label='str:ContentConstraint')
 
         self.assertEqual(result, self.load_reference_text(reference_filename))
@@ -199,16 +201,16 @@ class TestHelper(unittest.TestCase):
                                   dataflow_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.dataflows[dataflow_name]. \
+        result = obj_.payload['Dataflows'][dataflow_name]. \
             _parse_XML(indent='', label='str:Dataflow')
 
-        self.assertEqual(result, self.load_reference_text(reference_filename))
+        self.assertEqual(self.load_reference_text(reference_filename), result)
 
     def metadata_dsd_writing(self, reference_filename, data_filename,
                              dsd_name):
         obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename))
 
-        result = obj_.payload.dsds[dsd_name]. \
+        result = obj_.payload['DataStructures'][dsd_name]. \
             _parse_XML(indent='', label='str:DataStructure')
 
         self.assertEqual(result.replace('\n', ''),
@@ -219,7 +221,8 @@ class TestHelper(unittest.TestCase):
         reference = pd.read_json(
             os.path.join(self.pathToReference, "df.json"),
             orient='records').astype('str')
-        dataframe: pd.DataFrame = message.payload['BIS_DER'].data.astype('str')
+        dataframe: pd.DataFrame = message.payload[
+            'BIS:BIS_DER(1.0)'].data.astype('str')
         pd.testing.assert_frame_equal(
             dataframe.fillna('').replace('nan', ''),
             reference.replace('nan', ''),

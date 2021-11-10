@@ -10,11 +10,9 @@ from sdmxthon.model.base import MaintainableArtefact, NameableArtefact, \
 from sdmxthon.model.header import Contact
 from sdmxthon.model.representation import Representation
 from sdmxthon.model.utils import generic_setter, bool_setter
-from sdmxthon.parsers.references import RelationshipRefType
 from sdmxthon.utils.handlers import add_indent, export_intern_data, \
     split_unique_id
 from sdmxthon.utils.mappings import structureAbbr
-from sdmxthon.utils.xml_base import find_attr_value_
 
 
 class ItemScheme(MaintainableArtefact):
@@ -52,10 +50,10 @@ class ItemScheme(MaintainableArtefact):
         if items is not None:
             urn_list = []
             for i in items:
-                if i.urn not in urn_list:
+                if i.urn is not None and i.urn not in urn_list:
                     urn_list.append(i.urn)
                     self.append(i)
-                else:
+                elif i.urn is not None:
                     raise ValueError(
                         'Item Scheme cannot have two items with same URN')
 
@@ -108,23 +106,6 @@ class ItemScheme(MaintainableArtefact):
             raise TypeError(
                 f"The object has to be of the type {self._itemType}")
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(ItemScheme, self)._build_attributes(node, attrs,
-                                                  already_processed)
-
-        value = find_attr_value_('isPartial', node)
-        if value is not None and 'isPartial' not in already_processed:
-            already_processed.add('isPartial')
-            value = self._gds_parse_boolean(value)
-            self.is_partial = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(ItemScheme, self)._build_children(child_, node, nodeName_,
-                                                fromsubclass_, gds_collector_)
-
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
 
@@ -174,6 +155,7 @@ class ConceptScheme(ItemScheme):
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
@@ -189,6 +171,7 @@ class ConceptScheme(ItemScheme):
                      validTo=validTo,
                      isFinal=isFinal,
                      isExternalReference=isExternalReference,
+                     isPartial=isPartial,
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl,
                      maintainer=maintainer,
@@ -216,26 +199,6 @@ class ConceptScheme(ItemScheme):
         """For parsing purposes, makes a dict of all the Codelist references"""
         return self._cl_references
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(ConceptScheme, self)._build_attributes(node, attrs,
-                                                     already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(ConceptScheme, self)._build_children(child_, node, nodeName_,
-                                                   fromsubclass_,
-                                                   gds_collector_)
-        if nodeName_ == 'Concept':
-            obj_ = Concept._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if (obj_.core_representation is not None and
-                    obj_.core_representation.codelist is not None):
-                self._cl_references[
-                    obj_.id] = obj_.core_representation.codelist
-            self.append(obj_)
-
 
 class Codelist(ItemScheme):
     """ A list from which some statistical concepts (coded concepts) take
@@ -253,6 +216,7 @@ class Codelist(ItemScheme):
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
@@ -266,6 +230,7 @@ class Codelist(ItemScheme):
                                        serviceUrl=serviceUrl,
                                        structureUrl=structureUrl,
                                        maintainer=maintainer,
+                                       isPartial=isPartial,
                                        items=items)
         self._checked = False
 
@@ -293,21 +258,6 @@ class Codelist(ItemScheme):
         """Factory Method of Codelist"""
         return Codelist(*args_, **kwargs_)
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(Codelist, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(Codelist, self)._build_children(child_, node, nodeName_,
-                                              fromsubclass_, gds_collector_)
-
-        if nodeName_ == 'Code':
-            obj_ = Code._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.append(obj_)
-
 
 class OrganisationScheme(ItemScheme):
     """Abstract class. Used for structure messages"""
@@ -318,9 +268,12 @@ class OrganisationScheme(ItemScheme):
                  description: InternationalString = None,
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None,
+                 isFinal: bool = None,
+                 isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
-                 structureUrl: str = None, maintainer=None,
+                 structureUrl: str = None,
+                 maintainer=None,
                  items=None):
 
         super(OrganisationScheme, self). \
@@ -333,6 +286,7 @@ class OrganisationScheme(ItemScheme):
                      validTo=validTo,
                      isFinal=isFinal,
                      isExternalReference=isExternalReference,
+                     isPartial=isPartial,
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl,
                      maintainer=maintainer,
@@ -389,22 +343,6 @@ class AgencyScheme(OrganisationScheme):
     def _factory(*args_, **kwargs_):
         """Factory Method of AgencyScheme"""
         return AgencyScheme(*args_, **kwargs_)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(AgencyScheme, self)._build_attributes(node, attrs,
-                                                    already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(AgencyScheme, self)._build_children(child_, node, nodeName_,
-                                                  fromsubclass_,
-                                                  gds_collector_)
-        if nodeName_ == 'Agency':
-            obj_ = Agency._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.append(obj_)
 
 
 class Item(NameableArtefact):
@@ -501,22 +439,6 @@ class Item(NameableArtefact):
         """Adds a child to the Item"""
         self._childs.append(value)
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(Item, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(Item, self). \
-            _build_children(child_, node, nodeName_,
-                            fromsubclass_, gds_collector_)
-
-        if nodeName_ == 'Parent':
-            obj_ = RelationshipRefType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.parent = obj_.ref
-
     def _parse_XML(self, indent, head):
         head = f'{structureAbbr}:' + head
 
@@ -564,16 +486,6 @@ class Code(Item):
     def _factory(*args_, **kwargs_):
         """Factory Method of Code"""
         return Code(*args_, **kwargs_)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(Code, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(Code, self)._build_children(child_, node, nodeName_,
-                                          fromsubclass_, gds_collector_)
 
     def _parse_XML(self, indent, head):
         outfile = super(Code, self)._parse_XML(indent, head)
@@ -624,28 +536,6 @@ class Agency(Item):
     def contacts(self, value):
         self._contacts = generic_setter(value, List[Contact])
 
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Agency"""
-        return Agency(*args_, **kwargs_)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(Agency, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(Agency, self)._build_children(child_, node, nodeName_,
-                                            fromsubclass_, gds_collector_)
-
-        if nodeName_ == 'Contact':
-            obj_ = Contact._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if self._contacts is None:
-                self._contacts = []
-            self._contacts.append(obj_)
-
     def _parse_XML(self, indent, head):
         outfile = super(Agency, self)._parse_XML(indent, head)
 
@@ -678,7 +568,7 @@ class Concept(Item):
                  name: InternationalString = None,
                  description: InternationalString = None,
                  scheme: ItemScheme = None, parent: Item = None, childs=None,
-                 coreRepresentation: Representation = None):
+                 core_representation: Representation = None):
         if childs is None:
             childs = []
         if annotations is None:
@@ -689,7 +579,7 @@ class Concept(Item):
                                       scheme=scheme, parent=parent,
                                       childs=childs)
 
-        self.core_representation = coreRepresentation
+        self.core_representation = core_representation
         self._ref = None  # Attribute for storing the references to codelists.
 
     def __eq__(self, other):
@@ -708,25 +598,6 @@ class Concept(Item):
     def core_representation(self, value):
         from .representation import Representation
         self._coreRepresentation = generic_setter(value, Representation)
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Concept"""
-        return Concept(*args_, **kwargs_)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(Concept, self)._build_attributes(node, attrs, already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=None,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(Concept, self)._build_children(child_, node, nodeName_,
-                                             fromsubclass_, gds_collector_)
-        if nodeName_ == 'CoreRepresentation':
-            obj_ = Representation._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self.core_representation = obj_
 
     def _parse_XML(self, indent, head):
         outfile = super(Concept, self)._parse_XML(indent, head)

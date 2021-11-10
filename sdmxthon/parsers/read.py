@@ -1,328 +1,115 @@
-import os
-import warnings
-from datetime import datetime
+from xml.parsers.expat import ExpatError
 
-import pandas as pd
-from lxml import etree as etree_
-from lxml.etree import DocumentInvalid
+import xmltodict
 
-from sdmxthon.model.dataset import Dataset
-from sdmxthon.parsers.gdscollector import GdsCollector
-from sdmxthon.parsers.message_parsers import GenericDataType, \
-    StructureSpecificDataType, \
-    MetadataType
-from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.xml_base import parse_xml, \
-    makeWarnings
+from sdmxthon.parsers.data_read import create_dataset
+from sdmxthon.parsers.metadata_read import create_metadata
+from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
+    STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
+    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE
+from sdmxthon.utils.xml_base import validate_doc, \
+    process_string_to_read
 
-CapturedNsmap_ = {}
-print_warnings = True
-SaveElementTreeNode = True
-
-GenericDataConstant = '{http://www.sdmx.org/resources/sdmxml/schemas' \
-                      '/v2_1/message}GenericData'
-StructureDataConstant = '{http://www.sdmx.org/resources/sdmxml' \
-                        '/schemas/v2_1/message}StructureSpecificData'
-MetadataConstant = '{http://www.sdmx.org/resources/sdmxml' \
-                   '/schemas/v2_1/message}Structure'
-
-pathToSchema = 'schemas/SDMXMessage.xsd'
+options = {'process_namespaces': True,
+           'namespaces': namespaces,
+           'dict_constructor': dict,
+           'attr_prefix': ''}
 
 
-def _read_xml(inFileName, print_warning=True, validate=True):
-    # TODO Check if the message has been loaded correctly
+def parse_sdmx(result):
+    datasets = dict()
 
-    global CapturedNsmap_
-    gds_collector = GdsCollector()
-
-    parser = None
-    doc = parse_xml(inFileName, parser)
-    root_node = doc.getroot()
-    if root_node.tag == GenericDataConstant:
-        root_tag = 'GenericData'
-        root_class = GenericDataType
-    elif root_node.tag == StructureDataConstant:
-        root_tag = 'StructureSpecificData'
-        root_class = StructureSpecificDataType
-    elif root_node.tag == MetadataConstant:
-        root_tag = 'Structure'
-        root_class = MetadataType
+    if STRSPE in result:
+        global_mode = STRSPE
+    elif GENERIC in result:
+        global_mode = GENERIC
     else:
-        return None
+        global_mode = STRUCTURE
+
+    if global_mode == STRUCTURE:
+        # Parsing Structure
+        return create_metadata(result[STRUCTURE][STRUCTURES])
+    else:
+        message = result[global_mode]
+        if isinstance(message[DATASET], list):
+            structures = {}
+            # Relationship between structures and structure id
+            for structure in message[HEADER][STRUCTURE]:
+                structures[structure[STRID]] = structure
+            for single_dataset in message[DATASET]:
+                str_ref = single_dataset[STRREF]
+                if SERIES in single_dataset:
+                    metadata = get_dataset_metadata(structures[str_ref],
+                                                    str_ref,
+                                                    mode=SERIES)
+                else:
+                    metadata = get_dataset_metadata(structures[str_ref],
+                                                    str_ref,
+                                                    mode=OBS)
+                ds = create_dataset(single_dataset, metadata,
+                                    global_mode)
+                datasets[metadata[STRID]] = ds
+        else:
+            if SERIES in message[DATASET]:
+                metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
+                                                message[DATASET][STRREF],
+                                                mode=SERIES)
+            else:
+                metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
+                                                message[DATASET][STRREF],
+                                                mode=OBS)
+
+            ds = create_dataset(message[DATASET], metadata, global_mode)
+            datasets[metadata[STRID]] = ds
+
+    return datasets
+
+
+def read_xml(infile, mode=None, validate=True):
+    infile = process_string_to_read(infile)
 
     if validate:
-        base_path = os.path.dirname(os.path.dirname(__file__))
-        schema = os.path.join(base_path, pathToSchema)
-        xmlschema_doc = etree_.parse(schema)
-        xmlschema = etree_.XMLSchema(xmlschema_doc)
+        validate_doc(infile)
+    try:
+        result = xmltodict.parse(infile, **options)
+    except ExpatError:  # UTF-8 BOM
+        result = xmltodict.parse(infile[3:], **options)
 
-        if not xmlschema.validate(doc):
-            try:
-                xmlschema.assertValid(doc)
-            except DocumentInvalid as e:
-                if len(e.args) == 1 and \
-                        'xsi:type' in e.args[0] or \
-                        'abstract' in e.args[0]:
-                    pass
-                else:
-                    raise e
-    root_obj = root_class._factory()
-    root_obj.original_tag_name_ = root_tag
-    root_obj._build(root_node, gds_collector_=gds_collector)
-    makeWarnings(print_warning, gds_collector)
+    del infile
 
-    return root_obj
+    if mode is not None:
+        if mode == "Data" and STRUCTURE in result:
+            raise TypeError("Unable to parse metadata file as data file")
+        elif mode == "Metadata" and (STRSPE in result or GENERIC in result):
+            raise TypeError("Unable to parse data file as metadata file")
+        elif mode not in ["Data", "Metadata"]:
+            raise ValueError("Wrong mode")
 
-
-def _sdmx_str_to_dataset(xmlObj, dsds, dataflows) -> []:
-    datasets = {}
-    for e in xmlObj.dataset:
-        if e.structureRef in xmlObj.header.structure.keys():
-            str_dict = xmlObj.header.structure[e.structureRef]
-            if (dsds is not None and str_dict['type'] == 'DataStructure' and
-                    str_dict['ID'] in dsds.keys()):
-                dsd = dsds[str_dict['ID']]
-                item = Dataset(structure=dsd)
-            elif dataflows is not None and str_dict['type'] == 'DataFlow':
-                if str_dict['ID'] in dataflows.keys():
-                    dataflow = dataflows[str_dict['ID']]
-                    dsd = dataflow.structure
-                    item = Dataset(dataflow=dataflow)
-                else:
-                    warnings.warn(f'DataFlow {str_dict["ID"]} not found')
-                    continue
-            else:
-                warnings.warn(f'DSD {str_dict["ID"]} not found')
-                continue
-        else:
-            warnings.warn(f'Structure {e.structureRef} not found')
-            continue
-
-        dataset_attributes = {'reportingBegin': e.reporting_begin_date,
-                              'reportingEnd': e.reporting_end_date,
-                              'dataExtractionDate': datetime.now().strftime(
-                                  '%Y-%m-%dT%H:%M:%S'),
-                              'validFrom': e.valid_from_date,
-                              'validTo': e.valid_to_date,
-                              'publicationYear': e.publication_year,
-                              'publicationPeriod': e.publication_period,
-                              'action': e.action, 'setId': dsd.id,
-                              'dimensionAtObservation': str_dict['dimAtObs']}
-
-        # Default Attributes
-
-        item.dataset_attributes = dataset_attributes.copy()
-
-        attached_attributes = {}
-
-        for k, v in e.any_attributes.items():
-            if k in dsd.dataset_attribute_codes:
-                attached_attributes[k] = v
-
-        item.attached_attributes = attached_attributes
-
-        if len(e.data) > 0 or e.dataframe is not None:
-
-            temp = None
-
-            if len(e.data) > 0:
-                temp = pd.DataFrame(e.data)
-
-            if e.dataframe is not None and temp is not None:
-                temp = pd.concat([temp, e.dataframe], ignore_index=True)
-            elif temp is None:
-                temp = e.dataframe
-
-            item.data = temp
-        datasets[dsd.unique_id] = item
-    del xmlObj
+    datasets = parse_sdmx(result)
     return datasets
 
 
-def _sdmx_gen_to_dataset(xmlObj, dsds, dataflows) -> []:
-    datasets = {}
-
-    for e in xmlObj.dataset:
-        if e.structureRef in xmlObj.header.structure.keys():
-            str_dict = xmlObj.header.structure[e.structureRef]
-            if dsds is not None and str_dict['type'] == 'DataStructure' and \
-                    str_dict['ID'] in dsds.keys():
-                dsd = dsds[str_dict['ID']]
-                item = Dataset(structure=dsd)
-            elif dataflows is not None and str_dict['type'] == 'DataFlow':
-                if str_dict['ID'] in dataflows.keys():
-                    dataflow = dataflows[str_dict['ID']]
-                    dsd = dataflow.structure
-                    item = Dataset(dataflow=dataflow)
-                else:
-                    warnings.warn(f'DataFlow {str_dict["ID"]} not found')
-                    continue
-            else:
-                warnings.warn(f'DSD {str_dict["ID"]} not found')
-                continue
-        else:
-            warnings.warn(f'Structure {e.structureRef} not found')
-            continue
-
-        dataset_attributes = {'reportingBegin': e.reporting_begin_date,
-                              'reportingEnd': e.reporting_end_date,
-                              'dataExtractionDate': datetime.now().strftime(
-                                  '%Y-%m-%dT%H:%M:%S'),
-                              'validFrom': e.valid_from_date,
-                              'validTo': e.valid_to_date,
-                              'publicationYear': e.publication_year,
-                              'publicationPeriod': e.publication_period,
-                              'action': e.action, 'setId': dsd.id,
-                              'dimensionAtObservation': str_dict['dimAtObs']}
-
-        item.dataset_attributes = dataset_attributes.copy()
-
-        attached_attributes = {}
-        if e.Attributes is not None:
-            attached_attributes = e.Attributes.value_
-
-        item.attached_attributes = attached_attributes.copy()
-        if len(e.data) > 0 or e.dataframe is not None:
-
-            temp = None
-
-            if len(e.data) > 0:
-                temp = pd.DataFrame(e.data)
-
-            if e.dataframe is not None and temp is not None:
-                temp = pd.concat([temp, e.dataframe], ignore_index=True)
-            elif temp is None:
-                temp = e.dataframe
-
-            if str_dict['dimAtObs'] == 'AllDimensions':
-                item.data = temp.rename(
-                    columns={'OBS_VALUE': dsd.measure_code})
-            else:
-                item.data = temp.rename(
-                    columns={'ObsDimension': str_dict['dimAtObs'],
-                             'OBS_VALUE': dsd.measure_code})
-        datasets[dsd.unique_id] = item
-    del xmlObj
-    return datasets
+def get_elements_from_structure(structure):
+    if STRUCTURE in structure:
+        agency_id = structure[STRUCTURE][REF][AGENCY_ID]
+        id_ = structure[STRUCTURE][REF][ID]
+        version = structure[STRUCTURE][REF][VERSION]
+    else:
+        agency_id = structure[STR_USAGE][REF][AGENCY_ID]
+        id_ = structure[STR_USAGE][REF][ID]
+        version = structure[STR_USAGE][REF][VERSION]
+    return agency_id, id_, version
 
 
-def _sdmx_to_dataset_no_metadata(xml_obj, type_: MessageTypeEnum):
-    datasets = {}
+def get_dataset_metadata(structure, dataset_ref, mode):
+    if mode == SERIES and structure[DIM_OBS] == ALL_DIM:
+        raise Exception
+    elif mode == OBS and structure[DIM_OBS] != ALL_DIM:
+        raise Exception
 
-    for e in xml_obj.dataset:
-        if e.structureRef in xml_obj.header.structure.keys():
-            str_dict = xml_obj.header.structure[e.structureRef]
-        else:
-            warnings.warn(f'Structure {e.structureRef} not found')
-            continue
-
-        dataset_attributes = {'reportingBegin': e.reporting_begin_date,
-                              'reportingEnd': e.reporting_end_date,
-                              'dataExtractionDate': datetime.now().strftime(
-                                  '%Y-%m-%dT%H:%M:%S'),
-                              'validFrom': e.valid_from_date,
-                              'validTo': e.valid_to_date,
-                              'publicationYear': e.publication_year,
-                              'publicationPeriod': e.publication_period,
-                              'action': e.action, 'setId': e.structureRef,
-                              'dimensionAtObservation': str_dict['dimAtObs']}
-
-        item = Dataset(dataset_attributes=dataset_attributes)
-
-        if type_ == MessageTypeEnum.GenericDataSet:
-            attached_attributes = {}
-            if e.Attributes is not None:
-                attached_attributes = e.Attributes.value_
-
-            if len(e.data) > 0 or e.dataframe is not None:
-
-                temp = None
-
-                if len(e.data) > 0:
-                    temp = pd.DataFrame(e.data)
-
-                if e.dataframe is not None and temp is not None:
-                    temp = pd.concat([temp, e.dataframe],
-                                     ignore_index=True)
-                elif temp is None:
-                    temp = e.dataframe
-                if str_dict['dimAtObs'] == 'AllDimensions':
-                    item.data = temp
-                else:
-                    item.data = temp.rename(
-                        columns={'ObsDimension': str_dict['dimAtObs']})
-        else:
-            attached_attributes = {}
-            for k, v in e.any_attributes.items():
-                if k not in ['type', 'xsi:dim_type']:
-                    attached_attributes[k] = v
-
-            item.attached_attributes = attached_attributes
-
-            if len(e.data) > 0 or e.dataframe is not None:
-
-                temp = None
-
-                if len(e.data) > 0:
-                    temp = pd.DataFrame(e.data)
-
-                if e.dataframe is not None and temp is not None:
-                    temp = pd.concat([temp, e.dataframe], ignore_index=True)
-                elif temp is None:
-                    temp = e.dataframe
-
-                item.data = temp
-
-        item.attached_attributes = attached_attributes
-
-        datasets[e.structureRef] = item
-    del xml_obj
-    return datasets
-
-
-def _sdmx_to_dataframe(xml_obj, type_: MessageTypeEnum):
-    dataframes = {}
-
-    for e in xml_obj.dataset:
-        if e.structureRef in xml_obj.header.structure.keys():
-            str_dict = xml_obj.header.structure[e.structureRef]
-        else:
-            warnings.warn(f'Structure {e.structureRef} not found')
-            continue
-
-        if type_ == MessageTypeEnum.GenericDataSet:
-            if len(e.data) > 0 or e.dataframe is not None:
-
-                temp = None
-
-                if len(e.data) > 0:
-                    temp = pd.DataFrame(e.data)
-
-                if e.dataframe is not None and temp is not None:
-                    temp = pd.concat([temp, e.dataframe],
-                                     ignore_index=True)
-                elif temp is None:
-                    temp = e.dataframe
-                if str_dict['dimAtObs'] == 'AllDimensions':
-                    dataframes[str_dict['ID']] = temp
-                else:
-                    dataframes[str_dict['ID']] = temp.rename(
-                        columns={'ObsDimension': str_dict['dimAtObs']})
-        else:
-            if len(e.data) > 0 or e.dataframe is not None:
-
-                temp = None
-
-                if len(e.data) > 0:
-                    temp = pd.DataFrame(e.data)
-
-                if e.dataframe is not None and temp is not None:
-                    temp = pd.concat([temp, e.dataframe], ignore_index=True)
-                elif temp is None:
-                    temp = e.dataframe
-
-                dataframes[str_dict['ID']] = temp
-
-    del xml_obj
-
-    return dataframes
+    if dataset_ref == structure[STRID]:
+        agency_id, id_, version = get_elements_from_structure(structure)
+        return {DIM_OBS: structure[DIM_OBS],
+                STRID: f"{agency_id}:{id_}({version})"}
+    else:
+        raise Exception

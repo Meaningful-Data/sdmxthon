@@ -11,7 +11,7 @@ setuptools.setup(
     long_description_content_type='text/x-rst',
     packages=setuptools.find_packages(),
     include_package_data=True,
-    version='1.0',
+    version='1.0.3',
     license='Apache 2.0',
     license_files='license.txt',
     author='MeaningfulData',
@@ -19,7 +19,9 @@ setuptools.setup(
     project_urls={
         'Bug Tracker': 'https://github.com/Meaningful-Data/sdmxthon/issues',
         'Documentation': 'https://docs.sdmxthon.meaningfuldata.eu',
-        'Source Code': 'https://github.com/Meaningful-Data/sdmxthon'
+        'Source Code': 'https://github.com/Meaningful-Data/sdmxthon',
+        'Changelog': 'https://github.com/Meaningful-Data/sdmxthon/blob'
+                     '/master/Changelog.rst '
     },
     keywords=['SDMX', 'Pandas', 'Validation'],
     install_requires=[

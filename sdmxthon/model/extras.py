@@ -1,7 +1,6 @@
 from datetime import datetime, date, timedelta
 
 from sdmxthon.model.utils import generic_setter
-from sdmxthon.parsers.data_generic import ComponentValueType
 
 
 class Period:
@@ -24,29 +23,6 @@ class Period:
     @period.setter
     def period(self, value):
         self._period = generic_setter(value, datetime)
-
-
-class RangePeriod(ComponentValueType):
-    def __init__(self, start: Period, end: Period):
-        super(RangePeriod, self).__init__()
-        self.start = start
-        self.end = end
-
-    @property
-    def start(self):
-        return self._start
-
-    @start.setter
-    def start(self, value):
-        self._start = generic_setter(value, datetime)
-
-    @property
-    def end(self):
-        return self._end
-
-    @end.setter
-    def end(self, value):
-        self._end = generic_setter(value, datetime)
 
 
 class ReferencePeriod:

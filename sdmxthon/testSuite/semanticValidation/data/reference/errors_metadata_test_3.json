@@ -14,10 +14,10 @@
     "ObjectType": "DSD"
   },
   {
-    "Code": "MX04",
+    "Code": "MS02",
     "ErrorLevel": "CRITICAL",
-    "Message": "Codelist MD:CL_TEST_1(1.0) not found for Concept MD:MD_CS(1.0)-TEST_1",
-    "ObjectID": "MD:MD_CS(1.0)-TEST_1",
-    "ObjectType": "Concept"
+    "ObjectID": "MD:CL_TEST_1(1.0)",
+    "ObjectType": "Codelist",
+    "Message": "Missing Codelist MD:CL_TEST_1(1.0)"
   }
 ]
