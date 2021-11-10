@@ -251,10 +251,9 @@ def create_organisations(json_orgs):
         if len(json_orgs) == 1 and isinstance(json_orgs[AGENCIES], dict):
             ag_sch = create_scheme(json_orgs, AGENCIES, AGENCY)
             return ag_sch
-        else:
-            for e in json_orgs[AGENCIES]:
-                ag_sch = create_scheme(e, AGENCIES, AGENCY)
-                orgs = {**orgs, **ag_sch}
+        for e in json_orgs[AGENCIES]:
+            ag_sch = create_scheme(e, AGENCIES, AGENCY)
+            orgs = {**orgs, **ag_sch}
     return orgs
 
 

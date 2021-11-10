@@ -9,67 +9,79 @@ from sdmxthon.utils.handlers import add_indent
 from sdmxthon.utils.mappings import commonAbbr, structureAbbr
 
 
+def _int_str_getter(attr):
+    if attr is None:
+        return None
+    if isinstance(attr, InternationalString):
+        if len(attr.items) == 0:
+            return None
+        if len(attr.items) == 1:
+            values_view = attr.items.values()
+            value_iterator = iter(values_view)
+            first_value = next(value_iterator)
+            return first_value['content']
+
+        return attr.items
+
+    return attr
+
+
+def _writer_int_str(attr, word, abbr, indent, prettyprint):
+    outfile = ""
+    if attr is not None:
+        data = attr._to_XML(f'{abbr}:{word}', prettyprint)
+        for e in data:
+            outfile += f'{indent}{e}'
+    return outfile
+
+
+def _writer_attr(attr, word, indent):
+    outfile = ""
+    if attr is not None:
+        for e in attr:
+            outfile += f'{indent}<{structureAbbr}:{word}>{e}' \
+                       f'</{structureAbbr}:{word}>'
+
+    return outfile
+
+
 class Contact(object):
     """Contact provides defines the contact information about a party."""
 
     def __init__(self, name=None, department=None, role=None, telephone=None,
                  fax=None, X400=None, uri=None, email=None):
-        self._name = name
-        self._department = department
-        self._role = role
-        self._telephone = telephone
-        self._fax = fax
-        self._x400 = X400
-        self._uri = uri
-        self._email = email
+        self.name = name
+        self.department = department
+        self.role = role
+        self.telephone = telephone
+        self.fax = fax
+        self.X400 = X400
+        self.uri = uri
+        self.email = email
 
     def __eq__(self, other):
         if isinstance(other, Contact):
-            return (self._name == other._name and
-                    self._uri == other._uri and
-                    self._email == other._email and
-                    self._fax == other._fax and
-                    self._role == other._role and
-                    self._telephone == other._telephone and
-                    self._department == other._department)
+            return (self.name == other.name and
+                    self.uri == other.uri and
+                    self.email == other.email and
+                    self.fax == other.fax and
+                    self.role == other.role and
+                    self.telephone == other.telephone and
+                    self.department == other.department)
 
     @property
     def name(self):
         """Name of the Contact"""
-        if self._name is None:
-            return None
-        elif isinstance(self._name, InternationalString):
-            if len(self._name.items) == 0:
-                return None
-            elif len(self._name.items) == 1:
-                values_view = self._name.items.values()
-                value_iterator = iter(values_view)
-                first_value = next(value_iterator)
-                return first_value['content']
-            else:
-                return self._name.items
-        return self._name
+        return _int_str_getter(self._name)
 
     @name.setter
     def name(self, value):
-        self.name = generic_setter(value, InternationalString)
+        self._name = generic_setter(value, InternationalString)
 
     @property
     def department(self):
         """Department of the Contact"""
-        if self._department is None:
-            return None
-        elif isinstance(self._department, InternationalString):
-            if len(self._department.items) == 0:
-                return None
-            elif len(self._department.items) == 1:
-                values_view = self._department.items.values()
-                value_iterator = iter(values_view)
-                first_value = next(value_iterator)
-                return first_value['content']
-            else:
-                return self._department.items
-        return self._department
+        return _int_str_getter(self._department)
 
     @department.setter
     def department(self, value):
@@ -78,19 +90,7 @@ class Contact(object):
     @property
     def role(self):
         """Role of the Contact"""
-        if self._role is None:
-            return None
-        elif isinstance(self._role, InternationalString):
-            if len(self._role.items) == 0:
-                return None
-            elif len(self._role.items) == 1:
-                values_view = self._role.items.values()
-                value_iterator = iter(values_view)
-                first_value = next(value_iterator)
-                return first_value['content']
-            else:
-                return self._role.items
-        return self._role
+        return _int_str_getter(self._role)
 
     @role.setter
     def role(self, value):
@@ -101,10 +101,9 @@ class Contact(object):
         """Telephone of the Contact"""
         if self._telephone is None:
             return None
-        elif len(self._telephone) == 1:
+        if len(self._telephone) == 1:
             return self._telephone[0]
-        else:
-            return self._telephone
+        return self._telephone
 
     @telephone.setter
     def telephone(self, value):
@@ -120,10 +119,9 @@ class Contact(object):
         """Fax of the Contact"""
         if self._fax is None:
             return None
-        elif len(self._fax) == 1:
+        if len(self._fax) == 1:
             return self._fax[0]
-        else:
-            return self._fax
+        return self._fax
 
     @fax.setter
     def fax(self, value):
@@ -139,10 +137,10 @@ class Contact(object):
         """IPM of the Contact"""
         if self._x400 is None:
             return None
-        elif len(self._x400) == 1:
+        if len(self._x400) == 1:
             return self._x400[0]
-        else:
-            return self._x400
+
+        return self._x400
 
     @X400.setter
     def X400(self, value):
@@ -158,10 +156,10 @@ class Contact(object):
         """URI of the Contact"""
         if self._uri is None:
             return None
-        elif len(self._uri) == 1:
+        if len(self._uri) == 1:
             return self._uri[0]
-        else:
-            return self._uri
+
+        return self._uri
 
     @uri.setter
     def uri(self, value):
@@ -169,7 +167,6 @@ class Contact(object):
             self._uri = []
         elif isinstance(value, list):
             self._uri = value
-
         else:
             raise TypeError('URI must be a list')
 
@@ -178,10 +175,10 @@ class Contact(object):
         """Email of the Contact"""
         if self._email is None:
             return None
-        elif len(self._email) == 1:
+        if len(self._email) == 1:
             return self._email[0]
-        else:
-            return self._email
+
+        return self._email
 
     @email.setter
     def email(self, value):
@@ -197,40 +194,20 @@ class Contact(object):
 
         prettyprint = indent != ''
 
-        if self.name is not None:
-            data = self._name._to_XML(f'{commonAbbr}:Name', prettyprint)
-            for e in data:
-                outfile += f'{indent}{e}'
-        if self._department is not None:
-            data = self._department._to_XML(f'{structureAbbr}:Department',
-                                            prettyprint)
-            for e in data:
-                outfile += f'{indent}{e}'
-        if self._role is not None:
-            data = self._role._to_XML(f'{structureAbbr}:Role', prettyprint)
-            for e in data:
-                outfile += f'{indent}{e}'
+        outfile += _writer_int_str(self._name, 'Name', commonAbbr, indent,
+                                   prettyprint)
+        outfile += _writer_int_str(self._department, 'Department',
+                                   structureAbbr, indent,
+                                   prettyprint)
+        outfile += _writer_int_str(self._role, 'Role', structureAbbr, indent,
+                                   prettyprint)
+
         indent = add_indent(indent)
-        if self._telephone is not None:
-            for e in self._telephone:
-                outfile += f'{indent}<{structureAbbr}:Telephone>{e}' \
-                           f'</{structureAbbr}:Telephone>'
-        if self._uri is not None:
-            for e in self._uri:
-                outfile += f'{indent}<{structureAbbr}:URI>{e}' \
-                           f'</{structureAbbr}:URI>'
-        if self._x400 is not None:
-            for e in self._x400:
-                outfile += f'{indent}<{structureAbbr}:X400>{e}' \
-                           f'</{structureAbbr}:X400>'
-        if self._fax is not None:
-            for e in self._fax:
-                outfile += f'{indent}<{structureAbbr}:Fax>{e}' \
-                           f'</{structureAbbr}:Fax>'
-        if self._email is not None:
-            for e in self._email:
-                outfile += f'{indent}<{structureAbbr}:Email>{e}' \
-                           f'</{structureAbbr}:Email>'
+        outfile += _writer_attr(self._telephone, 'Telephone', indent)
+        outfile += _writer_attr(self._uri, 'URI', indent)
+        outfile += _writer_attr(self._x400, 'X400', indent)
+        outfile += _writer_attr(self._fax, 'Fax', indent)
+        outfile += _writer_attr(self._email, 'Email', indent)
         return outfile
 
 
@@ -240,7 +217,7 @@ class Party(object):
     identification of the party."""
 
     def __init__(self, id_=None, Name=None, contact=None, extensiontype_=None):
-        self.id = id_
+        self.id_ = id_
 
         if Name is None:
             self.name = []
@@ -403,6 +380,8 @@ class Header(object):
                     self.reporting_end == other.reporting_end and
                     self.embargo_date == other.embargo_date and
                     self.source == other.source)
+
+        return False
 
     @property
     def id_(self):

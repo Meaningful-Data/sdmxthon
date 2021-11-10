@@ -57,7 +57,7 @@ class Dataset:
         if structure is not None and dataflow is not None:
             raise ValueError('A Dataset cannot have a structure '
                              'and a dataflow, use only one')
-        elif structure is not None:
+        if structure is not None:
             self._dataflow = None
             self.structure = structure
         elif dataflow is not None:
@@ -77,20 +77,20 @@ class Dataset:
     def __str__(self):
         if self.structure is not None:
             return f'<DataSet  - {self.structure.id}>'
-        else:
-            return '<DataSet - No Structure found>'
+
+        return '<DataSet - No Structure found>'
 
     def __unicode__(self):
         if self.structure is not None:
             return f'<DataSet  - {self.structure.id}>'
-        else:
-            return '<DataSet - No Structure found>'
+
+        return '<DataSet - No Structure found>'
 
     def __repr__(self):
         if self.structure is not None:
             return f'<DataSet  - {self.structure.id}>'
-        else:
-            return '<DataSet - No Structure found>'
+
+        return '<DataSet - No Structure found>'
 
     @property
     def dataflow(self) -> DataFlowDefinition:
@@ -296,9 +296,8 @@ class Dataset:
         element['data'] = json.loads(result).copy()
         if pathToJSON is None:
             return element
-        else:
-            with open(pathToJSON, 'w') as f:
-                f.write(json.dumps(element, ensure_ascii=False, indent=2))
+        with open(pathToJSON, 'w') as f:
+            f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
     def to_feather(self, pathToFeather: str, **kwargs):
         """Parses the data to an Apache Feather format. Kwargs are supported.
@@ -318,9 +317,8 @@ class Dataset:
         """
         if isinstance(self.data, DataFrame):
             return validate_data(self.data, self.structure)
-        else:
-            raise ValueError(
-                'Data for dataset %s is not well formed' % self.structure.id)
+        raise ValueError(f'Data for dataset {self.structure.id} '
+                         f'is not well formed')
 
     def set_dimension_at_observation(self, dimAtObs):
         """Sets the dimensionAtObservation
@@ -422,11 +420,10 @@ class Dataset:
             prepared = datetime.now()
 
         if outputPath == '':
-            return writer(path=outputPath, dType=message_type, payload=self,
+            return writer(path=outputPath, type_=message_type, payload=self,
                           id_=id_, test=test, header=header,
                           prepared=prepared, sender=sender, receiver=receiver)
-        else:
-            writer(path=outputPath, dType=message_type, payload=self, id_=id_,
-                   test=test, header=header,
-                   prepared=prepared, sender=sender, receiver=receiver,
-                   prettyprint=prettyprint)
+        writer(path=outputPath, type_=message_type, payload=self, id_=id_,
+               test=test, header=header,
+               prepared=prepared, sender=sender, receiver=receiver,
+               prettyprint=prettyprint)

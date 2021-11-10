@@ -21,10 +21,10 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     data = read_xml(sdmx_file, None, validate=validate)
 
     if isinstance(first_element_dict(data), Dataset):
-        type = MessageTypeEnum.StructureDataSet
+        type_ = MessageTypeEnum.StructureDataSet
     else:
-        type = MessageTypeEnum.Metadata
-    return Message(type, data)
+        type_ = MessageTypeEnum.Metadata
+    return Message(type_, data)
 
 
 def get_datasets(data, path_to_metadata, validate=True):
@@ -100,7 +100,7 @@ def xml_to_csv(data, output_path=None, validate=True, **kwargs):
         if len(datasets) > 1:
             raise ValueError('Cannot introduce several Datasets in a CSV. '
                              'Consider using .zip in output path')
-        elif len(datasets) == 1:
+        if len(datasets) == 1:
             if output_path is not None and '.zip' in output_path:
                 filename = output_path.split('.')[0]
                 output_path = filename + '.csv'

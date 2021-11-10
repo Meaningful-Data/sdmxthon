@@ -82,10 +82,10 @@ class Message:
         """
         if isinstance(self.payload, dict):
             return self.payload
-        elif isinstance(self.payload, Dataset):
+        if isinstance(self.payload, Dataset):
             return {'datasets': {self.payload.unique_id, self.payload}}
-        else:
-            return {'datasets': self.payload}
+
+        return {'datasets': self.payload}
 
     @property
     def header(self):
@@ -167,8 +167,8 @@ class Message:
                     validations[e.structure.id] = list_errors
             if len(validations) == 0:
                 return None
-            else:
-                return validations
+
+            return validations
         elif isinstance(self.payload, Dataset):
             return self.payload.semantic_validation()
         else:
@@ -224,15 +224,14 @@ class Message:
             prepared = datetime.now()
 
         if outputPath == '':
-            return writer(path=outputPath, dType=self.type,
+            return writer(path=outputPath, type_=self.type,
                           payload=self.payload, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver,
                           header=header, prettyprint=prettyprint)
-        else:
-            writer(path=outputPath, dType=self.type, payload=self.payload,
-                   id_=id_, test=test, header=header,
-                   prepared=prepared, sender=sender, receiver=receiver,
-                   prettyprint=prettyprint)
+        writer(path=outputPath, type_=self.type, payload=self.payload,
+               id_=id_, test=test, header=header,
+               prepared=prepared, sender=sender, receiver=receiver,
+               prettyprint=prettyprint)
 
 
 if __name__ == '__main__':
