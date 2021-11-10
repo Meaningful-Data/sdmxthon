@@ -61,8 +61,7 @@ class ItemScheme(MaintainableArtefact):
         if isinstance(other, ItemScheme):
             return super(ItemScheme, self).__eq__(
                 other) and self._items == other._items
-        else:
-            return False
+        return False
 
     def __str__(self):
         return f'<{self.__class__.__name__} - {self.unique_id}>'
@@ -184,15 +183,10 @@ class ConceptScheme(ItemScheme):
             if not self._checked:
                 self._checked = True
                 return super(ConceptScheme, self).__eq__(other)
-            else:
-                return True
-        else:
-            return False
 
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of ConceptScheme"""
-        return ConceptScheme(*args_, **kwargs_)
+            return True
+
+        return False
 
     @property
     def cl_references(self):
@@ -239,10 +233,10 @@ class Codelist(ItemScheme):
             if not self._checked:
                 self._checked = True
                 return super(Codelist, self).__eq__(other)
-            else:
-                return True
-        else:
-            return False
+
+            return True
+
+        return False
 
     def __str__(self):
         return f'<{self.__class__.__name__} - {self.id}>'
@@ -252,11 +246,6 @@ class Codelist(ItemScheme):
 
     def __repr__(self):
         return f'<{self.__class__.__name__} - {self.id}>'
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Codelist"""
-        return Codelist(*args_, **kwargs_)
 
 
 class OrganisationScheme(ItemScheme):
@@ -295,8 +284,8 @@ class OrganisationScheme(ItemScheme):
     def __eq__(self, other):
         if isinstance(other, OrganisationScheme):
             return super(OrganisationScheme, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
 
 class AgencyScheme(OrganisationScheme):
@@ -336,13 +325,8 @@ class AgencyScheme(OrganisationScheme):
     def __eq__(self, other):
         if isinstance(other, AgencyScheme):
             return super(AgencyScheme, self).__eq__(other)
-        else:
-            return False
 
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of AgencyScheme"""
-        return AgencyScheme(*args_, **kwargs_)
+        return False
 
 
 class Item(NameableArtefact):
@@ -383,8 +367,8 @@ class Item(NameableArtefact):
     def __eq__(self, other):
         if isinstance(other, Item):
             return super(Item, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return f'<{self.__class__.__name__} - {self.id}>'
@@ -424,16 +408,6 @@ class Item(NameableArtefact):
     @parent.setter
     def parent(self, value):
         self._parent = value
-        """
-        if value is None:
-            self._parent = value
-        elif value.__class__ == self.__class__:
-            value.addChild(self)
-            self._parent = value
-        else:
-            raise TypeError(f"The parent of a {self._schemeType} has to be "
-                            f"another {self._schemeType}  object")
-        """
 
     def add_child(self, value):
         """Adds a child to the Item"""
@@ -479,13 +453,8 @@ class Code(Item):
     def __eq__(self, other):
         if isinstance(other, Code):
             return super(Code, self).__eq__(other)
-        else:
-            return False
 
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Code"""
-        return Code(*args_, **kwargs_)
+        return False
 
     def _parse_XML(self, indent, head):
         outfile = super(Code, self)._parse_XML(indent, head)
@@ -524,8 +493,8 @@ class Agency(Item):
         if isinstance(other, Agency):
             return super(Agency, self).__eq__(
                 other) and self._contacts == other._contacts
-        else:
-            return False
+
+        return False
 
     @property
     def contacts(self):
@@ -586,8 +555,8 @@ class Concept(Item):
         if isinstance(other, Concept):
             return (super(Concept, self).__eq__(other) and
                     self._coreRepresentation == other._coreRepresentation)
-        else:
-            return False
+
+        return False
 
     @property
     def core_representation(self):

@@ -317,8 +317,7 @@ class ContentConstraint(Constraint):
         if value not in ConstraintRoleType:
             raise ValueError('ConstraintRole must be either '
                              '"Allowed" or "Actual"')
-        else:
-            self._role = value
+        self._role = value
 
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
@@ -443,8 +442,8 @@ class DataStructureDefinition(MaintainableArtefact):
                     self._measureDescriptor == other._measureDescriptor and
                     self._groupDimensionDescriptor ==
                     other._groupDimensionDescriptor)
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return '<DataStructureDefinition  - %s:%s(%s)>' % (
@@ -494,8 +493,8 @@ class DataStructureDefinition(MaintainableArtefact):
         """Keys of the attributeDescriptor components"""
         if self.attribute_descriptor is not None:
             return [k for k in self.attribute_descriptor.components]
-        else:
-            return []
+
+        return []
 
     @property
     def dataset_attribute_codes(self):
@@ -739,8 +738,8 @@ class DataFlowDefinition(MaintainableArtefact):
         if isinstance(other, DataFlowDefinition):
             return (super(DataFlowDefinition, self).__eq__(other) and
                     self._structure == other._structure)
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return f'<DataFlowDefinition - {self.unique_id}>'

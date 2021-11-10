@@ -4,7 +4,7 @@ from io import StringIO
 import pandas as pd
 
 from sdmxthon.model.component import PrimaryMeasure
-from sdmxthon.model.header import Header
+from sdmxthon.model.header import Header, Sender, Party
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import add_indent
@@ -15,24 +15,17 @@ from sdmxthon.utils.parsing_words import ORGS, DATAFLOWS, CODELISTS, \
 
 chunksize = 100000
 
-"""
-     --------------------------------------------
-    |                                            |
-    |                   Common                   |
-    |                                            |
-     --------------------------------------------
-"""
 
-"""
-     --------------------------------------------
-    |                                            |
-    |                   Common                   |
-    |                                            |
-     --------------------------------------------
-"""
+#
+#      --------------------------------------------
+#     |                                            |
+#     |                   Common                   |
+#     |                                            |
+#      --------------------------------------------
+#
 
 
-def addStructure(dataset, prettyprint, dType):
+def addStructure(dataset, prettyprint, type_):
     outfile = ''
 
     if prettyprint:
@@ -45,7 +38,7 @@ def addStructure(dataset, prettyprint, dType):
 
     outfile += f'{nl}{child2}<{messageAbbr}:Structure ' \
                f'structureID="{dataset.structure.id}" '
-    if dType != MessageTypeEnum.GenericDataSet:
+    if type_ != MessageTypeEnum.GenericDataSet:
         outfile += f'namespace="urn:sdmx:org.sdmx.infomodel.' \
                    f'datastructure.DataStructure=' \
                    f'{dataset.structure.agencyID}:{dataset.structure.id}' \
@@ -63,20 +56,20 @@ def addStructure(dataset, prettyprint, dType):
     return outfile
 
 
-def create_namespaces(dataTypeString, payload, dType, prettyprint):
+def create_namespaces(data_type, payload, type_, prettyprint):
     if prettyprint:
         nl = '\n'
     else:
         nl = ''
     outfile = f'<?xml version="1.0" encoding="UTF-8"?>{nl}'
-    outfile += f'<{messageAbbr}:{dataTypeString} ' \
+    outfile += f'<{messageAbbr}:{data_type} ' \
                f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' \
                f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml' \
                f'/schemas/v2_1/message" '
-    if dType == MessageTypeEnum.GenericDataSet:
+    if type_ == MessageTypeEnum.GenericDataSet:
         outfile += f'xmlns:{genericAbbr}="http://www.sdmx.org/resources' \
                    f'/sdmxml/schemas/v2_1/data/generic" '
-    elif dType == MessageTypeEnum.StructureDataSet:
+    elif type_ == MessageTypeEnum.StructureDataSet:
         outfile += f'xmlns:{structureSpecificAbbr}="http://www.sdmx.org' \
                    f'/resources/sdmxml/schemas/v2_1/data/structurespecific" '
         if isinstance(payload, dict):
@@ -159,6 +152,20 @@ def process_dataset(dataset):
     return dataset
 
 
+def _write_metadata_element(payload, dict_word, pkg_word,
+                            item_word, newline, indent):
+    outfile = ""
+    if dict_word in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:{pkg_word}>'
+        for e in payload[dict_word].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:{item_word}')
+        outfile += f'{indent_child}</{structureAbbr}:{pkg_word}>'
+
+    return outfile
+
+
 def parse_metadata(payload, prettyprint):
     if prettyprint:
         indent = '\t'
@@ -167,60 +174,25 @@ def parse_metadata(payload, prettyprint):
         indent = newline = ''
 
     outfile = f'{indent}<{messageAbbr}:Structures>'
-    if ORGS in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:OrganisationSchemes>'
-        for e in payload[ORGS].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:AgencyScheme')
-        outfile += f'{indent_child}</{structureAbbr}:OrganisationSchemes>'
-
-    if DATAFLOWS in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
-        for e in payload[DATAFLOWS].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:Dataflow')
-        outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
-
-    if CODELISTS in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:Codelists>'
-        for e in payload[CODELISTS].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:Codelist')
-        outfile += f'{indent_child}</{structureAbbr}:Codelists>'
-
-    if CONCEPTS in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:Concepts>'
-        for e in payload[CONCEPTS].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:ConceptScheme')
-        outfile += f'{indent_child}</{structureAbbr}:Concepts>'
-
-    if DSDS in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:DataStructures>'
-        for e in payload[DSDS].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:DataStructure')
-        outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
-
-    if CONSTRAINTS in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:Constraints>'
-        for e in payload[CONSTRAINTS].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:ContentConstraint')
-        outfile += f'{indent_child}</{structureAbbr}:Constraints>'
+    outfile += _write_metadata_element(payload, ORGS, 'OrganisationSchemes',
+                                       'AgencyScheme', newline, indent)
+    outfile += _write_metadata_element(payload, DATAFLOWS, 'Dataflows',
+                                       'Dataflow', newline, indent)
+    outfile += _write_metadata_element(payload, CODELISTS, 'Codelists',
+                                       'Codelist', newline, indent)
+    outfile += _write_metadata_element(payload, CONCEPTS, 'Concepts',
+                                       'ConceptScheme', newline, indent)
+    outfile += _write_metadata_element(payload, DSDS, 'DataStructures',
+                                       'DataStructure', newline, indent)
+    outfile += _write_metadata_element(payload, CONSTRAINTS, 'Constraints',
+                                       'ContentConstraint', newline, indent)
 
     outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
 
     return outfile
 
 
-def writer(path, payload, dType, prettyprint=True, id_='test',
+def writer(path, payload, type_, prettyprint=True, id_='test',
            test='true',
            prepared=datetime.now(),
            sender='Unknown',
@@ -233,36 +205,28 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     else:
         child1 = child2 = nl = ''
 
-    if dType == MessageTypeEnum.GenericDataSet:
+    if type_ == MessageTypeEnum.GenericDataSet:
         data_type_string = 'GenericData'
-    elif dType == MessageTypeEnum.StructureDataSet:
+    elif type_ == MessageTypeEnum.StructureDataSet:
         data_type_string = 'StructureSpecificData'
     else:
         data_type_string = 'Structure'
 
     # Header
-    outfile = create_namespaces(data_type_string, payload, dType, prettyprint)
+    outfile = create_namespaces(data_type_string, payload, type_, prettyprint)
 
     if header is None:
-        outfile += f'{child1}<{messageAbbr}:Header>{nl}' \
-                   f'{child2}<{messageAbbr}:ID>{id_}</{messageAbbr}:ID>' \
-                   f'{nl}{child2}<{messageAbbr}:Test>{test}' \
-                   f'</{messageAbbr}:Test>' \
-                   f'{nl}{child2}<{messageAbbr}:Prepared>' \
-                   f'{prepared.strftime("%Y-%m-%dT%H:%M:%S")}' \
-                   f'</{messageAbbr}:Prepared>' \
-                   f'{nl}{child2}<{messageAbbr}:Sender id="{sender}"/>' \
-                   f'{nl}{child2}<{messageAbbr}:Receiver id="{receiver}"/>'
-    else:
-        outfile += write_from_header(header, prettyprint)
+        header = Header(id_, test, prepared, Sender(sender), [Party(receiver)])
 
-    if isinstance(payload, dict) and dType is not MessageTypeEnum.Metadata:
+    outfile += write_from_header(header, prettyprint)
+
+    if isinstance(payload, dict) and type_ is not MessageTypeEnum.Metadata:
         for record in payload.values():
-            outfile += addStructure(record, prettyprint, dType)
-    elif dType is not MessageTypeEnum.Metadata:
-        outfile += addStructure(payload, prettyprint, dType)
+            outfile += addStructure(record, prettyprint, type_)
+    elif type_ is not MessageTypeEnum.Metadata:
+        outfile += addStructure(payload, prettyprint, type_)
 
-    if dType is not MessageTypeEnum.Metadata and header is not None:
+    if type_ is not MessageTypeEnum.Metadata and header is not None:
         if header.dataset_action is not None:
             outfile += f'{nl}{child2}<{messageAbbr}:DataSetAction>' \
                        f'{header.dataset_action}</{messageAbbr}:DataSetAction>'
@@ -279,7 +243,7 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     outfile += f'{nl}{child1}</{messageAbbr}:Header>{nl}'
 
     # Dataset
-    if dType == MessageTypeEnum.GenericDataSet:
+    if type_ == MessageTypeEnum.GenericDataSet:
         if isinstance(payload, dict):
             for record in payload.values():
                 record = process_dataset(record)
@@ -287,7 +251,7 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         else:
             payload = process_dataset(payload)
             outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
-    elif dType == MessageTypeEnum.StructureDataSet:
+    elif type_ == MessageTypeEnum.StructureDataSet:
         if isinstance(payload, dict):
             count = 0
             for record in payload.values():
@@ -298,7 +262,7 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         else:
             payload = process_dataset(payload)
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
-    elif dType == MessageTypeEnum.Metadata:
+    elif type_ == MessageTypeEnum.Metadata:
         if len(payload) > 0:
             outfile += parse_metadata(payload, prettyprint)
     outfile += f'</{messageAbbr}:{data_type_string}>'
@@ -326,13 +290,50 @@ def series_process(parser, data, data_dict, series_codes, obs_codes):
     return ''.join(out)
 
 
-"""
-     --------------------------------------------
-    |                                            |
-    |              Structure Specific            |
-    |                                            |
-     --------------------------------------------
-"""
+def get_codes(dim, dataset):
+    series_codes = []
+    obs_codes = [dim, dataset.structure.measure_code]
+    for e in dataset.structure.attribute_descriptor.components.values():
+        if e.id in dataset.data.keys() and isinstance(e.related_to,
+                                                      PrimaryMeasure):
+            obs_codes.append(e.id)
+    for e in dataset.data.keys():
+        if ((e in dataset.structure.dimension_codes and e != dim)
+                or (e in dataset.structure.attribute_codes and
+                    e not in obs_codes)):
+            series_codes.append(e)
+
+    return series_codes, obs_codes
+
+
+#
+#      --------------------------------------------
+#     |                                            |
+#     |              Structure Specific            |
+#     |                                            |
+#      --------------------------------------------
+#
+
+def memory_optimization_str(dataset, opt_att_codes, prettyprint):
+    outfile = ""
+    length_ = len(dataset.data)
+    if len(dataset.data) > chunksize:
+        previous = 0
+        next_ = chunksize
+        while previous <= length_:
+            outfile += obs_str(dataset.data.iloc[previous:next_],
+                               opt_att_codes, prettyprint)
+            previous = next_
+            next_ += chunksize
+
+            if next_ >= length_:
+                outfile += obs_str(dataset.data.iloc[previous:],
+                                   opt_att_codes, prettyprint)
+                previous = next_
+    else:
+        outfile += obs_str(dataset.data, opt_att_codes, prettyprint)
+
+    return outfile
 
 
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
@@ -359,36 +360,9 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
                      if att not in man_att]
 
     if dim == "AllDimensions":
-        chunksize = 100000
-        length_ = len(dataset.data)
-        if len(dataset.data) > chunksize:
-            previous = 0
-            next_ = chunksize
-            while previous <= length_:
-                outfile += obs_str(dataset.data.iloc[previous:next_],
-                                   opt_att_codes, prettyprint)
-                previous = next_
-                next_ += chunksize
-
-                if next_ >= length_:
-                    outfile += obs_str(dataset.data.iloc[previous:],
-                                       opt_att_codes, prettyprint)
-                    previous = next_
-        else:
-            outfile += obs_str(dataset.data, opt_att_codes, prettyprint)
-
+        outfile += memory_optimization_str(dataset, opt_att_codes, prettyprint)
     else:
-        series_codes = []
-        obs_codes = [dim, dataset.structure.measure_code]
-        for e in dataset.structure.attribute_descriptor.components.values():
-            if e.id in dataset.data.keys() and isinstance(e.related_to,
-                                                          PrimaryMeasure):
-                obs_codes.append(e.id)
-        for e in dataset.data.keys():
-            if ((e in dataset.structure.dimension_codes and e != dim)
-                    or (e in dataset.structure.attribute_codes and
-                        e not in obs_codes)):
-                series_codes.append(e)
+        series_codes, obs_codes = get_codes(dim, dataset)
         outfile += ser_str(dataset.data, opt_att_codes, series_codes,
                            obs_codes, prettyprint)
 
@@ -479,13 +453,45 @@ def ser_str(data: pd.DataFrame,
     return out
 
 
-"""
-     --------------------------------------------
-    |                                            |
-    |                   Generic                  |
-    |                                            |
-     --------------------------------------------
-"""
+#
+#      --------------------------------------------
+#     |                                            |
+#     |                   Generic                  |
+#     |                                            |
+#      --------------------------------------------
+#
+
+def memory_optimization_gen(dataset, dim_codes, att_codes, measure_code,
+                            prettyprint):
+    outfile = ""
+    length_ = len(dataset.data)
+    if len(dataset.data) > chunksize:
+        previous = 0
+        next_ = chunksize
+        while previous <= length_:
+            outfile += obs_gen(dataset.data.iloc[previous:next_],
+                               dim_codes=dim_codes,
+                               att_codes=att_codes,
+                               measure_code=measure_code,
+                               prettyprint=prettyprint)
+            previous = next_
+            next_ += chunksize
+
+            if next_ >= length_:
+                outfile += obs_gen(dataset.data.iloc[previous:length_],
+                                   dim_codes=dim_codes,
+                                   att_codes=att_codes,
+                                   measure_code=measure_code,
+                                   prettyprint=prettyprint)
+                previous = next_
+    else:
+        outfile += obs_gen(dataset.data,
+                           dim_codes=dim_codes,
+                           att_codes=att_codes,
+                           measure_code=measure_code,
+                           prettyprint=prettyprint)
+
+    return outfile
 
 
 def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
@@ -515,45 +521,10 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
-        chunksize = 100000
-        length_ = len(dataset.data)
-        if len(dataset.data) > chunksize:
-            previous = 0
-            next_ = chunksize
-            while previous <= length_:
-                outfile += obs_gen(dataset.data.iloc[previous:next_],
-                                   dim_codes=dim_codes,
-                                   att_codes=att_codes,
-                                   measure_code=measure_code,
-                                   prettyprint=prettyprint)
-                previous = next_
-                next_ += chunksize
-
-                if next_ >= length_:
-                    outfile += obs_gen(dataset.data.iloc[previous:length_],
-                                       dim_codes=dim_codes,
-                                       att_codes=att_codes,
-                                       measure_code=measure_code,
-                                       prettyprint=prettyprint)
-                    previous = next_
-        else:
-            outfile += obs_gen(dataset.data,
-                               dim_codes=dim_codes,
-                               att_codes=att_codes,
-                               measure_code=measure_code,
-                               prettyprint=prettyprint)
+        outfile += memory_optimization_gen(dataset, dim_codes, att_codes,
+                                           measure_code, prettyprint)
     else:
-        series_codes = []
-        obs_codes = [dim, dataset.structure.measure_code]
-        for e in dataset.structure.attribute_descriptor.components.values():
-            if e.id in dataset.data.keys() and isinstance(e.related_to,
-                                                          PrimaryMeasure):
-                obs_codes.append(e.id)
-        for e in dataset.data.keys():
-            if ((e in dataset.structure.dimension_codes and e != dim)
-                    or (e in dataset.structure.attribute_codes and
-                        e not in obs_codes)):
-                series_codes.append(e)
+        series_codes, obs_codes = get_codes(dim, dataset)
 
         outfile += ser_gen(dataset.data,
                            dim_codes=dim_codes,
@@ -566,6 +537,28 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
     return outfile
+
+
+def format_measure_att(data, measure_code, att_codes, child3, child4, nl):
+    out = ""
+    if measure_code != "OBS_VALUE":
+        out += f'{child3}<{genericAbbr}:ObsValue id="{measure_code}" ' \
+               f'value="{data[measure_code]}"/>{nl}'
+    else:
+        out += f'{child3}<{genericAbbr}:ObsValue ' \
+               f'value="{data[measure_code]}"/>{nl}'
+
+    if len(att_codes) > 0:
+        out += f"{child3}<{genericAbbr}:Attributes>{nl}"
+
+        for k in att_codes:
+            if data[k] != '':
+                out += f'{child4}<{genericAbbr}:Value id="{k}" ' \
+                       f'value="{data[k]}"/>{nl}'
+
+        out += f"{child3}</{genericAbbr}:Attributes>{nl}"
+
+    return out
 
 
 def format_obs(data: dict,
@@ -590,22 +583,8 @@ def format_obs(data: dict,
 
     out += f"{child3}</{genericAbbr}:ObsKey>{nl}"
 
-    if measure_code != "OBS_VALUE":
-        out += f'{child3}<{genericAbbr}:ObsValue id="{measure_code}" ' \
-               f'value="{data[measure_code]}"/>{nl}'
-    else:
-        out += f'{child3}<{genericAbbr}:ObsValue ' \
-               f'value="{data[measure_code]}"/>{nl}'
-
-    if len(att_codes) > 0:
-        out += f"{child3}<{genericAbbr}:Attributes>{nl}"
-
-        for k in att_codes:
-            if data[k] != '':
-                out += f'{child4}<{genericAbbr}:Value id="{k}" ' \
-                       f'value="{data[k]}"/>{nl}'
-
-        out += f"{child3}</{genericAbbr}:Attributes>{nl}"
+    out += format_measure_att(data, measure_code, att_codes,
+                              child3, child4, nl)
 
     out += f"{child2}</{genericAbbr}:Obs>{nl}"
 
@@ -637,10 +616,9 @@ def format_ser(data: dict,
         child2 = '\t\t'
         child3 = '\t\t\t'
         child4 = '\t\t\t\t'
-        child5 = '\t\t\t\t\t'
         nl = '\n'
     else:
-        child2 = child3 = child4 = child5 = nl = ''
+        child2 = child3 = child4 = nl = ''
 
     out = f"{child2}<{genericAbbr}:Series>{nl}"
     # --------------  Series --------------
@@ -674,23 +652,8 @@ def format_ser(data: dict,
             out += f'{child4}<{genericAbbr}:ObsDimension ' \
                    f'value="{obs[dim]}"/>{nl}'
 
-        if measure_code != "OBS_VALUE":
-            out += f'{child4}<{genericAbbr}:ObsValue id="{measure_code}" ' \
-                   f'value="{obs[measure_code]}"/>{nl}'
-        else:
-            out += f'{child4}<{genericAbbr}:ObsValue ' \
-                   f'value="{obs[measure_code]}"/>{nl}'
-
-        # Obs Attributes
-        if len(obs_attr) > 0:
-            out += f"{child4}<{genericAbbr}:Attributes>{nl}"
-
-            for k in obs_attr:
-                if obs[k] != '':
-                    out += f'{child5}<{genericAbbr}:Value id="{k}" ' \
-                           f'value="{obs[k]}"/>{nl}'
-
-            out += f"{child4}</{genericAbbr}:Attributes>{nl}"
+        out += format_measure_att(obs, measure_code, obs_attr,
+                                  child3, child4, nl)
 
         out += f"{child3}</{genericAbbr}:Obs>{nl}"
 

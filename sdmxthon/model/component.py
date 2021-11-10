@@ -26,8 +26,8 @@ class Component(IdentifiableArtefact):
             return (super(Component, self).__eq__(other) and
                     self.local_representation == other.local_representation and
                     self._concept_identity == other._concept_identity)
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return f'<{self.__class__.__name__} - {self.id}>'
@@ -71,8 +71,8 @@ class Component(IdentifiableArtefact):
         if isinstance(self.concept_identity, Concept) and \
                 self.concept_identity.core_representation is not None:
             return self.concept_identity.core_representation
-        else:
-            return None
+
+        return None
 
     def _parse_XML(self, indent, head):
 
@@ -238,8 +238,8 @@ class Dimension(Component):
         if isinstance(other, Dimension):
             return super(Dimension, self).__eq__(
                 other) and self._position == other._position
-        else:
-            return False
+
+        return False
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -276,8 +276,8 @@ class TimeDimension(Dimension):
     def __eq__(self, other):
         if isinstance(other, TimeDimension):
             return super(TimeDimension, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
 
 class Attribute(Component):
@@ -303,8 +303,8 @@ class Attribute(Component):
             return (super(Attribute, self).__eq__(other) and
                     self._usageStatus == other._usageStatus and
                     self._relatedTo == other._relatedTo)
-        else:
-            return False
+
+        return False
 
     @staticmethod
     def _factory(*args_, **kwargs_):
@@ -361,11 +361,11 @@ class MeasureDimension(Dimension):
     def __eq__(self, other):
         if isinstance(other, MeasureDimension):
             return super(MeasureDimension, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
 
-class PrimaryMeasure(Component, object):
+class PrimaryMeasure(Component):
     """The metadata concept that is the phenomenon to be measured in a
     data set. In a data set the instance of the measure is often called
     the observation."""
@@ -374,7 +374,6 @@ class PrimaryMeasure(Component, object):
                  annotations=None,
                  local_representation: Representation = None,
                  concept_identity: Concept = None):
-
         super(PrimaryMeasure, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations,
@@ -384,5 +383,5 @@ class PrimaryMeasure(Component, object):
     def __eq__(self, other):
         if isinstance(other, PrimaryMeasure):
             return super(PrimaryMeasure, self).__eq__(other)
-        else:
-            return False
+
+        return False

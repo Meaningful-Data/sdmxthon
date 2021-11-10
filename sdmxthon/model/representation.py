@@ -85,8 +85,8 @@ class Representation(object):
             return (self._codelist == other._codelist and
                     self._conceptScheme == other._conceptScheme and
                     self._type == other._type)
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return f'<{self.__class__.__name__} - {self.facets} - {self.type_}>'

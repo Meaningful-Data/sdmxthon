@@ -33,8 +33,7 @@ class LocalisedString(object):
             return (self._locale == other._locale and
                     self._content == other._content and
                     self._label == other._label)
-        else:
-            return False
+        return False
 
     @property
     def locale(self):
@@ -85,8 +84,7 @@ class InternationalString(object):
     def __eq__(self, other):
         if isinstance(other, InternationalString):
             return self._items == other._items
-        else:
-            return False
+        return False
 
     @property
     def items(self):
@@ -98,10 +96,9 @@ class InternationalString(object):
         if not isinstance(localisedString, LocalisedString):
             raise TypeError("International strings can only get localised "
                             "strings as arguments")
-        else:
-            self._items[localisedString.label] = {
-                'locale': localisedString.locale,
-                'content': localisedString.content}
+        self._items[localisedString.label] = {
+            'locale': localisedString.locale,
+            'content': localisedString.content}
 
     def getLabels(self):
         """Gets the labels of the items present in the International String"""
@@ -232,8 +229,7 @@ class AnnotableArtefact(object):
         if not isinstance(annotation, Annotation):
             raise TypeError(
                 "Annotable artefacts can only get annotations as arguments")
-        else:
-            self._annotations.append(annotation)
+        self._annotations.append(annotation)
 
     def _to_XML(self, prettyprint):
 
@@ -276,8 +272,8 @@ class AnnotableArtefact(object):
                 outfile.append(f'{child1}</{commonAbbr}:Annotation>')
             outfile.append(f'</{commonAbbr}:Annotations>')
             return outfile
-        else:
-            return None
+
+        return None
 
 
 class IdentifiableArtefact(AnnotableArtefact):
@@ -299,8 +295,7 @@ class IdentifiableArtefact(AnnotableArtefact):
             return (super(IdentifiableArtefact, self).__eq__(other) and
                     self._id == other._id and
                     self._uri == other._uri and self._urn == other._urn)
-        else:
-            return False
+        return False
 
     @property
     def id(self):
@@ -368,8 +363,7 @@ class NameableArtefact(IdentifiableArtefact):
             return (super(NameableArtefact, self).__eq__(other) and
                     self._name == other._name and
                     self._description == other._description)
-        else:
-            return False
+        return False
 
     @property
     def name(self):
@@ -377,16 +371,17 @@ class NameableArtefact(IdentifiableArtefact):
         the International String class """
         if self._name is None:
             return None
-        elif isinstance(self._name, InternationalString):
+        if isinstance(self._name, InternationalString):
             if len(self._name.items) == 0:
                 return None
-            elif len(self._name.items) == 1:
+            if len(self._name.items) == 1:
                 values_view = self._name.items.values()
                 value_iterator = iter(values_view)
                 first_value = next(value_iterator)
                 return first_value['content']
-            else:
-                return self._name.items
+
+            return self._name.items
+
         return self._name
 
     @property
@@ -395,16 +390,17 @@ class NameableArtefact(IdentifiableArtefact):
         via the International String class."""
         if self._description is None:
             return None
-        elif isinstance(self._description, InternationalString):
+        if isinstance(self._description, InternationalString):
             if len(self._description.items) == 0:
                 return None
-            elif len(self._description.items) == 1:
+
+            if len(self._description.items) == 1:
                 values_view = self._description.items.values()
                 value_iterator = iter(values_view)
                 first_value = next(value_iterator)
                 return first_value['content']
-            else:
-                return self._description.items
+
+            return self._description.items
         return self._description
 
     @name.setter
@@ -452,8 +448,8 @@ class VersionableArtefact(NameableArtefact):
                     self._version == other._version and
                     self._validFrom == other._validFrom and
                     self._validTo == other._validTo)
-        else:
-            return False
+
+        return False
 
     @property
     def version(self):
@@ -535,16 +531,15 @@ class MaintainableArtefact(VersionableArtefact):
                     self._serviceUrl == other._serviceUrl and
                     self._structureUrl == other._structureUrl and
                     self._maintainer == other._maintainer)
-        else:
-            return False
+        return False
 
     @property
     def unique_id(self):
         """Provides the unique id in the shape of AgencyID:ID(version)"""
         if isinstance(self.maintainer, str):
             return f'{self.maintainer}:{self.id}({self.version})'
-        else:
-            return f'{self.maintainer.id}:{self.id}({self.version})'
+
+        return f'{self.maintainer.id}:{self.id}({self.version})'
 
     @property
     def isFinal(self):
@@ -600,10 +595,10 @@ class MaintainableArtefact(VersionableArtefact):
         if self.maintainer is not None:
             if isinstance(self.maintainer, str):
                 return self.maintainer
-            else:
-                return self.maintainer.id
-        else:
-            return None
+
+            return self.maintainer.id
+
+        return None
 
     def _to_XML(self, prettyprint):
         outfile = super(MaintainableArtefact, self)._to_XML(prettyprint)

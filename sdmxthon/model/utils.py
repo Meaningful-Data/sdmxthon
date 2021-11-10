@@ -53,8 +53,8 @@ def get_date_string(date: datetime, format_: str = "%Y-%m-%d"):
     """
     if date is None:
         return ""
-    else:
-        return datetime.strftime(date, format_)
+
+    return datetime.strftime(date, format_)
 
 
 def string_setter(value: str, pattern: str = None,
@@ -82,16 +82,14 @@ def string_setter(value: str, pattern: str = None,
             regex = re.compile(pattern, re.I)
             if regex.match(value):
                 return value
-            else:
-                raise ValueError(f"Error setting the string. Pattern "
-                                 f"'{pattern}' not respected")
+            raise ValueError(f"Error setting the string. Pattern "
+                             f"'{pattern}' not respected")
         elif enumeration is not None:
             if value in enumeration:
                 return value
-            else:
-                raise ValueError(
-                    f"Error setting the string. Enumeration "
-                    f"{str(enumeration)} not respected")
+            raise ValueError(
+                f"Error setting the string. Enumeration "
+                f"{str(enumeration)} not respected")
         else:
             return value
     elif isinstance(value, int):
@@ -114,10 +112,10 @@ def date_setter(value: datetime):
 
     if isinstance(value, datetime) or value is None:
         return value
-    elif isinstance(value, str):
+    if isinstance(value, str):
         return set_date_from_string(value)
-    else:
-        raise TypeError("Type should be datetime or date")
+
+    raise TypeError("Type should be datetime or date")
 
 
 def bool_setter(value: bool):
@@ -131,12 +129,12 @@ def bool_setter(value: bool):
     """
     if isinstance(value, bool) or value is None:
         return value
-    elif value == "false":
+    if value == "false":
         return False
-    elif value == "true":
+    if value == "true":
         return True
-    else:
-        raise ValueError("Type should be bool")
+
+    raise ValueError("Type should be bool")
 
 
 def generic_setter(value, class_):
@@ -151,9 +149,9 @@ def generic_setter(value, class_):
     """
     if isinstance(value, class_) or value is None:
         return value
-    else:
-        raise TypeError(f"The value has to be an instance of the "
-                        f"{class_.__name__} class. {type(value)} passed")
+
+    raise TypeError(f"The value has to be an instance of the "
+                    f"{class_.__name__} class. {type(value)} passed")
 
 
 def int_setter(value: int):
@@ -168,11 +166,10 @@ def int_setter(value: int):
 
     if isinstance(value, int) or value is None:
         return value
-    else:
-        try:
-            return int(value)
-        except Exception:
-            raise ValueError("Type should be int")
+    try:
+        return int(value)
+    except Exception:
+        raise ValueError("Type should be int")
 
 
 _base_ns = 'http://www.sdmx.org/resources/sdmxml/schemas/v2_1'

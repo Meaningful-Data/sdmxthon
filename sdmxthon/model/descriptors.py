@@ -12,8 +12,8 @@ class GroupDimension(object):
     def __eq__(self, other):
         if isinstance(other, GroupDimension):
             return super(GroupDimension, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
     @property
     def ref(self):
@@ -42,8 +42,8 @@ class ComponentList(IdentifiableArtefact):
         if isinstance(other, ComponentList):
             return (super(ComponentList, self).__eq__(other) and
                     self._components == other._components)
-        else:
-            return False
+
+        return False
 
     def __str__(self):
         return f'<{self.__class__.__name__} - {self.id}>'
@@ -65,7 +65,7 @@ class ComponentList(IdentifiableArtefact):
         if isinstance(self, MeasureDescriptor) and len(self._components) == 1:
             raise ValueError('Measure Descriptor cannot have '
                              'more than one Primary Measure')
-        elif isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
+        if isinstance(value, (Dimension, Attribute, PrimaryMeasure)):
             value.componentList = self
             self._components[value.id] = value
         elif isinstance(value, GroupDimension):
@@ -128,8 +128,8 @@ class DimensionDescriptor(ComponentList, object):
     def __eq__(self, other):
         if isinstance(other, DimensionDescriptor):
             return super(DimensionDescriptor, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
 
 class AttributeDescriptor(ComponentList, object):
@@ -150,8 +150,8 @@ class AttributeDescriptor(ComponentList, object):
     def __eq__(self, other):
         if isinstance(other, AttributeDescriptor):
             return super(AttributeDescriptor, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
 
 class MeasureDescriptor(ComponentList, object):
@@ -172,8 +172,8 @@ class MeasureDescriptor(ComponentList, object):
     def __eq__(self, other):
         if isinstance(other, MeasureDescriptor):
             return super(MeasureDescriptor, self).__eq__(other)
-        else:
-            return False
+
+        return False
 
 
 class GroupDimensionDescriptor(ComponentList, object):
@@ -194,5 +194,5 @@ class GroupDimensionDescriptor(ComponentList, object):
     def __eq__(self, other):
         if isinstance(other, GroupDimensionDescriptor):
             return super(GroupDimensionDescriptor, self).__eq__(other)
-        else:
-            return False
+
+        return False

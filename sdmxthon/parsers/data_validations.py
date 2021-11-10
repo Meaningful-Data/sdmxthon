@@ -143,10 +143,7 @@ def time_period_valid(dt_str: str, type_: str):
 
         try:
             res = match_specials.fullmatch(dt_str)
-            if res:
-                return True
-            else:
-                return False
+            return bool(res)
         except Exception:
             return False
 
