@@ -6,10 +6,14 @@ import pandas as pd
 from sdmxthon.model.component import PrimaryMeasure
 from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
-from sdmxthon.parsers.message_parsers import Structures
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import add_indent
 from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
+from sdmxthon.utils.parsing_words import ORGS, DATAFLOWS, CODELISTS, \
+    CONCEPTS, DSDS, CONSTRAINTS
+
+chunksize = 100000
 
 """
      --------------------------------------------
@@ -142,6 +146,72 @@ def write_from_header(header, prettyprint):
     return outfile
 
 
+def process_dataset(dataset):
+    dataset.data = dataset.data.fillna(value='')
+    return dataset
+
+
+def parse_metadata(payload, prettyprint):
+    if prettyprint:
+        indent = '\t'
+        newline = '\n'
+    else:
+        indent = newline = ''
+
+    outfile = f'{indent}<{messageAbbr}:Structures>'
+    if ORGS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:OrganisationSchemes>'
+        for e in payload[ORGS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:AgencyScheme')
+        outfile += f'{indent_child}</{structureAbbr}:OrganisationSchemes>'
+
+    if DATAFLOWS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
+        for e in payload[DATAFLOWS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:Dataflow')
+        outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
+
+    if CODELISTS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Codelists>'
+        for e in payload[CODELISTS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:Codelist')
+        outfile += f'{indent_child}</{structureAbbr}:Codelists>'
+
+    if CONCEPTS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Concepts>'
+        for e in payload[CONCEPTS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:ConceptScheme')
+        outfile += f'{indent_child}</{structureAbbr}:Concepts>'
+
+    if DSDS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:DataStructures>'
+        for e in payload[DSDS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:DataStructure')
+        outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
+
+    if CONSTRAINTS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Constraints>'
+        for e in payload[CONSTRAINTS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:ContentConstraint')
+        outfile += f'{indent_child}</{structureAbbr}:Constraints>'
+
+    outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
+
+    return outfile
+
+
 def writer(path, payload, dType, prettyprint=True, id_='test',
            test='true',
            prepared=datetime.now(),
@@ -204,20 +274,25 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
     if dType == MessageTypeEnum.GenericDataSet:
         if isinstance(payload, dict):
             for record in payload.values():
+                record = process_dataset(record)
                 outfile += genWriting(record, prettyprint, record.dim_at_obs)
         else:
+            payload = process_dataset(payload)
             outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif dType == MessageTypeEnum.StructureDataSet:
         if isinstance(payload, dict):
             count = 0
             for record in payload.values():
                 count += 1
+                record = process_dataset(record)
                 outfile += strWriting(record, prettyprint, count,
                                       record.dim_at_obs)
         else:
+            payload = process_dataset(payload)
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
-    elif dType == MessageTypeEnum.Metadata and isinstance(payload, Structures):
-        outfile += payload.to_XML(prettyprint)
+    elif dType == MessageTypeEnum.Metadata:
+        if len(payload) > 0:
+            outfile += parse_metadata(payload, prettyprint)
     outfile += f'</{messageAbbr}:{data_type_string}>'
 
     if path != '':
@@ -229,31 +304,18 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         return f
 
 
-def series_process(data, data_dict, series_codes, obs_codes):
-    indexes = data[series_codes].drop_duplicates().index.tolist()
+def format_dict_ser(out, parser, data_dict, obs):
+    data_dict['Series'][0]['Obs'] = obs.to_dict(orient="records")
+    out.append(parser(data_dict['Series'][0]))
+    del data_dict['Series'][0]
 
-    if len(indexes) > 1:
-        previous = 0
-        next_ = indexes[1]
-        count = 1
-        while count < len(indexes):
-            # Filter each datapoint and get the obs as dict
-            data_dict['Series'][count - 1]['Obs'] = \
-                data.loc[previous:next_ - 1][
-                    obs_codes].to_dict(orient="records")
-            previous = next_
-            count += 1
-            if count == len(indexes):
-                data_dict['Series'][count - 1]['Obs'] = data.loc[previous:len(
-                    data)][obs_codes].to_dict(orient="records")
-            else:
-                next_ = indexes[count]
 
-    elif len(indexes) == 1:
-        data_dict['Series'][0]['Obs'] = data.loc[0:1][
-            obs_codes].to_dict(orient="records")
+def series_process(parser, data, data_dict, series_codes, obs_codes):
+    out = []
+    data.groupby(by=series_codes)[obs_codes].apply(
+        lambda x: format_dict_ser(out, parser, data_dict, x))
 
-    return data_dict
+    return ''.join(out)
 
 
 """
@@ -267,8 +329,6 @@ def series_process(data, data_dict, series_codes, obs_codes):
 
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     outfile = ''
-
-    dataset.data = dataset.data.dropna(axis=1, how="all")
 
     if prettyprint:
         child1 = '\t'
@@ -292,7 +352,6 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
 
     if dim == "AllDimensions":
 
-        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
@@ -352,8 +411,7 @@ def obs_str(data: pd.DataFrame,
             prettyprint=True) -> str:
     parser = lambda x: format_obs_str(x, prettyprint)  # noqa: E731
 
-    iterator = map(parser, data.astype('str').replace('nan', '').to_dict(
-        orient='records'))
+    iterator = map(parser, data.to_dict(orient='records'))
     out = ''.join(iterator)
 
     for c in codes:
@@ -397,18 +455,15 @@ def ser_str(data: pd.DataFrame,
             obs_codes: list,
             prettyprint=True) -> str:
     # Getting each datapoint from data and creating dict
-    data = data.sort_values(series_codes, axis=0).astype('str') \
-        .replace('nan', '')
+    data = data.sort_values(series_codes, axis=0)
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    data_dict = series_process(data=data, data_dict=data_dict,
-                               series_codes=series_codes, obs_codes=obs_codes)
+    parser = lambda x: format_ser_str(data=x,  # noqa: E731
+                                      prettyprint=prettyprint)
 
-    parser = lambda x: format_ser_str(x, prettyprint)  # noqa: E731
-
-    iterator = map(parser, data_dict['Series'])
-    out = ''.join(iterator)
+    out = series_process(parser=parser, data=data, data_dict=data_dict,
+                         series_codes=series_codes, obs_codes=obs_codes)
 
     for c in opt_att_codes:
         out = out.replace(f'{c}="" ', '')
@@ -427,8 +482,6 @@ def ser_str(data: pd.DataFrame,
 
 def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     outfile = ''
-
-    dataset.data = dataset.data.dropna(axis=1, how="all")
 
     if prettyprint:
         child1 = '\t'
@@ -454,8 +507,6 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
-
-        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
@@ -560,8 +611,7 @@ def obs_gen(data: pd.DataFrame,
     parser = lambda x: format_obs(x, dim_codes, att_codes,  # noqa: E731
                                   measure_code, prettyprint)
 
-    iterator = map(parser, data.astype('str').replace('nan', '')
-                   .to_dict(orient='records'))
+    iterator = map(parser, data.to_dict(orient='records'))
     out = ''.join(iterator)
 
     return out
@@ -650,9 +700,6 @@ def ser_gen(data: pd.DataFrame,
             series_codes: list,
             prettyprint=True):
     # Getting each datapoint from data and creating dict
-
-    out = ""
-
     series_key = [v for v in series_codes if v in dim_codes]
     series_att = [v for v in series_codes if v in att_codes]
     dim = obs_codes[0]
@@ -661,14 +708,10 @@ def ser_gen(data: pd.DataFrame,
     else:
         obs_att = obs_codes[2:]
 
-    data = data.sort_values(series_codes, axis=0) \
-        .astype('str').replace('nan', '')
+    data = data.sort_values(series_codes, axis=0)
 
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
-
-    data_dict = series_process(data=data, data_dict=data_dict,
-                               series_codes=series_codes, obs_codes=obs_codes)
 
     parser = lambda x: format_ser(data=x,  # noqa: E731
                                   measure_code=measure_code,
@@ -677,9 +720,8 @@ def ser_gen(data: pd.DataFrame,
                                   obs_attr=obs_att,
                                   dim=dim,
                                   prettyprint=prettyprint)
-
-    iterator = map(parser, data_dict['Series'])
-    out += ''.join(iterator)
+    out = series_process(parser=parser, data=data, data_dict=data_dict,
+                         series_codes=series_codes, obs_codes=obs_codes)
 
     del data_dict
 

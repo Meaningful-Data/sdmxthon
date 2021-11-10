@@ -10,12 +10,10 @@ from typing import List
 
 from sdmxthon.model.utils import string_setter, bool_setter, generic_setter, \
     set_date_from_string
-from sdmxthon.parsers.data_parser import DataParser
-from sdmxthon.utils.mappings import Locale_Codes, commonAbbr
-from sdmxthon.utils.xml_base import find_attr_value_
+from sdmxthon.utils.mappings import commonAbbr
 
 
-class LocalisedString(DataParser):
+class LocalisedString(object):
     """The Localised String supports the representation
        of text in one locale (locale is similar to language but
        includes geographic variations such as Canadian
@@ -23,10 +21,9 @@ class LocalisedString(DataParser):
     """
 
     def __init__(self, locale: str = None, label: str = None,
-                 content: str = None, gds_collector=None):
+                 content: str = None):
         """Inits LocalisedString with optional attributes."""
 
-        super().__init__(gds_collector)
         self.label = label
         self._locale = locale
         self._content = content
@@ -38,11 +35,6 @@ class LocalisedString(DataParser):
                     self._label == other._label)
         else:
             return False
-
-    @staticmethod
-    def _factory(*args):
-        """Factory Method of LocalisedString"""
-        return LocalisedString(*args)
 
     @property
     def locale(self):
@@ -74,20 +66,6 @@ class LocalisedString(DataParser):
     @content.setter
     def content(self, value):
         self._content = string_setter(value)
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        value = find_attr_value_('{http://www.w3.org/XML/1998/namespace}lang',
-                                 node)
-        if value is not None and 'lang' not in already_processed:
-            already_processed.add('lang')
-            self._label = value
-            if value in Locale_Codes.keys():
-                self._locale = Locale_Codes[value]
-            else:
-                raise ValueError(f'{value} is not in ISO 639-1 Codes')
-        if node.text.strip() not in ['', '\n']:
-            self._content = " ".join(node.text.split())
 
 
 class InternationalString(object):
@@ -152,13 +130,11 @@ class InternationalString(object):
         return outfile
 
 
-class Annotation(DataParser):
+class Annotation(object):
     """Additional descriptive information attached to an object"""
 
     def __init__(self, id_: str = None, title: str = None, type_: str = None,
-                 url: str = None, text: InternationalString = None,
-                 gds_collector=None):
-        super(Annotation, self).__init__(gds_collector_=gds_collector)
+                 url: str = None, text: InternationalString = None):
         self.id = id_
         self.title = title
         self.type = type_
@@ -224,70 +200,12 @@ class Annotation(DataParser):
     def text(self, value):
         self._text = value
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        value = find_attr_value_('id', node)
 
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self._id = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the attributes present in the XML element"""
-        if nodeName_ == 'AnnotationTitle':
-            value_ = child_.text
-            value_ = self._gds_validate_string(value_)
-            self._title = value_
-        elif nodeName_ == 'AnnotationType':
-            value_ = child_.text
-            value_ = self._gds_validate_string(value_)
-            self._type = value_
-        elif nodeName_ == 'AnnotationURL':
-            value_ = child_.text
-            value_ = self._gds_validate_string(value_)
-            self._url = value_.strip()
-        elif nodeName_ == 'AnnotationText':
-            obj_ = LocalisedString._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if self._text is None:
-                self._text = InternationalString()
-            self._text.addLocalisedString(obj_)
-
-
-class AnnotationsType(DataParser):
-    """Parser of the XML element Annotations"""
-
-    def __init__(self, gds_collector_=None):
-        super().__init__(gds_collector_)
-        self._annotations = []
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of AnnotationsType"""
-        return AnnotationsType(*args_, **kwargs_)
-
-    @property
-    def annotations(self):
-        """The annotations included in the XML element Annotations"""
-        return self._annotations
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'Annotation':
-            obj_ = Annotation._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._annotations.append(obj_)
-
-
-class AnnotableArtefact(DataParser):
+class AnnotableArtefact(object):
     """Superclass of all artefacts. Contains the list of annotations."""
 
-    def __init__(self, annotations: List[Annotation] = None,
-                 gds_collector=None):
+    def __init__(self, annotations: List[Annotation] = None):
 
-        super(AnnotableArtefact, self).__init__(gds_collector_=gds_collector)
         self._annotations = []
 
         if isinstance(annotations, list):
@@ -316,14 +234,6 @@ class AnnotableArtefact(DataParser):
                 "Annotable artefacts can only get annotations as arguments")
         else:
             self._annotations.append(annotation)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        if nodeName_ == 'Annotations':
-            obj_ = AnnotationsType._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            self._annotations = obj_.annotations
 
     def _to_XML(self, prettyprint):
 
@@ -420,31 +330,6 @@ class IdentifiableArtefact(AnnotableArtefact):
     def urn(self, value):
         self._urn = generic_setter(value, str)
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        value = find_attr_value_('id', node)
-        if value is not None and 'id' not in already_processed:
-            already_processed.add('id')
-            self.id = value
-
-        value = find_attr_value_('uri', node)
-        if value is not None and 'uri' not in already_processed:
-            already_processed.add('uri')
-            self.uri = value
-
-        value = find_attr_value_('urn', node)
-        if value is not None and 'urn' not in already_processed:
-            already_processed.add('urn')
-            self.urn = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(IdentifiableArtefact, self)._build_children(child_, node,
-                                                          nodeName_,
-                                                          fromsubclass_,
-                                                          gds_collector_)
-
     def _to_XML(self, prettyprint) -> dict:
 
         attributes = ''
@@ -530,30 +415,6 @@ class NameableArtefact(IdentifiableArtefact):
     def description(self, value):
         self._description = generic_setter(value, InternationalString)
 
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(NameableArtefact, self)._build_attributes(node, attrs,
-                                                        already_processed)
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(NameableArtefact, self)._build_children(child_, node, nodeName_,
-                                                      fromsubclass_,
-                                                      gds_collector_)
-        if nodeName_ == 'Name':
-            obj_ = LocalisedString._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if self._name is None:
-                self._name = InternationalString()
-            self._name.addLocalisedString(obj_)
-        elif nodeName_ == 'Description':
-            obj_ = LocalisedString._factory()
-            obj_._build(child_, gds_collector_=gds_collector_)
-            if self._description is None:
-                self._description = InternationalString()
-            self._description.addLocalisedString(obj_)
-
     def _to_XML(self, prettyprint) -> dict:
         outfile = super(NameableArtefact, self)._to_XML(prettyprint)
 
@@ -617,41 +478,9 @@ class VersionableArtefact(NameableArtefact):
     def validFrom(self, value):
         self._validFrom = set_date_from_string(value)
 
-    #        self._validFrom = value
-
     @validTo.setter
     def validTo(self, value):
         self._validTo = set_date_from_string(value)
-        # self._validTo = value
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(VersionableArtefact, self)._build_attributes(node, attrs,
-                                                           already_processed)
-
-        value = find_attr_value_('version', node)
-        if value is not None and 'version' not in already_processed:
-            already_processed.add('version')
-            # TODO Validate version
-            self.version = value
-
-        value = find_attr_value_('validFrom', node)
-        if value is not None and 'validFrom' not in already_processed:
-            already_processed.add('validFrom')
-            self.validFrom = value
-
-        value = find_attr_value_('validTo', node)
-        if value is not None and 'validTo' not in already_processed:
-            already_processed.add('validTo')
-            self.validTo = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(VersionableArtefact, self)._build_children(child_, node,
-                                                         nodeName_,
-                                                         fromsubclass_,
-                                                         gds_collector_)
 
     def _to_XML(self, prettyprint) -> dict:
         outfile = super(VersionableArtefact, self)._to_XML(prettyprint)
@@ -775,37 +604,6 @@ class MaintainableArtefact(VersionableArtefact):
                 return self.maintainer.id
         else:
             return None
-
-    def _build_attributes(self, node, attrs, already_processed):
-        """Builds the attributes present in the XML element"""
-        super(MaintainableArtefact, self)._build_attributes(node, attrs,
-                                                            already_processed)
-
-        value = find_attr_value_('agencyID', node)
-        if value is not None and 'agencyID' not in already_processed:
-            already_processed.add('agencyID')
-            self._maintainer = value
-
-        value = find_attr_value_('isExternalReference', node)
-        if value is not None and 'isExternalReference' not in \
-                already_processed:
-            already_processed.add('isExternalReference')
-            value = self._gds_parse_boolean(value)
-            self.isExternalReference = value
-
-        value = find_attr_value_('isFinal', node)
-        if value is not None and 'isFinal' not in already_processed:
-            already_processed.add('isFinal')
-            value = self._gds_parse_boolean(value)
-            self.isFinal = value
-
-    def _build_children(self, child_, node, nodeName_, fromsubclass_=False,
-                        gds_collector_=None):
-        """Builds the childs of the XML element"""
-        super(MaintainableArtefact, self)._build_children(child_, node,
-                                                          nodeName_,
-                                                          fromsubclass_,
-                                                          gds_collector_)
 
     def _to_XML(self, prettyprint):
         outfile = super(MaintainableArtefact, self)._to_XML(prettyprint)

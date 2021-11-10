@@ -6,6 +6,5 @@
 *.py[cod]
 *$py.class
 dist
-/sdmxthon/docs/_build/
-/sdmxthon/docs/_build/html/
-/sdmxthon/outputTests/
+sdmxthon/docs/_build
+sdmxthon/outputTests/

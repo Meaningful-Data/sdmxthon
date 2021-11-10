@@ -51,7 +51,7 @@ There are 3 elements that are common to all SDMX-ML files: the Header, the
 data or metadata XML elements and their attributes. All headers are parsed via
 the :doc:`Header<./packages/model/header>` class, defined in the Model Package. The XML elements and its
 attributes are parsed with the build_children and the build_attributes methods
-of DataParser and its implementations in each class.
+of object and its implementations in each class.
 
 Depending on the content of each XML file, we will go through different classes
 to parse it through these two methods.

@@ -38,6 +38,7 @@ def reading_generic_series(dataset) -> pd.DataFrame:
     # Generic Series
     test_list = []
     df = None
+    dataset[SERIES] = add_list(dataset[SERIES])
     for series in dataset[SERIES]:
         keys = dict()
         # Series Keys
@@ -71,6 +72,7 @@ def reading_generic_all(dataset) -> pd.DataFrame:
     # Generic All Dimensions
     test_list = []
     df = None
+    dataset[OBS] = add_list(dataset[OBS])
     for data in dataset[OBS]:
         obs = dict()
         obs = {**obs, **get_element_to_list(data, mode=OBSKEY)}
@@ -134,7 +136,10 @@ def create_dataset(dataset, metadata, global_mode):
     elif GENERIC == global_mode:
 
         # Dataset info
-        attached_attributes = get_at_att_gen(dataset)
+        if ATTRIBUTES in dataset:
+            attached_attributes = get_at_att_gen(dataset)
+        else:
+            attached_attributes = {}
 
         # Parsing data
         if SERIES in dataset:

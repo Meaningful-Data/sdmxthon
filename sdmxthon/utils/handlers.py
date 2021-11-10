@@ -1,7 +1,6 @@
 """
     Handlers file provide functions to make the code more readable
 """
-import inspect
 
 
 def first_element_dict(obj_: dict):
@@ -96,20 +95,3 @@ def recursive_compare(d1, d2, level='root'):
             print('{:<20} {} != {}'.format(level, d1, d2))
 
     return control
-
-
-def eq_method(self, other):
-    attributes = inspect.getmembers(self.__class__,
-                                    lambda a: not (inspect.isroutine(a)))
-    result = [a[0] for a in attributes if not (
-            a[0].startswith('__') or
-            a[0].endswith('__') or
-            a[0].startswith('_'))]
-
-    global_control = True
-    for e in result:
-        if not recursive_compare(getattr(self, e, None),
-                                 getattr(other, e, None)):
-            global_control = False
-
-    return global_control

@@ -1,3 +1,5 @@
+import copy
+
 from sdmxthon.model.base import InternationalString, LocalisedString, \
     Annotation
 from sdmxthon.model.component import Component, Dimension, TimeDimension, \
@@ -59,6 +61,11 @@ codelists = {}
 concepts = {}
 datastructures = {}
 dataflows = {}
+
+# Errors
+errors = []
+missing_rep = {"CON": [], "CS": [], "CL": []}
+dsd_id = ""
 
 
 def create_int_str(json_int) -> InternationalString:
@@ -157,6 +164,9 @@ def format_representation(json_rep) -> Representation:
         full_id = unique_id(data[AGENCY_ID], data[ID], data[VERSION])
         if full_id in codelists:
             rep[CL.lower()] = codelists[full_id]
+        elif full_id not in missing_rep["CL"]:
+            missing_rep["CL"].append(full_id)
+            rep[CL.lower()] = full_id
 
     for e in node:
         if e in json_rep:
@@ -211,6 +221,12 @@ def create_scheme(json_elem, scheme, item):
 
             element = format_annotations(element)
             element = format_name_description(element)
+            full_id = unique_id(element[AGENCY_ID],
+                                element[ID],
+                                element[VERSION])
+            element = format_urls(element)
+            element = format_maintainer(element)
+            element = format_id(element)
             if item in element:
                 element[item] = add_list(element[item])
                 items = []
@@ -223,12 +239,6 @@ def create_scheme(json_elem, scheme, item):
                     agencies.update({e.id: e for e in items})
             else:
                 element['items'] = []
-            full_id = unique_id(element[AGENCY_ID],
-                                element[ID],
-                                element[VERSION])
-            element = format_urls(element)
-            element = format_maintainer(element)
-            element = format_id(element)
             # Dynamic creation with specific class
             elements[full_id] = schemes_classes[scheme](**element)
 
@@ -264,17 +274,19 @@ def format_con_id(json_ref):
                 cl = core_rep.codelist
                 if cl is not None:
                     rep[CL.lower()] = cl
-        else:
-            raise Exception
-    # else:
-    #     raise Exception
+        elif json_ref[ID] not in missing_rep["CON"]:
+            missing_rep["CON"].append(json_ref[ID])
+
+    elif full_cs_id not in missing_rep["CS"]:
+        missing_rep["CS"].append(full_cs_id)
 
     return rep
 
 
-def format_relationship(json_rel, node=DIM):
+def format_relationship(json_rel, node=DIM, att_name=None):
     rels = {}
     if node in json_rel:
+        json_rel[node] = add_list(json_rel[node])
         for e in json_rel[node]:
             if DIM_REF in e:
                 element = e[DIM_REF][REF][ID]
@@ -283,10 +295,24 @@ def format_relationship(json_rel, node=DIM):
             if element in dimensions:
                 rels[element] = dimensions[element]
             else:
-                raise Exception
+                errors.append(
+                    {'Code': 'MS04', 'ErrorLevel': 'CRITICAL',
+                     'ObjectID': f'{dsd_id}',
+                     'ObjectType': 'Attribute',
+                     'Message': f'Missing Dimension {e[REF][ID]} '
+                                f'related to Attribute '
+                                f'{att_name}'})
     elif PRIM_MEASURE in json_rel:
         if json_rel[PRIM_MEASURE][REF][ID] in measures:
             rels = measures[json_rel[PRIM_MEASURE][REF][ID]]
+        else:
+            errors.append(
+                {'Code': 'MS05', 'ErrorLevel': 'CRITICAL',
+                 'ObjectID': f'{dsd_id}',
+                 'ObjectType': 'Attribute',
+                 'Message': 'Missing Primary Measure '
+                            f'{json_rel[PRIM_MEASURE][REF][ID]} '
+                            f'related to Attribute {att_name}'})
     elif GROUP in json_rel:
         if json_rel[GROUP][REF][ID] in groups:
             rels = groups[json_rel[GROUP][REF][ID]]
@@ -296,8 +322,6 @@ def format_relationship(json_rel, node=DIM):
 
 
 def format_component(json_comp, comp) -> Component:
-    json_comp = format_id(json_comp)
-    json_comp = format_annotations(json_comp)
     rep = {}
     rep_class = None
     if LOCAL_REP in json_comp:
@@ -315,8 +339,11 @@ def format_component(json_comp, comp) -> Component:
 
     # Attribute Handling
     if ATT_REL in json_comp:
-        json_comp[REL_TO] = format_relationship(json_comp[ATT_REL])
+        json_comp[REL_TO] = format_relationship(json_comp[ATT_REL],
+                                                att_name=json_comp[ID])
         del json_comp[ATT_REL]
+    json_comp = format_id(json_comp)
+    json_comp = format_annotations(json_comp)
 
     return comp(**json_comp)
 
@@ -337,6 +364,11 @@ def format_component_lists(json_comp_lists, comp_list, comp):
         dimensions.update(components)
     elif comp == comp_lists_items[ME_LIST]:
         measures.update(components)
+        if len(components) == 0:
+            errors.append({'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{dsd_id}', 'ObjectType': 'DSD',
+                           'Message': f'DSD {dsd_id} does not have '
+                                      f'a Primary Measure'})
 
     json_comp_lists[COMPS] = components
 
@@ -367,7 +399,17 @@ def format_dsd_comps(json_comps):
             json_comps[name] = format_component_lists(comps[e],
                                                       comp_lists_classes[e],
                                                       comp_lists_items[e])
-
+        else:
+            if e == DIM_LIST:
+                errors.append({'Code': 'MX01', 'ErrorLevel': 'CRITICAL',
+                               'ObjectID': f'{dsd_id}', 'ObjectType': 'DSD',
+                               'Message': f'DSD {dsd_id} does not have '
+                                          f'a DimensionList'})
+            elif e == ME_LIST:
+                errors.append({'Code': 'MX02', 'ErrorLevel': 'CRITICAL',
+                               'ObjectID': f'{dsd_id}', 'ObjectType': 'DSD',
+                               'Message': f'DSD {dsd_id} does not have '
+                                          f'a Primary Measure'})
     del json_comps[DSD_COMPS]
 
     return json_comps
@@ -375,34 +417,43 @@ def format_dsd_comps(json_comps):
 
 def create_datastructures(json_dsds):
     elements = {}
-
-    if DSD in json_dsds:
+    if json_dsds is not None and DSD in json_dsds:
         json_dsds[DSD] = add_list(json_dsds[DSD])
         for element in json_dsds[DSD]:
             dimensions.clear()
             measures.clear()
             groups.clear()
-            if XMLNS in element:
-                del element[XMLNS]
-
-            if DSD_COMPS in element:
-                element = format_dsd_comps(element)
-
             element = format_annotations(element)
             element = format_name_description(element)
             full_id = unique_id(element[AGENCY_ID],
                                 element[ID],
                                 element[VERSION])
+            global dsd_id
+            dsd_id = full_id
             element = format_urls(element)
 
             element = format_maintainer(element)
             element = format_id(element)
+            if XMLNS in element:
+                del element[XMLNS]
+
+            if DSD_COMPS in element:
+                element = format_dsd_comps(element)
+            del dsd_id
             # Creation of DSD
             if full_id not in elements:
                 elements[full_id] = DataStructureDefinition(**element)
             else:
-                raise Exception
+                errors.append({'Code': 'MS06', 'ErrorLevel': 'CRITICAL',
+                               'ObjectID': f'{full_id}', 'ObjectType': 'DSD',
+                               'Message': f'DSD {full_id} is not unique'})
 
+    else:
+        errors.append(
+            {'Code': 'MS01', 'ErrorLevel': 'CRITICAL',
+             'ObjectID': None,
+             'ObjectType': 'DSD',
+             'Message': 'Not found any DSD in this file'})
     return elements
 
 
@@ -547,7 +598,7 @@ def create_constraints(json_cons):
                 raise Exception
 
             if attachment is not None:
-                attachment.constraints.append(elements[full_id])
+                attachment.add_constraint(elements[full_id])
                 del attachment
 
             # TODO Delete once we change constraints
@@ -559,7 +610,64 @@ def create_constraints(json_cons):
     return elements
 
 
+def grouping_errors():
+    if len(missing_rep["CS"]) > 0:
+        for e in missing_rep["CS"]:
+            errors.append({'Code': 'MS07', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}',
+                           'ObjectType': 'Concept',
+                           'Message': f'Missing Concept Scheme {e}'}
+                          )
+        missing_rep["CS"].clear()
+    if len(missing_rep["CL"]) > 0:
+        for e in missing_rep["CL"]:
+            errors.append({'Code': 'MS02', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}',
+                           'ObjectType': 'Codelist',
+                           'Message': f'Missing Codelist {e}'})
+        missing_rep["CL"].clear()
+    if len(missing_rep["CON"]) > 0:
+        for e in missing_rep["CON"]:
+            errors.append({'Code': 'MS03', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}',
+                           'ObjectType': 'Concept',
+                           'Message': f'Missing Concept {e}'})
+        missing_rep["CON"].clear()
+
+
 def create_metadata(json_meta):
+    """
+        Metadata validations stands for the next schema:
+
+        .. list-table:: Metadata validations
+            :widths: 20 80
+            :header-rows: 1
+
+            * - Code
+              - Description
+            * - MS01
+              - Check that the metadata file contains at least one DSD
+            * - MS02
+              - Check that the metadata file contains related codelists
+            * - MS03
+              - Check if the DSD metadata file contains the concepts needed \
+                for each DSD
+            * - MS04
+              - Check if the dimensions in Attribute Relationship are in \
+                DimensionList in DSD file
+            * - MS05
+              - Check if the primary measure in Attribute Relationship is in
+                MeasureList in DSD file
+            * - MS06
+              - Check if all DSDs present in the metadata file are unique
+            * - MS07
+              - Check if all Concept Scheme needed are present
+            * - MX01
+              - Check if minimum structural requirements for DSD xml are \
+                satisfied
+            * - MX02
+              - Check if every DSD has primary measure defined
+    """
     # Reset dict to store metadata
     metadata = dict()
 
@@ -580,10 +688,15 @@ def create_metadata(json_meta):
     if CONSTRAINTS in json_meta:
         metadata[CONSTRAINTS] = create_constraints(json_meta[CONSTRAINTS])
 
+    grouping_errors()
+
+    metadata['errors'] = copy.copy(errors)
+
     # Reset global variables
     agencies.clear()
     concepts.clear()
     codelists.clear()
     datastructures.clear()
     dataflows.clear()
+    errors.clear()
     return metadata
