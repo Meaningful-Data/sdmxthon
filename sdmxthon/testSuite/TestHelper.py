@@ -83,8 +83,11 @@ class TestHelper(unittest.TestCase):
         self.assert_equal_validation(errors, reference)
 
     def metadata_valid_test(self, path_to_data):
-        obj_ = read_xml(os.path.join(self.pathToMetadata, path_to_data),
-                        mode="Metadata")
+        if 'http' in path_to_data:
+            path = path_to_data
+        else:
+            path = os.path.join(self.pathToMetadata, path_to_data)
+        obj_ = read_xml(path, mode="Metadata")
         errors = obj_['errors']
         if errors is None:
             errors = []

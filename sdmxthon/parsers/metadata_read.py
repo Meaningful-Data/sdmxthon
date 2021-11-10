@@ -64,6 +64,7 @@ dataflows = {}
 
 # Errors
 errors = []
+missing_rep = {"CON": [], "CS": [], "CL": []}
 dsd_id = ""
 
 
@@ -163,11 +164,8 @@ def format_representation(json_rep) -> Representation:
         full_id = unique_id(data[AGENCY_ID], data[ID], data[VERSION])
         if full_id in codelists:
             rep[CL.lower()] = codelists[full_id]
-        else:
-            errors.append({'Code': 'MS02', 'ErrorLevel': 'CRITICAL',
-                           'ObjectID': f'{full_id}',
-                           'ObjectType': 'Codelist',
-                           'Message': f'Missing Codelist {full_id}'})
+        elif full_id not in missing_rep["CL"]:
+            missing_rep["CL"].append(full_id)
             rep[CL.lower()] = full_id
 
     for e in node:
@@ -223,6 +221,12 @@ def create_scheme(json_elem, scheme, item):
 
             element = format_annotations(element)
             element = format_name_description(element)
+            full_id = unique_id(element[AGENCY_ID],
+                                element[ID],
+                                element[VERSION])
+            element = format_urls(element)
+            element = format_maintainer(element)
+            element = format_id(element)
             if item in element:
                 element[item] = add_list(element[item])
                 items = []
@@ -235,12 +239,6 @@ def create_scheme(json_elem, scheme, item):
                     agencies.update({e.id: e for e in items})
             else:
                 element['items'] = []
-            full_id = unique_id(element[AGENCY_ID],
-                                element[ID],
-                                element[VERSION])
-            element = format_urls(element)
-            element = format_maintainer(element)
-            element = format_id(element)
             # Dynamic creation with specific class
             elements[full_id] = schemes_classes[scheme](**element)
 
@@ -276,17 +274,11 @@ def format_con_id(json_ref):
                 cl = core_rep.codelist
                 if cl is not None:
                     rep[CL.lower()] = cl
-        else:
-            errors.append({'Code': 'MS03', 'ErrorLevel': 'CRITICAL',
-                           'ObjectID': f'{json_ref[ID]}',
-                           'ObjectType': 'Concept',
-                           'Message': f'Missing Concept {json_ref[ID]}'})
-    else:
-        errors.append({'Code': 'MS07', 'ErrorLevel': 'CRITICAL',
-                       'ObjectID': f'{full_cs_id}',
-                       'ObjectType': 'Concept',
-                       'Message': f'Missing Concept Scheme {full_cs_id}'}
-                      )
+        elif json_ref[ID] not in missing_rep["CON"]:
+            missing_rep["CON"].append(json_ref[ID])
+
+    elif full_cs_id not in missing_rep["CS"]:
+        missing_rep["CS"].append(full_cs_id)
 
     return rep
 
@@ -618,7 +610,64 @@ def create_constraints(json_cons):
     return elements
 
 
+def grouping_errors():
+    if len(missing_rep["CS"]) > 0:
+        for e in missing_rep["CS"]:
+            errors.append({'Code': 'MS07', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}',
+                           'ObjectType': 'Concept',
+                           'Message': f'Missing Concept Scheme {e}'}
+                          )
+        missing_rep["CS"].clear()
+    if len(missing_rep["CL"]) > 0:
+        for e in missing_rep["CL"]:
+            errors.append({'Code': 'MS02', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}',
+                           'ObjectType': 'Codelist',
+                           'Message': f'Missing Codelist {e}'})
+        missing_rep["CL"].clear()
+    if len(missing_rep["CON"]) > 0:
+        for e in missing_rep["CON"]:
+            errors.append({'Code': 'MS03', 'ErrorLevel': 'CRITICAL',
+                           'ObjectID': f'{e}',
+                           'ObjectType': 'Concept',
+                           'Message': f'Missing Concept {e}'})
+        missing_rep["CON"].clear()
+
+
 def create_metadata(json_meta):
+    """
+        Metadata validations stands for the next schema:
+
+        .. list-table:: Metadata validations
+            :widths: 20 80
+            :header-rows: 1
+
+            * - Code
+              - Description
+            * - MS01
+              - Check that the metadata file contains at least one DSD
+            * - MS02
+              - Check that the metadata file contains related codelists
+            * - MS03
+              - Check if the DSD metadata file contains the concepts needed \
+                for each DSD
+            * - MS04
+              - Check if the dimensions in Attribute Relationship are in \
+                DimensionList in DSD file
+            * - MS05
+              - Check if the primary measure in Attribute Relationship is in
+                MeasureList in DSD file
+            * - MS06
+              - Check if all DSDs present in the metadata file are unique
+            * - MS07
+              - Check if all Concept Scheme needed are present
+            * - MX01
+              - Check if minimum structural requirements for DSD xml are \
+                satisfied
+            * - MX02
+              - Check if every DSD has primary measure defined
+    """
     # Reset dict to store metadata
     metadata = dict()
 
@@ -638,6 +687,8 @@ def create_metadata(json_meta):
         dataflows.update(metadata[DATAFLOWS])
     if CONSTRAINTS in json_meta:
         metadata[CONSTRAINTS] = create_constraints(json_meta[CONSTRAINTS])
+
+    grouping_errors()
 
     metadata['errors'] = copy.copy(errors)
 

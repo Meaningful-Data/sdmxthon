@@ -7,8 +7,11 @@ from sdmxthon.model.component import PrimaryMeasure
 from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import add_indent
 from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
     structureSpecificAbbr, structureAbbr
+from sdmxthon.utils.parsing_words import ORGS, DATAFLOWS, CODELISTS, \
+    CONCEPTS, DSDS, CONSTRAINTS
 
 chunksize = 100000
 
@@ -148,6 +151,67 @@ def process_dataset(dataset):
     return dataset
 
 
+def parse_metadata(payload, prettyprint):
+    if prettyprint:
+        indent = '\t'
+        newline = '\n'
+    else:
+        indent = newline = ''
+
+    outfile = f'{indent}<{messageAbbr}:Structures>'
+    if ORGS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:OrganisationSchemes>'
+        for e in payload[ORGS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:AgencyScheme')
+        outfile += f'{indent_child}</{structureAbbr}:OrganisationSchemes>'
+
+    if DATAFLOWS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Dataflows>'
+        for e in payload[DATAFLOWS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:Dataflow')
+        outfile += f'{indent_child}</{structureAbbr}:Dataflows>'
+
+    if CODELISTS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Codelists>'
+        for e in payload[CODELISTS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:Codelist')
+        outfile += f'{indent_child}</{structureAbbr}:Codelists>'
+
+    if CONCEPTS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Concepts>'
+        for e in payload[CONCEPTS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:ConceptScheme')
+        outfile += f'{indent_child}</{structureAbbr}:Concepts>'
+
+    if DSDS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:DataStructures>'
+        for e in payload[DSDS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:DataStructure')
+        outfile += f'{indent_child}</{structureAbbr}:DataStructures>'
+
+    if CONSTRAINTS in payload:
+        indent_child = newline + add_indent(indent)
+        outfile += f'{indent_child}<{structureAbbr}:Constraints>'
+        for e in payload[CONSTRAINTS].values():
+            outfile += e._parse_XML(indent_child,
+                                    f'{structureAbbr}:ContentConstraint')
+        outfile += f'{indent_child}</{structureAbbr}:Constraints>'
+
+    outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
+
+    return outfile
+
+
 def writer(path, payload, dType, prettyprint=True, id_='test',
            test='true',
            prepared=datetime.now(),
@@ -227,9 +291,8 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
             payload = process_dataset(payload)
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif dType == MessageTypeEnum.Metadata:
-        # TODO Write to metadata ??
         if len(payload) > 0:
-            outfile += payload.to_XML(prettyprint)
+            outfile += parse_metadata(payload, prettyprint)
     outfile += f'</{messageAbbr}:{data_type_string}>'
 
     if path != '':

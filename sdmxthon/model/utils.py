@@ -26,6 +26,8 @@ def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
 
     if value is None:
         return None
+    if isinstance(value, datetime):
+        return value
     for fmt in (format_, "%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"):
         try:
             return datetime.strptime(value, fmt)
