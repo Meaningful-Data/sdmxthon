@@ -9,7 +9,6 @@ from lxml.etree import DocumentInvalid
 
 pathToSchema = 'schemas/SDMXMessage.xsd'
 
-
 def process_string_to_read(infile: str):
     if isinstance(infile, str):
         if validators.url(infile):
