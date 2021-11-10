@@ -23,6 +23,14 @@ chunksize = 100000
      --------------------------------------------
 """
 
+"""
+     --------------------------------------------
+    |                                            |
+    |                   Common                   |
+    |                                            |
+     --------------------------------------------
+"""
+
 
 def addStructure(dataset, prettyprint, dType):
     outfile = ''
@@ -303,7 +311,6 @@ def writer(path, payload, dType, prettyprint=True, id_='test',
         f.write(outfile)
         return f
 
-
 def format_dict_ser(out, parser, data_dict, obs):
     data_dict['Series'][0]['Obs'] = obs.to_dict(orient="records")
     out.append(parser(data_dict['Series'][0]))
@@ -351,7 +358,7 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
                      if att not in man_att]
 
     if dim == "AllDimensions":
-
+        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
@@ -507,6 +514,7 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
+        chunksize = 100000
         length_ = len(dataset.data)
         if len(dataset.data) > chunksize:
             previous = 0
@@ -616,7 +624,6 @@ def obs_gen(data: pd.DataFrame,
 
     return out
 
-
 def format_ser(data: dict,
                measure_code: str,
                series_key: list,
@@ -700,6 +707,7 @@ def ser_gen(data: pd.DataFrame,
             series_codes: list,
             prettyprint=True):
     # Getting each datapoint from data and creating dict
+    
     series_key = [v for v in series_codes if v in dim_codes]
     series_att = [v for v in series_codes if v in att_codes]
     dim = obs_codes[0]
@@ -720,6 +728,7 @@ def ser_gen(data: pd.DataFrame,
                                   obs_attr=obs_att,
                                   dim=dim,
                                   prettyprint=prettyprint)
+    
     out = series_process(parser=parser, data=data, data_dict=data_dict,
                          series_codes=series_codes, obs_codes=obs_codes)
 

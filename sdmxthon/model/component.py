@@ -338,7 +338,6 @@ class Attribute(Component):
         else:
             self._relatedTo = value
 
-
 class MeasureDimension(Dimension):
     """ A statistical concept that identifies the component in the key
         structure that has an enumerated list of measures. This dimension has,
