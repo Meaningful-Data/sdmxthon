@@ -5,12 +5,12 @@ from io import BytesIO
 
 import requests
 import validators
-from lxml import etree as etree_
+from lxml import etree as etree_, etree
+from lxml.etree import DocumentInvalid
 
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 CDATA_pattern_ = re_.compile(r'<!\[CDATA\[.*?]]>', re_.DOTALL)
 BaseStrType_ = str
-
 
 #
 # You can replace the following class definition by defining an
@@ -18,6 +18,8 @@ BaseStrType_ = str
 # named "GdsCollector".  See the default class definition below for
 # clues about the possible content of that class.
 #
+
+pathToSchema = 'schemas/SDMXMessage.xsd'
 
 
 def parse_xml(infile, parser=None):
@@ -58,6 +60,24 @@ def parse_xml(infile, parser=None):
             parser = etree_.XMLParser()
     doc = etree_.parse(infile, parser=parser)
     return doc
+
+
+def validate_doc(doc):
+    base_path = os.path.dirname(os.path.dirname(__file__))
+    schema = os.path.join(base_path, pathToSchema)
+    xmlschema_doc = etree.parse(schema)
+    xmlschema = etree.XMLSchema(xmlschema_doc)
+
+    if not xmlschema.validate(doc):
+        try:
+            xmlschema.assertValid(doc)
+        except DocumentInvalid as e:
+            if len(e.args) == 1 and \
+                    'xsi:type' in e.args[0] or \
+                    'abstract' in e.args[0]:
+                pass
+            else:
+                raise e
 
 
 def find_attr_value_(attr_name, node):

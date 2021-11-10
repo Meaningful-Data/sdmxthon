@@ -52,7 +52,7 @@ class ComponentList(IdentifiableArtefact):
                                             annotations=annotations)
         self._components = {}
         if components is not None:
-            for c in components:
+            for c in components.values():
                 self.add_component(c)
 
     def __eq__(self, other):
@@ -142,7 +142,7 @@ class DimensionDescriptor(ComponentList, DataParser):
                  annotations=None, components=None):
 
         if components is None:
-            components = []
+            components = {}
         super(DimensionDescriptor, self).__init__(id_=id_, uri=uri, urn=urn,
                                                   annotations=annotations,
                                                   components=components)
@@ -185,7 +185,7 @@ class AttributeDescriptor(ComponentList, DataParser):
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None, components=None):
         if components is None:
-            components = []
+            components = {}
 
         super(AttributeDescriptor, self).__init__(id_=id_, uri=uri, urn=urn,
                                                   annotations=annotations,
@@ -227,7 +227,7 @@ class MeasureDescriptor(ComponentList, DataParser):
                  annotations=None, components=None):
 
         if components is None:
-            components = []
+            components = {}
         super(MeasureDescriptor, self).__init__(id_=id_, uri=uri, urn=urn,
                                                 annotations=annotations,
                                                 components=components)
@@ -267,7 +267,7 @@ class GroupDimensionDescriptor(ComponentList, DataParser):
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None, components=None):
         if components is None:
-            components = []
+            components = {}
         super(GroupDimensionDescriptor, self). \
             __init__(id_=id_, uri=uri, urn=urn,
                      annotations=annotations, components=components)

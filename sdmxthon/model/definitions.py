@@ -53,7 +53,7 @@ class MemberSelection(DataParser):
 
     @values_for.setter
     def values_for(self, value):
-        self._values_for = generic_setter(value, Component)
+        self._values_for = generic_setter(value, str)
 
     @property
     def is_included(self):
@@ -87,7 +87,7 @@ class MemberSelection(DataParser):
 class CubeRegion(DataParser):
 
     def __init__(self, is_included: bool = False,
-                 member: MemberSelection = None, gds_collector=None):
+                 member: List[MemberSelection] = None, gds_collector=None):
         super(CubeRegion, self).__init__(gds_collector_=gds_collector)
         self.is_included = is_included
 
@@ -104,7 +104,7 @@ class CubeRegion(DataParser):
 
     @member.setter
     def member(self, value):
-        self._member = generic_setter(value, MemberSelection)
+        self._member = generic_setter(value, list)
 
     @property
     def is_included(self):
@@ -129,7 +129,9 @@ class CubeRegion(DataParser):
         if nodeName_ == 'KeyValue':
             obj_ = MemberSelection._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.member = obj_
+            if self.member is None:
+                self.member = []
+            self.member.append(obj_)
 
 
 class MetadataTargetRegion:
@@ -229,13 +231,16 @@ class Constraint(MaintainableArtefact):
                  annotations=None,
                  name: InternationalString = None,
                  description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None,
+                 version: str = None,
+                 maintainer=None,
+                 validFrom: datetime = None,
                  validTo: datetime = None,
-                 isFinal: bool = None, isExternalReference: bool = None,
+                 isFinal: bool = None,
+                 isExternalReference: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None,
                  dataContentRegion: List[CubeRegion] = None,
-                 dataContentKeys: DataKeySet = None,
+                 dataKeySet: List[DataKeySet] = None,
                  metadataContentRegion: List[MetadataTargetRegion] = None,
                  availableDates: List[ReferencePeriod] = None,
                  calendar: List[ReleaseCalendar] = None):
@@ -248,6 +253,7 @@ class Constraint(MaintainableArtefact):
                      version=version, validFrom=validFrom,
                      validTo=validTo,
                      isFinal=isFinal,
+                     maintainer=maintainer,
                      isExternalReference=isExternalReference,
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl)
@@ -266,7 +272,7 @@ class Constraint(MaintainableArtefact):
         if calendar is not None:
             self.calendar = calendar
 
-        self.data_content_keys = dataContentKeys
+        self.data_content_keys = dataKeySet
 
         self._ref_attach = None
         self._type_attach = None
@@ -285,7 +291,7 @@ class Constraint(MaintainableArtefact):
 
     @data_content_keys.setter
     def data_content_keys(self, value):
-        self._data_content_keys = generic_setter(value, DataKeySet)
+        self._data_content_keys = generic_setter(value, list)
 
     @property
     def metadata_content_region(self):
@@ -344,7 +350,9 @@ class Constraint(MaintainableArtefact):
         elif nodeName_ == 'DataKeySet':
             obj_ = DataKeySet._factory()
             obj_._build(child_, gds_collector_=gds_collector_)
-            self.data_content_keys = obj_
+            if self.data_content_keys is None:
+                self.data_content_keys = []
+            self.data_content_keys.append(obj_)
 
 
 class AttachmentConstraintType(DataParser):
@@ -409,12 +417,15 @@ class ContentConstraint(Constraint):
                  annotations=None,
                  name: InternationalString = None,
                  description: InternationalString = None,
-                 version: str = None, validFrom: datetime = None,
+                 version: str = None,
+                 maintainer=None,
+                 validFrom: datetime = None,
                  validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None,
                  dataContentRegion: List[CubeRegion] = None,
+                 dataKeySet: List[DataKeySet] = None,
                  metadataContentRegion: List[MetadataTargetRegion] = None,
                  availableDates: List[ReferencePeriod] = None,
                  calendar: List[ReleaseCalendar] = None,
@@ -427,6 +438,7 @@ class ContentConstraint(Constraint):
                      name=name,
                      description=description,
                      version=version,
+                     maintainer=maintainer,
                      validFrom=validFrom,
                      validTo=validTo,
                      isFinal=isFinal,
@@ -434,6 +446,7 @@ class ContentConstraint(Constraint):
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl,
                      dataContentRegion=dataContentRegion,
+                     dataKeySet=dataKeySet,
                      metadataContentRegion=metadataContentRegion,
                      availableDates=availableDates,
                      calendar=calendar)
@@ -513,35 +526,37 @@ class ContentConstraint(Constraint):
         outfile += f'{indent_child}</{structureAbbr}:ConstraintAttachment>'
 
         if self.data_content_keys is not None:
+            for i in self.data_content_keys:
+                outfile += f'{indent_child}<{structureAbbr}:DataKeySet ' \
+                           f'isIncluded="' \
+                           f'{str(i.is_included).lower()}">'
 
-            outfile += f'{indent_child}<{structureAbbr}:DataKeySet ' \
-                       f'isIncluded="' \
-                       f'{str(self.data_content_keys.is_included).lower()}">'
+                for e in i.keys:
+                    outfile += f'{indent_child_2}<{structureAbbr}:Key>'
 
-            for e in self.data_content_keys.keys:
-                outfile += f'{indent_child_2}<{structureAbbr}:Key>'
+                    for k, v in e.items():
+                        outfile += f'{indent_ref}<{commonAbbr}:KeyValue ' \
+                                   f'id="{k}">'
+                        outfile += f'{indent_value}<{commonAbbr}:Value>{v}' \
+                                   f'</{commonAbbr}:Value>'
+                        outfile += f'{indent_ref}</{commonAbbr}:KeyValue>'
 
-                for k, v in e.items():
-                    outfile += f'{indent_ref}<{commonAbbr}:KeyValue id="{k}">'
-                    outfile += f'{indent_value}<{commonAbbr}:Value>{v}' \
-                               f'</{commonAbbr}:Value>'
-                    outfile += f'{indent_ref}</{commonAbbr}:KeyValue>'
+                    outfile += f'{indent_child_2}</{structureAbbr}:Key>'
 
-                outfile += f'{indent_child_2}</{structureAbbr}:Key>'
-
-            outfile += f'{indent_child}</{structureAbbr}:DataKeySet>'
+                outfile += f'{indent_child}</{structureAbbr}:DataKeySet>'
 
         if self.data_content_region is not None:
 
             for e in self.data_content_region:
                 outfile += f'{indent_child}<{structureAbbr}:CubeRegion ' \
                            f'isIncluded="{str(e.is_included).lower()}">'
-                outfile += f'{indent_child_2}<{commonAbbr}:KeyValue ' \
-                           f'id="{e.member.values_for}">'
-                for j in e.member.sel_value:
-                    outfile += f'{indent_ref}<{commonAbbr}:Value>{j}' \
-                               f'</{commonAbbr}:Value>'
-                outfile += f'{indent_child_2}</{commonAbbr}:KeyValue>'
+                for m in e.member:
+                    outfile += f'{indent_child_2}<{commonAbbr}:KeyValue ' \
+                               f'id="{m.values_for}">'
+                    for j in m.sel_value:
+                        outfile += f'{indent_ref}<{commonAbbr}:Value>{j}' \
+                                   f'</{commonAbbr}:Value>'
+                    outfile += f'{indent_child_2}</{commonAbbr}:KeyValue>'
                 outfile += f'{indent_child}</{structureAbbr}:CubeRegion>'
 
         outfile += f'{indent}</{label}>'
@@ -562,10 +577,10 @@ class DataStructureDefinition(MaintainableArtefact):
                  isFinal: bool = None, isExternalReference: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
-                 dimensionDescriptor: DimensionDescriptor = None,
-                 measureDescriptor: MeasureDescriptor = None,
-                 attributeDescriptor: AttributeDescriptor = None,
-                 groupDimensionDescriptor: GroupDimensionDescriptor = None,
+                 dimension_list: DimensionDescriptor = None,
+                 measure_list: MeasureDescriptor = None,
+                 attribute_list: AttributeDescriptor = None,
+                 group_dimension_descriptor: GroupDimensionDescriptor = None,
                  constraint: list = None):
 
         super(DataStructureDefinition, self). \
@@ -583,10 +598,10 @@ class DataStructureDefinition(MaintainableArtefact):
                      structureUrl=structureUrl,
                      maintainer=maintainer)
 
-        self.dimension_descriptor = dimensionDescriptor
-        self.measure_descriptor = measureDescriptor
-        self.attribute_descriptor = attributeDescriptor
-        self.group_dimension_descriptor = groupDimensionDescriptor
+        self.dimension_descriptor = dimension_list
+        self.measure_descriptor = measure_list
+        self.attribute_descriptor = attribute_list
+        self.group_dimension_descriptor = group_dimension_descriptor
         self._constraints = constraint
 
     def __eq__(self, other):
@@ -727,16 +742,18 @@ class DataStructureDefinition(MaintainableArtefact):
             for c in self.constraints:
                 if len(c.data_content_region) > 0:
                     for e in c.data_content_region:
-                        if e.member.values_for not in cubes.keys():
-                            cubes[e.member.values_for] = set(
-                                e.member.sel_value)
-                        else:
-                            cubes[e.member.values_for].update(
-                                e.member.sel_value)
-                if c.data_content_keys is not None and \
-                        c.role is not None and \
-                        c.role == "Allowed":
-                    series += c.data_content_keys.keys
+                        for m in e.member:
+                            if m.values_for not in cubes.keys():
+                                cubes[m.values_for] = set(
+                                    m.sel_value)
+                            else:
+                                cubes[m.values_for].update(
+                                    m.sel_value)
+                if (c.data_content_keys is not None and
+                        len(c.data_content_keys) > 0):
+                    for e in c.data_content_keys:
+                        if c.role is not None and c.role == "Allowed":
+                            series += e.keys
 
         return cubes, series
 
@@ -914,8 +931,10 @@ class DataFlowDefinition(MaintainableArtefact):
 
     def __eq__(self, other):
         if isinstance(other, DataFlowDefinition):
-            return super(DataFlowDefinition, self).__eq__(
-                other) and self._structure == other._structure
+            return (super(DataFlowDefinition, self).__eq__(other) and
+                    self._structure == other._structure)
+        else:
+            return False
 
     def __str__(self):
         return f'<DataFlowDefinition - {self.unique_id}>'

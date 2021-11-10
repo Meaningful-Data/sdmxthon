@@ -12,6 +12,7 @@ from sdmxthon.api.api import _read_xml, MetadataType, _set_references, \
     get_datasets, get_pandas_df, xml_to_csv
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.message import Message
+from sdmxthon.parsers.new_read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
 
@@ -187,10 +188,10 @@ class TestHelper(unittest.TestCase):
         self.assertEqual(result, self.load_reference_text(reference_filename))
 
     def metadata_constraint_writing(self, reference_filename, data_filename):
-        obj_ = read_sdmx(os.path.join(self.pathToDB, data_filename),
-                         validate=True)
+        obj_ = read_xml(os.path.join(self.pathToDB, data_filename),
+                        validate=True)
 
-        result = first_element_dict(obj_.payload.constraints)._parse_XML(
+        result = first_element_dict(obj_['Constraints'])._parse_XML(
             indent='', label='str:ContentConstraint')
 
         self.assertEqual(result, self.load_reference_text(reference_filename))

@@ -219,7 +219,8 @@ class Dataset:
             if self._structure is not None:
                 for e in self.structure.dataset_attribute_codes:
                     if e in temp.keys():
-                        attached_attributes[e] = temp.loc[0, e]
+                        if len(temp) > 0:
+                            attached_attributes[e] = temp.loc[0, e]
                         del temp[e]
 
             self._data = temp
