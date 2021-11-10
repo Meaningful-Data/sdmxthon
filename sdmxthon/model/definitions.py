@@ -373,7 +373,7 @@ class ContentConstraint(Constraint):
                         outfile += f'{indent_ref}</{commonAbbr}:KeyValue>'
 
                     outfile += f'{indent_child_2}</{structureAbbr}:Key>'
-                
+
                 outfile += f'{indent_child}</{structureAbbr}:DataKeySet>'
 
         if self.data_content_region is not None:
