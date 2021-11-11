@@ -50,6 +50,23 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
     return data
 
 
+# Monthly
+regex_monthly = r'(19|[2-9][0-9])\d{2}(-(0[1-9]|1[012]))?'
+match_monthly = re.compile(regex_monthly)
+
+# Duration
+regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((\d+)D)?(T(?=.)((\d+)H)?((' \
+                 r'\d+)M)?(\d*(\.\d+)?S)?)? '
+match_duration = re.compile(regex_duration)
+
+# semester, quarter and trimester
+regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[' \
+                 r'1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
+                 r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[' \
+                 r'0-5][0-9]|36[0-5]))'
+match_specials = re.compile(regex_specials)
+
+
 def time_period_valid(dt_str: str, type_: str):
     """Validates any time period"""
 
@@ -57,16 +74,13 @@ def time_period_valid(dt_str: str, type_: str):
             type_ == "GregorianTimePeriod" or
             type_ == "BasicTimePeriod" or
             type_ == "StandardTimePeriod"):
-        regex_monthly = r'(19|[2-9][0-9])\d{2}(-(0[1-9]|1[012]))?'
-        match_monthly = re.compile(regex_monthly)
 
         # Matching year and monthly
-
         try:
             res = match_monthly.fullmatch(dt_str)
             if res:
                 return True
-        except Exception:
+        except (TypeError, ValueError):
             return False
 
         # Checks for datetime string in GregorianTimePeriod type
@@ -83,40 +97,27 @@ def time_period_valid(dt_str: str, type_: str):
             dt_str = dt_str.split('/', maxsplit=1)[0]
 
             # Matching duration
-            regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((\d+)D)?(T(?=.)(' \
-                             r'(\d+)H)?((\d+)M)?' \
-                             r'(\d*(\.\d+)?S)?)?'
-            match_duration = re.compile(regex_duration)
-
             try:
                 res = match_duration.fullmatch(duration)
                 if not res:
                     dt_str += '/' + duration
                     return False
-            except Exception:
+            except (TypeError, ValueError):
                 dt_str += '/' + duration
                 return False
             control_changed = True
-
-        # Matching semester, quarter and trimester
-        regex_specials = r'(19|[2-9][0-9])\d{2}-(A[1]|S[1-2]|Q[1-4]|T[' \
-                         r'1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[' \
-                         r'1-9])|D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[' \
-                         r'0-5][0-9]|36[0-5]))'
-        match_specials = re.compile(regex_specials)
-
         try:
             res = match_specials.fullmatch(dt_str)
             if res:
                 return True
-        except Exception:
+        except (TypeError, ValueError):
             return False
 
         try:
             res = datetime.strptime(dt_str, '%Y-%m-%d')
             if res:
                 return True
-        except Exception:
+        except (TypeError, ValueError):
             return False
 
         try:
@@ -125,7 +126,7 @@ def time_period_valid(dt_str: str, type_: str):
                 if control_changed:
                     dt_str += '/' + duration
                 return False
-        except Exception:
+        except (TypeError, ValueError):
             if control_changed:
                 dt_str += '/' + duration
             return False
@@ -135,16 +136,10 @@ def time_period_valid(dt_str: str, type_: str):
     if (type_ == "ReportingTimePeriod" or
             type_ == "ObservationalTimePeriod" or
             type_ == "StandardTimePeriod"):
-        # Matching semester, quarter and trimester
-        regex_specials = r'''(19|[2-9][0-9])\d{2}-
-        (A[1]|S[1-2]|Q[1-4]|T[1-3]|M(0[1-9]|1[012])|W(5[0-3]|[1-4][0-9]|[1-9])|
-        D((00[1-9]|0[1-9][0-9])?|[12][0-9][0-9]|3[0-5][0-9]|36[0-5]))'''
-        match_specials = re.compile(regex_specials)
-
         try:
             res = match_specials.fullmatch(dt_str)
             return bool(res)
-        except Exception:
+        except (TypeError, ValueError):
             return False
 
     return True
@@ -318,14 +313,13 @@ def check_date(e, format_: str):
 
 def check_reporting(e, format_):
     # Matching semester, quarter and trimester
-    regex_specials = r'(19|[2-9][0-9])\d{2}-' + format_
-    match_specials = re.compile(regex_specials)
+    match_reporting = re.compile(format_)
 
     try:
-        res = match_specials.fullmatch(e)
+        res = match_reporting.fullmatch(e)
         if not res:
             return False
-    except Exception:
+    except (TypeError, ValueError):
         return False
     return True
 
@@ -443,259 +437,240 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
                      'Component': f'{k}', 'Type': 'Dimension', 'Rows': None,
                      'Message': f'Missing {k}'})
             continue
-
-        is_numeric = False
-
-        temp = data[k].astype(object).replace('', np.nan).dropna()
-
-        if pandas.to_numeric(temp, errors='coerce').notnull().all():
-            data_column = data[k].unique().astype('float64')
-            is_numeric = True
-        else:
-            data_column = data[k].astype('str').fillna('nan').unique()
-
-        if k in dsd.attribute_codes:
-            type_ = 'Attribute'
-            code = 'SS06'
-        else:
-            grouping_keys.append(k)
-            type_ = 'Dimension'
-            code = 'SS05'
-
-        if k in man_codes:
-            control = False
-            if is_numeric:
-                if np.isnan(np.sum(data_column)):
-                    control = True
-            else:
-                if 'nan' in data_column:
-                    control = True
-            if control:
-                pos = data[
-                    (data[k] == 'nan') | (data[k].isnull())].index.values
-                rows = data.iloc[pos, :].to_dict('records')
-                errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
-                               'Component': f'{k}', 'Type': f'{type_}',
-                               'Rows': rows.copy(),
-                               'Message': f'Missing value in '
-                                          f'{type_.lower()} {k}'})
-
-        if k in faceted:
-            facets = faceted[k]
-            if is_numeric:
-                errors += check_num_facets(facets, data_column, k, type_)
-            else:
-                errors += check_str_facets(facets, data_column, k, type_)
-
-        if is_numeric:
-            data_column = data_column.astype('str')
-            format_temp = np.vectorize(trunc_dec)
-            data_column = format_temp(data_column)
-
-        if k in types:
-            if (types[k] == 'ObservationalTimePeriod' or
-                    types[k] == 'ReportingTimePeriod' or
-                    types[k] == 'GregorianTimePeriod' or
-                    types[k] == 'BasicTimePeriod' or
-                    types[k] == "StandardTimePeriod"):
-                for e in data_column:
-                    if not time_period_valid(e, types[k]):
-                        errors.append(
-                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
-                             'Component': f'{k}',
-                             'Type': f'{type_}',
-                             'Rows': None,
-                             'Message': f'Value {e} not compliant with '
-                                        f'type : {types[k]}'})
-            elif (types[k] == 'GregorianDay' or
-                  types[k] == 'GregorianYearMonth' or
-                  types[k] == 'GregorianYear'):
-                for e in data_column:
-                    if types[k] == 'GregorianDay':
-                        format_ = "%Y-%m-%d"
-                    elif types[k] == 'GregorianYearMonth':
-                        format_ = "%Y-%m"
-                    else:
-                        format_ = "%Y"
-
-                    if not check_date(e, format_):
-                        errors.append(
-                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
-                             'Component': f'{k}',
-                             'Type': f'{type_}',
-                             'Rows': None,
-                             'Message': f'Value {e} not compliant with '
-                                        f'type : {types[k]}'})
-
-            elif types[k] == "ReportingYear" or types[
-                k] == "ReportingSemester" or types[
-                k] == "ReportingTrimester" or \
-                    types[k] == "ReportingQuarter" or types[
-                k] == "ReportingMonth" or \
-                    types[k] == "ReportingWeek" or types[k] == "ReportingDay":
-                for e in data_column:
-                    if types[k] == 'ReportingYear':
-                        format_ = "A[1]"
-                    elif types[k] == 'ReportingSemester':
-                        format_ = "S[1-2]"
-                    elif types[k] == 'ReportingTrimester':
-                        format_ = "T[1-3]"
-                    elif types[k] == 'ReportingQuarter':
-                        format_ = "Q[1-4]"
-                    elif types[k] == "ReportingMonth":
-                        format_ = "M(0[1-9]|1[012])"
-                    elif types[k] == "ReportingWeek":
-                        format_ = "W(5[0-3]|[1-4][0-9]|[1-9])"
-                    else:
-                        format_ = "D((00[1-9]|0[1-9][0-9])?" \
-                                  "|[12][0-9][0-9]|3[0-5][0-9]|36[0-5])"
-
-                    if not check_reporting(e, format_):
-                        errors.append(
-                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
-                             'Component': f'{k}',
-                             'Type': f'{type_}',
-                             'Rows': None,
-                             'Message': f'Value {e} not compliant with '
-                                        f'type : {types[k]}'})
-
-            elif types[k].lower() == "datetime" or types[k] == "TimeRange":
-                for e in data_column:
-                    invalid_date = False
-                    duration = ""
-                    control_changed = False
-                    if types[k] == "TimeRange" and '/' not in e:
-                        invalid_date = True
-                    elif types[k] == "TimeRange":
-                        duration = e.split('/', maxsplit=1)[1]
-                        e = e.split('/', maxsplit=1)[0]
-
-                        # Matching duration
-                        regex_duration = r'(-?)P(?=.)((\d+)Y)?((\d+)M)?((' \
-                                         r'\d+)D)?(T(?=.)((\d+)H)?((\d+)M)?' \
-                                         r'(\d*(\.\d+)?S)?)?'
-                        match_duration = re.compile(regex_duration)
-
-                        try:
-                            res = match_duration.fullmatch(duration)
-                            if not res:
-                                invalid_date = True
-                        except Exception:
-                            invalid_date = True
-                        duration = '/' + duration
-                        control_changed = True
-
-                    try:
-                        res = datetime.fromisoformat(e)
-                        if not 1900 < res.year <= 9999:
-                            invalid_date = True
-                    except Exception:
-                        invalid_date = True
-
-                    if invalid_date:
-                        errors.append(
-                            {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
-                             'Component': f'{k}',
-                             'Type': f'{type_}',
-                             'Rows': None,
-                             'Message': f'Value {e + duration} not compliant '
-                                        f'with type : {types[k]}'})
-                    if control_changed:
-                        e += duration
-
-        if k in cubes.keys():
-            code = 'SS10'
-            values = data_column[
-                np.isin(data_column, list(cubes[k]), invert=True)]
-            if len(values) > 0:
-                values = values[
-                    np.isin(values, ['nan', 'None', np.nan], invert=True)]
-                for v in values:
-                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
-                                   'Component': f'{k}', 'Type': f'{type_}',
-                                   'Rows': None,
-                                   'Message': f'Wrong value {v} for '
-                                              f'{type_.lower()} {k}'})
-
-        elif k in codelist_values.keys():
-            code = 'SS04'
-            values = data_column[
-                np.isin(data_column, codelist_values[k], invert=True)]
-            if len(values) > 0:
-                values = values[
-                    np.isin(values, ['nan', 'None', np.nan], invert=True)]
-                for v in values:
-                    errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
-                                   'Component': f'{k}', 'Type': f'{type_}',
-                                   'Rows': None,
-                                   'Message': f'Wrong value {v} for '
-                                              f'{type_.lower()} {k}'})
+        process_errors_by_column(data, dsd, errors, k, man_codes,
+                                 grouping_keys,
+                                 faceted, types, codelist_values, cubes)
 
     if len(series_const) > 0:
-        lookup = pd.DataFrame(series_const).drop_duplicates() \
-            .reset_index(drop=True)
-        all_columns = lookup.columns.tolist()
-
-        result = all(elem in data.columns.tolist() for elem in all_columns)
-
-        if result:
-            columns = lookup.columns[lookup.isna().any()].tolist()
-
-            lookup['membership_series_const'] = True
-
-            dict_wild = {}
-
-            for e in columns:
-                dict_wild[e] = lookup[lookup[e].isna()]
-                dict_wild[e].pop(e)
-
-            res = data[all_columns].merge(lookup, how="left")
-
-            for k in dict_wild:
-                res.update(data[all_columns].merge(dict_wild[k], how="left"),
-                           overwrite=False)
-
-            indexes = res[res['membership_series_const'].isna()].index.tolist()
-
-            del res
-            del dict_wild
-            del lookup
-            del all_columns
-
-            if len(indexes) > 0:
-                rows = data.loc[indexes, :].to_dict('records')
-                errors.append({'Code': 'SS11',
-                               'ErrorLevel': 'WARNING',
-                               'Component': 'Series',
-                               'Type': 'Constraint',
-                               'Rows': rows.copy(),
-                               'Message': 'Found disallowed rows'
-                               })
-                del rows
-        else:
-            del lookup
-            del all_columns
+        error_SS11(data, series_const, errors)
 
     if len(grouping_keys) > 0:
         duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
         if len(duplicated) > 0:
-            duplicated_indexes = duplicated[
-                grouping_keys].drop_duplicates().index.values
-            for v in duplicated_indexes:
-                data_point = duplicated.loc[v, grouping_keys]
-                series = duplicated[grouping_keys].apply(
-                    lambda row: np.array_equal(row.values, data_point.values),
-                    axis=1)
-                pos = series[series].index.values
-                rows = duplicated.loc[pos, :].to_dict('records')
-                duplicated = duplicated.drop(pos)
-                errors.append({'Code': 'SS07',
-                               'ErrorLevel': 'WARNING',
-                               'Component': 'Duplicated',
-                               'Type': 'Datapoint',
-                               'Rows': rows.copy(),
-                               'Message': f'Duplicated datapoint '
-                                          f'{format_row(data_point)}'
-                               })
+            duplicated.groupby(by=grouping_keys).apply(
+                lambda x: create_error_SS07(x, errors, grouping_keys)
+            )
+        del duplicated
 
     return errors
+
+
+def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
+                             faceted, types, codelist_values, cubes):
+    is_numeric = False
+
+    temp = data[k].astype(object).replace('', np.nan).dropna()
+
+    if (pandas.to_numeric(temp, errors='coerce').notnull().all() and
+            'TimePeriod' not in types[k]):
+        data_column = data[k].unique().astype('float64')
+        is_numeric = True
+    else:
+        data_column = data[k].astype('str').fillna('nan').unique()
+
+    if k in dsd.attribute_codes:
+        role = 'Attribute'
+        code = 'SS06'
+    else:
+        grouping_keys.append(k)
+        role = 'Dimension'
+        code = 'SS05'
+
+    if k in man_codes:
+        control = False
+        if is_numeric:
+            if np.isnan(np.sum(data_column)):
+                control = True
+        else:
+            if 'nan' in data_column:
+                control = True
+        if control:
+            pos = data[
+                (data[k] == 'nan') | (data[k].isnull())].index.values
+            rows = data.iloc[pos, :].to_dict('records')
+            errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
+                           'Component': f'{k}', 'Type': f'{role}',
+                           'Rows': rows.copy(),
+                           'Message': f'Missing value in '
+                                      f'{role.lower()} {k}'})
+
+    if k in types:
+        error_SS09(k, types, data_column, errors, role)
+
+    if k in faceted:
+        facets = faceted[k]
+        if is_numeric:
+            errors += check_num_facets(facets, data_column, k, role)
+        else:
+            errors += check_str_facets(facets, data_column, k, role)
+
+    if is_numeric:
+        data_column = data_column.astype('str')
+        format_temp = np.vectorize(trunc_dec)
+        data_column = format_temp(data_column)
+
+    if k in cubes.keys():
+        code = 'SS10'
+        values = data_column[
+            np.isin(data_column, list(cubes[k]), invert=True)]
+        if len(values) > 0:
+            create_error_SS10_SS04(values, code, role, k, errors)
+
+    elif k in codelist_values.keys():
+        code = 'SS04'
+        values = data_column[
+            np.isin(data_column, codelist_values[k], invert=True)]
+        if len(values) > 0:
+            create_error_SS10_SS04(values, code, role, k, errors)
+
+
+def create_error_SS10_SS04(values, code, role, k, errors):
+    values = values[
+        np.isin(values, ['nan', 'None', np.nan], invert=True)]
+    for v in values:
+        errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
+                       'Component': f'{k}', 'Type': f'{role}',
+                       'Rows': None,
+                       'Message': f'Wrong value {v} for '
+                                  f'{role.lower()} {k}'})
+
+
+def error_SS11(data, series_const, errors):
+    lookup = pd.DataFrame(series_const).drop_duplicates() \
+        .reset_index(drop=True)
+    all_columns = lookup.columns.tolist()
+
+    result = all(elem in data.columns.tolist() for elem in all_columns)
+
+    if result:
+        columns = lookup.columns[lookup.isna().any()].tolist()
+
+        lookup['membership_series_const'] = True
+
+        dict_wild = {}
+
+        for e in columns:
+            dict_wild[e] = lookup[lookup[e].isna()]
+            dict_wild[e].pop(e)
+
+        res = data[all_columns].merge(lookup, how="left")
+
+        for k in dict_wild:
+            res.update(data[all_columns].merge(dict_wild[k], how="left"),
+                       overwrite=False)
+
+        indexes = res[res['membership_series_const'].isna()].index.tolist()
+
+        del res
+        del dict_wild
+        del lookup
+        del all_columns
+
+        if len(indexes) > 0:
+            rows = data.loc[indexes, :].to_dict('records')
+            errors.append({'Code': 'SS11',
+                           'ErrorLevel': 'WARNING',
+                           'Component': 'Series',
+                           'Type': 'Constraint',
+                           'Rows': rows.copy(),
+                           'Message': 'Found disallowed rows'
+                           })
+            del rows
+    else:
+        del lookup
+        del all_columns
+
+
+time_periods = ['ObservationalTimePeriod', 'ReportingTimePeriod',
+                'GregorianTimePeriod', 'BasicTimePeriod', "StandardTimePeriod"]
+
+gregorian_periods = {'GregorianDay': "%Y-%m-%d", 'GregorianYearMonth': "%Y-%m",
+                     'GregorianYear': "%Y"}
+
+reporting_periods = {'ReportingYear': "A[1]", 'ReportingSemester': "S[1-2]",
+                     'ReportingTrimester': "T[1-3]",
+                     'ReportingQuarter': "Q[1-4]",
+                     "ReportingMonth": "M(0[1-9]|1[012])",
+                     "ReportingWeek": "W(5[0-3]|[1-4][0-9]|[1-9])",
+                     "ReportingDay": "D((00[1-9]|0[1-9][0-9])?"
+                                     "|[12][0-9][0-9]|3[0-5][0-9]|36[0-5])"
+                     }
+
+
+def error_SS09(k, time_types, data_column, errors, role):
+    if time_types[k] in time_periods:
+        create_error_SS09(data_column, time_types[k], time_types[k], k,
+                          role, errors, time_period_valid)
+    elif time_types[k] in gregorian_periods:
+        format_ = gregorian_periods[time_types[k]]
+        create_error_SS09(data_column, format_, time_types[k], k,
+                          role, errors, check_date)
+
+    elif time_types[k] in reporting_periods:
+
+        format_ = r'(19|[2-9][0-9])\d{2}-' + reporting_periods[time_types[k]]
+
+        create_error_SS09(data_column, format_, time_types[k], k,
+                          role, errors, time_period_valid)
+
+    elif time_types[k].lower() == "datetime" or time_types[k] == "TimeRange":
+        for e in data_column:
+            invalid_date = False
+            duration = ""
+            control_changed = False
+            if time_types[k] == "TimeRange" and '/' not in e:
+                invalid_date = True
+            elif time_types[k] == "TimeRange":
+                duration = e.split('/', maxsplit=1)[1]
+                e = e.split('/', maxsplit=1)[0]
+
+                try:
+                    res = match_duration.fullmatch(duration)
+                    if not res:
+                        invalid_date = True
+                except (TypeError, ValueError):
+                    invalid_date = True
+                duration = '/' + duration
+                control_changed = True
+
+            try:
+                res = datetime.fromisoformat(e)
+                if not 1900 < res.year <= 9999:
+                    invalid_date = True
+            except (TypeError, ValueError):
+                invalid_date = True
+
+            if invalid_date:
+                errors.append(
+                    {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
+                     'Component': f'{k}',
+                     'Type': f'{role}',
+                     'Rows': None,
+                     'Message': f'Value {e + duration} not compliant '
+                                f'with type : {time_types[k]}'})
+            if control_changed:
+                e += duration
+
+
+def create_error_SS07(x, errors, grouping_keys):
+    errors.append({'Code': 'SS07',
+                   'ErrorLevel': 'WARNING',
+                   'Component': 'Duplicated',
+                   'Type': 'Datapoint',
+                   'Rows': x.to_dict(orient="records").copy(),
+                   'Message': f'Duplicated datapoint '
+                              f'{format_row(x.loc[0, grouping_keys])}'
+                   })
+
+
+def create_error_SS09(data_column, format_, time_type, comp, role, errors,
+                      func):
+    for e in data_column:
+        if not func(e, format_):
+            errors.append(
+                {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
+                 'Component': f'{comp}',
+                 'Type': f'{role}',
+                 'Rows': None,
+                 'Message': f'Value {e} not compliant with '
+                            f'type : {time_type}'})

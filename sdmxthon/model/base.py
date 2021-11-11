@@ -227,8 +227,8 @@ class AnnotableArtefact(object):
     def addAnnotation(self, annotation: Annotation):
         """Method to add an annotation to the list"""
         if not isinstance(annotation, Annotation):
-            raise TypeError(
-                "Annotable artefacts can only get annotations as arguments")
+            raise TypeError("Annotable artefacts can only get "
+                            "annotations as arguments")
         self._annotations.append(annotation)
 
     def _to_XML(self, prettyprint):

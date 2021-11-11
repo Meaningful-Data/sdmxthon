@@ -18,8 +18,8 @@ class Component(IdentifiableArtefact):
         super(Component, self).__init__(id_=id_, uri=uri, urn=urn,
                                         annotations=annotations)
 
-        self._local_representation = local_representation
-        self._concept_identity = concept_identity
+        self.local_representation = local_representation
+        self.concept_identity = concept_identity
 
     def __eq__(self, other):
         if isinstance(other, Component):
@@ -241,11 +241,6 @@ class Dimension(Component):
 
         return False
 
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Dimension"""
-        return Dimension(*args_, **kwargs_)
-
     @property
     def position(self):
         """Position of the Dimension in the DimensionList"""
@@ -305,11 +300,6 @@ class Attribute(Component):
                     self._relatedTo == other._relatedTo)
 
         return False
-
-    @staticmethod
-    def _factory(*args_, **kwargs_):
-        """Factory Method of Attribute"""
-        return Attribute(*args_, **kwargs_)
 
     @property
     def assignment_status(self):

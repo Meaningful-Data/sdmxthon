@@ -394,6 +394,15 @@ class ContentConstraint(Constraint):
         return outfile
 
 
+def add_type_facets(key, value, type_, facets):
+    if value.representation is not None:
+        if value.representation.type_ is not None:
+            type_[key] = value.representation.type_
+
+        if len(value.representation.facets) > 0:
+            facets[key] = value.representation.facets
+
+
 class DataStructureDefinition(MaintainableArtefact):
     """A collection of metadata concepts, their structure and usage when used
     to collect or disseminate data."""
@@ -530,30 +539,15 @@ class DataStructureDefinition(MaintainableArtefact):
         facets = {}
         type_ = {}
         for k, v in self.dimension_descriptor.components.items():
-            if v.representation is not None:
-                if v.representation.type_ is not None:
-                    type_[k] = v.representation.type_
-
-                if len(v.representation.facets) > 0:
-                    facets[k] = v.representation.facets
+            add_type_facets(k, v, type_, facets)
 
         if self.attribute_descriptor is not None:
             for k, v in self.attribute_descriptor.components.items():
-                if v.representation is not None:
-                    if v.representation.type_ is not None:
-                        type_[k] = v.representation.type_
-
-                    if len(v.representation.facets) > 0:
-                        facets[k] = v.representation.facets
+                add_type_facets(k, v, type_, facets)
 
         if self.measure_descriptor is not None:
             for k, v in self.measure_descriptor.components.items():
-                if v.representation is not None:
-                    if v.representation.type_ is not None:
-                        type_[k] = v.representation.type_
-
-                    if len(v.representation.facets) > 0:
-                        facets[k] = v.representation.facets
+                add_type_facets(k, v, type_, facets)
 
         return facets, type_
 
