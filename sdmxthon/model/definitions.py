@@ -398,9 +398,13 @@ def add_type_facets(key, value, type_, facets):
     if value.representation is not None:
         if value.representation.type_ is not None:
             type_[key] = value.representation.type_
+        else:
+            type_[key] = 'String'
 
         if len(value.representation.facets) > 0:
             facets[key] = value.representation.facets
+    else:
+        type_[key] = 'String'
 
 
 class DataStructureDefinition(MaintainableArtefact):
