@@ -260,8 +260,8 @@ def process_global_time_format(dt_str, type_):
 
     if control_special:
         return process_special_time_format(dt_str)
-    else:
-        return process_common_time_format(dt_str, type_)
+
+    return process_common_time_format(dt_str, type_)
 
 
 def process_common_time_format(dt_str, type_):
