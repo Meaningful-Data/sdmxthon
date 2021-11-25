@@ -28,7 +28,10 @@ def set_date_from_string(value: str, format_: str = "%Y-%m-%dT%H:%M:%S"):
         return None
     if isinstance(value, datetime):
         return value
-    for fmt in (format_, "%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"):
+    if value[-1] == "Z":
+        value = value[:-1]
+    for fmt in (format_, "%Y-%m-%d", "%Y-%m-%dT%H:%M:%S",
+                "%Y-%m-%dT%H:%M:%S.%f"):
         try:
             return datetime.strptime(value, fmt)
         except ValueError:

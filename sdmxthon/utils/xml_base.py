@@ -19,7 +19,7 @@ def process_string_to_read(infile: str):
                     raise requests.ConnectionError(
                         f'Invalid URL. Response from server: {response.text}')
                 infile = io.TextIOWrapper(BytesIO(response.content),
-                                          encoding='UTF-8',
+                                          encoding='utf-8',
                                           errors="replace").read()
             except requests.ConnectionError:
                 raise requests.ConnectionError('Invalid URL. '
@@ -27,8 +27,8 @@ def process_string_to_read(infile: str):
         elif '/' in infile or '\\' in infile:
             try:
                 infile = os.path.join(infile)
-                with open(infile, "r", errors='replace',
-                          encoding="UTF-8") as f:
+                with open(infile, "r", encoding='utf-8',
+                          errors='replace') as f:
                     infile = f.read()
             except AttributeError:
                 pass
@@ -38,17 +38,18 @@ def process_string_to_read(infile: str):
         try:
             infile = os.path.join(infile)
             with open(infile, "r", errors='replace',
-                      encoding="UTF-8") as f:
+                      encoding="utf-8") as f:
                 infile = f.read()
         except AttributeError:
             pass
     elif isinstance(infile, BytesIO):
         infile = io.TextIOWrapper(infile,
-                                  encoding='UTF-8',
+                                  encoding='utf-8',
                                   errors="replace").read()
 
     if infile[0] != '<' and infile[3] == '<':
         infile = infile[3:]
+
     return infile
 
 

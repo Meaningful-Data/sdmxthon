@@ -120,9 +120,11 @@ class InternationalString(object):
         outfile = []
         if len(self._items) > 0:
             for label, v in self._items.items():
+                text = v["content"].replace("&", "&amp;") \
+                    .replace("<", "&lt;").replace(">", "&gt;")
                 outfile.append(
                     f'{child1}<{name} xml:lang="{label}">'
-                    f'{v["content"].replace("&", "&amp;")}</{name}>')
+                    f'{text}</{name}>')
 
         return outfile
 
@@ -485,10 +487,12 @@ class VersionableArtefact(NameableArtefact):
             outfile['Attributes'] += f' version="{self.version}"'
 
         if self.validFrom is not None:
-            outfile['Attributes'] += f' validFrom="{self.validFrom}"'
+            valid_from_str = self.validFrom.strftime("%Y-%m-%dT%H:%M:%S")
+            outfile['Attributes'] += f' validFrom="{valid_from_str}"'
 
         if self.validTo is not None:
-            outfile['Attributes'] += f' validTo="{self.validTo}"'
+            valid_to_str = self.validTo.strftime("%Y-%m-%dT%H:%M:%S")
+            outfile['Attributes'] += f' validTo="{valid_to_str}"'
 
         return outfile
 

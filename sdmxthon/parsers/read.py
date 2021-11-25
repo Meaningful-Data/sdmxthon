@@ -72,7 +72,9 @@ def read_xml(infile, mode=None, validate=True):
         validate_doc(infile)
     try:
         result = xmltodict.parse(infile, **options)
-    except ExpatError:  # UTF-8 BOM
+    except ExpatError as e:
+        if e.offset > 10:  # UTF-8 BOM
+            raise e
         result = xmltodict.parse(infile[3:], **options)
 
     del infile

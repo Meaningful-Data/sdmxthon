@@ -125,10 +125,9 @@ class Component(IdentifiableArtefact):
                            f'class="Concept"/>'
 
             outfile += f'{indent_child}</{structureAbbr}:ConceptIdentity>'
-
+        indent_enum = add_indent(indent_child)
+        indent_ref = add_indent(indent_enum)
         if self.local_representation is not None:
-            indent_enum = add_indent(indent_child)
-            indent_ref = add_indent(indent_enum)
             outfile += f'{indent_child}<{structureAbbr}:LocalRepresentation>'
             if self.local_representation.codelist is not None:
                 label_format = 'EnumerationFormat'
@@ -168,49 +167,49 @@ class Component(IdentifiableArtefact):
 
             outfile += f'{indent_child}</{structureAbbr}:LocalRepresentation>'
 
-            if isinstance(self, Attribute):
-                outfile += f'{indent_child}<{structureAbbr}:' \
-                           f'AttributeRelationship>'
+        if head == f'{structureAbbr}:Attribute':
+            outfile += f'{indent_child}<{structureAbbr}:' \
+                       f'AttributeRelationship>'
 
-                if isinstance(self.related_to, dict):
-                    if 'id' in self.related_to.keys():
+            if isinstance(self.related_to, dict):
+                if 'id' in self.related_to.keys():
 
-                        if isinstance(self.related_to['id'], list):
-                            for k in self.related_to['id']:
-                                outfile += f'{indent_enum}<{structureAbbr}:' \
-                                           f'{self.related_to["type"]}>'
-                                outfile += f'{indent_ref}<Ref id="{k}"/>'
-                                outfile += f'{indent_enum}</{structureAbbr}:' \
-                                           f'{self.related_to["type"]}>'
-                        else:
+                    if isinstance(self.related_to['id'], list):
+                        for k in self.related_to['id']:
                             outfile += f'{indent_enum}<{structureAbbr}:' \
                                        f'{self.related_to["type"]}>'
-                            outfile += f'{indent_ref}<Ref ' \
-                                       f'id="{self.related_to["id"]}"/>'
+                            outfile += f'{indent_ref}<Ref id="{k}"/>'
                             outfile += f'{indent_enum}</{structureAbbr}:' \
                                        f'{self.related_to["type"]}>'
                     else:
-                        for k in self.related_to:
-                            outfile += f'{indent_enum}<{structureAbbr}' \
-                                       f':Dimension>'
-                            outfile += f'{indent_ref}<Ref id="{k}"/>'
-                            outfile += f'{indent_enum}</{structureAbbr}' \
-                                       f':Dimension>'
-                elif isinstance(self.related_to, Dimension):
-                    outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
-                    outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
-                    outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
-                elif isinstance(self.related_to, PrimaryMeasure):
-                    outfile += f'{indent_enum}<{structureAbbr}' \
-                               f':PrimaryMeasure>'
-                    outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
-                    outfile += f'{indent_enum}</{structureAbbr}' \
-                               f':PrimaryMeasure>'
+                        outfile += f'{indent_enum}<{structureAbbr}:' \
+                                   f'{self.related_to["type"]}>'
+                        outfile += f'{indent_ref}<Ref ' \
+                                   f'id="{self.related_to["id"]}"/>'
+                        outfile += f'{indent_enum}</{structureAbbr}:' \
+                                   f'{self.related_to["type"]}>'
                 else:
-                    outfile += f'{indent_enum}<{structureAbbr}:None/>'
+                    for k in self.related_to:
+                        outfile += f'{indent_enum}<{structureAbbr}' \
+                                   f':Dimension>'
+                        outfile += f'{indent_ref}<Ref id="{k}"/>'
+                        outfile += f'{indent_enum}</{structureAbbr}' \
+                                   f':Dimension>'
+            elif isinstance(self.related_to, Dimension):
+                outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
+                outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
+                outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
+            elif isinstance(self.related_to, PrimaryMeasure):
+                outfile += f'{indent_enum}<{structureAbbr}' \
+                           f':PrimaryMeasure>'
+                outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
+                outfile += f'{indent_enum}</{structureAbbr}' \
+                           f':PrimaryMeasure>'
+            else:
+                outfile += f'{indent_enum}<{structureAbbr}:None/>'
 
-                outfile += f'{indent_child}</{structureAbbr}' \
-                           f':AttributeRelationship>'
+            outfile += f'{indent_child}</{structureAbbr}' \
+                       f':AttributeRelationship>'
 
         outfile += f'{indent}</{head}>'
         return outfile

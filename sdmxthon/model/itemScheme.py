@@ -422,6 +422,16 @@ class Item(NameableArtefact):
         indent = add_indent(indent)
         outfile = f'{indent}<{head}{data["Attributes"]}>'
         outfile += export_intern_data(data, indent)
+        if self.parent is not None:
+            indent_par = add_indent(indent)
+            indent_ref = add_indent(indent_par)
+            outfile += f'{indent_par}<{structureAbbr}:Parent>'
+            if isinstance(self.parent, Item):
+                text = self.parent.id
+            else:
+                text = self.parent
+            outfile += f'{indent_ref}<Ref id="{text}"/>'
+            outfile += f'{indent_par}</{structureAbbr}:Parent>'
         return outfile
 
 
@@ -598,7 +608,21 @@ class Concept(Item):
                                f'version="{version}" class="Codelist"/>'
 
                 outfile += f'{indent_enum}</{structureAbbr}:Enumeration>'
+            else:
+                label_format = "TextFormat"
+                format_attributes = ' '
 
+                if self.core_representation.type_ is not None:
+                    format_attributes = f' textType=' \
+                                        f'"{self.core_representation.type_}"'
+
+                if self.core_representation.facets is not None:
+                    for e in self.core_representation.facets:
+                        format_attributes += f' {e.facet_type}=' \
+                                             f'"{e.facet_value}"'
+
+                outfile += f'{indent_enum}<{structureAbbr}:' \
+                           f'{label_format}{format_attributes}/>'
             outfile += f'{indent_child}</{structureAbbr}:CoreRepresentation>'
 
         outfile += f'{indent}</{structureAbbr}:{head}>'
