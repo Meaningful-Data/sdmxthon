@@ -130,9 +130,11 @@ def create_dataset(dataset, metadata, global_mode):
         if SERIES in dataset:
             # Structure Specific Series
             df = reading_str_series(dataset)
-        else:
+        elif OBS in dataset:
             # Structure Specific All dimensions
             df = pd.DataFrame(dataset[OBS]).replace(np.nan, '')
+        else:
+            df = pd.DataFrame()
     elif GENERIC == global_mode:
 
         # Dataset info
@@ -154,10 +156,9 @@ def create_dataset(dataset, metadata, global_mode):
             df.replace(np.nan, '', inplace=True)
             df.rename(columns={'OBSVALUE': 'OBS_VALUE'}, inplace=True)
         else:
-            raise Exception
+            df = pd.DataFrame()
     else:
         raise Exception
-
     dataset = Dataset(attached_attributes=attached_attributes, data=df)
 
     return dataset

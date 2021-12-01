@@ -284,8 +284,9 @@ def format_dict_ser(out, parser, data_dict, obs):
 
 def series_process(parser, data, data_dict, series_codes, obs_codes):
     out = []
-    data.groupby(by=series_codes)[obs_codes].apply(
-        lambda x: format_dict_ser(out, parser, data_dict, x))
+    if all(elem in data.columns for elem in obs_codes):
+        data.groupby(by=series_codes)[obs_codes].apply(
+            lambda x: format_dict_ser(out, parser, data_dict, x))
 
     return ''.join(out)
 
