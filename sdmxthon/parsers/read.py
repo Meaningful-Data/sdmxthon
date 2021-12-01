@@ -54,11 +54,18 @@ def parse_sdmx(result):
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[DATASET][STRREF],
                                                 mode=SERIES)
-            else:
+            elif OBS in message[DATASET]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[DATASET][STRREF],
                                                 mode=OBS)
-
+            else:
+                if message[HEADER][STRUCTURE][DIM_OBS] == "AllDimensions":
+                    mode = OBS
+                else:
+                    mode = SERIES
+                metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
+                                                message[DATASET][STRREF],
+                                                mode=mode)
             ds = create_dataset(message[DATASET], metadata, global_mode)
             datasets[metadata[STRID]] = ds
 
@@ -72,7 +79,9 @@ def read_xml(infile, mode=None, validate=True):
         validate_doc(infile)
     try:
         result = xmltodict.parse(infile, **options)
-    except ExpatError:  # UTF-8 BOM
+    except ExpatError as e:
+        if e.offset > 10:  # UTF-8 BOM
+            raise e
         result = xmltodict.parse(infile[3:], **options)
 
     del infile
