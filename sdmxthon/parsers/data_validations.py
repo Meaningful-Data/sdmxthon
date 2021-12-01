@@ -133,9 +133,15 @@ def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     if len(grouping_keys) > 0:
         duplicated = data[data.duplicated(subset=grouping_keys, keep=False)]
         if len(duplicated) > 0:
+            indexes = list(duplicated.index)
+            duplicated_dict = duplicated.to_dict(orient="records")
+            rows = dict(zip(indexes, duplicated_dict))
             duplicated.groupby(by=grouping_keys).apply(
-                lambda x: create_error_SS07(x, errors, grouping_keys)
+                lambda x: create_error_SS07(x, rows, errors, grouping_keys)
             )
+            del indexes
+            del duplicated_dict
+            del rows
         del duplicated
 
     return errors
@@ -631,23 +637,23 @@ def create_error_SS10_SS04(values, code, role, k, errors):
                                   f'{role.lower()} {k}'})
 
 
-def format_row(row):
+def format_row(row, grouping_keys):
     string = ''
-    for k, v in row.items():
-        string += f' ( {str(k)} : {str(v) if str(v) != "nan" else ""} ) '
+    for k in grouping_keys:
+        string += f' ( {str(k)} : {str(row[k]) if str(row[k]) != "nan" else ""} ) '
     return string
 
 
-def create_error_SS07(x, errors, grouping_keys):
+def create_error_SS07(x, rows, errors, grouping_keys):
+    elems = [rows[k] for k in list(x.index)]
     errors.append({'Code': 'SS07',
                    'ErrorLevel': 'WARNING',
                    'Component': 'Duplicated',
                    'Type': 'Datapoint',
-                   'Rows': x.to_dict(orient="records").copy(),
+                   'Rows': elems,
                    'Message': f'Duplicated datapoint '
-                              f'{format_row(x.loc[0, grouping_keys])}'
+                              f'{format_row(elems[0], grouping_keys)}'
                    })
-
 
 def create_error_SS09(data_column, format_, time_type, comp, role, errors,
                       func):
