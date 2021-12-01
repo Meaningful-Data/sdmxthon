@@ -636,7 +636,7 @@ def create_error_SS10_SS04(values, code, role, k, errors):
                        'Message': f'Wrong value {v} for '
                                   f'{role.lower()} {k}'})
 
-        
+
 def format_row(row, grouping_keys):
     string = ''
     for k in grouping_keys:
