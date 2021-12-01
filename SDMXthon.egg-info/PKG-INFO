@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: SDMXthon
-Version: 1.0.3
+Version: 1.2
 Summary: Library with SDMX to Pandas, Pandas to SDMX, SDMX validation and SDMX metadata validation
 Home-page: UNKNOWN
 Author: MeaningfulData

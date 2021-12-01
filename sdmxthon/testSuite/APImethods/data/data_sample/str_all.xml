@@ -16,8 +16,9 @@
                            namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)"
                            dimensionAtObservation="AllDimensions">
             <common:Structure>
-                <Ref agencyID="BIS" id="BIS_DER" version="1.0"
-                     class="DataStructure"/>
+                <URN>
+                    urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)
+                </URN>
             </common:Structure>
         </message:Structure>
     </message:Header>

@@ -24,6 +24,8 @@ def process_string_to_read(infile: str):
             except requests.ConnectionError:
                 raise requests.ConnectionError('Invalid URL. '
                                                'No response from server')
+        elif len(infile) > 10 and "<?" in infile[:10] and "xml" in infile[:10]:
+            pass
         elif '/' in infile or '\\' in infile:
             try:
                 infile = os.path.join(infile)

@@ -4,9 +4,10 @@ import xmltodict
 
 from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
+from sdmxthon.utils.handlers import split_from_urn
 from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
-    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE
+    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE, URN
 from sdmxthon.utils.xml_base import validate_doc, \
     process_string_to_read
 
@@ -98,16 +99,25 @@ def read_xml(infile, mode=None, validate=True):
     return datasets
 
 
+def get_ids_from_structure(element: dict):
+    if REF in element:
+        agency_id = element[REF][AGENCY_ID]
+        id_ = element[REF][ID]
+        version = element[REF][VERSION]
+        return agency_id, id_, version
+    elif URN in element:
+        return split_from_urn(element[URN])
+    return None, None, None
+
+
 def get_elements_from_structure(structure):
     if STRUCTURE in structure:
-        agency_id = structure[STRUCTURE][REF][AGENCY_ID]
-        id_ = structure[STRUCTURE][REF][ID]
-        version = structure[STRUCTURE][REF][VERSION]
-    else:
-        agency_id = structure[STR_USAGE][REF][AGENCY_ID]
-        id_ = structure[STR_USAGE][REF][ID]
-        version = structure[STR_USAGE][REF][VERSION]
-    return agency_id, id_, version
+        return get_ids_from_structure(structure[STRUCTURE])
+
+    elif STR_USAGE in structure:
+        return get_ids_from_structure(structure[STR_USAGE])
+
+    return None, None, None
 
 
 def get_dataset_metadata(structure, dataset_ref, mode):
@@ -118,7 +128,11 @@ def get_dataset_metadata(structure, dataset_ref, mode):
 
     if dataset_ref == structure[STRID]:
         agency_id, id_, version = get_elements_from_structure(structure)
-        return {DIM_OBS: structure[DIM_OBS],
-                STRID: f"{agency_id}:{id_}({version})"}
+        if agency_id is not None:
+            return {DIM_OBS: structure[DIM_OBS],
+                    STRID: f"{agency_id}:{id_}({version})"}
+        else:
+            return {DIM_OBS: structure[DIM_OBS],
+                    STRID: f"{id_}({version})"}
     else:
         raise Exception
