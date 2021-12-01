@@ -237,7 +237,6 @@ class Dimension(Component):
         if isinstance(other, Dimension):
             return super(Dimension, self).__eq__(
                 other) and self._position == other._position
-
         return False
 
     @property
