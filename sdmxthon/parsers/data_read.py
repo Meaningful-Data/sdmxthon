@@ -15,8 +15,7 @@ chunksize = 50000
 def get_element_to_list(data, mode):
     obs = {}
     if VALUE in data[mode]:
-        if not isinstance(data[mode][VALUE], list):
-            data[mode][VALUE] = [data[mode][VALUE]]
+        data[mode][VALUE] = add_list(data[mode][VALUE])
         for k in data[mode][VALUE]:
             obs[k[ID]] = k[VALUE.lower()]
     return obs
@@ -116,6 +115,7 @@ def get_at_att_str(dataset):
 def get_at_att_gen(dataset):
     attached_attributes = {}
     if VALUE in dataset[ATTRIBUTES]:
+        dataset[ATTRIBUTES][VALUE] = add_list(dataset[ATTRIBUTES][VALUE])
         for k in dataset[ATTRIBUTES][VALUE]:
             attached_attributes[k[ID]] = k[VALUE.lower()]
     return attached_attributes
