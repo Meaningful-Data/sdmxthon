@@ -108,6 +108,7 @@ TYPE_ = 'type_'
 TYPE = 'type'
 TEXT = 'text'
 URL = 'url'
+URN = "URN"
 
 # Representation
 CORE_REP = 'CoreRepresentation'

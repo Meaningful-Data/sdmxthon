@@ -640,7 +640,8 @@ def create_error_SS10_SS04(values, code, role, k, errors):
 def format_row(row, grouping_keys):
     string = ''
     for k in grouping_keys:
-        string += f' ( {str(k)} : {str(row[k]) if str(row[k]) != "nan" else ""} ) '
+        string += f' ( {str(k)} : ' \
+                  f'{str(row[k]) if str(row[k]) != "nan" else ""} ) '
     return string
 
 
@@ -654,6 +655,7 @@ def create_error_SS07(x, rows, errors, grouping_keys):
                    'Message': f'Duplicated datapoint '
                               f'{format_row(elems[0], grouping_keys)}'
                    })
+
 
 def create_error_SS09(data_column, format_, time_type, comp, role, errors,
                       func):

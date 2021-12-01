@@ -23,6 +23,10 @@ def split_unique_id(obj_: str):
     return agencyID, id, version
 
 
+def split_from_urn(obj_: str):
+    return split_unique_id(obj_.split("=", 1)[1])
+
+
 def get_outfile(obj_: dict, key='', indent=''):
     element = obj_.get(key) or []
 
