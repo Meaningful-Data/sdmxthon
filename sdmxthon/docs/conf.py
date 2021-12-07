@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 project = 'SDMXThon'
 copyright = '2021, MeaningfulData'
 author = 'MeaningfulData'
-version = '0.1'
+version = '1.2'
 
 # -- General configuration ---------------------------------------------------
 
@@ -56,7 +56,7 @@ html_theme_options = {
     'analytics_id': '',
     'analytics_anonymize_ip': True,
     'logo_only': False,
-    'display_version': False,
+    'display_version': True,
     'prev_next_buttons_location': '',
     'style_external_links': True,
     'vcs_pageview_mode': 'blob',
