@@ -9,7 +9,7 @@ setuptools.setup(
                 'SDMX validation and SDMX metadata validation',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["testSuite"]),
     include_package_data=True,
     version='1.3',
     license='Apache 2.0',
