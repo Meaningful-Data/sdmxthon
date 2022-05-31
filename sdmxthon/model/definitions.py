@@ -615,6 +615,10 @@ class DataStructureDefinition(MaintainableArtefact):
         """Formats the DataStructureDefinition as a VTL DataStructure"""
         dataset_name = self.id
         components = []
+        NAME = "name"
+        ROLE = "role"
+        TYPE = "type"
+        NULLABLE = "nullable"
         for c in self.dimension_descriptor.components.values():
 
             type_ = "String"
@@ -623,8 +627,8 @@ class DataStructureDefinition(MaintainableArtefact):
                     c.representation.type_ is not None):
                 type_ = c.representation.type_
 
-            component = {"name": c.id, "role": "Identifier",
-                         "type": Data_Types_VTL[type_], "isNull": False}
+            component = {NAME: c.id, ROLE: "Identifier",
+                         TYPE: Data_Types_VTL[type_], NULLABLE: False}
 
             components.append(component)
         if self.attribute_descriptor is not None:
@@ -635,8 +639,8 @@ class DataStructureDefinition(MaintainableArtefact):
                         c.representation.type_ is not None):
                     type_ = c.representation.type_
 
-                component = {"name": c.id, "role": "Attribute",
-                             "type": Data_Types_VTL[type_], "isNull": True}
+                component = {NAME: c.id, ROLE: "Attribute",
+                             TYPE: Data_Types_VTL[type_], NULLABLE: True}
 
                 components.append(component)
         for c in self.measure_descriptor.components.values():
@@ -646,16 +650,16 @@ class DataStructureDefinition(MaintainableArtefact):
                     c.representation.type_ is not None):
                 type_ = c.representation.type_
 
-            component = {"name": c.id, "role": "Measure",
-                         "type": Data_Types_VTL[type_], "isNull": True}
+            component = {NAME: c.id, ROLE: "Measure",
+                         TYPE: Data_Types_VTL[type_], NULLABLE: True}
 
             components.append(component)
 
-        result = {
-            "DataSet": {"name": dataset_name, "DataStructure": components}}
+        result = {"datasets": [{"name": dataset_name,
+                                "DataStructure": components}]}
         if path is not None:
             with open(path, 'w') as fp:
-                fp.write(json.dumps(result))
+                json.dump(result, fp)
         else:
             return result
 
