@@ -4,7 +4,7 @@ from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.message import Message
 from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.handlers import first_element_dict
+from sdmxthon.utils.handlers import first_element_dict, drop_na_all
 
 
 def read_sdmx(sdmx_file, validate=True) -> Message:
@@ -27,7 +27,7 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     return Message(type_, data)
 
 
-def get_datasets(data, path_to_metadata, validate=True):
+def get_datasets(data, path_to_metadata, validate=True, remove_empty_columns=True):
     """
     GetDatasets performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
@@ -38,6 +38,7 @@ def get_datasets(data, path_to_metadata, validate=True):
 
     :param validate: Validation of the XML file against the XSD (default: True)
 
+    :param remove_empty_columns: Removes empty columns on output pd.Dataframe
 
     :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of \
     :obj:`Datasets <model.dataSet.DataSet>`
@@ -55,28 +56,36 @@ def get_datasets(data, path_to_metadata, validate=True):
         elif v in metadata['Dataflows']:
             datasets[v].dataflow = metadata['Dataflows'][v]
 
+        if remove_empty_columns:
+            datasets[v].data = drop_na_all(datasets[v].data)
+
     if len(datasets) == 1:
         return first_element_dict(datasets)
 
     return datasets
 
 
-def get_pandas_df(data, validate=True):
+def get_pandas_df(data, validate=True, remove_empty_columns=True):
     """
     GetPandasDF reads all observations in a SDMX file as Pandas Dataframe(s)
 
     :param data: Path, URL or SDMX data file as string
 
     :param validate: Validation of the XML file against the XSD (default: True)
+    :param remove_empty_columns: Removes empty columns on output pd.Dataframe
 
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
     datasets = read_xml(data, "Data", validate=validate)
-    return {ds: datasets[ds].data for ds in datasets}
+    if not remove_empty_columns:
+        return {ds: datasets[ds].data for ds in datasets}
+    else:
+        return {ds: drop_na_all(datasets[ds].data) for ds in datasets}
 
 
-def xml_to_csv(data, output_path=None, validate=True, **kwargs):
+def xml_to_csv(data, output_path=None, validate=True,
+               remove_empty_columns=True, **kwargs):
     """
     XML to CSV transforms a SDMX file into a CSV. Saves the file on disk or
     .zip of CSV. If the SDMX data file has only a Dataset and output_path is
@@ -85,9 +94,17 @@ def xml_to_csv(data, output_path=None, validate=True, **kwargs):
     :param data: Path, URL or SDMX file as string (Data file)
     :param output_path: Path to save the CSV (default: None)
     :param validate: Validation of the XML file against the XSD (default: True)
+    :param remove_empty_columns: Removes empty columns on output pd.Dataframe
+    :param kwargs: Kwargs for `to_csv \
+    <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html>`_
+
     :return: A StringIO object if output_path is ''
     """
     datasets = read_xml(data, mode="Data", validate=validate)
+
+    if remove_empty_columns:
+        for ds in datasets:
+            datasets[ds].data = drop_na_all(datasets[ds].data)
 
     if output_path is not None and '.zip' in output_path:
         with ZipFile(output_path, 'w') as zipObj:

@@ -222,8 +222,7 @@ class Dataset:
                         if len(temp) > 0:
                             attached_attributes[e] = temp.loc[0, e]
                         del temp[e]
-
-            self._data = temp.dropna(axis=1, how="all")
+            self._data = temp
             if len(attached_attributes) > 0:
                 for k, v in attached_attributes.items():
                     self.attached_attributes[k] = str(v)
