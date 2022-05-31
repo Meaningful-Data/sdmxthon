@@ -27,7 +27,8 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     return Message(type_, data)
 
 
-def get_datasets(data, path_to_metadata, validate=True, remove_empty_columns=True):
+def get_datasets(data, path_to_metadata, validate=True,
+                 remove_empty_columns=True):
     """
     GetDatasets performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
