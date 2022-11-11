@@ -10,3 +10,5 @@ dist
 /sdmxthon/outputTests/
 Pipfile.lock
 /SDMXthon.egg-info/
+/testApi.py
+/xml_parsers_test.py
