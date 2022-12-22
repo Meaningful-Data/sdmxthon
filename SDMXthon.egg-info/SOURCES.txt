@@ -9,6 +9,11 @@ SDMXthon.egg-info/dependency_links.txt
 SDMXthon.egg-info/requires.txt
 SDMXthon.egg-info/top_level.txt
 sdmxthon/__init__.py
+sdmxthon.egg-info/PKG-INFO
+sdmxthon.egg-info/SOURCES.txt
+sdmxthon.egg-info/dependency_links.txt
+sdmxthon.egg-info/requires.txt
+sdmxthon.egg-info/top_level.txt
 sdmxthon/api/api.py
 sdmxthon/model/__init__.py
 sdmxthon/model/base.py
