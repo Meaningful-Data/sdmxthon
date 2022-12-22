@@ -62,7 +62,7 @@ The information in the payload can be obtained by using the payload class attrib
 
 .. code-block:: python
 
-     >>> sdmx_message.payload.dsds
+     >>> sdmx_message.payload['DataStructures']
 
     {'ECB:ECB_CBD2(1.0)': <DataStructureDefinition  - ECB:ECB_CBD2(1.0)>}
 
@@ -75,7 +75,7 @@ the concrete objects:
     >>> sdmx_message.content
 
     {
-      "codelists": {
+      "Codelists": {
         "ECB:CL_ACTIVITY(1.0)": "<Codelist - ECB:CL_ACTIVITY(1.0)>",
         "ECB:CL_AREA(1.0)": "<Codelist - ECB:CL_AREA(1.0)>",
         "ECB:CL_CB_EXP_TYPE(1.0)": "<Codelist - ECB:CL_CB_EXP_TYPE(1.0)>",
@@ -98,13 +98,13 @@ the concrete objects:
         "ECB:CL_UNIT(1.0)": "<Codelist - ECB:CL_UNIT(1.0)>",
         "ECB:CL_UNIT_MULT(1.0)": "<Codelist - ECB:CL_UNIT_MULT(1.0)>"
       },
-      "concepts": {
+      "Concepts": {
         "ECB:ECB_CONCEPTS(1.0)": "<ConceptScheme - ECB:ECB_CONCEPTS(1.0)>"
       },
-      "dsds": {
+      "DataStructures": {
         "ECB:ECB_CBD2(1.0)": "<DataStructureDefinition  - ECB:ECB_CBD2(1.0)>"
       },
-      "organisations": "<AgencyScheme - SDMX:AGENCIES(1.0)>"
+      "OrganisationSchemes": "<AgencyScheme - SDMX:AGENCIES(1.0)>"
     }
 
 The input to the read_sdmx method can be a file or an URL. An example with a URL:
@@ -133,13 +133,13 @@ Datasets objects:
      >>> sdmx_data_message = sdmxthon.read_sdmx('http://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011')
      >>> sdmx_data_message.content
 
-     {'datasets': {'ESTAT_DSD_nama_10_gdp_1_0': <DataSet - No Structure found>}}
+     {'ESTAT_DSD_nama_10_gdp_1_0': <DataSet - No Structure found>}
 
 A Dataset object has a series of SDMX-specific attributes (see reference for complete list). The data in the dataset are stored as a Pandas Dataframe, in the *data* attribute:
 
 .. code-block:: python
 
-     >>> sdmx_data_message.content['datasets']['ESTAT_DSD_nama_10_gdp_1_0'].data
+     >>> sdmx_data_message.content['ESTAT_DSD_nama_10_gdp_1_0'].data
 
       NA_ITEM        UNIT GEO FREQ TIME_PERIOD OBS_VALUE
     0    B1GQ  CLV10_MEUR  BE    A        2011  369293.6
@@ -234,7 +234,7 @@ Scheme we can access to the inner metadata classes.
 
 .. code-block:: python
 
-    >>> concept_scheme = message.content['concepts']["ECB:ECB_CONCEPTS(1.0)"]
+    >>> concept_scheme = message.content['Concepts']["ECB:ECB_CONCEPTS(1.0)"]
     >>> concept_scheme.items
 
     {
@@ -248,7 +248,7 @@ Regarding the DataStructureDefinition, we can access in a similar way:
 
 .. code-block:: python
 
-    >>> dsd = message.content['dsds']['ECB:ECB_CBD2(1.0)']
+    >>> dsd = message.content['DataStructures']['ECB:ECB_CBD2(1.0)']
     >>> dsd.content
 
     {'dimensions': {

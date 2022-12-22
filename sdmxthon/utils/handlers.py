@@ -1,6 +1,7 @@
 """
     Handlers file provide functions to make the code more readable
 """
+import pandas as pd
 
 
 def first_element_dict(obj_: dict):
@@ -99,3 +100,7 @@ def recursive_compare(d1, d2, level='root'):
             print('{:<20} {} != {}'.format(level, d1, d2))
 
     return control
+
+
+def drop_na_all(df: pd.DataFrame):
+    return df.dropna(axis=1, how="all")

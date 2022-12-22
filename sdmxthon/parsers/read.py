@@ -32,12 +32,19 @@ def parse_sdmx(result):
         return create_metadata(result[STRUCTURE][STRUCTURES])
     else:
         message = result[global_mode]
-        if isinstance(message[DATASET], list):
+        dataset_key = None
+        for key in message:
+            if DATASET in key:
+                dataset_key = key
+        if dataset_key is None:
+            raise Exception('Cannot parse datasets on this file')
+
+        if isinstance(message[dataset_key], list):
             structures = {}
             # Relationship between structures and structure id
             for structure in message[HEADER][STRUCTURE]:
                 structures[structure[STRID]] = structure
-            for single_dataset in message[DATASET]:
+            for single_dataset in message[dataset_key]:
                 str_ref = single_dataset[STRREF]
                 if SERIES in single_dataset:
                     metadata = get_dataset_metadata(structures[str_ref],
@@ -51,13 +58,13 @@ def parse_sdmx(result):
                                     global_mode)
                 datasets[metadata[STRID]] = ds
         else:
-            if SERIES in message[DATASET]:
+            if SERIES in message[dataset_key]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
-                                                message[DATASET][STRREF],
+                                                message[dataset_key][STRREF],
                                                 mode=SERIES)
-            elif OBS in message[DATASET]:
+            elif OBS in message[dataset_key]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
-                                                message[DATASET][STRREF],
+                                                message[dataset_key][STRREF],
                                                 mode=OBS)
             else:
                 if message[HEADER][STRUCTURE][DIM_OBS] == "AllDimensions":
@@ -65,9 +72,9 @@ def parse_sdmx(result):
                 else:
                     mode = SERIES
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
-                                                message[DATASET][STRREF],
+                                                message[dataset_key][STRREF],
                                                 mode=mode)
-            ds = create_dataset(message[DATASET], metadata, global_mode)
+            ds = create_dataset(message[dataset_key], metadata, global_mode)
             datasets[metadata[STRID]] = ds
 
     return datasets

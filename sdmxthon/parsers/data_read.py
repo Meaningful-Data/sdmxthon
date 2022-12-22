@@ -55,7 +55,10 @@ def reading_generic_series(dataset) -> pd.DataFrame:
         for data in series[OBS]:
             obs = dict()
             obs[OBS_DIM] = data[OBS_DIM][VALUE.lower()]
-            obs[OBSVALUE.upper()] = data[OBSVALUE][VALUE.lower()]
+            if OBSVALUE in data:
+                obs[OBSVALUE.upper()] = data[OBSVALUE][VALUE.lower()]
+            else:
+                obs[OBSVALUE.upper()] = None
             if ATTRIBUTES in data:
                 obs = {**obs, **get_element_to_list(data, mode=ATTRIBUTES)}
             test_list.append({**keys, **obs})

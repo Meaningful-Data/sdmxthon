@@ -6,5 +6,9 @@
 *.py[cod]
 *$py.class
 dist
-sdmxthon/docs/_build
-sdmxthon/outputTests/
+/sdmxthon/docs/_build
+/sdmxthon/outputTests/
+Pipfile.lock
+/SDMXthon.egg-info/
+/testApi.py
+/xml_parsers_test.py

@@ -10,46 +10,59 @@ from lxml.etree import DocumentInvalid
 pathToSchema = 'schemas/SDMXMessage.xsd'
 
 
+def URLparsing(infile: str):
+    try:
+        response = requests.get(infile)
+        if response.status_code == 400:
+            raise requests.ConnectionError(
+                f'Invalid URL. Response from server: {response.text}')
+        infile = io.TextIOWrapper(BytesIO(response.content),
+                                  encoding='utf-8',
+                                  errors="replace").read()
+    except requests.ConnectionError:
+        raise requests.ConnectionError('Invalid URL. '
+                                       'No response from server')
+    return infile
+
+
 def process_string_to_read(infile: str):
-    if isinstance(infile, str):
+    if isinstance(infile, (str, os.PathLike)):
+        # Is URL
         if validators.url(infile):
-            try:
-                response = requests.get(infile)
-                if response.status_code == 400:
-                    raise requests.ConnectionError(
-                        f'Invalid URL. Response from server: {response.text}')
-                infile = io.TextIOWrapper(BytesIO(response.content),
-                                          encoding='utf-8',
-                                          errors="replace").read()
-            except requests.ConnectionError:
-                raise requests.ConnectionError('Invalid URL. '
-                                               'No response from server')
+            infile = URLparsing(infile)
+        # Is file as string
         elif len(infile) > 10 and "<?" in infile[:10] and "xml" in infile[:10]:
             pass
-        elif '/' in infile or '\\' in infile:
+        # Is file as path
+        elif ('/' in infile or '\\' in infile or
+              (".xml" in infile and "<" not in infile) or
+              isinstance(infile, os.PathLike)):
+            if not os.path.isfile(infile):
+                raise ValueError(f"File not found: {infile}")
             try:
-                infile = os.path.join(infile)
-                with open(infile, "r", encoding='utf-8',
+                with open(infile, "r",
+                          encoding='utf-8',
                           errors='replace') as f:
                     infile = f.read()
             except AttributeError:
                 pass
         else:
-            raise ValueError(f'Unable to parse {infile}')
-    elif isinstance(infile, os.PathLike):
-        try:
-            infile = os.path.join(infile)
-            with open(infile, "r", errors='replace',
-                      encoding="utf-8") as f:
-                infile = f.read()
-        except AttributeError:
-            pass
+            error_msg = f'Cannot parse string as SDMX. ' \
+                        f'Found {infile}'
+            raise ValueError(error_msg)
+    # Is bytes
     elif isinstance(infile, BytesIO):
         infile = io.TextIOWrapper(infile,
                                   encoding='utf-8',
                                   errors="replace").read()
 
-    if infile[0] != '<' and infile[3] == '<':
+    else:
+        error_msg = f'Cannot parse as SDMX, ' \
+                    f'please use String or Path to file. ' \
+                    f'Found {infile}'
+        raise ValueError(error_msg)
+
+    if infile[0] != '<' and infile[3] == '<':  # BOM parsing
         infile = infile[3:]
 
     return infile
