@@ -7,9 +7,10 @@ from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest
 app = Flask(__name__)
 
 agencies = {'BIS': BISRequest, 'ECB': ECBRequest,
-            'EUROSTAT': EUROSTATRequest, 'ILO': ILORequest}
+            'ESTAT': EUROSTATRequest, 'ILO': ILORequest}
 
 
+# url to provide agencies information (name, code and base url)
 @app.route('/agencies', methods=['GET'])
 def get_agencies_info():
     agencies_info = []
@@ -24,6 +25,7 @@ def get_agencies_info():
         return Response(str(e), status=500)
 
 
+# url to provide available dataflows for every agency
 @app.route('/dataflows/<agency_code>', methods=['GET'])
 def get_dataflows(agency_code):
     if agency_code not in agencies.keys():
@@ -36,6 +38,7 @@ def get_dataflows(agency_code):
     return Response(json.dumps(dataflows, indent=2), status=200)
 
 
+# url to redirect to specific dataflow data
 @app.route('/dataflows/url/<agency_code>/<unique_id>', methods=['GET'])
 def get_dataflow_url(agency_code, unique_id):
     params = request.args.to_dict()
