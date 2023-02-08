@@ -1,10 +1,10 @@
 import json
-
 from flask import Flask, redirect, request, Response
-
+from flask_cors import CORS
 from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest
 
 app = Flask(__name__)
+CORS(app)
 
 agencies = {'BIS': BISRequest, 'ECB': ECBRequest,
             'ESTAT': EUROSTATRequest, 'ILO': ILORequest}
@@ -46,9 +46,13 @@ def get_dataflow_url(agency_code, unique_id):
         return Response('Agency name not allowed', status=400)
     try:
         x = agencies[agency_code]
-        url_str = x.get_data_url(unique_id=unique_id,
-                                 params=params)
-        return redirect(url_str)
+        data_url_str = x.get_data_url(unique_id=unique_id,
+                                      params=params)
+        metadata_url_str = x.get_metadata_url(unique_id=unique_id,
+                                              params=params)
+        urls = {'dataflows_data': data_url_str,
+                'dataflows_metadata': metadata_url_str}
+        return Response(urls, status=200)
     except Exception as e:
         return Response(str(e), status=500)
 

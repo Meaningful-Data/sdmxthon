@@ -57,6 +57,10 @@ class BaseRequest:
         raise NotImplementedError
 
     @classmethod
+    def get_metadata_url(cls, unique_id, params) -> str:
+        raise NotImplementedError
+
+    @classmethod
     def get_dataflow_data(cls, df_unique_id, params):
         url_df = cls.get_data_url(df_unique_id, params)
 
@@ -73,7 +77,7 @@ class BaseRequest:
 
 
 START_PERIOD = 'start_period'
-END_PERIOD = 'start_period'
+END_PERIOD = 'end_period'
 FIRST_N = 'first_n'
 LAST_N = 'last_n'
 DETAIL = 'detail'
@@ -117,6 +121,15 @@ class BISRequest(BaseRequest):
         url_df = f"{url_df}detail={params['detail']}"
         return url_df
 
+    @classmethod
+    def get_metadata_url(cls, unique_id, params):
+        references = 'none'
+        flow = cls.to_bis_id(unique_id)
+        flow = flow.replace(',', '/')
+
+        url_md = f"{cls.base_url}/dataflow/{flow}?references=none&detail={params['detail']}"
+        return url_md
+
 
 class EUROSTATRequest(BaseRequest):
     name = 'Eurostat'
@@ -149,6 +162,15 @@ class EUROSTATRequest(BaseRequest):
                 url_df = f"{url_df}{value}={params[key]}&"
         url_df = url_df[:-1]  # Deletes the last character (?, &)
         return url_df
+
+    @classmethod
+    def get_metadata_url(cls, unique_id, params):
+        flow = cls.to_eurostat_id(unique_id)
+        flow = flow.replace(',', '/')
+
+        url_md = f"{cls.base_url}/sdmx/2.1/dataflow/{flow}"
+
+        return url_md
 
 
 class ECBRequest(BaseRequest):
@@ -188,6 +210,18 @@ class ECBRequest(BaseRequest):
                 url_df = f"{url_df}{value}={params[key]}&"
         url_df = f"{url_df}detail={params['detail']}"
         return url_df
+
+    @classmethod
+    def get_metadata_url(cls, unique_id, params):
+        flow = cls.to_ecb_id(unique_id)  # Flow
+        # flow = f"{agency_id},{dataflow_id},{dataflow_version}"
+
+        url_md = f"{cls.base_url}/service/metadata/{flow}/{params['key']}/{params['provider_ref']}?"
+        for key, value in cls.mapping_params_url.items():
+            if key in params:
+                url_md = f"{url_md}{value}={params[key]}&"
+        url_md = f"{url_md}detail={params['detail']}"
+        return url_md
 
 
 class ILORequest(BaseRequest):
@@ -229,6 +263,14 @@ class ILORequest(BaseRequest):
                 url_df = f"{url_df}{value}={params[key]}&"
         url_df = f"{url_df}detail={params['detail']}"
         return url_df
+
+    @classmethod
+    def get_metadata_url(cls, unique_id, params):
+        flow = cls.to_ilo_id(unique_id)
+        flow = flow.replace(',', '/')
+
+        url_md = f"{cls.base_url}/dataflow/{flow}?references=none&detail={params['detail']}"
+        return url_md
 
 
 def main():
