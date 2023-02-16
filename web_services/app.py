@@ -1,5 +1,5 @@
 import json
-from flask import Flask, redirect, request, Response
+from flask import Flask, redirect, request, Response, jsonify
 from flask_cors import CORS
 from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest
 
@@ -39,8 +39,8 @@ def get_dataflows(agency_code):
 
 
 # url to redirect to specific dataflow data
-@app.route('/dataflows/url/<agency_code>/<unique_id>', methods=['GET'])
-def get_dataflow_url(agency_code, unique_id):
+@app.route('/dataflows/data/url/<agency_code>/<unique_id>', methods=['GET'])
+def get_dataflow_data_url(agency_code, unique_id):
     params = request.args.to_dict()
     if agency_code not in agencies.keys():
         return Response('Agency name not allowed', status=400)
@@ -48,11 +48,21 @@ def get_dataflow_url(agency_code, unique_id):
         x = agencies[agency_code]
         data_url_str = x.get_data_url(unique_id=unique_id,
                                       params=params)
+        return jsonify(data_url_str)
+    except Exception as e:
+        return Response(str(e), status=500)
+
+
+@app.route('/dataflows/url/<agency_code>/<unique_id>', methods=['GET'])
+def get_dataflow_metadata_url(agency_code, unique_id):
+    params = request.args.to_dict()
+    if agency_code not in agencies.keys():
+        return Response('Agency name not allowed', status=400)
+    try:
+        x = agencies[agency_code]
         metadata_url_str = x.get_metadata_url(unique_id=unique_id,
                                               params=params)
-        urls = {'dataflows_data': data_url_str,
-                'dataflows_metadata': metadata_url_str}
-        return Response(urls, status=200)
+        return jsonify(metadata_url_str)
     except Exception as e:
         return Response(str(e), status=500)
 
