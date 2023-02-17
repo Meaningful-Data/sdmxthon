@@ -2,9 +2,19 @@
 import requests as rq
 
 from sdmxthon.api.api import read_sdmx
+from sdmxthon.model.base import InternationalString
 from sdmxthon.model.definitions import DataStructureDefinition, \
     DataFlowDefinition
 from sdmxthon.utils.handlers import split_unique_id
+
+
+def format_locale(element: InternationalString):
+    if element is None:
+        return None
+
+    if isinstance(element, dict):
+        return element["en"]["content"]
+    return str(element)
 
 
 class BaseRequest:
@@ -35,14 +45,16 @@ class BaseRequest:
         dataflows = message.payload['Dataflows'].values()
         list_dataflows = []
         for i in dataflows:
+            name = format_locale(i.name)
+            description = format_locale(i.description)
+
             i: DataFlowDefinition
             info = {'id': i.id,
                     'unique_id': i.unique_id,
-                    'name': i.name,
-                    'description': i.description,
+                    'name': name,
+                    'description': description,
                     'version': i.version}
             list_dataflows.append(info)
-        print(list_dataflows)
         return list_dataflows
 
     @classmethod
