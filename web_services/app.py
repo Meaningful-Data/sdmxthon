@@ -1,7 +1,8 @@
 import json
 from flask import Flask, redirect, request, Response, jsonify
 from flask_cors import CORS
-from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest
+from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest, \
+    BaseRequest
 
 app = Flask(__name__)
 CORS(app)
@@ -63,6 +64,18 @@ def get_dataflow_metadata_url(agency_code, unique_id):
         metadata_url_str = x.get_metadata_url(unique_id=unique_id,
                                               params=params)
         return jsonify(metadata_url_str)
+    except Exception as e:
+        return Response(str(e), status=500)
+
+
+@app.route('/dataflows/code/<url>', methods=['GET'])
+def get_code_url(url):
+    if url == '':
+        return Response('Empty url is not allowed', status=400)
+    try:
+        x = BaseRequest()
+        code_str = x.get_sdmxthon_code(url=url)
+        return code_str
     except Exception as e:
         return Response(str(e), status=500)
 
