@@ -1,7 +1,6 @@
 import requests
 import random
 
-
 data = {'email': 'juanjo@j2logo.com', 'pass': '1234'}
 get_agencies = requests.get('http://127.0.0.1:5000/agencies')
 
@@ -121,23 +120,52 @@ def describe_GET_dataflows_metadata():
 
 
 def describe_GET_dataflows_code():
-    def get(dataflow_url):
-        url = 'http://127.0.0.1:5000/dataflows/{dataflow_url}'
+    def get(params):
+        url = 'http://127.0.0.1:5000/dataflows/code?'
+        for key in params:
+            url = f"{url}{key}={params[key]}&"
+        url = url[:-1]
         response = requests.get(url)
         return response
 
-    def context_url():
-        def it_return_code():
-            url = "available_url"
-            response = get(url)
-            assert response.status_code == 200
-            assert response.json() == """from sdmxthon import read_sdmx
-                                      if __name__ == 'main':
-                                      message = read_sdmx('{url}', validate=True)
-                                      print(message.content)""".format(url=url)
+    def context_too_much_parameters():
+        def it_respond_with_error_message():
+            url = "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL_D,1.0/all/all?detail=full"
+            params = {'url': url, 'other_parameter': 'other_parameter'}
+            response = get(params)
+            assert response.status_code == 400
+            assert response.json() == "Too much parameters, insert only url parameter"
+
+    def context_missing_url_parameter():
+        def it_respond_with_error_message():
+            params = {'other_parameter': 'other_parameter'}
+            response = get(params)
+            assert response.status_code == 400
+            assert response.json() == "Invalid parameters, insert url parameter"
 
     def context_empty_url():
         def it_respond_with_error_message():
-            response = get(url="")
+            params = {'url': ''}
+            response = get(params)
             assert response.status_code == 400
             assert response.json() == 'Empty url is not allowed'
+
+    def context_invalid_url():
+        def it_return_code():
+            url = "invalid_url"
+            params = {'url': url}
+            response = get(params)
+            assert response.status_code == 400
+            assert response.json() == f"{url} is not a valid url"
+
+    def context_valid_url():
+        def it_return_code():
+            url = "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL_D,1.0/all/all?detail=full"
+            params = {'url': url}
+            response = get(params)
+            assert response.status_code == 200
+            assert response.json() == "from sdmxthon import read_sdmx<br/>" \
+                                      "if __name__ == 'main':<br/>" \
+                                      "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>" \
+                                      "&emsp;&emsp;print(message.content)".format(
+                url=url)
