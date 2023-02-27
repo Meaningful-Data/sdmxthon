@@ -3,6 +3,7 @@ from flask import Flask, redirect, request, Response, jsonify
 from flask_cors import CORS
 from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest, \
     BaseRequest
+import validators
 
 app = Flask(__name__)
 CORS(app)
@@ -68,10 +69,19 @@ def get_dataflow_metadata_url(agency_code, unique_id):
         return Response(str(e), status=500)
 
 
-@app.route('/dataflows/code/<url>', methods=['GET'])
-def get_code_url(url):
-    if url == '':
+@app.route('/dataflows/code', methods=['GET'])
+def get_code_url():
+    params = request.args.to_dict()
+    print(params.keys())
+    if len(params.keys()) > 1:
+        return Response("Too much parameters, insert only url parameter", status=400)
+    if 'url' not in params.keys():
+        return Response("Invalid parameters, insert url parameter", status=400)
+    url = params['url']
+    if f"{url}" == '':
         return Response('Empty url is not allowed', status=400)
+    if not validators.url(f"{url}"):
+        return Response(f"{url} is not a valid url", status=400)
     try:
         x = BaseRequest()
         code_str = x.get_sdmxthon_code(url=url)
