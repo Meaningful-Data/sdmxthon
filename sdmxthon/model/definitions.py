@@ -6,17 +6,13 @@ import json
 from datetime import datetime
 from typing import List
 
-from sdmxthon.model.base import MaintainableArtefact, \
-    InternationalString
+from sdmxthon.model.base import InternationalString, MaintainableArtefact
 from sdmxthon.model.component import Component
-from sdmxthon.model.descriptors import ComponentList, DimensionDescriptor, \
-    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor
+from sdmxthon.model.descriptors import AttributeDescriptor, ComponentList, DimensionDescriptor, GroupDimensionDescriptor, MeasureDescriptor
 from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
-from sdmxthon.model.utils import generic_setter, ConstraintRoleType, \
-    bool_setter
-from sdmxthon.utils.handlers import export_intern_data, add_indent, \
-    split_unique_id
-from sdmxthon.utils.mappings import structureAbbr, Data_Types_VTL, commonAbbr
+from sdmxthon.model.utils import ConstraintRoleType, bool_setter, generic_setter
+from sdmxthon.utils.handlers import add_indent, export_intern_data, split_unique_id
+from sdmxthon.utils.mappings import Data_Types_VTL, commonAbbr, structureAbbr
 
 
 class MemberSelection(object):
@@ -40,6 +36,8 @@ class MemberSelection(object):
 
     @sel_value.setter
     def sel_value(self, value):
+        if not isinstance(value, list):
+            value = [value]
         self._selValue = generic_setter(value, list)
 
     @property
