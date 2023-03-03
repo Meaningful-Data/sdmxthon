@@ -75,7 +75,7 @@ def validate_doc(infile):
         parser = etree.ETCompatXMLParser()
     except AttributeError:
         # fallback to xml.etree
-        parser = etree.XMLParser()
+        parser = etree.XMLParser(remove_blank_text=True)
 
     base_path = os.path.dirname(os.path.dirname(__file__))
     schema = os.path.join(base_path, pathToSchema)
@@ -86,17 +86,14 @@ def validate_doc(infile):
         infile = BytesIO(bytes(infile, "UTF_8"))
 
     doc = etree.parse(infile, parser=parser)
-
     if not xmlschema.validate(doc):
-        try:
-            xmlschema.assertValid(doc)
-        except DocumentInvalid as e:
-            if len(e.args) == 1 and \
-                    'xsi:type' in e.args[0] or \
-                    'abstract' in e.args[0]:
-                pass
-            else:
-                raise e
+        log_errors = list(xmlschema.error_log)
+        unhandled_errors = []
+        for e in log_errors:
+            if 'content type is empty' not in e.message:
+                unhandled_errors.append(e.message)
+        if len(unhandled_errors)>0:
+            raise Exception(';\n'.join(unhandled_errors))
 
 
 def cast(typ, value):
