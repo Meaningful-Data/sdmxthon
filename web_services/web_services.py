@@ -3,8 +3,7 @@ import requests as rq
 
 from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.base import InternationalString
-from sdmxthon.model.definitions import DataStructureDefinition, \
-    DataFlowDefinition
+from sdmxthon.model.definitions import DataFlowDefinition
 from sdmxthon.utils.handlers import split_unique_id
 
 
@@ -35,9 +34,6 @@ class BaseRequest:
     def get_dataflows(cls, params):
         for key in params:
             if key not in cls.dataflows_params:
-                raise Exception
-        for key in cls.dataflows_params:
-            if key not in params:
                 raise Exception
         url = cls.dataflows_url.format(**params)
         message = read_sdmx(url, validate=False)
@@ -133,7 +129,10 @@ class BISRequest(BaseRequest):
     def get_data_url(cls, unique_id, params):
         flow = cls.to_bis_id(unique_id)  # Flow
         # flow = f"{agency_id},{dataflow_id},{dataflow_version}"
-
+        if 'key' not in params:
+            params['key'] = 'all'
+        if 'detail' not in params:
+            params['detail'] = 'full'
         url_df = f"{cls.base_url}/data/{flow}/{params['key']}/all?"
         for key, value in cls.mapping_params_url.items():
             if key in params:
@@ -143,11 +142,10 @@ class BISRequest(BaseRequest):
 
     @classmethod
     def get_metadata_url(cls, unique_id, params):
-        references = 'none'
         flow = cls.to_bis_id(unique_id)
         flow = flow.replace(',', '/')
 
-        url_md = f"{cls.base_url}/dataflow/{flow}?references=none&detail=full"
+        url_md = f"{cls.base_url}/dataflow/{flow}?references=all&detail=full"
         return url_md
 
 
@@ -170,13 +168,13 @@ class EUROSTATRequest(BaseRequest):
     @staticmethod
     def to_eurostat_id(unique_id):
         agency_id, id_, version = split_unique_id(unique_id)
-        return id_, agency_id, version
+        return id_
 
     @classmethod
     def get_data_url(cls, unique_id, params):
-        flow_id, agency_id, version = cls.to_eurostat_id(unique_id)  # Flow
+        flow_id = cls.to_eurostat_id(unique_id)  # Flow
 
-        url_df = f"{cls.base_url}/sdmx/2.1/data/{flow_id}?"
+        url_df = f"{cls.base_url}/sdmx/2.1/data/{flow_id}/?"
         for key, value in cls.mapping_params_url.items():
             if key in params:
                 url_df = f"{url_df}{value}={params[key]}&"
@@ -222,7 +220,12 @@ class ECBRequest(BaseRequest):
     def get_data_url(cls, unique_id, params):
         flow = cls.to_ecb_id(unique_id)  # Flow
         # flow = f"{agency_id},{dataflow_id},{dataflow_version}"
-
+        if 'key' not in params:
+            params['key'] = 'all'
+        if 'detail' not in params:
+            params['detail'] = 'full'
+        if 'provider_ref' not in params:
+            params['provider_ref'] = 'all'
         url_df = f"{cls.base_url}/service/data/{flow}/{params['key']}/{params['provider_ref']}?"
         for key, value in cls.mapping_params_url.items():
             if key in params:
@@ -236,7 +239,7 @@ class ECBRequest(BaseRequest):
         # flow = f"{agency_id},{dataflow_id},{dataflow_version}"
         agency_id, flow_id, version = flow.split(',')
 
-        url_md = f"{cls.base_url}/service/dataflow/{agency_id}/{flow_id}/{version}?references=none&detail=full"
+        url_md = f"{cls.base_url}/service/dataflow/{agency_id}/{flow_id}/{version}?references=all&detail=full"
         return url_md
 
 
@@ -266,13 +269,16 @@ class ILORequest(BaseRequest):
     @staticmethod
     def to_ilo_id(unique_id):
         agency_id, id_, version = split_unique_id(unique_id)
-        return id_, agency_id, version
+        return id_, agency_id
 
     @classmethod
     def get_data_url(cls, unique_id, params):
-        flow_id, agency_id, version = cls.to_ilo_id(unique_id)  # Flow
+        flow_id, agency_id = cls.to_ilo_id(unique_id)  # Flow
         # flow = f"{agency_id},{dataflow_id},{dataflow_version}"
-
+        if 'key' not in params:
+            params['key'] = 'all'
+        if 'detail' not in params:
+            params['detail'] = 'full'
         url_df = f"{cls.base_url}/data/{flow_id}/{params['key']}/{agency_id}?"
         for key, value in cls.mapping_params_url.items():
             if key in params:
@@ -284,7 +290,7 @@ class ILORequest(BaseRequest):
     def get_metadata_url(cls, unique_id, params):
         flow_id, agency_id, version = cls.to_ilo_id(unique_id)
 
-        url_md = f"{cls.base_url}/dataflow/{agency_id}/{flow_id}/{version}?references=none&detail=full"
+        url_md = f"{cls.base_url}/dataflow/{agency_id}/{flow_id}/{version}?references=all&detail=full"
         return url_md
 
 

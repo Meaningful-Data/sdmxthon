@@ -2,6 +2,19 @@
 Changelog
 #########
 
+2.0 (2023-03-03)
+----------------
+
+**Added**
+ - Added Webservices to search for datasets and dataflows in ECB, EUROSTAT,
+   BIS and ILO using a REST API.
+
+**Changes**
+ - Fixed read_xml to allow for more flexibility on structural validation and better error management.
+
+**Bugfixes**
+ - Fixed member reading on CubeRegion.
+
 1.3 (2022-31-05)
 ----------------
 **Added**

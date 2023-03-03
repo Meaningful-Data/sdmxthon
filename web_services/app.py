@@ -1,9 +1,10 @@
 import json
-from flask import Flask, redirect, request, Response, jsonify
-from flask_cors import CORS
-from web_services import BISRequest, EUROSTATRequest, ECBRequest, ILORequest, \
-    BaseRequest
+
 import validators
+from flask import Flask, Response, jsonify, request
+from flask_cors import CORS
+
+from web_services import BISRequest, BaseRequest, ECBRequest, EUROSTATRequest, ILORequest
 
 app = Flask(__name__)
 CORS(app)
