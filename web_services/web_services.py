@@ -54,18 +54,13 @@ class BaseRequest:
         return list_dataflows
 
     @classmethod
-    def get_data_url(cls, unique_id, params) -> str:
-        for key in params:
-            if key not in cls.data_params:
-                raise Exception
-
-        for key in cls.data_params:
-            if key not in params:
-                raise Exception
+    def get_data_url(cls, unique_id, params):
+        # Implement this method in the child class
         raise NotImplementedError
 
     @classmethod
     def get_metadata_url(cls, unique_id, params) -> str:
+        # Implement this method in the child class
         raise NotImplementedError
 
     @classmethod
@@ -85,11 +80,11 @@ class BaseRequest:
 
     @classmethod
     def get_sdmxthon_code(cls, url):
-        str = "from sdmxthon import read_sdmx<br/>"\
-              "if __name__ == 'main':<br/>"\
-              "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>"\
-              "&emsp;&emsp;print(message.content)".format(url=url)
-        return str
+        code = "from sdmxthon import read_sdmx<br/>" \
+               "if __name__ == 'main':<br/>" \
+               "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>" \
+               "&emsp;&emsp;print(message.content)".format(url=url)
+        return code
 
 
 START_PERIOD = 'start_period'
@@ -295,7 +290,7 @@ class ILORequest(BaseRequest):
 
 
 def main():
-    ## EXAMPLES
+    # EXAMPLES
     # Elección de la agencia
     x = ECBRequest()
 
@@ -303,7 +298,8 @@ def main():
     # message_def = x.get_dataflows(params={'code': 'ECB'})
 
     # Para devolver la url de los datos de un dataflow en concreto
-    # url_str = x.get_data_url(unique_id='ECB:AME(1.0)', params={'key': 'all', 'detail': 'full', 'provider_ref': 'all', DIMENSION_AT: 2020, UPDATED_AFTER: 2020})
+    # url_str = x.get_data_url(unique_id='ECB:AME(1.0)', params={'key': 'all', 'detail': 'full',
+    # 'provider_ref': 'all', DIMENSION_AT: 2020, UPDATED_AFTER: 2020})
 
     # Para devolver datos de un dataflow en concreto
     message_def = x.get_dataflow_data(df_unique_id='ECB:AME(1.0)',
