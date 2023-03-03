@@ -87,6 +87,14 @@ class BaseRequest:
         # data = read_sdmx(url_df, validate=False)
         # print(data)
 
+    @classmethod
+    def get_sdmxthon_code(cls, url):
+        str = "from sdmxthon import read_sdmx<br/>"\
+              "if __name__ == 'main':<br/>"\
+              "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>"\
+              "&emsp;&emsp;print(message.content)".format(url=url)
+        return str
+
 
 START_PERIOD = 'start_period'
 END_PERIOD = 'end_period'
