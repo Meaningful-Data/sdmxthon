@@ -269,11 +269,11 @@ class ILORequest(BaseRequest):
     @staticmethod
     def to_ilo_id(unique_id):
         agency_id, id_, version = split_unique_id(unique_id)
-        return id_, agency_id
+        return agency_id, id_, version
 
     @classmethod
     def get_data_url(cls, unique_id, params):
-        flow_id, agency_id = cls.to_ilo_id(unique_id)  # Flow
+        agency_id, flow_id, version = cls.to_ilo_id(unique_id)  # Flow
         # flow = f"{agency_id},{dataflow_id},{dataflow_version}"
         if 'key' not in params:
             params['key'] = 'all'
@@ -288,7 +288,7 @@ class ILORequest(BaseRequest):
 
     @classmethod
     def get_metadata_url(cls, unique_id, params):
-        flow_id, agency_id, version = cls.to_ilo_id(unique_id)
+        agency_id, flow_id, version = cls.to_ilo_id(unique_id)
 
         url_md = f"{cls.base_url}/dataflow/{agency_id}/{flow_id}/{version}?references=all&detail=full"
         return url_md
