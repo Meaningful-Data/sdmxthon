@@ -1,7 +1,7 @@
 import json
 
 import validators
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, request
 from flask_cors import CORS
 
 from web_services import BISRequest, BaseRequest, ECBRequest, EUROSTATRequest, ILORequest
@@ -43,15 +43,15 @@ def get_dataflows(agency_code):
 
 # url to redirect to specific dataflow data
 @app.route('/dataflows/data/url/<agency_code>/<unique_id>', methods=['GET'])
-def get_dataflow_data_url(agency_code, unique_id):
+def get_data_url(agency_code, unique_id):
     params = request.args.to_dict()
     if agency_code not in agencies.keys():
         return Response('Agency name not allowed', status=400)
     try:
         x = agencies[agency_code]
-        data_url_str = x.get_data_url(unique_id=unique_id,
-                                      params=params)
-        return jsonify(data_url_str)
+        url_str = x.get_data_url(unique_id=unique_id,
+                                 params=params)
+        return url_str, 200
     except Exception as e:
         return Response(str(e), status=500)
 
@@ -65,7 +65,7 @@ def get_dataflow_metadata_url(agency_code, unique_id):
         x = agencies[agency_code]
         metadata_url_str = x.get_metadata_url(unique_id=unique_id,
                                               params=params)
-        return jsonify(metadata_url_str)
+        return metadata_url_str, 200
     except Exception as e:
         return Response(str(e), status=500)
 
