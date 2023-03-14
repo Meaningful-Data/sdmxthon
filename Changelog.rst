@@ -2,6 +2,16 @@
 Changelog
 #########
 
+2.1 (2023-03-14)
+----------------
+**Added**
+
+**Changes**
+ - Improved structural error management with definitions of common errors.
+
+**Bugfixes**
+ - Fixed ID errors on Annotation
+
 2.0 (2023-03-03)
 ----------------
 

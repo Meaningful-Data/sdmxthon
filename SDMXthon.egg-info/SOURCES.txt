@@ -14,6 +14,10 @@ sdmxthon.egg-info/SOURCES.txt
 sdmxthon.egg-info/dependency_links.txt
 sdmxthon.egg-info/requires.txt
 sdmxthon.egg-info/top_level.txt
+sdmxthon/WebServices/__init__.py
+sdmxthon/WebServices/app.py
+sdmxthon/WebServices/sdmx_requests.py
+sdmxthon/WebServices/test.py
 sdmxthon/api/api.py
 sdmxthon/model/__init__.py
 sdmxthon/model/base.py

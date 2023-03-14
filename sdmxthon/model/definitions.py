@@ -8,10 +8,13 @@ from typing import List
 
 from sdmxthon.model.base import InternationalString, MaintainableArtefact
 from sdmxthon.model.component import Component
-from sdmxthon.model.descriptors import AttributeDescriptor, ComponentList, DimensionDescriptor, GroupDimensionDescriptor, MeasureDescriptor
+from sdmxthon.model.descriptors import AttributeDescriptor, ComponentList, \
+    DimensionDescriptor, GroupDimensionDescriptor, MeasureDescriptor
 from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
-from sdmxthon.model.utils import ConstraintRoleType, bool_setter, generic_setter
-from sdmxthon.utils.handlers import add_indent, export_intern_data, split_unique_id
+from sdmxthon.model.utils import ConstraintRoleType, bool_setter, \
+    generic_setter
+from sdmxthon.utils.handlers import add_indent, export_intern_data, \
+    split_unique_id
 from sdmxthon.utils.mappings import Data_Types_VTL, commonAbbr, structureAbbr
 
 
