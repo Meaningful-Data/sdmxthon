@@ -11,7 +11,7 @@ setuptools.setup(
     long_description_content_type='text/x-rst',
     packages=setuptools.find_packages(exclude=["testSuite"]),
     include_package_data=True,
-    version='2.0',
+    version='2.1',
     license='Apache 2.0',
     license_files='license.txt',
     author='MeaningfulData',

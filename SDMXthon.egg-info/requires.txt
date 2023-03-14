@@ -1,6 +1,0 @@
-lxml
-pandas
-numpy
-validators
-requests
-xmltodict

@@ -125,6 +125,8 @@ def format_annotations(item_elem: any):
         if ANNOTATION in ann:
             ann[ANNOTATION] = add_list(ann[ANNOTATION])
             for e in ann[ANNOTATION]:
+                if ID in e:
+                    e = format_id(e)
                 if ANNOTATION_TITLE in e:
                     e[TITLE] = e.pop(ANNOTATION_TITLE)
                 if ANNOTATION_TYPE in e:

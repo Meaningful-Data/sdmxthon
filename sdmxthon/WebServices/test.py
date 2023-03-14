@@ -1,8 +1,7 @@
-import requests
+# flake8: noqa
 import random
 
-data = {'email': 'juanjo@j2logo.com', 'pass': '1234'}
-get_agencies = requests.get('http://127.0.0.1:5000/agencies')
+import requests
 
 
 def describe_GET_agencies_info():
@@ -29,8 +28,7 @@ AGENCIES_CODES = ["BIS", "ESTAT", "ECB", "ILO"]
 
 def describe_GET_dataflows():
     def get(agency_code):
-        url = 'http://127.0.0.1:5000/dataflows/{agency_code}'.format(
-            agency_code)
+        url = f'http://127.0.0.1:5000/dataflows/{agency_code}'
         response = requests.get(url)
         return response
 
@@ -64,8 +62,7 @@ UNIQUE_ID = {"BIS": "BIS:WS_CBPOL_D(1.0)",
 
 def describe_GET_dataflows_data():
     def get(agency_code, unique_id, params):
-        url = 'http://127.0.0.1:5000/dataflows/data/url/{agency_code}/{unique_id}'.format(
-            agency_code=agency_code, unique_id=unique_id)
+        url = f'http://127.0.0.1:5000/dataflows/data/url/{agency_code}/{unique_id}'
         if params != "":
             response = requests.get(url, params=params)
         else:
@@ -164,8 +161,7 @@ def describe_GET_dataflows_code():
             params = {'url': url}
             response = get(params)
             assert response.status_code == 200
-            assert response.json() == "from sdmxthon import read_sdmx<br/>" \
-                                      "if __name__ == 'main':<br/>" \
-                                      "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>" \
-                                      "&emsp;&emsp;print(message.content)".format(
-                url=url)
+            assert response.json() == f"""from sdmxthon import read_sdmx<br/>
+                                      if __name__ == 'main':<br/>
+                                      &emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>
+                                      &emsp;&emsp;print(message.content)"""

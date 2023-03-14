@@ -5,7 +5,8 @@ from io import BytesIO
 import requests
 import validators
 from lxml import etree
-from lxml.etree import DocumentInvalid
+
+from sdmxthon.utils.xml_allowed_errors import ALLOWED_ERRORS_CONTENT
 
 pathToSchema = 'schemas/SDMXMessage.xsd'
 
@@ -90,10 +91,15 @@ def validate_doc(infile):
         log_errors = list(xmlschema.error_log)
         unhandled_errors = []
         for e in log_errors:
-            if 'content type is empty' not in e.message:
-                unhandled_errors.append(e.message)
-        if len(unhandled_errors)>0:
-            raise Exception(';\n'.join(unhandled_errors))
+            unhandled_errors.append(e.message)
+        severe_errors = unhandled_errors.copy()
+        for e in unhandled_errors:
+            for allowed_error in ALLOWED_ERRORS_CONTENT:
+                if allowed_error in e:
+                    severe_errors.remove(e)
+
+        if len(severe_errors) > 0:
+            raise Exception(';\n'.join(severe_errors))
 
 
 def cast(typ, value):

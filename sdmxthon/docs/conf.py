@@ -18,9 +18,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'sdmxthon'
-copyright = '2022, MeaningfulData'
+copyright = '2023, MeaningfulData'
 author = 'MeaningfulData'
-version = '1.3'
+version = '2.1'
 
 # -- General configuration ---------------------------------------------------
 
