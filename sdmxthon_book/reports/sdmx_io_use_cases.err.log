@@ -1,0 +1,70 @@
+Traceback (most recent call last):
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\jupyter_cache\executors\utils.py", line 58, in single_nb_execution
+    executenb(
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 650, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 608, in async_setup_kernel
+    yield
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import sdmxthon
+
+instance = sdmxthon.read_sdmx('data.xml')
+------------------
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[1], line 3[0m
+[0;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01msdmxthon[39;00m
+[1;32m----> 3[0m instance [38;5;241m=[39m [43msdmxthon[49m[38;5;241;43m.[39;49m[43mread_sdmx[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mdata.xml[39;49m[38;5;124;43m'[39;49m[43m)[49m
+
+File [1;32m~\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\sdmxthon\api\api.py:21[0m, in [0;36mread_sdmx[1;34m(sdmx_file, validate)[0m
+[0;32m     10[0m [38;5;28;01mdef[39;00m [38;5;21mread_sdmx[39m(sdmx_file, validate[38;5;241m=[39m[38;5;28;01mTrue[39;00m) [38;5;241m-[39m[38;5;241m>[39m Message:
+[0;32m     11[0m [38;5;250m    [39m[38;5;124;03m"""[39;00m
+[0;32m     12[0m [38;5;124;03m    Read SDMX performs the operation of reading a SDMX Data and SDMX[39;00m
+[0;32m     13[0m [38;5;124;03m    metadata files. URLs could be used.[39;00m
+[1;32m   (...)[0m
+[0;32m     18[0m [38;5;124;03m    :return: A :obj:`Message <model.message.Message>` object[39;00m
+[0;32m     19[0m [38;5;124;03m    """[39;00m
+[1;32m---> 21[0m     data [38;5;241m=[39m [43mread_xml[49m[43m([49m[43msdmx_file[49m[43m,[49m[43m [49m[38;5;28;43;01mNone[39;49;00m[43m,[49m[43m [49m[43mvalidate[49m[38;5;241;43m=[39;49m[43mvalidate[49m[43m)[49m
+[0;32m     23[0m     [38;5;28;01mif[39;00m [38;5;28misinstance[39m(first_element_dict(data), Dataset):
+[0;32m     24[0m         type_ [38;5;241m=[39m MessageTypeEnum[38;5;241m.[39mStructureDataSet
+
+File [1;32m~\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\sdmxthon\parsers\read.py:84[0m, in [0;36mread_xml[1;34m(infile, mode, validate)[0m
+[0;32m     83[0m [38;5;28;01mdef[39;00m [38;5;21mread_xml[39m(infile, mode[38;5;241m=[39m[38;5;28;01mNone[39;00m, validate[38;5;241m=[39m[38;5;28;01mTrue[39;00m):
+[1;32m---> 84[0m     infile [38;5;241m=[39m [43mprocess_string_to_read[49m[43m([49m[43minfile[49m[43m)[49m
+[0;32m     86[0m     [38;5;28;01mif[39;00m validate:
+[0;32m     87[0m         validate_doc(infile)
+
+File [1;32m~\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\sdmxthon\utils\xml_base.py:42[0m, in [0;36mprocess_string_to_read[1;34m(infile)[0m
+[0;32m     38[0m [38;5;28;01melif[39;00m ([38;5;124m'[39m[38;5;124m/[39m[38;5;124m'[39m [38;5;129;01min[39;00m infile [38;5;129;01mor[39;00m [38;5;124m'[39m[38;5;130;01m\\[39;00m[38;5;124m'[39m [38;5;129;01min[39;00m infile [38;5;129;01mor[39;00m
+[0;32m     39[0m       ([38;5;124m"[39m[38;5;124m.xml[39m[38;5;124m"[39m [38;5;129;01min[39;00m infile [38;5;129;01mand[39;00m [38;5;124m"[39m[38;5;124m<[39m[38;5;124m"[39m [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m infile) [38;5;129;01mor[39;00m
+[0;32m     40[0m       [38;5;28misinstance[39m(infile, os[38;5;241m.[39mPathLike)):
+[0;32m     41[0m     [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m os[38;5;241m.[39mpath[38;5;241m.[39misfile(infile):
+[1;32m---> 42[0m         [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mFile not found: [39m[38;5;132;01m{[39;00minfile[38;5;132;01m}[39;00m[38;5;124m"[39m)
+[0;32m     43[0m     [38;5;28;01mtry[39;00m:
+[0;32m     44[0m         [38;5;28;01mwith[39;00m [38;5;28mopen[39m(infile, [38;5;124m"[39m[38;5;124mr[39m[38;5;124m"[39m,
+[0;32m     45[0m                   encoding[38;5;241m=[39m[38;5;124m'[39m[38;5;124mutf-8[39m[38;5;124m'[39m,
+[0;32m     46[0m                   errors[38;5;241m=[39m[38;5;124m'[39m[38;5;124mreplace[39m[38;5;124m'[39m) [38;5;28;01mas[39;00m f:
+
+[1;31mValueError[0m: File not found: data.xml
+ValueError: File not found: data.xml
+

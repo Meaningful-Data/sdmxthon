@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\jupyter_cache\executors\utils.py", line 58, in single_nb_execution
+    executenb(
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 650, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\aolle\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 608, in async_setup_kernel
+    yield
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "C:\Users\aolle\.virtualenvs\sdmx-nELv1vYW\Lib\site-packages\nbclient\client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import json
+
+url = "http://127.0.0.1:8080/ws/public/data/loadStatus"
+uid =  json.loads(validate_request.text)['uid']
+
+result_request = requests.get(f'{url}?uid={uid}')
+
+result = json.loads(result_request.text)
+
+print(result['Datasets'][0]['ValidationReport'][:2])
+
+------------------
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mIndexError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[7], line 10[0m
+[0;32m      6[0m result_request [38;5;241m=[39m requests[38;5;241m.[39mget([38;5;124mf[39m[38;5;124m'[39m[38;5;132;01m{[39;00murl[38;5;132;01m}[39;00m[38;5;124m?uid=[39m[38;5;132;01m{[39;00muid[38;5;132;01m}[39;00m[38;5;124m'[39m)
+[0;32m      8[0m result [38;5;241m=[39m json[38;5;241m.[39mloads(result_request[38;5;241m.[39mtext)
+[1;32m---> 10[0m [38;5;28mprint[39m([43mresult[49m[43m[[49m[38;5;124;43m'[39;49m[38;5;124;43mDatasets[39;49m[38;5;124;43m'[39;49m[43m][49m[43m[[49m[38;5;241;43m0[39;49m[43m][49m[[38;5;124m'[39m[38;5;124mValidationReport[39m[38;5;124m'[39m][:[38;5;241m2[39m])
+
+[1;31mIndexError[0m: list index out of range
+IndexError: list index out of range
+

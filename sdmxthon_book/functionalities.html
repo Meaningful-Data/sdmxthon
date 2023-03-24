@@ -1,0 +1,1161 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>SDMXThon functionalities &#8212; About SDMXThon</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'functionalities';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core sdmx.io use cases" href="sdmx_io_use_cases.html" />
+    <link rel="prev" title="SDMXThon use cases introduction" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    SDMXThon use cases introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">SDMXThon functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdmx_io_use_cases.html">Core sdmx.io use cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdmxthon_comprehensive_example.html">Comprehensive example</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/functionalities.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>SDMXThon functionalities</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdmx-message-reading">SDMX Message reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdmx-data-functionalities">SDMX data functionalities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdmx-metadata-functionalities">SDMX metadata functionalities</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="sdmxthon-functionalities">
+<h1>SDMXThon functionalities<a class="headerlink" href="#sdmxthon-functionalities" title="Permalink to this heading">#</a></h1>
+<section id="sdmx-message-reading">
+<h2>SDMX Message reading<a class="headerlink" href="#sdmx-message-reading" title="Permalink to this heading">#</a></h2>
+<p>SDMThon includes a simple method to read any sdmx file, regardless of whether it is a data or metadata file.
+The method can be called on stored files or urls.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sdmxthon</span>
+
+<span class="n">message_metadata</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;input_data/bis_otc_outs.xml&#39;</span><span class="p">)</span>
+<span class="n">message_data</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;https://stats.bis.org/api/v1/data/BIS,WS_OTC_DERIV2,1.0/all/all?lastNObservations=3&amp;detail=full&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">message_metadata</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">message_data</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageTypeEnum.Metadata
+MessageTypeEnum.StructureDataSet
+</pre></div>
+</div>
+</div>
+</div>
+<p>The payload of the messages is in an attribute of the message object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">message_metadata</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">message_data</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;OrganisationSchemes&#39;: {&#39;SDMX:AGENCIES(1.0)&#39;: &lt;AgencyScheme - SDMX:AGENCIES(1.0)&gt;}, &#39;Codelists&#39;: {&#39;BIS:CL_AVAILABILITY(1.0)&#39;: &lt;Codelist - CL_AVAILABILITY&gt;, &#39;BIS:CL_BIS_IF_REF_AREA(1.0)&#39;: &lt;Codelist - CL_BIS_IF_REF_AREA&gt;, &#39;BIS:CL_BIS_UNIT(1.0)&#39;: &lt;Codelist - CL_BIS_UNIT&gt;, &#39;BIS:CL_COLLECTION(1.0)&#39;: &lt;Codelist - CL_COLLECTION&gt;, &#39;BIS:CL_CONF_STATUS(1.0)&#39;: &lt;Codelist - CL_CONF_STATUS&gt;, &#39;BIS:CL_DECIMALS(1.0)&#39;: &lt;Codelist - CL_DECIMALS&gt;, &#39;BIS:CL_DER_BASIS(1.0)&#39;: &lt;Codelist - CL_DER_BASIS&gt;, &#39;BIS:CL_DER_INSTR(1.0)&#39;: &lt;Codelist - CL_DER_INSTR&gt;, &#39;BIS:CL_EX_METHOD(1.0)&#39;: &lt;Codelist - CL_EX_METHOD&gt;, &#39;BIS:CL_FREQ(1.0)&#39;: &lt;Codelist - CL_FREQ&gt;, &#39;BIS:CL_ISSUE_MAT(1.0)&#39;: &lt;Codelist - CL_ISSUE_MAT&gt;, &#39;BIS:CL_MARKET_RISK(1.0)&#39;: &lt;Codelist - CL_MARKET_RISK&gt;, &#39;BIS:CL_OBS_STATUS(1.0)&#39;: &lt;Codelist - CL_OBS_STATUS&gt;, &#39;BIS:CL_OD_TYPE(1.0)&#39;: &lt;Codelist - CL_OD_TYPE&gt;, &#39;BIS:CL_RATING(1.0)&#39;: &lt;Codelist - CL_RATING&gt;, &#39;BIS:CL_SECTOR_CPY(1.0)&#39;: &lt;Codelist - CL_SECTOR_CPY&gt;, &#39;BIS:CL_SECTOR_UDL(1.0)&#39;: &lt;Codelist - CL_SECTOR_UDL&gt;, &#39;BIS:CL_TIME_FORMAT(1.0)&#39;: &lt;Codelist - CL_TIME_FORMAT&gt;, &#39;BIS:CL_UNIT_MULT(1.0)&#39;: &lt;Codelist - CL_UNIT_MULT&gt;}, &#39;Concepts&#39;: {&#39;BIS:STANDALONE_CONCEPT_SCHEME(1.0)&#39;: &lt;ConceptScheme - BIS:STANDALONE_CONCEPT_SCHEME(1.0)&gt;}, &#39;DataStructures&#39;: {&#39;BIS:BIS_DER(1.0)&#39;: &lt;DataStructureDefinition  - BIS:BIS_DER(1.0)&gt;}, &#39;Dataflows&#39;: {&#39;BIS:WS_OTC_DERIV2(1.0)&#39;: &lt;DataFlowDefinition - BIS:WS_OTC_DERIV2(1.0)&gt;}, &#39;Constraints&#39;: {&#39;BIS:OTCDO_NA_R(1.0)&#39;: &lt;sdmxthon.model.definitions.ContentConstraint object at 0x000001BB3A5CE450&gt;}, &#39;errors&#39;: []}
+{&#39;BIS:WS_OTC_DERIV2(1.0)&#39;: &lt;DataSet - No Structure found&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sdmx-data-functionalities">
+<h2>SDMX data functionalities<a class="headerlink" href="#sdmx-data-functionalities" title="Permalink to this heading">#</a></h2>
+<p>The DataSet object has a series of SDMX-specific attributes. The data in the dataset are stored as a Pandas Dataframe, in the data attribute:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">message_data</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;BIS:WS_OTC_DERIV2(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FREQ</th>
+      <th>DER_TYPE</th>
+      <th>DER_INSTR</th>
+      <th>DER_RISK</th>
+      <th>DER_REP_CTY</th>
+      <th>DER_SECTOR_CPY</th>
+      <th>DER_CPC</th>
+      <th>DER_SECTOR_UDL</th>
+      <th>DER_CURR_LEG1</th>
+      <th>DER_CURR_LEG2</th>
+      <th>DER_ISSUE_MAT</th>
+      <th>DER_RATING</th>
+      <th>DER_EX_METHOD</th>
+      <th>DER_BASIS</th>
+      <th>AVAILABILITY</th>
+      <th>COLLECTION</th>
+      <th>TIME_PERIOD</th>
+      <th>OBS_VALUE</th>
+      <th>OBS_STATUS</th>
+      <th>OBS_CONF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>H</td>
+      <td>T</td>
+      <td>W</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>N</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S1</td>
+      <td>7955.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>H</td>
+      <td>T</td>
+      <td>W</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>N</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S2</td>
+      <td>12381.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>H</td>
+      <td>T</td>
+      <td>W</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>N</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2022-S1</td>
+      <td>10363.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>H</td>
+      <td>A</td>
+      <td>T</td>
+      <td>L</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S1</td>
+      <td>284102.446</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>H</td>
+      <td>A</td>
+      <td>T</td>
+      <td>L</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S2</td>
+      <td>97640.002</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>14862</th>
+      <td>H</td>
+      <td>S</td>
+      <td>U</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>D</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>E</td>
+      <td>2021-S2</td>
+      <td>350594.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14863</th>
+      <td>H</td>
+      <td>S</td>
+      <td>U</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>D</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>E</td>
+      <td>2022-S1</td>
+      <td>308992.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14864</th>
+      <td>H</td>
+      <td>A</td>
+      <td>M</td>
+      <td>D</td>
+      <td>5J</td>
+      <td>B</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>CHF</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>C</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S1</td>
+      <td>4714.702</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14865</th>
+      <td>H</td>
+      <td>A</td>
+      <td>M</td>
+      <td>D</td>
+      <td>5J</td>
+      <td>B</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>CHF</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>C</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S2</td>
+      <td>4619.951</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14866</th>
+      <td>H</td>
+      <td>A</td>
+      <td>M</td>
+      <td>D</td>
+      <td>5J</td>
+      <td>B</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>CHF</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>C</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2022-S1</td>
+      <td>293.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+  </tbody>
+</table>
+<p>14867 rows × 20 columns</p>
+</div></div></div>
+</div>
+<p>The generated data frame has one column for each component of the data structure of the dataset.
+This dataset does not have any data structure attached to it, since it has not been loaded:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>None
+</pre></div>
+</div>
+</div>
+</div>
+<p>By assigning a structure to the dataset, it is possible to validate the data against its structure:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">message_metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;DataStructures&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+</pre></div>
+</div>
+</div>
+</div>
+<p>If the dataset has structural errors, the output of the semantic_validation method is a list of dictionaries with the errors:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;DER_BASIS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;Code&#39;: &#39;SS08&#39;,
+  &#39;ErrorLevel&#39;: &#39;WARNING&#39;,
+  &#39;Component&#39;: &#39;DER_BASIS&#39;,
+  &#39;Type&#39;: &#39;Dimension&#39;,
+  &#39;Rows&#39;: None,
+  &#39;Message&#39;: &#39;Value error not compliant with maxLength : 1&#39;},
+ {&#39;Code&#39;: &#39;SS04&#39;,
+  &#39;ErrorLevel&#39;: &#39;CRITICAL&#39;,
+  &#39;Component&#39;: &#39;DER_BASIS&#39;,
+  &#39;Type&#39;: &#39;Dimension&#39;,
+  &#39;Rows&#39;: None,
+  &#39;Message&#39;: &#39;Wrong value error for dimension DER_BASIS&#39;}]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The list of possible errors can be found in this link:
+<a class="reference external" href="https://docs.sdmxthon.meaningfuldata.eu/validations.html">https://docs.sdmxthon.meaningfuldata.eu/validations.html</a></p>
+<p>From dataset objects it is possible to generate an SDMX v2.1 message, with any of the different modalities:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdmxthon.utils.enums</span> <span class="kn">import</span> <span class="n">MessageTypeEnum</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">to_xml</span><span class="p">(</span>
+    <span class="n">message_type</span> <span class="o">=</span> <span class="n">MessageTypeEnum</span><span class="o">.</span><span class="n">StructureDataSet</span><span class="p">,</span>
+    <span class="n">outputPath</span> <span class="o">=</span> <span class="s1">&#39;structure_dataset_example.xml&#39;</span><span class="p">,</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="s1">&#39;dataset_id&#39;</span><span class="p">,</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="s1">&#39;false&#39;</span><span class="p">,</span>
+    <span class="n">prepared</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="s1">&#39;MeaningfulData&#39;</span><span class="p">,</span>
+    <span class="n">receiver</span> <span class="o">=</span> <span class="s1">&#39;open&#39;</span><span class="p">,</span>
+    <span class="n">prettyprint</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sdmx-metadata-functionalities">
+<h2>SDMX metadata functionalities<a class="headerlink" href="#sdmx-metadata-functionalities" title="Permalink to this heading">#</a></h2>
+<p>SDMXthon provides a simple way to navigate through the metadata. Using the content method on the Message class and the items method on each item Scheme we can access to the inner metadata classes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">concept_scheme</span> <span class="o">=</span> <span class="n">message_metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;Concepts&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:STANDALONE_CONCEPT_SCHEME(1.0)&#39;</span><span class="p">]</span>
+<span class="n">concept_scheme</span><span class="o">.</span><span class="n">items</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;TIME_FORMAT&#39;: &lt;Concept - TIME_FORMAT&gt;,
+ &#39;ADJUST_CODED&#39;: &lt;Concept - ADJUST_CODED&gt;,
+ &#39;AGG_EQUN&#39;: &lt;Concept - AGG_EQUN&gt;,
+ &#39;AVAILABILITY&#39;: &lt;Concept - AVAILABILITY&gt;,
+ &#39;BIS_BLOCK&#39;: &lt;Concept - BIS_BLOCK&gt;,
+ &#39;BIS_DOC_DATE&#39;: &lt;Concept - BIS_DOC_DATE&gt;,
+ &#39;BIS_SUFFIX&#39;: &lt;Concept - BIS_SUFFIX&gt;,
+ &#39;BIS_TOPIC&#39;: &lt;Concept - BIS_TOPIC&gt;,
+ &#39;BIS_UNIT&#39;: &lt;Concept - BIS_UNIT&gt;,
+ &#39;BORROWERS_CTY&#39;: &lt;Concept - BORROWERS_CTY&gt;,
+ &#39;BORROWER_NAT&#39;: &lt;Concept - BORROWER_NAT&gt;,
+ &#39;BREAKS&#39;: &lt;Concept - BREAKS&gt;,
+ &#39;CBS_BANK_TYPE&#39;: &lt;Concept - CBS_BANK_TYPE&gt;,
+ &#39;CBS_BASIS&#39;: &lt;Concept - CBS_BASIS&gt;,
+ &#39;CG_DTYPE&#39;: &lt;Concept - CG_DTYPE&gt;,
+ &#39;CIBL_CATEGORY&#39;: &lt;Concept - CIBL_CATEGORY&gt;,
+ &#39;CIBL_TABLE&#39;: &lt;Concept - CIBL_TABLE&gt;,
+ &#39;CIBL_TYPE&#39;: &lt;Concept - CIBL_TYPE&gt;,
+ &#39;COLLECTION&#39;: &lt;Concept - COLLECTION&gt;,
+ &#39;COLLECTION_DETAIL&#39;: &lt;Concept - COLLECTION_DETAIL&gt;,
+ &#39;COMPILATION&#39;: &lt;Concept - COMPILATION&gt;,
+ &#39;COMPILING_ORG&#39;: &lt;Concept - COMPILING_ORG&gt;,
+ &#39;COVERAGE&#39;: &lt;Concept - COVERAGE&gt;,
+ &#39;COVERED_AREA&#39;: &lt;Concept - COVERED_AREA&gt;,
+ &#39;CPSS_DATA_TYPE&#39;: &lt;Concept - CPSS_DATA_TYPE&gt;,
+ &#39;CPSS_REP_CCY&#39;: &lt;Concept - CPSS_REP_CCY&gt;,
+ &#39;CPSS_REP_COUNTRY&#39;: &lt;Concept - CPSS_REP_COUNTRY&gt;,
+ &#39;CPSS_TABLE&#39;: &lt;Concept - CPSS_TABLE&gt;,
+ &#39;CTY_TYPE&#39;: &lt;Concept - CTY_TYPE&gt;,
+ &#39;CURR_TYPE_BOOK&#39;: &lt;Concept - CURR_TYPE_BOOK&gt;,
+ &#39;DATA_COMP&#39;: &lt;Concept - DATA_COMP&gt;,
+ &#39;DECIMALS&#39;: &lt;Concept - DECIMALS&gt;,
+ &#39;DER_BASIS&#39;: &lt;Concept - DER_BASIS&gt;,
+ &#39;DER_CPC&#39;: &lt;Concept - DER_CPC&gt;,
+ &#39;DER_CURR_LEG1&#39;: &lt;Concept - DER_CURR_LEG1&gt;,
+ &#39;DER_CURR_LEG2&#39;: &lt;Concept - DER_CURR_LEG2&gt;,
+ &#39;DER_EX_METHOD&#39;: &lt;Concept - DER_EX_METHOD&gt;,
+ &#39;DER_INSTR&#39;: &lt;Concept - DER_INSTR&gt;,
+ &#39;DER_ISSUE_MAT&#39;: &lt;Concept - DER_ISSUE_MAT&gt;,
+ &#39;DER_RATING&#39;: &lt;Concept - DER_RATING&gt;,
+ &#39;DER_REP_CTY&#39;: &lt;Concept - DER_REP_CTY&gt;,
+ &#39;DER_RISK&#39;: &lt;Concept - DER_RISK&gt;,
+ &#39;DER_SECTOR_CPY&#39;: &lt;Concept - DER_SECTOR_CPY&gt;,
+ &#39;DER_SECTOR_UDL&#39;: &lt;Concept - DER_SECTOR_UDL&gt;,
+ &#39;DER_TYPE&#39;: &lt;Concept - DER_TYPE&gt;,
+ &#39;DOC_METHOD&#39;: &lt;Concept - DOC_METHOD&gt;,
+ &#39;DOM_SER_IDS&#39;: &lt;Concept - DOM_SER_IDS&gt;,
+ &#39;DSR_BORROWERS&#39;: &lt;Concept - DSR_BORROWERS&gt;,
+ &#39;D_CPART_TR_H&#39;: &lt;Concept - D_CPART_TR_H&gt;,
+ &#39;D_CURR_H&#39;: &lt;Concept - D_CURR_H&gt;,
+ &#39;D_EUS_MAT_H&#39;: &lt;Concept - D_EUS_MAT_H&gt;,
+ &#39;D_INSTR_H&#39;: &lt;Concept - D_INSTR_H&gt;,
+ &#39;D_VOL_H&#39;: &lt;Concept - D_VOL_H&gt;,
+ &#39;EER_BASKET&#39;: &lt;Concept - EER_BASKET&gt;,
+ &#39;EER_TYPE&#39;: &lt;Concept - EER_TYPE&gt;,
+ &#39;FREQ&#39;: &lt;Concept - FREQ&gt;,
+ &#39;I2A_ACC_STD&#39;: &lt;Concept - I2A_ACC_STD&gt;,
+ &#39;I2A_CODE&#39;: &lt;Concept - I2A_CODE&gt;,
+ &#39;I2A_CONS_PERI&#39;: &lt;Concept - I2A_CONS_PERI&gt;,
+ &#39;I2A_CONTRACT_TYPE&#39;: &lt;Concept - I2A_CONTRACT_TYPE&gt;,
+ &#39;I2A_CURRENCY&#39;: &lt;Concept - I2A_CURRENCY&gt;,
+ &#39;I2A_CURRENCY_LEG1&#39;: &lt;Concept - I2A_CURRENCY_LEG1&gt;,
+ &#39;I2A_CURRENCY_LEG2&#39;: &lt;Concept - I2A_CURRENCY_LEG2&gt;,
+ &#39;I2A_INST&#39;: &lt;Concept - I2A_INST&gt;,
+ &#39;I2A_MEASURE&#39;: &lt;Concept - I2A_MEASURE&gt;,
+ &#39;I2A_POS_TYPE&#39;: &lt;Concept - I2A_POS_TYPE&gt;,
+ &#39;IBLN_CATEGORY&#39;: &lt;Concept - IBLN_CATEGORY&gt;,
+ &#39;IBLN_TABLE&#39;: &lt;Concept - IBLN_TABLE&gt;,
+ &#39;IBLN_TYPE&#39;: &lt;Concept - IBLN_TYPE&gt;,
+ &#39;IBLR_CATEGORY&#39;: &lt;Concept - IBLR_CATEGORY&gt;,
+ &#39;IBLR_CURR&#39;: &lt;Concept - IBLR_CURR&gt;,
+ &#39;IBLR_TYPE&#39;: &lt;Concept - IBLR_TYPE&gt;,
+ &#39;ICM_CURRENCY&#39;: &lt;Concept - ICM_CURRENCY&gt;,
+ &#39;IF_REF_AREA&#39;: &lt;Concept - IF_REF_AREA&gt;,
+ &#39;ISSUER_BUS_IMM&#39;: &lt;Concept - ISSUER_BUS_IMM&gt;,
+ &#39;ISSUER_BUS_ULT&#39;: &lt;Concept - ISSUER_BUS_ULT&gt;,
+ &#39;ISSUER_CTY&#39;: &lt;Concept - ISSUER_CTY&gt;,
+ &#39;ISSUER_NAT&#39;: &lt;Concept - ISSUER_NAT&gt;,
+ &#39;ISSUER_RES&#39;: &lt;Concept - ISSUER_RES&gt;,
+ &#39;ISSUE_COL&#39;: &lt;Concept - ISSUE_COL&gt;,
+ &#39;ISSUE_CUR&#39;: &lt;Concept - ISSUE_CUR&gt;,
+ &#39;ISSUE_CUR_GROUP&#39;: &lt;Concept - ISSUE_CUR_GROUP&gt;,
+ &#39;ISSUE_OR_MAT&#39;: &lt;Concept - ISSUE_OR_MAT&gt;,
+ &#39;ISSUE_RATE&#39;: &lt;Concept - ISSUE_RATE&gt;,
+ &#39;ISSUE_RE_MAT&#39;: &lt;Concept - ISSUE_RE_MAT&gt;,
+ &#39;ISSUE_RISK&#39;: &lt;Concept - ISSUE_RISK&gt;,
+ &#39;ISSUE_TYPE&#39;: &lt;Concept - ISSUE_TYPE&gt;,
+ &#39;JD_CATEGORY&#39;: &lt;Concept - JD_CATEGORY&gt;,
+ &#39;JD_TYPE&#39;: &lt;Concept - JD_TYPE&gt;,
+ &#39;LOCATION&#39;: &lt;Concept - LOCATION&gt;,
+ &#39;L_BIS_SUFF&#39;: &lt;Concept - L_BIS_SUFF&gt;,
+ &#39;L_BIS_TOP_H&#39;: &lt;Concept - L_BIS_TOP_H&gt;,
+ &#39;L_CP_COUNTRY&#39;: &lt;Concept - L_CP_COUNTRY&gt;,
+ &#39;L_CP_SECTOR&#39;: &lt;Concept - L_CP_SECTOR&gt;,
+ &#39;L_CURR_TYPE&#39;: &lt;Concept - L_CURR_TYPE&gt;,
+ &#39;L_DENOM&#39;: &lt;Concept - L_DENOM&gt;,
+ &#39;L_INSTR&#39;: &lt;Concept - L_INSTR&gt;,
+ &#39;L_MEASURE&#39;: &lt;Concept - L_MEASURE&gt;,
+ &#39;L_PARENT_CTY&#39;: &lt;Concept - L_PARENT_CTY&gt;,
+ &#39;L_POSITION&#39;: &lt;Concept - L_POSITION&gt;,
+ &#39;L_POS_TYPE&#39;: &lt;Concept - L_POS_TYPE&gt;,
+ &#39;L_REP_BANK_TYPE&#39;: &lt;Concept - L_REP_BANK_TYPE&gt;,
+ &#39;L_REP_CTY&#39;: &lt;Concept - L_REP_CTY&gt;,
+ &#39;MARKET&#39;: &lt;Concept - MARKET&gt;,
+ &#39;MEASURE&#39;: &lt;Concept - MEASURE&gt;,
+ &#39;MEASURE_DETAIL&#39;: &lt;Concept - MEASURE_DETAIL&gt;,
+ &#39;META_UPDATE&#39;: &lt;Concept - META_UPDATE&gt;,
+ &#39;METHOD_REF&#39;: &lt;Concept - METHOD_REF&gt;,
+ &#39;MS_CURRENCY&#39;: &lt;Concept - MS_CURRENCY&gt;,
+ &#39;MS_MEASURE&#39;: &lt;Concept - MS_MEASURE&gt;,
+ &#39;MS_REP_COUNTRY&#39;: &lt;Concept - MS_REP_COUNTRY&gt;,
+ &#39;MS_TOPIC&#39;: &lt;Concept - MS_TOPIC&gt;,
+ &#39;NAT_TITLE&#39;: &lt;Concept - NAT_TITLE&gt;,
+ &#39;OBS_COM&#39;: &lt;Concept - OBS_COM&gt;,
+ &#39;OBS_CONF&#39;: &lt;Concept - OBS_CONF&gt;,
+ &#39;OBS_PRE_BREAK&#39;: &lt;Concept - OBS_PRE_BREAK&gt;,
+ &#39;OBS_STATUS&#39;: &lt;Concept - OBS_STATUS&gt;,
+ &#39;OBS_VALUE&#39;: &lt;Concept - OBS_VALUE&gt;,
+ &#39;OD_CPARTY&#39;: &lt;Concept - OD_CPARTY&gt;,
+ &#39;OD_CURR_MAT_REG&#39;: &lt;Concept - OD_CURR_MAT_REG&gt;,
+ &#39;OD_INSTR&#39;: &lt;Concept - OD_INSTR&gt;,
+ &#39;OD_REP_CTY&#39;: &lt;Concept - OD_REP_CTY&gt;,
+ &#39;OD_RISK_CAT&#39;: &lt;Concept - OD_RISK_CAT&gt;,
+ &#39;OD_TYPE&#39;: &lt;Concept - OD_TYPE&gt;,
+ &#39;ORG_VISIBILITY&#39;: &lt;Concept - ORG_VISIBILITY&gt;,
+ &#39;PRICED_UNIT&#39;: &lt;Concept - PRICED_UNIT&gt;,
+ &#39;PS_INFO_TYPE&#39;: &lt;Concept - PS_INFO_TYPE&gt;,
+ &#39;PS_SECTOR&#39;: &lt;Concept - PS_SECTOR&gt;,
+ &#39;PS_SYSTEMS&#39;: &lt;Concept - PS_SYSTEMS&gt;,
+ &#39;PS_TRANS_TYPE&#39;: &lt;Concept - PS_TRANS_TYPE&gt;,
+ &#39;PUBLICATIONS&#39;: &lt;Concept - PUBLICATIONS&gt;,
+ &#39;REF_AREA&#39;: &lt;Concept - REF_AREA&gt;,
+ &#39;REM_MATURITY&#39;: &lt;Concept - REM_MATURITY&gt;,
+ &#39;REP_CTY&#39;: &lt;Concept - REP_CTY&gt;,
+ &#39;REP_DELAY&#39;: &lt;Concept - REP_DELAY&gt;,
+ &#39;RE_TYPE&#39;: &lt;Concept - RE_TYPE&gt;,
+ &#39;RE_VINTAGE&#39;: &lt;Concept - RE_VINTAGE&gt;,
+ &#39;RPI_INFO_TYPE&#39;: &lt;Concept - RPI_INFO_TYPE&gt;,
+ &#39;RPI_INSTRUMENT&#39;: &lt;Concept - RPI_INSTRUMENT&gt;,
+ &#39;RPI_TERM_AND_OP&#39;: &lt;Concept - RPI_TERM_AND_OP&gt;,
+ &#39;SECTOR_PARTICIPANT&#39;: &lt;Concept - SECTOR_PARTICIPANT&gt;,
+ &#39;SEC_INFO_TYPE&#39;: &lt;Concept - SEC_INFO_TYPE&gt;,
+ &#39;SEC_INSTR&#39;: &lt;Concept - SEC_INSTR&gt;,
+ &#39;SEC_INSTRUMENT&#39;: &lt;Concept - SEC_INSTRUMENT&gt;,
+ &#39;SEC_ISSUER&#39;: &lt;Concept - SEC_ISSUER&gt;,
+ &#39;SEC_SUFFIX&#39;: &lt;Concept - SEC_SUFFIX&gt;,
+ &#39;SEC_SYSTEM&#39;: &lt;Concept - SEC_SYSTEM&gt;,
+ &#39;SEC_TYPE&#39;: &lt;Concept - SEC_TYPE&gt;,
+ &#39;SOURCE_REF&#39;: &lt;Concept - SOURCE_REF&gt;,
+ &#39;SOURCE_TYPE&#39;: &lt;Concept - SOURCE_TYPE&gt;,
+ &#39;SYN_CR_PURPOSE&#39;: &lt;Concept - SYN_CR_PURPOSE&gt;,
+ &#39;TC_ADJUST&#39;: &lt;Concept - TC_ADJUST&gt;,
+ &#39;TC_BORROWERS&#39;: &lt;Concept - TC_BORROWERS&gt;,
+ &#39;TC_LENDERS&#39;: &lt;Concept - TC_LENDERS&gt;,
+ &#39;TIME_PERIOD&#39;: &lt;Concept - TIME_PERIOD&gt;,
+ &#39;TITLE&#39;: &lt;Concept - TITLE&gt;,
+ &#39;TITLE_COMPL&#39;: &lt;Concept - TITLE_COMPL&gt;,
+ &#39;TITLE_GRP&#39;: &lt;Concept - TITLE_GRP&gt;,
+ &#39;TITLE_GRP_COMPL&#39;: &lt;Concept - TITLE_GRP_COMPL&gt;,
+ &#39;TITLE_GRP_NAT&#39;: &lt;Concept - TITLE_GRP_NAT&gt;,
+ &#39;TITLE_TS&#39;: &lt;Concept - TITLE_TS&gt;,
+ &#39;TYPE_ADJUST&#39;: &lt;Concept - TYPE_ADJUST&gt;,
+ &#39;UNIT_DETAIL&#39;: &lt;Concept - UNIT_DETAIL&gt;,
+ &#39;UNIT_MEASURE&#39;: &lt;Concept - UNIT_MEASURE&gt;,
+ &#39;UNIT_MULT&#39;: &lt;Concept - UNIT_MULT&gt;,
+ &#39;UNIT_TYPE&#39;: &lt;Concept - UNIT_TYPE&gt;,
+ &#39;VALUATION&#39;: &lt;Concept - VALUATION&gt;,
+ &#39;VALUE&#39;: &lt;Concept - VALUE&gt;,
+ &#39;VIS_CTY&#39;: &lt;Concept - VIS_CTY&gt;,
+ &#39;XD_EXCHANGE&#39;: &lt;Concept - XD_EXCHANGE&gt;,
+ &#39;CURR_DENOM&#39;: &lt;Concept - CURR_DENOM&gt;,
+ &#39;LENDERS_SECTOR&#39;: &lt;Concept - LENDERS_SECTOR&gt;,
+ &#39;BORROWERS_SECTOR&#39;: &lt;Concept - BORROWERS_SECTOR&gt;,
+ &#39;ISSUER_CTY_RES&#39;: &lt;Concept - ISSUER_CTY_RES&gt;,
+ &#39;ISSUER_SECTOR&#39;: &lt;Concept - ISSUER_SECTOR&gt;,
+ &#39;CURRENCY&#39;: &lt;Concept - CURRENCY&gt;,
+ &#39;DEVICE_TYPE&#39;: &lt;Concept - DEVICE_TYPE&gt;,
+ &#39;FUNCTION&#39;: &lt;Concept - FUNCTION&gt;,
+ &#39;SUB_FUNCTION&#39;: &lt;Concept - SUB_FUNCTION&gt;,
+ &#39;TECHNOLOGY&#39;: &lt;Concept - TECHNOLOGY&gt;,
+ &#39;ISSUER&#39;: &lt;Concept - ISSUER&gt;,
+ &#39;COMMENT_TS&#39;: &lt;Concept - COMMENT_TS&gt;,
+ &#39;INDICATOR&#39;: &lt;Concept - INDICATOR&gt;,
+ &#39;INSTITUTION_TYPE&#39;: &lt;Concept - INSTITUTION_TYPE&gt;,
+ &#39;COMMENT_OBS&#39;: &lt;Concept - COMMENT_OBS&gt;,
+ &#39;TABLE&#39;: &lt;Concept - TABLE&gt;,
+ &#39;SUPP_INFO_BREAKS&#39;: &lt;Concept - SUPP_INFO_BREAKS&gt;,
+ &#39;SYSTEM_TYPE&#39;: &lt;Concept - SYSTEM_TYPE&gt;,
+ &#39;SYSTEM&#39;: &lt;Concept - SYSTEM&gt;,
+ &#39;OTHER_PS_TRANS&#39;: &lt;Concept - OTHER_PS_TRANS&gt;,
+ &#39;TYPE_OF_INFO&#39;: &lt;Concept - TYPE_OF_INFO&gt;,
+ &#39;RTBL&#39;: &lt;Concept - RTBL&gt;,
+ &#39;REJURI&#39;: &lt;Concept - REJURI&gt;,
+ &#39;RESECT&#39;: &lt;Concept - RESECT&gt;,
+ &#39;CTYPE&#39;: &lt;Concept - CTYPE&gt;,
+ &#39;MSTRAD&#39;: &lt;Concept - MSTRAD&gt;,
+ &#39;MSCLEAR&#39;: &lt;Concept - MSCLEAR&gt;,
+ &#39;COLMGMT&#39;: &lt;Concept - COLMGMT&gt;,
+ &#39;COLRUSE&#39;: &lt;Concept - COLRUSE&gt;,
+ &#39;COLTYPE&#39;: &lt;Concept - COLTYPE&gt;,
+ &#39;COLQUAL&#39;: &lt;Concept - COLQUAL&gt;,
+ &#39;COLJURI&#39;: &lt;Concept - COLJURI&gt;,
+ &#39;COLCRCL&#39;: &lt;Concept - COLCRCL&gt;,
+ &#39;FUNDSRC&#39;: &lt;Concept - FUNDSRC&gt;,
+ &#39;RHMB&#39;: &lt;Concept - RHMB&gt;,
+ &#39;MAT&#39;: &lt;Concept - MAT&gt;,
+ &#39;CP_JURI&#39;: &lt;Concept - CP_JURI&gt;,
+ &#39;INSTRUMENT_TYPE&#39;: &lt;Concept - INSTRUMENT_TYPE&gt;,
+ &#39;CCUR&#39;: &lt;Concept - CCUR&gt;,
+ &#39;CMAT&#39;: &lt;Concept - CMAT&gt;,
+ &#39;COLCUR&#39;: &lt;Concept - COLCUR&gt;,
+ &#39;COLMAT&#39;: &lt;Concept - COLMAT&gt;,
+ &#39;MRGACC&#39;: &lt;Concept - MRGACC&gt;,
+ &#39;DIRECTION&#39;: &lt;Concept - DIRECTION&gt;,
+ &#39;INSTITUTION_RES&#39;: &lt;Concept - INSTITUTION_RES&gt;,
+ &#39;DEVICE_STATE&#39;: &lt;Concept - DEVICE_STATE&gt;,
+ &#39;PAYMT_PROPERTY&#39;: &lt;Concept - PAYMT_PROPERTY&gt;,
+ &#39;PART_SECT&#39;: &lt;Concept - PART_SECT&gt;,
+ &#39;OLD_TABLE&#39;: &lt;Concept - OLD_TABLE&gt;,
+ &#39;PART_TYPE&#39;: &lt;Concept - PART_TYPE&gt;,
+ &#39;TERMINAL_LOC&#39;: &lt;Concept - TERMINAL_LOC&gt;,
+ &#39;INITIATION_DEV&#39;: &lt;Concept - INITIATION_DEV&gt;,
+ &#39;CARD_TYPE&#39;: &lt;Concept - CARD_TYPE&gt;,
+ &#39;TERMINAL_TYPE&#39;: &lt;Concept - TERMINAL_TYPE&gt;,
+ &#39;WITH_AND_DEP&#39;: &lt;Concept - WITH_AND_DEP&gt;,
+ &#39;CARD_FCT&#39;: &lt;Concept - CARD_FCT&gt;,
+ &#39;PAYMT_SPEED&#39;: &lt;Concept - PAYMT_SPEED&gt;,
+ &#39;DEV_STATE_TECH&#39;: &lt;Concept - DEV_STATE_TECH&gt;,
+ &#39;CARD_ISS_LOC&#39;: &lt;Concept - CARD_ISS_LOC&gt;,
+ &#39;ISSUER_OR_ONUS&#39;: &lt;Concept - ISSUER_OR_ONUS&gt;,
+ &#39;CONF_STATUS&#39;: &lt;Concept - CONF_STATUS&gt;,
+ &#39;POS_CUR&#39;: &lt;Concept - POS_CUR&gt;,
+ &#39;REP_AGENCY&#39;: &lt;Concept - REP_AGENCY&gt;,
+ &#39;BUS_HOLIDAY&#39;: &lt;Concept - BUS_HOLIDAY&gt;,
+ &#39;STOCK_EXCHANGE&#39;: &lt;Concept - STOCK_EXCHANGE&gt;,
+ &#39;COLPOSTYPE&#39;: &lt;Concept - COLPOSTYPE&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Data Structure Definitions can be accessed in a similar way:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dsd</span> <span class="o">=</span> <span class="n">message_metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;DataStructures&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dsd</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;dimensions&#39;: {&#39;FREQ&#39;: &lt;Dimension - FREQ&gt;,
+  &#39;DER_TYPE&#39;: &lt;Dimension - DER_TYPE&gt;,
+  &#39;DER_INSTR&#39;: &lt;Dimension - DER_INSTR&gt;,
+  &#39;DER_RISK&#39;: &lt;Dimension - DER_RISK&gt;,
+  &#39;DER_REP_CTY&#39;: &lt;Dimension - DER_REP_CTY&gt;,
+  &#39;DER_SECTOR_CPY&#39;: &lt;Dimension - DER_SECTOR_CPY&gt;,
+  &#39;DER_CPC&#39;: &lt;Dimension - DER_CPC&gt;,
+  &#39;DER_SECTOR_UDL&#39;: &lt;Dimension - DER_SECTOR_UDL&gt;,
+  &#39;DER_CURR_LEG1&#39;: &lt;Dimension - DER_CURR_LEG1&gt;,
+  &#39;DER_CURR_LEG2&#39;: &lt;Dimension - DER_CURR_LEG2&gt;,
+  &#39;DER_ISSUE_MAT&#39;: &lt;Dimension - DER_ISSUE_MAT&gt;,
+  &#39;DER_RATING&#39;: &lt;Dimension - DER_RATING&gt;,
+  &#39;DER_EX_METHOD&#39;: &lt;Dimension - DER_EX_METHOD&gt;,
+  &#39;DER_BASIS&#39;: &lt;Dimension - DER_BASIS&gt;,
+  &#39;TIME_PERIOD&#39;: &lt;TimeDimension - TIME_PERIOD&gt;},
+ &#39;measure&#39;: &lt;PrimaryMeasure - OBS_VALUE&gt;,
+ &#39;attributes&#39;: {&#39;TIME_FORMAT&#39;: &lt;Attribute - TIME_FORMAT&gt;,
+  &#39;OBS_STATUS&#39;: &lt;Attribute - OBS_STATUS&gt;,
+  &#39;AVAILABILITY&#39;: &lt;Attribute - AVAILABILITY&gt;,
+  &#39;COLLECTION&#39;: &lt;Attribute - COLLECTION&gt;,
+  &#39;DECIMALS&#39;: &lt;Attribute - DECIMALS&gt;,
+  &#39;UNIT_MEASURE&#39;: &lt;Attribute - UNIT_MEASURE&gt;,
+  &#39;UNIT_MULT&#39;: &lt;Attribute - UNIT_MULT&gt;,
+  &#39;OBS_CONF&#39;: &lt;Attribute - OBS_CONF&gt;,
+  &#39;OBS_PRE_BREAK&#39;: &lt;Attribute - OBS_PRE_BREAK&gt;,
+  &#39;TITLE_TS&#39;: &lt;Attribute - TITLE_TS&gt;},
+ &#39;groups&#39;: &lt;GroupDimensionDescriptor - Sibling&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SDMXThon use cases introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sdmx_io_use_cases.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Core sdmx.io use cases</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdmx-message-reading">SDMX Message reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdmx-data-functionalities">SDMX data functionalities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdmx-metadata-functionalities">SDMX metadata functionalities</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By meaningfulData
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

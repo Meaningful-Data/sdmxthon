@@ -1,0 +1,1361 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>About SDMXThon</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    SDMXThon use cases introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>SDMXThon use cases introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-functionalities">SDMXThon functionalities</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-sdmx_io_use_cases">Core sdmx.io use cases</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-integration_fmr">Integration with Fusion Metadata Registry</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-sdmxthon_comprehensive_example">Comprehensive example</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="sdmxthon-use-cases-introduction">
+<h1>SDMXThon use cases introduction<a class="headerlink" href="#sdmxthon-use-cases-introduction" title="Permalink to this heading">#</a></h1>
+<p>SDMXThon is an open-source Python library to manage SDMX Data and Metadata. It intends to provide a simple and effective way to integrate SDMX functionalities into Python.</p>
+<p>SDMXThon provides simple APIs to read SDMX data into Pandas data frames, and to generate SDMX files from Pandas data frames. SDMXThon benefits from all the interfaces that Pandas has already built-in, which makes it a very powerful tool to integrate SDMX in already existing pipelines.</p>
+<p>SDMXThon uses the version 2.1 of the Standard. Upgrade to version 3 will be done when the version of the standard will be more widely used.</p>
+<div class="toctree-wrapper compound">
+<span id="document-functionalities"></span><section class="tex2jax_ignore mathjax_ignore" id="sdmxthon-functionalities">
+<h2>SDMXThon functionalities<a class="headerlink" href="#sdmxthon-functionalities" title="Permalink to this heading">#</a></h2>
+<section id="sdmx-message-reading">
+<h3>SDMX Message reading<a class="headerlink" href="#sdmx-message-reading" title="Permalink to this heading">#</a></h3>
+<p>SDMThon includes a simple method to read any sdmx file, regardless of whether it is a data or metadata file.
+The method can be called on stored files or urls.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sdmxthon</span>
+
+<span class="n">message_metadata</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;input_data/bis_otc_outs.xml&#39;</span><span class="p">)</span>
+<span class="n">message_data</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;https://stats.bis.org/api/v1/data/BIS,WS_OTC_DERIV2,1.0/all/all?lastNObservations=3&amp;detail=full&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">message_metadata</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">message_data</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageTypeEnum.Metadata
+MessageTypeEnum.StructureDataSet
+</pre></div>
+</div>
+</div>
+</div>
+<p>The payload of the messages is in an attribute of the message object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">message_metadata</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">message_data</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;OrganisationSchemes&#39;: {&#39;SDMX:AGENCIES(1.0)&#39;: &lt;AgencyScheme - SDMX:AGENCIES(1.0)&gt;}, &#39;Codelists&#39;: {&#39;BIS:CL_AVAILABILITY(1.0)&#39;: &lt;Codelist - CL_AVAILABILITY&gt;, &#39;BIS:CL_BIS_IF_REF_AREA(1.0)&#39;: &lt;Codelist - CL_BIS_IF_REF_AREA&gt;, &#39;BIS:CL_BIS_UNIT(1.0)&#39;: &lt;Codelist - CL_BIS_UNIT&gt;, &#39;BIS:CL_COLLECTION(1.0)&#39;: &lt;Codelist - CL_COLLECTION&gt;, &#39;BIS:CL_CONF_STATUS(1.0)&#39;: &lt;Codelist - CL_CONF_STATUS&gt;, &#39;BIS:CL_DECIMALS(1.0)&#39;: &lt;Codelist - CL_DECIMALS&gt;, &#39;BIS:CL_DER_BASIS(1.0)&#39;: &lt;Codelist - CL_DER_BASIS&gt;, &#39;BIS:CL_DER_INSTR(1.0)&#39;: &lt;Codelist - CL_DER_INSTR&gt;, &#39;BIS:CL_EX_METHOD(1.0)&#39;: &lt;Codelist - CL_EX_METHOD&gt;, &#39;BIS:CL_FREQ(1.0)&#39;: &lt;Codelist - CL_FREQ&gt;, &#39;BIS:CL_ISSUE_MAT(1.0)&#39;: &lt;Codelist - CL_ISSUE_MAT&gt;, &#39;BIS:CL_MARKET_RISK(1.0)&#39;: &lt;Codelist - CL_MARKET_RISK&gt;, &#39;BIS:CL_OBS_STATUS(1.0)&#39;: &lt;Codelist - CL_OBS_STATUS&gt;, &#39;BIS:CL_OD_TYPE(1.0)&#39;: &lt;Codelist - CL_OD_TYPE&gt;, &#39;BIS:CL_RATING(1.0)&#39;: &lt;Codelist - CL_RATING&gt;, &#39;BIS:CL_SECTOR_CPY(1.0)&#39;: &lt;Codelist - CL_SECTOR_CPY&gt;, &#39;BIS:CL_SECTOR_UDL(1.0)&#39;: &lt;Codelist - CL_SECTOR_UDL&gt;, &#39;BIS:CL_TIME_FORMAT(1.0)&#39;: &lt;Codelist - CL_TIME_FORMAT&gt;, &#39;BIS:CL_UNIT_MULT(1.0)&#39;: &lt;Codelist - CL_UNIT_MULT&gt;}, &#39;Concepts&#39;: {&#39;BIS:STANDALONE_CONCEPT_SCHEME(1.0)&#39;: &lt;ConceptScheme - BIS:STANDALONE_CONCEPT_SCHEME(1.0)&gt;}, &#39;DataStructures&#39;: {&#39;BIS:BIS_DER(1.0)&#39;: &lt;DataStructureDefinition  - BIS:BIS_DER(1.0)&gt;}, &#39;Dataflows&#39;: {&#39;BIS:WS_OTC_DERIV2(1.0)&#39;: &lt;DataFlowDefinition - BIS:WS_OTC_DERIV2(1.0)&gt;}, &#39;Constraints&#39;: {&#39;BIS:OTCDO_NA_R(1.0)&#39;: &lt;sdmxthon.model.definitions.ContentConstraint object at 0x000001BB3A5CE450&gt;}, &#39;errors&#39;: []}
+{&#39;BIS:WS_OTC_DERIV2(1.0)&#39;: &lt;DataSet - No Structure found&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sdmx-data-functionalities">
+<h3>SDMX data functionalities<a class="headerlink" href="#sdmx-data-functionalities" title="Permalink to this heading">#</a></h3>
+<p>The DataSet object has a series of SDMX-specific attributes. The data in the dataset are stored as a Pandas Dataframe, in the data attribute:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">message_data</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;BIS:WS_OTC_DERIV2(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FREQ</th>
+      <th>DER_TYPE</th>
+      <th>DER_INSTR</th>
+      <th>DER_RISK</th>
+      <th>DER_REP_CTY</th>
+      <th>DER_SECTOR_CPY</th>
+      <th>DER_CPC</th>
+      <th>DER_SECTOR_UDL</th>
+      <th>DER_CURR_LEG1</th>
+      <th>DER_CURR_LEG2</th>
+      <th>DER_ISSUE_MAT</th>
+      <th>DER_RATING</th>
+      <th>DER_EX_METHOD</th>
+      <th>DER_BASIS</th>
+      <th>AVAILABILITY</th>
+      <th>COLLECTION</th>
+      <th>TIME_PERIOD</th>
+      <th>OBS_VALUE</th>
+      <th>OBS_STATUS</th>
+      <th>OBS_CONF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>H</td>
+      <td>T</td>
+      <td>W</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>N</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S1</td>
+      <td>7955.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>H</td>
+      <td>T</td>
+      <td>W</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>N</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S2</td>
+      <td>12381.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>H</td>
+      <td>T</td>
+      <td>W</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>N</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2022-S1</td>
+      <td>10363.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>H</td>
+      <td>A</td>
+      <td>T</td>
+      <td>L</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S1</td>
+      <td>284102.446</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>H</td>
+      <td>A</td>
+      <td>T</td>
+      <td>L</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S2</td>
+      <td>97640.002</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>14862</th>
+      <td>H</td>
+      <td>S</td>
+      <td>U</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>D</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>E</td>
+      <td>2021-S2</td>
+      <td>350594.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14863</th>
+      <td>H</td>
+      <td>S</td>
+      <td>U</td>
+      <td>T</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>TO1</td>
+      <td>A</td>
+      <td>D</td>
+      <td>3</td>
+      <td>A</td>
+      <td>K</td>
+      <td>E</td>
+      <td>2022-S1</td>
+      <td>308992.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14864</th>
+      <td>H</td>
+      <td>A</td>
+      <td>M</td>
+      <td>D</td>
+      <td>5J</td>
+      <td>B</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>CHF</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>C</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S1</td>
+      <td>4714.702</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14865</th>
+      <td>H</td>
+      <td>A</td>
+      <td>M</td>
+      <td>D</td>
+      <td>5J</td>
+      <td>B</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>CHF</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>C</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2021-S2</td>
+      <td>4619.951</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <th>14866</th>
+      <td>H</td>
+      <td>A</td>
+      <td>M</td>
+      <td>D</td>
+      <td>5J</td>
+      <td>B</td>
+      <td>5J</td>
+      <td>A</td>
+      <td>TO1</td>
+      <td>CHF</td>
+      <td>A</td>
+      <td>A</td>
+      <td>3</td>
+      <td>C</td>
+      <td>K</td>
+      <td>S</td>
+      <td>2022-S1</td>
+      <td>293.000</td>
+      <td>A</td>
+      <td>F</td>
+    </tr>
+  </tbody>
+</table>
+<p>14867 rows × 20 columns</p>
+</div></div></div>
+</div>
+<p>The generated data frame has one column for each component of the data structure of the dataset.
+This dataset does not have any data structure attached to it, since it has not been loaded:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>None
+</pre></div>
+</div>
+</div>
+</div>
+<p>By assigning a structure to the dataset, it is possible to validate the data against its structure:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">message_metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;DataStructures&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+</pre></div>
+</div>
+</div>
+</div>
+<p>If the dataset has structural errors, the output of the semantic_validation method is a list of dictionaries with the errors:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;DER_BASIS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;Code&#39;: &#39;SS08&#39;,
+  &#39;ErrorLevel&#39;: &#39;WARNING&#39;,
+  &#39;Component&#39;: &#39;DER_BASIS&#39;,
+  &#39;Type&#39;: &#39;Dimension&#39;,
+  &#39;Rows&#39;: None,
+  &#39;Message&#39;: &#39;Value error not compliant with maxLength : 1&#39;},
+ {&#39;Code&#39;: &#39;SS04&#39;,
+  &#39;ErrorLevel&#39;: &#39;CRITICAL&#39;,
+  &#39;Component&#39;: &#39;DER_BASIS&#39;,
+  &#39;Type&#39;: &#39;Dimension&#39;,
+  &#39;Rows&#39;: None,
+  &#39;Message&#39;: &#39;Wrong value error for dimension DER_BASIS&#39;}]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The list of possible errors can be found in this link:
+<a class="reference external" href="https://docs.sdmxthon.meaningfuldata.eu/validations.html">https://docs.sdmxthon.meaningfuldata.eu/validations.html</a></p>
+<p>From dataset objects it is possible to generate an SDMX v2.1 message, with any of the different modalities:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdmxthon.utils.enums</span> <span class="kn">import</span> <span class="n">MessageTypeEnum</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">to_xml</span><span class="p">(</span>
+    <span class="n">message_type</span> <span class="o">=</span> <span class="n">MessageTypeEnum</span><span class="o">.</span><span class="n">StructureDataSet</span><span class="p">,</span>
+    <span class="n">outputPath</span> <span class="o">=</span> <span class="s1">&#39;structure_dataset_example.xml&#39;</span><span class="p">,</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="s1">&#39;dataset_id&#39;</span><span class="p">,</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="s1">&#39;false&#39;</span><span class="p">,</span>
+    <span class="n">prepared</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="s1">&#39;MeaningfulData&#39;</span><span class="p">,</span>
+    <span class="n">receiver</span> <span class="o">=</span> <span class="s1">&#39;open&#39;</span><span class="p">,</span>
+    <span class="n">prettyprint</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sdmx-metadata-functionalities">
+<h3>SDMX metadata functionalities<a class="headerlink" href="#sdmx-metadata-functionalities" title="Permalink to this heading">#</a></h3>
+<p>SDMXthon provides a simple way to navigate through the metadata. Using the content method on the Message class and the items method on each item Scheme we can access to the inner metadata classes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">concept_scheme</span> <span class="o">=</span> <span class="n">message_metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;Concepts&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:STANDALONE_CONCEPT_SCHEME(1.0)&#39;</span><span class="p">]</span>
+<span class="n">concept_scheme</span><span class="o">.</span><span class="n">items</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;TIME_FORMAT&#39;: &lt;Concept - TIME_FORMAT&gt;,
+ &#39;ADJUST_CODED&#39;: &lt;Concept - ADJUST_CODED&gt;,
+ &#39;AGG_EQUN&#39;: &lt;Concept - AGG_EQUN&gt;,
+ &#39;AVAILABILITY&#39;: &lt;Concept - AVAILABILITY&gt;,
+ &#39;BIS_BLOCK&#39;: &lt;Concept - BIS_BLOCK&gt;,
+ &#39;BIS_DOC_DATE&#39;: &lt;Concept - BIS_DOC_DATE&gt;,
+ &#39;BIS_SUFFIX&#39;: &lt;Concept - BIS_SUFFIX&gt;,
+ &#39;BIS_TOPIC&#39;: &lt;Concept - BIS_TOPIC&gt;,
+ &#39;BIS_UNIT&#39;: &lt;Concept - BIS_UNIT&gt;,
+ &#39;BORROWERS_CTY&#39;: &lt;Concept - BORROWERS_CTY&gt;,
+ &#39;BORROWER_NAT&#39;: &lt;Concept - BORROWER_NAT&gt;,
+ &#39;BREAKS&#39;: &lt;Concept - BREAKS&gt;,
+ &#39;CBS_BANK_TYPE&#39;: &lt;Concept - CBS_BANK_TYPE&gt;,
+ &#39;CBS_BASIS&#39;: &lt;Concept - CBS_BASIS&gt;,
+ &#39;CG_DTYPE&#39;: &lt;Concept - CG_DTYPE&gt;,
+ &#39;CIBL_CATEGORY&#39;: &lt;Concept - CIBL_CATEGORY&gt;,
+ &#39;CIBL_TABLE&#39;: &lt;Concept - CIBL_TABLE&gt;,
+ &#39;CIBL_TYPE&#39;: &lt;Concept - CIBL_TYPE&gt;,
+ &#39;COLLECTION&#39;: &lt;Concept - COLLECTION&gt;,
+ &#39;COLLECTION_DETAIL&#39;: &lt;Concept - COLLECTION_DETAIL&gt;,
+ &#39;COMPILATION&#39;: &lt;Concept - COMPILATION&gt;,
+ &#39;COMPILING_ORG&#39;: &lt;Concept - COMPILING_ORG&gt;,
+ &#39;COVERAGE&#39;: &lt;Concept - COVERAGE&gt;,
+ &#39;COVERED_AREA&#39;: &lt;Concept - COVERED_AREA&gt;,
+ &#39;CPSS_DATA_TYPE&#39;: &lt;Concept - CPSS_DATA_TYPE&gt;,
+ &#39;CPSS_REP_CCY&#39;: &lt;Concept - CPSS_REP_CCY&gt;,
+ &#39;CPSS_REP_COUNTRY&#39;: &lt;Concept - CPSS_REP_COUNTRY&gt;,
+ &#39;CPSS_TABLE&#39;: &lt;Concept - CPSS_TABLE&gt;,
+ &#39;CTY_TYPE&#39;: &lt;Concept - CTY_TYPE&gt;,
+ &#39;CURR_TYPE_BOOK&#39;: &lt;Concept - CURR_TYPE_BOOK&gt;,
+ &#39;DATA_COMP&#39;: &lt;Concept - DATA_COMP&gt;,
+ &#39;DECIMALS&#39;: &lt;Concept - DECIMALS&gt;,
+ &#39;DER_BASIS&#39;: &lt;Concept - DER_BASIS&gt;,
+ &#39;DER_CPC&#39;: &lt;Concept - DER_CPC&gt;,
+ &#39;DER_CURR_LEG1&#39;: &lt;Concept - DER_CURR_LEG1&gt;,
+ &#39;DER_CURR_LEG2&#39;: &lt;Concept - DER_CURR_LEG2&gt;,
+ &#39;DER_EX_METHOD&#39;: &lt;Concept - DER_EX_METHOD&gt;,
+ &#39;DER_INSTR&#39;: &lt;Concept - DER_INSTR&gt;,
+ &#39;DER_ISSUE_MAT&#39;: &lt;Concept - DER_ISSUE_MAT&gt;,
+ &#39;DER_RATING&#39;: &lt;Concept - DER_RATING&gt;,
+ &#39;DER_REP_CTY&#39;: &lt;Concept - DER_REP_CTY&gt;,
+ &#39;DER_RISK&#39;: &lt;Concept - DER_RISK&gt;,
+ &#39;DER_SECTOR_CPY&#39;: &lt;Concept - DER_SECTOR_CPY&gt;,
+ &#39;DER_SECTOR_UDL&#39;: &lt;Concept - DER_SECTOR_UDL&gt;,
+ &#39;DER_TYPE&#39;: &lt;Concept - DER_TYPE&gt;,
+ &#39;DOC_METHOD&#39;: &lt;Concept - DOC_METHOD&gt;,
+ &#39;DOM_SER_IDS&#39;: &lt;Concept - DOM_SER_IDS&gt;,
+ &#39;DSR_BORROWERS&#39;: &lt;Concept - DSR_BORROWERS&gt;,
+ &#39;D_CPART_TR_H&#39;: &lt;Concept - D_CPART_TR_H&gt;,
+ &#39;D_CURR_H&#39;: &lt;Concept - D_CURR_H&gt;,
+ &#39;D_EUS_MAT_H&#39;: &lt;Concept - D_EUS_MAT_H&gt;,
+ &#39;D_INSTR_H&#39;: &lt;Concept - D_INSTR_H&gt;,
+ &#39;D_VOL_H&#39;: &lt;Concept - D_VOL_H&gt;,
+ &#39;EER_BASKET&#39;: &lt;Concept - EER_BASKET&gt;,
+ &#39;EER_TYPE&#39;: &lt;Concept - EER_TYPE&gt;,
+ &#39;FREQ&#39;: &lt;Concept - FREQ&gt;,
+ &#39;I2A_ACC_STD&#39;: &lt;Concept - I2A_ACC_STD&gt;,
+ &#39;I2A_CODE&#39;: &lt;Concept - I2A_CODE&gt;,
+ &#39;I2A_CONS_PERI&#39;: &lt;Concept - I2A_CONS_PERI&gt;,
+ &#39;I2A_CONTRACT_TYPE&#39;: &lt;Concept - I2A_CONTRACT_TYPE&gt;,
+ &#39;I2A_CURRENCY&#39;: &lt;Concept - I2A_CURRENCY&gt;,
+ &#39;I2A_CURRENCY_LEG1&#39;: &lt;Concept - I2A_CURRENCY_LEG1&gt;,
+ &#39;I2A_CURRENCY_LEG2&#39;: &lt;Concept - I2A_CURRENCY_LEG2&gt;,
+ &#39;I2A_INST&#39;: &lt;Concept - I2A_INST&gt;,
+ &#39;I2A_MEASURE&#39;: &lt;Concept - I2A_MEASURE&gt;,
+ &#39;I2A_POS_TYPE&#39;: &lt;Concept - I2A_POS_TYPE&gt;,
+ &#39;IBLN_CATEGORY&#39;: &lt;Concept - IBLN_CATEGORY&gt;,
+ &#39;IBLN_TABLE&#39;: &lt;Concept - IBLN_TABLE&gt;,
+ &#39;IBLN_TYPE&#39;: &lt;Concept - IBLN_TYPE&gt;,
+ &#39;IBLR_CATEGORY&#39;: &lt;Concept - IBLR_CATEGORY&gt;,
+ &#39;IBLR_CURR&#39;: &lt;Concept - IBLR_CURR&gt;,
+ &#39;IBLR_TYPE&#39;: &lt;Concept - IBLR_TYPE&gt;,
+ &#39;ICM_CURRENCY&#39;: &lt;Concept - ICM_CURRENCY&gt;,
+ &#39;IF_REF_AREA&#39;: &lt;Concept - IF_REF_AREA&gt;,
+ &#39;ISSUER_BUS_IMM&#39;: &lt;Concept - ISSUER_BUS_IMM&gt;,
+ &#39;ISSUER_BUS_ULT&#39;: &lt;Concept - ISSUER_BUS_ULT&gt;,
+ &#39;ISSUER_CTY&#39;: &lt;Concept - ISSUER_CTY&gt;,
+ &#39;ISSUER_NAT&#39;: &lt;Concept - ISSUER_NAT&gt;,
+ &#39;ISSUER_RES&#39;: &lt;Concept - ISSUER_RES&gt;,
+ &#39;ISSUE_COL&#39;: &lt;Concept - ISSUE_COL&gt;,
+ &#39;ISSUE_CUR&#39;: &lt;Concept - ISSUE_CUR&gt;,
+ &#39;ISSUE_CUR_GROUP&#39;: &lt;Concept - ISSUE_CUR_GROUP&gt;,
+ &#39;ISSUE_OR_MAT&#39;: &lt;Concept - ISSUE_OR_MAT&gt;,
+ &#39;ISSUE_RATE&#39;: &lt;Concept - ISSUE_RATE&gt;,
+ &#39;ISSUE_RE_MAT&#39;: &lt;Concept - ISSUE_RE_MAT&gt;,
+ &#39;ISSUE_RISK&#39;: &lt;Concept - ISSUE_RISK&gt;,
+ &#39;ISSUE_TYPE&#39;: &lt;Concept - ISSUE_TYPE&gt;,
+ &#39;JD_CATEGORY&#39;: &lt;Concept - JD_CATEGORY&gt;,
+ &#39;JD_TYPE&#39;: &lt;Concept - JD_TYPE&gt;,
+ &#39;LOCATION&#39;: &lt;Concept - LOCATION&gt;,
+ &#39;L_BIS_SUFF&#39;: &lt;Concept - L_BIS_SUFF&gt;,
+ &#39;L_BIS_TOP_H&#39;: &lt;Concept - L_BIS_TOP_H&gt;,
+ &#39;L_CP_COUNTRY&#39;: &lt;Concept - L_CP_COUNTRY&gt;,
+ &#39;L_CP_SECTOR&#39;: &lt;Concept - L_CP_SECTOR&gt;,
+ &#39;L_CURR_TYPE&#39;: &lt;Concept - L_CURR_TYPE&gt;,
+ &#39;L_DENOM&#39;: &lt;Concept - L_DENOM&gt;,
+ &#39;L_INSTR&#39;: &lt;Concept - L_INSTR&gt;,
+ &#39;L_MEASURE&#39;: &lt;Concept - L_MEASURE&gt;,
+ &#39;L_PARENT_CTY&#39;: &lt;Concept - L_PARENT_CTY&gt;,
+ &#39;L_POSITION&#39;: &lt;Concept - L_POSITION&gt;,
+ &#39;L_POS_TYPE&#39;: &lt;Concept - L_POS_TYPE&gt;,
+ &#39;L_REP_BANK_TYPE&#39;: &lt;Concept - L_REP_BANK_TYPE&gt;,
+ &#39;L_REP_CTY&#39;: &lt;Concept - L_REP_CTY&gt;,
+ &#39;MARKET&#39;: &lt;Concept - MARKET&gt;,
+ &#39;MEASURE&#39;: &lt;Concept - MEASURE&gt;,
+ &#39;MEASURE_DETAIL&#39;: &lt;Concept - MEASURE_DETAIL&gt;,
+ &#39;META_UPDATE&#39;: &lt;Concept - META_UPDATE&gt;,
+ &#39;METHOD_REF&#39;: &lt;Concept - METHOD_REF&gt;,
+ &#39;MS_CURRENCY&#39;: &lt;Concept - MS_CURRENCY&gt;,
+ &#39;MS_MEASURE&#39;: &lt;Concept - MS_MEASURE&gt;,
+ &#39;MS_REP_COUNTRY&#39;: &lt;Concept - MS_REP_COUNTRY&gt;,
+ &#39;MS_TOPIC&#39;: &lt;Concept - MS_TOPIC&gt;,
+ &#39;NAT_TITLE&#39;: &lt;Concept - NAT_TITLE&gt;,
+ &#39;OBS_COM&#39;: &lt;Concept - OBS_COM&gt;,
+ &#39;OBS_CONF&#39;: &lt;Concept - OBS_CONF&gt;,
+ &#39;OBS_PRE_BREAK&#39;: &lt;Concept - OBS_PRE_BREAK&gt;,
+ &#39;OBS_STATUS&#39;: &lt;Concept - OBS_STATUS&gt;,
+ &#39;OBS_VALUE&#39;: &lt;Concept - OBS_VALUE&gt;,
+ &#39;OD_CPARTY&#39;: &lt;Concept - OD_CPARTY&gt;,
+ &#39;OD_CURR_MAT_REG&#39;: &lt;Concept - OD_CURR_MAT_REG&gt;,
+ &#39;OD_INSTR&#39;: &lt;Concept - OD_INSTR&gt;,
+ &#39;OD_REP_CTY&#39;: &lt;Concept - OD_REP_CTY&gt;,
+ &#39;OD_RISK_CAT&#39;: &lt;Concept - OD_RISK_CAT&gt;,
+ &#39;OD_TYPE&#39;: &lt;Concept - OD_TYPE&gt;,
+ &#39;ORG_VISIBILITY&#39;: &lt;Concept - ORG_VISIBILITY&gt;,
+ &#39;PRICED_UNIT&#39;: &lt;Concept - PRICED_UNIT&gt;,
+ &#39;PS_INFO_TYPE&#39;: &lt;Concept - PS_INFO_TYPE&gt;,
+ &#39;PS_SECTOR&#39;: &lt;Concept - PS_SECTOR&gt;,
+ &#39;PS_SYSTEMS&#39;: &lt;Concept - PS_SYSTEMS&gt;,
+ &#39;PS_TRANS_TYPE&#39;: &lt;Concept - PS_TRANS_TYPE&gt;,
+ &#39;PUBLICATIONS&#39;: &lt;Concept - PUBLICATIONS&gt;,
+ &#39;REF_AREA&#39;: &lt;Concept - REF_AREA&gt;,
+ &#39;REM_MATURITY&#39;: &lt;Concept - REM_MATURITY&gt;,
+ &#39;REP_CTY&#39;: &lt;Concept - REP_CTY&gt;,
+ &#39;REP_DELAY&#39;: &lt;Concept - REP_DELAY&gt;,
+ &#39;RE_TYPE&#39;: &lt;Concept - RE_TYPE&gt;,
+ &#39;RE_VINTAGE&#39;: &lt;Concept - RE_VINTAGE&gt;,
+ &#39;RPI_INFO_TYPE&#39;: &lt;Concept - RPI_INFO_TYPE&gt;,
+ &#39;RPI_INSTRUMENT&#39;: &lt;Concept - RPI_INSTRUMENT&gt;,
+ &#39;RPI_TERM_AND_OP&#39;: &lt;Concept - RPI_TERM_AND_OP&gt;,
+ &#39;SECTOR_PARTICIPANT&#39;: &lt;Concept - SECTOR_PARTICIPANT&gt;,
+ &#39;SEC_INFO_TYPE&#39;: &lt;Concept - SEC_INFO_TYPE&gt;,
+ &#39;SEC_INSTR&#39;: &lt;Concept - SEC_INSTR&gt;,
+ &#39;SEC_INSTRUMENT&#39;: &lt;Concept - SEC_INSTRUMENT&gt;,
+ &#39;SEC_ISSUER&#39;: &lt;Concept - SEC_ISSUER&gt;,
+ &#39;SEC_SUFFIX&#39;: &lt;Concept - SEC_SUFFIX&gt;,
+ &#39;SEC_SYSTEM&#39;: &lt;Concept - SEC_SYSTEM&gt;,
+ &#39;SEC_TYPE&#39;: &lt;Concept - SEC_TYPE&gt;,
+ &#39;SOURCE_REF&#39;: &lt;Concept - SOURCE_REF&gt;,
+ &#39;SOURCE_TYPE&#39;: &lt;Concept - SOURCE_TYPE&gt;,
+ &#39;SYN_CR_PURPOSE&#39;: &lt;Concept - SYN_CR_PURPOSE&gt;,
+ &#39;TC_ADJUST&#39;: &lt;Concept - TC_ADJUST&gt;,
+ &#39;TC_BORROWERS&#39;: &lt;Concept - TC_BORROWERS&gt;,
+ &#39;TC_LENDERS&#39;: &lt;Concept - TC_LENDERS&gt;,
+ &#39;TIME_PERIOD&#39;: &lt;Concept - TIME_PERIOD&gt;,
+ &#39;TITLE&#39;: &lt;Concept - TITLE&gt;,
+ &#39;TITLE_COMPL&#39;: &lt;Concept - TITLE_COMPL&gt;,
+ &#39;TITLE_GRP&#39;: &lt;Concept - TITLE_GRP&gt;,
+ &#39;TITLE_GRP_COMPL&#39;: &lt;Concept - TITLE_GRP_COMPL&gt;,
+ &#39;TITLE_GRP_NAT&#39;: &lt;Concept - TITLE_GRP_NAT&gt;,
+ &#39;TITLE_TS&#39;: &lt;Concept - TITLE_TS&gt;,
+ &#39;TYPE_ADJUST&#39;: &lt;Concept - TYPE_ADJUST&gt;,
+ &#39;UNIT_DETAIL&#39;: &lt;Concept - UNIT_DETAIL&gt;,
+ &#39;UNIT_MEASURE&#39;: &lt;Concept - UNIT_MEASURE&gt;,
+ &#39;UNIT_MULT&#39;: &lt;Concept - UNIT_MULT&gt;,
+ &#39;UNIT_TYPE&#39;: &lt;Concept - UNIT_TYPE&gt;,
+ &#39;VALUATION&#39;: &lt;Concept - VALUATION&gt;,
+ &#39;VALUE&#39;: &lt;Concept - VALUE&gt;,
+ &#39;VIS_CTY&#39;: &lt;Concept - VIS_CTY&gt;,
+ &#39;XD_EXCHANGE&#39;: &lt;Concept - XD_EXCHANGE&gt;,
+ &#39;CURR_DENOM&#39;: &lt;Concept - CURR_DENOM&gt;,
+ &#39;LENDERS_SECTOR&#39;: &lt;Concept - LENDERS_SECTOR&gt;,
+ &#39;BORROWERS_SECTOR&#39;: &lt;Concept - BORROWERS_SECTOR&gt;,
+ &#39;ISSUER_CTY_RES&#39;: &lt;Concept - ISSUER_CTY_RES&gt;,
+ &#39;ISSUER_SECTOR&#39;: &lt;Concept - ISSUER_SECTOR&gt;,
+ &#39;CURRENCY&#39;: &lt;Concept - CURRENCY&gt;,
+ &#39;DEVICE_TYPE&#39;: &lt;Concept - DEVICE_TYPE&gt;,
+ &#39;FUNCTION&#39;: &lt;Concept - FUNCTION&gt;,
+ &#39;SUB_FUNCTION&#39;: &lt;Concept - SUB_FUNCTION&gt;,
+ &#39;TECHNOLOGY&#39;: &lt;Concept - TECHNOLOGY&gt;,
+ &#39;ISSUER&#39;: &lt;Concept - ISSUER&gt;,
+ &#39;COMMENT_TS&#39;: &lt;Concept - COMMENT_TS&gt;,
+ &#39;INDICATOR&#39;: &lt;Concept - INDICATOR&gt;,
+ &#39;INSTITUTION_TYPE&#39;: &lt;Concept - INSTITUTION_TYPE&gt;,
+ &#39;COMMENT_OBS&#39;: &lt;Concept - COMMENT_OBS&gt;,
+ &#39;TABLE&#39;: &lt;Concept - TABLE&gt;,
+ &#39;SUPP_INFO_BREAKS&#39;: &lt;Concept - SUPP_INFO_BREAKS&gt;,
+ &#39;SYSTEM_TYPE&#39;: &lt;Concept - SYSTEM_TYPE&gt;,
+ &#39;SYSTEM&#39;: &lt;Concept - SYSTEM&gt;,
+ &#39;OTHER_PS_TRANS&#39;: &lt;Concept - OTHER_PS_TRANS&gt;,
+ &#39;TYPE_OF_INFO&#39;: &lt;Concept - TYPE_OF_INFO&gt;,
+ &#39;RTBL&#39;: &lt;Concept - RTBL&gt;,
+ &#39;REJURI&#39;: &lt;Concept - REJURI&gt;,
+ &#39;RESECT&#39;: &lt;Concept - RESECT&gt;,
+ &#39;CTYPE&#39;: &lt;Concept - CTYPE&gt;,
+ &#39;MSTRAD&#39;: &lt;Concept - MSTRAD&gt;,
+ &#39;MSCLEAR&#39;: &lt;Concept - MSCLEAR&gt;,
+ &#39;COLMGMT&#39;: &lt;Concept - COLMGMT&gt;,
+ &#39;COLRUSE&#39;: &lt;Concept - COLRUSE&gt;,
+ &#39;COLTYPE&#39;: &lt;Concept - COLTYPE&gt;,
+ &#39;COLQUAL&#39;: &lt;Concept - COLQUAL&gt;,
+ &#39;COLJURI&#39;: &lt;Concept - COLJURI&gt;,
+ &#39;COLCRCL&#39;: &lt;Concept - COLCRCL&gt;,
+ &#39;FUNDSRC&#39;: &lt;Concept - FUNDSRC&gt;,
+ &#39;RHMB&#39;: &lt;Concept - RHMB&gt;,
+ &#39;MAT&#39;: &lt;Concept - MAT&gt;,
+ &#39;CP_JURI&#39;: &lt;Concept - CP_JURI&gt;,
+ &#39;INSTRUMENT_TYPE&#39;: &lt;Concept - INSTRUMENT_TYPE&gt;,
+ &#39;CCUR&#39;: &lt;Concept - CCUR&gt;,
+ &#39;CMAT&#39;: &lt;Concept - CMAT&gt;,
+ &#39;COLCUR&#39;: &lt;Concept - COLCUR&gt;,
+ &#39;COLMAT&#39;: &lt;Concept - COLMAT&gt;,
+ &#39;MRGACC&#39;: &lt;Concept - MRGACC&gt;,
+ &#39;DIRECTION&#39;: &lt;Concept - DIRECTION&gt;,
+ &#39;INSTITUTION_RES&#39;: &lt;Concept - INSTITUTION_RES&gt;,
+ &#39;DEVICE_STATE&#39;: &lt;Concept - DEVICE_STATE&gt;,
+ &#39;PAYMT_PROPERTY&#39;: &lt;Concept - PAYMT_PROPERTY&gt;,
+ &#39;PART_SECT&#39;: &lt;Concept - PART_SECT&gt;,
+ &#39;OLD_TABLE&#39;: &lt;Concept - OLD_TABLE&gt;,
+ &#39;PART_TYPE&#39;: &lt;Concept - PART_TYPE&gt;,
+ &#39;TERMINAL_LOC&#39;: &lt;Concept - TERMINAL_LOC&gt;,
+ &#39;INITIATION_DEV&#39;: &lt;Concept - INITIATION_DEV&gt;,
+ &#39;CARD_TYPE&#39;: &lt;Concept - CARD_TYPE&gt;,
+ &#39;TERMINAL_TYPE&#39;: &lt;Concept - TERMINAL_TYPE&gt;,
+ &#39;WITH_AND_DEP&#39;: &lt;Concept - WITH_AND_DEP&gt;,
+ &#39;CARD_FCT&#39;: &lt;Concept - CARD_FCT&gt;,
+ &#39;PAYMT_SPEED&#39;: &lt;Concept - PAYMT_SPEED&gt;,
+ &#39;DEV_STATE_TECH&#39;: &lt;Concept - DEV_STATE_TECH&gt;,
+ &#39;CARD_ISS_LOC&#39;: &lt;Concept - CARD_ISS_LOC&gt;,
+ &#39;ISSUER_OR_ONUS&#39;: &lt;Concept - ISSUER_OR_ONUS&gt;,
+ &#39;CONF_STATUS&#39;: &lt;Concept - CONF_STATUS&gt;,
+ &#39;POS_CUR&#39;: &lt;Concept - POS_CUR&gt;,
+ &#39;REP_AGENCY&#39;: &lt;Concept - REP_AGENCY&gt;,
+ &#39;BUS_HOLIDAY&#39;: &lt;Concept - BUS_HOLIDAY&gt;,
+ &#39;STOCK_EXCHANGE&#39;: &lt;Concept - STOCK_EXCHANGE&gt;,
+ &#39;COLPOSTYPE&#39;: &lt;Concept - COLPOSTYPE&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Data Structure Definitions can be accessed in a similar way:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dsd</span> <span class="o">=</span> <span class="n">message_metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;DataStructures&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dsd</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;dimensions&#39;: {&#39;FREQ&#39;: &lt;Dimension - FREQ&gt;,
+  &#39;DER_TYPE&#39;: &lt;Dimension - DER_TYPE&gt;,
+  &#39;DER_INSTR&#39;: &lt;Dimension - DER_INSTR&gt;,
+  &#39;DER_RISK&#39;: &lt;Dimension - DER_RISK&gt;,
+  &#39;DER_REP_CTY&#39;: &lt;Dimension - DER_REP_CTY&gt;,
+  &#39;DER_SECTOR_CPY&#39;: &lt;Dimension - DER_SECTOR_CPY&gt;,
+  &#39;DER_CPC&#39;: &lt;Dimension - DER_CPC&gt;,
+  &#39;DER_SECTOR_UDL&#39;: &lt;Dimension - DER_SECTOR_UDL&gt;,
+  &#39;DER_CURR_LEG1&#39;: &lt;Dimension - DER_CURR_LEG1&gt;,
+  &#39;DER_CURR_LEG2&#39;: &lt;Dimension - DER_CURR_LEG2&gt;,
+  &#39;DER_ISSUE_MAT&#39;: &lt;Dimension - DER_ISSUE_MAT&gt;,
+  &#39;DER_RATING&#39;: &lt;Dimension - DER_RATING&gt;,
+  &#39;DER_EX_METHOD&#39;: &lt;Dimension - DER_EX_METHOD&gt;,
+  &#39;DER_BASIS&#39;: &lt;Dimension - DER_BASIS&gt;,
+  &#39;TIME_PERIOD&#39;: &lt;TimeDimension - TIME_PERIOD&gt;},
+ &#39;measure&#39;: &lt;PrimaryMeasure - OBS_VALUE&gt;,
+ &#39;attributes&#39;: {&#39;TIME_FORMAT&#39;: &lt;Attribute - TIME_FORMAT&gt;,
+  &#39;OBS_STATUS&#39;: &lt;Attribute - OBS_STATUS&gt;,
+  &#39;AVAILABILITY&#39;: &lt;Attribute - AVAILABILITY&gt;,
+  &#39;COLLECTION&#39;: &lt;Attribute - COLLECTION&gt;,
+  &#39;DECIMALS&#39;: &lt;Attribute - DECIMALS&gt;,
+  &#39;UNIT_MEASURE&#39;: &lt;Attribute - UNIT_MEASURE&gt;,
+  &#39;UNIT_MULT&#39;: &lt;Attribute - UNIT_MULT&gt;,
+  &#39;OBS_CONF&#39;: &lt;Attribute - OBS_CONF&gt;,
+  &#39;OBS_PRE_BREAK&#39;: &lt;Attribute - OBS_PRE_BREAK&gt;,
+  &#39;TITLE_TS&#39;: &lt;Attribute - TITLE_TS&gt;},
+ &#39;groups&#39;: &lt;GroupDimensionDescriptor - Sibling&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<span id="document-sdmx_io_use_cases"></span><section class="tex2jax_ignore mathjax_ignore" id="core-sdmx-io-use-cases">
+<h2>Core <a class="reference external" href="http://sdmx.io">sdmx.io</a> use cases<a class="headerlink" href="#core-sdmx-io-use-cases" title="Permalink to this heading">#</a></h2>
+<section id="modelling">
+<h3>Modelling<a class="headerlink" href="#modelling" title="Permalink to this heading">#</a></h3>
+<p>Data modelling is better done through a user interface and persisting information into a database. SDMXThon is not providing either, and it does not intend to substitute or compete with proper tools for modelling purposes, like Fusion Metadata Registry.
+Still, SDMXTHon can provide some functionalities for quick prototyping, due to its simple API to explore and manipulate metadata, as well as the method to generate SDMX-ML messages for the data structures.</p>
+</section>
+<section id="collection">
+<h3>Collection<a class="headerlink" href="#collection" title="Permalink to this heading">#</a></h3>
+<p>Data collection involves the reception and integration of data from multiple providers. SDMX enables automated data collection by providing standard formats to change metadata and data.</p>
+<p>The following chart represents a typical collection process:</p>
+<p><img alt="collection" src="_images/collection.png" /></p>
+<p>A system receives an SDMX data file. The file is read, so that the data are loaded, and the related structure is obtained. Once the structure of the data is known, it is possible to validate that the data are following their required structure. Finally, if data are structurally correct, the data in the instance shall be loaded into the collection database.
+SDMXThon provides support to all the steps in the use case, as demonstrated with the following example.</p>
+<p>SDMXThon allows reading SDMX instances from stored files or from the web. It can also get as input a string or BytesIO object, facilitating integration if the data reception system is written in Python.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sdmxthon</span>
+
+<span class="n">instance</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;input_data/data.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>An SDMX message may contain metadata or data. The ‘type’ attribute for Message objects returns the message type, which in this case is a Structure Specific DataSet.
+Because it is a data file, the content of the message returns the datasets included in the file as a dictionary, with the ID of the dataflow as key.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageTypeEnum.StructureDataSet
+dict_keys([&#39;BIS:BIS_DER(1.0)&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once the related data structure is known, we can load it by calling a webservice (implemented, for instance, by FMR). With the metadata, it is possible to perform the structural validation of the metadata.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;https://stats.bis.org/api/v1/datastructure/BIS/BIS_DER/1.0?references=all&amp;detail=full&#39;</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;DataStructures&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+</pre></div>
+</div>
+</div>
+</div>
+<p>An empty list as a result of the validation means that there are no structural errors. So this means that data can be loaded into the db. The data loading depends on the specific system and its underlying datamodel. But the advantage of using Pandas is that it includes a method to write into databases, with several different RDBMS supported.</p>
+</section>
+<section id="production">
+<h3>Production<a class="headerlink" href="#production" title="Permalink to this heading">#</a></h3>
+<p>The production phase of the statistical process changes from institution to institution. But, in any case, it typically involves consistency validation (in some cases done during the collection phase) and data derivation (e.g., aggregates or calculation of new data).
+SDMXThon can support the statistical production by providing all the calculation capabilities included in Pandas. Because of Pandas, virtually any calculation (for validation or derivation purposes) in the production process can be done.
+In any case, for a production process, we strongly recommend the use of the Validation and Transformation Language (VTL). meaningfulData offers a proprietary Python library for this language, on top of some other relevant functionalities for VTL.
+Please refer to the example in section 4 for an explanation on how SDMXThon ca be used for data production.</p>
+</section>
+<section id="dissemination">
+<h3>Dissemination<a class="headerlink" href="#dissemination" title="Permalink to this heading">#</a></h3>
+<p>As with data modelling, data dissemination requires of a full system including data stored in databases and interfaces (GUIs and APIs). SDMXThon is not providing any of those, but can be used to develop a dissemination system in Python.
+The following chart represents a simplified version of a dissemination service:</p>
+<p><img alt="collection" src="_images/dissemination.png" /></p>
+<p>Essentially, dissemination is the process of allowing users (human or machines) to request some data, with certain filters, and responding with the data required. To do this, it is necessary to have a system able to receive the request for data, get the data from the database, serialize them into the required format (SDMX), and serve the response.
+SDMXThon provides a simple interface to perform these tasks. Connection to most RDBMS is supported, which allows retrieving the required data. Once the data are loaded, the SDMX file is generated with a simple method, and can be passed as a file or StringIO to the serving system. In any case, such a dissemination system would need to be built, and it is not provided by SDMXThon.
+The other side of data dissemination is data analysis. Data are disseminated because some user are going to use this data for some analytical purpose (or to calculate new information to be analysed). Given that Pandas is one of the most relevant libraries for data science and data analysis, the simple interface SDMXThon is providing to retrieve the required data enables any data analyst with no or limited SDMX knowledge to benefit from all the functionalities SDMX offers.</p>
+</section>
+</section>
+<span id="document-integration_fmr"></span><section class="tex2jax_ignore mathjax_ignore" id="integration-with-fusion-metadata-registry">
+<h2>Integration with Fusion Metadata Registry<a class="headerlink" href="#integration-with-fusion-metadata-registry" title="Permalink to this heading">#</a></h2>
+<p>SDMXThon does only provide an API to interact with SDMX data and metadata with Python, using SDMX-ML as an interface, but it does not provide any repository to store metadata and data, or any graphical interface or tool to manage information. Therefore, use of SDMXThon within statistical organisations must be seen as a complementary tool to facilitate data access, processing and analysing, but requiring a tool for SDMX metadata management, and a system for storing data.
+FMR is a natural candidate for this kind of use. Because FMR offers a REST API, not only to serve metadata, but also to perform actions, the integration between SDMXThon and FMR is quite simple, even if they are built using different technologies.
+The comprehensive example in next section shows how FMR can be used together with SDMXThon.</p>
+</section>
+<span id="document-sdmxthon_comprehensive_example"></span><section class="tex2jax_ignore mathjax_ignore" id="comprehensive-example">
+<h2>Comprehensive example<a class="headerlink" href="#comprehensive-example" title="Permalink to this heading">#</a></h2>
+<p>This example demonstrates how SDMXThon can be used to produce SDMX data from a CSV file.</p>
+<p>Let’s suppose that we have some data stored in a CSV file, which correspond to a dataflow following the BIS_DER datastructure from the BIS.</p>
+<p>We can create a Dataset object in SDMXThon, and load this CSV data and the related metadata:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sdmxthon</span>
+<span class="kn">from</span> <span class="nn">sdmxthon.model.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">data_instance</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
+<span class="n">data_instance</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;input_data/input_data.csv&#39;</span><span class="p">)</span>
+
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">sdmxthon</span><span class="o">.</span><span class="n">read_sdmx</span><span class="p">(</span><span class="s1">&#39;https://stats.bis.org/api/v1/datastructure/BIS/BIS_DER/1.0?references=all&amp;detail=full&#39;</span><span class="p">)</span>
+<span class="n">data_instance</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;DataStructures&#39;</span><span class="p">][</span><span class="s1">&#39;BIS:BIS_DER(1.0)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>SDMXThon provides a method to do a structural validation of the data against the metadata:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">validation_results</span> <span class="o">=</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The dataset has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">validation_results</span><span class="p">)</span><span class="si">}</span><span class="s1"> errors:</span><span class="se">\n</span><span class="s1"> </span><span class="si">{</span><span class="p">[</span><span class="n">error</span><span class="p">[</span><span class="s2">&quot;Message&quot;</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">validation_results</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The dataset has 3 errors:
+ [&#39;Missing value in measure OBS_VALUE&#39;, &#39;Missing FREQ&#39;, &#39;Missing OBS_STATUS&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Thus, the dataset is incorrect, because there are some empty values, and the dimension ‘FREQ’ and the mandatory attribute ‘OBS_STATUS’ are missing.
+It is possible to use Pandas to correct the dataset:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;OBS_VALUE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;OBS_VALUE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;FREQ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span>
+<span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;OBS_STATUS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+
+<span class="n">validation_results</span> <span class="o">=</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">semantic_validation</span><span class="p">()</span>
+<span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The dataset has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">validation_results</span><span class="p">)</span><span class="si">}</span><span class="s1"> errors:</span><span class="se">\n</span><span class="s1"> </span><span class="si">{</span><span class="p">[</span><span class="n">error</span><span class="p">[</span><span class="s2">&quot;Message&quot;</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">validation_results</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The dataset has 0 errors:
+ []
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now suppose that we want to validate that each observation is within 50% of the observation for the previous period. Again, we can use Panda’s capabilities to perform these validations:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Get list of dimensions excluding TIME_PERIOD:</span>
+<span class="n">dimension_descriptor</span> <span class="o">=</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">dimension_descriptor</span><span class="o">.</span><span class="n">components</span>
+<span class="n">dimenension_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dimension_descriptor</span><span class="p">]</span>
+<span class="n">dimenension_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;TIME_PERIOD&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># Add a field with the previous value of the series:</span>
+<span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;previous_value&quot;</span><span class="p">]</span> <span class="o">=</span> \
+    <span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;TIME_PERIOD&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">dimenension_list</span><span class="p">)</span>\
+            <span class="p">[</span><span class="s2">&quot;OBS_VALUE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c1"># Get if value is between the percentage of the previous value:</span>
+<span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;val_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;previous_value&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;OBS_VALUE&quot;</span><span class="p">]</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">~</span><span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;val_result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="c1">#Drop inmaterial observations (previous or current below 1000):</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="n">errors</span><span class="p">[(</span><span class="n">errors</span><span class="p">[</span><span class="s1">&#39;previous_value&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">|</span>  <span class="p">(</span><span class="n">errors</span><span class="p">[</span><span class="s1">&#39;OBS_VALUE&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_instance</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+
+<span class="n">errors</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;error.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9914
+1818
+</pre></div>
+</div>
+</div>
+</div>
+<p>SDMXThon provides a method to simply generate an SDMX-ML message from a Dataset object.
+The message is generated as a StringIO object, but it is also possible to set a path to save the data as a file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_instance</span><span class="o">.</span><span class="n">to_xml</span><span class="p">(</span><span class="n">outputPath</span><span class="o">=</span><span class="s1">&#39;output_data/output_data.xml&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_instance</span><span class="o">.</span><span class="n">to_xml</span><span class="p">()</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()[:</span><span class="mi">3000</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;mes:StructureSpecificData xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mes=&quot;http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message&quot; xmlns:ss=&quot;http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific&quot; xmlns:ns1=&quot;urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0):ObsLevelDim:AllDimensions&quot; xmlns:com=&quot;http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common&quot; xsi:schemaLocation=&quot;http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd&quot;&gt;
+	&lt;mes:Header&gt;
+		&lt;mes:ID&gt;test&lt;/mes:ID&gt;
+		&lt;mes:Test&gt;true&lt;/mes:Test&gt;
+		&lt;mes:Prepared&gt;2023-03-24T09:41:39&lt;/mes:Prepared&gt;
+		&lt;mes:Sender id=&quot;Unknown&quot;/&gt;
+		&lt;mes:Receiver id=&quot;Not_supplied&quot;/&gt;
+		&lt;mes:Structure structureID=&quot;BIS_DER&quot; namespace=&quot;urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)&quot; dimensionAtObservation=&quot;AllDimensions&quot;&gt;
+			&lt;com:Structure&gt;
+				&lt;Ref agencyID=&quot;BIS&quot; id=&quot;BIS_DER&quot; version=&quot;1.0&quot; class=&quot;DataStructure&quot;/&gt;
+			&lt;/com:Structure&gt;
+		&lt;/mes:Structure&gt;
+		&lt;mes:Source xml:lang=&quot;en&quot;&gt;SDMXthon&lt;/mes:Source&gt;
+	&lt;/mes:Header&gt;
+	&lt;mes:DataSet ss:structureRef=&quot;BIS_DER&quot; xsi:type=&quot;ns1:DataSetType&quot; ss:dataScope=&quot;DataStructure&quot; action=&quot;Replace&quot;&gt;
+		&lt;Obs DER_TYPE=&quot;T&quot; DER_INSTR=&quot;W&quot; DER_RISK=&quot;T&quot; DER_REP_CTY=&quot;5J&quot; DER_SECTOR_CPY=&quot;N&quot; DER_CPC=&quot;5J&quot; DER_SECTOR_UDL=&quot;A&quot; DER_CURR_LEG1=&quot;TO1&quot; DER_CURR_LEG2=&quot;TO1&quot; DER_ISSUE_MAT=&quot;A&quot; DER_RATING=&quot;B&quot; DER_EX_METHOD=&quot;3&quot; DER_BASIS=&quot;A&quot; AVAILABILITY=&quot;K&quot; COLLECTION=&quot;S&quot; TIME_PERIOD=&quot;2021-S2&quot; OBS_VALUE=&quot;12381.0&quot; FREQ=&quot;H&quot; OBS_STATUS=&quot;A&quot; previous_value=&quot;&quot; val_result=&quot;&quot; /&gt;
+		&lt;Obs DER_TYPE=&quot;T&quot; DER_INSTR=&quot;W&quot; DER_RISK=&quot;T&quot; DER_REP_CTY=&quot;5J&quot; DER_SECTOR_CPY=&quot;N&quot; DER_CPC=&quot;5J&quot; DER_SECTOR_UDL=&quot;A&quot; DER_CURR_LEG1=&quot;TO1&quot; DER_CURR_LEG2=&quot;TO1&quot; DER_ISSUE_MAT=&quot;A&quot; DER_RATING=&quot;B&quot; DER_EX_METHOD=&quot;3&quot; DER_BASIS=&quot;A&quot; AVAILABILITY=&quot;K&quot; COLLECTION=&quot;S&quot; TIME_PERIOD=&quot;2022-S1&quot; OBS_VALUE=&quot;10363.0&quot; FREQ=&quot;H&quot; OBS_STATUS=&quot;A&quot; previous_value=&quot;12381.0&quot; val_result=&quot;1.1947312554279648&quot; /&gt;
+		&lt;Obs DER_TYPE=&quot;A&quot; DER_INSTR=&quot;T&quot; DER_RISK=&quot;L&quot; DER_REP_CTY=&quot;5J&quot; DER_SECTOR_CPY=&quot;A&quot; DER_CPC=&quot;5J&quot; DER_SECTOR_UDL=&quot;A&quot; DER_CURR_LEG1=&quot;TO1&quot; DER_CURR_LEG2=&quot;TO1&quot; DER_ISSUE_MAT=&quot;A&quot; DER_RATING=&quot;A&quot; DER_EX_METHOD=&quot;3&quot; DER_BASIS=&quot;A&quot; AVAILABILITY=&quot;K&quot; COLLECTION=&quot;S&quot; TIME_PERIOD=&quot;2021-S2&quot; OBS_VALUE=&quot;97640.002&quot; FREQ=&quot;H&quot; OBS_STATUS=&quot;A&quot; previous_value=&quot;&quot; val_result=&quot;&quot; /&gt;
+		&lt;Obs DER_TYPE=&quot;A&quot; DER_INSTR=&quot;T&quot; DER_RISK=&quot;L&quot; DER_REP_CTY=&quot;5J&quot; DER_SECTOR_CPY=&quot;A&quot; DER_CPC=&quot;5J&quot; DER_SECTOR_UDL=&quot;A&quot; DER_CURR_LEG1=&quot;TO1&quot; DER_CURR_LEG2=&quot;TO1&quot; DER_ISSUE_MAT=&quot;A&quot; DER_RATING=&quot;A&quot; DER_EX_METHOD=&quot;3&quot; DER_BASIS=&quot;A&quot; AVAILABILITY=&quot;K&quot; COLLECTION=&quot;S&quot; TIME_PERIOD=&quot;2022-S1&quot; OBS_VALUE=&quot;122347.497&quot; FREQ=&quot;H&quot; OBS_STATUS=&quot;A&quot; previous_value=&quot;97640.002&quot; val_result=&quot;0.7980547570989539&quot; /&gt;
+		&lt;Obs DER_TYPE=&quot;A&quot; DER_INSTR=&quot;V&quot; DER_RISK=&quot;T&quot; DER_REP_CTY=&quot;5J&quot; DER_SECTOR_CPY=&quot;M&quot; DER_CPC=&quot;5J&quot; DER_SECTOR_UDL=&quot;A&quot; DER_CURR_LEG1=&quot;TO1&quot; DER_CURR_LEG2=&quot;TO1&quot; DER_ISSUE_MAT=&quot;A&quot; DER_RATING=&quot;B&quot; DER_EX_METHOD=&quot;3&quot; DER_BASIS=&quot;C&quot; AVAILABILITY=&quot;K&quot; COLLECTION=&quot;S&quot; TIME_PERIOD=&quot;2021-S2&quot; OBS_VALUE=
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also make use of the FMR web service to validate the generated data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8080/ws/public/data/load&quot;</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;uploadFile&#39;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;output_data/output_data.xml&#39;</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)}</span>
+
+<span class="n">validate_request</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">validate_request</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&quot;Success&quot;:true,&quot;uid&quot;:&quot;78e280ca-aeab-4c1b-b932-f6b177f46f2b&quot;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8080/ws/public/data/loadStatus&quot;</span>
+<span class="n">uid</span> <span class="o">=</span>  <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">validate_request</span><span class="o">.</span><span class="n">text</span><span class="p">)[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Wait for the validation to finish</span>
+
+<span class="n">result_request</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">?uid=</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result_request</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;Datasets&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;ValidationReport&#39;</span><span class="p">][:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;Type&#39;: &#39;MandatoryAttributes&#39;, &#39;Errors&#39;: [{&#39;ErrorCode&#39;: &#39;REG-201-051&#39;, &#39;Message&#39;: &quot;Missing mandatory attribute &#39;DECIMALS&#39;&quot;, &#39;Dataset&#39;: 0, &#39;ComponentId&#39;: &#39;DECIMALS&#39;, &#39;Position&#39;: &#39;Dataset&#39;}, {&#39;ErrorCode&#39;: &#39;REG-201-051&#39;, &#39;Message&#39;: &quot;Missing mandatory attribute &#39;UNIT_MEASURE&#39;&quot;, &#39;Dataset&#39;: 0, &#39;ComponentId&#39;: &#39;UNIT_MEASURE&#39;, &#39;Position&#39;: &#39;Dataset&#39;}, {&#39;ErrorCode&#39;: &#39;REG-201-051&#39;, &#39;Message&#39;: &quot;Missing mandatory attribute &#39;UNIT_MULT&#39;&quot;, &#39;Dataset&#39;: 0, &#39;ComponentId&#39;: &#39;UNIT_MULT&#39;, &#39;Position&#39;: &#39;Dataset&#39;}]}, {&#39;Type&#39;: &#39;FormatSpecific&#39;, &#39;Errors&#39;: [{&#39;ErrorCode&#39;: &#39;-&#39;, &#39;Message&#39;: &quot;Unexpected attribute &#39;previous_value&#39; for element &#39;StructureSpecificData/DataSet/Obs&#39;&quot;, &#39;Dataset&#39;: 0, &#39;Position&#39;: &#39;Dataset&#39;}, {&#39;ErrorCode&#39;: &#39;-&#39;, &#39;Message&#39;: &quot;Unexpected attribute &#39;val_result&#39; for element &#39;StructureSpecificData/DataSet/Obs&#39;&quot;, &#39;Dataset&#39;: 0, &#39;Position&#39;: &#39;Dataset&#39;}]}]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-functionalities">SDMXThon functionalities</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-sdmx_io_use_cases">Core sdmx.io use cases</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-integration_fmr">Integration with Fusion Metadata Registry</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="intro.html#document-sdmxthon_comprehensive_example">Comprehensive example</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By meaningfulData
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
