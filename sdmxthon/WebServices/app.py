@@ -76,7 +76,7 @@ def get_code_url():
     params = request.args.to_dict()
     print(params.keys())
     if len(params.keys()) > 1:
-        return Response("Too much parameters, insert only url parameter",
+        return Response("Too many parameters, insert only url parameter",
                         status=400)
     if 'url' not in params.keys():
         return Response("Invalid parameters, insert url parameter", status=400)

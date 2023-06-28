@@ -80,10 +80,12 @@ class BaseRequest:
 
     @classmethod
     def get_sdmxthon_code(cls, url):
-        code = "from sdmxthon import read_sdmx<br/>" \
-               "if __name__ == 'main':<br/>" \
-               "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>" \
-               "&emsp;&emsp;print(message.content)".format(url=url)
+        code = f"""
+from sdmxthon import read_sdmx
+if __name__ == '__main__':
+    message = read_sdmx('{url}', validate=True)
+    print(message.content)"""
+        
         return code
 
 
@@ -303,7 +305,8 @@ def main():
     # Get metadata url
     message_def = x.get_metadata_url(unique_id='ESTAT:MED_PS22(1.0)',
                                       params={})
-    print(message_def)
+    print(x.get_sdmxthon_code(message_def))
+
 
 
 if __name__ == "__main__":
