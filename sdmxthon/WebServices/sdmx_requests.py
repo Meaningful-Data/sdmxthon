@@ -163,7 +163,7 @@ class EUROSTATRequest(BaseRequest):
     @staticmethod
     def to_eurostat_id(unique_id):
         agency_id, id_, version = split_unique_id(unique_id)
-        return id_
+        return agency_id, id_, version 
 
     @classmethod
     def get_data_url(cls, unique_id, params):
@@ -178,7 +178,7 @@ class EUROSTATRequest(BaseRequest):
 
     @classmethod
     def get_metadata_url(cls, unique_id, params):
-        flow_id, agency_id, version = cls.to_eurostat_id(unique_id)
+        agency_id, flow_id, version = cls.to_eurostat_id(unique_id)
 
         url_md = f"{cls.base_url}/sdmx/2.1/dataflow/{agency_id}/{flow_id}/{version}"
 
@@ -291,22 +291,18 @@ class ILORequest(BaseRequest):
 
 def main():
     # EXAMPLES
-    # Elección de la agencia
-    x = ECBRequest()
+    x = EUROSTATRequest()
 
-    # Para listar los dataflows de cada agencia
+    # Get agency dataflows
     # message_def = x.get_dataflows(params={'code': 'ECB'})
 
-    # Para devolver la url de los datos de un dataflow en concreto
+    # Get data url
     # url_str = x.get_data_url(unique_id='ECB:AME(1.0)', params={'key': 'all', 'detail': 'full',
     # 'provider_ref': 'all', DIMENSION_AT: 2020, UPDATED_AFTER: 2020})
 
-    # Para devolver datos de un dataflow en concreto
-    message_def = x.get_dataflow_data(df_unique_id='ECB:AME(1.0)',
-                                      params={'key': 'all', 'detail': 'full',
-                                              'provider_ref': 'all',
-                                              DIMENSION_AT: 'TIME_PERIOD',
-                                              UPDATED_AFTER: 2020})
+    # Get metadata url
+    message_def = x.get_metadata_url(unique_id='ESTAT:MED_PS22(1.0)',
+                                      params={})
     print(message_def)
 
 
