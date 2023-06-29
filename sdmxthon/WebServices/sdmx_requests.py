@@ -26,16 +26,19 @@ class BaseRequest:
     base_url = None
 
     dataflows_url = None
-    dataflows_params = None
 
     data_params = None
 
     @classmethod
-    def get_dataflows(cls, params):
-        for key in params:
-            if key not in cls.dataflows_params:
-                raise Exception
-        url = cls.dataflows_url.format(**params)
+    def get_dataflows(cls, params = None):
+        if params is None:
+            url = cls.dataflows_url.format(agency_code = cls.code)
+        else:
+            for key in params:
+                if key not in cls.dataflows_params:
+                    raise Exception
+            url = cls.dataflows_url.format(**params)
+        
         message = read_sdmx(url, validate=False)
 
         dataflows = message.payload['Dataflows'].values()
@@ -105,8 +108,8 @@ class BISRequest(BaseRequest):
     code = 'BIS'
     base_url = 'https://stats.bis.org/api/v1'
 
-    dataflows_params = ['code']
-    dataflows_url = base_url + "/dataflow/{code}/all/latest?references=none&detail=full"
+    dataflows_params = ['agency_code']
+    dataflows_url = base_url + "/dataflow/{agency_code}/all/latest?references=none&detail=full"
 
     data_params = ['key', 'detail']
     # key='all', detail='full'
@@ -151,8 +154,8 @@ class EUROSTATRequest(BaseRequest):
     code = 'ESTAT'
     base_url = 'https://ec.europa.eu/eurostat/api/dissemination'
 
-    dataflows_params = ['code']
-    dataflows_url = base_url + "/sdmx/2.1/dataflow/{code}/all?detail=referencestubs"
+    dataflows_params = ['agency_code']
+    dataflows_url = base_url + "/sdmx/2.1/dataflow/{agency_code}/all?detail=referencestubs"
 
     mapping_params_url = {
         START_PERIOD: 'startPeriod',
@@ -192,8 +195,8 @@ class ECBRequest(BaseRequest):
     code = 'ECB'
     base_url = 'https://sdw-wsrest.ecb.europa.eu'
 
-    dataflows_params = ['code']
-    dataflows_url = base_url + "/service/dataflow/{code}/all/latest?references=none&detail=full"
+    dataflows_params = ['agency_code']
+    dataflows_url = base_url + "/service/dataflow/{agency_code}/all/latest?references=none&detail=full"
 
     data_params = ['key', 'detail', 'provider_ref']
     # key='all', detail='full', provider_ref='all'
@@ -245,9 +248,9 @@ class ILORequest(BaseRequest):
     code = 'ILO'
     base_url = 'https://www.ilo.org/sdmx/rest'
 
-    dataflows_params = ['code']
+    dataflows_params = ['agency_code']
 
-    dataflows_url = base_url + "/dataflow/{code}/all/latest?references=none&detail=full"
+    dataflows_url = base_url + "/dataflow/{agency_code}/all/latest?references=none&detail=full"
 
     data_params = ['key', 'detail']
     # key='all', detail='full', include_history='false'
