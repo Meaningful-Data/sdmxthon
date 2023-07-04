@@ -36,7 +36,7 @@ def get_dataflows(agency_code):
         return Response('Agency name not allowed', status=400)
     try:
         x = agencies[agency_code]
-        dataflows = x.get_dataflows(params={'code': agency_code})
+        dataflows = x.get_dataflows(params={'agency_code': agency_code})
     except Exception as e:
         return Response(str(e), status=500)
     return Response(json.dumps(dataflows, indent=2), status=200)
@@ -76,7 +76,7 @@ def get_code_url():
     params = request.args.to_dict()
     print(params.keys())
     if len(params.keys()) > 1:
-        return Response("Too much parameters, insert only url parameter",
+        return Response("Too many parameters, insert only url parameter",
                         status=400)
     if 'url' not in params.keys():
         return Response("Invalid parameters, insert url parameter", status=400)

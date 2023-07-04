@@ -26,16 +26,19 @@ class BaseRequest:
     base_url = None
 
     dataflows_url = None
-    dataflows_params = None
 
     data_params = None
 
     @classmethod
-    def get_dataflows(cls, params):
-        for key in params:
-            if key not in cls.dataflows_params:
-                raise Exception
-        url = cls.dataflows_url.format(**params)
+    def get_dataflows(cls, params = None):
+        if params is None:
+            url = cls.dataflows_url.format(agency_code = cls.code)
+        else:
+            for key in params:
+                if key not in cls.dataflows_params:
+                    raise Exception
+            url = cls.dataflows_url.format(**params)
+        
         message = read_sdmx(url, validate=False)
 
         dataflows = message.payload['Dataflows'].values()
@@ -80,10 +83,12 @@ class BaseRequest:
 
     @classmethod
     def get_sdmxthon_code(cls, url):
-        code = "from sdmxthon import read_sdmx<br/>" \
-               "if __name__ == 'main':<br/>" \
-               "&emsp;&emsp;message = read_sdmx('{url}', validate=True)<br/>" \
-               "&emsp;&emsp;print(message.content)".format(url=url)
+        code = f"""
+from sdmxthon import read_sdmx
+if __name__ == '__main__':
+    message = read_sdmx('{url}', validate=True)
+    print(message.content)"""
+        
         return code
 
 
@@ -103,8 +108,8 @@ class BISRequest(BaseRequest):
     code = 'BIS'
     base_url = 'https://stats.bis.org/api/v1'
 
-    dataflows_params = ['code']
-    dataflows_url = base_url + "/dataflow/{code}/all/latest?references=none&detail=full"
+    dataflows_params = ['agency_code']
+    dataflows_url = base_url + "/dataflow/{agency_code}/all/latest?references=none&detail=full"
 
     data_params = ['key', 'detail']
     # key='all', detail='full'
@@ -149,8 +154,8 @@ class EUROSTATRequest(BaseRequest):
     code = 'ESTAT'
     base_url = 'https://ec.europa.eu/eurostat/api/dissemination'
 
-    dataflows_params = ['code']
-    dataflows_url = base_url + "/sdmx/2.1/dataflow/{code}/all?detail=referencestubs"
+    dataflows_params = ['agency_code']
+    dataflows_url = base_url + "/sdmx/2.1/dataflow/{agency_code}/all?detail=referencestubs"
 
     mapping_params_url = {
         START_PERIOD: 'startPeriod',
@@ -163,7 +168,7 @@ class EUROSTATRequest(BaseRequest):
     @staticmethod
     def to_eurostat_id(unique_id):
         agency_id, id_, version = split_unique_id(unique_id)
-        return id_
+        return agency_id, id_, version 
 
     @classmethod
     def get_data_url(cls, unique_id, params):
@@ -178,7 +183,7 @@ class EUROSTATRequest(BaseRequest):
 
     @classmethod
     def get_metadata_url(cls, unique_id, params):
-        flow_id, agency_id, version = cls.to_eurostat_id(unique_id)
+        agency_id, flow_id, version = cls.to_eurostat_id(unique_id)
 
         url_md = f"{cls.base_url}/sdmx/2.1/dataflow/{agency_id}/{flow_id}/{version}"
 
@@ -190,8 +195,8 @@ class ECBRequest(BaseRequest):
     code = 'ECB'
     base_url = 'https://sdw-wsrest.ecb.europa.eu'
 
-    dataflows_params = ['code']
-    dataflows_url = base_url + "/service/dataflow/{code}/all/latest?references=none&detail=full"
+    dataflows_params = ['agency_code']
+    dataflows_url = base_url + "/service/dataflow/{agency_code}/all/latest?references=none&detail=full"
 
     data_params = ['key', 'detail', 'provider_ref']
     # key='all', detail='full', provider_ref='all'
@@ -243,9 +248,9 @@ class ILORequest(BaseRequest):
     code = 'ILO'
     base_url = 'https://www.ilo.org/sdmx/rest'
 
-    dataflows_params = ['code']
+    dataflows_params = ['agency_code']
 
-    dataflows_url = base_url + "/dataflow/{code}/all/latest?references=none&detail=full"
+    dataflows_url = base_url + "/dataflow/{agency_code}/all/latest?references=none&detail=full"
 
     data_params = ['key', 'detail']
     # key='all', detail='full', include_history='false'
@@ -291,23 +296,20 @@ class ILORequest(BaseRequest):
 
 def main():
     # EXAMPLES
-    # Elección de la agencia
-    x = ECBRequest()
+    x = EUROSTATRequest()
 
-    # Para listar los dataflows de cada agencia
+    # Get agency dataflows
     # message_def = x.get_dataflows(params={'code': 'ECB'})
 
-    # Para devolver la url de los datos de un dataflow en concreto
+    # Get data url
     # url_str = x.get_data_url(unique_id='ECB:AME(1.0)', params={'key': 'all', 'detail': 'full',
     # 'provider_ref': 'all', DIMENSION_AT: 2020, UPDATED_AFTER: 2020})
 
-    # Para devolver datos de un dataflow en concreto
-    message_def = x.get_dataflow_data(df_unique_id='ECB:AME(1.0)',
-                                      params={'key': 'all', 'detail': 'full',
-                                              'provider_ref': 'all',
-                                              DIMENSION_AT: 'TIME_PERIOD',
-                                              UPDATED_AFTER: 2020})
-    print(message_def)
+    # Get metadata url
+    message_def = x.get_metadata_url(unique_id='ESTAT:MED_PS22(1.0)',
+                                      params={})
+    print(x.get_sdmxthon_code(message_def))
+
 
 
 if __name__ == "__main__":
