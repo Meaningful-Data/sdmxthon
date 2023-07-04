@@ -1,5 +1,4 @@
 from datetime import datetime
-from io import StringIO
 
 import pandas as pd
 
@@ -271,9 +270,7 @@ def writer(path, payload, type_, prettyprint=True, id_='test',
         with open(path, "w", encoding="UTF-8", errors='replace') as f:
             f.write(outfile)
     else:
-        f = StringIO()
-        f.write(outfile)
-        return f
+        return outfile
 
 
 def format_dict_ser(out, parser, data_dict, obs):

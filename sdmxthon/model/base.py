@@ -67,7 +67,7 @@ class LocalisedString(object):
         self._content = string_setter(value)
 
 
-class InternationalString(object):
+class InternationalString:
     """The International String is a collection of Localised
        Strings and supports the representation of text in
        multiple locales.
@@ -127,6 +127,16 @@ class InternationalString(object):
                     f'{text}</{name}>')
 
         return outfile
+
+    @classmethod
+    def from_str(cls, value):
+        """
+        Generates InternationalString from a str
+        :param value: Content of the String
+        :return: A InternationalString instance
+        """
+        return cls([LocalisedString(locale='English', label='en',
+                                    content=value)])
 
 
 class Annotation(object):
@@ -356,6 +366,11 @@ class NameableArtefact(IdentifiableArtefact):
                  description: InternationalString = None):
         super(NameableArtefact, self).__init__(id_=id_, uri=uri, urn=urn,
                                                annotations=annotations)
+
+        if isinstance(name, str):
+            name = InternationalString.from_str(name)
+        if isinstance(description, str):
+            description = InternationalString.from_str(description)
 
         self._name = name
         self._description = description
