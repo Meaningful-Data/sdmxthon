@@ -307,17 +307,26 @@ class Dataset:
         """
         self.data.to_feather(pathToFeather, **kwargs)
 
-    def semantic_validation(self):
-        """Performs a Semantic Validation on the Data.
+    def structural_validation(self):
+        """Performs a Structural Validation on the Data.
 
         :returns:
             A list of errors as defined in the Validation Page.
 
         """
-        if isinstance(self.data, DataFrame):
-            return validate_data(self.data, self.structure)
-        raise ValueError(f'Data for dataset {self.structure.id} '
+        if self.data is None:
+            raise ValueError('The dataset should contain data to perform a structural validation')
+        elif self.structure is None:
+            raise ValueError('The dataset should contain a structure to perform a structural validation')
+        
+        if not isinstance(self.data, DataFrame):
+            raise ValueError(f'Data for dataset {self.structure.id} '
                          f'is not well formed')
+        elif not isinstance(self.structure, DataStructureDefinition):
+            raise TypeError('structure must be a DataStructureDefinition')
+            
+            
+        return validate_data(self.data, self.structure)
 
     def set_dimension_at_observation(self, dimAtObs):
         """Sets the dimensionAtObservation
