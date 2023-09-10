@@ -5,6 +5,7 @@ from sdmxthon.model.message import Message
 from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict, drop_na_all
+from sdmxthon.webservices import web_services
 
 
 def read_sdmx(sdmx_file, validate=True) -> Message:
@@ -128,3 +129,11 @@ def xml_to_csv(data, output_path=None, validate=True,
             return dataset.to_csv(output_path, **kwargs)
 
         raise ValueError('No Datasets were parsed')
+
+def get_supported_agencies():
+    "Returns the agencies supported by the API"
+    return {
+        'BIS': web_services.BISRequest,
+        'ECB': web_services.ECBRequest,
+        'ESTAT': web_services.EUROSTATRequest,
+        'ILO': web_services.ILORequest}
