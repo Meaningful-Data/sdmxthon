@@ -48,12 +48,12 @@ class ItemScheme(MaintainableArtefact):
 
         self._items = {}
         if items is not None:
-            urn_list = []
+            codes_list = []
             for i in items:
-                if i.urn is not None and i.urn not in urn_list:
-                    urn_list.append(i.urn)
+                if i.id is not None and i.id not in codes_list:
+                    codes_list.append(i.id)
                     self.append(i)
-                elif i.urn is not None:
+                elif i.id is not None:
                     raise ValueError(
                         'Item Scheme cannot have two items with same URN')
 

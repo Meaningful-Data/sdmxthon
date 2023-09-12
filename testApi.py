@@ -1,12 +1,16 @@
 # flake8: noqa
-import sdmxthon
+from sdmxthon.webservices import webservices
+
 
 def main():
-    message_data = sdmxthon.read_sdmx('https://stats.bis.org/api/v1/data/BIS,WS_OTC_DERIV2,1.0/all/all?lastNObservations=3&detail=full')
-    dataset = message_data.content['BIS:WS_OTC_DERIV2(1.0)']
-    # dataset.structure = sdmxthon.read_sdmx('https://stats.bis.org/api/v1/dataflow/BIS/WS_OTC_DERIV2/1.0?references=all&detail=full').content['DataStructures']['BIS:BIS_DER(1.0)']
-    print(dataset.structural_validation())
-
+    bis_ws = webservices.BisWs()
+    # dataflows = bis_ws.get_all_dataflows()
+    # data_flow_id = dataflows[0]['id']
+    data_flow_id = 'WS_CBPOL_D'
+    print(bis_ws.get_data_url(data_flow_id))
+    print(bis_ws.get_dsd_url())
+    print(bis_ws.get_dsd_url(data_flow_id))
+    print(bis_ws.get_dsd_url(resources = data_flow_id, agency_id = 'BIS'))
 
 if __name__ == "__main__":
     main()
