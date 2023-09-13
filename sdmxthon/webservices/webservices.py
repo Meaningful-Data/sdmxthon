@@ -1,13 +1,16 @@
 """
-    Module to facilitate direct connections to known implementations of SDMX web services.
+    Module to facilitate direct connections to
+    known implementations of SDMX web services.
 """
 
 from abc import ABC
 
-from sdmxthon.webservices import query_builder
-from sdmxthon.parsers.read import read_xml
-from sdmxthon.model.definitions import DataFlowDefinition
 from sdmxthon.api.api import read_sdmx
+from sdmxthon.model.definitions import DataFlowDefinition
+from sdmxthon.parsers.read import read_xml
+from sdmxthon.webservices import query_builder
+
+
 # from sdmxthon.utils.handlers import split_unique_id
 
 
@@ -21,7 +24,7 @@ class SdmxWebServiceConnection(ABC):
     def get_all_dataflows(self):
         """Returns a list of all dataflows"""
         url = (f"{self.ENTRY_POINT}"
-                f"{self.WS_IMPLEMENTATION.get_data_flows(self.AGENCY_ID)}")
+               f"{self.WS_IMPLEMENTATION.get_data_flows(self.AGENCY_ID)}")
         message = read_xml(url, validate=False)
         dataflows = message['Dataflows'].values()
         list_dataflows = []
@@ -38,33 +41,30 @@ class SdmxWebServiceConnection(ABC):
             list_dataflows.append(info)
         return list_dataflows
 
-
     def get_data_flow_url(self, flow, **kwargs) -> str:
         """
         Returns the URL to get one or many dataflows
         """
-        return (f"{self.ENTRY_POINT}"
-                f"{self.WS_IMPLEMENTATION.get_data(flow, kwargs)}")
+        url_params = self.WS_IMPLEMENTATION.get_data(flow, kwargs)
 
+        return f"{self.ENTRY_POINT}{url_params}"
 
     def get_data_url(self, flow, **kwargs) -> str:
         """Returns the URL to get the data"""
-        return (f"{self.ENTRY_POINT}"
-                f"{self.WS_IMPLEMENTATION.get_data(flow, kwargs)}")
+        url_params = self.WS_IMPLEMENTATION.get_data(flow, kwargs)
+        return f"{self.ENTRY_POINT}{url_params}"
 
-
-    def get_dsd_url(self, resources = None, **kwargs) -> str:
+    def get_dsd_url(self, resources=None, **kwargs) -> str:
         """Returns the URL to get the data"""
-        return (f"{self.ENTRY_POINT}"
-                f"{self.WS_IMPLEMENTATION.get_dsds(resources = resources, **kwargs)}")
-
+        url_params = self.WS_IMPLEMENTATION.get_dsds(resources=resources,
+                                                     **kwargs)
+        return f"{self.ENTRY_POINT}{url_params}"
 
     def get_data(self, **kwargs):
         """Returns a message with the data"""
         url = self.get_data_url(kwargs)
         message = read_sdmx(url, validate=False)
         return message
-
 
     def get_dsd(self, **kwargs):
         """Returns a message with the dsd"""
@@ -77,7 +77,6 @@ class SdmxWebServiceConnection(ABC):
         url = self.get_data_flow_url(kwargs)
         message = read_sdmx(url, validate=False)
         return message
-
 
     @staticmethod
     def get_sdmxthon_code(url):

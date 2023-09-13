@@ -13,3 +13,4 @@ Pipfile.lock
 /testApi.py
 /xml_parsers_test.py
 testApi.py
+pypi.pypirc

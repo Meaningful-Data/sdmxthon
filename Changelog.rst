@@ -2,6 +2,26 @@
 Changelog
 #########
 
+2.3 (2023-09-13)
+----------------
+**Added**
+ - Webservices and data discovery on BIS, ECB, ESTAT, ILO
+
+**Changes**
+
+**Bugfixes**
+ - Fixed duplication detection on ItemScheme. It is based now on ID instead of URN.
+
+2.2 (2023-07-04)
+----------------
+**Added**
+
+**Changes**
+ - International String is now based on str instead of object. NameableArtefacts can use str on __init__ method.
+ - Changed semantic validation to structure validation. Improved error messages and logic.
+
+**Bugfixes**
+
 2.1 (2023-03-14)
 ----------------
 **Added**
