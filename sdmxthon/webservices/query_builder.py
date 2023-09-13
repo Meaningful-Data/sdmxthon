@@ -164,12 +164,10 @@ class SdmxWs1(SdmxWebservice):
         return base_query + references_query + detail_query
 
 
-
 class SdmxWs1p5(SdmxWs1):
     """
     SDMX Web Service 1.5 specification
     """
-
 
 
 class SdmxWs1p4(SdmxWs1):
@@ -245,15 +243,3 @@ class QueryBuilder:
         return self._ws_implementation.get_data(flow, key,provider,
             start_period,end_period, updated_after, first_n_observations, 
             last_n_observations, dimension_at_observation, detail, include_history)
-
-if __name__ == "__main__":
-    query_builder = QueryBuilder(SdmxWs1p5())
-    print(query_builder.get_data_flows('ECB'))
-    print(query_builder.get_data_flows('ECB', 'DF1'))
-    print(query_builder.get_data_flows('ECB', ['DF1', 'DF2']))
-
-    print(query_builder.get_data_flows('ECB', ['DF1', 'DF2'], references = 'descendants'))
-    print(query_builder.get_data_flows('ECB', ['DF1', 'DF2'], references = 'descendants', detail='full'))
-    print(query_builder.get_data('flow1'))
-
-    # print(query_builder.get_data_flows('ECB', ['DF1', 'DF2'], references = 'abc'))

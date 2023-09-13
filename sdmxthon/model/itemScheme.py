@@ -55,7 +55,7 @@ class ItemScheme(MaintainableArtefact):
                     self.append(i)
                 elif i.id is not None:
                     raise ValueError(
-                        'Item Scheme cannot have two items with same URN')
+                        'Item Scheme cannot have two items with same id')
 
     def __eq__(self, other):
         if isinstance(other, ItemScheme):
