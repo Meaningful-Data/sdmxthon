@@ -14,7 +14,7 @@ sphinx-autobuild = "*"
 sphinx-rtd-theme = "*"
 
 [packages]
-lxml = "==4.6.0"
+lxml = "==4.9.1"
 pandas = "==1.4.2"
 numpy = "==1.19.3"
 validators = "==0.19.0"
