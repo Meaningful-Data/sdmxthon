@@ -1,8 +1,10 @@
 ﻿.idea
 .settings
 .ipynb_checkpoints
+/tokens/pypi.pypirc
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
+testApi.py
 *.py[cod]
 *$py.class
 dist
@@ -12,5 +14,3 @@ Pipfile.lock
 /SDMXthon.egg-info/
 /testApi.py
 /xml_parsers_test.py
-testApi.py
-pypi.pypirc
