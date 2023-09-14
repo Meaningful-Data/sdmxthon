@@ -16,7 +16,7 @@ sphinx-rtd-theme = "*"
 [packages]
 lxml = "==4.9.1"
 pandas = "==1.4.2"
-numpy = "==1.19.3"
+numpy = "==1.22.0"
 validators = "==0.19.0"
 requests = "==2.31.0"
 xmltodict = "==0.13.0"
