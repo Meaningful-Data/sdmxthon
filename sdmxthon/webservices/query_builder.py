@@ -12,6 +12,7 @@ class SdmxWebservice(ABC):
     REFERENCES_OPTIONS = []
     STRUCTURE_DETAIL_OPTIONS = []
     DATA_DETAIL_OPTIONS = []
+    CONSTRAINTS_MODE_OPTIONS = []
 
     @abstractmethod
     def get_data_flows(self, agency_id, resources,
@@ -35,6 +36,14 @@ class SdmxWebservice(ABC):
                  references=None, detail=None):
         """
         Returns query to get dsd
+        """
+
+    @abstractmethod
+    def get_constraints(self, flow, key=None, provider=None, component_id=None,
+                        mode=None, references=None, start_period=None,
+                        end_period=None, updated_after=None):
+        """
+        Returns query to get availability constraints
         """
 
     def validate_references(self, reference: str):
@@ -61,6 +70,14 @@ class SdmxWebservice(ABC):
         if detail not in self.DATA_DETAIL_OPTIONS:
             raise ValueError(f"detail must be one of the following values: "
                              f"{self.STRUCTURE_DETAIL_OPTIONS}")
+
+    def validate_constraints_mode(self, mode: str):
+        """
+        Validates that the mode is one of the allowed values
+        """
+        if mode not in self.CONSTRAINTS_MODE_OPTIONS:
+            raise ValueError(f"mode must be one of the following values: "
+                             f"{self.CONSTRAINTS_MODE_OPTIONS}")
 
 
 class SdmxWs2p0(SdmxWebservice):
@@ -107,6 +124,8 @@ class SdmxWs1(SdmxWebservice):
                                 'referencepartial',
                                 'allcompletestubs', 'referencecompletestubs',
                                 'full']
+
+    CONSTRAINTS_MODE_OPTIONS = ['exact', 'available']
 
     def get_data_flows(self, agency_id=None, resources=None,
                        version=None, references=None, detail=None) -> str:
@@ -167,6 +186,24 @@ class SdmxWs1(SdmxWebservice):
             params += f"?detail={detail}"
 
         return base_query + params
+
+    def get_constraints(self, flow, key=None, provider=None, component_id=None,
+                        mode=None, references=None, start_period=None,
+                        end_period=None, updated_after=None):
+
+        key = key if key else 'all'
+        provider = provider if provider else 'all'
+        component_id = component_id if component_id else 'all'
+
+        base_query = f"/availableconstraint/{flow}/{key}/{provider}/{component_id}"
+        mode_query = f"?mode={mode}" if mode else ""
+        references_query = f"?references={references}" if references else ""
+        start_period_query = f"?startPeriod={start_period}" if start_period else ""
+        end_period_query = f"?endPeriod={end_period}" if end_period else ""
+        updated_after_query = f"?updatedAfter={updated_after}" if updated_after else ""
+
+        return base_query + mode_query + references_query + start_period_query + \
+            end_period_query + updated_after_query
 
 
 class SdmxWs1p5(SdmxWs1):
@@ -249,3 +286,19 @@ class QueryBuilder:
                                                 last_n_observations,
                                                 dimension_at_observation,
                                                 detail, include_history)
+
+    def get_constraints(self, flow, key=None, provider=None, component_id=None,
+                        mode=None, references=None, start_period=None,
+                        end_period=None, updated_after=None):
+        """Returns the constraints query for the WS Implementation"""
+        provider = self.id_builder(provider)
+        if mode:
+            self._ws_implementation.validate_constraints_mode(mode)
+        if references:
+            self._ws_implementation.validate_references(references)
+
+        return self._ws_implementation.get_constraints(flow, key, provider,
+                                                       component_id, mode,
+                                                       references, start_period,
+                                                       end_period,
+                                                       updated_after)
