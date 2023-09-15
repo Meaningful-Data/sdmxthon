@@ -2,6 +2,15 @@
 Changelog
 #########
 
+2.3.1 (2023-09-15)
+----------------
+**Added**
+
+**Changes**
+
+**Bugfixes**
+ - Fixed webservices URLs and params.
+
 2.3 (2023-09-13)
 ----------------
 **Added**

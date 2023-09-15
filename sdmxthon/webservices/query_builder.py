@@ -154,21 +154,30 @@ class SdmxWs1(SdmxWebservice):
 
         params = ""
         if start_period:
-            params += f"?startPeriod={start_period}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}startPeriod={start_period}"
         if end_period:
-            params += f"?endPeriod={end_period}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}endPeriod={end_period}"
         if updated_after:
-            params += f"?updatedAfter={updated_after}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}updatedAfter={updated_after}"
         if first_n_observations:
-            params += f"?firstNObservations={first_n_observations}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}firstNObservations={first_n_observations}"
         if last_n_observations:
-            params += f"?lastNObservations={last_n_observations}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}lastNObservations={last_n_observations}"
         if dimension_at_observation:
-            params += f"?dimensionAtObservation={dimension_at_observation}"
+            initial = "&" if "?" in params else "?"
+            params += (f"{initial}dimensionAtObservation="
+                       f"{dimension_at_observation}")
         if detail:
-            params += f"?detail={detail}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
         if include_history:
-            params += f"?includeHistory={include_history}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}includeHistory={include_history}"
 
         return base_query + params
 
@@ -181,9 +190,11 @@ class SdmxWs1(SdmxWebservice):
         base_query = f"/datastructure/{agency_id}/{resources}/{version}"
         params = ""
         if references:
-            params += f"?references={references}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
         if detail:
-            params += f"?detail={detail}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
 
         return base_query + params
 
@@ -195,15 +206,27 @@ class SdmxWs1(SdmxWebservice):
         provider = provider if provider else 'all'
         component_id = component_id if component_id else 'all'
 
-        base_query = f"/availableconstraint/{flow}/{key}/{provider}/{component_id}"
-        mode_query = f"?mode={mode}" if mode else ""
-        references_query = f"?references={references}" if references else ""
-        start_period_query = f"?startPeriod={start_period}" if start_period else ""
-        end_period_query = f"?endPeriod={end_period}" if end_period else ""
-        updated_after_query = f"?updatedAfter={updated_after}" if updated_after else ""
+        base_query = f"/availableconstraint/{flow}/{key}"
+        base_query += f"/{provider}/{component_id}"
 
-        return base_query + mode_query + references_query + start_period_query + \
-            end_period_query + updated_after_query
+        params = ""
+        if mode:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}mode={mode}"
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if start_period:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}startPeriod={start_period}"
+        if end_period:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}endPeriod={end_period}"
+        if updated_after:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}updatedAfter={updated_after}"
+
+        return base_query + params
 
 
 class SdmxWs1p5(SdmxWs1):
@@ -273,7 +296,7 @@ class QueryBuilder:
                  first_n_observations=None, last_n_observations=None,
                  dimension_at_observation=None,
                  detail=None, include_history=None):
-        "Returns the data query for the WS Implementation"
+        """Returns the data query for the WS Implementation"""
 
         provider = self.id_builder(provider)
         if detail:
@@ -299,6 +322,7 @@ class QueryBuilder:
 
         return self._ws_implementation.get_constraints(flow, key, provider,
                                                        component_id, mode,
-                                                       references, start_period,
+                                                       references,
+                                                       start_period,
                                                        end_period,
                                                        updated_after)
