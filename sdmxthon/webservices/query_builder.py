@@ -99,10 +99,16 @@ class SdmxWs2p0(SdmxWebservice):
         version = version if version else "latest"
 
         base_query = f"dataflow/{agency_id}/{resources}/{version}"
-        references_query = f"?references={references}" if references else ""
-        detail_query = f"?detail={detail}" if detail else ""
 
-        return base_query + references_query + detail_query
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
 
     def get_data(self, flow, key=None, provider=None, start_period=None,
                  end_period=None, updated_after=None,
@@ -136,9 +142,11 @@ class SdmxWs1(SdmxWebservice):
         base_query = f"/dataflow/{agency_id}/{resources}/{version}"
         params = ""
         if references:
-            params += f"?references={references}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
         if detail:
-            params += f"?detail={detail}"
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
 
         return base_query + params
 
