@@ -44,13 +44,13 @@ class SdmxWebServiceConnection(ABC):
         Returns the URL to get one or many dataflows
         """
         return (f"{self.ENTRY_POINT}"
-                f"{self.WS_IMPLEMENTATION.get_data(flow, kwargs)}")
+                f"{self.WS_IMPLEMENTATION.get_data_flows(resources=flow, **kwargs)}")
 
 
     def get_data_url(self, flow, **kwargs) -> str:
         """Returns the URL to get the data"""
         return (f"{self.ENTRY_POINT}"
-                f"{self.WS_IMPLEMENTATION.get_data(flow, kwargs)}")
+                f"{self.WS_IMPLEMENTATION.get_data(flow, **kwargs)}")
 
 
     def get_dsd_url(self, resources = None, **kwargs) -> str:
@@ -59,9 +59,15 @@ class SdmxWebServiceConnection(ABC):
                 f"{self.WS_IMPLEMENTATION.get_dsds(resources = resources, **kwargs)}")
 
 
-    def get_data(self, **kwargs):
+    def get_constraints_url(self, flow, **kwargs) -> str:
+        """Returns the URL to get the constraints"""
+        return (f"{self.ENTRY_POINT}"
+                f"{self.WS_IMPLEMENTATION.get_constraints(flow, **kwargs)}")
+
+
+    def get_data(self, flow, **kwargs):
         """Returns a message with the data"""
-        url = self.get_data_url(kwargs)
+        url = self.get_data_url(flow, **kwargs)
         message = read_sdmx(url, validate=False)
         return message
 
@@ -72,12 +78,17 @@ class SdmxWebServiceConnection(ABC):
         message = read_sdmx(url, validate=False)
         return message
 
-    def get_dataflow(self, **kwargs):
+    def get_data_flow(self, flow, **kwargs):
         "Returns a message with the dataflow"
-        url = self.get_data_flow_url(kwargs)
+        url = self.get_data_flow_url(flow, **kwargs)
         message = read_sdmx(url, validate=False)
         return message
 
+    def get_constraints(self, **kwargs):
+        """Returns a message with the constraints"""
+        url = self.get_constraints_url(kwargs)
+        message = read_sdmx(url, validate=False)
+        return message
 
     @staticmethod
     def get_sdmxthon_code(url):
