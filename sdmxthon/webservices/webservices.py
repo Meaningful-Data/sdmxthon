@@ -5,6 +5,8 @@
 
 from abc import ABC
 
+import pandas as pd
+
 from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.definitions import DataFlowDefinition
 from sdmxthon.parsers.read import read_xml
@@ -69,6 +71,7 @@ class SdmxWebServiceConnection(ABC):
     def get_data(self, flow, **kwargs):
         """Returns a message with the data"""
         url = self.get_data_url(flow, **kwargs)
+        print(url)
         message = read_sdmx(url, validate=False)
         return message
 
@@ -89,6 +92,54 @@ class SdmxWebServiceConnection(ABC):
         url = self.get_constraints_url(kwargs)
         message = read_sdmx(url, validate=False)
         return message
+
+    def get_pandas_with_names(self, flow, **kwargs):
+        """Returns a Pandas DataFrame with the data"""
+        def _create_codelist_dataframe(codelist, concept_name):
+            codelist_list = []
+            for id, code in codelist.items.items():
+                item = {'id': id}
+                for lang_code, strings in code.name.items():
+                    item[f"{concept_name}-{lang_code}"] = strings['content']
+                codelist_list.append(item)
+            
+            return pd.DataFrame(codelist_list)
+
+        def _generate_insight_dict(metadata_payload):
+            result = {}
+            codelists = metadata_payload['Codelists']
+            structure = metadata_payload['DataStructures']
+            if len(structure) !=  1:
+                raise Exception('One structure expected')
+            structure = list(structure.values())[0]
+            for id, component in structure.dimension_descriptor.components.items():
+                codelist=component.representation.codelist
+                if codelist:
+                    codelist = _create_codelist_dataframe(codelist, component.id)
+                result[id] = {'name': component.concept_identity.name, 'codelist': codelist}
+            return result
+
+
+        def _generate_final_df_and_concepts_name(data, metadata_payload):
+            insight_dict = _generate_insight_dict(metadata_payload)
+
+            concepts_names = {}
+            for code, component in insight_dict.items():
+                concepts_names[code] = component['name']
+                if component['codelist'] is not None:
+                    data = data.merge(component['codelist'], left_on=code, right_on='id', how='inner')
+                    data.drop(columns=['id_x', 'id_y'], inplace=True, errors='ignore')
+            data.to_csv('data.csv')
+            return data, concepts_names
+
+        metadata = self.get_data_flow(flow, references='descendants')
+        message = self.get_data(flow, **kwargs)
+        data = list(message.payload.values())[0].data
+        df, concepts_name = _generate_final_df_and_concepts_name(data, metadata.payload)
+
+        df.to_csv('data.csv')
+
+        return df, concepts_name
 
     @staticmethod
     def get_sdmxthon_code(url):
