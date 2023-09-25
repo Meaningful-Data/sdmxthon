@@ -59,6 +59,8 @@ DSD = 'DataStructure'
 DSD_COMPS = 'DataStructureComponents'
 CON_ID = 'ConceptIdentity'
 CON_ID_LOW = 'concept_identity'
+CON_ROLE = 'ConceptRole'
+CON_ROLE_LOW = 'concept_role'
 # Dimension
 DIM_LIST = 'DimensionList'
 DIM_LIST_LOW = 'dimension_list'

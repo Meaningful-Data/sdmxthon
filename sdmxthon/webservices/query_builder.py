@@ -110,12 +110,54 @@ class SdmxWs2p0(SdmxWebservice):
 
         return base_query + params
 
-    def get_data(self, flow, key=None, provider=None, start_period=None,
+    def get_data(self, dataflow_id, provider=None, version=None,
+                 key=None,
+                 start_period=None,
                  end_period=None, updated_after=None,
                  first_n_observations=None, last_n_observations=None,
                  dimension_at_observation=None,
                  detail=None, include_history=None):
-        raise NotImplementedError("get_data not implemented for SDMX 2.0")
+        base_query = f"/data/dataflow/{provider}/{dataflow_id}/{version}"
+
+        base_query += f"/{key}" if key else ""
+
+        params = ""
+        if start_period:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}startPeriod={start_period}"
+        if end_period:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}endPeriod={end_period}"
+        if updated_after:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}updatedAfter={updated_after}"
+        if first_n_observations:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}firstNObservations={first_n_observations}"
+        if last_n_observations:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}lastNObservations={last_n_observations}"
+        if dimension_at_observation:
+            initial = "&" if "?" in params else "?"
+            params += (f"{initial}dimensionAtObservation="
+                       f"{dimension_at_observation}")
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+        if include_history:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}includeHistory={include_history}"
+
+        return base_query + params
+
+    def get_constraints(self, flow, key=None, provider=None, component_id=None,
+                        mode=None, references=None, start_period=None,
+                        end_period=None, updated_after=None):
+        pass
+
+    def get_dsds(self, resources, agency_id, version, references=None,
+                 detail=None):
+        pass
 
 
 class SdmxWs1(SdmxWebservice):
@@ -299,24 +341,15 @@ class QueryBuilder:
             agency_id, resources, version,
             references, detail)
 
-    def get_data(self, flow, key=None, provider=None, start_period=None,
-                 end_period=None, updated_after=None,
-                 first_n_observations=None, last_n_observations=None,
-                 dimension_at_observation=None,
-                 detail=None, include_history=None):
+    def get_data(self, flow, provider=None, detail=None, **kwargs):
         """Returns the data query for the WS Implementation"""
 
         provider = self.id_builder(provider)
         if detail:
             self._ws_implementation.validate_data_detail(detail)
 
-        return self._ws_implementation.get_data(flow, key, provider,
-                                                start_period, end_period,
-                                                updated_after,
-                                                first_n_observations,
-                                                last_n_observations,
-                                                dimension_at_observation,
-                                                detail, include_history)
+        return self._ws_implementation.get_data(flow, provider=provider,
+                                                detail=detail, **kwargs)
 
     def get_constraints(self, flow, key=None, provider=None, component_id=None,
                         mode=None, references=None, start_period=None,

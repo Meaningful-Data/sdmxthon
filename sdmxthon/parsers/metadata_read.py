@@ -29,7 +29,8 @@ from sdmxthon.utils.parsing_words import ORGS, AGENCIES, AGENCY, ID, \
     URL, CON_ID_LOW, PARENT, GROUP_DIM_LOW, GROUP_DIM, DIM_REF, DF, \
     STRUCTURE, STR_URL, STR_URL_LOW, SER_URL, SER_URL_LOW, CONSTRAINTS, \
     CON_CONS, CONS_ATT, DATA_KEY_SET, DATA_KEY_SET_LOW, CUBE_REGION, \
-    KEY_VALUE, KEY, VALUE, TYPE, INCLUDED, INCLUDE, CONTENT_REGION
+    KEY_VALUE, KEY, VALUE, TYPE, INCLUDED, INCLUDE, CONTENT_REGION, CON_ROLE, \
+    CON_ROLE_LOW
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
@@ -343,6 +344,9 @@ def format_component(json_comp, comp) -> Component:
         json_comp[REL_TO] = format_relationship(json_comp[ATT_REL],
                                                 att_name=json_comp[ID])
         del json_comp[ATT_REL]
+    if CON_ROLE in json_comp:
+        json_comp[CON_ROLE_LOW] = None
+        del json_comp[CON_ROLE]
     json_comp = format_id(json_comp)
     json_comp = format_annotations(json_comp)
 

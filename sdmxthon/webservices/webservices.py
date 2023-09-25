@@ -74,7 +74,7 @@ class SdmxWebServiceConnection(ABC):
 
     def get_dsd(self, **kwargs):
         """Returns a message with the dsd"""
-        url = self.get_dsd_url(kwargs)
+        url = self.get_dsd_url(**kwargs)
         message = read_sdmx(url, validate=False)
         return message
 
@@ -163,44 +163,22 @@ class IloWs(SdmxWebServiceConnection):
     ENTRY_POINT = 'https://www.ilo.org/sdmx/rest'
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
 
-# class OecdWs(SdmxWebServiceConnection):
-#     """Implements the connection to the ILO SDMX web service"""
-#     AGENCY_ID = 'OECD'
-#     ENTRY_POINT = 'https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/'
-#     WS_IMPLEMENTATION = None
 
-# def get_data_url(self, flow, start_period=None,
-#                  end_period=None, updated_after=None,
-#                  first_n_observations=None,
-#                  last_n_observations=None, ) -> str:
-#     """OCDE specific implementation"""
-#
-#     params = ""
-#     if start_period:
-#         initial = "&" if "?" in params else "?"
-#         params += f"{initial}startPeriod={start_period}"
-#     if end_period:
-#         initial = "&" if "?" in params else "?"
-#         params += f"{initial}endPeriod={end_period}"
-#     if updated_after:
-#         initial = "&" if "?" in params else "?"
-#         params += f"{initial}updatedAfter={updated_after}"
-#     if first_n_observations:
-#         initial = "&" if "?" in params else "?"
-#         params += f"{initial}firstNObservations={first_n_observations}"
-#     if last_n_observations:
-#         initial = "&" if "?" in params else "?"
-#         params += f"{initial}lastNObservations={last_n_observations}"
-#
-#     return f"{self.ENTRY_POINT}/data/{flow}/" + params
-#
-# def get_data_flow_url(self, flow=None, agency_id=None,
-#                       version=None, references=None) -> str:
-#
-#     version = version if version else "latest"
-#     agency_id = agency_id if agency_id else "all"
-#
-#     references_query = f"?references={references}" if references else ""
-#
-#     return (f"{self.ENTRY_POINT}/dataflow/{agency_id}/{flow}/{version}" +
-#             references_query)
+class ImfWs(SdmxWebServiceConnection):
+    """Implements the connection to the IMF SDMX web service"""
+    AGENCY_ID = 'IMF'
+    ENTRY_POINT = 'http://dataservices.imf.org/REST/SDMX_XML'
+
+
+class OecdWs(SdmxWebServiceConnection):
+    """Implements the connection to the ILO SDMX web service"""
+    AGENCY_ID = 'OECD'
+    ENTRY_POINT = 'https://sdmx.oecd.org/public/rest'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+
+
+class OecdWs2(SdmxWebServiceConnection):
+    """Implements the connection to the ILO SDMX web service"""
+    AGENCY_ID = 'OECD'
+    ENTRY_POINT = 'https://sdmx.oecd.org/public/rest/v2'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs2p0())

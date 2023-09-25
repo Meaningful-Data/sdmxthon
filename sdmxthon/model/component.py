@@ -224,6 +224,7 @@ class Dimension(Component):
     def __init__(self, id_: str = None, uri: str = None, urn: str = None,
                  annotations=None, local_representation: Representation = None,
                  concept_identity: Concept = None,
+                 concept_role: str = None,
                  position: int = None):
         super(Dimension, self). \
             __init__(id_=id_, uri=uri, urn=urn,
