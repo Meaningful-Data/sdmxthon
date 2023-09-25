@@ -97,8 +97,9 @@ class SdmxWs2p0(SdmxWebservice):
                        version=None, references=None, detail=None) -> str:
         resources = resources if resources else "all"
         version = version if version else "latest"
+        agency_id = agency_id if agency_id else "all"
 
-        base_query = f"dataflow/{agency_id}/{resources}/{version}"
+        base_query = f"/structure/dataflow/{agency_id}/{resources}/{version}"
 
         params = ""
         if references:
@@ -117,7 +118,8 @@ class SdmxWs2p0(SdmxWebservice):
                  first_n_observations=None, last_n_observations=None,
                  dimension_at_observation=None,
                  detail=None, include_history=None):
-        base_query = f"/data/dataflow/{provider}/{dataflow_id}/{version}"
+        base_query = f"/data/dataflow/{provider}/{dataflow_id}"
+        base_query += f"/{version}" if version else ""
 
         base_query += f"/{key}" if key else ""
 

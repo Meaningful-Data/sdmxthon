@@ -137,4 +137,8 @@ def get_supported_agencies():
         'BIS': webservices.BisWs,
         'ECB': webservices.EcbWs,
         'ESTAT': webservices.EuroStatWs,
-        'ILO': webservices.IloWs}
+        'ILO': webservices.IloWs,
+        'OECD': webservices.OecdWs,
+        'OECDv2': webservices.OecdWs2,
+        'UNICEF': webservices.UnicefWs,
+    }

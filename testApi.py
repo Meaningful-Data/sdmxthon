@@ -36,7 +36,9 @@ def main():
     dataflow_id = 'BRAZIL_CO'
     agency_id = 'BRAZIL_CO'
 
-    print(ws.get_data_url(dataflow_id, last_n_observations=1))
+    print(ws.get_all_dataflows())
+
+    # print(ws.get_data_url(dataflow_id, last_n_observations=1))
     # print(ws.get_data_flow(dataflow_id, agency_id=agency_id, references='descendants').content)
     # data = ws.get_data(dataflow_id, provider=agency_id, version=version,
     #                    last_n_observations=1)

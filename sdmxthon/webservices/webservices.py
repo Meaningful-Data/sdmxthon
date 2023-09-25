@@ -24,7 +24,7 @@ class SdmxWebServiceConnection(ABC):
     def get_all_dataflows(self):
         """Returns a list of all dataflows"""
         url = (f"{self.ENTRY_POINT}"
-               f"{self.WS_IMPLEMENTATION.get_data_flows(self.AGENCY_ID)}")
+               f"{self.WS_IMPLEMENTATION.get_data_flows()}")
         message = read_xml(url, validate=False)
         dataflows = message['Dataflows'].values()
         list_dataflows = []
@@ -182,6 +182,10 @@ class OecdWs2(SdmxWebServiceConnection):
     AGENCY_ID = 'OECD'
     ENTRY_POINT = 'https://sdmx.oecd.org/public/rest/v2'
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs2p0())
+
+    def get_all_dataflows(self):
+        """Not supported by v2, goes to v1"""
+        return OecdWs().get_all_dataflows()
 
 
 class UnicefWs(SdmxWebServiceConnection):
