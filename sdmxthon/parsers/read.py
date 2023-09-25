@@ -24,6 +24,10 @@ def parse_sdmx(result):
         global_mode = STRSPE
     elif GENERIC in result:
         global_mode = GENERIC
+    elif 'Error' in result:
+        if 'ErrorMessage' in result['Error']:
+            raise Exception(result['Error']['ErrorMessage'])
+        raise Exception(result['Error'])
     else:
         global_mode = STRUCTURE
 

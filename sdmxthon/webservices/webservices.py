@@ -164,10 +164,10 @@ class IloWs(SdmxWebServiceConnection):
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
 
 
-class ImfWs(SdmxWebServiceConnection):
-    """Implements the connection to the IMF SDMX web service"""
-    AGENCY_ID = 'IMF'
-    ENTRY_POINT = 'http://dataservices.imf.org/REST/SDMX_XML'
+# class ImfWs(SdmxWebServiceConnection):
+#     """Implements the connection to the IMF SDMX web service"""
+#     AGENCY_ID = 'IMF'
+#     ENTRY_POINT = 'http://dataservices.imf.org/REST/SDMX_XML'
 
 
 class OecdWs(SdmxWebServiceConnection):
@@ -182,3 +182,10 @@ class OecdWs2(SdmxWebServiceConnection):
     AGENCY_ID = 'OECD'
     ENTRY_POINT = 'https://sdmx.oecd.org/public/rest/v2'
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs2p0())
+
+
+class UnicefWs(SdmxWebServiceConnection):
+    """Implements the connection to the ILO SDMX web service"""
+    AGENCY_ID = 'UNICEF'
+    ENTRY_POINT = 'https://sdmx.data.unicef.org/ws/public/sdmxapi/rest'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
