@@ -164,12 +164,6 @@ class IloWs(SdmxWebServiceConnection):
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
 
 
-# class ImfWs(SdmxWebServiceConnection):
-#     """Implements the connection to the IMF SDMX web service"""
-#     AGENCY_ID = 'IMF'
-#     ENTRY_POINT = 'http://dataservices.imf.org/REST/SDMX_XML'
-
-
 class OecdWs(SdmxWebServiceConnection):
     """Implements the connection to the ILO SDMX web service"""
     AGENCY_ID = 'OECD'

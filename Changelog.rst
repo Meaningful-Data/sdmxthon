@@ -2,6 +2,17 @@
 Changelog
 #########
 
+2.3.2 (2023-09-26)
+----------------
+**Added**
+  - Webservices and Data Discovery for OECD (v1 and v2) and UNICEF
+
+**Changes**
+
+**Bugfixes**
+  - Fixed bug on ConceptRole on Dimension
+
+
 2.3.1 (2023-09-15)
 ----------------
 **Added**
