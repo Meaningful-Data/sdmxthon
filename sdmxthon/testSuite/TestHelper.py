@@ -60,7 +60,7 @@ class TestHelper(unittest.TestCase):
                       reference_filename):
         dataset = self.load_input_data(sqlite_db, sqlite_filename, limit,
                                        meta_file)
-        errors = dataset.semantic_validation()
+        errors = dataset.structural_validation()
         reference_dict = self.load_reference_data(reference_filename)
         self.assert_equal_validation(
             json.loads(json.dumps(errors).replace("NaN", 'null')),
@@ -70,7 +70,7 @@ class TestHelper(unittest.TestCase):
                             pkl_filename):
         dataset = self.load_input_data(sqlite_db, sqlite_filename, limit,
                                        pkl_filename)
-        errors = dataset.semantic_validation()
+        errors = dataset.structural_validation()
         self.assert_equal_validation(errors, [])
 
     def metadata_test(self, reference_filename, path_to_data):
@@ -122,11 +122,11 @@ class TestHelper(unittest.TestCase):
                                os.path.join(self.pathToMetadata,
                                             metadata_filename))
         if reference_filename is None:
-            self.assertEqual(dataset.semantic_validation(), [])
+            self.assertEqual(dataset.structural_validation(), [])
         else:
             reference_dict = self.load_reference_data(reference_filename)
             self.assert_equal_validation(json.loads(
-                json.dumps(dataset.semantic_validation()).replace("NaN",
+                json.dumps(dataset.structural_validation()).replace("NaN",
                                                                   'null')),
                 reference_dict)
 
@@ -134,7 +134,7 @@ class TestHelper(unittest.TestCase):
         obj_ = Message(message_type=MessageTypeEnum.Metadata, payload={})
 
         result = obj_.to_xml('', prepared=datetime.fromisoformat(
-            '2021-04-08T17:27:28'), prettyprint=False).getvalue()
+            '2021-04-08T17:27:28'), prettyprint=False)
 
         self.assertEqual(self.load_reference_text(reference_filename), result)
 
@@ -151,7 +151,7 @@ class TestHelper(unittest.TestCase):
             dataset.set_dimension_at_observation('TIME_PERIOD')
 
         result = dataset.to_xml(dtype, '', prepared=datetime.fromisoformat(
-            '2000-01-01T00:00:01'), prettyprint=False).getvalue()
+            '2000-01-01T00:00:01'), prettyprint=False)
 
         df = first_element_dict(
             get_pandas_df(BytesIO(bytes(result, encoding='UTF-8'))))
