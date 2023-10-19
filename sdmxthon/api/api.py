@@ -52,10 +52,12 @@ def get_datasets(data, path_to_metadata, validate=True,
                         validate=validate)
 
     for v in datasets:
-        if v in metadata['DataStructures']:
-            datasets[v].structure = metadata['DataStructures'][v]
-        elif v in metadata['Dataflows']:
-            datasets[v].dataflow = metadata['Dataflows'][v]
+        if 'DataStructures' in metadata:
+            if v in metadata['DataStructures']:
+                datasets[v].structure = metadata['DataStructures'][v]
+        if 'Dataflows' in metadata:
+            if v in metadata['Dataflows']:
+                datasets[v].dataflow = metadata['Dataflows'][v]
 
         if remove_empty_columns:
             datasets[v].data = drop_na_all(datasets[v].data)

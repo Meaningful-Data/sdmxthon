@@ -7,7 +7,7 @@ from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.utils.handlers import split_from_urn
 from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
-    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE, URN
+    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE, URN, DATASET_ID
 from sdmxthon.utils.xml_base import validate_doc, \
     process_string_to_read
 
@@ -62,14 +62,19 @@ def parse_sdmx(result):
                                     global_mode)
                 datasets[metadata[STRID]] = ds
         else:
+            dataset_id = None
+            if DATASET_ID in message[HEADER]:
+                dataset_id = message[HEADER][DATASET_ID]
             if SERIES in message[dataset_key]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[dataset_key][STRREF],
-                                                mode=SERIES)
+                                                mode=SERIES,
+                                                dataset_id=dataset_id)
             elif OBS in message[dataset_key]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[dataset_key][STRREF],
-                                                mode=OBS)
+                                                mode=OBS,
+                                                dataset_id=dataset_id)
             else:
                 if message[HEADER][STRUCTURE][DIM_OBS] == "AllDimensions":
                     mode = OBS
@@ -77,8 +82,10 @@ def parse_sdmx(result):
                     mode = SERIES
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[dataset_key][STRREF],
-                                                mode=mode)
+                                                mode=mode,
+                                                dataset_id=dataset_id)
             ds = create_dataset(message[dataset_key], metadata, global_mode)
+
             datasets[metadata[STRID]] = ds
 
     return datasets
@@ -131,7 +138,7 @@ def get_elements_from_structure(structure):
     return None, None, None
 
 
-def get_dataset_metadata(structure, dataset_ref, mode):
+def get_dataset_metadata(structure, dataset_ref, mode, dataset_id=None):
     if mode == SERIES and structure[DIM_OBS] == ALL_DIM:
         raise Exception
     elif mode == OBS and structure[DIM_OBS] != ALL_DIM:
@@ -139,6 +146,8 @@ def get_dataset_metadata(structure, dataset_ref, mode):
 
     if dataset_ref == structure[STRID]:
         agency_id, id_, version = get_elements_from_structure(structure)
+        if dataset_id is not None:
+            id_ = dataset_id
         if agency_id is not None:
             return {DIM_OBS: structure[DIM_OBS],
                     STRID: f"{agency_id}:{id_}({version})"}
@@ -146,4 +155,4 @@ def get_dataset_metadata(structure, dataset_ref, mode):
             return {DIM_OBS: structure[DIM_OBS],
                     STRID: f"{id_}({version})"}
     else:
-        raise Exception
+        raise Exception("Could not find structure reference")

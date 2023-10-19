@@ -24,6 +24,7 @@ STRID = 'structureID'
 DIM_OBS = 'dimensionAtObservation'
 ALL_DIM = "AllDimensions"
 REF = 'Ref'
+DATASET_ID = 'DataSetID'
 
 # Structures
 # Common
