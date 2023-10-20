@@ -1,0 +1,1324 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<m:Structure
+        xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+        xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+        xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+    <m:Header>
+        <m:ID>DF1605144905</m:ID>
+        <m:Test>false</m:Test>
+        <m:Prepared>2020-11-12T01:35:05.934Z</m:Prepared>
+        <m:Sender id="ESTAT"/>
+    </m:Header>
+    <m:Structures>
+        <s:Dataflows>
+            <s:Dataflow id="HLTH_RS_PRSHP1"
+                        urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:HLTH_RS_PRSHP1(1.0)"
+                        agencyID="ESTAT" version="1.0" isFinal="false">
+                <c:Annotations>
+                    <c:Annotation>
+                        <c:AnnotationTitle>DATASET</c:AnnotationTitle>
+                        <c:AnnotationType>DISSEMINATION_OBJECT_TYPE
+                        </c:AnnotationType>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>18676</c:AnnotationTitle>
+                        <c:AnnotationType>OBS_COUNT</c:AnnotationType>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>1980</c:AnnotationTitle>
+                        <c:AnnotationType>OBS_PERIOD_OVERALL_OLDEST
+                        </c:AnnotationType>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>2019</c:AnnotationTitle>
+                        <c:AnnotationType>OBS_PERIOD_OVERALL_LATEST
+                        </c:AnnotationType>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>2020-07-10T11:00:00+0200
+                        </c:AnnotationTitle>
+                        <c:AnnotationType>UPDATE_STRUCTURE</c:AnnotationType>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>2020-07-10T11:00:00+0200
+                        </c:AnnotationTitle>
+                        <c:AnnotationType>UPDATE_DATA</c:AnnotationType>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>Explanatory texts (metadata)
+                        </c:AnnotationTitle>
+                        <c:AnnotationType>ESMS_HTML</c:AnnotationType>
+                        <c:AnnotationURL>
+                            https://ec.europa.eu/eurostat/cache/metadata/en/hlth_res_esms.htm
+                        </c:AnnotationURL>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>Explanatory texts (metadata)
+                        </c:AnnotationTitle>
+                        <c:AnnotationType>ESMS_SDMX</c:AnnotationType>
+                        <c:AnnotationURL>
+                            https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&amp;file=metadata/hlth_res_esms.sdmx.zip
+                        </c:AnnotationURL>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationType>SOURCE_INSTITUTIONS
+                        </c:AnnotationType>
+                        <c:AnnotationText xml:lang="fr">Eurostat
+                        </c:AnnotationText>
+                        <c:AnnotationText xml:lang="en">Eurostat
+                        </c:AnnotationText>
+                        <c:AnnotationText xml:lang="de">Eurostat
+                        </c:AnnotationText>
+                    </c:Annotation>
+                </c:Annotations>
+                <c:Name xml:lang="en">Health personnel employed in hospital
+                </c:Name>
+                <c:Name xml:lang="fr">Personnel de santé employé par un
+                    hôpital
+                </c:Name>
+                <c:Name xml:lang="de">Krankenhauspersonal</c:Name>
+                <s:Structure>
+                    <Ref id="HLTH_RS_PRSHP1" version="7.0" agencyID="ESTAT"
+                         package="datastructure"
+                         class="DataStructure"/>
+                </s:Structure>
+            </s:Dataflow>
+        </s:Dataflows>
+        <s:Codelists>
+            <s:Codelist agencyID="ESTAT" id="GEO" isFinal="true"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ESTAT:GEO(1.5)"
+                        version="1.5"
+                        isPartial="true">
+                <c:Name xml:lang="en">Geopolitical entity (reporting)</c:Name>
+                <c:Name xml:lang="de">Geopolitische Meldeeinheit</c:Name>
+                <c:Name xml:lang="fr">Entité géopolitique (déclarante)</c:Name>
+                <s:Code id="BE"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).BE">
+                    <c:Name xml:lang="en">Belgium</c:Name>
+                    <c:Name xml:lang="de">Belgien</c:Name>
+                    <c:Name xml:lang="fr">Belgique</c:Name>
+                </s:Code>
+                <s:Code id="BG"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).BG">
+                    <c:Name xml:lang="en">Bulgaria</c:Name>
+                    <c:Name xml:lang="de">Bulgarien</c:Name>
+                    <c:Name xml:lang="fr">Bulgarie</c:Name>
+                </s:Code>
+                <s:Code id="CZ"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).CZ">
+                    <c:Name xml:lang="en">Czechia</c:Name>
+                    <c:Name xml:lang="de">Tschechien</c:Name>
+                    <c:Name xml:lang="fr">Tchéquie</c:Name>
+                </s:Code>
+                <s:Code id="DK"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).DK">
+                    <c:Name xml:lang="en">Denmark</c:Name>
+                    <c:Name xml:lang="de">Dänemark</c:Name>
+                    <c:Name xml:lang="fr">Danemark</c:Name>
+                </s:Code>
+                <s:Code id="DE"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).DE">
+                    <c:Name xml:lang="en">Germany (until 1990 former territory
+                        of the FRG)
+                    </c:Name>
+                    <c:Name xml:lang="de">Deutschland (bis 1990 früheres Gebiet
+                        der BRD)
+                    </c:Name>
+                    <c:Name xml:lang="fr">Allemagne (jusqu'en 1990, ancien
+                        territoire de la RFA)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="EE"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).EE">
+                    <c:Name xml:lang="en">Estonia</c:Name>
+                    <c:Name xml:lang="de">Estland</c:Name>
+                    <c:Name xml:lang="fr">Estonie</c:Name>
+                </s:Code>
+                <s:Code id="IE"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).IE">
+                    <c:Name xml:lang="en">Ireland</c:Name>
+                    <c:Name xml:lang="de">Irland</c:Name>
+                    <c:Name xml:lang="fr">Irlande</c:Name>
+                </s:Code>
+                <s:Code id="EL"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).EL">
+                    <c:Name xml:lang="en">Greece</c:Name>
+                    <c:Name xml:lang="de">Griechenland</c:Name>
+                    <c:Name xml:lang="fr">Grèce</c:Name>
+                </s:Code>
+                <s:Code id="ES"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).ES">
+                    <c:Name xml:lang="en">Spain</c:Name>
+                    <c:Name xml:lang="de">Spanien</c:Name>
+                    <c:Name xml:lang="fr">Espagne</c:Name>
+                </s:Code>
+                <s:Code id="FR"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).FR">
+                    <c:Name xml:lang="en">France</c:Name>
+                    <c:Name xml:lang="de">Frankreich</c:Name>
+                    <c:Name xml:lang="fr">France</c:Name>
+                </s:Code>
+                <s:Code id="HR"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).HR">
+                    <c:Name xml:lang="en">Croatia</c:Name>
+                    <c:Name xml:lang="de">Kroatien</c:Name>
+                    <c:Name xml:lang="fr">Croatie</c:Name>
+                </s:Code>
+                <s:Code id="IT"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).IT">
+                    <c:Name xml:lang="en">Italy</c:Name>
+                    <c:Name xml:lang="de">Italien</c:Name>
+                    <c:Name xml:lang="fr">Italie</c:Name>
+                </s:Code>
+                <s:Code id="CY"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).CY">
+                    <c:Name xml:lang="en">Cyprus</c:Name>
+                    <c:Name xml:lang="de">Zypern</c:Name>
+                    <c:Name xml:lang="fr">Chypre</c:Name>
+                </s:Code>
+                <s:Code id="LV"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).LV">
+                    <c:Name xml:lang="en">Latvia</c:Name>
+                    <c:Name xml:lang="de">Lettland</c:Name>
+                    <c:Name xml:lang="fr">Lettonie</c:Name>
+                </s:Code>
+                <s:Code id="LT"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).LT">
+                    <c:Name xml:lang="en">Lithuania</c:Name>
+                    <c:Name xml:lang="de">Litauen</c:Name>
+                    <c:Name xml:lang="fr">Lituanie</c:Name>
+                </s:Code>
+                <s:Code id="LU"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).LU">
+                    <c:Name xml:lang="en">Luxembourg</c:Name>
+                    <c:Name xml:lang="de">Luxemburg</c:Name>
+                    <c:Name xml:lang="fr">Luxembourg</c:Name>
+                </s:Code>
+                <s:Code id="HU"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).HU">
+                    <c:Name xml:lang="en">Hungary</c:Name>
+                    <c:Name xml:lang="de">Ungarn</c:Name>
+                    <c:Name xml:lang="fr">Hongrie</c:Name>
+                </s:Code>
+                <s:Code id="MT"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).MT">
+                    <c:Name xml:lang="en">Malta</c:Name>
+                    <c:Name xml:lang="de">Malta</c:Name>
+                    <c:Name xml:lang="fr">Malte</c:Name>
+                </s:Code>
+                <s:Code id="NL"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).NL">
+                    <c:Name xml:lang="en">Netherlands</c:Name>
+                    <c:Name xml:lang="de">Niederlande</c:Name>
+                    <c:Name xml:lang="fr">Pays-Bas</c:Name>
+                </s:Code>
+                <s:Code id="AT"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).AT">
+                    <c:Name xml:lang="en">Austria</c:Name>
+                    <c:Name xml:lang="de">Österreich</c:Name>
+                    <c:Name xml:lang="fr">Autriche</c:Name>
+                </s:Code>
+                <s:Code id="PL"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).PL">
+                    <c:Name xml:lang="en">Poland</c:Name>
+                    <c:Name xml:lang="de">Polen</c:Name>
+                    <c:Name xml:lang="fr">Pologne</c:Name>
+                </s:Code>
+                <s:Code id="PT"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).PT">
+                    <c:Name xml:lang="en">Portugal</c:Name>
+                    <c:Name xml:lang="de">Portugal</c:Name>
+                    <c:Name xml:lang="fr">Portugal</c:Name>
+                </s:Code>
+                <s:Code id="RO"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).RO">
+                    <c:Name xml:lang="en">Romania</c:Name>
+                    <c:Name xml:lang="de">Rumänien</c:Name>
+                    <c:Name xml:lang="fr">Roumanie</c:Name>
+                </s:Code>
+                <s:Code id="SI"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).SI">
+                    <c:Name xml:lang="en">Slovenia</c:Name>
+                    <c:Name xml:lang="de">Slowenien</c:Name>
+                    <c:Name xml:lang="fr">Slovénie</c:Name>
+                </s:Code>
+                <s:Code id="SK"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).SK">
+                    <c:Name xml:lang="en">Slovakia</c:Name>
+                    <c:Name xml:lang="de">Slowakei</c:Name>
+                    <c:Name xml:lang="fr">Slovaquie</c:Name>
+                </s:Code>
+                <s:Code id="FI"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).FI">
+                    <c:Name xml:lang="en">Finland</c:Name>
+                    <c:Name xml:lang="de">Finnland</c:Name>
+                    <c:Name xml:lang="fr">Finlande</c:Name>
+                </s:Code>
+                <s:Code id="UK"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).UK">
+                    <c:Name xml:lang="en">United Kingdom</c:Name>
+                    <c:Name xml:lang="de">Vereinigtes Königreich</c:Name>
+                    <c:Name xml:lang="fr">Royaume-Uni</c:Name>
+                </s:Code>
+                <s:Code id="IS"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).IS">
+                    <c:Name xml:lang="en">Iceland</c:Name>
+                    <c:Name xml:lang="de">Island</c:Name>
+                    <c:Name xml:lang="fr">Islande</c:Name>
+                </s:Code>
+                <s:Code id="LI"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).LI">
+                    <c:Name xml:lang="en">Liechtenstein</c:Name>
+                    <c:Name xml:lang="de">Liechtenstein</c:Name>
+                    <c:Name xml:lang="fr">Liechtenstein</c:Name>
+                </s:Code>
+                <s:Code id="NO"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).NO">
+                    <c:Name xml:lang="en">Norway</c:Name>
+                    <c:Name xml:lang="de">Norwegen</c:Name>
+                    <c:Name xml:lang="fr">Norvège</c:Name>
+                </s:Code>
+                <s:Code id="CH"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).CH">
+                    <c:Name xml:lang="en">Switzerland</c:Name>
+                    <c:Name xml:lang="de">Schweiz</c:Name>
+                    <c:Name xml:lang="fr">Suisse</c:Name>
+                </s:Code>
+                <s:Code id="ME"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).ME">
+                    <c:Name xml:lang="en">Montenegro</c:Name>
+                    <c:Name xml:lang="de">Montenegro</c:Name>
+                    <c:Name xml:lang="fr">Monténégro</c:Name>
+                </s:Code>
+                <s:Code id="MK"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).MK">
+                    <c:Name xml:lang="en">North Macedonia</c:Name>
+                    <c:Name xml:lang="de">Nordmazedonien</c:Name>
+                    <c:Name xml:lang="fr">Macédoine du Nord</c:Name>
+                </s:Code>
+                <s:Code id="AL"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).AL">
+                    <c:Name xml:lang="en">Albania</c:Name>
+                    <c:Name xml:lang="de">Albanien</c:Name>
+                    <c:Name xml:lang="fr">Albanie</c:Name>
+                </s:Code>
+                <s:Code id="RS"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).RS">
+                    <c:Name xml:lang="en">Serbia</c:Name>
+                    <c:Name xml:lang="de">Serbien</c:Name>
+                    <c:Name xml:lang="fr">Serbie</c:Name>
+                </s:Code>
+                <s:Code id="TR"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:GEO(1.5).TR">
+                    <c:Name xml:lang="en">Turkey</c:Name>
+                    <c:Name xml:lang="de">Türkei</c:Name>
+                    <c:Name xml:lang="fr">Turquie</c:Name>
+                </s:Code>
+            </s:Codelist>
+            <s:Codelist agencyID="ESTAT" id="UNIT" isFinal="true"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ESTAT:UNIT(7.0)"
+                        version="7.0"
+                        isPartial="true">
+                <c:Name xml:lang="en">Unit of measure</c:Name>
+                <c:Name xml:lang="de">Maßeinheit</c:Name>
+                <c:Name xml:lang="fr">Unité de mesure</c:Name>
+                <s:Code id="FTE"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:UNIT(7.0).FTE">
+                    <c:Name xml:lang="en">Full-time equivalent (FTE)</c:Name>
+                    <c:Name xml:lang="de">Vollzeitäquivalent (VZÄ)</c:Name>
+                    <c:Name xml:lang="fr">Equivalent temps plein (ETP)</c:Name>
+                </s:Code>
+                <s:Code id="FTE_HTHAB"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:UNIT(7.0).FTE_HTHAB">
+                    <c:Name xml:lang="en">Full time equivalent per hundred
+                        thousand inhabitants
+                    </c:Name>
+                    <c:Name xml:lang="de">Vollzeiteinheit pro hunderttausend
+                        Einwohner
+                    </c:Name>
+                    <c:Name xml:lang="fr">Equivalent temps plein par centaine
+                        de milliers d'habitants
+                    </c:Name>
+                </s:Code>
+                <s:Code id="HAB_HC"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:UNIT(7.0).HAB_HC">
+                    <c:Name xml:lang="en">Inhabitants per ... (head count)
+                    </c:Name>
+                    <c:Name xml:lang="de">Einwohner pro ... (Anzahl)</c:Name>
+                    <c:Name xml:lang="fr">Habitants par ... (dénombrement des
+                        effectifs)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="HAB_FTE"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:UNIT(7.0).HAB_FTE">
+                    <c:Name xml:lang="en">Inhabitants per ... (full time
+                        equivalent)
+                    </c:Name>
+                    <c:Name xml:lang="de">Einwohner pro ... (Vollzeiteinheit)
+                    </c:Name>
+                    <c:Name xml:lang="fr">Habitants par ... (équivalent temps
+                        plein)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="HC"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:UNIT(7.0).HC">
+                    <c:Name xml:lang="en">Head count</c:Name>
+                    <c:Name xml:lang="de">Anzahl</c:Name>
+                    <c:Name xml:lang="fr">Dénombrement des effectifs</c:Name>
+                </s:Code>
+                <s:Code id="HC_HTHAB"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:UNIT(7.0).HC_HTHAB">
+                    <c:Name xml:lang="en">Head count per hundred thousand
+                        inhabitants
+                    </c:Name>
+                    <c:Name xml:lang="de">Anzahl pro hunderttausend Einwohner
+                    </c:Name>
+                    <c:Name xml:lang="fr">Dénombrement des effectifs par
+                        centaine de milliers d'habitants
+                    </c:Name>
+                </s:Code>
+            </s:Codelist>
+            <s:Codelist agencyID="ESTAT" id="FREQ" isFinal="true"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ESTAT:FREQ(1.5)"
+                        version="1.5"
+                        isPartial="true">
+                <c:Name xml:lang="en">Time frequency</c:Name>
+                <c:Name xml:lang="de">Zeitliche Frequenz</c:Name>
+                <c:Name xml:lang="fr">Fréquence (relative au temps)</c:Name>
+                <s:Code id="A"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:FREQ(1.5).A">
+                    <c:Name xml:lang="en">Annual</c:Name>
+                    <c:Name xml:lang="de">Jährlich</c:Name>
+                    <c:Name xml:lang="fr">Annuel</c:Name>
+                </s:Code>
+            </s:Codelist>
+            <s:Codelist agencyID="ESTAT" id="ISCO08" isFinal="true"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ESTAT:ISCO08(1.0)"
+                        version="1.0"
+                        isPartial="true">
+                <c:Name xml:lang="en">International Standard Classification of
+                    Occupations 2008 (ISCO-08)
+                </c:Name>
+                <c:Name xml:lang="de">Internationale Standardklassifikation der
+                    Berufe 2008 (ISCO-08)
+                </c:Name>
+                <c:Name xml:lang="fr">Classification internationale type des
+                    professions 2008 (CITP-08)
+                </c:Name>
+                <s:Code id="OC221"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).OC221">
+                    <c:Name xml:lang="en">Medical doctors</c:Name>
+                    <c:Name xml:lang="de">Ärzte</c:Name>
+                    <c:Name xml:lang="fr">Médecins</c:Name>
+                </s:Code>
+                <s:Code id="OC222_3222"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).OC222_3222">
+                    <c:Name xml:lang="en">Nursing professionals and midwives
+                    </c:Name>
+                    <c:Name xml:lang="de">Qualifizierte Krankenschwestern und
+                        Hebammen
+                    </c:Name>
+                    <c:Name xml:lang="fr">Cadres infirmiers et de
+                        sages-femmes
+                    </c:Name>
+                </s:Code>
+                <s:Code id="OC3221"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).OC3221">
+                    <c:Name xml:lang="en">Nursing associate professionals
+                    </c:Name>
+                    <c:Name xml:lang="de">Nicht akademische
+                        Krankenpflegefachkräfte
+                    </c:Name>
+                    <c:Name xml:lang="fr">Personnel infirmier (niveau
+                        intermédiaire)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="OC5321"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).OC5321">
+                    <c:Name xml:lang="en">Health care assistants</c:Name>
+                    <c:Name xml:lang="de">Pflegehelfer</c:Name>
+                    <c:Name xml:lang="fr">Aides-soignants en institution
+                    </c:Name>
+                </s:Code>
+                <s:Code id="HOSP"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).HOSP">
+                    <c:Name xml:lang="en">Hospital employment</c:Name>
+                    <c:Name xml:lang="de">Beschäftigte im Krankenhaus</c:Name>
+                    <c:Name xml:lang="fr">Emploi à hôpital</c:Name>
+                </s:Code>
+                <s:Code id="OTH_SERV"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).OTH_SERV">
+                    <c:Name xml:lang="en">Other health service providers
+                        employed by hospital
+                    </c:Name>
+                    <c:Name xml:lang="de">Sonstiges im Krankenhaus
+                        beschäftigtes Personal
+                    </c:Name>
+                    <c:Name xml:lang="fr">Autre fournisseurs de service de
+                        santé employés par un hôpital
+                    </c:Name>
+                </s:Code>
+                <s:Code id="OTH_HOSP"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:ISCO08(1.0).OTH_HOSP">
+                    <c:Name xml:lang="en">Other staff employed by hospital
+                    </c:Name>
+                    <c:Name xml:lang="de">Sonstiges im Krankenhaus
+                        beschäftigtes Personal
+                    </c:Name>
+                    <c:Name xml:lang="fr">Autre personnels employés par un
+                        hôpital
+                    </c:Name>
+                </s:Code>
+            </s:Codelist>
+            <s:Codelist
+                    xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+                    xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+                    xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+                    agencyID="ESTAT"
+                    id="OBS_FLAG" isFinal="true"
+                    urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ESTAT:OBS_FLAG(1.5)"
+                    version="1.5">
+                <c:Name xml:lang="en">Observation status (Flag)</c:Name>
+                <c:Name xml:lang="de">Beobachtungswert</c:Name>
+                <c:Name xml:lang="fr">Valeur observée</c:Name>
+                <s:Code id="b"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).b">
+                    <c:Name xml:lang="en">break in time series</c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch</c:Name>
+                    <c:Name xml:lang="fr">rupture de série</c:Name>
+                </s:Code>
+                <s:Code id="bc"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bc">
+                    <c:Name xml:lang="en">break in time series, confidential
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, vertraulich</c:Name>
+                    <c:Name xml:lang="fr">rupture de série, confidentiel
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bcd"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bcd">
+                    <c:Name xml:lang="en">break in time series, confidential,
+                        definition differs (see metadata)
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, vertraulich,
+                        abweichende Definition (siehe Metadaten)
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, confidentiel,
+                        définition différente (voir métadonnées)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bd"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bd">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata)
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten)
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bde"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bde">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), estimated
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), geschätzt
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), estimé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdep"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdep">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), estimated,
+                        provisional
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), geschätzt,
+                        vorläufig
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), estimé,
+                        provisoire
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bder"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bder">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), estimated, revised
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), geschätzt,
+                        revidiert
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), estimé, révisé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdf"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdf">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), forecast
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), Prognose
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), prévision
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdn"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdn">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), not significant
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), unbedeutend
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), non significatif
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdp"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdp">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), provisional
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), vorläufig
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), provisoire
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdps"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdps">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), provisional, Eurostat
+                        estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), vorläufig, Eurostat
+                        Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), provisoire,
+                        estimation Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdr"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdr">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), revised
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), revidiert
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), révisé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdrs"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdrs">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), revised, Eurostat
+                        estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), revidiert, Eurostat
+                        Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), révisé, estimation
+                        Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bds"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bds">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), Eurostat
+                        Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), estimation
+                        Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdu"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdu">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), low reliability
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), geringe
+                        Zuverlässigkeit
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), peu fiable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bdz"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bdz">
+                    <c:Name xml:lang="en">break in time series, definition
+                        differs (see metadata), not applicable
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, abweichende
+                        Definition (siehe Metadaten), nicht zutreffend
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, définition
+                        différente (voir métadonnées), non applicable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="be"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).be">
+                    <c:Name xml:lang="en">break in time series, estimated
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, geschätzt</c:Name>
+                    <c:Name xml:lang="fr">rupture de série, estimé</c:Name>
+                </s:Code>
+                <s:Code id="bep"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bep">
+                    <c:Name xml:lang="en">break in time series, estimated,
+                        provisional
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, geschätzt,
+                        vorläufig
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, estimé,
+                        provisoire
+                    </c:Name>
+                </s:Code>
+                <s:Code id="ber"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).ber">
+                    <c:Name xml:lang="en">break in time series, estimated,
+                        revised
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, geschätzt,
+                        revidiert
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, estimé, révisé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bf"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bf">
+                    <c:Name xml:lang="en">break in time series, forecast
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, Prognose</c:Name>
+                    <c:Name xml:lang="fr">rupture de série, prévision</c:Name>
+                </s:Code>
+                <s:Code id="bn"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bn">
+                    <c:Name xml:lang="en">break in time series, not
+                        significant
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, unbedeutend</c:Name>
+                    <c:Name xml:lang="fr">rupture de série, non significatif
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bp"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bp">
+                    <c:Name xml:lang="en">break in time series, provisional
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, vorläufig</c:Name>
+                    <c:Name xml:lang="fr">rupture de série, provisoire</c:Name>
+                </s:Code>
+                <s:Code id="bps"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bps">
+                    <c:Name xml:lang="en">break in time series, provisional,
+                        Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, vorläufig, Eurostat
+                        Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, provisoire,
+                        estimation Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bpu"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bpu">
+                    <c:Name xml:lang="en">break in time series, provisional,
+                        low reliability
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, vorläufig, geringe
+                        Zuverlässigkeit
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, provisoire, peu
+                        fiable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="br"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).br">
+                    <c:Name xml:lang="en">break in time series, revised
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, revidiert</c:Name>
+                    <c:Name xml:lang="fr">rupture de série, révisé</c:Name>
+                </s:Code>
+                <s:Code id="brs"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).brs">
+                    <c:Name xml:lang="en">break in time series, revised,
+                        Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, revidiert, Eurostat
+                        Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, révisé, estimation
+                        Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bs"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bs">
+                    <c:Name xml:lang="en">break in time series, Eurostat
+                        estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, Eurostat Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, estimation
+                        Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="bu"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bu">
+                    <c:Name xml:lang="en">break in time series, low
+                        reliability
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, geringe
+                        Zuverlässigkeit
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, peu fiable</c:Name>
+                </s:Code>
+                <s:Code id="bz"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).bz">
+                    <c:Name xml:lang="en">break in time series, not
+                        applicable
+                    </c:Name>
+                    <c:Name xml:lang="de">Zeitreihenbruch, nicht zutreffend
+                    </c:Name>
+                    <c:Name xml:lang="fr">rupture de série, non applicable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="c"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).c">
+                    <c:Name xml:lang="en">confidential</c:Name>
+                    <c:Name xml:lang="de">vertraulich</c:Name>
+                    <c:Name xml:lang="fr">confidentiel</c:Name>
+                </s:Code>
+                <s:Code id="cd"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).cd">
+                    <c:Name xml:lang="en">confidential, definition differs (see
+                        metadata)
+                    </c:Name>
+                    <c:Name xml:lang="de">vertraulich, abweichende Definition
+                        (siehe Metadaten)
+                    </c:Name>
+                    <c:Name xml:lang="fr">confidentiel, définition différente
+                        (voir métadonnées)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="d"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).d">
+                    <c:Name xml:lang="en">definition differs (see metadata)
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten)
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées)
+                    </c:Name>
+                </s:Code>
+                <s:Code id="de"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).de">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        estimated
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), geschätzt
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), estimé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dep"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dep">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        estimated, provisional
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), geschätzt, vorläufig
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), estimé, provisoire
+                    </c:Name>
+                </s:Code>
+                <s:Code id="der"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).der">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        estimated, revised
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), geschätzt, revidiert
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), estimé, révisé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="df"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).df">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        forecast
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), Prognose
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), prévision
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dn"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dn">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        not significant
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), unbedeutend
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), non significatif
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dp"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dp">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        provisional
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), vorläufig
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), provisoire
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dps"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dps">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        provisional, Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), vorläufig, Eurostat Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), provisoire, estimation Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dpu"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dpu">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        provisional, low reliability
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), vorläufig, geringe Zuverlässigkeit
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), provisoire, peu fiable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dr"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dr">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        revised
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), revidiert
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), révisé
+                    </c:Name>
+                </s:Code>
+                <s:Code id="drs"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).drs">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        revised, Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), revidiert, Eurostat Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), révisé, estimation Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="ds"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).ds">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), Eurostat Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), estimation Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="du"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).du">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        low reliability
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), geringe Zuverlässigkeit
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), peu fiable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="dz"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).dz">
+                    <c:Name xml:lang="en">definition differs (see metadata),
+                        not applicable
+                    </c:Name>
+                    <c:Name xml:lang="de">abweichende Definition (siehe
+                        Metadaten), nicht zutreffend
+                    </c:Name>
+                    <c:Name xml:lang="fr">définition différente (voir
+                        métadonnées), non applicable
+                    </c:Name>
+                </s:Code>
+                <s:Code id="e"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).e">
+                    <c:Name xml:lang="en">estimated</c:Name>
+                    <c:Name xml:lang="de">geschätzt</c:Name>
+                    <c:Name xml:lang="fr">estimé</c:Name>
+                </s:Code>
+                <s:Code id="ep"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).ep">
+                    <c:Name xml:lang="en">estimated, provisional</c:Name>
+                    <c:Name xml:lang="de">geschätzt, vorläufig</c:Name>
+                    <c:Name xml:lang="fr">estimé, provisoire</c:Name>
+                </s:Code>
+                <s:Code id="er"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).er">
+                    <c:Name xml:lang="en">estimated, revised</c:Name>
+                    <c:Name xml:lang="de">geschätzt, revidiert</c:Name>
+                    <c:Name xml:lang="fr">estimé, révisé</c:Name>
+                </s:Code>
+                <s:Code id="f"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).f">
+                    <c:Name xml:lang="en">forecast</c:Name>
+                    <c:Name xml:lang="de">Prognose</c:Name>
+                    <c:Name xml:lang="fr">prévision</c:Name>
+                </s:Code>
+                <s:Code id="n"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).n">
+                    <c:Name xml:lang="en">not significant</c:Name>
+                    <c:Name xml:lang="de">unbedeutend</c:Name>
+                    <c:Name xml:lang="fr">non significatif</c:Name>
+                </s:Code>
+                <s:Code id="p"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).p">
+                    <c:Name xml:lang="en">provisional</c:Name>
+                    <c:Name xml:lang="de">vorläufig</c:Name>
+                    <c:Name xml:lang="fr">provisoire</c:Name>
+                </s:Code>
+                <s:Code id="ps"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).ps">
+                    <c:Name xml:lang="en">provisional, Eurostat estimate
+                    </c:Name>
+                    <c:Name xml:lang="de">vorläufig, Eurostat Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">provisoire, estimation Eurostat
+                    </c:Name>
+                </s:Code>
+                <s:Code id="pu"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).pu">
+                    <c:Name xml:lang="en">provisional, low reliability</c:Name>
+                    <c:Name xml:lang="de">vorläufig, geringe Zuverlässigkeit
+                    </c:Name>
+                    <c:Name xml:lang="fr">provisoire, peu fiable</c:Name>
+                </s:Code>
+                <s:Code id="r"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).r">
+                    <c:Name xml:lang="en">revised</c:Name>
+                    <c:Name xml:lang="de">revidiert</c:Name>
+                    <c:Name xml:lang="fr">révisé</c:Name>
+                </s:Code>
+                <s:Code id="rs"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).rs">
+                    <c:Name xml:lang="en">revised, Eurostat estimate</c:Name>
+                    <c:Name xml:lang="de">revidiert, Eurostat Schätzung
+                    </c:Name>
+                    <c:Name xml:lang="fr">révisé, estimation Eurostat</c:Name>
+                </s:Code>
+                <s:Code id="s"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).s">
+                    <c:Name xml:lang="en">Eurostat estimate</c:Name>
+                    <c:Name xml:lang="de">Eurostat Schätzung</c:Name>
+                    <c:Name xml:lang="fr">estimation Eurostat</c:Name>
+                </s:Code>
+                <s:Code id="u"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).u">
+                    <c:Name xml:lang="en">low reliability</c:Name>
+                    <c:Name xml:lang="de">geringe Zuverlässigkeit</c:Name>
+                    <c:Name xml:lang="fr">peu fiable</c:Name>
+                </s:Code>
+                <s:Code id="z"
+                        urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ESTAT:OBS_FLAG(1.5).z">
+                    <c:Name xml:lang="en">not applicable</c:Name>
+                    <c:Name xml:lang="de">nicht zutreffend</c:Name>
+                    <c:Name xml:lang="fr">non applicable</c:Name>
+                </s:Code>
+            </s:Codelist>
+        </s:Codelists>
+        <s:Concepts>
+            <s:ConceptScheme agencyID="ESTAT" id="HLTH_RS_PRSHP1"
+                             isFinal="true"
+                             urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.ConceptScheme=ESTAT:HLTH_RS_PRSHP1(7.0)"
+                             version="7.0" isPartial="false">
+                <c:Name xml:lang="en">List of concepts for dataset
+                    'HLTH_RS_PRSHP1'
+                </c:Name>
+                <s:Concept id="freq"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).freq">
+                    <c:Name xml:lang="en">Time frequency</c:Name>
+                    <c:Name xml:lang="de">Zeitliche Frequenz</c:Name>
+                    <c:Name xml:lang="fr">Fréquence (relative au temps)
+                    </c:Name>
+                    <s:CoreRepresentation>
+                        <s:Enumeration>
+                            <Ref agencyID="ESTAT" class="Codelist" id="FREQ"
+                                 package="codelist" version="1.5"/>
+                        </s:Enumeration>
+                    </s:CoreRepresentation>
+                </s:Concept>
+                <s:Concept id="isco08"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).isco08">
+                    <c:Name xml:lang="en">International Standard Classification
+                        of Occupations 2008 (ISCO-08)
+                    </c:Name>
+                    <c:Name xml:lang="de">Internationale Standardklassifikation
+                        der Berufe 2008 (ISCO-08)
+                    </c:Name>
+                    <c:Name xml:lang="fr">Classification internationale type
+                        des professions 2008 (CITP-08)
+                    </c:Name>
+                    <s:CoreRepresentation>
+                        <s:Enumeration>
+                            <Ref agencyID="ESTAT" class="Codelist" id="ISCO08"
+                                 package="codelist" version="1.0"/>
+                        </s:Enumeration>
+                    </s:CoreRepresentation>
+                </s:Concept>
+                <s:Concept id="unit"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).unit">
+                    <c:Name xml:lang="en">Unit of measure</c:Name>
+                    <c:Name xml:lang="de">Maßeinheit</c:Name>
+                    <c:Name xml:lang="fr">Unité de mesure</c:Name>
+                    <s:CoreRepresentation>
+                        <s:Enumeration>
+                            <Ref agencyID="ESTAT" class="Codelist" id="UNIT"
+                                 package="codelist" version="7.0"/>
+                        </s:Enumeration>
+                    </s:CoreRepresentation>
+                </s:Concept>
+                <s:Concept id="geo"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).geo">
+                    <c:Name xml:lang="en">Geopolitical entity (reporting)
+                    </c:Name>
+                    <c:Name xml:lang="de">Geopolitische Meldeeinheit</c:Name>
+                    <c:Name xml:lang="fr">Entité géopolitique (déclarante)
+                    </c:Name>
+                    <s:CoreRepresentation>
+                        <s:Enumeration>
+                            <Ref agencyID="ESTAT" class="Codelist" id="GEO"
+                                 package="codelist" version="1.5"/>
+                        </s:Enumeration>
+                    </s:CoreRepresentation>
+                </s:Concept>
+                <s:Concept id="TIME_PERIOD"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).TIME_PERIOD">
+                    <c:Name xml:lang="en">Time</c:Name>
+                    <c:Name xml:lang="de">Zeit</c:Name>
+                    <c:Name xml:lang="fr">Temps</c:Name>
+                    <s:CoreRepresentation>
+                        <s:TextFormat textType="ObservationalTimePeriod"/>
+                    </s:CoreRepresentation>
+                </s:Concept>
+                <s:Concept id="OBS_FLAG"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_FLAG">
+                    <c:Name xml:lang="en">Observation status (Flag)</c:Name>
+                    <c:Name xml:lang="de">Beobachtungswert</c:Name>
+                    <c:Name xml:lang="fr">Valeur observée</c:Name>
+                    <s:CoreRepresentation>
+                        <s:Enumeration>
+                            <Ref agencyID="ESTAT" class="Codelist"
+                                 id="OBS_FLAG" package="codelist"
+                                 version="1.5"/>
+                        </s:Enumeration>
+                    </s:CoreRepresentation>
+                </s:Concept>
+                <s:Concept id="OBS_VALUE"
+                           urn="urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_VALUE">
+                    <c:Name xml:lang="en">Observation value</c:Name>
+                    <c:Name xml:lang="fr">Valeur observée</c:Name>
+                    <c:Name xml:lang="de">Beobachtungswert</c:Name>
+                </s:Concept>
+            </s:ConceptScheme>
+        </s:Concepts>
+        <s:DataStructures>
+            <s:DataStructure
+                    xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+                    xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+                    xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+                    agencyID="ESTAT"
+                    id="HLTH_RS_PRSHP1" isFinal="true"
+                    urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ESTAT:HLTH_RS_PRSHP1(7.0)"
+                    version="7.0">
+                <c:Annotations>
+                    <c:Annotation>
+                        <c:AnnotationTitle>OBS_FLAG</c:AnnotationTitle>
+                        <c:AnnotationType>DISSEMINATION_FLAG_SETTINGS
+                        </c:AnnotationType>
+                        <c:AnnotationURL/>
+                    </c:Annotation>
+                    <c:Annotation>
+                        <c:AnnotationTitle>time</c:AnnotationTitle>
+                        <c:AnnotationType>DISSEMINATION_TIME_DIMENSION_CODE
+                        </c:AnnotationType>
+                        <c:AnnotationURL/>
+                    </c:Annotation>
+                </c:Annotations>
+                <c:Name xml:lang="en">HLTH_RS_PRSHP1 data structure</c:Name>
+                <s:DataStructureComponents>
+                    <s:DimensionList id="DimensionDescriptor"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).DimensionDescriptor">
+                        <s:Dimension id="freq" position="1"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).freq">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept" id="freq"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:Enumeration>
+                                    <Ref agencyID="ESTAT" class="Codelist"
+                                         id="FREQ" package="codelist"
+                                         version="1.5"/>
+                                </s:Enumeration>
+                            </s:LocalRepresentation>
+                        </s:Dimension>
+                        <s:Dimension id="isco08" position="2"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).isco08">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept"
+                                     id="isco08"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:Enumeration>
+                                    <Ref agencyID="ESTAT" class="Codelist"
+                                         id="ISCO08" package="codelist"
+                                         version="1.0"/>
+                                </s:Enumeration>
+                            </s:LocalRepresentation>
+                        </s:Dimension>
+                        <s:Dimension id="unit" position="3"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).unit">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept" id="unit"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:Enumeration>
+                                    <Ref agencyID="ESTAT" class="Codelist"
+                                         id="UNIT" package="codelist"
+                                         version="7.0"/>
+                                </s:Enumeration>
+                            </s:LocalRepresentation>
+                        </s:Dimension>
+                        <s:Dimension id="geo" position="4"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).geo">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept" id="geo"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:Enumeration>
+                                    <Ref agencyID="ESTAT" class="Codelist"
+                                         id="GEO" package="codelist"
+                                         version="1.5"/>
+                                </s:Enumeration>
+                            </s:LocalRepresentation>
+                        </s:Dimension>
+                        <s:TimeDimension id="TIME_PERIOD" position="5"
+                                         urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=ESTAT:HLTH_RS_PRSHP1(7.0).TIME_PERIOD">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept"
+                                     id="TIME_PERIOD"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:TextFormat
+                                        textType="ObservationalTimePeriod"/>
+                            </s:LocalRepresentation>
+                        </s:TimeDimension>
+                    </s:DimensionList>
+                    <s:AttributeList id="AttributeDescriptor"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).AttributeDescriptor">
+                        <s:Attribute assignmentStatus="Conditional"
+                                     id="OBS_FLAG"
+                                     urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_FLAG">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept"
+                                     id="OBS_FLAG"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:Enumeration>
+                                    <Ref agencyID="ESTAT" class="Codelist"
+                                         id="OBS_FLAG" package="codelist"
+                                         version="1.5"/>
+                                </s:Enumeration>
+                            </s:LocalRepresentation>
+                            <s:AttributeRelationship>
+                                <s:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </s:PrimaryMeasure>
+                            </s:AttributeRelationship>
+                        </s:Attribute>
+                    </s:AttributeList>
+                    <s:MeasureList id="MeasureDescriptor"
+                                   urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).MeasureDescriptor">
+                        <s:PrimaryMeasure id="OBS_VALUE"
+                                          urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_VALUE">
+                            <s:ConceptIdentity>
+                                <Ref agencyID="ESTAT" class="Concept"
+                                     id="OBS_VALUE"
+                                     maintainableParentID="HLTH_RS_PRSHP1"
+                                     maintainableParentVersion="7.0"
+                                     package="conceptscheme"/>
+                            </s:ConceptIdentity>
+                            <s:LocalRepresentation>
+                                <s:TextFormat textType="Double"/>
+                            </s:LocalRepresentation>
+                        </s:PrimaryMeasure>
+                    </s:MeasureList>
+                </s:DataStructureComponents>
+            </s:DataStructure>
+        </s:DataStructures>
+    </m:Structures>
+</m:Structure>
