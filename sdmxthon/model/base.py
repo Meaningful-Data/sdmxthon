@@ -513,8 +513,8 @@ class VersionableArtefact(NameableArtefact):
 
 
 class MaintainableArtefact(VersionableArtefact):
-    """An abstract class to group together primary structural metadata artefacts
-       that are maintained by an Agency."""
+    """An abstract class to group together primary structural
+    metadata artefacts that are maintained by an Agency."""
 
     def __init__(self, id_: str = None, uri: str = None, urn=None,
                  annotations: List[Annotation] = None,

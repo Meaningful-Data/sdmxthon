@@ -17,7 +17,7 @@ options = {'process_namespaces': True,
            'attr_prefix': ''}
 
 
-def parse_sdmx(result):
+def parse_sdmx(result, use_dataset_id=False):
     datasets = dict()
 
     if STRSPE in result:
@@ -62,19 +62,15 @@ def parse_sdmx(result):
                                     global_mode)
                 datasets[metadata[STRID]] = ds
         else:
-            dataset_id = None
-            if DATASET_ID in message[HEADER]:
-                dataset_id = message[HEADER][DATASET_ID]
+
             if SERIES in message[dataset_key]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[dataset_key][STRREF],
-                                                mode=SERIES,
-                                                dataset_id=dataset_id)
+                                                mode=SERIES)
             elif OBS in message[dataset_key]:
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[dataset_key][STRREF],
-                                                mode=OBS,
-                                                dataset_id=dataset_id)
+                                                mode=OBS)
             else:
                 if message[HEADER][STRUCTURE][DIM_OBS] == "AllDimensions":
                     mode = OBS
@@ -82,16 +78,19 @@ def parse_sdmx(result):
                     mode = SERIES
                 metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
                                                 message[dataset_key][STRREF],
-                                                mode=mode,
-                                                dataset_id=dataset_id)
+                                                mode=mode)
             ds = create_dataset(message[dataset_key], metadata, global_mode)
 
-            datasets[metadata[STRID]] = ds
+            if use_dataset_id and DATASET_ID in message[HEADER]:
+                dataset_id = message[HEADER][DATASET_ID]
+                datasets[dataset_id] = ds
+            else:
+                datasets[metadata[STRID]] = ds
 
     return datasets
 
 
-def read_xml(infile, mode=None, validate=True):
+def read_xml(infile, mode=None, validate=True, use_dataset_id=False):
     infile = process_string_to_read(infile)
 
     if validate:
@@ -113,7 +112,7 @@ def read_xml(infile, mode=None, validate=True):
         elif mode not in ["Data", "Metadata"]:
             raise ValueError("Wrong mode")
 
-    datasets = parse_sdmx(result)
+    datasets = parse_sdmx(result, use_dataset_id)
     return datasets
 
 
@@ -138,7 +137,7 @@ def get_elements_from_structure(structure):
     return None, None, None
 
 
-def get_dataset_metadata(structure, dataset_ref, mode, dataset_id=None):
+def get_dataset_metadata(structure, dataset_ref, mode):
     if mode == SERIES and structure[DIM_OBS] == ALL_DIM:
         raise Exception
     elif mode == OBS and structure[DIM_OBS] != ALL_DIM:
@@ -146,8 +145,6 @@ def get_dataset_metadata(structure, dataset_ref, mode, dataset_id=None):
 
     if dataset_ref == structure[STRID]:
         agency_id, id_, version = get_elements_from_structure(structure)
-        if dataset_id is not None:
-            id_ = dataset_id
         if agency_id is not None:
             return {DIM_OBS: structure[DIM_OBS],
                     STRID: f"{agency_id}:{id_}({version})"}

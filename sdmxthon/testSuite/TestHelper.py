@@ -127,7 +127,8 @@ class TestHelper(unittest.TestCase):
             reference_dict = self.load_reference_data(reference_filename)
             self.assert_equal_validation(json.loads(
                 json.dumps(dataset.structural_validation()).replace("NaN",
-                                                                  'null')),
+                                                                    'null')
+            ),
                 reference_dict)
 
     def header_writing(self, reference_filename):

@@ -80,7 +80,8 @@ def get_pandas_df(data, validate=True, remove_empty_columns=True):
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    datasets = read_xml(data, "Data", validate=validate)
+    datasets = read_xml(data, "Data", validate=validate,
+                        use_dataset_id=True)
     if not remove_empty_columns:
         return {ds: datasets[ds].data for ds in datasets}
     else:
@@ -103,7 +104,8 @@ def xml_to_csv(data, output_path=None, validate=True,
 
     :return: A StringIO object if output_path is ''
     """
-    datasets = read_xml(data, mode="Data", validate=validate)
+    datasets = read_xml(data, mode="Data", validate=validate,
+                        use_dataset_id=True)
 
     if remove_empty_columns:
         for ds in datasets:
