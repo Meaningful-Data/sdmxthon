@@ -2,6 +2,15 @@
 Changelog
 #########
 
+2.4 (2023-10-23)
+----------------
+**Added**
+
+**Changes**
+  - Support for DatasetID as key on get_pandas_df and xml_to_csv results
+
+**Bugfixes**
+
 2.3.2 (2023-09-26)
 ----------------
 **Added**
