@@ -14,7 +14,9 @@ def load_reference_text(reference_filename, pathToReference):
     with open(os.path.join(pathToReference, reference_filename), 'r',
               encoding="utf-8") as f:
         reference_text = f.read()
-    return reference_text.replace('\n', '').replace("\\'", '\'')
+    reference_text = reference_text.replace('\n', '')
+    reference_text = reference_text.replace("\\'", '\'')
+    return reference_text
 
 
 # Extract and compare metadata
@@ -127,9 +129,10 @@ header_params = [('header_test.xml', 'header.txt')]
 @mark.parametrize("data_filename, reference_filename", header_params)
 # General test function for comparing header data
 def test_header_comparison(data_filename, reference_filename, reference_path):
+    prepared_time = datetime.fromisoformat('2021-04-08T17:27:28')
     obj_ = Message(message_type=MessageTypeEnum.Metadata, payload={})
     result = obj_.to_xml('',
-                         prepared=datetime.fromisoformat('2021-04-08T17:27:28'),
+                         prepared=prepared_time,
                          prettyprint=False)
     expected_result = load_reference_text(reference_filename, reference_path)
     assert expected_result == result

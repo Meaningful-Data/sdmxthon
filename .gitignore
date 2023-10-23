@@ -1,6 +1,7 @@
 ﻿.idea
 .settings
 .ipynb_checkpoints
+.pytest_cache
 /tokens/pypi.pypirc
 # Byte-compiled / optimized / DLL files
 **/__pycache__/

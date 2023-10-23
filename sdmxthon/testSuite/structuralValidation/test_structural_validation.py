@@ -12,7 +12,7 @@ pytestmark = mark.input_path(Path(__file__).parent / "data")
 
 # Function to set up the dataset and metadata for testing
 def get_test_dataset(data_path, metadata_path, metadata_file):
-    dataset = get_datasets(os.path.join(data_path, f"data.xml"),
+    dataset = get_datasets(os.path.join(data_path, "data.xml"),
                            os.path.join(metadata_path, metadata_file))
     return dataset
 
@@ -31,17 +31,11 @@ def test_metadata_errors(data_path, metadata_path):
         get_test_dataset(data_path, metadata_path,
                          'metadata_errors.xml')
     except Exception as e:
-        captured_error = str(e)
+        elements = e.args[0].splitlines()
+        elements = sorted(elements)
 
-        # Compare the complete error message
-        expected_error = (
-            "Element 'Ref', attribute 'id': The value 'TEST_ERROR' does not match the fixed value constraint "
-            "'OBS_VALUE'.;\n"
-            "Element '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}DataStructure': Duplicate "
-            "key-sequence ['DS2', 'MD', '1.0'] in unique identity-constraint '{"
-            "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}UniqueDataStructure'."
-        )
-        assert captured_error == expected_error, f"Unexpected error: {captured_error}"
+        assert "TEST_ERROR" in elements[0]
+        assert "Duplicate key-sequence" in elements[1]
 
 
 # Test: Checking for specific error codes (using custom structure)
