@@ -1,6 +1,7 @@
 ﻿.idea
 .settings
 .ipynb_checkpoints
+.pytest_cache
 /tokens/pypi.pypirc
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
@@ -14,3 +15,4 @@ Pipfile.lock
 /SDMXthon.egg-info/
 /testApi.py
 /xml_parsers_test.py
+/sdmxthon/testSuite/.coverage

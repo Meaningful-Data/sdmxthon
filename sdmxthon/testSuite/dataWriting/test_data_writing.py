@@ -2,30 +2,51 @@
 Data Writing Tests
 """
 import os
-import unittest
+from datetime import datetime
+from io import BytesIO
+from pathlib import Path
 
-from sdmxthon.testSuite import TestHelper
+import pandas as pd
+from pytest import mark
+
+from sdmxthon.api.api import read_sdmx, get_pandas_df
+from sdmxthon.model.dataset import Dataset
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import first_element_dict
+
+pytestmark = mark.input_path(Path(__file__).parent / "data")
+
+data_types_params = [
+    (MessageTypeEnum.GenericDataSet, False),
+    (MessageTypeEnum.GenericDataSet, True),
+    (MessageTypeEnum.StructureDataSet, False),
+    (MessageTypeEnum.StructureDataSet, True)
+]
 
 
-class DataWriting(TestHelper.TestHelper):
-    path = os.path.dirname(__file__)
-    pathToDB = os.path.join(os.path.join(path, "data"), "data_sample")
-    pathToMetadata = os.path.join(os.path.join(path, "data"), "metadata")
-    pathToReference = os.path.join(os.path.join(path, "data"), "reference")
+@mark.parametrize("data_type,series", data_types_params)
+def test_data_writing(data_type, series, data_path, metadata_path):
+    message = read_sdmx(os.path.join(metadata_path, 'metadata.xml'))
+    data_path = os.path.join(data_path, "df.json")
+    dataset = Dataset(data=pd.read_json(data_path, orient='records'),
+                      structure=message.payload['DataStructures']
+                      ['BIS:BIS_DER(1.0)'])
 
-    def test_1(self):
-        self.data_writing(MessageTypeEnum.GenericDataSet)
+    dataset.data = dataset.data.astype('str')
 
-    def test_2(self):
-        self.data_writing(MessageTypeEnum.GenericDataSet, series=True)
+    if series:
+        dataset.set_dimension_at_observation('TIME_PERIOD')
 
-    def test_3(self):
-        self.data_writing(MessageTypeEnum.StructureDataSet)
+    prepared_time = datetime.fromisoformat('2000-01-01T00:00:01')
 
-    def test_4(self):
-        self.data_writing(MessageTypeEnum.StructureDataSet, series=True)
+    result = dataset.to_xml(data_type, '',
+                            prepared=prepared_time,
+                            prettyprint=False)
 
+    df = first_element_dict(get_pandas_df(BytesIO(bytes(result,
+                                                        encoding='UTF-8'))))
 
-if __name__ == '__main__':
-    unittest.main(verbosity=1)
+    pd.testing.assert_frame_equal(
+        df.fillna('').replace('nan', ''),
+        dataset.data.replace('nan', ''),
+        check_like=True)

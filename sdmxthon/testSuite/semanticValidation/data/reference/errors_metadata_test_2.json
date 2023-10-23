@@ -1,9 +1,0 @@
-[
-  {
-    "Code": "MS01",
-    "ErrorLevel": "CRITICAL",
-    "ObjectID": null,
-    "ObjectType": "DSD",
-    "Message": "Not found any DSD in this file"
-  }
-]

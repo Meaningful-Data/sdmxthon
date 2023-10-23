@@ -2,37 +2,29 @@
 Metadata Equality Tests
 """
 import os
-import unittest
+from pathlib import Path
 
-from sdmxthon.testSuite import TestHelper
+from pytest import mark
 
+from sdmxthon.api.api import read_sdmx
 
-class MetadataEquality(TestHelper.TestHelper):
-    path = os.path.dirname(__file__)
-    pathToDB = os.path.join(os.path.join(path, "data"), "data_sample")
+pytestmark = mark.input_path(Path(__file__).parent / "data")
 
-    def test_1(self):
-        data = 'bis.xml'
-
-        self.metadata_equality(data)
-
-    def test_2(self):
-        data = 'estat.xml'
-
-        self.metadata_equality(data)
-
-    def test_3(self):
-        data = 'imf.xml'
-
-        self.metadata_equality(data)
-
-    def test_4(self):
-        data = 'wb.xml'
-        self.metadata_equality(data)
-
-    def test_6(self):
-        self.metadata_inequality()
+filenames = ["bis.xml", "estat.xml", "imf.xml", "wb.xml"]
 
 
-if __name__ == '__main__':
-    unittest.main(verbosity=1)
+# Test: Metadata equality
+@mark.parametrize("filename", filenames)
+def test_metadata_equality(filename, data_path):
+    obj_ = read_sdmx(os.path.join(data_path, filename))
+    obj_2 = read_sdmx(os.path.join(data_path, filename))
+
+    assert obj_2 == obj_
+
+
+# Test: Metadata inequality
+def test_metadata_inequality(data_path):
+    obj_ = read_sdmx(os.path.join(data_path, 'bis.xml'))
+    obj_2 = read_sdmx(os.path.join(data_path, 'wb.xml'))
+
+    assert obj_2 != obj_
