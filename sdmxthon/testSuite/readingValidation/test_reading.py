@@ -1,24 +1,19 @@
 import os
+from pathlib import Path
 
-import pytest
+from pytest import mark
 
 from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.message import Message
 
-
-# Fixture to provide the path to the data files
-@pytest.fixture
-def file_reader():
-    path = os.path.dirname(__file__)
-    pathToDB = os.path.join(os.path.join(path, "data"), "data_sample")
-    return pathToDB
+pytestmark = mark.input_path(Path(__file__).parent / "data")
 
 
 # Test reading and validation of SDMX files
-@pytest.mark.parametrize("filename", ['gen_all.xml', 'gen_ser.xml',
-                                      'str_all.xml', 'str_ser.xml'])
-def test_reading_validation(file_reader, filename):
-    file_path = os.path.join(file_reader, filename)
+@mark.parametrize("filename", ['gen_all.xml', 'gen_ser.xml',
+                               'str_all.xml', 'str_ser.xml'])
+def test_reading_validation(data_path, filename):
+    file_path = os.path.join(data_path, filename)
     result = read_sdmx(file_path, validate=True)
     assert result is not None
     data = result.content['BIS:BIS_DER(1.0)'].data
@@ -33,9 +28,9 @@ def test_reading_validation(file_reader, filename):
 
 
 # Test reading of dataflow SDMX file
-def test_dataflow(file_reader):
+def test_dataflow(data_path):
     filename = 'dataflow.xml'
-    file_path = os.path.join(file_reader, filename)
+    file_path = os.path.join(data_path, filename)
     result = read_sdmx(file_path, validate=True)
     data_dataflow = result.content['BIS:WEBSTATS_DER_DATAFLOW(1.0)'].data
     num_rows = len(data_dataflow)
