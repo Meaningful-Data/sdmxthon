@@ -1,0 +1,29 @@
+name: documentation
+
+on:
+  push:
+    branches: [ "master" , "v2.X" ]
+permissions:
+  contents: write
+
+jobs:
+  generate-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - name: Install dependencies
+        run: |
+          pip install sphinx sphinx_rtd_theme myst_parser
+      - name: Sphinx build
+        run: |
+          cd sdmxthon
+          sphinx-build docs docs/_build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        with:
+          publish_branch: master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: sdmxthon/docs/_build/
+          force_orphan: true

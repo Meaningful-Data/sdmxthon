@@ -15,12 +15,18 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
 
-# -- Project information -----------------------------------------------------
 
-project = 'sdmxthon'
-copyright = '2023, MeaningfulData'
-author = 'MeaningfulData'
-version = '2.1'
+# -- Project information -----------------------------------------------------
+about = {}
+with open('../__version__.py', 'r') as f:
+    exec(f.read(), about)
+
+project = about['project']
+description = about['description']
+url = about['url']
+version = about['version']
+author = about['author']
+author_email = about['author_email']
 
 # -- General configuration ---------------------------------------------------
 
