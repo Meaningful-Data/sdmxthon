@@ -5,7 +5,7 @@ name: Python testing
 
 on:
   push:
-    branches: [ "master" , "v2.X" ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
