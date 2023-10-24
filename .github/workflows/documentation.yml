@@ -15,23 +15,13 @@ jobs:
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme myst_parser
-      - name: Get PythonPath and PWD
-        run: |
-          echo "PWD=$(pwd)"
-          echo "PYTHONPATH=$PYTHONPATH"
       - name: Sphinx build
         run: |
-          cd sdmxthon
-          echo "PWD=$(pwd)"
-          echo "FILES=$(find . -type f -printf "%f\n)"
-          sphinx-build docs docs/_build
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          # Upload entire repository
-          path: 'sdmxthon/docs/_build/'
+          sphinx-build sdmxthon/docs _build
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _build
+          force_orphan: true
