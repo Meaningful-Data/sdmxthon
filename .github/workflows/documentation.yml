@@ -15,9 +15,15 @@ jobs:
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme myst_parser
+      - name: Get PythonPath and PWD
+        run: |
+          echo "PWD=$(pwd)"
+          echo "PYTHONPATH=$PYTHONPATH"
       - name: Sphinx build
         run: |
           cd sdmxthon
+          echo "PWD=$(pwd)"
+          echo "FILES=$(find . -type f -printf "%f\n)"
           sphinx-build docs docs/_build
       - name: Setup Pages
         uses: actions/configure-pages@v3
