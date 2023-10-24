@@ -2,7 +2,7 @@ name: documentation
 
 on:
   push:
-    branches: [ "master", "v2.X" ]
+    branches: [ "master" ]
 permissions:
   contents: write
 
