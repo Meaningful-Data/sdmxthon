@@ -9,7 +9,7 @@ permissions:
 jobs:
   generate-documentation:
     runs-on: ubuntu-latest
-    environment: github-pages
+    environment: gh-pages
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
@@ -27,5 +27,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.AUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: _build
+          force_orphan: true
