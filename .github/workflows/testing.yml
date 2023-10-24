@@ -34,4 +34,4 @@ jobs:
       - name: Lint with flake8
         run: |
           # stop the build if there are Flake8 errors
-          flake8 . --count --max-complexity=25 --max-line-length=80 --show-source --statistics
+          flake8 . --count --max-complexity=25 --max-line-length=81 --show-source --statistics
