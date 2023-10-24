@@ -12,7 +12,7 @@ jobs:
   generate-documentation:
     runs-on: ubuntu-latest
     environment:
-      name: gh-pages
+      name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
     steps:
       - uses: actions/checkout@v3
