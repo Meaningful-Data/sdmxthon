@@ -27,6 +27,7 @@ url = about['url']
 version = about['version']
 author = about['author']
 author_email = about['author_email']
+copyright = about['copyright']
 
 # -- General configuration ---------------------------------------------------
 
