@@ -9,6 +9,7 @@ permissions:
 jobs:
   generate-documentation:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
@@ -28,4 +29,3 @@ jobs:
         with:
           personal_token: ${{ secrets.AUTH_TOKEN }}
           publish_dir: _build
-          force_orphan: true
