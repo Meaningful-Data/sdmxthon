@@ -2,7 +2,7 @@
 Item
 ####
 
-.. autoclass:: model.itemScheme.Item
+.. autoclass:: sdmxthon.model.itemScheme.Item
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children
@@ -11,7 +11,7 @@ Item
 ****
 Code
 ****
-.. autoclass:: model.itemScheme.Code()
+.. autoclass:: sdmxthon.model.itemScheme.Code()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, factory, build_children, childs, parent, scheme
@@ -20,7 +20,7 @@ Code
 *******
 Concept
 *******
-.. autoclass:: model.itemScheme.Concept
+.. autoclass:: sdmxthon.model.itemScheme.Concept
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, factory, build_children, childs, parent, scheme
@@ -29,7 +29,7 @@ Concept
 ******
 Agency
 ******
-.. autoclass:: model.itemScheme.Agency
+.. autoclass:: sdmxthon.model.itemScheme.Agency
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, factory, build_children, childs, parent, scheme

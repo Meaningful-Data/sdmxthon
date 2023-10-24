@@ -10,12 +10,12 @@ Validations on SDMXthon are applied to the data in a Dataset and the metadata
 Data validations
 ****************
 
-.. currentmodule:: parsers.data_validations
+.. currentmodule:: sdmxthon.parsers.data_validations
 .. autofunction:: validate_data()
 
 ********************
 Metadata validations
 ********************
 
-.. py:currentmodule:: parsers.metadata_read
+.. py:currentmodule:: sdmxthon.parsers.metadata_read
 .. autofunction:: create_metadata()

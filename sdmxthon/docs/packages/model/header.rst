@@ -2,7 +2,7 @@
 Header
 ######
 
-.. autoclass:: model.header.Header
+.. autoclass:: sdmxthon.model.header.Header
     :members:
     :show-inheritance:
     :exclude-members: has_content_, build_attributes, build_children, factory
@@ -12,7 +12,7 @@ Header
 Party
 *****
 
-.. autoclass:: model.header.Party
+.. autoclass:: sdmxthon.model.header.Party
     :members:
     :show-inheritance:
     :exclude-members: has_content_, build_attributes, build_children, factory
@@ -22,7 +22,7 @@ Party
 Sender
 ======
 
-.. autoclass:: model.header.Sender
+.. autoclass:: sdmxthon.model.header.Sender
     :members:
     :show-inheritance:
     :exclude-members: has_content_, build_attributes, build_children, factory, validate_TimezoneType

@@ -2,7 +2,7 @@
 Descriptors
 ############
 
-.. autoclass:: model.descriptors.ComponentList
+.. autoclass:: sdmxthon.model.descriptors.ComponentList
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -12,7 +12,7 @@ Descriptors
 DimensionDescriptor
 *******************
 
-.. autoclass:: model.descriptors.DimensionDescriptor()
+.. autoclass:: sdmxthon.model.descriptors.DimensionDescriptor()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -22,7 +22,7 @@ DimensionDescriptor
 AttributeDescriptor
 *******************
 
-.. autoclass:: model.descriptors.AttributeDescriptor()
+.. autoclass:: sdmxthon.model.descriptors.AttributeDescriptor()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -32,7 +32,7 @@ AttributeDescriptor
 MeasureDescriptor
 *****************
 
-.. autoclass:: model.descriptors.MeasureDescriptor()
+.. autoclass:: sdmxthon.model.descriptors.MeasureDescriptor()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -42,7 +42,7 @@ MeasureDescriptor
 GroupDimensionDescriptor
 ************************
 
-.. autoclass:: model.descriptors.GroupDimensionDescriptor()
+.. autoclass:: sdmxthon.model.descriptors.GroupDimensionDescriptor()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory

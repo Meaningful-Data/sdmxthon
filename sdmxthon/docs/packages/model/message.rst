@@ -2,7 +2,7 @@
 Message
 -------
 
-.. autoclass:: model.message.Message
+.. autoclass:: sdmxthon.model.message.Message
    :members:
    :exclude-members: validate
    :show-inheritance:

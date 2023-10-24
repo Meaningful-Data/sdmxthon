@@ -10,6 +10,7 @@ testApi.py
 *$py.class
 dist
 /sdmxthon/docs/_build
+/_build
 /sdmxthon/outputTests/
 Pipfile.lock
 /SDMXthon.egg-info/

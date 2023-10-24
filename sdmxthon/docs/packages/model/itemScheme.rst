@@ -2,7 +2,7 @@
 ItemScheme
 ##########
 
-.. autoclass:: model.itemScheme.ItemScheme
+.. autoclass:: sdmxthon.model.itemScheme.ItemScheme
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children
@@ -13,7 +13,7 @@ ItemScheme
 ConceptScheme
 *************
 
-.. autoclass:: model.itemScheme.ConceptScheme()
+.. autoclass:: sdmxthon.model.itemScheme.ConceptScheme()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, cl_references, factory, build_attributes, build_children
@@ -23,7 +23,7 @@ ConceptScheme
 Codelist
 ********
 
-.. autoclass:: model.itemScheme.Codelist()
+.. autoclass:: sdmxthon.model.itemScheme.Codelist()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, factory, build_attributes, build_children
@@ -32,7 +32,7 @@ Codelist
 ******************
 OrganisationScheme
 ******************
-.. autoclass:: model.itemScheme.OrganisationScheme()
+.. autoclass:: sdmxthon.model.itemScheme.OrganisationScheme()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, factory, build_attributes, build_children
@@ -41,7 +41,7 @@ OrganisationScheme
 ============
 AgencyScheme
 ============
-.. autoclass:: model.itemScheme.AgencyScheme()
+.. autoclass:: sdmxthon.model.itemScheme.AgencyScheme()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, factory, build_attributes, build_children
