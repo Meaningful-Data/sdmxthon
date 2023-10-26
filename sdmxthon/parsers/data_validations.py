@@ -51,9 +51,10 @@ def get_mandatory_attributes(dsd: DataStructureDefinition) -> list:
 
 def validate_data(data: DataFrame, dsd: DataStructureDefinition):
     """
-        Data validations stands for the next schema:
+        Data validations stand for the next schema:
 
         .. list-table:: Data validations
+            :class: only-dark
             :widths: 20 80
             :header-rows: 1
 

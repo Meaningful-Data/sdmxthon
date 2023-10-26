@@ -35,7 +35,6 @@ copyright = about['copyright']
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_rtd_theme",
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosectionlabel'
@@ -58,20 +57,31 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
+html_title = 'SDMXthon Docs'
+
+html_sidebars = {
+    "**": ["search-field.html", "sidebar-nav-bs.html"]
+}
+
 html_theme_options = {
-    'analytics_id': '',
-    'analytics_anonymize_ip': True,
-    'logo_only': False,
-    'display_version': True,
-    'prev_next_buttons_location': '',
-    'style_external_links': True,
-    'vcs_pageview_mode': 'blob',
-    'collapse_navigation': False,
-    'sticky_navigation': False,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
+    "navigation_with_keys": False,
+    "show_prev_next": False,
+    "show_toc_level": 2,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/Meaningful-Data/sdmxthon",
+            "icon": "fab fa-github-square"
+        }
+    ],
+    "navbar_start": ["navbar-logo", "navbar-icon-links.html"],
+    "navbar_center": ["navbar-nav"],
+    "navbar_end": [],
+    "navbar_persistent": [],
+    "footer_start": ["copyright", "last-updated"],
+    "footer_end": [],
+    "navigation_depth": 2,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

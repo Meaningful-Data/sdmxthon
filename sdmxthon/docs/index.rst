@@ -47,9 +47,9 @@ Classes of the library are in the :doc:`Model package<./packages/model>`
 .. include:: installation.rst
 
 
-********
-Packages
-********
+*****************
+Table of Contents
+*****************
 
 .. toctree::
     :maxdepth: 2
