@@ -6,13 +6,13 @@ from io import StringIO
 from typing import Dict
 
 from sdmxthon.model.dataset import Dataset
-from sdmxthon.model.header import Party, Sender, Header
+from sdmxthon.model.header import Header
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 
 
 class Message:
-    """ Message class holds the type of a SDMX Message, its payload and its
+    """ Message class holds the type of SDMX Message, its payload and its
     header.
 
     :param message_type: Enumeration that withholds the Message type for \
@@ -101,56 +101,16 @@ class Message:
 
         self._header = value
 
-    def set_dimension_at_observation(self, dimAtObs):
+    def set_dimension_at_observation(self, dim_at_obs):
         """Sets the dimensionAtObservation if the payload is formed by Datasets
 
-        :param dimAtObs: Dimension At Observation
-        :type dimAtObs: str
+        :param dim_at_obs: Dimension At Observation
+        :type dim_at_obs: str
 
         """
         for e in self.payload.values():
             if isinstance(e, Dataset):
-                e.set_dimension_at_observation(dimAtObs)
-
-    def header_creation(self, id_: str, test: bool = False,
-                        senderId: str = "Unknown",
-                        receiverId: str = "not_supplied",
-                        datetimeStr=''):
-        """
-            Creates the header for a Message
-
-            :param id_: ID of the Header
-            :type id_: str
-
-            :param test: Mark as test file
-            :type test: bool
-
-            :param senderId: ID of the Sender
-            :type senderId: str
-
-            :param receiverId: ID of the Receiver
-            :type receiverId: str
-
-            :param datetimeStr: Datetime of the preparation of the Message.
-            :type datetimeStr: str Format:  '%Y-%m-%dT%H:%M:%S'
-        """
-        header = Header(ID=id_)
-        header.test = test
-        if datetimeStr == '':
-            header.prepared = datetime.now()
-        else:
-            header.prepared = header._gds_parse_datetime(datetimeStr)
-
-        sender = Sender()
-        sender.id_ = senderId
-
-        receiver = Party()
-        receiver.id_ = receiverId
-
-        header.sender = sender
-        header.receiver = receiver
-
-        self.header = header
+                e.set_dimension_at_observation(dim_at_obs)
 
     def validate(self):
         """Performs the semantic validation if the Payload is all Datasets
@@ -175,7 +135,7 @@ class Message:
             raise TypeError('Wrong Payload. Must be of type '
                             'DataSet or a dict of DataSet')
 
-    def to_xml(self, outputPath: str = '',
+    def to_xml(self, output_path: str = '',
                header: Header = None,
                id_: str = 'test',
                test: str = 'true',
@@ -185,8 +145,8 @@ class Message:
                prettyprint=True) -> StringIO:
         """Exports its payload to a XML file in SDMX-ML 2.1 format
 
-        :param outputPath: Path to save the file, defaults to ''
-        :type outputPath: str
+        :param output_path: Path to save the file, defaults to ''
+        :type output_path: str
 
         :param prettyprint: Specifies if the output file is formatted
         :type prettyprint: bool
@@ -223,12 +183,12 @@ class Message:
         if prepared is None:
             prepared = datetime.now()
 
-        if outputPath == '':
-            return writer(path=outputPath, type_=self.type,
+        if output_path == '':
+            return writer(path=output_path, type_=self.type,
                           payload=self.payload, id_=id_, test=test,
                           prepared=prepared, sender=sender, receiver=receiver,
                           header=header, prettyprint=prettyprint)
-        writer(path=outputPath, type_=self.type, payload=self.payload,
+        writer(path=output_path, type_=self.type, payload=self.payload,
                id_=id_, test=test, header=header,
                prepared=prepared, sender=sender, receiver=receiver,
                prettyprint=prettyprint)

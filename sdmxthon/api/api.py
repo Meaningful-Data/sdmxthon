@@ -1,3 +1,8 @@
+"""
+API module contains the functions to read SDMX files and transform them into
+Pandas Dataframes or CSV files. It also contains the function to get the
+supported agencies by the API.
+"""
 from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
@@ -15,7 +20,7 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     :param sdmx_file: Path, URL or SDMX file as string
     :param validate: Validation of the XML file against the XSD (default: True)
 
-    :return: A :obj:`Message <model.message.Message>` object
+    :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
 
     data = read_xml(sdmx_file, None, validate=validate)
@@ -41,8 +46,8 @@ def get_datasets(data, path_to_metadata, validate=True,
 
     :param remove_empty_columns: Removes empty columns on output pd.Dataframe
 
-    :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of \
-    :obj:`Datasets <model.dataSet.DataSet>`
+    :return: A :obj:`Dataset <sdmxthon.model.dataset.DataSet>` object or a \
+    dict of :obj:`Datasets <sdmxthon.model.dataset.DataSet>`
     """
 
     datasets = read_xml(data, mode="Data", validate=validate)
@@ -135,7 +140,7 @@ def xml_to_csv(data, output_path=None, validate=True,
 
 
 def get_supported_agencies():
-    "Returns the agencies supported by the API"
+    """Returns the agencies supported by the API"""
     from sdmxthon.webservices import webservices
     return {
         'BIS': webservices.BisWs,

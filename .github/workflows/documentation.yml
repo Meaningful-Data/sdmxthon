@@ -27,7 +27,7 @@ jobs:
           pipenv install --dev
       - name: Sphinx build
         run: |
-          pipenv run sphinx-build sdmxthon/docs _build
+          pipenv run sphinx-build -W sdmxthon/docs _build
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload Artifact

@@ -232,53 +232,53 @@ class Dataset:
         """Extracts the dimensionAtObservation from the dataset_attributes"""
         return self.dataset_attributes.get('dimensionAtObservation')
 
-    def read_csv(self, pathToCSV: str, **kwargs):
+    def read_csv(self, path_to_csv: str, **kwargs):
         """Loads the data from a CSV. Check the `Pandas read_csv docs
         <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas
         .read_csv.html>`_ Kwargs are supported
 
-        :param pathToCSV: Path to CSV file
-        :type pathToCSV: str
+        :param path_to_csv: Path to CSV file
+        :type path_to_csv: str
 
         """
-        self._data = pd.read_csv(pathToCSV, **kwargs)
+        self._data = pd.read_csv(path_to_csv, **kwargs)
 
-    def read_json(self, pathToJSON: str, **kwargs):
+    def read_json(self, path_to_json: str, **kwargs):
         """Loads the data from a JSON. Check the
         `Pandas read_json docs
         <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas
         .read_json.html>`_. Kwargs are supported
 
-        :param pathToJSON: Path to JSON file
-        :type pathToJSON: str
+        :param path_to_json: Path to JSON file
+        :type path_to_json: str
         """
-        self._data = pd.read_json(pathToJSON, **kwargs)
+        self._data = pd.read_json(path_to_json, **kwargs)
 
-    def read_excel(self, pathToExcel: str, **kwargs):
-        """Loads the data from a Excel file. Check the `Pandas read_excel
+    def read_excel(self, path_to_excel: str, **kwargs):
+        """Loads the data from an Excel file. Check the `Pandas read_excel
         docs <https://pandas.pydata.org/pandas-docs/stable/reference/api
         /pandas.read_excel.html>`_. Kwargs are supported
 
-        :param pathToExcel: Path to Excel file
-        :type pathToExcel: str
+        :param path_to_excel: Path to Excel file
+        :type path_to_excel: str
         """
-        self._data = pd.read_excel(pathToExcel, **kwargs)
+        self._data = pd.read_excel(path_to_excel, **kwargs)
 
-    def to_csv(self, pathToCSV: str = None, **kwargs):
+    def to_csv(self, path_to_csv: str = None, **kwargs):
         """Parses the data to a CSV file. Kwargs are supported
 
-        :param pathToCSV: Path to save as CSV file
-        :type pathToCSV: str
+        :param path_to_csv: Path to save as CSV file
+        :type path_to_csv: str
 
         """
-        return self.data.to_csv(pathToCSV, **kwargs)
+        return self.data.to_csv(path_to_csv, **kwargs)
 
-    def to_json(self, pathToJSON: str = None):
+    def to_json(self, path_to_json: str = None):
         """Parses the data using the JSON Specification from the library
         documentation
 
-        :param pathToJSON: Path to save as JSON file
-        :type pathToJSON: str
+        :param path_to_json: Path to save as JSON file
+        :type path_to_json: str
 
         """
 
@@ -293,19 +293,19 @@ class Dataset:
 
         result = self.data.to_json(orient="records")
         element['data'] = json.loads(result).copy()
-        if pathToJSON is None:
+        if path_to_json is None:
             return element
-        with open(pathToJSON, 'w') as f:
+        with open(path_to_json, 'w') as f:
             f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
-    def to_feather(self, pathToFeather: str, **kwargs):
+    def to_feather(self, path_to_feather: str, **kwargs):
         """Parses the data to an Apache Feather format. Kwargs are supported.
 
-        :param pathToFeather: Path to Feather file
-        :type pathToFeather: str
+        :param path_to_feather: Path to Feather file
+        :type path_to_feather: str
 
         """
-        self.data.to_feather(pathToFeather, **kwargs)
+        self.data.to_feather(path_to_feather, **kwargs)
 
     def structural_validation(self):
         """Performs a Structural Validation on the Data.
@@ -329,16 +329,16 @@ class Dataset:
 
         return validate_data(self.data, self.structure)
 
-    def set_dimension_at_observation(self, dimAtObs):
+    def set_dimension_at_observation(self, dim_at_obs):
         """Sets the dimensionAtObservation
-            :param dimAtObs: Dimension At Observation
-            :type dimAtObs: str
+            :param dim_at_obs: Dimension At Observation
+            :type dim_at_obs: str
         """
-        if (dimAtObs in self.structure.dimension_codes or
-                dimAtObs == 'AllDimensions'):
-            self.dataset_attributes['dimensionAtObservation'] = dimAtObs
+        if (dim_at_obs in self.structure.dimension_codes or
+                dim_at_obs == 'AllDimensions'):
+            self.dataset_attributes['dimensionAtObservation'] = dim_at_obs
         else:
-            raise ValueError(f'{dimAtObs} is not a dimension '
+            raise ValueError(f'{dim_at_obs} is not a dimension '
                              f'of dataset {self.structure.id}')
 
     def _check_DA_keys(self, attributes: dict):
@@ -378,7 +378,7 @@ class Dataset:
     def to_xml(self,
                message_type: MessageTypeEnum =
                MessageTypeEnum.StructureDataSet,
-               outputPath: str = '',
+               output_path: str = '',
                header: Header = None,
                id_: str = 'test',
                test: str = 'true',
@@ -392,10 +392,10 @@ class Dataset:
         :param message_type: Format of the Message in SDMX-ML
         :type message_type: MessageTypeEnum
 
-        :param outputPath: Path to save the file, defaults to ''
-        :type outputPath: str
+        :param output_path: Path to save the file, defaults to ''
+        :type output_path: str
 
-        :param prettyprint: Saves the file formatted to be human readable
+        :param prettyprint: Saves the file formatted to be human-readable
         :type prettyprint: bool
 
         :param header: Header to be written, defaults to None
@@ -428,11 +428,11 @@ class Dataset:
         if prepared is None:
             prepared = datetime.now()
 
-        if outputPath == '':
-            return writer(path=outputPath, type_=message_type, payload=self,
+        if output_path == '':
+            return writer(path=output_path, type_=message_type, payload=self,
                           id_=id_, test=test, header=header,
                           prepared=prepared, sender=sender, receiver=receiver)
-        writer(path=outputPath, type_=message_type, payload=self, id_=id_,
+        writer(path=output_path, type_=message_type, payload=self, id_=id_,
                test=test, header=header,
                prepared=prepared, sender=sender, receiver=receiver,
                prettyprint=prettyprint)

@@ -2,6 +2,7 @@
 .settings
 .ipynb_checkpoints
 .pytest_cache
+.coverage
 /tokens/pypi.pypirc
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
@@ -18,3 +19,4 @@ Pipfile.lock
 /xml_parsers_test.py
 /sdmxthon/testSuite/.coverage
 /intro_book/
+/about_sdmthon_book/

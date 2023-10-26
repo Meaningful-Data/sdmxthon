@@ -44,17 +44,20 @@ All access to parse the SDMX files are in the :doc:`Api package<./packages/api>`
 
 Classes of the library are in the :doc:`Model package<./packages/model>`
 
+.. include:: installation.rst
+
+
 ********
 Packages
 ********
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   walkthrough
-   packages/api
-   packages/model
-   packages/parsers
-   validations
-   developers
-
+    walkthrough
+    installation
+    packages/api
+    packages/model
+    packages/parsers
+    validations
+    developers
