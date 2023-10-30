@@ -64,7 +64,7 @@ For more details of the errors triggered by the library please refer to the
 :doc:`Validations<./validations>`
 
 Data validations processes can be found in the data_validations.py file.
-These methods are triggered by the semantic_validation method in the Dataset
+These methods are triggered by the structural_validation method in the Dataset
 class in the Model package.
 
 Metadata validations processes can be found in the metadata_validations file.

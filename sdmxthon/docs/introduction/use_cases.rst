@@ -63,7 +63,7 @@ is possible to perform the structural validation of the metadata.
 
   metadata = SDMXthon.read_sdmx('https://stats.bis.org/api/v1/datastructure/BIS/BIS_DER/1.0?references=all&detail=full')
   dataset.structure = metadata.content['DataStructures']['BIS:BIS_DER(1.0)']
-  dataset.semantic_validation()
+  dataset.structural_validation()
 
 .. container:: output execute_result
 

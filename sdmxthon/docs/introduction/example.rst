@@ -34,7 +34,7 @@ against the metadata:
 
   >>> import json
 
-  >>> validation_results = data_instance.semantic_validation()
+  >>> validation_results = data_instance.structural_validation()
 
   >>> print (f'The dataset has {len(validation_results)} errors:\n {[error["Message"] for error in validation_results]}')
 
@@ -56,7 +56,7 @@ missing. It is possible to use Pandas to correct the dataset:
   >>> data_instance.data['FREQ'] = 'H'
   >>> data_instance.data['OBS_STATUS'] = 'A'
 
-  >>> validation_results = data_instance.semantic_validation()
+  >>> validation_results = data_instance.structural_validation()
   >>> print (f'The dataset has {len(validation_results)} errors:\n {[error["Message"] for error in validation_results]}')
 
 .. container:: output stream stdout

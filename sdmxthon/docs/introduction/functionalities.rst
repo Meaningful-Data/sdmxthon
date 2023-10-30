@@ -93,7 +93,7 @@ the data against its structure:
 .. code:: python
 
   >>> dataset.structure = message_metadata.content['DataStructures']['BIS:BIS_DER(1.0)']
-  >>> dataset.semantic_validation()
+  >>> dataset.structural_validation()
 
 .. container:: output execute_result
 
@@ -103,12 +103,12 @@ the data against its structure:
 
 
 If the dataset has structural errors, the output of the
-semantic_validation method is a list of dictionaries with the errors:
+structural_validation method is a list of dictionaries with the errors:
 
 .. code:: python
 
   >>> dataset.data['DER_BASIS'] = 'error'
-  >>> dataset.semantic_validation()
+  >>> dataset.structural_validation()
 
 .. container:: output execute_result
 
