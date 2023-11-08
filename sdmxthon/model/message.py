@@ -86,7 +86,8 @@ class Message:
             return self.payload
         if isinstance(self.payload, Dataset):
             return {'datasets': {self.payload.unique_id, self.payload}}
-
+        if isinstance(self.payload, SDMXError):
+            return {'Errors': self.payload}
         return {'datasets': self.payload}
 
     @property
@@ -124,7 +125,8 @@ class Message:
         if (isinstance(self.payload, dict) and
                 all(isinstance(n, Dataset) for n in self.payload.values())):
             for e in self.payload.values():
-                list_errors = e.semantic_validation()
+                e: Dataset
+                list_errors = e.structural_validation()
                 if len(list_errors) > 0:
                     validations[e.structure.id] = list_errors
             if len(validations) == 0:
@@ -132,7 +134,7 @@ class Message:
 
             return validations
         elif isinstance(self.payload, Dataset):
-            return self.payload.semantic_validation()
+            return self.payload.structural_validation()
         else:
             raise TypeError('Wrong Payload. Must be of type '
                             'DataSet or a dict of DataSet')

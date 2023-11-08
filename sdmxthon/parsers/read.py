@@ -33,7 +33,7 @@ def parse_sdmx(result, use_dataset_id=False):
         if ERROR_MESSAGE in result[ERROR]:
             code = result[ERROR][ERROR_MESSAGE][ERROR_CODE]
             text = result[ERROR][ERROR_MESSAGE][ERROR_TEXT]
-            return {'Errors': SDMXError(code=code, text=text)}
+            return SDMXError(code=code, text=text)
         raise Exception('Cannot parse this sdmx error message')
     elif STRUCTURE in result:
         global_mode = STRUCTURE

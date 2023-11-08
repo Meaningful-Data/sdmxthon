@@ -4,7 +4,7 @@ class SDMXError:
     """
 
     def __init__(self, code, text):
-        self._code = code
+        self._code = int(code)
         self._text = text
 
     @property
@@ -15,6 +15,10 @@ class SDMXError:
         """
         return self._code
 
+    @code.setter
+    def code(self, value):
+        self._code = int(value)
+
     @property
     def text(self):
         """
@@ -22,6 +26,10 @@ class SDMXError:
         :return: SDMX Error text
         """
         return self._text
+
+    @text.setter
+    def text(self, value):
+        self._text = value
 
     def __str__(self):
         return f"<SDMX Error - Code: {self.code} - Text: {self.text}>"
