@@ -68,7 +68,7 @@ def create_namespaces(data_type, payload, type_, prettyprint):
     if type_ == MessageTypeEnum.GenericDataSet:
         outfile += f'xmlns:{genericAbbr}="http://www.sdmx.org/resources' \
                    f'/sdmxml/schemas/v2_1/data/generic" '
-    elif type_ == MessageTypeEnum.StructureDataSet:
+    elif type_ == MessageTypeEnum.StructureSpecificDataSet:
         outfile += f'xmlns:{structureSpecificAbbr}="http://www.sdmx.org' \
                    f'/resources/sdmxml/schemas/v2_1/data/structurespecific" '
         if isinstance(payload, dict):
@@ -206,7 +206,7 @@ def writer(path, payload, type_, prettyprint=True, id_='test',
 
     if type_ == MessageTypeEnum.GenericDataSet:
         data_type_string = 'GenericData'
-    elif type_ == MessageTypeEnum.StructureDataSet:
+    elif type_ == MessageTypeEnum.StructureSpecificDataSet:
         data_type_string = 'StructureSpecificData'
     else:
         data_type_string = 'Structure'
@@ -250,7 +250,7 @@ def writer(path, payload, type_, prettyprint=True, id_='test',
         else:
             payload = process_dataset(payload)
             outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
-    elif type_ == MessageTypeEnum.StructureDataSet:
+    elif type_ == MessageTypeEnum.StructureSpecificDataSet:
         if isinstance(payload, dict):
             count = 0
             for record in payload.values():

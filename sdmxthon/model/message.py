@@ -2,11 +2,12 @@
     Message file contains the Message class for the use of external assets
 """
 from datetime import datetime
-from io import StringIO
 from typing import Dict
 
 from sdmxthon.model.dataset import Dataset
+from sdmxthon.model.error import SDMXError
 from sdmxthon.model.header import Header
+from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 
@@ -27,7 +28,8 @@ class Message:
     """
 
     def __init__(self, message_type: MessageTypeEnum,
-                 payload: (Dict[str, dict], Dict[str, Dataset], Dataset),
+                 payload: (Dict[str, dict], Dict[str, Dataset], Dataset,
+                           SDMXError, Dict[str, SubmissionResult]),
                  header: Header = None):
         self._type = message_type
         self._payload = payload
@@ -142,7 +144,7 @@ class Message:
                prepared: datetime = None,
                sender: str = 'Unknown',
                receiver: str = 'Not_supplied',
-               prettyprint=True) -> StringIO:
+               prettyprint=True) -> str:
         """Exports its payload to a XML file in SDMX-ML 2.1 format
 
         :param output_path: Path to save the file, defaults to ''

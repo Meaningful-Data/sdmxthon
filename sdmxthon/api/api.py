@@ -6,7 +6,9 @@ supported agencies by the API.
 from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
+from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
+from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict, drop_na_all
@@ -23,13 +25,20 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
 
-    data = read_xml(sdmx_file, None, validate=validate)
+    payload = read_xml(sdmx_file, None, validate=validate)
 
-    if isinstance(first_element_dict(data), Dataset):
-        type_ = MessageTypeEnum.StructureDataSet
+    if isinstance(payload, dict):
+        if isinstance(first_element_dict(payload), Dataset):
+            type_ = MessageTypeEnum.StructureSpecificDataSet
+        elif isinstance(first_element_dict(payload), SubmissionResult):
+            type_ = MessageTypeEnum.Submission
+        else:
+            type_ = MessageTypeEnum.Metadata
+    elif isinstance(payload, SDMXError):
+        type_ = MessageTypeEnum.Error
     else:
-        type_ = MessageTypeEnum.Metadata
-    return Message(type_, data)
+        raise Exception("Unable to set Message Type")
+    return Message(message_type=type_, payload=payload)
 
 
 def get_datasets(data, path_to_metadata, validate=True,

@@ -377,7 +377,7 @@ class Dataset:
 
     def to_xml(self,
                message_type: MessageTypeEnum =
-               MessageTypeEnum.StructureDataSet,
+               MessageTypeEnum.StructureSpecificDataSet,
                output_path: str = '',
                header: Header = None,
                id_: str = 'test',

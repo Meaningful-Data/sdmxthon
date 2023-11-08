@@ -19,8 +19,8 @@ pytestmark = mark.input_path(Path(__file__).parent / "data")
 data_types_params = [
     (MessageTypeEnum.GenericDataSet, False),
     (MessageTypeEnum.GenericDataSet, True),
-    (MessageTypeEnum.StructureDataSet, False),
-    (MessageTypeEnum.StructureDataSet, True)
+    (MessageTypeEnum.StructureSpecificDataSet, False),
+    (MessageTypeEnum.StructureSpecificDataSet, True)
 ]
 
 
