@@ -12,7 +12,6 @@ from requests.exceptions import ConnectionError
 
 from sdmxthon.api.api import read_sdmx, get_pandas_df, xml_to_csv, \
     upload_metadata_to_fmr
-from sdmxthon.testSuite.conftest import data_path
 
 pytestmark = pytest.mark.input_path(Path(__file__).parent / "data")
 
@@ -67,8 +66,8 @@ def test_upload_metadata_to_fmr(filename, metadata_path):
     try:
         upload_metadata_to_fmr(file_path)
     except ConnectionError as e:
-        assert e.args[0] == (f'Unable to connect to FMR '
-                             f'at http://localhost:8080')
+        assert e.args[0] == ('Unable to connect to FMR '
+                             'at http://localhost:8080')
     except Exception as e:
         assert e.args[1] == 304
         assert e.args[2] == ('Either no structures were submitted, '

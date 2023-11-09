@@ -21,6 +21,7 @@ STRREF = 'structureRef'
 STRUCTURE = 'Structure'
 STR_USAGE = 'StructureUsage'
 STRID = 'structureID'
+STRTYPE = 'structure_type'
 DIM_OBS = 'dimensionAtObservation'
 ALL_DIM = "AllDimensions"
 REF = 'Ref'

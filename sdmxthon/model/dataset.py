@@ -4,6 +4,7 @@
 """
 
 import json
+from copy import copy
 from datetime import date, datetime
 
 import pandas as pd
@@ -15,6 +16,7 @@ from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.webservices.fmr import validate_sdmx_csv_fmr
 
 
 class Dataset:
@@ -37,12 +39,16 @@ class Dataset:
     :type data: `Pandas Dataframe \
     <https://pandas.pydata.org/pandas-docs/stable \
     /reference/api/pandas.DataFrame.html>`_
+
     """
 
     def __init__(self, structure: DataStructureDefinition = None,
                  dataflow: DataFlowDefinition = None,
                  dataset_attributes: dict = None,
-                 attached_attributes: dict = None, data=None):
+                 attached_attributes: dict = None,
+                 data=None,
+                 unique_id: str = None,
+                 structure_type: str = None):
 
         self._dataset_attributes = {}
 
@@ -60,8 +66,28 @@ class Dataset:
         if structure is not None:
             self._dataflow = None
             self.structure = structure
+            if structure_type is not None:
+                raise Exception("Cannot define data structure and "
+                                "structure type at the same time")
+            if unique_id is not None:
+                raise Exception("Cannot define data structure and "
+                                "full_id at the same time")
         elif dataflow is not None:
+            if structure_type is not None:
+                raise Exception("Cannot define dataflow and "
+                                "structure type at the same time")
+            if unique_id is not None:
+                raise Exception("Cannot define dataflow and "
+                                "full_id at the same time")
             self.dataflow = dataflow
+        elif structure_type is not None:
+            self._structure_type = structure_type
+            if unique_id is None:
+                raise Exception("Cannot define structure type and "
+                                "not define full_id")
+            self._unique_id = unique_id
+        else:
+            raise ValueError('A Dataset must have a structure or a dataflow')
 
         if data is not None:
             if isinstance(data, pd.DataFrame):
@@ -125,6 +151,8 @@ class Dataset:
                 self.dataset_attributes['setId'] = value.id
                 self._structure = value
                 self._structure = value.structure
+                self._structure_type = "dataflow"
+                self._unique_id = value.unique_id
         else:
             raise TypeError('dataflow must be a DataFlowDefinition')
 
@@ -166,6 +194,8 @@ class Dataset:
                 self._data = self._data.rename(
                     {'OBS_VALUE': value.measure_code})
             self.dataset_attributes['setId'] = value.id
+            self._structure_type = "structure"
+            self._unique_id = value.unique_id
         self._structure = value
 
     @property
@@ -231,6 +261,16 @@ class Dataset:
     def dim_at_obs(self):
         """Extracts the dimensionAtObservation from the dataset_attributes"""
         return self.dataset_attributes.get('dimensionAtObservation')
+
+    @property
+    def unique_id(self):
+        """Extracts the unique_id"""
+        return self._unique_id
+
+    @property
+    def structure_type(self):
+        """Extracts the structure_type"""
+        return self._structure_type
 
     def read_csv(self, path_to_csv: str, **kwargs):
         """Loads the data from a CSV. Check the `Pandas read_csv docs
@@ -328,6 +368,39 @@ class Dataset:
             raise TypeError('structure must be a DataStructureDefinition')
 
         return validate_data(self.data, self.structure)
+
+    def to_sdmx_csv(self, output_path: str = None):
+        df: pd.DataFrame = copy(self.data)
+
+        for k, v in self.attached_attributes.items():
+            df[k] = v
+
+        # Insert two columns at the beginning of the data set
+        df.insert(0, 'STRUCTURE', self._structure_type)
+        df.insert(1, 'STRUCTURE_ID', self._unique_id)
+
+        # Convert the dataset into a csv file
+        if output_path is not None:
+            df.to_csv(output_path, index=False, header=True)
+        return df.to_csv(index=False, header=True)
+
+    def fmr_validation(self, host: str = 'localhost',
+                       port: int = 8080,
+                       use_https: bool = False,
+                       delimiter: str = 'comma',
+                       max_retries: int = 10,
+                       interval_time: float = 0.5
+                       ):
+
+        """Uploads data to fmr and performs a validation"""
+        csv_text = self.to_sdmx_csv()
+        return validate_sdmx_csv_fmr(csv_text=csv_text,
+                                     host=host,
+                                     port=port,
+                                     use_https=use_https,
+                                     delimiter=delimiter,
+                                     max_retries=max_retries,
+                                     interval_time=interval_time)
 
     def set_dimension_at_observation(self, dim_at_obs):
         """Sets the dimensionAtObservation

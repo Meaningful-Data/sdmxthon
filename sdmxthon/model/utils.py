@@ -212,6 +212,15 @@ FacetType = ['isSequence', 'minLength', 'maxLength', 'minValue', 'maxValue',
 
 METADATA_ENDPOINT = '/ws/secure/sdmxapi/rest/'
 
+STATUS_IN_PROCESS = ['Initialising', 'Analysing', 'Validating',
+                     'Consolidating']
+
+# The list of load status which means is an error
+STATUS_ERRORS = ['IncorrectDSD', 'InvalidRef', 'MissingDSD',
+                 'Error']
+
+STATUS_COMPLETED = ["Complete"]
+
 
 def generate_basic_auth_token(user, password):
     bytes_auth = bytes(f"{user}:{password}", 'utf-8')

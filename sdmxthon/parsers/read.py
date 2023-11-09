@@ -12,7 +12,7 @@ from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
     ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE, URN, DATASET_ID, \
     ERROR, ERROR_MESSAGE, ERROR_CODE, ERROR_TEXT, REG_INTERFACE, \
     SUBMIT_STRUCTURE_RESPONSE, SUBMISSION_RESULT, SUBMITTED_STRUCTURE, \
-    MAINTAINABLE_OBJECT, ACTION, STATUS_MSG, STATUS
+    MAINTAINABLE_OBJECT, ACTION, STATUS_MSG, STATUS, STRTYPE
 from sdmxthon.utils.xml_base import validate_doc, \
     process_string_to_read
 
@@ -146,12 +146,15 @@ def get_ids_from_structure(element: dict):
 
 def get_elements_from_structure(structure):
     if STRUCTURE in structure:
-        return get_ids_from_structure(structure[STRUCTURE])
+        structure_type = "datastructure"
+        tuple_ids = get_ids_from_structure(structure[STRUCTURE])
 
     elif STR_USAGE in structure:
-        return get_ids_from_structure(structure[STR_USAGE])
-
-    return None, None, None
+        structure_type = "dataflow"
+        tuple_ids = get_ids_from_structure(structure[STR_USAGE])
+    else:
+        return None, None, None, None
+    return tuple_ids + (structure_type,)
 
 
 def get_dataset_metadata(structure, dataset_ref, mode):
@@ -161,13 +164,15 @@ def get_dataset_metadata(structure, dataset_ref, mode):
         raise Exception
 
     if dataset_ref == structure[STRID]:
-        agency_id, id_, version = get_elements_from_structure(structure)
+        (agency_id, id_,
+         version, structure_type) = get_elements_from_structure(structure)
         if agency_id is not None:
-            return {DIM_OBS: structure[DIM_OBS],
-                    STRID: f"{agency_id}:{id_}({version})"}
+            str_id = f"{agency_id}:{id_}({version})"
         else:
-            return {DIM_OBS: structure[DIM_OBS],
-                    STRID: f"{id_}({version})"}
+            str_id = f"{id_}({version})"
+        return {DIM_OBS: structure[DIM_OBS],
+                STRID: str_id,
+                STRTYPE: structure_type}
     else:
         raise Exception("Could not find structure reference")
 
