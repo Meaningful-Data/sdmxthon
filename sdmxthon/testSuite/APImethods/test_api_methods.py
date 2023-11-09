@@ -8,8 +8,11 @@ from pathlib import Path
 import pandas as pd
 import pytest
 from pytest import mark
+from requests.exceptions import ConnectionError
 
-from sdmxthon.api.api import read_sdmx, get_pandas_df, xml_to_csv
+from sdmxthon.api.api import read_sdmx, get_pandas_df, xml_to_csv, \
+    upload_metadata_to_fmr
+from sdmxthon.testSuite.conftest import data_path
 
 pytestmark = pytest.mark.input_path(Path(__file__).parent / "data")
 
@@ -53,3 +56,22 @@ def test_xml_to_csv(filename, data_path, reference_path):
                           header=True)
     dataframe = pd.read_csv(StringIO(text_csv)).astype('str')
     assert_with_reference(dataframe, reference_path)
+
+
+metadata_filenames = ["metadata.xml"]
+
+
+@mark.parametrize("filename", metadata_filenames)
+def test_upload_metadata_to_fmr(filename, metadata_path):
+    file_path = os.path.join(metadata_path, filename)
+    try:
+        upload_metadata_to_fmr(file_path)
+    except ConnectionError as e:
+        assert e.args[0] == (f'Unable to connect to FMR '
+                             f'at http://localhost:8080')
+    except Exception as e:
+        assert e.args[1] == 304
+        assert e.args[2] == ('Either no structures were submitted, '
+                             'or the submitted structures contain '
+                             'no changes from the ones currently '
+                             'stored in the system')

@@ -3,6 +3,7 @@ API module contains the functions to read SDMX files and transform them into
 Pandas Dataframes or CSV files. It also contains the function to get the
 supported agencies by the API.
 """
+import os
 from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
@@ -12,6 +13,8 @@ from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict, drop_na_all
+from sdmxthon.utils.xml_base import process_string_to_read
+from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
 def read_sdmx(sdmx_file, validate=True) -> Message:
@@ -160,3 +163,21 @@ def get_supported_agencies():
         'OECDv2': webservices.OecdWs2,
         'UNICEF': webservices.UnicefWs,
     }
+
+
+def upload_metadata_to_fmr(data: (str, os.PathLike),
+                           host: str = 'localhost',
+                           port: int = 8080,
+                           user: str = 'root',
+                           password: str = 'password',
+                           use_https: bool = False
+                           ):
+    sdmx_text = process_string_to_read(data)
+    submit_structures_to_fmr(
+        sdmx_text=sdmx_text,
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        use_https=use_https
+    )

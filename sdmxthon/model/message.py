@@ -10,6 +10,7 @@ from sdmxthon.model.header import Header
 from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
 class Message:
@@ -138,6 +139,34 @@ class Message:
         else:
             raise TypeError('Wrong Payload. Must be of type '
                             'DataSet or a dict of DataSet')
+
+    def upload_metadata_to_fmr(self, host: str = 'localhost',
+                               port: int = 8080,
+                               user: str = 'root',
+                               password: str = 'password',
+                               use_https: bool = False):
+        """
+        Uploads the metadata to the FMR
+        :param host: Host to be connected
+        :param port: Port to be used
+        :param user: Username for basic Auth (Admin or Agency privileges)
+        :param password: Password for basic Auth
+        :param use_https: Flag to use or not https
+        :param raise_exception: Flag to raise exception if anything fails
+        :return:
+        """
+        # Argument handling
+        if self.type != MessageTypeEnum.Metadata:
+            raise TypeError('Message type must be Metadata')
+        sdmx_text = self.to_xml()
+        submit_structures_to_fmr(
+            sdmx_text=sdmx_text,
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            use_https=use_https
+        )
 
     def to_xml(self, output_path: str = '',
                header: Header = None,
