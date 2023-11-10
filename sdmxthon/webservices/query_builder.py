@@ -212,6 +212,90 @@ class SdmxWebservice(ABC):
         Returns query to retrieve concepts
         """
 
+    def get_codes(self, agency_id, resources,
+                  version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve codes
+        """
+
+    def get_categories(self, agency_id, resources,
+                       version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve categories
+        """
+
+    def get_hierarchies(self, agency_id, resources,
+                        version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve hierarchies
+        """
+
+    def get_organisations(self, agency_id, resources,
+                          version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve organisations
+        """
+
+    def get_agencies(self, agency_id, resources,
+                     version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve agencies
+        """
+
+    def get_data_providers(self, agency_id, resources,
+                           version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve data providers
+        """
+
+    def get_data_consumers(self, agency_id, resources,
+                           version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve data consumers
+        """
+
+    def get_organisation_unit_schemes(self, agency_id, resources,
+                                      version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get organisation unit schemes
+        """
+
+    def get_transformation_schemes(self, agency_id, resources,
+                                   version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get transformation schemes
+        """
+
+    def get_ruleset_schemes(self, agency_id, resources,
+                            version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get ruleset schemes
+        """
+
+    def get_user_defined_operator_schemes(self, agency_id, resources,
+                                          version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get user defined operator schemes
+        """
+
+    def get_custom_type_schemes(self, agency_id, resources,
+                                version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get custom type schemes
+        """
+
+    def get_name_personalisation_schemes(self, agency_id, resources,
+                                         version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get name personalisation schemes
+        """
+
+    def get_name_alias_schemes(self, agency_id, resources,
+                               version, item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve get name alias schemes
+        """
+
     def validate_references(self, reference: str):
         """
         Validates that the reference is one of the allowed values
@@ -908,6 +992,258 @@ class SdmxWs1(SdmxWebservice):
 
         return base_query + params
 
+    def get_codes(self, agency_id=None, resources=None,
+                  version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/codelist/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_categories(self, agency_id=None, resources=None,
+                       version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/categoryscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_hierarchies(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/hierarchicalcodelist/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_organisations(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/organisationscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_agencies(self, agency_id=None, resources=None,
+                     version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/agencyscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_data_providers(self, agency_id=None, resources=None,
+                           version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/dataproviderscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_data_consumers(self, agency_id=None, resources=None,
+                           version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/dataconsumerscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_organisation_unit_schemes(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/organisationunitscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_transformation_schemes(self, agency_id=None, resources=None,
+                                   version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/transformationscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_ruleset_schemes(self, agency_id=None, resources=None,
+                            version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/rulesetscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_user_defined_operator_schemes(self, agency_id=None, resources=None,
+                                          version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/userdefinedoperatorscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_custom_type_schemes(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/customtypescheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_name_personalisation_schemes(self, agency_id=None, resources=None,
+                                         version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/namepersonalisationscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def get_name_alias_schemes(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/namealiasscheme/{agency_id}/{resources}/{version}/{item_id}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
 
 class SdmxWs1p5(SdmxWs1):
     """
@@ -1389,7 +1725,7 @@ class QueryBuilder:
             references, detail)
 
     def get_concepts(self, agency_id=None, resources=None,
-                     version=None, references=None, detail=None) -> str:
+                     version=None, item_id=None, references=None, detail=None) -> str:
         """Returns the get concepts query for the WS Implementation"""
         resources = self.id_builder(resources)
         agency_id = agency_id if agency_id else "all"
@@ -1400,5 +1736,215 @@ class QueryBuilder:
             self._ws_implementation.validate_structural_detail(detail)
 
         return self._ws_implementation.get_concepts(
-            agency_id, resources, version,
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_codes(self, agency_id=None, resources=None,
+                  version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get codes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_codes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_categories(self, agency_id=None, resources=None,
+                       version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get categories query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_categories(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_hierarchies(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get hierarchies query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_hierarchies(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_organisations(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get organisations query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_organisations(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_agencies(self, agency_id=None, resources=None,
+                     version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get agencies query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_agencies(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_data_providers(self, agency_id=None, resources=None,
+                           version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get data providers query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_data_providers(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_data_consumers(self, agency_id=None, resources=None,
+                           version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get data consumers query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_data_consumers(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_organisation_unit_schemes(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get organisation unit schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_organisation_unit_schemes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_transformation_schemes(self, agency_id=None, resources=None,
+                                   version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get transformation schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_transformation_schemes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_ruleset_schemes(self, agency_id=None, resources=None,
+                            version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get ruleset schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_ruleset_schemes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_user_defined_operator_schemes(self, agency_id=None, resources=None,
+                                          version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get user defined operator schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_user_defined_operator_schemes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_custom_type_schemes(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get custom type schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_custom_type_schemes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_name_personalisation_schemes(self, agency_id=None, resources=None,
+                                         version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get name personalisation schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_name_personalisation_schemes(
+            agency_id, resources, version, item_id,
+            references, detail)
+
+    def get_name_alias_schemes(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get name alias schemes query for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+
+        if references:
+            self._ws_implementation.validate_references(references)
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_name_alias_schemes(
+            agency_id, resources, version, item_id,
             references, detail)
