@@ -261,6 +261,7 @@ def submit_structures_to_fmr(sdmx_text: str,
     :param use_https: Flag to use or not https
     :type use_https: bool
 
+    :exception: Exception with error details if upload fails
     """
     # Argument handling
     if port < 1 or port > 65535:

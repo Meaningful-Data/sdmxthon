@@ -147,13 +147,18 @@ class Message:
                                use_https: bool = False):
         """
         Uploads the metadata to the FMR
+
         :param host: Host to be connected
+        :type host: str
         :param port: Port to be used
+        :type port: int
         :param user: Username for basic Auth (Admin or Agency privileges)
+        :type user: str
         :param password: Password for basic Auth
+        :type password: str
         :param use_https: Flag to use or not https
-        :param raise_exception: Flag to raise exception if anything fails
-        :return:
+        :type use_https: bool
+
         """
         # Argument handling
         if self.type != MessageTypeEnum.Metadata:

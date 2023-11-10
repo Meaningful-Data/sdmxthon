@@ -194,6 +194,8 @@ def upload_metadata_to_fmr(data: (str, os.PathLike),
     :param use_https: A boolean indicating whether to use HTTPS
                       (default is False)
     :type use_https: bool
+
+    :exception: Exception with error details if upload fails
     """
 
     # Process the input data to obtain SDMX text

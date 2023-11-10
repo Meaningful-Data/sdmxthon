@@ -27,5 +27,10 @@ XML To CSV
 .. autofunction:: xml_to_csv
 
 
+*******************************************
+Upload metadata to Fusion Metadata Registry
+*******************************************
+.. autofunction:: upload_metadata_to_fmr
+
 
 
