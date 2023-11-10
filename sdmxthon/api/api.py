@@ -172,7 +172,32 @@ def upload_metadata_to_fmr(data: (str, os.PathLike),
                            password: str = 'password',
                            use_https: bool = False
                            ):
+    """
+     Uploads metadata to FMR instance
+
+    :param data: Either a string containing SDMX metadata or a path to a file with SDMX metadata
+    :type data: str or a path to a file
+
+    :param host: The FMR instance host (default is 'localhost')
+    :type host: str
+
+    :param port: The FMR instance port (default is 8080)
+    :type port: str
+
+    :param user: The username for authentication (default is 'root')
+    :type user: str
+
+    :param password: The password for authentication (default is 'password')
+    :type password: str
+
+    :param use_https: A boolean indicating whether to use HTTPS (default is False)
+    :type use_https: bool
+    """
+
+    # Process the input data to obtain SDMX text
     sdmx_text = process_string_to_read(data)
+
+    # Submit the SDMX structures to FMR for processing
     submit_structures_to_fmr(
         sdmx_text=sdmx_text,
         host=host,

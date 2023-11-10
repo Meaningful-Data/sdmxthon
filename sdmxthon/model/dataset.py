@@ -370,8 +370,19 @@ class Dataset:
         return validate_data(self.data, self.structure)
 
     def to_sdmx_csv(self, output_path: str = None):
+
+        """
+        Converts a dataset to an SDMX CSV format
+
+        :param output_path: The path where the resulting SDMX CSV file will be saved
+
+        :return: The SDMX CSV data as a string if no output path is provided
+        """
+
+        # Create a copy of the dataset
         df: pd.DataFrame = copy(self.data)
 
+        # Add additional attributes to the dataset
         for k, v in self.attached_attributes.items():
             df[k] = v
 
@@ -381,7 +392,10 @@ class Dataset:
 
         # Convert the dataset into a csv file
         if output_path is not None:
+            # Save the CSV file to the specified output path
             df.to_csv(output_path, index=False, header=True)
+
+        # Return the SDMX CSV data as a string
         return df.to_csv(index=False, header=True)
 
     def fmr_validation(self, host: str = 'localhost',
@@ -392,8 +406,31 @@ class Dataset:
                        interval_time: float = 0.5
                        ):
 
-        """Uploads data to fmr and performs a validation"""
+        """
+        Uploads data to FMR and performs validation
+
+        :param host: The FMR instance host (default is 'localhost')
+        :type host: str
+
+        :param port: The FMR instance port (default is 8080)
+        :type port: int
+
+        :param use_https: A boolean indicating whether to use HTTPS (default is False)
+        :type use_https: bool
+
+        :param delimiter: The delimiter used in the CSV file (options: 'comma', 'semicolon', 'tab', 'space')
+        :type delimiter: str
+
+        :param max_retries: The maximum number of retries for checking validation status (default is 10)
+        :type max_retries: int
+
+        :param interval_time: The interval time between retries in seconds (default is 0.5)
+        :type interval_time: int
+
+        :return: The validation status if successful
+        """
         csv_text = self.to_sdmx_csv()
+
         return validate_sdmx_csv_fmr(csv_text=csv_text,
                                      host=host,
                                      port=port,
