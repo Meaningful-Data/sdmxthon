@@ -13,6 +13,7 @@ from sdmxthon.model.utils import (generate_basic_auth_token,
 def check_host_availability(host_url):
     """
     Checks if the host is available
+
     :param host_url: URL to check
     :return: True if the host is available, False otherwise
     :exception: Exception if the host is not available
@@ -60,8 +61,6 @@ def validation_status_request(status_url: str,
     :exception: raise an exception if the validation status
                 is not found in the response
     :exception: raise an exception if the current time exceeds the timeout
-
-
     """
 
     # Record the starting time for the entire validation process
@@ -138,6 +137,9 @@ def get_validation_status(status_url: str,
     :type interval_time: float
 
     :return: The validation status if successful
+    :exception: raise an exception if the validation status
+                is not found in the response
+    :exception: raise an exception if the current time exceeds the timeout
 
     """
 

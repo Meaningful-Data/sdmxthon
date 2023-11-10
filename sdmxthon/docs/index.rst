@@ -59,5 +59,6 @@ Packages
     packages/api
     packages/model
     packages/parsers
+    webservices
     validations
     developers
