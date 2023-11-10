@@ -37,7 +37,6 @@ def handle_status(response_status):
 
 def validation_status_request(status_url: str,
                               uid: str,
-                              headers: dict,
                               max_retries: int = 10,
                               interval_time: float = 0.5):
     """
@@ -49,7 +48,8 @@ def validation_status_request(status_url: str,
     :param uid: the unique identifier we have to send to the request
     :type uid: str
 
-    :param max_retries: The maximum number of retries for checking validation status
+    :param max_retries: The maximum number of retries for
+                        checking validation status
     :type max_retries: int
 
     :param interval_time: The interval time between retries in seconds
@@ -57,7 +57,8 @@ def validation_status_request(status_url: str,
 
     :return: The validation status if successful
 
-    :exception: raise an exception if the validation status is not found in the response
+    :exception: raise an exception if the validation status
+                is not found in the response
     :exception: raise an exception if the current time exceeds the timeout
 
 
@@ -83,14 +84,14 @@ def validation_status_request(status_url: str,
         interval_start = current - start_global
         interval = current - start
 
-        # Skip the current iteration if the time interval is less than the specified interval time
+        # Skip the current iteration if the time interval is less than the
+        # specified interval time
         if interval_start <= interval_time:
             continue
 
         # Perform a get request to the server to check the load status
         response_status = get(url=status_url,
-                              params={'uid': uid},
-                              headers=headers)
+                              params={'uid': uid})
 
         # Check if the 'Status' key is present in the response JSON
         if 'Status' not in response_status.json():
@@ -128,10 +129,12 @@ def get_validation_status(status_url: str,
     :param uid: The unique identifier of the uploaded file
     :type uid: str
 
-    :param max_retries: The maximum number of retries for checking validation status (default is 10)
+    :param max_retries: The maximum number of retries for checking validation
+                        status (default is 10)
     :type max_retries: int
 
-    :param interval_time: The interval time between retries in seconds (default is 0.5)
+    :param interval_time: The interval time between retries
+                          in seconds (default is 0.5)
     :type interval_time: float
 
     :return: The validation status if successful
@@ -165,7 +168,8 @@ def validate_sdmx_csv_fmr(csv_text: str,
                           interval_time: float = 0.5
                           ):
     """
-    Validates an SDMX CSV file by uploading it to an FMR instance and checking its validation status
+    Validates an SDMX CSV file by uploading it to an FMR instance
+    and checking its validation status
 
     :param csv_text: The SDMX CSV text to be validated
     :type csv_text: str
@@ -176,16 +180,20 @@ def validate_sdmx_csv_fmr(csv_text: str,
     :param port: The FMR instance port (default is 8080)
     :type port: int
 
-    :param use_https: A boolean indicating whether to use HTTPS (default is False)
+    :param use_https: A boolean indicating whether to use HTTPS
+                     (default is False)
     :type use_https: bool
 
-    :param delimiter: The delimiter used in the CSV file (options: 'comma', 'semicolon', 'tab', 'space')
+    :param delimiter: The delimiter used in the CSV file
+                      (options: 'comma', 'semicolon', 'tab', 'space')
     :type delimiter: str
 
-    :param max_retries: The maximum number of retries for checking validation status (default is 10)
+    :param max_retries: The maximum number of retries for checking
+                        validation status (default is 10)
     :type max_retries: int
 
-    :param interval_time: The interval time between retries in seconds (default is 0.5)
+    :param interval_time: The interval time between retries
+                          in seconds (default is 0.5)
     :type interval_time: float
 
     :exception: Exception with error details if validation fails

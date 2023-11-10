@@ -175,7 +175,8 @@ def upload_metadata_to_fmr(data: (str, os.PathLike),
     """
      Uploads metadata to FMR instance
 
-    :param data: Either a string containing SDMX metadata or a path to a file with SDMX metadata
+    :param data: Either a string containing SDMX metadata or a path
+                 to a file with SDMX metadata
     :type data: str or a path to a file
 
     :param host: The FMR instance host (default is 'localhost')
@@ -190,7 +191,8 @@ def upload_metadata_to_fmr(data: (str, os.PathLike),
     :param password: The password for authentication (default is 'password')
     :type password: str
 
-    :param use_https: A boolean indicating whether to use HTTPS (default is False)
+    :param use_https: A boolean indicating whether to use HTTPS
+                      (default is False)
     :type use_https: bool
     """
 

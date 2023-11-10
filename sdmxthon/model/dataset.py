@@ -374,7 +374,8 @@ class Dataset:
         """
         Converts a dataset to an SDMX CSV format
 
-        :param output_path: The path where the resulting SDMX CSV file will be saved
+        :param output_path: The path where the resulting
+                            SDMX CSV file will be saved
 
         :return: The SDMX CSV data as a string if no output path is provided
         """
@@ -415,16 +416,20 @@ class Dataset:
         :param port: The FMR instance port (default is 8080)
         :type port: int
 
-        :param use_https: A boolean indicating whether to use HTTPS (default is False)
+        :param use_https: A boolean indicating whether to use HTTPS
+                          (default is False)
         :type use_https: bool
 
-        :param delimiter: The delimiter used in the CSV file (options: 'comma', 'semicolon', 'tab', 'space')
+        :param delimiter: The delimiter used in the CSV file
+                          (options: 'comma', 'semicolon', 'tab', 'space')
         :type delimiter: str
 
-        :param max_retries: The maximum number of retries for checking validation status (default is 10)
+        :param max_retries: The maximum number of retries for checking
+                            validation status (default is 10)
         :type max_retries: int
 
-        :param interval_time: The interval time between retries in seconds (default is 0.5)
+        :param interval_time: The interval time between retries in seconds
+                              (default is 0.5)
         :type interval_time: int
 
         :return: The validation status if successful
