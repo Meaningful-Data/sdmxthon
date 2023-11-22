@@ -12,7 +12,9 @@ class SdmxWebservice(ABC):
     REFERENCES_OPTIONS = []
     STRUCTURE_DETAIL_OPTIONS = []
     DATA_DETAIL_OPTIONS = []
+    DATA_HISTORY_OPTIONS = []
     CONSTRAINTS_MODE_OPTIONS = []
+    CONSTRAINTS_REFERENCES_OPTIONS = []
 
     @abstractmethod
     def get_data_flows(self, agency_id, resources,
@@ -321,6 +323,14 @@ class SdmxWebservice(ABC):
             raise ValueError(f"detail must be one of the following values: "
                              f"{self.DATA_DETAIL_OPTIONS}")
 
+    def validate_data_history(self, include_history: str):
+        """
+        Validates that the includeHistory is one of the allowed options
+        """
+        if include_history not in self.DATA_HISTORY_OPTIONS:
+            raise ValueError(f"includeHistory must be one of the following options: "
+                             f"{self.DATA_HISTORY_OPTIONS}")
+
     def validate_constraints_mode(self, mode: str):
         """
         Validates that the mode is one of the allowed values
@@ -328,6 +338,14 @@ class SdmxWebservice(ABC):
         if mode not in self.CONSTRAINTS_MODE_OPTIONS:
             raise ValueError(f"mode must be one of the following values: "
                              f"{self.CONSTRAINTS_MODE_OPTIONS}")
+
+    def validate_constraints_references(self, references: str):
+        """
+        Validates that the references constraints is one of the allowed values
+        """
+        if references not in self.CONSTRAINTS_REFERENCES_OPTIONS:
+            raise ValueError(f"references constraints must be one of the following values: "
+                             f"{self.CONSTRAINTS_REFERENCES_OPTIONS}")
 
 
 class SdmxWs2p0(SdmxWebservice):
@@ -427,7 +445,12 @@ class SdmxWs1(SdmxWebservice):
 
     DATA_DETAIL_OPTIONS = ['full', 'dataonly', 'serieskeysonly', 'nodata']
 
+    DATA_HISTORY_OPTIONS = ['true', 'false']
+
     CONSTRAINTS_MODE_OPTIONS = ['exact', 'available']
+
+    CONSTRAINTS_REFERENCES_OPTIONS = ['none', 'all', 'datastructure', 'conceptscheme',
+                                      'codelist', 'dataproviderscheme', 'dataflow']
 
     def build_query(self, query, agency_id=None, resources=None,
                     version=None, references=None, detail=None) -> str:
@@ -779,15 +802,17 @@ class QueryBuilder:
         return self.query_builder_common(self._ws_implementation.get_dsds,
                                          agency_id, resources, version, references, detail)
 
-    def get_data(self, flow, provider=None, detail=None, **kwargs):
+    def get_data(self, flow, provider=None, detail=None, include_history=None, **kwargs):
         """Returns the data query for the WS Implementation"""
 
         provider = self.id_builder(provider)
         if detail:
             self._ws_implementation.validate_data_detail(detail)
+        if include_history:
+            self._ws_implementation.validate_data_history(include_history)
 
-        return self._ws_implementation.get_data(flow, provider=provider,
-                                                detail=detail, **kwargs)
+        return self._ws_implementation.get_data(flow, provider=provider, detail=detail,
+                                                include_history=include_history, **kwargs)
 
     def get_constraints(self, flow, key=None, provider=None, component_id=None,
                         mode=None, references=None, start_period=None,
@@ -797,7 +822,7 @@ class QueryBuilder:
         if mode:
             self._ws_implementation.validate_constraints_mode(mode)
         if references:
-            self._ws_implementation.validate_references(references)
+            self._ws_implementation.validate_constraints_references(references)
 
         return self._ws_implementation.get_constraints(flow, key, provider,
                                                        component_id, mode,

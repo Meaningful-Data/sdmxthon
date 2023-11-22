@@ -249,8 +249,8 @@ def test_get_data_flows_with_multiple_params(query_builder):
 
 def test_get_concepts_with_multiple_params(query_builder):
     query = query_builder.get_concepts(agency_id="all", resources="all", version="latest", item_id="all",
-                                       references="parents", detail="full")
-    assert query == "/conceptscheme/all/all/latest/all?references=parents&detail=full"
+                                       references="parents", detail="allstubs")
+    assert query == "/conceptscheme/all/all/latest/all?references=parents&detail=allstubs"
 
 
 def test_get_data_with_multiple_parameters(query_builder):
@@ -264,11 +264,11 @@ def test_get_data_with_multiple_parameters(query_builder):
 
 
 def test_get_constraints_with_multiple_params(query_builder):
-    query = query_builder.get_constraints(flow="example_flow", mode="exact", references="all",
+    query = query_builder.get_constraints(flow="example_flow", mode="available", references="conceptscheme",
                                           start_period="2020-01-01", end_period="2020-12-31",
                                           updated_after="2020-01-01")
-    assert query == ("/availableconstraint/example_flow/all/all/all?mode=exact&references=all&startPeriod=2020-01-01"
-                     "&endPeriod=2020-12-31&updatedAfter=2020-01-01")
+    assert query == ("/availableconstraint/example_flow/all/all/all?mode=available&references=conceptscheme&"
+                     "startPeriod=2020-01-01&endPeriod=2020-12-31&updatedAfter=2020-01-01")
 
 
 if __name__ == '__main__':
