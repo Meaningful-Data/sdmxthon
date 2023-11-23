@@ -2,6 +2,33 @@
 Changelog
 #########
 
+2.5 (2023-11-10)
+----------------
+**Added**
+  - Added FMR interaction with data validation and metadata submission. Added methods on webservices package.
+  - Added SDMXError and SubmissionRequest classes to handle FMR interaction
+  - Added to_sdmx_csv() method to Dataset #43
+  - Added fmr_validation() method to Dataset #43
+  - Added upload_metadata_to_fmr() method to Message #44
+  - Added upload_metadata_to_fmr() method to API #44
+  - Added webservices documentation #42
+
+**Changes**
+  - Changed semantic_validation to structural validation on documentation
+  - Changed MessageTypeEnum on StructureSpecific files from Structure to StructureSpecific
+
+**Bugfixes**
+  - Fixed bug on Message validate method using old semantic_validation on each Dataset in payload.
+
+2.4 (2023-10-23)
+----------------
+**Added**
+
+**Changes**
+  - Support for DatasetID as key on get_pandas_df and xml_to_csv results
+
+**Bugfixes**
+
 2.3.2 (2023-09-26)
 ----------------
 **Added**

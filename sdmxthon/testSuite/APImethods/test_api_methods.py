@@ -2,76 +2,75 @@
 API methods Tests
 """
 import os
-import unittest
+from io import StringIO
+from pathlib import Path
 
-from sdmxthon.testSuite import TestHelper
+import pandas as pd
+import pytest
+from pytest import mark
+from requests.exceptions import ConnectionError
 
+from sdmxthon.api.api import read_sdmx, get_pandas_df, xml_to_csv, \
+    upload_metadata_to_fmr
 
-class APImethods(TestHelper.TestHelper):
-    path = os.path.dirname(__file__)
-    pathToDB = os.path.join(os.path.join(path, "data"), "data_sample")
-    pathToReference = os.path.join(os.path.join(path, "data"), "reference")
-
-    def test_1(self):
-        data = 'gen_all.xml'
-
-        self.read_sdmx_data(data)
-
-    def test_2(self):
-        data = 'str_all.xml'
-
-        self.read_sdmx_data(data)
-
-    def test_3(self):
-        data = 'gen_ser.xml'
-
-        self.read_sdmx_data(data)
-
-    def test_4(self):
-        data = 'str_ser.xml'
-
-        self.read_sdmx_data(data)
-
-    def test_5(self):
-        data = 'gen_all.xml'
-
-        self.get_pandas_df_data(data)
-
-    def test_6(self):
-        data = 'str_all.xml'
-
-        self.get_pandas_df_data(data)
-
-    def test_7(self):
-        data = 'gen_ser.xml'
-
-        self.get_pandas_df_data(data)
-
-    def test_8(self):
-        data = 'str_ser.xml'
-
-        self.get_pandas_df_data(data)
-
-    def test_9(self):
-        data = 'gen_all.xml'
-
-        self.xml_to_csv_data(data)
-
-    def test_10(self):
-        data = 'str_all.xml'
-
-        self.xml_to_csv_data(data)
-
-    def test_11(self):
-        data = 'gen_ser.xml'
-
-        self.xml_to_csv_data(data)
-
-    def test_12(self):
-        data = 'str_ser.xml'
-
-        self.xml_to_csv_data(data)
+pytestmark = pytest.mark.input_path(Path(__file__).parent / "data")
 
 
-if __name__ == '__main__':
-    unittest.main(verbosity=1)
+def assert_with_reference(dataframe, reference_path):
+    reference = pd.read_json(os.path.join(reference_path, "df.json"),
+                             orient='records').astype('str')
+
+    pd.testing.assert_frame_equal(
+        dataframe.fillna('').replace('nan', ''),
+        reference.replace('nan', ''),
+        check_like=True)
+
+
+filenames = ["gen_all.xml", "gen_ser.xml", "str_all.xml", "str_ser.xml"]
+
+
+# Test: Read sdmx (data files)
+@mark.parametrize("filename", filenames)
+def test_read_sdmx(filename, data_path, reference_path):
+    message = read_sdmx(os.path.join(data_path, filename))
+    key = 'BIS:BIS_DER(1.0)'
+    dataframe: pd.DataFrame = message.payload[key].data.astype('str')
+    assert_with_reference(dataframe, reference_path)
+
+
+# Test: Get pandas df
+@mark.parametrize("filename", filenames)
+def test_get_pandas_df(filename, data_path, reference_path):
+    dict_dataframe = get_pandas_df(os.path.join(data_path, filename))
+    key = 'BIS:BIS_DER(1.0)'
+    dataframe: pd.DataFrame = dict_dataframe[key].astype('str')
+    assert_with_reference(dataframe, reference_path)
+
+
+# Test: xml to csv
+@mark.parametrize("filename", filenames)
+def test_xml_to_csv(filename, data_path, reference_path):
+    text_csv = xml_to_csv(os.path.join(data_path, filename),
+                          sep=',', encoding='utf-8', index=False,
+                          header=True)
+    dataframe = pd.read_csv(StringIO(text_csv)).astype('str')
+    assert_with_reference(dataframe, reference_path)
+
+
+metadata_filenames = ["metadata.xml"]
+
+
+@mark.parametrize("filename", metadata_filenames)
+def test_upload_metadata_to_fmr(filename, metadata_path):
+    file_path = os.path.join(metadata_path, filename)
+    try:
+        upload_metadata_to_fmr(file_path)
+    except ConnectionError as e:
+        assert e.args[0] == ('Unable to connect to FMR '
+                             'at http://localhost:8080')
+    except Exception as e:
+        assert e.args[1] == 304
+        assert e.args[2] == ('Either no structures were submitted, '
+                             'or the submitted structures contain '
+                             'no changes from the ones currently '
+                             'stored in the system')

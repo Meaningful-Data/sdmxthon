@@ -3,6 +3,7 @@
 """
 
 import re
+from base64 import b64encode
 from datetime import datetime
 from typing import List
 
@@ -208,3 +209,19 @@ ConstraintRoleType = ['Allowed', 'Actual']
 FacetType = ['isSequence', 'minLength', 'maxLength', 'minValue', 'maxValue',
              'startValue', 'endValue', 'interval', 'timeInterval', 'decimals',
              'pattern', 'startTime', 'endTime']
+
+METADATA_ENDPOINT = '/ws/secure/sdmxapi/rest/'
+
+STATUS_IN_PROCESS = ['Initialising', 'Analysing', 'Validating',
+                     'Consolidating']
+
+# The list of load status which means is an error
+STATUS_ERRORS = ['IncorrectDSD', 'InvalidRef', 'MissingDSD',
+                 'Error']
+
+STATUS_COMPLETED = ["Complete"]
+
+
+def generate_basic_auth_token(user, password):
+    bytes_auth = bytes(f"{user}:{password}", 'utf-8')
+    return 'Basic ' + b64encode(bytes_auth).decode('ascii')

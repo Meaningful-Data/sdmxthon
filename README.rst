@@ -14,8 +14,8 @@
 .. image:: https://img.shields.io/pypi/pyversions/sdmxthon
     :alt: Python Version
 
-.. image:: https://github.com/Meaningful-Data/sdmxthon/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/Meaningful-Data/sdmxthon/actions/workflows/ci.yml
+.. image:: https://github.com/Meaningful-Data/sdmxthon/actions/workflows/testing.yml/badge.svg?branch=master
+    :target: https://github.com/Meaningful-Data/sdmxthon/actions/workflows/testing.yml
     :alt: Tests
 
 
@@ -35,5 +35,6 @@ Features
 2. Pandas connector (SDMX to Pandas, Pandas to SDMX)
 3. SDMX data validation
 4. SDMX metadata validation
+5. Interaction with SDMX APIs and Fusion Metadata Registry
 
 `View Changelog <https://github.com/Meaningful-Data/sdmxthon/blob/master/Changelog.rst>`_

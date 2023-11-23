@@ -8,7 +8,7 @@ Please refer to the SDMX Base Package
 Annotation
 **********
 
-.. autoclass:: model.base.Annotation
+.. autoclass:: sdmxthon.model.base.Annotation
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -18,7 +18,7 @@ Annotation
 Annotable Artefact
 ******************
 
-.. autoclass:: model.base.AnnotableArtefact
+.. autoclass:: sdmxthon.model.base.AnnotableArtefact
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory
@@ -27,7 +27,7 @@ Annotable Artefact
 *********************
 Identifiable Artefact
 *********************
-.. autoclass:: model.base.IdentifiableArtefact
+.. autoclass:: sdmxthon.model.base.IdentifiableArtefact
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory
@@ -36,7 +36,7 @@ Identifiable Artefact
 *****************
 Nameable Artefact
 *****************
-.. autoclass:: model.base.NameableArtefact
+.. autoclass:: sdmxthon.model.base.NameableArtefact
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory
@@ -45,7 +45,7 @@ Nameable Artefact
 ********************
 Versionable Artefact
 ********************
-.. autoclass:: model.base.VersionableArtefact
+.. autoclass:: sdmxthon.model.base.VersionableArtefact
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory
@@ -54,7 +54,7 @@ Versionable Artefact
 *********************
 Maintainable Artefact
 *********************
-.. autoclass:: model.base.MaintainableArtefact
+.. autoclass:: sdmxthon.model.base.MaintainableArtefact
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory
@@ -63,7 +63,7 @@ Maintainable Artefact
 ********************
 International String
 ********************
-.. autoclass:: model.base.InternationalString
+.. autoclass:: sdmxthon.model.base.InternationalString
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory
@@ -73,7 +73,7 @@ International String
 Localised String
 ================
 
-.. autoclass:: model.base.LocalisedString
+.. autoclass:: sdmxthon.model.base.LocalisedString
     :members:
     :show-inheritance:
     :exclude-members: to_XML, build_attributes, build_children, factory

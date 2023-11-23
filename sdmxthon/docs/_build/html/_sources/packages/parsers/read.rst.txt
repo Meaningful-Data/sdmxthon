@@ -1,8 +1,0 @@
-Read Parser
-###########
-
-.. autoclass:: model.component.Component
-    :members:
-    :show-inheritance:
-    :exclude-members: parse_XML, build_attributes, build_children, factory
-    :undoc-members:

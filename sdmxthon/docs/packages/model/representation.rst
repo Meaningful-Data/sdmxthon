@@ -2,7 +2,7 @@
 Representation
 ##############
 
-.. autoclass:: model.representation.Representation
+.. autoclass:: sdmxthon.model.representation.Representation
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -12,7 +12,7 @@ Representation
 Facet
 *****
 
-.. autoclass:: model.representation.Facet
+.. autoclass:: sdmxthon.model.representation.Facet
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory

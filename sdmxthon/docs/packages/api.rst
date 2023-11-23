@@ -4,7 +4,7 @@ Api Package
 
 The ``api`` package contains all the methods to load data into SDMXthon.
 
-.. currentmodule:: api.api
+.. currentmodule:: sdmxthon.api.api
 
 *********
 Read SDMX
@@ -26,6 +26,11 @@ XML To CSV
 **********
 .. autofunction:: xml_to_csv
 
+
+*******************************************
+Upload metadata to Fusion Metadata Registry
+*******************************************
+.. autofunction:: upload_metadata_to_fmr
 
 
 

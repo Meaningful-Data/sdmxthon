@@ -21,9 +21,28 @@ STRREF = 'structureRef'
 STRUCTURE = 'Structure'
 STR_USAGE = 'StructureUsage'
 STRID = 'structureID'
+STRTYPE = 'structure_type'
 DIM_OBS = 'dimensionAtObservation'
 ALL_DIM = "AllDimensions"
 REF = 'Ref'
+DATASET_ID = 'DataSetID'
+
+# SDMX Error handling
+ERROR = 'Error'
+ERROR_MESSAGE = 'ErrorMessage'
+ERROR_CODE = 'code'
+ERROR_TEXT = 'Text'
+
+# SDMX Registry Interface handling
+REG_INTERFACE = 'RegistryInterface'
+SUBMIT_STRUCTURE_RESPONSE = 'SubmitStructureResponse'
+SUBMISSION_RESULT = 'SubmissionResult'
+SUBMITTED_STRUCTURE = 'SubmittedStructure'
+MAINTAINABLE_OBJECT = 'MaintainableObject'
+ACTION = 'action'
+STATUS_MSG = 'StatusMessage'
+STATUS = 'status'
+
 
 # Structures
 # Common
@@ -156,7 +175,9 @@ namespaces = {
     'http://www.w3.org/2001/XMLSchema-instance': 'xsi',
     'http://www.w3.org/XML/1998/namespace': None,
     schema_root + 'data/structurespecific': None,
-    schema_root + 'data/generic': None}
+    schema_root + 'data/generic': None,
+    schema_root + 'registry': None
+}
 
 # To exclude from attached_attributes
 exc_attributes = [STRREF, 'action', 'dataScope', 'xsi:type', SERIES, OBS]

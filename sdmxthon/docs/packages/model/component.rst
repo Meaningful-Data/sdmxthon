@@ -2,7 +2,7 @@
 Component
 #########
 
-.. autoclass:: model.component.Component
+.. autoclass:: sdmxthon.model.component.Component
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -11,7 +11,7 @@ Component
 *********
 Dimension
 *********
-.. autoclass:: model.component.Dimension
+.. autoclass:: sdmxthon.model.component.Dimension
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -20,7 +20,7 @@ Dimension
 =============
 TimeDimension
 =============
-.. autoclass:: model.component.TimeDimension()
+.. autoclass:: sdmxthon.model.component.TimeDimension()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -30,7 +30,7 @@ TimeDimension
 MeasureDimension
 ================
 
-.. autoclass:: model.component.MeasureDimension()
+.. autoclass:: sdmxthon.model.component.MeasureDimension()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -39,7 +39,7 @@ MeasureDimension
 *********
 Attribute
 *********
-.. autoclass:: model.component.Attribute
+.. autoclass:: sdmxthon.model.component.Attribute
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -48,7 +48,7 @@ Attribute
 **************
 PrimaryMeasure
 **************
-.. autoclass:: model.component.PrimaryMeasure()
+.. autoclass:: sdmxthon.model.component.PrimaryMeasure()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory

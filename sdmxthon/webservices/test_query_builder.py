@@ -256,18 +256,18 @@ def test_get_concepts_with_multiple_params(query_builder):
 def test_get_data_with_multiple_parameters(query_builder):
     query = query_builder.get_data(flow="example_flow", key="all", provider="all",
                                    start_period="2022-01-01", end_period="2022-12-31", updated_after="2022-01-01",
-                                   first_n_observations=10, dimension_at_observation="TIME_PERIOD", detail="full",
-                                   include_history="true")
+                                   first_n_observations=10, dimension_at_observation="TIME_PERIOD",
+                                   detail="serieskeysonly", include_history="true")
     assert query == ("/data/example_flow/all/all?startPeriod=2022-01-01&endPeriod=2022-12-31"
                      "&updatedAfter=2022-01-01&firstNObservations=10&dimensionAtObservation=TIME_PERIOD&"
-                     "detail=full&includeHistory=true")
+                     "detail=serieskeysonly&includeHistory=true")
 
 
 def test_get_constraints_with_multiple_params(query_builder):
-    query = query_builder.get_constraints(flow="example_flow", mode="available", references="conceptscheme",
+    query = query_builder.get_constraints(flow="example_flow", mode="available", references="dataproviderscheme",
                                           start_period="2020-01-01", end_period="2020-12-31",
                                           updated_after="2020-01-01")
-    assert query == ("/availableconstraint/example_flow/all/all/all?mode=available&references=conceptscheme&"
+    assert query == ("/availableconstraint/example_flow/all/all/all?mode=available&references=dataproviderscheme&"
                      "startPeriod=2020-01-01&endPeriod=2020-12-31&updatedAfter=2020-01-01")
 
 

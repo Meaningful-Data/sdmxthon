@@ -2,7 +2,7 @@
 DataStructureDefinition
 #######################
 
-.. autoclass:: model.definitions.DataStructureDefinition
+.. autoclass:: sdmxthon.model.definitions.DataStructureDefinition
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory
@@ -12,7 +12,7 @@ DataStructureDefinition
 DataFlowDefinition
 ##################
 
-.. autoclass:: model.definitions.DataFlowDefinition
+.. autoclass:: sdmxthon.model.definitions.DataFlowDefinition
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory

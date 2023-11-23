@@ -15,14 +15,36 @@ from sdmxthon.webservices import query_builder
 
 
 class SdmxWebServiceConnection(ABC):
-    """Base class for all requests"""
+    """
+    Base class for all SDMX web service connections.
+
+    Implements the query builder
+    :doc:`QueryBuilder <./query_builder>`
+    and the methods to get the data from the web service.
+
+    :param AGENCY_ID: The agency id of the web service
+    :type AGENCY_ID: str
+
+    :param ENTRY_POINT: The entry point of the web service
+    :type ENTRY_POINT: str
+
+    :param WS_IMPLEMENTATION: The query builder implementation
+    :type WS_IMPLEMENTATION:
+        :doc:`QueryBuilder <./query_builder>`
+
+    """
 
     AGENCY_ID = None
     ENTRY_POINT = None
     WS_IMPLEMENTATION = None
 
     def get_all_dataflows(self):
-        """Returns a list of all dataflows"""
+        """
+        Queries the API to get the simplified information of all dataflows
+
+        :return: A list of dictionaries with the information of the dataflows
+                 (id, unique_id, name, description, version)
+        """
         url = (f"{self.ENTRY_POINT}"
                f"{self.WS_IMPLEMENTATION.get_data_flows()}")
         message = read_xml(url, validate=False)
@@ -43,7 +65,15 @@ class SdmxWebServiceConnection(ABC):
 
     def get_data_flow_url(self, flow, **kwargs) -> str:
         """
-        Returns the URL to get one or many dataflows
+        Generates the URL to get the dataflow
+
+        :param flow: The id of the dataflow
+        :type flow: str
+
+        :param kwargs: The parameters to add to the URL
+            (check the documentation of the get_data method in QueryBuilder )
+            :py:meth:`~sdmxthon.webservices.query_builder.QueryBuilder.get_data`
+        :type kwargs: dict
         """
         url_params = self.WS_IMPLEMENTATION.get_data_flows(resources=flow,
                                                            **kwargs)

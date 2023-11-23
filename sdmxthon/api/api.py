@@ -1,10 +1,20 @@
+"""
+API module contains the functions to read SDMX files and transform them into
+Pandas Dataframes or CSV files. It also contains the function to get the
+supported agencies by the API.
+"""
+import os
 from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
+from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
+from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.read import read_xml
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict, drop_na_all
+from sdmxthon.utils.xml_base import process_string_to_read
+from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
 def read_sdmx(sdmx_file, validate=True) -> Message:
@@ -15,16 +25,23 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     :param sdmx_file: Path, URL or SDMX file as string
     :param validate: Validation of the XML file against the XSD (default: True)
 
-    :return: A :obj:`Message <model.message.Message>` object
+    :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
 
-    data = read_xml(sdmx_file, None, validate=validate)
+    payload = read_xml(sdmx_file, None, validate=validate)
 
-    if isinstance(first_element_dict(data), Dataset):
-        type_ = MessageTypeEnum.StructureDataSet
+    if isinstance(payload, dict):
+        if isinstance(first_element_dict(payload), Dataset):
+            type_ = MessageTypeEnum.StructureSpecificDataSet
+        elif isinstance(first_element_dict(payload), SubmissionResult):
+            type_ = MessageTypeEnum.Submission
+        else:
+            type_ = MessageTypeEnum.Metadata
+    elif isinstance(payload, SDMXError):
+        type_ = MessageTypeEnum.Error
     else:
-        type_ = MessageTypeEnum.Metadata
-    return Message(type_, data)
+        raise Exception("Unable to set Message Type")
+    return Message(message_type=type_, payload=payload)
 
 
 def get_datasets(data, path_to_metadata, validate=True,
@@ -41,8 +58,8 @@ def get_datasets(data, path_to_metadata, validate=True,
 
     :param remove_empty_columns: Removes empty columns on output pd.Dataframe
 
-    :return: A :obj:`Dataset <model.dataSet.DataSet>` object or a dict of \
-    :obj:`Datasets <model.dataSet.DataSet>`
+    :return: A :obj:`Dataset <sdmxthon.model.dataset.DataSet>` object or a \
+    dict of :obj:`Datasets <sdmxthon.model.dataset.DataSet>`
     """
 
     datasets = read_xml(data, mode="Data", validate=validate)
@@ -52,10 +69,12 @@ def get_datasets(data, path_to_metadata, validate=True,
                         validate=validate)
 
     for v in datasets:
-        if v in metadata['DataStructures']:
-            datasets[v].structure = metadata['DataStructures'][v]
-        elif v in metadata['Dataflows']:
-            datasets[v].dataflow = metadata['Dataflows'][v]
+        if 'DataStructures' in metadata:
+            if v in metadata['DataStructures']:
+                datasets[v].structure = metadata['DataStructures'][v]
+        if 'Dataflows' in metadata:
+            if v in metadata['Dataflows']:
+                datasets[v].dataflow = metadata['Dataflows'][v]
 
         if remove_empty_columns:
             datasets[v].data = drop_na_all(datasets[v].data)
@@ -78,7 +97,8 @@ def get_pandas_df(data, validate=True, remove_empty_columns=True):
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    datasets = read_xml(data, "Data", validate=validate)
+    datasets = read_xml(data, "Data", validate=validate,
+                        use_dataset_id=True)
     if not remove_empty_columns:
         return {ds: datasets[ds].data for ds in datasets}
     else:
@@ -101,7 +121,8 @@ def xml_to_csv(data, output_path=None, validate=True,
 
     :return: A StringIO object if output_path is ''
     """
-    datasets = read_xml(data, mode="Data", validate=validate)
+    datasets = read_xml(data, mode="Data", validate=validate,
+                        use_dataset_id=True)
 
     if remove_empty_columns:
         for ds in datasets:
@@ -131,7 +152,7 @@ def xml_to_csv(data, output_path=None, validate=True,
 
 
 def get_supported_agencies():
-    "Returns the agencies supported by the API"
+    """Returns the agencies supported by the API"""
     from sdmxthon.webservices import webservices
     return {
         'BIS': webservices.BisWs,
@@ -142,3 +163,50 @@ def get_supported_agencies():
         'OECDv2': webservices.OecdWs2,
         'UNICEF': webservices.UnicefWs,
     }
+
+
+def upload_metadata_to_fmr(data: (str, os.PathLike),
+                           host: str = 'localhost',
+                           port: int = 8080,
+                           user: str = 'root',
+                           password: str = 'password',
+                           use_https: bool = False
+                           ):
+    """
+     Uploads metadata to FMR instance
+
+    :param data: Either a string containing SDMX metadata or a path
+                 to a file with SDMX metadata
+    :type data: str or a path to a file
+
+    :param host: The FMR instance host (default is 'localhost')
+    :type host: str
+
+    :param port: The FMR instance port (default is 8080)
+    :type port: str
+
+    :param user: The username for authentication (default is 'root')
+    :type user: str
+
+    :param password: The password for authentication (default is 'password')
+    :type password: str
+
+    :param use_https: A boolean indicating whether to use HTTPS
+                      (default is False)
+    :type use_https: bool
+
+    :exception: Exception with error details if upload fails
+    """
+
+    # Process the input data to obtain SDMX text
+    sdmx_text = process_string_to_read(data)
+
+    # Submit the SDMX structures to FMR for processing
+    submit_structures_to_fmr(
+        sdmx_text=sdmx_text,
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        use_https=use_https
+    )

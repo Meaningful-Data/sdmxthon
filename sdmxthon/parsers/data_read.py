@@ -7,7 +7,7 @@ from sdmxthon.model.dataset import Dataset
 from sdmxthon.utils.handlers import add_list
 from sdmxthon.utils.parsing_words import SERIES, OBS, ID, STRSPE, GENERIC, \
     SERIESKEY, ATTRIBUTES, VALUE, OBS_DIM, OBSVALUE, OBSKEY, DIM_OBS, \
-    exc_attributes
+    exc_attributes, STRID, STRTYPE
 
 chunksize = 50000
 
@@ -162,6 +162,9 @@ def create_dataset(dataset, metadata, global_mode):
             df = pd.DataFrame()
     else:
         raise Exception
-    dataset = Dataset(attached_attributes=attached_attributes, data=df)
+    dataset = Dataset(attached_attributes=attached_attributes,
+                      data=df,
+                      unique_id=metadata[STRID],
+                      structure_type=metadata[STRTYPE])
 
     return dataset

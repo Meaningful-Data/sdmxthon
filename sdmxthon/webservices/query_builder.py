@@ -8,6 +8,18 @@ from abc import ABC, abstractmethod
 class SdmxWebservice(ABC):
     """
     Interface specifying the methods for creating the queries
+
+    :param REFERENCES_OPTIONS: The allowed values for the references parameter
+    :type REFERENCES_OPTIONS: list[str]
+
+    :param STRUCTURE_DETAIL_OPTIONS: The allowed values for the detail parameter
+    :type STRUCTURE_DETAIL_OPTIONS: list[str]
+
+    :param DATA_DETAIL_OPTIONS: The allowed values for the detail parameter
+    :type DATA_DETAIL_OPTIONS: list[str]
+
+    :param CONSTRAINTS_MODE_OPTIONS: The allowed values for the mode parameter
+    :type CONSTRAINTS_MODE_OPTIONS: list[str]
     """
     REFERENCES_OPTIONS = []
     STRUCTURE_DETAIL_OPTIONS = []
@@ -20,7 +32,24 @@ class SdmxWebservice(ABC):
     def get_data_flows(self, agency_id, resources,
                        version, references=None, detail=None) -> str:
         """
-        Returns query to retrieve data flows
+        Returns URL and params to get dataflows
+
+        :param agency_id: The agency id of the dataflows
+        :type agency_id: str
+
+        :param resources: The resources to query
+        :type resources: str
+
+        :param version: The version of the dataflows
+        :type version: str
+
+        :param references: The references parameter (all, children, descendants)
+        :type references: str
+
+        :param detail: The detail parameter (full, referencestubs,
+                       referencepartial, allstubs, allcompletestubs,
+                       referencecompletestubs)
+        :type detail: str
         """
 
     @abstractmethod
@@ -30,14 +59,72 @@ class SdmxWebservice(ABC):
                  dimension_at_observation=None,
                  detail=None, include_history=None):
         """
-        Returns query to retrieve data
+        Returns URL and params to get data
+
+        :param flow: The id of the dataflow
+        :type flow: str
+
+        :param key: The key is constructed as a dot ('.')
+                    separated list of dimension filtered values.
+        :type key: str
+
+        :param provider: The provider of the dataflow
+        :type provider: str
+
+        :param start_period: The start period of the dataflow
+        :type start_period: str
+
+        :param end_period: The end period of the dataflow
+        :type end_period: str
+
+        :param updated_after: Data filtered by the last update date
+        :type updated_after: str
+
+        :param first_n_observations: Number of first observations to be returned
+                                     per key
+        :type first_n_observations: int
+
+        :param last_n_observations: Number of last observations to be returned
+                                    per key
+        :type last_n_observations: int
+
+        :param dimension_at_observation: The dimension at observation
+                                         of the dataflow
+        :type dimension_at_observation: str
+
+        :param detail: The detail parameter (full, referencestubs,
+                       referencepartial, allstubs, allcompletestubs,
+                       referencecompletestubs)
+
+        :param include_history: The include history of the dataflow
+                                (true, false)
+        :type include_history: str
+
+
         """
 
     @abstractmethod
     def get_dsds(self, resources, agency_id, version,
                  references=None, detail=None):
         """
-        Returns query to get dsd
+        Returns URL and params to get the Data Structure Definitions
+
+        :param resources: The resources to query
+        :type resources: str
+
+        :param agency_id: The agency id of the dataflows
+        :type agency_id: str
+
+        :param version: The version of the dataflows
+        :type version: str
+
+        :param references: The references parameter (all, children, descendants)
+        :type references: str
+
+        :param detail: The detail parameter (full, referencestubs,
+                       referencepartial, allstubs, allcompletestubs,
+                       referencecompletestubs)
+        :type detail: str
         """
 
     @abstractmethod
@@ -45,7 +132,35 @@ class SdmxWebservice(ABC):
                         mode=None, references=None, start_period=None,
                         end_period=None, updated_after=None):
         """
-        Returns query to get availability constraints
+        Returns URL and params to get the constraints
+
+        :param flow: The id of the dataflow
+        :type flow: str
+
+        :param key: The key is constructed as a dot ('.')
+                    separated list of dimension filtered values.
+        :type key: str
+
+        :param provider: The provider of the dataflow
+        :type provider: str
+
+        :param component_id: The component id of the dataflow
+        :type component_id: str
+
+        :param mode: The mode parameter (exact, available)
+        :type mode: str
+
+        :param references: The references parameter (all, children, descendants)
+        :type references: str
+
+        :param start_period: The start period of the dataflow
+        :type start_period: str
+
+        :param end_period: The end period of the dataflow
+        :type end_period: str
+
+        :param updated_after: Data filtered by the last update date
+        :type updated_after: str
         """
 
     @abstractmethod
@@ -304,7 +419,7 @@ class SdmxWebservice(ABC):
         """
 
         if reference not in self.REFERENCES_OPTIONS:
-            raise ValueError(f"reference must be one of the following values: "
+            raise ValueError(f"Reference must be one of the following values: "
                              f"{self.REFERENCES_OPTIONS}")
 
     def validate_structural_detail(self, detail: str):
@@ -351,6 +466,19 @@ class SdmxWebservice(ABC):
 class SdmxWs2p0(SdmxWebservice):
     """
     SDMX Web Service 2.0 specification
+
+    :param REFERENCES_OPTIONS: The allowed values for the references parameter
+                            (none, parents, parentsandsiblings, children,
+                            descendants, all)
+    :type REFERENCES_OPTIONS: list[str]
+
+    :param STRUCTURE_DETAIL_OPTIONS: The allowed values for the detail parameter
+                            (allstubs, referencestubs, referencepartial,
+                            allcompletestubs, referencecompletestubs, full)
+    :type STRUCTURE_DETAIL_OPTIONS: list[str]
+
+    :param DATA_DETAIL_OPTIONS: The allowed values for the detail parameter
+    :type DATA_DETAIL_OPTIONS: list[str]
     """
 
     REFERENCES_OPTIONS = ['none', 'parents', 'parentsandsiblings',
@@ -363,6 +491,19 @@ class SdmxWs2p0(SdmxWebservice):
 
     def get_data_flows(self, agency_id, resources=None,
                        version=None, references=None, detail=None) -> str:
+        """
+        Returns URL and params to get dataflows
+
+        :param agency_id: The agency id of the dataflows
+        :param resources: The resources to query
+        :param version: The version of the dataflows
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
         resources = resources if resources else "all"
         version = version if version else "latest"
         agency_id = agency_id if agency_id else "all"
@@ -386,6 +527,28 @@ class SdmxWs2p0(SdmxWebservice):
                  first_n_observations=None, last_n_observations=None,
                  dimension_at_observation=None,
                  detail=None, include_history=None):
+        """
+        Returns URL and params to get data
+
+        :param dataflow_id: The id of the dataflow
+        :param provider: The provider of the dataflow
+        :param version: The version of the dataflow
+        :param key: The key is constructed as a dot ('.') separated list of
+                    dimension filtered values.
+        :param start_period: Start period of the dataflow
+        :param end_period: End period of the dataflow
+        :param updated_after: Data filtered by the last update date
+        :param first_n_observations: Number of first observations to be returned
+                                     per key
+        :param last_n_observations: Number of last observations to be returned
+                                    per key
+        :param dimension_at_observation: The dimension at observation
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+        :param include_history: Value to include history (true, false)
+        :return: The URL and params formatted
+        """
         base_query = f"/data/dataflow/{provider}/{dataflow_id}"
         base_query += f"/{version}" if version else ""
 
@@ -489,6 +652,19 @@ class SdmxWs1(SdmxWebservice):
 
     def get_data_flows(self, agency_id=None, resources=None,
                        version=None, references=None, detail=None) -> str:
+        """
+                Returns URL and params to get dataflows
+
+                :param agency_id: The agency id of the dataflows
+                :param resources: The resources to query
+                :param version: The version of the dataflows
+                :param references: The references parameter (all, children, descendants,
+                                    parents, parentsandsiblings)
+                :param detail: The detail parameter (full, referencestubs,
+                                referencepartial, allstubs, allcompletestubs,
+                                referencecompletestubs)
+                :return: The URL and params formatted
+                """
         return self.build_query("dataflow", agency_id, resources, version, references, detail)
 
     def get_data(self, flow, key=None, provider=None, start_period=None,
@@ -496,6 +672,27 @@ class SdmxWs1(SdmxWebservice):
                  first_n_observations=None, last_n_observations=None,
                  dimension_at_observation=None,
                  detail=None, include_history=None) -> str:
+        """
+        Returns URL and params to get data
+
+        :param flow: The id of the dataflow
+        :param key: The key is constructed as a dot ('.') separated list of
+                    dimension filtered values.
+        :param provider: The provider of the dataflow
+        :param start_period: Start period of the dataflow
+        :param end_period: End period of the dataflow
+        :param updated_after: Data filtered by the last update date
+        :param first_n_observations: Number of first observations to be returned
+                                        per key (int)
+        :param last_n_observations: Number of last observations to be returned
+                                        per key (int)
+        :param dimension_at_observation: The dimension at observation
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+        :param include_history: Value to include history (true, false)
+        :return: The URL and params formatted
+        """
         key = key if key else 'all'
         provider = provider if provider else 'all'
 
@@ -531,12 +728,52 @@ class SdmxWs1(SdmxWebservice):
 
     def get_dsds(self, agency_id=None, resources=None,
                  version=None, references=None, detail=None) -> str:
+        """
+        Returns URL and params to get the Data Structure Definitions
+        :param resources: The resources to query
+
+        :param agency_id: The agency id of the dataflows
+
+        :param version: The version of the dataflows
+
+        :param references: The references parameter (all, children, descendants,
+                            parents, parentsandsiblings)
+
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
         return self.build_query("datastructure", agency_id, resources, version, references, detail)
 
     def get_constraints(self, flow, key=None, provider=None, component_id=None,
                         mode=None, references=None, start_period=None,
                         end_period=None, updated_after=None):
+        """
+        Returns URL and params to get the constraints
+        :param flow: The id of the dataflow
 
+        :param key: The key is constructed as a dot ('.') separated list of
+                    dimension filtered values.
+
+        :param provider: The provider of the dataflow
+
+        :param component_id: The component id of the dataflow
+
+        :param mode: The mode parameter (exact, available)
+
+        :param references: The references parameter (all, children, descendants,
+                            parents, parentsandsiblings)
+
+        :param start_period: The start period of the dataflow
+
+        :param end_period: The end period of the dataflow
+
+        :param updated_after: Data filtered by the last update date
+
+        :return: The URL and params formatted
+        """
         key = key if key else 'all'
         provider = provider if provider else 'all'
         component_id = component_id if component_id else 'all'

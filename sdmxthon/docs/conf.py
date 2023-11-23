@@ -15,12 +15,19 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
 
-# -- Project information -----------------------------------------------------
 
-project = 'sdmxthon'
-copyright = '2023, MeaningfulData'
-author = 'MeaningfulData'
-version = '2.1'
+# -- Project information -----------------------------------------------------
+about = {}
+with open('../__version__.py', 'r') as f:
+    exec(f.read(), about)
+
+project = about['project']
+description = about['description']
+url = about['url']
+version = about['version']
+author = about['author']
+author_email = about['author_email']
+copyright = about['copyright']
 
 # -- General configuration ---------------------------------------------------
 
@@ -63,11 +70,6 @@ html_theme_options = {
     'collapse_navigation': False,
     'sticky_navigation': False,
     'navigation_depth': 4,
-    'includehidden': True,
+    'includehidden': False,
     'titles_only': False
 }
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']

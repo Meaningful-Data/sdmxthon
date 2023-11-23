@@ -2,8 +2,13 @@ from enum import Enum
 
 
 class MessageTypeEnum(Enum):
-    GenericDataSet = 'GenericDataSet'
-    StructureDataSet = 'StructureDataSet'
-    GenericTimeSeriesDataSet = 'GenericTimeSeriesDataSet'
-    StructureTimeSeriesDataSet = 'StructureTimeSeriesDataSet'
+    """
+    Enumeration that withholds the Message type for writing purposes.
+    """
+    GenericDataSet = 'GenAll'
+    StructureSpecificDataSet = 'StrSpecificAll'
+    GenericTimeSeriesDataSet = 'GenTimeSeries'
+    StructureSpecificTimeSeriesDataSet = 'StrSpecificTimeSeries'
     Metadata = 'Structures'
+    Error = 'Error'
+    Submission = 'Submission'

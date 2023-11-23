@@ -4,6 +4,7 @@
 """
 
 import json
+from copy import copy
 from datetime import date, datetime
 
 import pandas as pd
@@ -15,6 +16,7 @@ from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.webservices.fmr import validate_sdmx_csv_fmr
 
 
 class Dataset:
@@ -37,12 +39,16 @@ class Dataset:
     :type data: `Pandas Dataframe \
     <https://pandas.pydata.org/pandas-docs/stable \
     /reference/api/pandas.DataFrame.html>`_
+
     """
 
     def __init__(self, structure: DataStructureDefinition = None,
                  dataflow: DataFlowDefinition = None,
                  dataset_attributes: dict = None,
-                 attached_attributes: dict = None, data=None):
+                 attached_attributes: dict = None,
+                 data=None,
+                 unique_id: str = None,
+                 structure_type: str = None):
 
         self._dataset_attributes = {}
 
@@ -60,8 +66,28 @@ class Dataset:
         if structure is not None:
             self._dataflow = None
             self.structure = structure
+            if structure_type is not None:
+                raise Exception("Cannot define data structure and "
+                                "structure type at the same time")
+            if unique_id is not None:
+                raise Exception("Cannot define data structure and "
+                                "full_id at the same time")
         elif dataflow is not None:
+            if structure_type is not None:
+                raise Exception("Cannot define dataflow and "
+                                "structure type at the same time")
+            if unique_id is not None:
+                raise Exception("Cannot define dataflow and "
+                                "full_id at the same time")
             self.dataflow = dataflow
+        elif structure_type is not None:
+            self._structure_type = structure_type
+            if unique_id is None:
+                raise Exception("Cannot define structure type and "
+                                "not define full_id")
+            self._unique_id = unique_id
+        else:
+            raise ValueError('A Dataset must have a structure or a dataflow')
 
         if data is not None:
             if isinstance(data, pd.DataFrame):
@@ -125,6 +151,8 @@ class Dataset:
                 self.dataset_attributes['setId'] = value.id
                 self._structure = value
                 self._structure = value.structure
+                self._structure_type = "dataflow"
+                self._unique_id = value.unique_id
         else:
             raise TypeError('dataflow must be a DataFlowDefinition')
 
@@ -166,6 +194,8 @@ class Dataset:
                 self._data = self._data.rename(
                     {'OBS_VALUE': value.measure_code})
             self.dataset_attributes['setId'] = value.id
+            self._structure_type = "structure"
+            self._unique_id = value.unique_id
         self._structure = value
 
     @property
@@ -232,53 +262,63 @@ class Dataset:
         """Extracts the dimensionAtObservation from the dataset_attributes"""
         return self.dataset_attributes.get('dimensionAtObservation')
 
-    def read_csv(self, pathToCSV: str, **kwargs):
+    @property
+    def unique_id(self):
+        """Extracts the unique_id"""
+        return self._unique_id
+
+    @property
+    def structure_type(self):
+        """Extracts the structure_type"""
+        return self._structure_type
+
+    def read_csv(self, path_to_csv: str, **kwargs):
         """Loads the data from a CSV. Check the `Pandas read_csv docs
         <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas
         .read_csv.html>`_ Kwargs are supported
 
-        :param pathToCSV: Path to CSV file
-        :type pathToCSV: str
+        :param path_to_csv: Path to CSV file
+        :type path_to_csv: str
 
         """
-        self._data = pd.read_csv(pathToCSV, **kwargs)
+        self._data = pd.read_csv(path_to_csv, **kwargs)
 
-    def read_json(self, pathToJSON: str, **kwargs):
+    def read_json(self, path_to_json: str, **kwargs):
         """Loads the data from a JSON. Check the
         `Pandas read_json docs
         <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas
         .read_json.html>`_. Kwargs are supported
 
-        :param pathToJSON: Path to JSON file
-        :type pathToJSON: str
+        :param path_to_json: Path to JSON file
+        :type path_to_json: str
         """
-        self._data = pd.read_json(pathToJSON, **kwargs)
+        self._data = pd.read_json(path_to_json, **kwargs)
 
-    def read_excel(self, pathToExcel: str, **kwargs):
-        """Loads the data from a Excel file. Check the `Pandas read_excel
+    def read_excel(self, path_to_excel: str, **kwargs):
+        """Loads the data from an Excel file. Check the `Pandas read_excel
         docs <https://pandas.pydata.org/pandas-docs/stable/reference/api
         /pandas.read_excel.html>`_. Kwargs are supported
 
-        :param pathToExcel: Path to Excel file
-        :type pathToExcel: str
+        :param path_to_excel: Path to Excel file
+        :type path_to_excel: str
         """
-        self._data = pd.read_excel(pathToExcel, **kwargs)
+        self._data = pd.read_excel(path_to_excel, **kwargs)
 
-    def to_csv(self, pathToCSV: str = None, **kwargs):
+    def to_csv(self, path_to_csv: str = None, **kwargs):
         """Parses the data to a CSV file. Kwargs are supported
 
-        :param pathToCSV: Path to save as CSV file
-        :type pathToCSV: str
+        :param path_to_csv: Path to save as CSV file
+        :type path_to_csv: str
 
         """
-        return self.data.to_csv(pathToCSV, **kwargs)
+        return self.data.to_csv(path_to_csv, **kwargs)
 
-    def to_json(self, pathToJSON: str = None):
+    def to_json(self, path_to_json: str = None):
         """Parses the data using the JSON Specification from the library
         documentation
 
-        :param pathToJSON: Path to save as JSON file
-        :type pathToJSON: str
+        :param path_to_json: Path to save as JSON file
+        :type path_to_json: str
 
         """
 
@@ -293,19 +333,19 @@ class Dataset:
 
         result = self.data.to_json(orient="records")
         element['data'] = json.loads(result).copy()
-        if pathToJSON is None:
+        if path_to_json is None:
             return element
-        with open(pathToJSON, 'w') as f:
+        with open(path_to_json, 'w') as f:
             f.write(json.dumps(element, ensure_ascii=False, indent=2))
 
-    def to_feather(self, pathToFeather: str, **kwargs):
+    def to_feather(self, path_to_feather: str, **kwargs):
         """Parses the data to an Apache Feather format. Kwargs are supported.
 
-        :param pathToFeather: Path to Feather file
-        :type pathToFeather: str
+        :param path_to_feather: Path to Feather file
+        :type path_to_feather: str
 
         """
-        self.data.to_feather(pathToFeather, **kwargs)
+        self.data.to_feather(path_to_feather, **kwargs)
 
     def structural_validation(self):
         """Performs a Structural Validation on the Data.
@@ -329,16 +369,91 @@ class Dataset:
 
         return validate_data(self.data, self.structure)
 
-    def set_dimension_at_observation(self, dimAtObs):
-        """Sets the dimensionAtObservation
-            :param dimAtObs: Dimension At Observation
-            :type dimAtObs: str
+    def to_sdmx_csv(self, output_path: str = None):
+
         """
-        if (dimAtObs in self.structure.dimension_codes or
-                dimAtObs == 'AllDimensions'):
-            self.dataset_attributes['dimensionAtObservation'] = dimAtObs
+        Converts a dataset to an SDMX CSV format
+
+        :param output_path: The path where the resulting
+                            SDMX CSV file will be saved
+
+        :return: The SDMX CSV data as a string if no output path is provided
+        """
+
+        # Create a copy of the dataset
+        df: pd.DataFrame = copy(self.data)
+
+        # Add additional attributes to the dataset
+        for k, v in self.attached_attributes.items():
+            df[k] = v
+
+        # Insert two columns at the beginning of the data set
+        df.insert(0, 'STRUCTURE', self._structure_type)
+        df.insert(1, 'STRUCTURE_ID', self._unique_id)
+
+        # Convert the dataset into a csv file
+        if output_path is not None:
+            # Save the CSV file to the specified output path
+            df.to_csv(output_path, index=False, header=True)
+
+        # Return the SDMX CSV data as a string
+        return df.to_csv(index=False, header=True)
+
+    def fmr_validation(self, host: str = 'localhost',
+                       port: int = 8080,
+                       use_https: bool = False,
+                       delimiter: str = 'comma',
+                       max_retries: int = 10,
+                       interval_time: float = 0.5
+                       ):
+
+        """
+        Uploads data to FMR and performs validation
+
+        :param host: The FMR instance host (default is 'localhost')
+        :type host: str
+
+        :param port: The FMR instance port (default is 8080)
+        :type port: int
+
+        :param use_https: A boolean indicating whether to use HTTPS
+                          (default is False)
+        :type use_https: bool
+
+        :param delimiter: The delimiter used in the CSV file
+                          (options: 'comma', 'semicolon', 'tab', 'space')
+        :type delimiter: str
+
+        :param max_retries: The maximum number of retries for checking
+                            validation status (default is 10)
+        :type max_retries: int
+
+        :param interval_time: The interval time between retries in seconds
+                              (default is 0.5)
+        :type interval_time: int
+
+        :return: The validation status if successful
+        """
+        csv_text = self.to_sdmx_csv()
+
+        return validate_sdmx_csv_fmr(csv_text=csv_text,
+                                     host=host,
+                                     port=port,
+                                     use_https=use_https,
+                                     delimiter=delimiter,
+                                     max_retries=max_retries,
+                                     interval_time=interval_time)
+
+    def set_dimension_at_observation(self, dim_at_obs):
+        """Sets the dimensionAtObservation
+            :param dim_at_obs: Dimension At Observation
+            :type dim_at_obs: str
+        """
+        if (dim_at_obs in self.structure.dimension_codes or
+                dim_at_obs == 'AllDimensions'):
+            self.dataset_attributes['dimensionAtObservation'] = dim_at_obs
         else:
-            raise ValueError(f'{dimAtObs} is not a dimension '
+            raise ValueError(f'{dim_at_obs} is not a dimension '
                              f'of dataset {self.structure.id}')
 
     def _check_DA_keys(self, attributes: dict):
@@ -377,8 +492,8 @@ class Dataset:
 
     def to_xml(self,
                message_type: MessageTypeEnum =
-               MessageTypeEnum.StructureDataSet,
-               outputPath: str = '',
+               MessageTypeEnum.StructureSpecificDataSet,
+               output_path: str = '',
                header: Header = None,
                id_: str = 'test',
                test: str = 'true',
@@ -392,10 +507,10 @@ class Dataset:
         :param message_type: Format of the Message in SDMX-ML
         :type message_type: MessageTypeEnum
 
-        :param outputPath: Path to save the file, defaults to ''
-        :type outputPath: str
+        :param output_path: Path to save the file, defaults to ''
+        :type output_path: str
 
-        :param prettyprint: Saves the file formatted to be human readable
+        :param prettyprint: Saves the file formatted to be human-readable
         :type prettyprint: bool
 
         :param header: Header to be written, defaults to None
@@ -428,11 +543,11 @@ class Dataset:
         if prepared is None:
             prepared = datetime.now()
 
-        if outputPath == '':
-            return writer(path=outputPath, type_=message_type, payload=self,
+        if output_path == '':
+            return writer(path=output_path, type_=message_type, payload=self,
                           id_=id_, test=test, header=header,
                           prepared=prepared, sender=sender, receiver=receiver)
-        writer(path=outputPath, type_=message_type, payload=self, id_=id_,
+        writer(path=output_path, type_=message_type, payload=self, id_=id_,
                test=test, header=header,
                prepared=prepared, sender=sender, receiver=receiver,
                prettyprint=prettyprint)
