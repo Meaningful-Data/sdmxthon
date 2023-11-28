@@ -19,13 +19,12 @@ def URLparsing(infile: str):
             raise requests.ConnectionError(
                 f'Invalid URL. Response from server: {response.text}')
         infile = TextIOWrapper(BytesIO(response.content),
-                                  encoding='utf-8',
-                                  errors="replace").read()
+                               encoding='utf-8',
+                               errors="replace").read()
     except requests.ConnectionError:
         raise requests.ConnectionError('Invalid URL. '
                                        'No response from server')
     return infile
-
 
 
 def process_string_to_read(infile: str):
@@ -88,8 +87,8 @@ def process_string_to_read(infile: str):
     # Is bytes
     elif isinstance(infile, BytesIO):
         infile = TextIOWrapper(infile,
-                                  encoding='utf-8',
-                                  errors="replace").read()
+                               encoding='utf-8',
+                               errors="replace").read()
 
     else:
         error_msg = f'Cannot parse as SDMX, ' \

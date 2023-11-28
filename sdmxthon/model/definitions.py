@@ -11,10 +11,13 @@ from sdmxthon.model.component import Component
 from sdmxthon.model.descriptors import AttributeDescriptor, ComponentList, \
     DimensionDescriptor, GroupDimensionDescriptor, MeasureDescriptor
 from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
+from sdmxthon.model.header import Header, Party, Sender
 from sdmxthon.model.utils import ConstraintRoleType, bool_setter, \
     generic_setter
-from sdmxthon.utils.handlers import add_indent, export_intern_data, \
-    split_unique_id
+from sdmxthon.parsers.writer_aux import create_namespaces, write_from_header, \
+    parse_metadata, export_intern_data, add_indent, get_end_message
+from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import split_unique_id
 from sdmxthon.utils.mappings import Data_Types_VTL, commonAbbr, structureAbbr
 
 
@@ -664,6 +667,74 @@ class DataStructureDefinition(MaintainableArtefact):
         else:
             return result
 
+    def to_xml(self,
+               output_path: str = '',
+               header: Header = None,
+               id_: str = 'test',
+               test: str = 'true',
+               prepared: datetime = None,
+               sender: str = 'Unknown',
+               receiver: str = 'Not_supplied',
+               prettyprint=True):
+        """
+        Exports the DataStructureDefinition to a XML file in SDMX-ML 2.1 format
+
+        :param output_path: Path to save the file, defaults to ''
+        :type output_path: str
+
+        :param prettyprint: Specifies if the output file is formatted
+        :type prettyprint: bool
+
+        :param header: Header to be written, defaults to None
+        :type header: Header
+
+        .. important::
+
+            If the header argument is not None, rest of the below arguments
+            will not be used
+
+        :param id_: ID of the Header, defaults to 'test'
+        :type id_: str
+
+        :param test: Mark as test file, defaults to 'true'
+        :type test: str
+
+        :param prepared: Datetime of the preparation of the Message, \
+        defaults to current date and time
+        :type prepared: datetime
+
+        :param sender: ID of the Sender, defaults to 'Unknown'
+        :type sender: str
+
+        :param receiver: ID of the Receiver, defaults to 'Not_supplied'
+        :type receiver: str
+
+        :returns: A str, if outputPath is ''
+        """
+        outfile = create_namespaces(
+            type_=MessageTypeEnum.Metadata,
+            payload=None,
+            prettyprint=True
+        )
+
+        if header is None:
+            header = Header(id_, test, prepared, Sender(sender),
+                            [Party(receiver)])
+
+        outfile += write_from_header(header, prettyprint,
+                                     type_=MessageTypeEnum.Metadata)
+        payload = {'DataStructures': {self.unique_id: self}}
+        outfile += parse_metadata(payload=payload,
+                                  prettyprint=prettyprint)
+        outfile += get_end_message(type_=MessageTypeEnum.Metadata)
+        if output_path != '':
+            with open(output_path, "w", encoding="UTF-8",
+                      errors='replace') as f:
+                f.write(outfile)
+        else:
+            return outfile
+        return outfile
+
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
 
@@ -698,9 +769,8 @@ class DataStructureDefinition(MaintainableArtefact):
             outfile += self.measure_descriptor. \
                 _parse_XML(indent_child, f'{structureAbbr}:MeasureList')
 
-        outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>'
-
-        outfile += f'{indent}</{label}>'
+        outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>' \
+                   f'{indent}</{label}>'
 
         return outfile
 

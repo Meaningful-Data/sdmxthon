@@ -2,8 +2,8 @@ from sdmxthon.model.base import IdentifiableArtefact
 from sdmxthon.model.itemScheme import Concept
 from sdmxthon.model.representation import Representation
 from sdmxthon.model.utils import generic_setter, int_setter
-from sdmxthon.utils.handlers import add_indent, export_intern_data, \
-    split_unique_id
+from sdmxthon.parsers.writer_aux import export_intern_data, add_indent
+from sdmxthon.utils.handlers import split_unique_id
 from sdmxthon.utils.mappings import structureAbbr
 
 

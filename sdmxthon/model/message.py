@@ -173,7 +173,8 @@ class Message:
             use_https=use_https
         )
 
-    def to_xml(self, output_path: str = '',
+    def to_xml(self,
+               output_path: str = '',
                header: Header = None,
                id_: str = 'test',
                test: str = 'true',
@@ -213,8 +214,7 @@ class Message:
         :param receiver: ID of the Receiver, defaults to 'Not_supplied'
         :type receiver: str
 
-        :returns:
-            StringIO object, if outputPath is ''
+        :returns: A str, if outputPath is ''
 
         """
 

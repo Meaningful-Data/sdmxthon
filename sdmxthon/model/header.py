@@ -5,7 +5,7 @@ from datetime import datetime
 
 from sdmxthon.model.base import InternationalString
 from sdmxthon.model.utils import generic_setter, string_setter, bool_setter
-from sdmxthon.utils.handlers import add_indent
+from sdmxthon.parsers.writer_aux import add_indent
 from sdmxthon.utils.mappings import commonAbbr, structureAbbr
 
 
