@@ -10,25 +10,35 @@ from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
 from sdmxthon.model.submission import SubmissionResult
-from sdmxthon.parsers.read import read_xml
+from sdmxthon.parsers.read import read_xml, read_sdmx_csv
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict, drop_na_all
 from sdmxthon.utils.xml_base import process_string_to_read
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
-def read_sdmx(sdmx_file, validate=True) -> Message:
+def read_sdmx(sdmx_file, validate=False) -> Message:
     """
     Read SDMX performs the operation of reading a SDMX Data and SDMX
-    metadata files. URLs could be used.
+    metadata files in XML or CSV format. URLs could be used.
 
     :param sdmx_file: Path, URL or SDMX file as string
-    :param validate: Validation of the XML file against the XSD (default: True)
+    :param validate: Validation of the XML file against the XSD (default: False)
 
     :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
 
-    payload = read_xml(sdmx_file, None, validate=validate)
+    # Process the SDMX file and check the file type
+    infile, filetype = process_string_to_read(sdmx_file)
+    if filetype == "xml":
+        payload = read_xml(infile, None, validate=validate)
+    elif filetype == "json":
+        raise Exception('Json is not supported')
+    elif filetype == "csv":
+        payload = read_sdmx_csv(infile)
+
+    else:
+        raise Exception("File type is not recognised")
 
     if isinstance(payload, dict):
         if isinstance(first_element_dict(payload), Dataset):

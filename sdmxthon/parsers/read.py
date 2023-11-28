@@ -1,7 +1,9 @@
 from xml.parsers.expat import ExpatError
 
+import pandas as pd
 import xmltodict
 
+from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.data_read import create_dataset
@@ -101,11 +103,82 @@ def parse_sdmx(result, use_dataset_id=False):
     return datasets
 
 
+def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
+    # Extract Structure type and structure id
+    if sdmx_csv_version == 1:
+        # For SDMX-CSV version 1, use 'DATAFLOW' column as the structure id
+        structure_id = data['DATAFLOW'].iloc[0]
+        # Structure type will be "dataflow" in both versions
+        structure_type = 'dataflow'
+        # Drop 'DATAFLOW' column from DataFrame
+        df_csv = data.drop(['DATAFLOW'], axis=1)
+    else:
+        # For SDMX-CSV version 2, use 'STRUCTURE_ID' column as the structure id and 'STRUCTURE' as the structure type
+        structure_id = data['STRUCTURE_ID'].iloc[0]
+        structure_type = data['STRUCTURE'].iloc[0]
+        # Drop 'STRUCTURE' and 'STRUCTURE_ID' columns from DataFrame
+        df_csv = data.drop(['STRUCTURE', 'STRUCTURE_ID'], axis=1)
+
+    # Return a Dataset object with the extracted information
+    return Dataset(unique_id=structure_id, structure_type=structure_type, data=df_csv)
+
+
+def read_sdmx_csv(infile: str):
+    # Get Dataframe from CSV file
+    df_csv = pd.read_csv(infile)
+    # Drop empty columns
+    df_csv = df_csv.dropna(axis=1, how='all')
+
+    # Determine SDMX-CSV version based on column names
+    if 'DATAFLOW' in df_csv.columns:
+        sdmx_csv_version = 1
+    elif 'STRUCTURE' in df_csv.columns and 'STRUCTURE_ID' in df_csv.columns:
+        sdmx_csv_version = 2
+    else:
+        # Raise an exception if the CSV file is not in SDMX-CSV format
+        raise Exception('Invalid CSV file, only SDMX-CSV is allowed')
+
+    # Convert all columns to strings
+    df_csv = df_csv.astype('str')
+    # Check if any column headers contain ':', indicating mode, label or text
+    mode_label_text = any([':' in x for x in df_csv.columns])
+
+    # Determine the id column based on the SDMX-CSV version
+    if sdmx_csv_version == 1:
+        id_column = 'DATAFLOW'
+    else:
+        id_column = 'STRUCTURE_ID'
+
+    # If mode, label or text is present, modify the DataFrame
+    if mode_label_text:
+        # Split the ID column to remove mode, label or text
+        df_csv[id_column] = df_csv[id_column].map(lambda x: x.split(': ')[0])
+        # Split the other columns to remove mode, label, or text
+        for x in df_csv.columns[sdmx_csv_version:]:
+            df_csv[x.split(':')[0]] = df_csv[x].map(lambda x: x.split(': ', 2)[0],
+                                                    na_action='ignore')
+            # Delete the original columns
+            del df_csv[x]
+
+    # Separate SDMX-CSV in different datasets per Structure ID
+    list_df = [data for _, data in df_csv.groupby(id_column)]
+
+    # Create a payload dictionary to store datasets with the different unique_ids as keys
+    payload = {}
+    for df in list_df:
+        # Generate a dataset from each subset of the DataFrame
+        dataset = generate_dataset_from_sdmx_csv(data=df, sdmx_csv_version=sdmx_csv_version)
+        # Add the dataset to the payload dictionary
+        payload[dataset.unique_id] = dataset
+
+    # Return the payload generated
+    return payload
+
+
 def read_xml(infile: str, mode: str = None,
              validate: bool = True,
              use_dataset_id: bool = False):
-    infile = process_string_to_read(infile)
-
+    infile, filetype = process_string_to_read(infile)
     if validate:
         validate_doc(infile)
     try:

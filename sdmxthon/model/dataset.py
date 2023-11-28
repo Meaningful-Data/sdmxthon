@@ -369,11 +369,12 @@ class Dataset:
 
         return validate_data(self.data, self.structure)
 
-    def to_sdmx_csv(self, output_path: str = None):
+    def to_sdmx_csv(self, version: int, output_path: str = None):
 
         """
         Converts a dataset to an SDMX CSV format
 
+        :param version: The SDMX-CSV version (1.2)
         :param output_path: The path where the resulting
                             SDMX CSV file will be saved
 
@@ -387,9 +388,15 @@ class Dataset:
         for k, v in self.attached_attributes.items():
             df[k] = v
 
-        # Insert two columns at the beginning of the data set
-        df.insert(0, 'STRUCTURE', self._structure_type)
-        df.insert(1, 'STRUCTURE_ID', self._unique_id)
+        if version == 1:
+            df.insert(0, 'DATAFLOW', self._unique_id)
+
+        elif version == 2:
+            # Insert two columns at the beginning of the data set
+            df.insert(0, 'STRUCTURE', self._structure_type)
+            df.insert(1, 'STRUCTURE_ID', self._unique_id)
+        else:
+            raise Exception('Invalid SDMX-CSV version.')
 
         # Convert the dataset into a csv file
         if output_path is not None:
