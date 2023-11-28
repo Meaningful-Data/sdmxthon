@@ -1,6 +1,7 @@
-import io
+import csv
+import json
 import os
-from io import BytesIO
+from io import BytesIO, StringIO, TextIOWrapper
 
 import requests
 import validators
@@ -17,13 +18,14 @@ def URLparsing(infile: str):
         if response.status_code == 400:
             raise requests.ConnectionError(
                 f'Invalid URL. Response from server: {response.text}')
-        infile = io.TextIOWrapper(BytesIO(response.content),
+        infile = TextIOWrapper(BytesIO(response.content),
                                   encoding='utf-8',
                                   errors="replace").read()
     except requests.ConnectionError:
         raise requests.ConnectionError('Invalid URL. '
                                        'No response from server')
     return infile
+
 
 
 def process_string_to_read(infile: str):
@@ -34,9 +36,37 @@ def process_string_to_read(infile: str):
         # Is file as string
         elif len(infile) > 10 and "<?" in infile[:10] and "xml" in infile[:10]:
             pass
+        elif len(infile) > 10 and ("{" in infile[:10] or "[" in infile[:10]):
+            # Assuming it's JSON if it starts with '{' or '['
+            try:
+                result = json.loads(infile)
+                return result, "json"
+            except json.JSONDecodeError:
+                pass
+
         # Is file as path
-        elif ('/' in infile or '\\' in infile or
-              (".xml" in infile and "<" not in infile) or
+        elif ((".json" in infile and "{" not in infile[:10]) or
+              (".json" in infile and "[" in infile[:10]) or
+              (".csv" in infile and "," not in infile[:10]) or
+              isinstance(infile, os.PathLike)):
+            if not os.path.isfile(infile):
+                raise ValueError(f"File not found: {infile}")
+            # Check if it's a valid JSON file
+            try:
+                with open(infile, "r", encoding='utf-8', errors='replace') as f:
+                    result = json.load(f)
+                return result, "json"
+            except (json.JSONDecodeError, AttributeError):
+                pass
+            # Check if it's a valid CSV file
+            try:
+                with open(infile, "r", encoding='utf-8', errors='replace') as f:
+                    csv.reader(f)
+                return infile, "csv"
+            except csv.Error:
+                pass
+        # Is file as path
+        elif ((".xml" in infile and "<" not in infile) or
               isinstance(infile, os.PathLike)):
             if not os.path.isfile(infile):
                 raise ValueError(f"File not found: {infile}")
@@ -45,15 +75,19 @@ def process_string_to_read(infile: str):
                           encoding='utf-8',
                           errors='replace') as f:
                     infile = f.read()
+                    return infile, "xml"
             except AttributeError:
                 pass
+        elif "DATAFLOW," in infile[:11] or ("STRUCTURE," in infile[:11] and
+                                            "STRUCTURE_ID" in infile[:25]):
+            return StringIO(infile), "csv"
         else:
             error_msg = f'Cannot parse string as SDMX. ' \
                         f'Found {infile}'
             raise ValueError(error_msg)
     # Is bytes
     elif isinstance(infile, BytesIO):
-        infile = io.TextIOWrapper(infile,
+        infile = TextIOWrapper(infile,
                                   encoding='utf-8',
                                   errors="replace").read()
 
@@ -66,7 +100,7 @@ def process_string_to_read(infile: str):
     if infile[0] != '<' and infile[3] == '<':  # BOM parsing
         infile = infile[3:]
 
-    return infile
+    return infile, "xml"
 
 
 def validate_doc(infile):

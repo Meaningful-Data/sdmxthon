@@ -11,7 +11,8 @@ pytestmark = mark.input_path(Path(__file__).parent / "data")
 
 # Test reading and validation of SDMX files
 @mark.parametrize("filename", ['gen_all.xml', 'gen_ser.xml',
-                               'str_all.xml', 'str_ser.xml'])
+                               'str_all.xml', 'str_ser.xml',
+                               'data_v1.csv', 'data_v2.csv'])
 def test_reading_validation(data_path, filename):
     file_path = os.path.join(data_path, filename)
     result = read_sdmx(file_path, validate=True)
