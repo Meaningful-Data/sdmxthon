@@ -150,9 +150,6 @@ def generic_setter(value, class_):
         Raises:
             TypeError: If the value is not an instance of the class
     """
-    from sdmxthon.model.base import InternationalString
-    if type(InternationalString) == type(class_) and isinstance(value, str):
-        return InternationalString.from_str(value)
     if isinstance(value, class_) or value is None:
         return value
 
