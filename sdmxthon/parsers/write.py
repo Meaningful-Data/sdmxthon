@@ -3,36 +3,60 @@ from datetime import datetime
 import pandas as pd
 
 from sdmxthon.model.component import PrimaryMeasure
-from sdmxthon.model.header import Header, Sender, Party
+from sdmxthon.model.header import Header, Party, Sender
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
-from sdmxthon.parsers.writer_aux import create_namespaces, write_from_header, \
-    parse_metadata, get_end_message
+from sdmxthon.parsers.writer_aux import create_namespaces, get_end_message, \
+    parse_metadata, write_from_header
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.mappings import messageAbbr, genericAbbr
+from sdmxthon.utils.mappings import genericAbbr, messageAbbr
 
 chunksize = 100000
 
 
-#
-#      --------------------------------------------
-#     |                                            |
-#     |                   Common                   |
-#     |                                            |
-#      --------------------------------------------
-#
+def remove_null_values_on_dataset(dataset):
+    """
+    This function removes null values from a dataset
 
-
-def process_dataset(dataset):
+    :param dataset: The dataset is to be cleaned
+    :return: The same dataset without null values
+    """
     dataset.data = dataset.data.fillna(value='')
     return dataset
 
 
-def writer(path, payload, type_, prettyprint=True, id_='test',
+def writer(path, payload, type_,
+           prettyprint=True,
+           id_='test',
            test='true',
            prepared=datetime.now(),
            sender='Unknown',
            receiver='Not_supplied',
            header: Header = None):
+    """
+    This function writes a SDMX-ML file from a payload
+
+    :param path: Output path (if empty, returns the string)
+
+    :param payload: Payload to be written
+
+    :param type_: Message type
+
+    :param prettyprint: Prettyprint option
+
+    :param id_: ID of the message
+
+    :param test: Flag to indicate if it is a test
+
+    :param prepared: Datetime of the message preparation
+
+    :param sender: Agency that sends the message
+
+    :param receiver: Receiver of the message
+
+    :param header: Header of the message
+
+    :return: XML as string, if path is empty
+    """
     # Header
     outfile = create_namespaces(type_, payload, prettyprint)
 
@@ -50,21 +74,23 @@ def writer(path, payload, type_, prettyprint=True, id_='test',
     if type_ == MessageTypeEnum.GenericDataSet:
         if isinstance(payload, dict):
             for record in payload.values():
-                record = process_dataset(record)
-                outfile += genWriting(record, prettyprint, record.dim_at_obs)
+                record = remove_null_values_on_dataset(record)
+                outfile += generic_writing(record, prettyprint,
+                                           record.dim_at_obs)
         else:
-            payload = process_dataset(payload)
-            outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
+            payload = remove_null_values_on_dataset(payload)
+            outfile += generic_writing(payload, prettyprint,
+                                       dim=payload.dim_at_obs)
     elif type_ == MessageTypeEnum.StructureSpecificDataSet:
         if isinstance(payload, dict):
             count = 0
             for record in payload.values():
                 count += 1
-                record = process_dataset(record)
+                record = remove_null_values_on_dataset(record)
                 outfile += strWriting(record, prettyprint, count,
                                       record.dim_at_obs)
         else:
-            payload = process_dataset(payload)
+            payload = remove_null_values_on_dataset(payload)
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif type_ == MessageTypeEnum.Metadata:
         if len(payload) > 0:
@@ -110,14 +136,6 @@ def get_codes(dim, dataset):
     return series_codes, obs_codes
 
 
-#
-#      --------------------------------------------
-#     |                                            |
-#     |              Structure Specific            |
-#     |                                            |
-#      --------------------------------------------
-#
-
 def memory_optimization_str(dataset, opt_att_codes, prettyprint):
     outfile = ""
     length_ = len(dataset.data)
@@ -140,6 +158,13 @@ def memory_optimization_str(dataset, opt_att_codes, prettyprint):
     return outfile
 
 
+#
+#      --------------------------------------------
+#     |                                            |
+#     |             Structure Specific             |
+#     |                                            |
+#      --------------------------------------------
+#
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     outfile = ''
 
@@ -265,8 +290,8 @@ def ser_str(data: pd.DataFrame,
 #      --------------------------------------------
 #
 
-def memory_optimization_gen(dataset, dim_codes, att_codes, measure_code,
-                            prettyprint):
+def memory_optimization_generic(dataset, dim_codes, att_codes, measure_code,
+                                prettyprint):
     outfile = ""
     length_ = len(dataset.data)
     if len(dataset.data) > chunksize:
@@ -298,7 +323,15 @@ def memory_optimization_gen(dataset, dim_codes, att_codes, measure_code,
     return outfile
 
 
-def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
+def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
+    """
+    This function writes a generic SDMX-ML data file from a dataset
+
+    :param dataset: Dataset to be written
+    :param prettyprint: Prettyprint option
+    :param dim: Dimension at observation
+    :return:
+    """
     outfile = ''
 
     if prettyprint:
@@ -325,18 +358,18 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
-        outfile += memory_optimization_gen(dataset, dim_codes, att_codes,
-                                           measure_code, prettyprint)
+        outfile += memory_optimization_generic(dataset, dim_codes, att_codes,
+                                               measure_code, prettyprint)
     else:
         series_codes, obs_codes = get_codes(dim, dataset)
 
-        outfile += ser_gen(dataset.data,
-                           dim_codes=dim_codes,
-                           att_codes=att_codes,
-                           measure_code=measure_code,
-                           prettyprint=prettyprint,
-                           series_codes=series_codes,
-                           obs_codes=obs_codes)
+        outfile += creating_series_generic(dataset.data,
+                                           dim_codes=dim_codes,
+                                           att_codes=att_codes,
+                                           measure_code=measure_code,
+                                           prettyprint=prettyprint,
+                                           series_codes=series_codes,
+                                           obs_codes=obs_codes)
 
     outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
@@ -365,11 +398,11 @@ def format_measure_att(data, measure_code, att_codes, child3, child4, nl):
     return out
 
 
-def format_obs(data: dict,
-               dim_codes: list,
-               att_codes: list,
-               measure_code: str,
-               prettyprint=True):
+def format_gen_obs(data: dict,
+                   dim_codes: list,
+                   att_codes: list,
+                   measure_code: str,
+                   prettyprint=True):
     if prettyprint:
         child2 = '\t\t'
         child3 = '\t\t\t'
@@ -400,8 +433,8 @@ def obs_gen(data: pd.DataFrame,
             att_codes: list,
             measure_code: str,
             prettyprint=True):
-    parser = lambda x: format_obs(x, dim_codes, att_codes,  # noqa: E731
-                                  measure_code, prettyprint)
+    parser = lambda x: format_gen_obs(x, dim_codes, att_codes,  # noqa: E731
+                                      measure_code, prettyprint)
 
     iterator = map(parser, data.to_dict(orient='records'))
     out = ''.join(iterator)
@@ -409,13 +442,13 @@ def obs_gen(data: pd.DataFrame,
     return out
 
 
-def format_ser(data: dict,
-               measure_code: str,
-               series_key: list,
-               series_attr: list,
-               obs_attr: list,
-               dim: str,
-               prettyprint=True):
+def format_generic_series(data: dict,
+                          measure_code: str,
+                          series_key: list,
+                          series_attr: list,
+                          obs_attr: list,
+                          dim: str,
+                          prettyprint=True):
     if prettyprint:
         child2 = '\t\t'
         child3 = '\t\t\t'
@@ -468,13 +501,13 @@ def format_ser(data: dict,
     return out
 
 
-def ser_gen(data: pd.DataFrame,
-            dim_codes: list,
-            att_codes: list,
-            measure_code: str,
-            obs_codes: list,
-            series_codes: list,
-            prettyprint=True):
+def creating_series_generic(data: pd.DataFrame,
+                            dim_codes: list,
+                            att_codes: list,
+                            measure_code: str,
+                            obs_codes: list,
+                            series_codes: list,
+                            prettyprint=True):
     # Getting each datapoint from data and creating dict
 
     series_key = [v for v in series_codes if v in dim_codes]
@@ -490,13 +523,13 @@ def ser_gen(data: pd.DataFrame,
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    parser = lambda x: format_ser(data=x,  # noqa: E731
-                                  measure_code=measure_code,
-                                  series_key=series_key,
-                                  series_attr=series_att,
-                                  obs_attr=obs_att,
-                                  dim=dim,
-                                  prettyprint=prettyprint)
+    parser = lambda x: format_generic_series(data=x,  # noqa: E731
+                                             measure_code=measure_code,
+                                             series_key=series_key,
+                                             series_attr=series_att,
+                                             obs_attr=obs_att,
+                                             dim=dim,
+                                             prettyprint=prettyprint)
 
     out = series_process(parser=parser, data=data, data_dict=data_dict,
                          series_codes=series_codes, obs_codes=obs_codes)

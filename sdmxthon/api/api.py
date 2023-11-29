@@ -10,10 +10,10 @@ from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
 from sdmxthon.model.submission import SubmissionResult
-from sdmxthon.parsers.read import read_xml, read_sdmx_csv
+from sdmxthon.parsers.read import read_sdmx_csv, read_xml
+from sdmxthon.parsers.reader_input_processor import process_string_to_read
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.handlers import first_element_dict, drop_na_all
-from sdmxthon.utils.xml_base import process_string_to_read
+from sdmxthon.utils.handlers import drop_na_all, first_element_dict
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 

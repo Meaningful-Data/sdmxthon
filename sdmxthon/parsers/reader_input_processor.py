@@ -9,7 +9,7 @@ from lxml import etree
 
 from sdmxthon.utils.xml_allowed_errors import ALLOWED_ERRORS_CONTENT
 
-pathToSchema = 'schemas/SDMXMessage.xsd'
+path_to_schema = 'schemas/SDMXMessage.xsd'
 
 
 def URLparsing(infile: str):
@@ -103,8 +103,12 @@ def process_string_to_read(infile: str):
 
 
 def validate_doc(infile):
-    # Use the lxml ElementTree compatible parser so that, e.g.,
-    #   we ignore comments.
+    """
+    Validates the XML file against the XSD schema
+
+    :param infile: String or Path to file
+    :exception: Exception if the XML file is not valid
+    """
     try:
         parser = etree.ETCompatXMLParser()
     except AttributeError:
@@ -112,7 +116,7 @@ def validate_doc(infile):
         parser = etree.XMLParser(remove_blank_text=True)
 
     base_path = os.path.dirname(os.path.dirname(__file__))
-    schema = os.path.join(base_path, pathToSchema)
+    schema = os.path.join(base_path, path_to_schema)
     xmlschema_doc = etree.parse(schema)
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
@@ -133,9 +137,3 @@ def validate_doc(infile):
 
         if len(severe_errors) > 0:
             raise Exception(';\n'.join(severe_errors))
-
-
-def cast(typ, value):
-    if typ is None or value is None:
-        return value
-    return typ(value)

@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 from pytest import mark
 
-from sdmxthon.api.api import read_sdmx, get_pandas_df
+from sdmxthon.api.api import get_pandas_df, read_sdmx
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
@@ -39,7 +39,7 @@ def test_data_writing(data_type, series, data_path, metadata_path):
 
     prepared_time = datetime.fromisoformat('2000-01-01T00:00:01')
 
-    result = dataset.to_xml(data_type, '',
+    result = dataset.to_xml(output_path='', message_type=data_type,
                             prepared=prepared_time,
                             prettyprint=False)
 

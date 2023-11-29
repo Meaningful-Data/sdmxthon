@@ -10,8 +10,8 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from sdmxthon.model.definitions import DataStructureDefinition, \
-    DataFlowDefinition
+from sdmxthon.model.definitions import DataFlowDefinition, \
+    DataStructureDefinition
 from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
@@ -498,9 +498,9 @@ class Dataset:
         self._dataset_attributes = attributes.copy()
 
     def to_xml(self,
+               output_path: str = '',
                message_type: MessageTypeEnum =
                MessageTypeEnum.StructureSpecificDataSet,
-               output_path: str = '',
                header: Header = None,
                id_: str = 'test',
                test: str = 'true',
