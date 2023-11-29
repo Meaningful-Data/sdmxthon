@@ -18,6 +18,7 @@ from sdmxthon.parsers.writer_aux import add_indent, create_namespaces, \
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import split_unique_id
 from sdmxthon.utils.mappings import commonAbbr, Data_Types_VTL, structureAbbr
+from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
 class MemberSelection(object):
@@ -607,6 +608,11 @@ class DataStructureDefinition(MaintainableArtefact):
 
     @property
     def constraints(self):
+        """
+        Constraints of the DataStructureDefinition
+
+        :return: List of constraints
+        """
         return self._constraints
 
     def add_constraint(self, value: ContentConstraint):
@@ -665,6 +671,36 @@ class DataStructureDefinition(MaintainableArtefact):
                 json.dump(result, fp)
         else:
             return result
+
+    def upload_to_fmr(self, host: str = 'localhost',
+                      port: int = 8080,
+                      user: str = 'root',
+                      password: str = 'password',
+                      use_https: bool = False):
+        """
+        Uploads the DataStructureDefinition to the FMR
+
+        :param host: Host to be connected
+        :type host: str
+        :param port: Port to be used
+        :type port: int
+        :param user: Username for basic Auth (Admin or Agency privileges)
+        :type user: str
+        :param password: Password for basic Auth
+        :type password: str
+        :param use_https: Flag to use or not https
+        :type use_https: bool
+
+        """
+        sdmx_text = self.to_xml()
+        submit_structures_to_fmr(
+            sdmx_text=sdmx_text,
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            use_https=use_https
+        )
 
     def to_xml(self,
                output_path: str = '',
@@ -841,6 +877,36 @@ class DataFlowDefinition(MaintainableArtefact):
             self._constraints = []
         self._constraints.append(value)
 
+    def upload_to_fmr(self, host: str = 'localhost',
+                      port: int = 8080,
+                      user: str = 'root',
+                      password: str = 'password',
+                      use_https: bool = False):
+        """
+        Uploads the DataFlow to the FMR
+
+        :param host: Host to be connected
+        :type host: str
+        :param port: Port to be used
+        :type port: int
+        :param user: Username for basic Auth (Admin or Agency privileges)
+        :type user: str
+        :param password: Password for basic Auth
+        :type password: str
+        :param use_https: Flag to use or not https
+        :type use_https: bool
+
+        """
+        sdmx_text = self.to_xml()
+        submit_structures_to_fmr(
+            sdmx_text=sdmx_text,
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            use_https=use_https
+        )
+
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
 
@@ -893,7 +959,7 @@ class DataFlowDefinition(MaintainableArtefact):
                receiver: str = 'Not_supplied',
                prettyprint=True):
         """
-        Exports the DataStructureDefinition to a XML file in SDMX-ML 2.1 format
+        Exports the DataFlow to a XML file in SDMX-ML 2.1 format
 
         :param output_path: Path to save the file, defaults to ''
         :type output_path: str

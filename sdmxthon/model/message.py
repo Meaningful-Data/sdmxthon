@@ -78,7 +78,8 @@ class Message:
 
     @property
     def content(self):
-        """Returns the payload as a dict
+        """
+        Returns the payload as a dict
 
         :class: `Dict`
 
@@ -140,11 +141,11 @@ class Message:
             raise TypeError('Wrong Payload. Must be of type '
                             'DataSet or a dict of DataSet')
 
-    def upload_metadata_to_fmr(self, host: str = 'localhost',
-                               port: int = 8080,
-                               user: str = 'root',
-                               password: str = 'password',
-                               use_https: bool = False):
+    def upload_to_fmr(self, host: str = 'localhost',
+                      port: int = 8080,
+                      user: str = 'root',
+                      password: str = 'password',
+                      use_https: bool = False):
         """
         Uploads the metadata to the FMR
 
