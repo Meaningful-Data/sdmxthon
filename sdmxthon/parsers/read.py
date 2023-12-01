@@ -1,6 +1,4 @@
 from xml.parsers.expat import ExpatError
-from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
-    validate_doc
 
 import pandas as pd
 import xmltodict
@@ -10,6 +8,8 @@ from sdmxthon.model.error import SDMXError
 from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
+from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
+    validate_doc
 from sdmxthon.utils.handlers import split_from_urn
 from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
@@ -18,7 +18,6 @@ from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     SERIES, STATUS, STATUS_MSG, STR_USAGE, STRID, STRREF, STRSPE, STRTYPE, \
     STRUCTURE, STRUCTURES, SUBMISSION_RESULT, SUBMIT_STRUCTURE_RESPONSE, \
     SUBMITTED_STRUCTURE, URN, VERSION
-from sdmxthon.utils.xml_base import process_string_to_read, validate_doc
 
 options = {'process_namespaces': True,
            'namespaces': namespaces,
