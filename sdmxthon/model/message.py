@@ -44,9 +44,9 @@ class Message:
 
     @property
     def type(self):
-        """Enumeration that withholds the Message type for writing purposes.
+        """Holds the Message type for writing purposes (see :meth:`.to_xml`)
 
-        :class: `MessageTypeEnum`
+        :class:`.MessageTypeEnum`
 
         """
         return self._type

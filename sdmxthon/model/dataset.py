@@ -10,8 +10,8 @@ from datetime import date, datetime
 import pandas as pd
 from pandas import DataFrame
 
-from sdmxthon.model.definitions import DataStructureDefinition, \
-    DataFlowDefinition
+from sdmxthon.model.definitions import DataFlowDefinition, \
+    DataStructureDefinition
 from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
@@ -379,7 +379,21 @@ class Dataset:
                             SDMX CSV file will be saved
 
         :return: The SDMX CSV data as a string if no output path is provided
+
+        .. important::
+
+            The SDMX CSV version must be 1 or 2. Please refer to this link
+            for more info:
+            https://wiki.sdmxcloud.org/SDMX-CSV
+
+            Uses pandas.Dataframe.to_csv with specific parameters to ensure
+            the file is compatible with the SDMX-CSV standard (e.g. no index,
+            uses header, comma delimiter, custom column names
+            for the first two columns)
         """
+
+        # Link to pandas.to_csv documentation on sphinx:
+        # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html
 
         # Create a copy of the dataset
         df: pd.DataFrame = copy(self.data)

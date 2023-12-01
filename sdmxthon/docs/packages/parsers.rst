@@ -90,10 +90,20 @@ Metadata validations
 Metadata validations includes methods to check if the referenced objects are
 in the same file at parsing.
 
-*************
-Writing file
-*************
+*********************
+Writing SDMX-ML files
+*********************
 
-The writing file includes all methods to write the data or metadata
+The writer file includes all methods to write the data or metadata
 to a SDMX-ML file.
 
+It uses the MessageTypeEnum enumeration to select the format we would like to have, Generic or StructureSpecific
+for data and Structure file for Metadata. This can be modified in :attr:`.Message.type` or using this enum in the
+:meth:`.Dataset.to_xml` method.
+
+.. autoclass:: sdmxthon.utils.enums.MessageTypeEnum
+    :members:
+    :show-inheritance:
+    :undoc-members:
+
+You may also write SDMX-CSV files using the :meth:`.Dataset.to_sdmx_csv` method.
