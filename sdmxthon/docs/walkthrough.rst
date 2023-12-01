@@ -11,7 +11,7 @@ SDMXthon uses the version 2.1 of the Standard. Upgrade to version 3 will be done
 
 **Features**
 
-- Reading and writing SDMX ML
+- Reading and writing SDMX-ML and SDMX-CSV
 - Data validation
 - Metadata validation
 - Interaction with SDMX APIs and Fusion Metadata Registry

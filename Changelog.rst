@@ -30,7 +30,7 @@ Changelog
 **Bugfixes**
 
 2.3.2 (2023-09-26)
-----------------
+------------------
 **Added**
   - Webservices and Data Discovery for OECD (v1 and v2) and UNICEF
 
@@ -41,7 +41,7 @@ Changelog
 
 
 2.3.1 (2023-09-15)
-----------------
+------------------
 **Added**
 
 **Changes**
@@ -116,6 +116,7 @@ Changelog
  - Model changes:
     - Deleted 'dataset' on data retrieval
     - Changed keys of message.content on Metadata Type.
+
 **Bugfixes**
 
 1.1 (2021-01-12)
@@ -132,8 +133,7 @@ Development version (Yanked Release), changes are implemented in 1.2.
 **Changes**
 
 **Bugfixes**
-
-- Fixed bug on Dataflow with constraints parsing.
+ - Fixed bug on Dataflow with constraints parsing.
 
 1.0.2 (2021-07-06)
 ------------------
@@ -143,8 +143,7 @@ Development version (Yanked Release), changes are implemented in 1.2.
 **Changes**
 
 **Bugfixes**
-
-- Fixed bug on Generic writing with only one dimension or attribute.
+ - Fixed bug on Generic writing with only one dimension or attribute.
 
 1.0.1 (2021-06-23)
 ------------------
@@ -152,15 +151,13 @@ Development version (Yanked Release), changes are implemented in 1.2.
 **Added**
 
 **Changes**
-
-- Added support for strings in all API methods. Restricted path to os.Pathlike
+ - Added support for strings in all API methods. Restricted path to os.Pathlike
 
 
 **Bugfixes**
-
-- Fixed bug on Series Constraints duplicated rows.
+ - Fixed bug on Series Constraints duplicated rows.
 
 1.0 (2021-05-28)
-________________
+----------------
 
 Initial release.

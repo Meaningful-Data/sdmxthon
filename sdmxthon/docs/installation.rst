@@ -2,7 +2,7 @@
 Installation
 ************
 
-To install the library, just run the following command:
+To install the library, just run the following command in a terminal:
 
 .. code-block:: text
 
