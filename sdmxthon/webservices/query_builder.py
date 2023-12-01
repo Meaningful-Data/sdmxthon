@@ -470,7 +470,7 @@ class SdmxWs1(SdmxWebservice):
                         end_period=None, updated_after=None):
         """
         Returns URL and params to get the constraints
-        
+
         :param flow: The id of the dataflow
 
         :param key: The key is constructed as a dot ('.') separated list of

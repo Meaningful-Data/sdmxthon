@@ -7,8 +7,6 @@ class MessageTypeEnum(Enum):
     """
     GenericDataSet = 'GenAll'
     StructureSpecificDataSet = 'StrSpecificAll'
-    GenericTimeSeriesDataSet = 'GenTimeSeries'
-    StructureSpecificTimeSeriesDataSet = 'StrSpecificTimeSeries'
     Metadata = 'Structures'
     Error = 'Error'
     Submission = 'Submission'

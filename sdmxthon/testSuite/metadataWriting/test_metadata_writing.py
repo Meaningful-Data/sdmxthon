@@ -5,7 +5,8 @@ from pathlib import Path
 from pytest import mark
 
 from sdmxthon.api.api import read_sdmx
-from sdmxthon.model.message import Message
+from sdmxthon.model.header import Header
+from sdmxthon.parsers.writer_aux import write_from_header
 from sdmxthon.utils.enums import MessageTypeEnum
 
 
@@ -14,8 +15,6 @@ def load_reference_text(reference_filename, pathToReference):
     with open(os.path.join(pathToReference, reference_filename), 'r',
               encoding="utf-8") as f:
         reference_text = f.read()
-    reference_text = reference_text.replace('\n', '')
-    reference_text = reference_text.replace("\\'", '\'')
     return reference_text
 
 
@@ -25,7 +24,11 @@ def compare_metadata(reference_filename, data_filename, metadata_key,
                      label_key):
     obj_ = read_sdmx(os.path.join(data_path, data_filename))
     metadata_obj = obj_.payload[metadata_key][metadata_name]
-    result = metadata_obj._parse_XML(indent='', label=label_key)
+    if hasattr(metadata_obj, 'to_xml'):
+        prepared = datetime.fromisoformat('2021-04-08T17:27:28')
+        result = metadata_obj.to_xml(prettyprint=True, prepared=prepared)
+    else:
+        result = metadata_obj._parse_XML(indent='', label=label_key)
 
     expected_result = load_reference_text(reference_filename, reference_path)
     return expected_result, result
@@ -49,6 +52,10 @@ dsd_params = [
     ('estat.xml', 'estat.txt', 'ESTAT:HLTH_RS_PRSHP1(7.0)'),
     ('imf.xml', 'imf.txt', 'IMF:ALT_FISCAL_DSD(1.0)'),
     ('wb.xml', 'wb.txt', 'WB:WDI(1.0)')]
+
+dataflows_params = [
+    ('bis.xml', 'bis.txt', 'BIS:WEBSTATS_DER_DATAFLOW(1.0)'),
+]
 
 constraints_params = [
     ('cube.xml', 'cube.txt', 'MD:Test_cube(1.0)'),
@@ -96,6 +103,18 @@ def test_dsd_comparison(data_filename, reference_filename, metadata_name,
     assert expected_result == result
 
 
+@mark.input_path(Path(__file__).parent / "DataFlow" / "data")
+@mark.parametrize("data_filename, reference_filename, metadata_name",
+                  dataflows_params)
+def test_dataflow_comparison(data_filename, reference_filename, metadata_name,
+                             data_path, reference_path):
+    metadata_key, label_key = 'Dataflows', 'str:DataFlow'
+    expected_result, result = compare_metadata(
+        reference_filename, data_filename, metadata_key, metadata_name,
+        data_path, reference_path, label_key)
+    assert expected_result == result
+
+
 @mark.input_path(Path(__file__).parent / "Constraint" / "data")
 @mark.parametrize("data_filename, reference_filename, metadata_name",
                   constraints_params)
@@ -121,7 +140,6 @@ def test_agency_scheme_comparison(data_filename, reference_filename,
 
 
 # Parameterized test for comparing header data
-
 header_params = [('header_test.xml', 'header.txt')]
 
 
@@ -129,10 +147,8 @@ header_params = [('header_test.xml', 'header.txt')]
 @mark.parametrize("data_filename, reference_filename", header_params)
 # General test function for comparing header data
 def test_header_comparison(data_filename, reference_filename, reference_path):
-    prepared_time = datetime.fromisoformat('2021-04-08T17:27:28')
-    obj_ = Message(message_type=MessageTypeEnum.Metadata, payload={})
-    result = obj_.to_xml('',
-                         prepared=prepared_time,
-                         prettyprint=False)
+    header = Header(Prepared=datetime.fromisoformat('2021-04-08T17:27:28'))
+    result = write_from_header(header, prettyprint=False,
+                               type_=MessageTypeEnum.Metadata)
     expected_result = load_reference_text(reference_filename, reference_path)
     assert expected_result == result

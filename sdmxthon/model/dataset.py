@@ -512,9 +512,9 @@ class Dataset:
         self._dataset_attributes = attributes.copy()
 
     def to_xml(self,
+               output_path: str = '',
                message_type: MessageTypeEnum =
                MessageTypeEnum.StructureSpecificDataSet,
-               output_path: str = '',
                header: Header = None,
                id_: str = 'test',
                test: str = 'true',

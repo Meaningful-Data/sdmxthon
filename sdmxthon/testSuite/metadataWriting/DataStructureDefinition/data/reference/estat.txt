@@ -1,1 +1,112 @@
-<str:DataStructure id="HLTH_RS_PRSHP1" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ESTAT:HLTH_RS_PRSHP1(7.0)" version="7.0" isFinal="true" agencyID="ESTAT"><com:Annotations><com:Annotation><com:AnnotationTitle>OBS_FLAG</com:AnnotationTitle><com:AnnotationType>DISSEMINATION_FLAG_SETTINGS</com:AnnotationType></com:Annotation><com:Annotation><com:AnnotationTitle>time</com:AnnotationTitle><com:AnnotationType>DISSEMINATION_TIME_DIMENSION_CODE</com:AnnotationType></com:Annotation></com:Annotations><com:Name xml:lang="en">HLTH_RS_PRSHP1 data structure</com:Name><str:DataStructureComponents><str:DimensionList id="DimensionDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).DimensionDescriptor"><str:Dimension id="freq" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).freq" position="1"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="freq" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="ESTAT" id="FREQ" version="1.5" class="Codelist"/></str:Enumeration><str:EnumerationFormat /></str:LocalRepresentation></str:Dimension><str:Dimension id="isco08" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).isco08" position="2"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="isco08" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="ESTAT" id="ISCO08" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat /></str:LocalRepresentation></str:Dimension><str:Dimension id="unit" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).unit" position="3"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="unit" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="ESTAT" id="UNIT" version="7.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat /></str:LocalRepresentation></str:Dimension><str:Dimension id="geo" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).geo" position="4"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="geo" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="ESTAT" id="GEO" version="1.5" class="Codelist"/></str:Enumeration><str:EnumerationFormat /></str:LocalRepresentation></str:Dimension><str:TimeDimension id="TIME_PERIOD" urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=ESTAT:HLTH_RS_PRSHP1(7.0).TIME_PERIOD" position="5"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="TIME_PERIOD" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:TextFormat textType="ObservationalTimePeriod"/></str:LocalRepresentation></str:TimeDimension></str:DimensionList><str:AttributeList id="AttributeDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).AttributeDescriptor"><str:Attribute id="OBS_FLAG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_FLAG" assignmentStatus="Conditional"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="OBS_FLAG" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="ESTAT" id="OBS_FLAG" version="1.5" class="Codelist"/></str:Enumeration><str:EnumerationFormat /></str:LocalRepresentation><str:AttributeRelationship><str:PrimaryMeasure><Ref id="OBS_VALUE"/></str:PrimaryMeasure></str:AttributeRelationship></str:Attribute></str:AttributeList><str:MeasureList id="MeasureDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).MeasureDescriptor"><str:PrimaryMeasure id="OBS_VALUE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_VALUE"><str:ConceptIdentity><Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="OBS_VALUE" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:TextFormat textType="Double"/></str:LocalRepresentation></str:PrimaryMeasure></str:MeasureList></str:DataStructureComponents></str:DataStructure>
+<?xml version="1.0" encoding="UTF-8"?>
+<mes:Structure xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+	<mes:Header>
+		<mes:ID>test</mes:ID>
+		<mes:Test>true</mes:Test>
+		<mes:Prepared>2021-04-08T17:27:28</mes:Prepared>
+		<mes:Sender id="Unknown"/>
+		<mes:Receiver id="Not_supplied"/>
+		<mes:Source xml:lang="en">SDMXthon</mes:Source>
+	</mes:Header>
+	<mes:Structures>
+		<str:DataStructures>
+			<str:DataStructure id="HLTH_RS_PRSHP1" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ESTAT:HLTH_RS_PRSHP1(7.0)" version="7.0" isFinal="true" agencyID="ESTAT">
+			<com:Annotations>
+				<com:Annotation>
+					<com:AnnotationTitle>OBS_FLAG</com:AnnotationTitle>
+					<com:AnnotationType>DISSEMINATION_FLAG_SETTINGS</com:AnnotationType>
+				</com:Annotation>
+				<com:Annotation>
+					<com:AnnotationTitle>time</com:AnnotationTitle>
+					<com:AnnotationType>DISSEMINATION_TIME_DIMENSION_CODE</com:AnnotationType>
+				</com:Annotation>
+			</com:Annotations>
+				<com:Name xml:lang="en">HLTH_RS_PRSHP1 data structure</com:Name>
+				<str:DataStructureComponents>
+					<str:DimensionList id="DimensionDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).DimensionDescriptor">
+						<str:Dimension id="freq" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).freq" position="1">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="freq" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="ESTAT" id="FREQ" version="1.5" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat />
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="isco08" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).isco08" position="2">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="isco08" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="ESTAT" id="ISCO08" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat />
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="unit" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).unit" position="3">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="unit" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="ESTAT" id="UNIT" version="7.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat />
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="geo" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=ESTAT:HLTH_RS_PRSHP1(7.0).geo" position="4">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="geo" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="ESTAT" id="GEO" version="1.5" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat />
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:TimeDimension id="TIME_PERIOD" urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=ESTAT:HLTH_RS_PRSHP1(7.0).TIME_PERIOD" position="5">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="TIME_PERIOD" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:TextFormat textType="ObservationalTimePeriod"/>
+							</str:LocalRepresentation>
+						</str:TimeDimension>
+					</str:DimensionList>
+					<str:AttributeList id="AttributeDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).AttributeDescriptor">
+						<str:Attribute id="OBS_FLAG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_FLAG" assignmentStatus="Conditional">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="OBS_FLAG" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="ESTAT" id="OBS_FLAG" version="1.5" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat />
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:PrimaryMeasure>
+									<Ref id="OBS_VALUE"/>
+								</str:PrimaryMeasure>
+							</str:AttributeRelationship>
+						</str:Attribute>
+					</str:AttributeList>
+					<str:MeasureList id="MeasureDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=ESTAT:HLTH_RS_PRSHP1(7.0).MeasureDescriptor">
+						<str:PrimaryMeasure id="OBS_VALUE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=ESTAT:HLTH_RS_PRSHP1(7.0).OBS_VALUE">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="HLTH_RS_PRSHP1" package="conceptscheme" maintainableParentVersion="7.0" agencyID="ESTAT" id="OBS_VALUE" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:TextFormat textType="Double"/>
+							</str:LocalRepresentation>
+						</str:PrimaryMeasure>
+					</str:MeasureList>
+				</str:DataStructureComponents>
+			</str:DataStructure>
+		</str:DataStructures>
+	</mes:Structures>
+</mes:Structure>

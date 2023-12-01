@@ -1,6 +1,6 @@
 from sdmxthon.model.base import IdentifiableArtefact
 from sdmxthon.model.component import Dimension, Attribute, PrimaryMeasure
-from sdmxthon.utils.handlers import add_indent, export_intern_data
+from sdmxthon.parsers.writer_aux import export_intern_data, add_indent
 
 
 class GroupDimension(object):

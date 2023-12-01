@@ -7,7 +7,6 @@ from base64 import b64encode
 from datetime import datetime
 from typing import List
 
-
 #
 # Convenience setters and getters
 #

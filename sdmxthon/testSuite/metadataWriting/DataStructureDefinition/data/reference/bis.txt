@@ -1,1 +1,501 @@
-<str:DataStructure id="BIS_DER" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)" version="1.0" isExternalReference="false" isFinal="false" agencyID="BIS"><com:Name xml:lang="en">BIS derivatives statistics</com:Name><com:Name xml:lang="es">Estadísticas de derivados del BIS</com:Name><str:DataStructureComponents><str:DimensionList id="DimensionDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=BIS:BIS_DER(1.0).DimensionDescriptor"><str:Dimension id="FREQ" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).FREQ" position="1"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="FREQ" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_FREQ" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_TYPE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_TYPE" position="2"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_TYPE" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_OD_TYPE" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_INSTR" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_INSTR" position="3"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_INSTR" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_DER_INSTR" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_RISK" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_RISK" position="4"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_RISK" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_MARKET_RISK" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_REP_CTY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_REP_CTY" position="5"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_REP_CTY" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" maxLength="2"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_SECTOR_CPY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_SECTOR_CPY" position="6"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_SECTOR_CPY" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_SECTOR_CPY" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_CPC" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_CPC" position="7"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_CPC" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" maxLength="2"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_SECTOR_UDL" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_SECTOR_UDL" position="8"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_SECTOR_UDL" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_SECTOR_UDL" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_CURR_LEG1" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_CURR_LEG1" position="9"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_CURR_LEG1" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_BIS_UNIT" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" maxLength="3"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_CURR_LEG2" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_CURR_LEG2" position="10"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_CURR_LEG2" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_BIS_UNIT" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" maxLength="3"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_ISSUE_MAT" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_ISSUE_MAT" position="11"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_ISSUE_MAT" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_ISSUE_MAT" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_RATING" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_RATING" position="12"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_RATING" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_RATING" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_EX_METHOD" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_EX_METHOD" position="13"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_EX_METHOD" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_EX_METHOD" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:Dimension id="DER_BASIS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_BASIS" position="14"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_BASIS" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_DER_BASIS" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation></str:Dimension><str:TimeDimension id="TIME_PERIOD" urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=BIS:BIS_DER(1.0).TIME_PERIOD" position="15"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="TIME_PERIOD" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:TextFormat textType="ObservationalTimePeriod"/></str:LocalRepresentation></str:TimeDimension></str:DimensionList><str:AttributeList id="AttributeDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=BIS:BIS_DER(1.0).AttributeDescriptor"><str:Attribute id="TIME_FORMAT" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).TIME_FORMAT" assignmentStatus="Conditional"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="TIME_FORMAT" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_TIME_FORMAT" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="3" maxLength="3"/></str:LocalRepresentation><str:AttributeRelationship><str:Dimension><Ref id="FREQ"/></str:Dimension><str:Dimension><Ref id="DER_TYPE"/></str:Dimension><str:Dimension><Ref id="DER_INSTR"/></str:Dimension><str:Dimension><Ref id="DER_RISK"/></str:Dimension><str:Dimension><Ref id="DER_REP_CTY"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_CPY"/></str:Dimension><str:Dimension><Ref id="DER_CPC"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_UDL"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG1"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG2"/></str:Dimension><str:Dimension><Ref id="DER_ISSUE_MAT"/></str:Dimension><str:Dimension><Ref id="DER_RATING"/></str:Dimension><str:Dimension><Ref id="DER_EX_METHOD"/></str:Dimension><str:Dimension><Ref id="DER_BASIS"/></str:Dimension></str:AttributeRelationship></str:Attribute><str:Attribute id="OBS_STATUS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).OBS_STATUS" assignmentStatus="Mandatory"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_STATUS" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_OBS_STATUS" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation><str:AttributeRelationship><str:PrimaryMeasure><Ref id="OBS_VALUE"/></str:PrimaryMeasure></str:AttributeRelationship></str:Attribute><str:Attribute id="AVAILABILITY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).AVAILABILITY" assignmentStatus="Mandatory"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="AVAILABILITY" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_AVAILABILITY" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation><str:AttributeRelationship><str:Dimension><Ref id="FREQ"/></str:Dimension><str:Dimension><Ref id="DER_TYPE"/></str:Dimension><str:Dimension><Ref id="DER_INSTR"/></str:Dimension><str:Dimension><Ref id="DER_RISK"/></str:Dimension><str:Dimension><Ref id="DER_REP_CTY"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_CPY"/></str:Dimension><str:Dimension><Ref id="DER_CPC"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_UDL"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG1"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG2"/></str:Dimension><str:Dimension><Ref id="DER_ISSUE_MAT"/></str:Dimension><str:Dimension><Ref id="DER_RATING"/></str:Dimension><str:Dimension><Ref id="DER_EX_METHOD"/></str:Dimension><str:Dimension><Ref id="DER_BASIS"/></str:Dimension></str:AttributeRelationship></str:Attribute><str:Attribute id="COLLECTION" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).COLLECTION" assignmentStatus="Mandatory"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="COLLECTION" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_COLLECTION" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation><str:AttributeRelationship><str:Dimension><Ref id="FREQ"/></str:Dimension><str:Dimension><Ref id="DER_TYPE"/></str:Dimension><str:Dimension><Ref id="DER_INSTR"/></str:Dimension><str:Dimension><Ref id="DER_RISK"/></str:Dimension><str:Dimension><Ref id="DER_REP_CTY"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_CPY"/></str:Dimension><str:Dimension><Ref id="DER_CPC"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_UDL"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG1"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG2"/></str:Dimension><str:Dimension><Ref id="DER_ISSUE_MAT"/></str:Dimension><str:Dimension><Ref id="DER_RATING"/></str:Dimension><str:Dimension><Ref id="DER_EX_METHOD"/></str:Dimension><str:Dimension><Ref id="DER_BASIS"/></str:Dimension></str:AttributeRelationship></str:Attribute><str:Attribute id="DECIMALS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).DECIMALS" assignmentStatus="Mandatory"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DECIMALS" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_DECIMALS" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="Integer" isSequence="false" maxLength="2"/></str:LocalRepresentation><str:AttributeRelationship><str:None/></str:AttributeRelationship></str:Attribute><str:Attribute id="UNIT_MEASURE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).UNIT_MEASURE" assignmentStatus="Mandatory"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MEASURE" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_BIS_UNIT" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="3" maxLength="3"/></str:LocalRepresentation><str:AttributeRelationship><str:None/></str:AttributeRelationship></str:Attribute><str:Attribute id="UNIT_MULT" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).UNIT_MULT" assignmentStatus="Mandatory"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MULT" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_UNIT_MULT" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" maxLength="2"/></str:LocalRepresentation><str:AttributeRelationship><str:None/></str:AttributeRelationship></str:Attribute><str:Attribute id="OBS_CONF" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).OBS_CONF" assignmentStatus="Conditional"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_CONF" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:Enumeration><Ref package="codelist" agencyID="BIS" id="CL_CONF_STATUS" version="1.0" class="Codelist"/></str:Enumeration><str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/></str:LocalRepresentation><str:AttributeRelationship><str:PrimaryMeasure><Ref id="OBS_VALUE"/></str:PrimaryMeasure></str:AttributeRelationship></str:Attribute><str:Attribute id="OBS_PRE_BREAK" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).OBS_PRE_BREAK" assignmentStatus="Conditional"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_PRE_BREAK" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:TextFormat textType="String" isSequence="false" maxLength="15"/></str:LocalRepresentation><str:AttributeRelationship><str:PrimaryMeasure><Ref id="OBS_VALUE"/></str:PrimaryMeasure></str:AttributeRelationship></str:Attribute><str:Attribute id="TITLE_TS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).TITLE_TS" assignmentStatus="Conditional"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="TITLE_TS" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:TextFormat textType="String" maxLength="255"/></str:LocalRepresentation><str:AttributeRelationship><str:Dimension><Ref id="FREQ"/></str:Dimension><str:Dimension><Ref id="DER_TYPE"/></str:Dimension><str:Dimension><Ref id="DER_INSTR"/></str:Dimension><str:Dimension><Ref id="DER_RISK"/></str:Dimension><str:Dimension><Ref id="DER_REP_CTY"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_CPY"/></str:Dimension><str:Dimension><Ref id="DER_CPC"/></str:Dimension><str:Dimension><Ref id="DER_SECTOR_UDL"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG1"/></str:Dimension><str:Dimension><Ref id="DER_CURR_LEG2"/></str:Dimension><str:Dimension><Ref id="DER_ISSUE_MAT"/></str:Dimension><str:Dimension><Ref id="DER_RATING"/></str:Dimension><str:Dimension><Ref id="DER_EX_METHOD"/></str:Dimension><str:Dimension><Ref id="DER_BASIS"/></str:Dimension></str:AttributeRelationship></str:Attribute></str:AttributeList><str:MeasureList id="MeasureDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=BIS:BIS_DER(1.0).MeasureDescriptor"><str:PrimaryMeasure id="OBS_VALUE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=BIS:BIS_DER(1.0).OBS_VALUE"><str:ConceptIdentity><Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/></str:ConceptIdentity><str:LocalRepresentation><str:TextFormat textType="BigInteger" maxLength="15"/></str:LocalRepresentation></str:PrimaryMeasure></str:MeasureList></str:DataStructureComponents></str:DataStructure>
+<?xml version="1.0" encoding="UTF-8"?>
+<mes:Structure xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">
+	<mes:Header>
+		<mes:ID>test</mes:ID>
+		<mes:Test>true</mes:Test>
+		<mes:Prepared>2021-04-08T17:27:28</mes:Prepared>
+		<mes:Sender id="Unknown"/>
+		<mes:Receiver id="Not_supplied"/>
+		<mes:Source xml:lang="en">SDMXthon</mes:Source>
+	</mes:Header>
+	<mes:Structures>
+		<str:DataStructures>
+			<str:DataStructure id="BIS_DER" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=BIS:BIS_DER(1.0)" version="1.0" isExternalReference="false" isFinal="false" agencyID="BIS">
+				<com:Name xml:lang="en">BIS derivatives statistics</com:Name>
+				<com:Name xml:lang="es">Estadísticas de derivados del BIS</com:Name>
+				<str:DataStructureComponents>
+					<str:DimensionList id="DimensionDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DimensionDescriptor=BIS:BIS_DER(1.0).DimensionDescriptor">
+						<str:Dimension id="FREQ" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).FREQ" position="1">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="FREQ" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_FREQ" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_TYPE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_TYPE" position="2">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_TYPE" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_OD_TYPE" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_INSTR" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_INSTR" position="3">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_INSTR" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_DER_INSTR" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_RISK" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_RISK" position="4">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_RISK" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_MARKET_RISK" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_REP_CTY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_REP_CTY" position="5">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_REP_CTY" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" maxLength="2"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_SECTOR_CPY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_SECTOR_CPY" position="6">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_SECTOR_CPY" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_SECTOR_CPY" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_CPC" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_CPC" position="7">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_CPC" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_BIS_IF_REF_AREA" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" maxLength="2"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_SECTOR_UDL" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_SECTOR_UDL" position="8">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_SECTOR_UDL" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_SECTOR_UDL" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_CURR_LEG1" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_CURR_LEG1" position="9">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_CURR_LEG1" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_BIS_UNIT" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" maxLength="3"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_CURR_LEG2" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_CURR_LEG2" position="10">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_CURR_LEG2" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_BIS_UNIT" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" maxLength="3"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_ISSUE_MAT" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_ISSUE_MAT" position="11">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_ISSUE_MAT" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_ISSUE_MAT" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_RATING" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_RATING" position="12">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_RATING" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_RATING" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_EX_METHOD" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_EX_METHOD" position="13">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_EX_METHOD" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_EX_METHOD" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:Dimension id="DER_BASIS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dimension=BIS:BIS_DER(1.0).DER_BASIS" position="14">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DER_BASIS" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_DER_BASIS" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+						</str:Dimension>
+						<str:TimeDimension id="TIME_PERIOD" urn="urn:sdmx:org.sdmx.infomodel.datastructure.TimeDimension=BIS:BIS_DER(1.0).TIME_PERIOD" position="15">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="TIME_PERIOD" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:TextFormat textType="ObservationalTimePeriod"/>
+							</str:LocalRepresentation>
+						</str:TimeDimension>
+					</str:DimensionList>
+					<str:AttributeList id="AttributeDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.AttributeDescriptor=BIS:BIS_DER(1.0).AttributeDescriptor">
+						<str:Attribute id="TIME_FORMAT" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).TIME_FORMAT" assignmentStatus="Conditional">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="TIME_FORMAT" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_TIME_FORMAT" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="3" maxLength="3"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:Dimension>
+									<Ref id="FREQ"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_TYPE"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_INSTR"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RISK"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_REP_CTY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_CPY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CPC"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_UDL"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG1"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG2"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_ISSUE_MAT"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RATING"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_EX_METHOD"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_BASIS"/>
+								</str:Dimension>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="OBS_STATUS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).OBS_STATUS" assignmentStatus="Mandatory">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_STATUS" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_OBS_STATUS" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:PrimaryMeasure>
+									<Ref id="OBS_VALUE"/>
+								</str:PrimaryMeasure>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="AVAILABILITY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).AVAILABILITY" assignmentStatus="Mandatory">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="AVAILABILITY" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_AVAILABILITY" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:Dimension>
+									<Ref id="FREQ"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_TYPE"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_INSTR"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RISK"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_REP_CTY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_CPY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CPC"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_UDL"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG1"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG2"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_ISSUE_MAT"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RATING"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_EX_METHOD"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_BASIS"/>
+								</str:Dimension>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="COLLECTION" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).COLLECTION" assignmentStatus="Mandatory">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="COLLECTION" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_COLLECTION" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:Dimension>
+									<Ref id="FREQ"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_TYPE"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_INSTR"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RISK"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_REP_CTY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_CPY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CPC"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_UDL"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG1"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG2"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_ISSUE_MAT"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RATING"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_EX_METHOD"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_BASIS"/>
+								</str:Dimension>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="DECIMALS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).DECIMALS" assignmentStatus="Mandatory">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="DECIMALS" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_DECIMALS" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="Integer" isSequence="false" maxLength="2"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:None/>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="UNIT_MEASURE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).UNIT_MEASURE" assignmentStatus="Mandatory">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MEASURE" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_BIS_UNIT" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="3" maxLength="3"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:None/>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="UNIT_MULT" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).UNIT_MULT" assignmentStatus="Mandatory">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="UNIT_MULT" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_UNIT_MULT" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" maxLength="2"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:None/>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="OBS_CONF" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).OBS_CONF" assignmentStatus="Conditional">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_CONF" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:Enumeration>
+									<Ref package="codelist" agencyID="BIS" id="CL_CONF_STATUS" version="1.0" class="Codelist"/>
+								</str:Enumeration>
+								<str:EnumerationFormat textType="String" isSequence="false" minLength="1" maxLength="1"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:PrimaryMeasure>
+									<Ref id="OBS_VALUE"/>
+								</str:PrimaryMeasure>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="OBS_PRE_BREAK" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).OBS_PRE_BREAK" assignmentStatus="Conditional">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_PRE_BREAK" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:TextFormat textType="String" isSequence="false" maxLength="15"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:PrimaryMeasure>
+									<Ref id="OBS_VALUE"/>
+								</str:PrimaryMeasure>
+							</str:AttributeRelationship>
+						</str:Attribute>
+						<str:Attribute id="TITLE_TS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.DataAttribute=BIS:BIS_DER(1.0).TITLE_TS" assignmentStatus="Conditional">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="TITLE_TS" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:TextFormat textType="String" maxLength="255"/>
+							</str:LocalRepresentation>
+							<str:AttributeRelationship>
+								<str:Dimension>
+									<Ref id="FREQ"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_TYPE"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_INSTR"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RISK"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_REP_CTY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_CPY"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CPC"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_SECTOR_UDL"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG1"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_CURR_LEG2"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_ISSUE_MAT"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_RATING"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_EX_METHOD"/>
+								</str:Dimension>
+								<str:Dimension>
+									<Ref id="DER_BASIS"/>
+								</str:Dimension>
+							</str:AttributeRelationship>
+						</str:Attribute>
+					</str:AttributeList>
+					<str:MeasureList id="MeasureDescriptor" urn="urn:sdmx:org.sdmx.infomodel.datastructure.MeasureDescriptor=BIS:BIS_DER(1.0).MeasureDescriptor">
+						<str:PrimaryMeasure id="OBS_VALUE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.PrimaryMeasure=BIS:BIS_DER(1.0).OBS_VALUE">
+							<str:ConceptIdentity>
+								<Ref maintainableParentID="BIS_CONCEPT_SCHEME" package="conceptscheme" maintainableParentVersion="1.0" agencyID="BIS" id="OBS_VALUE" class="Concept"/>
+							</str:ConceptIdentity>
+							<str:LocalRepresentation>
+								<str:TextFormat textType="BigInteger" maxLength="15"/>
+							</str:LocalRepresentation>
+						</str:PrimaryMeasure>
+					</str:MeasureList>
+				</str:DataStructureComponents>
+			</str:DataStructure>
+		</str:DataStructures>
+	</mes:Structures>
+</mes:Structure>

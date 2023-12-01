@@ -11,11 +11,14 @@ from sdmxthon.model.component import Component
 from sdmxthon.model.descriptors import AttributeDescriptor, ComponentList, \
     DimensionDescriptor, GroupDimensionDescriptor, MeasureDescriptor
 from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
-from sdmxthon.model.utils import ConstraintRoleType, bool_setter, \
-    generic_setter
-from sdmxthon.utils.handlers import add_indent, export_intern_data, \
-    split_unique_id
-from sdmxthon.utils.mappings import Data_Types_VTL, commonAbbr, structureAbbr
+from sdmxthon.model.header import Header, Party, Sender
+from sdmxthon.model.utils import bool_setter, ConstraintRoleType, generic_setter
+from sdmxthon.parsers.writer_aux import add_indent, create_namespaces, \
+    export_intern_data, get_end_message, parse_metadata, write_from_header
+from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import split_unique_id
+from sdmxthon.utils.mappings import commonAbbr, Data_Types_VTL, structureAbbr
+from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
 class MemberSelection(object):
@@ -605,6 +608,11 @@ class DataStructureDefinition(MaintainableArtefact):
 
     @property
     def constraints(self):
+        """
+        Constraints of the DataStructureDefinition
+
+        :return: List of constraints
+        """
         return self._constraints
 
     def add_constraint(self, value: ContentConstraint):
@@ -664,6 +672,104 @@ class DataStructureDefinition(MaintainableArtefact):
         else:
             return result
 
+    def upload_to_fmr(self, host: str = 'localhost',
+                      port: int = 8080,
+                      user: str = 'root',
+                      password: str = 'password',
+                      use_https: bool = False):
+        """
+        Uploads the DataStructureDefinition to the FMR
+
+        :param host: Host to be connected
+        :type host: str
+        :param port: Port to be used
+        :type port: int
+        :param user: Username for basic Auth (Admin or Agency privileges)
+        :type user: str
+        :param password: Password for basic Auth
+        :type password: str
+        :param use_https: Flag to use or not https
+        :type use_https: bool
+
+        """
+        sdmx_text = self.to_xml()
+        submit_structures_to_fmr(
+            sdmx_text=sdmx_text,
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            use_https=use_https
+        )
+
+    def to_xml(self,
+               output_path: str = '',
+               header: Header = None,
+               id_: str = 'test',
+               test: str = 'true',
+               prepared: datetime = None,
+               sender: str = 'Unknown',
+               receiver: str = 'Not_supplied',
+               prettyprint=True):
+        """
+        Exports the DataStructureDefinition to a XML file in SDMX-ML 2.1 format
+
+        :param output_path: Path to save the file, defaults to ''
+        :type output_path: str
+
+        :param prettyprint: Specifies if the output file is formatted
+        :type prettyprint: bool
+
+        :param header: Header to be written, defaults to None
+        :type header: Header
+
+        .. important::
+
+            If the header argument is not None, rest of the below arguments
+            will not be used
+
+        :param id_: ID of the Header, defaults to 'test'
+        :type id_: str
+
+        :param test: Mark as test file, defaults to 'true'
+        :type test: str
+
+        :param prepared: Datetime of the preparation of the Message, \
+        defaults to current date and time
+        :type prepared: datetime
+
+        :param sender: ID of the Sender, defaults to 'Unknown'
+        :type sender: str
+
+        :param receiver: ID of the Receiver, defaults to 'Not_supplied'
+        :type receiver: str
+
+        :returns: A str, if outputPath is ''
+        """
+        outfile = create_namespaces(
+            type_=MessageTypeEnum.Metadata,
+            payload=None,
+            prettyprint=prettyprint
+        )
+
+        if header is None:
+            header = Header(id_, test, prepared, Sender(sender),
+                            [Party(receiver)])
+
+        outfile += write_from_header(header, prettyprint,
+                                     type_=MessageTypeEnum.Metadata)
+        payload = {'DataStructures': {self.unique_id: self}}
+        outfile += parse_metadata(payload=payload,
+                                  prettyprint=prettyprint)
+        outfile += get_end_message(type_=MessageTypeEnum.Metadata)
+        if output_path != '':
+            with open(output_path, "w", encoding="UTF-8",
+                      errors='replace') as f:
+                f.write(outfile)
+        else:
+            return outfile
+        return outfile
+
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
 
@@ -698,9 +804,8 @@ class DataStructureDefinition(MaintainableArtefact):
             outfile += self.measure_descriptor. \
                 _parse_XML(indent_child, f'{structureAbbr}:MeasureList')
 
-        outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>'
-
-        outfile += f'{indent}</{label}>'
+        outfile += f'{indent_child}</{structureAbbr}:DataStructureComponents>' \
+                   f'{indent}</{label}>'
 
         return outfile
 
@@ -772,6 +877,36 @@ class DataFlowDefinition(MaintainableArtefact):
             self._constraints = []
         self._constraints.append(value)
 
+    def upload_to_fmr(self, host: str = 'localhost',
+                      port: int = 8080,
+                      user: str = 'root',
+                      password: str = 'password',
+                      use_https: bool = False):
+        """
+        Uploads the DataFlow to the FMR
+
+        :param host: Host to be connected
+        :type host: str
+        :param port: Port to be used
+        :type port: int
+        :param user: Username for basic Auth (Admin or Agency privileges)
+        :type user: str
+        :param password: Password for basic Auth
+        :type password: str
+        :param use_https: Flag to use or not https
+        :type use_https: bool
+
+        """
+        sdmx_text = self.to_xml()
+        submit_structures_to_fmr(
+            sdmx_text=sdmx_text,
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            use_https=use_https
+        )
+
     def _parse_XML(self, indent, label):
         prettyprint = indent != ''
 
@@ -812,4 +947,72 @@ class DataFlowDefinition(MaintainableArtefact):
 
         outfile += f'{indent}</{label}>'
 
+        return outfile
+
+    def to_xml(self,
+               output_path: str = '',
+               header: Header = None,
+               id_: str = 'test',
+               test: str = 'true',
+               prepared: datetime = None,
+               sender: str = 'Unknown',
+               receiver: str = 'Not_supplied',
+               prettyprint=True):
+        """
+        Exports the DataFlow to a XML file in SDMX-ML 2.1 format
+
+        :param output_path: Path to save the file, defaults to ''
+        :type output_path: str
+
+        :param prettyprint: Specifies if the output file is formatted
+        :type prettyprint: bool
+
+        :param header: Header to be written, defaults to None
+        :type header: Header
+
+        .. important::
+
+            If the header argument is not None, rest of the below arguments
+            will not be used
+
+        :param id_: ID of the Header, defaults to 'test'
+        :type id_: str
+
+        :param test: Mark as test file, defaults to 'true'
+        :type test: str
+
+        :param prepared: Datetime of the preparation of the Message, \
+        defaults to current date and time
+        :type prepared: datetime
+
+        :param sender: ID of the Sender, defaults to 'Unknown'
+        :type sender: str
+
+        :param receiver: ID of the Receiver, defaults to 'Not_supplied'
+        :type receiver: str
+
+        :returns: A str, if outputPath is ''
+        """
+        outfile = create_namespaces(
+            type_=MessageTypeEnum.Metadata,
+            payload=None,
+            prettyprint=prettyprint
+        )
+
+        if header is None:
+            header = Header(id_, test, prepared, Sender(sender),
+                            [Party(receiver)])
+
+        outfile += write_from_header(header, prettyprint,
+                                     type_=MessageTypeEnum.Metadata)
+        payload = {'Dataflows': {self.unique_id: self}}
+        outfile += parse_metadata(payload=payload,
+                                  prettyprint=prettyprint)
+        outfile += get_end_message(type_=MessageTypeEnum.Metadata)
+        if output_path != '':
+            with open(output_path, "w", encoding="UTF-8",
+                      errors='replace') as f:
+                f.write(outfile)
+        else:
+            return outfile
         return outfile
