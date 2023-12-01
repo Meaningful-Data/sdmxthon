@@ -43,6 +43,11 @@ ACTION = 'action'
 STATUS_MSG = 'StatusMessage'
 STATUS = 'status'
 
+# SOAP API handling
+FAULT = 'Fault'
+FAULTCODE = 'faultcode'
+FAULTSTRING = 'faultstring'
+
 
 # Structures
 # Common
@@ -176,7 +181,8 @@ namespaces = {
     'http://www.w3.org/XML/1998/namespace': None,
     schema_root + 'data/structurespecific': None,
     schema_root + 'data/generic': None,
-    schema_root + 'registry': None
+    schema_root + 'registry': None,
+    'http://schemas.xmlsoap.org/soap/envelope/': None
 }
 
 # To exclude from attached_attributes

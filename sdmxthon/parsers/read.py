@@ -9,14 +9,13 @@ from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.utils.handlers import split_from_urn
-from sdmxthon.utils.parsing_words import SERIES, OBS, STRSPE, GENERIC, \
-    STRREF, STRUCTURE, STRID, namespaces, HEADER, DATASET, REF, AGENCY_ID, \
-    ID, VERSION, DIM_OBS, ALL_DIM, STRUCTURES, STR_USAGE, URN, DATASET_ID, \
-    ERROR, ERROR_MESSAGE, ERROR_CODE, ERROR_TEXT, REG_INTERFACE, \
-    SUBMIT_STRUCTURE_RESPONSE, SUBMISSION_RESULT, SUBMITTED_STRUCTURE, \
-    MAINTAINABLE_OBJECT, ACTION, STATUS_MSG, STATUS, STRTYPE
-from sdmxthon.utils.xml_base import validate_doc, \
-    process_string_to_read
+from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
+    DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
+    FAULTCODE, FAULTSTRING, GENERIC, HEADER, ID, MAINTAINABLE_OBJECT, \
+    namespaces, OBS, REF, REG_INTERFACE, SERIES, STATUS, STATUS_MSG, STR_USAGE, \
+    STRID, STRREF, STRSPE, STRTYPE, STRUCTURE, STRUCTURES, SUBMISSION_RESULT, \
+    SUBMIT_STRUCTURE_RESPONSE, SUBMITTED_STRUCTURE, URN, VERSION
+from sdmxthon.utils.xml_base import process_string_to_read, validate_doc
 
 options = {'process_namespaces': True,
            'namespaces': namespaces,
@@ -41,6 +40,9 @@ def parse_sdmx(result, use_dataset_id=False):
         global_mode = STRUCTURE
     elif REG_INTERFACE in result:
         return handle_registry_interface(result)
+    elif FAULT in result:
+        raise Exception(f'SOAP API error: Code ({result[FAULT][FAULTCODE]}). '
+                        f'Message: {result[FAULT][FAULTSTRING]}')
     else:
         raise Exception('Cannot parse this sdmx file')
 
