@@ -6,15 +6,13 @@ supported agencies by the API.
 import os
 from zipfile import ZipFile
 
-from sdmxthon.model.dataset import Dataset
-from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
-from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.read import read_sdmx_csv, read_xml
 from sdmxthon.parsers.reader_input_processor import process_string_to_read
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import drop_na_all, first_element_dict
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
+from sdmxthon.webservices.webservices import get_supported_web_services
 
 
 def read_sdmx(sdmx_file, validate=False) -> Message:
@@ -31,26 +29,16 @@ def read_sdmx(sdmx_file, validate=False) -> Message:
     # Process the SDMX file and check the file type
     infile, filetype = process_string_to_read(sdmx_file)
     if filetype == "xml":
-        payload = read_xml(infile, None, validate=validate)
+        payload, type_ = read_xml(infile, None, validate=validate)
     elif filetype == "json":
         raise Exception('Json is not supported')
     elif filetype == "csv":
         payload = read_sdmx_csv(infile)
+        type_ = MessageTypeEnum.StructureSpecificDataSet
 
     else:
         raise Exception("File type is not recognised")
 
-    if isinstance(payload, dict):
-        if isinstance(first_element_dict(payload), Dataset):
-            type_ = MessageTypeEnum.StructureSpecificDataSet
-        elif isinstance(first_element_dict(payload), SubmissionResult):
-            type_ = MessageTypeEnum.Submission
-        else:
-            type_ = MessageTypeEnum.Metadata
-    elif isinstance(payload, SDMXError):
-        type_ = MessageTypeEnum.Error
-    else:
-        raise Exception("Unable to set Message Type")
     return Message(message_type=type_, payload=payload)
 
 
@@ -72,11 +60,11 @@ def get_datasets(data, path_to_metadata, validate=True,
     dict of :obj:`Datasets <sdmxthon.model.dataset.DataSet>`
     """
 
-    datasets = read_xml(data, mode="Data", validate=validate)
+    datasets, _ = read_xml(data, mode="Data", validate=validate)
 
-    metadata = read_xml(path_to_metadata,
-                        mode="Metadata",
-                        validate=validate)
+    metadata, _ = read_xml(path_to_metadata,
+                           mode="Metadata",
+                           validate=validate)
 
     for v in datasets:
         if 'DataStructures' in metadata:
@@ -107,8 +95,8 @@ def get_pandas_df(data, validate=True, remove_empty_columns=True):
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    datasets = read_xml(data, "Data", validate=validate,
-                        use_dataset_id=True)
+    datasets, _ = read_xml(data, "Data", validate=validate,
+                           use_dataset_id=True)
     if not remove_empty_columns:
         return {ds: datasets[ds].data for ds in datasets}
     else:
@@ -131,8 +119,8 @@ def xml_to_csv(data, output_path=None, validate=True,
 
     :return: A StringIO object if output_path is ''
     """
-    datasets = read_xml(data, mode="Data", validate=validate,
-                        use_dataset_id=True)
+    datasets, _ = read_xml(data, mode="Data", validate=validate,
+                           use_dataset_id=True)
 
     if remove_empty_columns:
         for ds in datasets:
@@ -163,16 +151,7 @@ def xml_to_csv(data, output_path=None, validate=True,
 
 def get_supported_agencies():
     """Returns the agencies supported by the API"""
-    from sdmxthon.webservices import webservices
-    return {
-        'BIS': webservices.BisWs,
-        'ECB': webservices.EcbWs,
-        'ESTAT': webservices.EuroStatWs,
-        'ILO': webservices.IloWs,
-        'OECD': webservices.OecdWs,
-        'OECDv2': webservices.OecdWs2,
-        'UNICEF': webservices.UnicefWs,
-    }
+    return get_supported_web_services()
 
 
 def upload_metadata_to_fmr(data: (str, os.PathLike),

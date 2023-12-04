@@ -1,36 +1,34 @@
 import copy
 
-from sdmxthon.model.base import InternationalString, LocalisedString, \
-    Annotation
-from sdmxthon.model.component import Component, Dimension, TimeDimension, \
-    Attribute, PrimaryMeasure
-from sdmxthon.model.definitions import DataStructureDefinition, \
-    DataFlowDefinition, ContentConstraint, DataKeySet, \
-    MemberSelection, CubeRegion
-from sdmxthon.model.descriptors import DimensionDescriptor, \
-    AttributeDescriptor, MeasureDescriptor, GroupDimensionDescriptor
+from sdmxthon.model.base import Annotation, InternationalString, LocalisedString
+from sdmxthon.model.component import Attribute, Component, Dimension, \
+    PrimaryMeasure, TimeDimension
+from sdmxthon.model.definitions import ContentConstraint, CubeRegion, \
+    DataFlowDefinition, DataKeySet, DataStructureDefinition, MemberSelection
+from sdmxthon.model.descriptors import AttributeDescriptor, DimensionDescriptor, \
+    GroupDimensionDescriptor, MeasureDescriptor
 from sdmxthon.model.header import Contact
-from sdmxthon.model.itemScheme import Agency, AgencyScheme, Codelist, Code, \
-    Item, ConceptScheme, Concept
-from sdmxthon.model.representation import Representation, Facet
+from sdmxthon.model.itemScheme import Agency, AgencyScheme, Code, Codelist, \
+    Concept, ConceptScheme, Item
+from sdmxthon.model.representation import Facet, Representation
 from sdmxthon.model.utils import FacetType
+from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import add_list, unique_id
 from sdmxthon.utils.mappings import Locale_Codes
-from sdmxthon.utils.parsing_words import ORGS, AGENCIES, AGENCY, ID, \
-    AGENCY_ID, VERSION, NAME, DESC, LANG, XML_TEXT, URI, EMAIL, ROLE, \
-    DEPARTMENT, TELEPHONE, FAX, CONTACT, MAINTAINER, CODELISTS, CL, \
-    CODE, CONCEPTS, CS, CON, ANNOTATIONS, ANNOTATION, ANNOTATION_TITLE, \
-    TITLE, ANNOTATION_TYPE, TYPE_, ANNOTATION_TEXT, TEXT, CORE_REP, \
-    CORE_REP_LOW, ENUM, REF, XMLNS, ENUM_FORMAT, TEXT_FORMAT, \
-    TEXT_TYPE, TEXT_TYPE_LOW, FACETS, DSDS, DSD, DSD_COMPS, DIM_LIST, \
-    ATT_LIST, ME_LIST, GROUP, DIM_LIST_LOW, ATT_LIST_LOW, ME_LIST_LOW, DIM, \
-    TIME_DIM, ATT, COMPS, CON_ID, PAR_ID, PAR_VER, CS_LOW, LOCAL_REP, \
-    LOCAL_REP_LOW, ATT_REL, REL_TO, PRIM_MEASURE, DATAFLOWS, ANNOTATION_URL, \
-    URL, CON_ID_LOW, PARENT, GROUP_DIM_LOW, GROUP_DIM, DIM_REF, DF, \
-    STRUCTURE, STR_URL, STR_URL_LOW, SER_URL, SER_URL_LOW, CONSTRAINTS, \
-    CON_CONS, CONS_ATT, DATA_KEY_SET, DATA_KEY_SET_LOW, CUBE_REGION, \
-    KEY_VALUE, KEY, VALUE, TYPE, INCLUDED, INCLUDE, CONTENT_REGION, CON_ROLE, \
-    CON_ROLE_LOW
+from sdmxthon.utils.parsing_words import AGENCIES, AGENCY, AGENCY_ID, \
+    ANNOTATION, ANNOTATION_TEXT, ANNOTATION_TITLE, ANNOTATION_TYPE, \
+    ANNOTATION_URL, ANNOTATIONS, ATT, ATT_LIST, ATT_LIST_LOW, ATT_REL, CL, CODE, \
+    CODELISTS, COMPS, CON, CON_CONS, CON_ID, CON_ID_LOW, CON_ROLE, CON_ROLE_LOW, \
+    CONCEPTS, CONS_ATT, CONSTRAINTS, CONTACT, CONTENT_REGION, CORE_REP, \
+    CORE_REP_LOW, CS, CS_LOW, CUBE_REGION, DATA_KEY_SET, DATA_KEY_SET_LOW, \
+    DATAFLOWS, DEPARTMENT, DESC, DF, DIM, DIM_LIST, DIM_LIST_LOW, DIM_REF, DSD, \
+    DSD_COMPS, DSDS, EMAIL, ENUM, ENUM_FORMAT, FACETS, FAX, GROUP, GROUP_DIM, \
+    GROUP_DIM_LOW, ID, INCLUDE, INCLUDED, KEY, KEY_VALUE, LANG, LOCAL_REP, \
+    LOCAL_REP_LOW, MAINTAINER, ME_LIST, ME_LIST_LOW, NAME, ORGS, PAR_ID, \
+    PAR_VER, PARENT, PRIM_MEASURE, REF, REL_TO, ROLE, SER_URL, SER_URL_LOW, \
+    STR_URL, STR_URL_LOW, STRUCTURE, TELEPHONE, TEXT, TEXT_FORMAT, TEXT_TYPE, \
+    TEXT_TYPE_LOW, TIME_DIM, TITLE, TYPE, TYPE_, URI, URL, VALUE, VERSION, \
+    XML_TEXT, XMLNS
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
@@ -704,4 +702,4 @@ def create_metadata(json_meta):
     datastructures.clear()
     dataflows.clear()
     errors.clear()
-    return metadata
+    return metadata, MessageTypeEnum.Metadata

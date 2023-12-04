@@ -1,3 +1,6 @@
+"""
+DataRead holds the functions to read the data from a SDMX file
+"""
 import itertools
 
 import numpy as np
@@ -5,9 +8,10 @@ import pandas as pd
 
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.utils.handlers import add_list
-from sdmxthon.utils.parsing_words import SERIES, OBS, ID, STRSPE, GENERIC, \
-    SERIESKEY, ATTRIBUTES, VALUE, OBS_DIM, OBSVALUE, OBSKEY, DIM_OBS, \
-    exc_attributes, STRID, STRTYPE
+from sdmxthon.utils.parsing_words import (ATTRIBUTES, DIM_OBS, exc_attributes,
+                                          GENERIC, ID, OBS, OBS_DIM, OBSKEY,
+                                          OBSVALUE, SERIES, SERIESKEY, STRID,
+                                          STRSPE, STRTYPE, VALUE)
 
 chunksize = 50000
 
@@ -24,7 +28,8 @@ def get_element_to_list(data, mode):
 def process_df(test_list: list, df: pd.DataFrame):
     if len(test_list) > 0:
         if df is not None:
-            df = pd.concat([df, pd.DataFrame(test_list)], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame(test_list)],
+                           ignore_index=True)
         else:
             df = pd.DataFrame(test_list)
 
@@ -33,12 +38,17 @@ def process_df(test_list: list, df: pd.DataFrame):
     return test_list, df
 
 
-def reading_generic_series(dataset) -> pd.DataFrame:
+def reading_generic_series(dataset_info) -> pd.DataFrame:
+    """
+    Reads each series of a generic dataset
+    :param dataset_info: Dict from Generic SDMX file
+    :return: A DataFrame with all series
+    """
     # Generic Series
     test_list = []
     df = None
-    dataset[SERIES] = add_list(dataset[SERIES])
-    for series in dataset[SERIES]:
+    dataset_info[SERIES] = add_list(dataset_info[SERIES])
+    for series in dataset_info[SERIES]:
         keys = dict()
         # Series Keys
         if not isinstance(series[SERIESKEY][VALUE], list):
@@ -70,12 +80,17 @@ def reading_generic_series(dataset) -> pd.DataFrame:
     return df
 
 
-def reading_generic_all(dataset) -> pd.DataFrame:
+def reading_generic_all(dataset_info) -> pd.DataFrame:
+    """
+    Reads each observation of a generic dataset
+    :param dataset_info: Dict from Generic SDMX file
+    :return: A DataFrame with all observations
+    """
     # Generic All Dimensions
     test_list = []
     df = None
-    dataset[OBS] = add_list(dataset[OBS])
-    for data in dataset[OBS]:
+    dataset_info[OBS] = add_list(dataset_info[OBS])
+    for data in dataset_info[OBS]:
         obs = dict()
         obs = {**obs, **get_element_to_list(data, mode=OBSKEY)}
         if ID in data[OBSVALUE]:
@@ -92,12 +107,17 @@ def reading_generic_all(dataset) -> pd.DataFrame:
     return df
 
 
-def reading_str_series(dataset) -> pd.DataFrame:
+def reading_str_series(dataset_info) -> pd.DataFrame:
+    """
+    Reads each series of a structure specific dataset
+    :param dataset_info: Dict from Structure Specific SDMX file
+    :return: A DataFrame with all series
+    """
     # Structure Specific Series
     test_list = []
     df = None
-    dataset[SERIES] = add_list(dataset[SERIES])
-    for data in dataset[SERIES]:
+    dataset_info[SERIES] = add_list(dataset_info[SERIES])
+    for data in dataset_info[SERIES]:
         keys = dict(itertools.islice(data.items(), len(data) - 1))
         if not isinstance(data[OBS], list):
             data[OBS] = [data[OBS]]
@@ -111,60 +131,79 @@ def reading_str_series(dataset) -> pd.DataFrame:
     return df
 
 
-def get_at_att_str(dataset):
-    return {k: dataset[k] for k in dataset if k not in exc_attributes}
+def get_at_att_str(dataset_info):
+    """
+    Gets Attached attributes from the dataset
+    :param dataset_info: Dict from Structure Specific SDMX file
+    :return: A dict with attached attributes
+    """
+    return {k: dataset_info[k] for k in dataset_info if k not in exc_attributes}
 
 
-def get_at_att_gen(dataset):
+def get_at_att_gen(dataset_info):
+    """
+    Gets Attached attributes from the dataset
+    :param dataset_info: Dict from Generic SDMX file
+    :return: A dict with attached attributes
+    """
     attached_attributes = {}
-    if VALUE in dataset[ATTRIBUTES]:
-        dataset[ATTRIBUTES][VALUE] = add_list(dataset[ATTRIBUTES][VALUE])
-        for k in dataset[ATTRIBUTES][VALUE]:
+    if VALUE in dataset_info[ATTRIBUTES]:
+        dataset_info[ATTRIBUTES][VALUE] = add_list(
+            dataset_info[ATTRIBUTES][VALUE])
+        for k in dataset_info[ATTRIBUTES][VALUE]:
             attached_attributes[k[ID]] = k[VALUE.lower()]
     return attached_attributes
 
 
-def create_dataset(dataset, metadata, global_mode):
+def create_dataset(dataset_info, metadata, global_mode):
+    """
+    Creates a Dataset object from a SDMX data file
+    :param dataset_info: Dict with dataset information
+    :param metadata: Dict with metadata information
+    :param global_mode: Mode of the SDMX data file (Structure Specific
+                        or Generic)
+    :return: A Dataset object
+    """
     if STRSPE == global_mode:
         # Dataset info
-        attached_attributes = get_at_att_str(dataset)
+        attached_attributes = get_at_att_str(dataset_info)
 
         # Parsing data
-        if SERIES in dataset:
+        if SERIES in dataset_info:
             # Structure Specific Series
-            df = reading_str_series(dataset)
-        elif OBS in dataset:
+            df = reading_str_series(dataset_info)
+        elif OBS in dataset_info:
             # Structure Specific All dimensions
-            df = pd.DataFrame(dataset[OBS]).replace(np.nan, '')
+            df = pd.DataFrame(dataset_info[OBS]).replace(np.nan, '')
         else:
             df = pd.DataFrame()
     elif GENERIC == global_mode:
 
         # Dataset info
-        if ATTRIBUTES in dataset:
-            attached_attributes = get_at_att_gen(dataset)
+        if ATTRIBUTES in dataset_info:
+            attached_attributes = get_at_att_gen(dataset_info)
         else:
             attached_attributes = {}
 
         # Parsing data
-        if SERIES in dataset:
+        if SERIES in dataset_info:
             # Generic Series
-            df = reading_generic_series(dataset)
+            df = reading_generic_series(dataset_info)
             renames = {'OBSVALUE': 'OBS_VALUE',
                        'ObsDimension': metadata[DIM_OBS]}
             df.rename(columns=renames, inplace=True)
-        elif OBS in dataset:
+        elif OBS in dataset_info:
             # Generic All Dimensions
-            df = reading_generic_all(dataset)
+            df = reading_generic_all(dataset_info)
             df.replace(np.nan, '', inplace=True)
             df.rename(columns={'OBSVALUE': 'OBS_VALUE'}, inplace=True)
         else:
             df = pd.DataFrame()
     else:
         raise Exception
-    dataset = Dataset(attached_attributes=attached_attributes,
-                      data=df,
-                      unique_id=metadata[STRID],
-                      structure_type=metadata[STRTYPE])
+    dataset_info = Dataset(attached_attributes=attached_attributes,
+                           data=df,
+                           unique_id=metadata[STRID],
+                           structure_type=metadata[STRTYPE])
 
-    return dataset
+    return dataset_info

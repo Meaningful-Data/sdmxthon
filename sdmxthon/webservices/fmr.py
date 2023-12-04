@@ -1,7 +1,7 @@
 import json
-from time import time, sleep
+from time import sleep, time
 
-from requests import post, get
+from requests import get, post
 from requests.exceptions import ConnectionError
 
 from sdmxthon.model.error import SDMXError
@@ -289,7 +289,7 @@ def submit_structures_to_fmr(sdmx_text: str,
 
     # Parse the response using SDMX parser
     from sdmxthon.parsers.read import read_xml
-    result = read_xml(response.text, validate=False)
+    result, _ = read_xml(response.text, validate=False)
 
     # Check if the result is an SDMXError
     if isinstance(result, SDMXError):

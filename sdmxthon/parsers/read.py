@@ -10,6 +10,7 @@ from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
     validate_doc
+from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import split_from_urn
 from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
@@ -25,7 +26,7 @@ options = {'process_namespaces': True,
            'attr_prefix': ''}
 
 
-def parse_sdmx(result, use_dataset_id=False):
+def parse_sdmx_ml(result, use_dataset_id=False):
     datasets = dict()
 
     if STRSPE in result:
@@ -36,12 +37,12 @@ def parse_sdmx(result, use_dataset_id=False):
         if ERROR_MESSAGE in result[ERROR]:
             code = result[ERROR][ERROR_MESSAGE][ERROR_CODE]
             text = result[ERROR][ERROR_MESSAGE][ERROR_TEXT]
-            return SDMXError(code=code, text=text)
+            return SDMXError(code=code, text=text), MessageTypeEnum.Error
         raise Exception('Cannot parse this sdmx error message')
     elif STRUCTURE in result:
         global_mode = STRUCTURE
     elif REG_INTERFACE in result:
-        return handle_registry_interface(result)
+        return handle_registry_interface(result), MessageTypeEnum.Submission
     elif FAULT in result:
         raise Exception(f'SOAP API error: Code ({result[FAULT][FAULTCODE]}). '
                         f'Message: {result[FAULT][FAULTSTRING]}')
@@ -51,60 +52,63 @@ def parse_sdmx(result, use_dataset_id=False):
     if global_mode == STRUCTURE:
         # Parsing Structure
         return create_metadata(result[STRUCTURE][STRUCTURES])
-    else:
-        message = result[global_mode]
-        dataset_key = None
-        for key in message:
-            if DATASET in key:
-                dataset_key = key
-        if dataset_key is None:
-            raise Exception('Cannot parse datasets on this file')
 
-        if isinstance(message[dataset_key], list):
-            structures = {}
-            # Relationship between structures and structure id
-            for structure in message[HEADER][STRUCTURE]:
-                structures[structure[STRID]] = structure
-            for single_dataset in message[dataset_key]:
-                str_ref = single_dataset[STRREF]
-                if SERIES in single_dataset:
-                    metadata = get_dataset_metadata(structures[str_ref],
-                                                    str_ref,
-                                                    mode=SERIES)
-                else:
-                    metadata = get_dataset_metadata(structures[str_ref],
-                                                    str_ref,
-                                                    mode=OBS)
-                ds = create_dataset(single_dataset, metadata,
-                                    global_mode)
-                datasets[metadata[STRID]] = ds
-        else:
+    # Getting datasets
+    message = result[global_mode]
+    type_ = MessageTypeEnum.GenericDataSet if global_mode == GENERIC else \
+        MessageTypeEnum.StructureSpecificDataSet
+    dataset_key = None
+    for key in message:
+        if DATASET in key:
+            dataset_key = key
+    if dataset_key is None:
+        raise Exception('Cannot parse datasets on this file')
 
-            if SERIES in message[dataset_key]:
-                metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
-                                                message[dataset_key][STRREF],
+    if isinstance(message[dataset_key], list):
+        structures = {}
+        # Relationship between structures and structure id
+        for structure in message[HEADER][STRUCTURE]:
+            structures[structure[STRID]] = structure
+        for single_dataset in message[dataset_key]:
+            str_ref = single_dataset[STRREF]
+            if SERIES in single_dataset:
+                metadata = get_dataset_metadata(structures[str_ref],
+                                                str_ref,
                                                 mode=SERIES)
-            elif OBS in message[dataset_key]:
-                metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
-                                                message[dataset_key][STRREF],
+            else:
+                metadata = get_dataset_metadata(structures[str_ref],
+                                                str_ref,
                                                 mode=OBS)
-            else:
-                if message[HEADER][STRUCTURE][DIM_OBS] == "AllDimensions":
-                    mode = OBS
-                else:
-                    mode = SERIES
-                metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
-                                                message[dataset_key][STRREF],
-                                                mode=mode)
-            ds = create_dataset(message[dataset_key], metadata, global_mode)
+            ds = create_dataset(single_dataset, metadata,
+                                global_mode)
+            datasets[metadata[STRID]] = ds
+    else:
 
-            if use_dataset_id and DATASET_ID in message[HEADER]:
-                dataset_id = message[HEADER][DATASET_ID]
-                datasets[dataset_id] = ds
+        if SERIES in message[dataset_key]:
+            metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
+                                            message[dataset_key][STRREF],
+                                            mode=SERIES)
+        elif OBS in message[dataset_key]:
+            metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
+                                            message[dataset_key][STRREF],
+                                            mode=OBS)
+        else:
+            if message[HEADER][STRUCTURE][DIM_OBS] == "AllDimensions":
+                mode = OBS
             else:
-                datasets[metadata[STRID]] = ds
+                mode = SERIES
+            metadata = get_dataset_metadata(message[HEADER][STRUCTURE],
+                                            message[dataset_key][STRREF],
+                                            mode=mode)
+        ds = create_dataset(message[dataset_key], metadata, global_mode)
 
-    return datasets
+        if use_dataset_id and DATASET_ID in message[HEADER]:
+            dataset_id = message[HEADER][DATASET_ID]
+            datasets[dataset_id] = ds
+        else:
+            datasets[metadata[STRID]] = ds
+
+    return datasets, type_
 
 
 def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
@@ -130,6 +134,11 @@ def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
 
 
 def read_sdmx_csv(infile: str):
+    """
+    ReadSDMXCSV reads a SDMX-CSV file as a dict of Datasets
+    :param infile: Path, URL or SDMX-CSV file as string
+    :return: A dict of Datasets
+    """
     # Get Dataframe from CSV file
     df_csv = pd.read_csv(infile)
     # Drop empty columns
@@ -187,6 +196,14 @@ def read_sdmx_csv(infile: str):
 def read_xml(infile: str, mode: str = None,
              validate: bool = True,
              use_dataset_id: bool = False):
+    """
+    ReadXML reads a SDMX file as a dict of Datasets or Metadata dict
+    :param infile: Path, URL or SDMX file as string
+    :param mode: "Data", "Metadata" or "Submission"
+    :param validate: Validation of the XML file against the XSD (default: True)
+    :param use_dataset_id: Use the dataset id as key in the dict (default: False)
+    :return:
+    """
     infile, filetype = process_string_to_read(infile)
     if validate:
         validate_doc(infile)
@@ -211,8 +228,8 @@ def read_xml(infile: str, mode: str = None,
         elif mode not in ["Data", "Metadata", "Error"]:
             raise ValueError("Wrong mode")
 
-    result = parse_sdmx(dict_info, use_dataset_id)
-    return result
+    return parse_sdmx_ml(dict_info, use_dataset_id)
+
 
 
 def get_ids_from_structure(element: dict):

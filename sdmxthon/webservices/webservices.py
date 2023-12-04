@@ -7,10 +7,23 @@ from abc import ABC
 
 import pandas as pd
 
-from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.definitions import DataFlowDefinition
 from sdmxthon.parsers.read import read_xml
-from sdmxthon.webservices import query_builder
+from sdmxthon.webservices.query_builder import QueryBuilder, SdmxWs1p4, \
+    SdmxWs1p5, SdmxWs2p0
+
+
+def get_supported_web_services():
+    """Returns a dictionary with the supported web services"""
+    return {
+        'BIS': BisWs,
+        'ECB': EcbWs,
+        'ESTAT': EuroStatWs,
+        'ILO': IloWs,
+        'OECD': OecdWs,
+        'OECDv2': OecdWs2,
+        'UNICEF': UnicefWs,
+    }
 
 
 # from sdmxthon.utils.handlers import split_unique_id
@@ -49,7 +62,7 @@ class SdmxWebServiceConnection(ABC):
         """
         url = (f"{self.ENTRY_POINT}"
                f"{self.WS_IMPLEMENTATION.get_data_flows()}")
-        message = read_xml(url, validate=False)
+        message, type_ = read_xml(url, validate=False)
         dataflows = message['Dataflows'].values()
         list_dataflows = []
         for i in dataflows:
@@ -101,26 +114,25 @@ class SdmxWebServiceConnection(ABC):
     def get_data(self, flow, **kwargs):
         """Returns a message with the data"""
         url = self.get_data_url(flow, **kwargs)
-        print(url)
-        message = read_sdmx(url, validate=False)
+        message, _ = read_xml(url, validate=False)
         return message
 
     def get_dsd(self, **kwargs):
         """Returns a message with the dsd"""
         url = self.get_dsd_url(**kwargs)
-        message = read_sdmx(url, validate=False)
+        message, _ = read_xml(url, validate=False)
         return message
 
     def get_data_flow(self, flow, **kwargs):
         """Returns a message with the dataflow"""
         url = self.get_data_flow_url(flow, **kwargs)
-        message = read_sdmx(url, validate=False)
+        message, _ = read_xml(url, validate=False)
         return message
 
     def get_constraints(self, **kwargs):
         """Returns a message with the constraints"""
         url = self.get_constraints_url(kwargs)
-        message = read_sdmx(url, validate=False)
+        message, _ = read_xml(url, validate=False)
         return message
 
     def get_pandas_with_names(self, flow, **kwargs):
@@ -192,14 +204,14 @@ class BisWs(SdmxWebServiceConnection):
     """Implements the connection to the BIS SDMX web service"""
     AGENCY_ID = 'BIS'
     ENTRY_POINT = 'https://stats.bis.org/api/v1'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs1p4())
 
 
 class EuroStatWs(SdmxWebServiceConnection):
     """Implements the connection to the Eurostat SDMX web service"""
     AGENCY_ID = 'ESTAT'
     ENTRY_POINT = 'https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs1p4())
 
     def get_data_url(self, flow, start_period=None,
                      end_period=None, updated_after=None,
@@ -241,28 +253,28 @@ class EcbWs(SdmxWebServiceConnection):
     """Implements the connection to the ECB SDMX web service"""
     AGENCY_ID = 'ECB'
     ENTRY_POINT = 'https://data-api.ecb.europa.eu/service'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs1p4())
 
 
 class IloWs(SdmxWebServiceConnection):
     """Implements the connection to the ILO SDMX web service"""
     AGENCY_ID = 'ILO'
     ENTRY_POINT = 'https://www.ilo.org/sdmx/rest'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs1p4())
 
 
 class OecdWs(SdmxWebServiceConnection):
     """Implements the connection to the ILO SDMX web service"""
     AGENCY_ID = 'OECD'
     ENTRY_POINT = 'https://sdmx.oecd.org/public/rest'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs1p5())
 
 
 class OecdWs2(SdmxWebServiceConnection):
     """Implements the connection to the ILO SDMX web service"""
     AGENCY_ID = 'OECD'
     ENTRY_POINT = 'https://sdmx.oecd.org/public/rest/v2'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs2p0())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs2p0())
 
     def get_all_dataflows(self):
         """Not supported by v2, goes to v1"""
@@ -273,4 +285,4 @@ class UnicefWs(SdmxWebServiceConnection):
     """Implements the connection to the ILO SDMX web service"""
     AGENCY_ID = 'UNICEF'
     ENTRY_POINT = 'https://sdmx.data.unicef.org/ws/public/sdmxapi/rest'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+    WS_IMPLEMENTATION = QueryBuilder(SdmxWs1p5())

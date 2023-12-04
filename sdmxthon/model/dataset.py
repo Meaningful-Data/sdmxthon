@@ -16,6 +16,7 @@ from sdmxthon.model.header import Header
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import split_unique_id
 from sdmxthon.webservices.fmr import validate_sdmx_csv_fmr
 
 
@@ -85,7 +86,8 @@ class Dataset:
             if unique_id is None:
                 raise Exception("Cannot define structure type and "
                                 "not define full_id")
-            self._unique_id = unique_id
+            self.unique_id = unique_id
+            self.gather_metadata()
         else:
             raise ValueError('A Dataset must have a structure or a dataflow')
 
@@ -266,6 +268,20 @@ class Dataset:
     def unique_id(self):
         """Extracts the unique_id"""
         return self._unique_id
+
+    @unique_id.setter
+    def unique_id(self, value):
+        # Check if the value is similar to BIS:BIS_DER(1.0)
+        if not isinstance(value, str):
+            raise TypeError('unique_id must be a string')
+        if not value.count(':') == 1 and value.count('(') == 1 and \
+                value.count(')') == 1:
+            raise ValueError('unique_id must be in the format '
+                             'agency:dataset(version)')
+        # Check if the agency is not empty
+        if value.split(':')[0] == '':
+            raise ValueError('unique_id must contain an agency')
+        self._unique_id = value
 
     @property
     def structure_type(self):
@@ -572,3 +588,22 @@ class Dataset:
                test=test, header=header,
                prepared=prepared, sender=sender, receiver=receiver,
                prettyprint=prettyprint)
+
+    def gather_metadata(self, unique_id=None, structure_type=None):
+        if unique_id is None:
+            unique_id = self.unique_id
+        else:
+            self.unique_id = unique_id
+        if structure_type is None:
+            structure_type = self.structure_type
+        else:
+            if structure_type not in ['structure', 'dataflow']:
+                raise ValueError('structure_type must be structure or '
+                                 'dataflow')
+            self._structure_type = structure_type
+
+        agency, id_, version = split_unique_id(unique_id)
+        from sdmxthon.webservices.webservices import get_supported_web_services
+        ws_mapper = get_supported_web_services()
+        if agency not in ws_mapper:
+            return
