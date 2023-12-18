@@ -448,5 +448,96 @@ def test_get_data_flows_with_multiple_params_ws2(query_builder_ws2):
     assert query == "/structure/dataflow/all/all/latest?references=descendants&detail=referencecompletestubs"
 
 
+def test_get_concept_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_concept_scheme_item(agency_id="all", resources="all",
+                                                      version="latest", item_id="all")
+    assert query == "/structure/conceptscheme/all/all/latest/all"
+
+
+def test_get_codelist_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_codelist_item(agency_id="all", resources="all",
+                                                version="latest", item_id="all")
+    assert query == "/structure/codelist/all/all/latest/all"
+
+
+def test_get_category_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_category_scheme_item(agency_id="all", resources="all",
+                                                       version="latest", item_id="all")
+    assert query == "/structure/categoryscheme/all/all/latest/all"
+
+
+def test_get_agency_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_agency_scheme_item(agency_id="all", resources="all",
+                                                     version="latest", item_id="all")
+    assert query == "/structure/agencyscheme/all/all/latest/all"
+
+
+def test_get_data_provider_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_data_provider_scheme_item(agency_id="all", resources="all",
+                                                            version="latest", item_id="all")
+    assert query == "/structure/dataproviderscheme/all/all/latest/all"
+
+
+def test_get_data_consumer_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_data_consumer_scheme_item(agency_id="all", resources="all",
+                                                            version="latest", item_id="all")
+    assert query == "/structure/dataconsumerscheme/all/all/latest/all"
+
+
+def test_get_organisation_unit_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_organisation_unit_scheme_item(agency_id="all", resources="all",
+                                                                version="latest", item_id="all")
+    assert query == "/structure/organisationunitscheme/all/all/latest/all"
+
+
+def test_get_transformation_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_transformation_scheme_item(agency_id="all", resources="all",
+                                                             version="latest", item_id="all")
+    assert query == "/structure/transformationscheme/all/all/latest/all"
+
+
+def test_get_ruleset_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_ruleset_scheme_item(agency_id="all", resources="all",
+                                                      version="latest", item_id="all")
+    assert query == "/structure/rulesetscheme/all/all/latest/all"
+
+
+def test_get_user_defined_operator_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_user_defined_operator_scheme_item(agency_id="all", resources="all",
+                                                                    version="latest", item_id="all")
+    assert query == "/structure/userdefinedoperatorscheme/all/all/latest/all"
+
+
+def test_get_custom_type_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_custom_type_scheme_item(agency_id="all", resources="all",
+                                                          version="latest", item_id="all")
+    assert query == "/structure/customtypescheme/all/all/latest/all"
+
+
+def test_get_name_personalisation_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_name_personalisation_scheme_item(agency_id="all", resources="all",
+                                                                   version="latest", item_id="all")
+    assert query == "/structure/namepersonalisationscheme/all/all/latest/all"
+
+
+def test_get_vtl_mapping_scheme_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_vtl_mapping_scheme_item(agency_id="all", resources="all",
+                                                          version="latest", item_id="all")
+    assert query == "/structure/vtlmappingscheme/all/all/latest/all"
+
+
+def test_get_value_list_item_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_value_list_item(agency_id="all", resources="all",
+                                                  version="latest", item_id="all")
+    assert query == "/structure/valuelist/all/all/latest/all"
+
+
+def test_get_concept_scheme_item_multiple_params_ws2(query_builder_ws2):
+    query = query_builder_ws2.get_concept_scheme_item(agency_id="all", resources="all", version="latest",
+                                                      item_id="all", references="ancestors",
+                                                      detail="referencepartial")
+    assert query == "/structure/conceptscheme/all/all/latest/all?references=ancestors&detail=referencepartial"
+
+
 if __name__ == '__main__':
     pytest.main()

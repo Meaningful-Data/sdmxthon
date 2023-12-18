@@ -534,6 +534,97 @@ class SdmxWebservice(ABC):
         Returns query to retrieve get name alias schemes
         """
 
+    @abstractmethod
+    def get_concept_scheme_item(self, agency_id, resources, version,
+                                item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve concept schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_codelist_item(self, agency_id, resources, version,
+                          item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve codelists in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_category_scheme_item(self, agency_id, resources, version,
+                                 item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve category schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_agency_scheme_item(self, agency_id, resources, version,
+                               item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve agency schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_data_provider_scheme_item(self, agency_id, resources, version,
+                                      item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve data provider schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_data_consumer_scheme_item(self, agency_id, resources, version,
+                                      item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve data consumer schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_organisation_unit_scheme_item(self, agency_id, resources, version,
+                                          item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve organisation unit schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_transformation_scheme_item(self, agency_id, resources, version,
+                                       item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve transformation schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_ruleset_scheme_item(self, agency_id, resources, version,
+                                item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve ruleset schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_user_defined_operator_scheme_item(self, agency_id, resources, version,
+                                              item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve user defined operator schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_custom_type_scheme_item(self, agency_id, resources, version,
+                                    item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve custom type schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_name_personalisation_scheme_item(self, agency_id, resources, version,
+                                             item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve name personalisation schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_vtl_mapping_scheme_item(self, agency_id, resources, version,
+                                    item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve name personalisation schemes in Item Scheme Queries (V2.0.0)
+        """
+
+    def get_value_list_item(self, agency_id, resources, version,
+                            item_id, references=None, detail=None) -> str:
+        """
+        Returns query to retrieve value lists  in Item Scheme Queries (V2.0.0)
+        """
+
     def validate_references(self, reference: str):
         """
         Validates that the reference is one of the allowed values
@@ -589,34 +680,69 @@ class SdmxWs2p0(SdmxWebservice):
     SDMX Web Service 2.0 specification
 
     :param REFERENCES_OPTIONS: The allowed values for the references parameter
-                            (none, parents, parentsandsiblings, children,
-                            descendants, all)
+                            (none, parents, parentsandsiblings, ancestors,
+                            children, descendants, all, datastructure,
+                            metadatastructure, categoryscheme, conceptscheme, codelist,
+                            hierarchy, hierarchyassociation, agencyscheme, dataproviderscheme,
+                            dataconsumerscheme, organisationunitscheme, dataflow, metadataflow,
+                            reportingtaxonomy, provisionagreement, structureset, process,
+                            categorisation, dataconstraint, metadataconstraint, transformationscheme,
+                            rulesetscheme, userdefinedoperatorscheme, customtypescheme,
+                            namepersonalisationscheme, namealiasscheme, valuelist, structuremap,
+                            representationmap, conceptscheme, categoryschememap, organisationschememap,
+                            reportingtaxonomymap)
     :type REFERENCES_OPTIONS: list[str]
 
     :param STRUCTURE_DETAIL_OPTIONS: The allowed values for the detail parameter
-                            (allstubs, referencestubs, referencepartial,
-                            allcompletestubs, referencecompletestubs, full)
+                            (full, allstubs, referencestubs, allcompletestubs,
+                             referencecompletestubs, referencepartial, raw)
     :type STRUCTURE_DETAIL_OPTIONS: list[str]
 
     :param DATA_DETAIL_OPTIONS: The allowed values for the detail parameter
     :type DATA_DETAIL_OPTIONS: list[str]
     """
 
-    REFERENCES_OPTIONS = ['none', 'parents', 'parentsandsiblings',
-                          'children', 'descendants', 'all']
+    REFERENCES_OPTIONS = ['none', 'parents', 'parentsandsiblings', 'ancestors',
+                          'children', 'descendants', 'all', 'datastructure',
+                          'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
+                          'hierarchy', 'hierarchyassociation', 'agencyscheme', 'dataproviderscheme',
+                          'dataconsumerscheme', 'organisationunitscheme', 'dataflow', 'metadataflow',
+                          'reportingtaxonomy', 'provisionagreement', 'structureset', 'process',
+                          'categorisation', 'dataconstraint', 'metadataconstraint', 'transformationscheme',
+                          'rulesetscheme', 'userdefinedoperatorscheme', 'customtypescheme',
+                          'namepersonalisationscheme', 'namealiasscheme', 'valuelist', 'structuremap',
+                          'representationmap', 'conceptscheme', 'categoryschememap', 'organisationschememap',
+                          'reportingtaxonomymap']
 
-    STRUCTURE_DETAIL_OPTIONS = ['allstubs', 'referencestubs',
-                                'referencepartial',
+    STRUCTURE_DETAIL_OPTIONS = ['full', 'allstubs', 'referencestubs',
                                 'allcompletestubs', 'referencecompletestubs',
-                                'full']
+                                'referencepartial', 'raw']
 
-    def common_structure_queries(self, query, agency_id=None, resources=None,
+    def common_structure_queries(self, structure_type, agency_id=None, resources=None,
                                  version=None, references=None, detail=None) -> str:
         agency_id = agency_id if agency_id else "all"
         resources = resources if resources else "all"
         version = version if version else "latest"
 
-        base_query = f"/structure/{query}/{agency_id}/{resources}/{version}"
+        base_query = f"/structure/{structure_type}/{agency_id}/{resources}/{version}"
+        params = ""
+        if references:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def common_item_scheme_queries(self, item_scheme_type, agency_id=None, resources=None,
+                                   version=None, item_id=None, references=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+        item_id = item_id if item_id else "all"
+
+        base_query = f"/structure/{item_scheme_type}/{agency_id}/{resources}/{version}/{item_id}"
         params = ""
         if references:
             initial = "&" if "?" in params else "?"
@@ -1425,6 +1551,286 @@ class SdmxWs2p0(SdmxWebservice):
                                version=None, item_id=None, references=None, detail=None) -> str:
         pass
 
+    def get_concept_scheme_item(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get concept schemes
+
+        :param agency_id: The agency id of concept schemes in Item Scheme Queries
+        :param resources: The resources to query
+        :param version: The version of the concept schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("conceptscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_codelist_item(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get codelists in Item Scheme Queries
+
+        :param agency_id: The agency id of codelists
+        :param resources: The resources to query
+        :param version: The version of the codelists
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("codelist", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_category_scheme_item(self, agency_id=None, resources=None,
+                                 version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get category schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of category schemes
+        :param resources: The resources to query
+        :param version: The version of the category schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("categoryscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_agency_scheme_item(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get agency schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of category schemes
+        :param resources: The resources to query
+        :param version: The version of the category schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("agencyscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_data_provider_scheme_item(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data provider schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of data provider schemes
+        :param resources: The resources to query
+        :param version: The version of the data provider schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("dataproviderscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_data_consumer_scheme_item(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data provider schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of data consumer schemes
+        :param resources: The resources to query
+        :param version: The version of the data consumer schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("dataconsumerscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_organisation_unit_scheme_item(self, agency_id=None, resources=None,
+                                          version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data provider schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of organisation unit schemes
+        :param resources: The resources to query
+        :param version: The version of the organisation unit schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("organisationunitscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_transformation_scheme_item(self, agency_id=None, resources=None,
+                                       version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get transformation schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of transformation schemes
+        :param resources: The resources to query
+        :param version: The version of the transformation schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("transformationscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_ruleset_scheme_item(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get ruleset schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of ruleset schemes
+        :param resources: The resources to query
+        :param version: The version of the ruleset schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("rulesetscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_user_defined_operator_scheme_item(self, agency_id=None, resources=None,
+                                              version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get user defined operator schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of user defined operator schemes
+        :param resources: The resources to query
+        :param version: The version of the user defined operator schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("userdefinedoperatorscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_custom_type_scheme_item(self, agency_id=None, resources=None,
+                                    version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get custom type schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of custom type schemes
+        :param resources: The resources to query
+        :param version: The version of the custom type schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("customtypescheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_name_personalisation_scheme_item(self, agency_id=None, resources=None,
+                                             version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get name personalisation schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of name personalisation schemes
+        :param resources: The resources to query
+        :param version: The version of the name personalisation schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("namepersonalisationscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
+                                    version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get vtl mapping schemes in Item Scheme Queries
+
+        :param agency_id: The agency id of vtl mapping schemes
+        :param resources: The resources to query
+        :param version: The version of the vtl mapping schemes
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("vtlmappingscheme", agency_id, resources,
+                                               version, item_id, references, detail)
+
+    def get_value_list_item(self, agency_id=None, resources=None,
+                            version=None, item_id=None, references=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get value lists in Item Scheme Queries
+
+        :param agency_id: The agency id of value lists
+        :param resources: The resources to query
+        :param version: The version of the value lists
+        :param references: The references parameter (all, children, descendants)
+        :param detail: The detail parameter (full, referencestubs,
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_item_scheme_queries("valuelist", agency_id, resources,
+                                               version, item_id, references, detail)
+
 
 class SdmxWs1(SdmxWebservice):
     """
@@ -1849,6 +2255,54 @@ class SdmxWs1(SdmxWebservice):
         return self.build_query_with_item("namealiasscheme", agency_id, resources, version,
                                           references, detail)
 
+    def get_concept_scheme_item(self, agency_id=None, resources=None, version=None,
+                                item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_codelist_item(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_category_scheme_item(self, agency_id=None, resources=None,
+                                 version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_agency_scheme_item(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_data_provider_scheme_item(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_data_consumer_scheme_item(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_organisation_unit_scheme_item(self, agency_id=None, resources=None,
+                                          version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_transformation_scheme_item(self, agency_id=None, resources=None,
+                                       version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_custom_type_scheme_item(self, agency_id=None, resources=None,
+                                    version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_name_personalisation_scheme_item(self, agency_id=None, resources=None,
+                                             version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
+                                    version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_value_list_item(self, agency_id=None, resources=None,
+                            version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
 
 class SdmxWs1p5(SdmxWs1):
     """
@@ -2265,4 +2719,88 @@ class QueryBuilder:
                                version=None, item_id=None, references=None, detail=None) -> str:
         """Returns the get name alias schemes query for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.get_name_alias_schemes,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_concept_scheme_item(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get concept scheme in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_concept_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_codelist_item(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get codelists in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_codelist_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_category_scheme_item(self, agency_id=None, resources=None,
+                                 version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get category schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_category_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_agency_scheme_item(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get agency schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_agency_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_data_provider_scheme_item(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get data provider schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_data_provider_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_data_consumer_scheme_item(self, agency_id=None, resources=None,
+                                      version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get data consumer schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_data_consumer_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_organisation_unit_scheme_item(self, agency_id=None, resources=None,
+                                          version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get organisation unit schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_organisation_unit_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_transformation_scheme_item(self, agency_id=None, resources=None,
+                                       version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get transformation schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_transformation_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_ruleset_scheme_item(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get ruleset schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_ruleset_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_user_defined_operator_scheme_item(self, agency_id=None, resources=None,
+                                              version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get user defined operator schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_user_defined_operator_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_custom_type_scheme_item(self, agency_id=None, resources=None,
+                                    version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get custom type schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_custom_type_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_name_personalisation_scheme_item(self, agency_id=None, resources=None,
+                                             version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get name personalisation schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_name_personalisation_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
+                                    version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get vtl mapping schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_vtl_mapping_scheme_item,
+                                                   agency_id, resources, version, item_id, references, detail)
+
+    def get_value_list_item(self, agency_id=None, resources=None,
+                            version=None, item_id=None, references=None, detail=None) -> str:
+        """Returns the get value list schemes in Item Scheme query for the WS Implementation"""
+        return self.query_builder_common_with_item(self._ws_implementation.get_value_list_item,
                                                    agency_id, resources, version, item_id, references, detail)
