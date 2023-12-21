@@ -2,6 +2,20 @@
 Changelog
 #########
 
+2.5.1 (2023-12-21)
+------------------
+**Added**
+  - Added changelog on docs and github link #52
+  - Structure submission to FMR from Dataflow and DataStructureDefinition #47
+  - Read SDMX to support SDMX-CSV v1 and v2 #45
+  - Handling on error messages on SOAP APIs requests
+  - Added MessageTypeEnum documentation.
+
+**Changes**
+  - Changed description of features in docs.
+
+**Bugfixes**
+
 2.5 (2023-11-10)
 ----------------
 **Added**
