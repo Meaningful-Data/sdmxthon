@@ -7,6 +7,9 @@ from base64 import b64encode
 from datetime import datetime
 from typing import List
 
+from sdmxthon.utils.enums import ActionEnum
+
+
 #
 # Convenience setters and getters
 #
@@ -187,7 +190,13 @@ NS = {
     'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
 }
 
-ActionType = ['Delete, Replace, Append, Information']
+ACTION_SDMX_CSV_MAPPER = {
+    ActionEnum.Append: 'A',
+    ActionEnum.Replace: 'R',
+    ActionEnum.Delete: 'D',
+    ActionEnum.Information: 'I'
+}
+
 UsageStatus = ['UsageStatus', 'mandatory conditional']
 FacetValueType = ['string', 'bigInteger', 'integer', 'long', 'short',
                   'decimal', 'float', 'double', 'boolean', 'uri',

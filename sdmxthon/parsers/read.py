@@ -10,6 +10,7 @@ from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
     validate_doc
+from sdmxthon.utils.enums import ActionEnum
 from sdmxthon.utils.handlers import split_from_urn
 from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
@@ -109,6 +110,7 @@ def parse_sdmx(result, use_dataset_id=False):
 
 def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
     # Extract Structure type and structure id
+    action = ActionEnum.Information
     if sdmx_csv_version == 1:
         # For SDMX-CSV version 1, use 'DATAFLOW' column as the structure id
         structure_id = data['DATAFLOW'].iloc[0]
@@ -117,6 +119,10 @@ def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
         # Drop 'DATAFLOW' column from DataFrame
         df_csv = data.drop(['DATAFLOW'], axis=1)
     else:
+        if 'ACTION' in data.columns:
+            action = data['ACTION'].iloc[0]
+            # Drop 'ACTION' column from DataFrame
+            data = data.drop(['ACTION'], axis=1)
         # For SDMX-CSV version 2, use 'STRUCTURE_ID'
         # column as the structure id and 'STRUCTURE' as the structure type
         structure_id = data['STRUCTURE_ID'].iloc[0]
@@ -126,7 +132,7 @@ def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
 
     # Return a Dataset object with the extracted information
     return Dataset(unique_id=structure_id, structure_type=structure_type,
-                   data=df_csv)
+                   data=df_csv, dataset_attributes={'action': action})
 
 
 def read_sdmx_csv(infile: str):
@@ -160,7 +166,8 @@ def read_sdmx_csv(infile: str):
         # Split the ID column to remove mode, label or text
         df_csv[id_column] = df_csv[id_column].map(lambda x: x.split(': ')[0])
         # Split the other columns to remove mode, label, or text
-        for x in df_csv.columns[version:]:
+        sequence = 1 if version == 1 else 3
+        for x in df_csv.columns[sequence:]:
             df_csv[x.split(':')[0]] = df_csv[x].map(
                 lambda x: x.split(': ', 2)[0],
                 na_action='ignore')
