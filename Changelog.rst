@@ -2,7 +2,7 @@
 Changelog
 #########
 
-2.5.2 (2023-12-22)
+2.5.3 (2023-12-22)
 ------------------
 **Added**
   - Added internal enumeration for Action (ActionEnum)
