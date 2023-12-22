@@ -2,6 +2,19 @@
 Changelog
 #########
 
+2.5.2 (2023-12-22)
+------------------
+**Added**
+  - Added internal enumeration for Action (ActionEnum)
+
+**Changes**
+  - Changed description of dataset attributes and added docs for structure_type and unique_id in Dataset.
+  - Fixed reading and writing of SDMX-CSV v2 to handle ACTION column. #53
+  - Changed link to Changelog in docs.
+
+**Bugfixes**
+  - Fixed bug when adding dataset attributes to raise an unhandled exception if not present on keys. #53
+
 2.5.1 (2023-12-21)
 ------------------
 **Added**
