@@ -13,9 +13,10 @@ from pandas import DataFrame
 from sdmxthon.model.definitions import DataFlowDefinition, \
     DataStructureDefinition
 from sdmxthon.model.header import Header
+from sdmxthon.model.utils import ACTION_SDMX_CSV_MAPPER
 from sdmxthon.parsers.data_validations import validate_data
 from sdmxthon.parsers.write import writer
-from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.enums import ActionEnum, MessageTypeEnum
 from sdmxthon.webservices.fmr import validate_sdmx_csv_fmr
 
 
@@ -28,8 +29,11 @@ class Dataset:
     :param dataflow: Associates the DataFlowDefinition to the Dataset
     :type dataflow: class:`DataFlowDefinition`
 
-    :param dataset_attributes: Contains all the attributes from the DataSet \
-    class of the Information Model
+    :param dataset_attributes: Contains all the attributes from the DataSet
+     class of the Information Model. Keys allowed are "reportingBegin",
+     "reportingEnd", "dataExtractionDate", "validFrom", "validTo",
+     "publicationYear", "publicationPeriod", "action", "setId",
+     "dimensionAtObservation"
     :type dataset_attributes: dict
 
     :param attached_attributes:  Contains all the attributes at a Dataset level
@@ -39,6 +43,14 @@ class Dataset:
     :type data: `Pandas Dataframe \
     <https://pandas.pydata.org/pandas-docs/stable \
     /reference/api/pandas.DataFrame.html>`_
+
+    :param unique_id: Internal attribute to use a full id in the dataset
+     with format "AgencyID:ID(Version)"
+    :type unique_id: str
+
+    :param structure_type: Internal attribute to use structure_type in the
+     dataset. Can only be "structure" or "dataflow".
+    :type structure_type: str
 
     """
 
@@ -200,9 +212,14 @@ class Dataset:
 
     @property
     def dataset_attributes(self) -> dict:
-        """Contains all the attributes from the DataSet class of the
+        """
+        Contains all the attributes from the DataSet class of the
         `Information Model <https://sdmx.org/wp-content/uploads/SDMX_2-1
         -1_SECTION_2_InformationModel_201108.pdf#page=85>`_
+        Keys allowed: "reportingBegin", "reportingEnd",
+        "dataExtractionDate", "validFrom", "validTo",
+        "publicationYear", "publicationPeriod", "action",
+        "setId", "dimensionAtObservation"
 
         :class: dict
 
@@ -406,9 +423,11 @@ class Dataset:
             df.insert(0, 'DATAFLOW', self._unique_id)
 
         elif version == 2:
+            action = ACTION_SDMX_CSV_MAPPER[self.dataset_attributes['action']]
             # Insert two columns at the beginning of the data set
             df.insert(0, 'STRUCTURE', self._structure_type)
             df.insert(1, 'STRUCTURE_ID', self._unique_id)
+            df.insert(2, 'ACTION', action)
         else:
             raise Exception('Invalid SDMX-CSV version.')
 
@@ -455,7 +474,7 @@ class Dataset:
 
         :return: The validation status if successful
         """
-        csv_text = self.to_sdmx_csv()
+        csv_text = self.to_sdmx_csv(version=2)
 
         return validate_sdmx_csv_fmr(csv_text=csv_text,
                                      host=host,
@@ -489,16 +508,19 @@ class Dataset:
                 "publicationPeriod", "action", "setId",
                 "dimensionAtObservation"]
 
+        spared_keys = []
         for spared_key in attributes.keys():
             if spared_key not in keys:
-                attributes.pop(spared_key)
+                spared_keys.append(spared_key)
+        if len(spared_keys) > 0:
+            raise ValueError(f'Invalid dataset attributes: {spared_keys}')
 
         for k in keys:
             if k not in attributes.keys():
                 if k == "dataExtractionDate":
                     attributes[k] = date.today()
                 elif k == "action":
-                    attributes[k] = "Replace"
+                    attributes[k] = ActionEnum.Information
                 elif k == "setId":
                     if self.structure is not None:
                         attributes[k] = self.structure.id
