@@ -27,6 +27,7 @@ class SdmxWebservice(ABC):
     DATA_HISTORY_OPTIONS = []
     CONSTRAINTS_MODE_OPTIONS = []
     CONSTRAINTS_REFERENCES_OPTIONS = []
+    METADATA_STRUCTURE_DETAIL_OPTIONS = []
 
     @abstractmethod
     def get_data_flows(self, agency_id, resources,
@@ -583,46 +584,277 @@ class SdmxWebservice(ABC):
         Returns query to retrieve organisation unit schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_transformation_scheme_item(self, agency_id, resources, version,
                                        item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve transformation schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_ruleset_scheme_item(self, agency_id, resources, version,
                                 item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve ruleset schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_user_defined_operator_scheme_item(self, agency_id, resources, version,
                                               item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve user defined operator schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_custom_type_scheme_item(self, agency_id, resources, version,
                                     item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve custom type schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_name_personalisation_scheme_item(self, agency_id, resources, version,
                                              item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve name personalisation schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_vtl_mapping_scheme_item(self, agency_id, resources, version,
                                     item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve name personalisation schemes in Item Scheme Queries (V2.0.0)
         """
 
+    @abstractmethod
     def get_value_list_item(self, agency_id, resources, version,
                             item_id, references=None, detail=None) -> str:
         """
         Returns query to retrieve value lists  in Item Scheme Queries (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_dsds(self, agency_id, resources, version,
+                          detail=None) -> str:
+        """
+        Returns query to retrieve data structure definitions in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_mdsds(self, agency_id, resources, version,
+                           detail=None) -> str:
+        """
+        Returns query to retrieve metadata structure definitions in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_dataflows(self, agency_id, resources, version,
+                               detail=None) -> str:
+        """
+        Returns query to retrieve dataflows in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_metadata_flows(self, agency_id, resources, version,
+                                    detail=None) -> str:
+        """
+        Returns query to retrieve metadata flows in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_provision_agreements(self, agency_id, resources, version,
+                                          detail=None) -> str:
+        """
+        Returns query to retrieve provision agreements in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_structure_sets(self, agency_id, resources, version,
+                                    detail=None) -> str:
+        """
+        Returns query to retrieve structure sets in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_processes(self, agency_id, resources, version,
+                               detail=None) -> str:
+        """
+        Returns query to retrieve processes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_categorisations(self, agency_id, resources, version,
+                                     detail=None) -> str:
+        """
+        Returns query to retrieve categorisations in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_data_constraints(self, agency_id, resources, version,
+                                      detail=None) -> str:
+        """
+        Returns query to retrieve data constraints in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_metadata_constraints(self, agency_id, resources, version,
+                                          detail=None) -> str:
+        """
+        Returns query to retrieve metadata constraints in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_concept_schemes(self, agency_id, resources, version,
+                                     detail=None) -> str:
+        """
+        Returns query to retrieve concept schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_code_lists(self, agency_id, resources, version,
+                                detail=None) -> str:
+        """
+        Returns query to retrieve code lists in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_category_schemes(self, agency_id, resources, version,
+                                      detail=None) -> str:
+        """
+        Returns query to retrieve category schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_hierarchies(self, agency_id, resources, version,
+                                 detail=None) -> str:
+        """
+        Returns query to retrieve hierarchies in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_hierarchy_associations(self, agency_id, resources, version,
+                                            detail=None) -> str:
+        """
+        Returns query to retrieve hierarchy associations in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_agency_schemes(self, agency_id, resources, version,
+                                    detail=None) -> str:
+        """
+        Returns query to retrieve agency schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_data_provider_schemes(self, agency_id, resources, version,
+                                           detail=None) -> str:
+        """
+        Returns query to retrieve data provider schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_data_consumer_schemes(self, agency_id, resources, version,
+                                           detail=None) -> str:
+        """
+        Returns query to retrieve data consumer schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_organisation_unit_schemes(self, agency_id, resources, version,
+                                               detail=None) -> str:
+        """
+        Returns query to retrieve organisation unit schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_transformation_schemes(self, agency_id, resources, version,
+                                            detail=None) -> str:
+        """
+        Returns query to retrieve transformation schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_ruleset_schemes(self, agency_id, resources, version,
+                                     detail=None) -> str:
+        """
+        Returns query to retrieve ruleset schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_user_defined_operator_schemes(self, agency_id, resources, version,
+                                                   detail=None) -> str:
+        """
+        Returns query to retrieve user defined operator schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_custom_type_schemes(self, agency_id, resources, version,
+                                         detail=None) -> str:
+        """
+        Returns query to retrieve custom type schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_name_personalisation_schemes(self, agency_id, resources, version,
+                                                  detail=None) -> str:
+        """
+        Returns query to retrieve name personalisation schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_vtl_mapping_schemes(self, agency_id, resources, version,
+                                         detail=None) -> str:
+        """
+        Returns query to retrieve vtl mapping schemes in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_value_lists(self, agency_id, resources, version,
+                                 detail=None) -> str:
+        """
+        Returns query to retrieve value lists in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_structure_maps(self, agency_id, resources, version,
+                                    detail=None) -> str:
+        """
+        Returns query to retrieve structure maps in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_representation_maps(self, agency_id, resources, version,
+                                         detail=None) -> str:
+        """
+        Returns query to retrieve representation maps in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_concept_scheme_maps(self, agency_id, resources, version,
+                                         detail=None) -> str:
+        """
+        Returns query to retrieve concept scheme maps in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_category_scheme_maps(self, agency_id, resources, version,
+                                          detail=None) -> str:
+        """
+        Returns query to retrieve category scheme maps in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_organisation_scheme_maps(self, agency_id, resources, version,
+                                              detail=None) -> str:
+        """
+        Returns query to retrieve organisation scheme maps in Metadata Queries (by structure) (V2.0.0)
+        """
+
+    @abstractmethod
+    def get_metadata_reporting_taxonomy_maps(self, agency_id, resources, version,
+                                             detail=None) -> str:
+        """
+        Returns query to retrieve reporting taxonomy maps in Metadata Queries (by structure) (V2.0.0)
         """
 
     def validate_references(self, reference: str):
@@ -674,6 +906,14 @@ class SdmxWebservice(ABC):
             raise ValueError(f"references constraints must be one of the following values: "
                              f"{self.CONSTRAINTS_REFERENCES_OPTIONS}")
 
+    def validate_metadata_structural_detail(self, detail: str):
+        """
+        Validates that the detail is one of the allowed values
+        """
+        if detail not in self.METADATA_STRUCTURE_DETAIL_OPTIONS:
+            raise ValueError(f"detail must be one of the following values: "
+                             f"{self.METADATA_STRUCTURE_DETAIL_OPTIONS}")
+
 
 class SdmxWs2p0(SdmxWebservice):
     """
@@ -718,6 +958,8 @@ class SdmxWs2p0(SdmxWebservice):
                                 'allcompletestubs', 'referencecompletestubs',
                                 'referencepartial', 'raw']
 
+    METADATA_STRUCTURE_DETAIL_OPTIONS = ['full', 'allstubs']
+
     def common_structure_queries(self, structure_type, agency_id=None, resources=None,
                                  version=None, references=None, detail=None) -> str:
         agency_id = agency_id if agency_id else "all"
@@ -747,6 +989,20 @@ class SdmxWs2p0(SdmxWebservice):
         if references:
             initial = "&" if "?" in params else "?"
             params += f"{initial}references={references}"
+        if detail:
+            initial = "&" if "?" in params else "?"
+            params += f"{initial}detail={detail}"
+
+        return base_query + params
+
+    def common_metadata_structure_queries(self, structure_type, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        agency_id = agency_id if agency_id else "all"
+        resources = resources if resources else "all"
+        version = version if version else "latest"
+
+        base_query = f"/metadata/structure/{structure_type}/{agency_id}/{resources}/{version}"
+        params = ""
         if detail:
             initial = "&" if "?" in params else "?"
             params += f"{initial}detail={detail}"
@@ -1831,6 +2087,550 @@ class SdmxWs2p0(SdmxWebservice):
         return self.common_item_scheme_queries("valuelist", agency_id, resources,
                                                version, item_id, references, detail)
 
+    def get_metadata_dsds(self, agency_id=None, resources=None,
+                          version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data structure definitios in metadata queries (by structure)
+
+        :param agency_id: The agency id of the data structure definitions in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the data structure definitions in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("datastructure", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_mdsds(self, agency_id=None, resources=None,
+                           version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get metadata structure definitions in metadata queries (by structure)
+
+        :param agency_id: The agency id of the metadata structure definitions in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the metadata structure definitions in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("metadatastructure", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_dataflows(self, agency_id=None, resources=None,
+                               version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get dataflows in metadata queries (by structure)
+
+        :param agency_id: The agency id of the dataflows in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the dataflows in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("dataflow", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_metadata_flows(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get metadata flows in metadata queries (by structure)
+
+        :param agency_id: The agency id of the metadata flows in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the metadata flows in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("metadataflow", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_provision_agreements(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get provision agreements in metadata queries (by structure)
+
+        :param agency_id: The agency id of the provision agreements in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the provision agreements in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("provisionagreement", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_structure_sets(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get structure sets in metadata queries (by structure)
+
+        :param agency_id: The agency id of the structure sets in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the structure sets in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("structureset", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_processes(self, agency_id=None, resources=None,
+                               version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get processes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the processes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the processes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("process", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_categorisations(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get categorisations in metadata queries (by structure)
+
+        :param agency_id: The agency id of the categorisations in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the categorisations in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("categorisation", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_data_constraints(self, agency_id=None, resources=None,
+                                      version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data constraints in metadata queries (by structure)
+
+        :param agency_id: The agency id of the data constraints in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the data constraints in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("dataconstraint", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_metadata_constraints(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get metadata constraints in metadata queries (by structure)
+
+        :param agency_id: The agency id of the metadata constraints in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the metadata constraints in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("metadataconstraint", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_concept_schemes(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get concept schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the concept schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the concept schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("conceptscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_code_lists(self, agency_id=None, resources=None,
+                                version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get code lists in metadata queries (by structure)
+
+        :param agency_id: The agency id of the code lists in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the code lists in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("codelist", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_category_schemes(self, agency_id=None, resources=None,
+                                      version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get category schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the category schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the category schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("categoryscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_hierarchies(self, agency_id=None, resources=None,
+                                 version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get hierarchies in metadata queries (by structure)
+
+        :param agency_id: The agency id of the hierarchies in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the hierarchies in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("hierarchy", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_hierarchy_associations(self, agency_id=None, resources=None,
+                                            version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get hierarchy associations in metadata queries (by structure)
+
+        :param agency_id: The agency id of the hierarchy associations in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the hierarchy associations in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("hierarchyassociation", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_agency_schemes(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get agency schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the agency schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the agency schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("agencyscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_data_provider_schemes(self, agency_id=None, resources=None,
+                                           version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data provider schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the data provider schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the data provider schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("dataproviderscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_data_consumer_schemes(self, agency_id=None, resources=None,
+                                           version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get data consumer schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the data consumer schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the data consumer schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("dataconsumerscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_organisation_unit_schemes(self, agency_id=None, resources=None,
+                                               version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get organisation unit schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the organisation unit schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the organisation unit schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("organisationunitscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_transformation_schemes(self, agency_id=None, resources=None,
+                                            version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get transformation schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the transformation schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the transformation schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("transformationscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_ruleset_schemes(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get ruleset schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the ruleset schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the ruleset schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("rulesetscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_user_defined_operator_schemes(self, agency_id=None, resources=None,
+                                                   version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get user defined operator schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the user defined operator schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the user defined operator schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("userdefinedoperatorscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_custom_type_schemes(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get custom type schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the custom type schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the custom type schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("customtypescheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_name_personalisation_schemes(self, agency_id=None, resources=None,
+                                                  version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get name personalisation schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the name personalisation schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the name personalisation schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("namepersonalisationscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_vtl_mapping_schemes(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get vtl mapping schemes in metadata queries (by structure)
+
+        :param agency_id: The agency id of the vtl mapping schemes in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the vtl mapping schemes in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("vtlmappingscheme", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_value_lists(self, agency_id=None, resources=None,
+                                 version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get value lists in metadata queries (by structure)
+
+        :param agency_id: The agency id of the value lists in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the value lists in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("valuelist", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_structure_maps(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get structure maps in metadata queries (by structure)
+
+        :param agency_id: The agency id of the structure maps in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the structure maps in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("structuremap", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_representation_maps(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get representation maps in metadata queries (by structure)
+
+        :param agency_id: The agency id of the representation maps in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the representation maps in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("representationmap", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_concept_scheme_maps(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get concept scheme maps in metadata queries (by structure)
+
+        :param agency_id: The agency id of the concept scheme maps in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the concept scheme maps in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("conceptschememap", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_category_scheme_maps(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get category scheme maps in metadata queries (by structure)
+
+        :param agency_id: The agency id of the category scheme maps in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the category scheme maps in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("categoryschememap", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_organisation_scheme_maps(self, agency_id=None, resources=None,
+                                              version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get organisation scheme maps in metadata queries (by structure)
+
+        :param agency_id: The agency id of the organisation scheme maps in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the organisation scheme maps in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("organisationschememap", agency_id, resources,
+                                                      version, detail)
+
+    def get_metadata_reporting_taxonomy_maps(self, agency_id=None, resources=None,
+                                             version=None, detail=None) -> str:
+
+        """
+        Returns URL and params to get reporting taxonomy maps in metadata queries (by structure)
+
+        :param agency_id: The agency id of the reporting taxonomy maps in metadata queries (by structure)
+        :param resources: The resources to query
+        :param version: The version of the reporting taxonomy maps in metadata queries (by structure)
+        :param detail: The detail parameter (full, allstubs)
+
+        :return: The URL and params formatted
+        """
+
+        return self.common_metadata_structure_queries("reportingtaxonomymap", agency_id, resources,
+                                                      version, detail)
+
 
 class SdmxWs1(SdmxWebservice):
     """
@@ -2287,6 +3087,14 @@ class SdmxWs1(SdmxWebservice):
                                        version=None, item_id=None, references=None, detail=None) -> str:
         pass
 
+    def get_ruleset_scheme_item(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_user_defined_operator_scheme_item(self, agency_id=None, resources=None,
+                                              version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
     def get_custom_type_scheme_item(self, agency_id=None, resources=None,
                                     version=None, item_id=None, references=None, detail=None) -> str:
         pass
@@ -2301,6 +3109,134 @@ class SdmxWs1(SdmxWebservice):
 
     def get_value_list_item(self, agency_id=None, resources=None,
                             version=None, item_id=None, references=None, detail=None) -> str:
+        pass
+
+    def get_metadata_dsds(self, agency_id=None, resources=None,
+                          version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_mdsds(self, agency_id=None, resources=None,
+                           version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_dataflows(self, agency_id=None, resources=None,
+                               version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_metadata_flows(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_provision_agreements(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_structure_sets(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_processes(self, agency_id=None, resources=None,
+                               version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_categorisations(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_data_constraints(self, agency_id=None, resources=None,
+                                      version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_metadata_constraints(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_concept_schemes(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_code_lists(self, agency_id=None, resources=None,
+                                version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_category_schemes(self, agency_id=None, resources=None,
+                                      version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_hierarchies(self, agency_id=None, resources=None,
+                                 version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_hierarchy_associations(self, agency_id=None, resources=None,
+                                            version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_agency_schemes(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_data_provider_schemes(self, agency_id=None, resources=None,
+                                           version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_data_consumer_schemes(self, agency_id=None, resources=None,
+                                           version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_organisation_unit_schemes(self, agency_id=None, resources=None,
+                                               version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_transformation_schemes(self, agency_id=None, resources=None,
+                                            version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_ruleset_schemes(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_user_defined_operator_schemes(self, agency_id=None, resources=None,
+                                                   version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_custom_type_schemes(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_name_personalisation_schemes(self, agency_id=None, resources=None,
+                                                  version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_vtl_mapping_schemes(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_value_lists(self, agency_id=None, resources=None,
+                                 version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_structure_maps(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_representation_maps(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_concept_scheme_maps(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_category_scheme_maps(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_organisation_scheme_maps(self, agency_id=None, resources=None,
+                                              version=None, detail=None) -> str:
+        pass
+
+    def get_metadata_reporting_taxonomy_maps(self, agency_id=None, resources=None,
+                                             version=None, detail=None) -> str:
         pass
 
 
@@ -2804,3 +3740,356 @@ class QueryBuilder:
         """Returns the get value list schemes in Item Scheme query for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.get_value_list_item,
                                                    agency_id, resources, version, item_id, references, detail)
+
+    def get_metadata_dsds(self, agency_id=None, resources=None,
+                          version=None, detail=None) -> str:
+        """Returns the data structure definitions query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_dsds(agency_id, resources, version, detail)
+
+    def get_metadata_mdsds(self, agency_id=None, resources=None,
+                           version=None, detail=None) -> str:
+        """Returns the metadata structure definitions query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_mdsds(agency_id, resources, version, detail)
+
+    def get_metadata_dataflows(self, agency_id=None, resources=None,
+                               version=None, detail=None) -> str:
+        """Returns the dataflows query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_dataflows(agency_id, resources, version, detail)
+
+    def get_metadata_metadata_flows(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        """Returns the metadata flows query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_metadata_flows(agency_id, resources, version, detail)
+
+    def get_metadata_provision_agreements(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        """Returns the provision agreements query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_provision_agreements(agency_id, resources, version, detail)
+
+    def get_metadata_structure_sets(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        """Returns the structure sets query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_structure_sets(agency_id, resources, version, detail)
+
+    def get_metadata_processes(self, agency_id=None, resources=None,
+                               version=None, detail=None) -> str:
+        """Returns the processes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_processes(agency_id, resources, version, detail)
+
+    def get_metadata_categorisations(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+        """Returns the categorisations query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_categorisations(agency_id, resources, version, detail)
+
+    def get_metadata_data_constraints(self, agency_id=None, resources=None,
+                                      version=None, detail=None) -> str:
+        """Returns the data constraints query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_data_constraints(agency_id, resources, version, detail)
+
+    def get_metadata_metadata_constraints(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        """Returns the metadata constraints query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_metadata_constraints(agency_id, resources, version, detail)
+
+    def get_metadata_concept_schemes(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+        """Returns the concept schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_concept_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_code_lists(self, agency_id=None, resources=None,
+                                version=None, detail=None) -> str:
+        """Returns the code lists query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_code_lists(agency_id, resources, version, detail)
+
+    def get_metadata_category_schemes(self, agency_id=None, resources=None,
+                                      version=None, detail=None) -> str:
+        """Returns the category schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_category_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_hierarchies(self, agency_id=None, resources=None,
+                                 version=None, detail=None) -> str:
+        """Returns the hierarchies query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_hierarchies(agency_id, resources, version, detail)
+
+    def get_metadata_hierarchy_associations(self, agency_id=None, resources=None,
+                                            version=None, detail=None) -> str:
+        """Returns the hierarchy associations query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_hierarchy_associations(agency_id, resources, version, detail)
+
+    def get_metadata_agency_schemes(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        """Returns the agency schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_agency_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_data_provider_schemes(self, agency_id=None, resources=None,
+                                           version=None, detail=None) -> str:
+        """Returns the data provider schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_data_provider_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_data_consumer_schemes(self, agency_id=None, resources=None,
+                                           version=None, detail=None) -> str:
+        """Returns the data consumer schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_data_consumer_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_organisation_unit_schemes(self, agency_id=None, resources=None,
+                                               version=None, detail=None) -> str:
+        """Returns the organisation unit schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_organisation_unit_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_transformation_schemes(self, agency_id=None, resources=None,
+                                            version=None, detail=None) -> str:
+        """Returns the transformation schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_transformation_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_ruleset_schemes(self, agency_id=None, resources=None,
+                                     version=None, detail=None) -> str:
+        """Returns the ruleset schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_ruleset_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_user_defined_operator_schemes(self, agency_id=None, resources=None,
+                                                   version=None, detail=None) -> str:
+        """Returns the user defined operator schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_user_defined_operator_schemes(
+            agency_id, resources, version, detail)
+
+    def get_metadata_custom_type_schemes(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        """Returns the custom type schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_custom_type_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_name_personalisation_schemes(self, agency_id=None, resources=None,
+                                                  version=None, detail=None) -> str:
+        """Returns the name personalisation schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_name_personalisation_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_vtl_mapping_schemes(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        """Returns the vtl mapping schemes query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_vtl_mapping_schemes(agency_id, resources, version, detail)
+
+    def get_metadata_value_lists(self, agency_id=None, resources=None,
+                                 version=None, detail=None) -> str:
+        """Returns the value lists query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_value_lists(agency_id, resources, version, detail)
+
+    def get_metadata_structure_maps(self, agency_id=None, resources=None,
+                                    version=None, detail=None) -> str:
+        """Returns the structure maps query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_structure_maps(agency_id, resources, version, detail)
+
+    def get_metadata_representation_maps(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        """Returns the representation maps query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_representation_maps(agency_id, resources, version, detail)
+
+    def get_metadata_concept_scheme_maps(self, agency_id=None, resources=None,
+                                         version=None, detail=None) -> str:
+        """Returns the concept scheme maps query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_concept_scheme_maps(agency_id, resources, version, detail)
+
+    def get_metadata_category_scheme_maps(self, agency_id=None, resources=None,
+                                          version=None, detail=None) -> str:
+        """Returns the category scheme maps query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_category_scheme_maps(agency_id, resources, version, detail)
+
+    def get_metadata_organisation_scheme_maps(self, agency_id=None, resources=None,
+                                              version=None, detail=None) -> str:
+        """Returns the organisation scheme maps query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_organisation_scheme_maps(agency_id, resources, version, detail)
+
+    def get_metadata_reporting_taxonomy_maps(self, agency_id=None, resources=None,
+                                             version=None, detail=None) -> str:
+        """Returns the reporting taxonomy maps query in metadata
+        queries (by structure) for the WS Implementation"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return self._ws_implementation.get_metadata_reporting_taxonomy_maps(agency_id, resources, version, detail)
