@@ -7,9 +7,9 @@ from datetime import datetime
 from typing import List
 
 from sdmxthon.model.base import InternationalString, MaintainableArtefact
-from sdmxthon.model.component import Component
+from sdmxthon.model.component import Component, GroupDimensionDescriptor
 from sdmxthon.model.descriptors import AttributeDescriptor, ComponentList, \
-    DimensionDescriptor, GroupDimensionDescriptor, MeasureDescriptor
+    DimensionDescriptor, MeasureDescriptor
 from sdmxthon.model.extras import ReferencePeriod, ReleaseCalendar
 from sdmxthon.model.header import Header, Party, Sender
 from sdmxthon.model.utils import bool_setter, ConstraintRoleType, generic_setter

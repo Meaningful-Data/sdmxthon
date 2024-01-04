@@ -1,6 +1,6 @@
 from sdmxthon.model.base import IdentifiableArtefact
-from sdmxthon.model.component import Dimension, Attribute, PrimaryMeasure
-from sdmxthon.parsers.writer_aux import export_intern_data, add_indent
+from sdmxthon.model.component import Attribute, Dimension, PrimaryMeasure
+from sdmxthon.parsers.writer_aux import add_indent, export_intern_data
 
 
 class GroupDimension(object):
@@ -176,23 +176,3 @@ class MeasureDescriptor(ComponentList, object):
         return False
 
 
-class GroupDimensionDescriptor(ComponentList, object):
-    """A set metadata concepts that define a partial key derived from the
-    Dimension Descriptor in a Data Structure Definition.
-    """
-
-    _componentType = "Dimension"
-
-    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
-                 annotations=None, components=None):
-        if components is None:
-            components = {}
-        super(GroupDimensionDescriptor, self). \
-            __init__(id_=id_, uri=uri, urn=urn,
-                     annotations=annotations, components=components)
-
-    def __eq__(self, other):
-        if isinstance(other, GroupDimensionDescriptor):
-            return super(GroupDimensionDescriptor, self).__eq__(other)
-
-        return False

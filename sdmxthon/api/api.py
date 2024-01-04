@@ -4,6 +4,7 @@ Pandas Dataframes or CSV files. It also contains the function to get the
 supported agencies by the API.
 """
 import os
+from pathlib import Path
 from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
@@ -27,6 +28,8 @@ def read_sdmx(sdmx_file, validate=False) -> Message:
 
     :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
+    if isinstance(sdmx_file, Path):
+        sdmx_file = str(sdmx_file)
 
     # Process the SDMX file and check the file type
     infile, filetype = process_string_to_read(sdmx_file)
