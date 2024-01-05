@@ -2,6 +2,33 @@
 Changelog
 #########
 
+2.5.3 (2023-12-22)
+------------------
+**Added**
+  - Added internal enumeration for Action (ActionEnum)
+
+**Changes**
+  - Changed description of dataset attributes and added docs for structure_type and unique_id in Dataset.
+  - Fixed reading and writing of SDMX-CSV v2 to handle ACTION column. #53
+  - Changed link to Changelog in docs.
+
+**Bugfixes**
+  - Fixed bug when adding dataset attributes to raise an unhandled exception if not present on keys. #53
+
+2.5.1 (2023-12-21)
+------------------
+**Added**
+  - Added changelog on docs and github link #52
+  - Structure submission to FMR from Dataflow and DataStructureDefinition #47
+  - Read SDMX to support SDMX-CSV v1 and v2 #45
+  - Handling on error messages on SOAP APIs requests
+  - Added MessageTypeEnum documentation.
+
+**Changes**
+  - Changed description of features in docs.
+
+**Bugfixes**
+
 2.5 (2023-11-10)
 ----------------
 **Added**

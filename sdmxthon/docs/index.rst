@@ -22,7 +22,7 @@ Main links
 - Bug Tracker and Enhancements: https://github.com/Meaningful-Data/sdmxthon/issues
 - Documentation: https://docs.sdmxthon.meaningfuldata.eu
 - Source Code: https://github.com/Meaningful-Data/sdmxthon
-- Changelog: https://github.com/Meaningful-Data/sdmxthon/blob/master/Changelog.rst
+- Changelog: https://docs.sdmxthon.meaningfuldata.eu/changelog.html
 - PyPi: https://pypi.org/project/sdmxthon/
 
 .. include:: installation.rst

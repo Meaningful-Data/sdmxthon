@@ -26,7 +26,15 @@ SDMXthon
 SDMXthon is an open source Python library implementing the
 `SDMX 2.1 information model <https://sdmx.org/wp-content/uploads/SDMX_2-1-1_SECTION_2_InformationModel_201108.pdf>`_
 
-Documentation can be found in the `Docs page <https://docs.sdmxthon.meaningfuldata.eu/>`_
+**********
+Main links
+**********
+
+- Bug Tracker and Enhancements: https://github.com/Meaningful-Data/sdmxthon/issues
+- Documentation: https://docs.sdmxthon.meaningfuldata.eu
+- Source Code: https://github.com/Meaningful-Data/sdmxthon
+- Changelog: https://docs.sdmxthon.meaningfuldata.eu/changelog.html
+- PyPi: https://pypi.org/project/sdmxthon/
 
 ========
 Features
@@ -37,5 +45,3 @@ Features
 - Data validation
 - Metadata validation
 - Interaction with SDMX APIs and Fusion Metadata Registry
-
-`View Changelog <https://github.com/Meaningful-Data/sdmxthon/blob/master/Changelog.rst>`_
