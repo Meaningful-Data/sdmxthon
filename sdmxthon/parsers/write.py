@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pandas as pd
 
-from sdmxthon.model.component import PrimaryMeasure
+from sdmxthon.model.component import GroupDimensionDescriptor, PrimaryMeasure
 from sdmxthon.model.header import Header, Party, Sender
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
 from sdmxthon.parsers.writer_aux import create_namespaces, get_end_message, \
@@ -122,18 +122,31 @@ def series_process(parser, data, data_dict, series_codes, obs_codes):
 
 def get_codes(dim, dataset):
     series_codes = []
+    group_codes = []
+    group_obj = None
     obs_codes = [dim, dataset.structure.measure_code]
     for e in dataset.structure.attribute_descriptor.components.values():
         if e.id in dataset.data.keys() and isinstance(e.related_to,
                                                       PrimaryMeasure):
             obs_codes.append(e.id)
+        elif (e.id in dataset.data.keys() and
+              isinstance(e.related_to, GroupDimensionDescriptor)):
+            group_codes.append(e.id)
+            if group_obj is None:
+                group_obj = e.related_to
+            elif group_obj != e.related_to:
+                raise Exception("Group Dimension Descriptor "
+                                "is not unique on DSD")
     for e in dataset.data.keys():
         if ((e in dataset.structure.dimension_codes and e != dim) or
                 (e in dataset.structure.attribute_codes and
-                 e not in obs_codes)):
+                 e not in obs_codes and e not in group_codes)):
             series_codes.append(e)
 
-    return series_codes, obs_codes
+    if len(group_codes) > 0:
+        group_codes += list(group_obj.components.keys())
+
+    return series_codes, obs_codes, group_codes, group_obj
 
 
 def memory_optimization_str(dataset, opt_att_codes, prettyprint):
@@ -165,6 +178,8 @@ def memory_optimization_str(dataset, opt_att_codes, prettyprint):
 #     |                                            |
 #      --------------------------------------------
 #
+
+
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     outfile = ''
 
@@ -191,9 +206,19 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     if dim == "AllDimensions":
         outfile += memory_optimization_str(dataset, opt_att_codes, prettyprint)
     else:
-        series_codes, obs_codes = get_codes(dim, dataset)
-        outfile += ser_str(dataset.data, opt_att_codes, series_codes,
-                           obs_codes, prettyprint)
+        series_codes, obs_codes, group_codes, gr_obj = get_codes(dim, dataset)
+
+        if len(group_codes) > 0:
+            outfile += group_str(data=dataset.data,
+                                 group_codes=group_codes,
+                                 group_obj=gr_obj,
+                                 prettyprint=prettyprint)
+
+        outfile += ser_str(data=dataset.data,
+                           opt_att_codes=opt_att_codes,
+                           series_codes=series_codes,
+                           obs_codes=obs_codes,
+                           prettyprint=prettyprint)
 
     outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
@@ -258,6 +283,35 @@ def format_ser_str(data: dict, prettyprint: bool) -> str:
     out += f"{child2}</Series>{nl}"
 
     return out
+
+
+def format_group_str(out: list,
+                     data: dict,
+                     group_obj: GroupDimensionDescriptor,
+                     prettyprint: bool):
+    if prettyprint:
+        child2 = '\t\t'
+        nl = '\n'
+    else:
+        child2 = nl = ''
+    result = f"{child2}<Group "
+    result += f'xsi:type="ns1:{group_obj.id}Type" '
+    for k, v in data.items():
+        result += f'{k}="{v}" '
+
+    result += f"/>{nl}"
+    out.append(result)
+
+
+def group_str(data, group_codes, group_obj, prettyprint):
+    # Getting each datapoint from data and creating dict
+    data = data.sort_values(group_codes, axis=0)
+
+    out = []
+    data[group_codes].apply(lambda x: format_group_str(out, dict(x), group_obj,
+                                                       prettyprint), axis=1)
+
+    return ''.join(out)
 
 
 def ser_str(data: pd.DataFrame,
@@ -361,7 +415,7 @@ def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
         outfile += memory_optimization_generic(dataset, dim_codes, att_codes,
                                                measure_code, prettyprint)
     else:
-        series_codes, obs_codes = get_codes(dim, dataset)
+        series_codes, obs_codes, _, _ = get_codes(dim, dataset)
 
         outfile += creating_series_generic(dataset.data,
                                            dim_codes=dim_codes,
