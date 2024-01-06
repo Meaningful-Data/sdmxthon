@@ -57,13 +57,13 @@ def read_sdmx(sdmx_file, validate=False) -> Message:
     return Message(message_type=type_, payload=payload)
 
 
-def get_datasets(data, path_to_metadata, validate=True,
+def get_datasets(path_to_data, path_to_metadata, validate=True,
                  remove_empty_columns=True):
     """
     GetDatasets performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
 
-    :param data: Path, URL or SDMX data file as string
+    :param path_to_data: Path, URL or SDMX data file as string
 
     :param path_to_metadata: Path or URL to the SDMX metadata file
 
@@ -75,7 +75,12 @@ def get_datasets(data, path_to_metadata, validate=True,
     dict of :obj:`Datasets <sdmxthon.model.dataset.DataSet>`
     """
 
-    datasets = read_xml(data, mode="Data", validate=validate)
+    if isinstance(path_to_data, Path):
+        path_to_data = str(path_to_data)
+    if isinstance(path_to_metadata, Path):
+        path_to_metadata = str(path_to_metadata)
+
+    datasets = read_xml(path_to_data, mode="Data", validate=validate)
 
     metadata = read_xml(path_to_metadata,
                         mode="Metadata",
