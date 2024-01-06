@@ -2,6 +2,7 @@ import csv
 import json
 import os
 from io import BytesIO, StringIO, TextIOWrapper
+from pathlib import Path
 
 import requests
 import validators
@@ -28,6 +29,8 @@ def URLparsing(infile: str):
 
 
 def process_string_to_read(infile: str):
+    if isinstance(infile, Path):
+        infile = str(infile)
     if isinstance(infile, (str, os.PathLike)):
         # Is URL
         if validators.url(infile):
