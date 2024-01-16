@@ -305,11 +305,12 @@ def format_group_str(out: list,
 
 def group_str(data, group_codes, group_obj, prettyprint):
     # Getting each datapoint from data and creating dict
-    data = data.sort_values(group_codes, axis=0)
+    group_data = data[group_codes]
+    group_data = group_data.drop_duplicates().reset_index(drop=True)
 
     out = []
-    data[group_codes].apply(lambda x: format_group_str(out, dict(x), group_obj,
-                                                       prettyprint), axis=1)
+    group_data.apply(lambda x: format_group_str(out, dict(x), group_obj,
+                                                prettyprint), axis=1)
 
     return ''.join(out)
 
@@ -415,7 +416,10 @@ def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
         outfile += memory_optimization_generic(dataset, dim_codes, att_codes,
                                                measure_code, prettyprint)
     else:
-        series_codes, obs_codes, _, _ = get_codes(dim, dataset)
+        series_codes, obs_codes, group_codes, _ = get_codes(dim, dataset)
+        for x in group_codes:
+            if x not in series_codes:
+                series_codes.append(x)
 
         outfile += creating_series_generic(dataset.data,
                                            dim_codes=dim_codes,
@@ -571,8 +575,6 @@ def creating_series_generic(data: pd.DataFrame,
         obs_att = []
     else:
         obs_att = obs_codes[2:]
-
-    data = data.sort_values(series_codes, axis=0)
 
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}

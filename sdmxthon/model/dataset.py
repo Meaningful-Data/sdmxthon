@@ -589,7 +589,8 @@ class Dataset:
         if output_path == '':
             return writer(path=output_path, type_=message_type, payload=self,
                           id_=id_, test=test, header=header,
-                          prepared=prepared, sender=sender, receiver=receiver)
+                          prepared=prepared, sender=sender, receiver=receiver,
+                          prettyprint=prettyprint)
         writer(path=output_path, type_=message_type, payload=self, id_=id_,
                test=test, header=header,
                prepared=prepared, sender=sender, receiver=receiver,

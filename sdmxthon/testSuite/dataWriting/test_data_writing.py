@@ -45,7 +45,6 @@ def test_data_writing(data_type, series, data_path, metadata_path):
 
     df = first_element_dict(get_pandas_df(BytesIO(bytes(result,
                                                         encoding='UTF-8'))))
-
     pd.testing.assert_frame_equal(
         df.fillna('').replace('nan', ''),
         dataset.data.replace('nan', ''),

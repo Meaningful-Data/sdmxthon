@@ -126,6 +126,8 @@ def reading_group_data(dataset) -> pd.DataFrame:
     for x in cols_to_delete:
         del df[x]
 
+    df = df.drop_duplicates(keep='first').reset_index(drop=True)
+
     return df
 
 
