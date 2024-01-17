@@ -1,4 +1,5 @@
 import pytest
+from pytest import mark
 from query_builder import SdmxWs1, SdmxWs2p0, QueryBuilder
 
 
@@ -22,521 +23,229 @@ def query_builder_ws2(sdmx_ws2):
     return QueryBuilder(sdmx_ws2)
 
 
-def test_get_data_flows(query_builder):
-    query = query_builder.get_data_flows(agency_id="all", resources="all", version="latest")
-    assert query == "/dataflow/all/all/latest"
+params_structure_queries_SdmxWs1 = [
+    ('get_dsds', '/datastructure/all/all/latest'),
+    ('get_mdsds', '/metadatastructure/all/all/latest'),
+    ('get_data_flows', '/dataflow/all/all/latest'),
+    ('get_meta_data_flows', '/metadataflow/all/all/latest'),
+    ('get_provision_agreements', '/provisionagreement/all/all/latest'),
+    ('get_structure_sets', '/structureset/all/all/latest'),
+    ('get_process', '/process/all/all/latest'),
+    ('get_categorisation', '/categorisation/all/all/latest'),
+    ('get_content_constraint', '/contentconstraint/all/all/latest'),
+    ('get_actual_constraint', '/actualconstraint/all/all/latest'),
+    ('get_allowed_constraint', '/allowedconstraint/all/all/latest'),
+    ('get_attachment_constraint', '/attachmentconstraint/all/all/latest'),
+    ('get_structure', '/structure/all/all/latest'),
+    ('get_concept_scheme', '/conceptscheme/all/all/latest'),
+    ('get_code_list', '/codelist/all/all/latest'),
+    ('get_category_scheme', '/categoryscheme/all/all/latest'),
+    ('get_hierarchical_codelist', '/hierarchicalcodelist/all/all/latest'),
+    ('get_organisation_scheme', '/organisationscheme/all/all/latest'),
+    ('get_agency_scheme', '/agencyscheme/all/all/latest'),
+    ('get_data_provider_scheme', '/dataproviderscheme/all/all/latest'),
+    ('get_data_consumer_scheme', '/dataconsumerscheme/all/all/latest'),
+    ('get_organisation_unit_scheme', '/organisationunitscheme/all/all/latest'),
+    ('get_transformation_scheme', '/transformationscheme/all/all/latest'),
+    ('get_ruleset_scheme', '/rulesetscheme/all/all/latest'),
+    ('get_user_defined_operator_scheme', '/userdefinedoperatorscheme/all/all/latest'),
+    ('get_custom_type_scheme', '/customtypescheme/all/all/latest'),
+    ('get_name_personalisation_scheme', '/namepersonalisationscheme/all/all/latest'),
+    ('get_name_alias_scheme', '/namealiasscheme/all/all/latest'),
+    ('get_schemas_datastructure', '/schema/datastructure/all/all/latest'),
+    ('get_schemas_meta_datastructure', '/schema/metadatastructure/all/all/latest'),
+    ('get_schemas_dataflow', '/schema/dataflow/all/all/latest'),
+    ('get_schemas_meta_dataflow', '/schema/metadataflow/all/all/latest'),
+    ('get_schemas_provision_agreement', '/schema/provisionagreement/all/all/latest')
+]
+
+params_item_queries_SdmxWs1 = [
+    ('get_concepts', '/conceptscheme/all/all/latest/all'),
+    ('get_codes', '/codelist/all/all/latest/all'),
+    ('get_categories', '/categoryscheme/all/all/latest/all'),
+    ('get_hierarchies', '/hierarchicalcodelist/all/all/latest/all'),
+    ('get_organisations', '/organisationscheme/all/all/latest/all'),
+    ('get_agencies', '/agencyscheme/all/all/latest/all'),
+    ('get_data_providers', '/dataproviderscheme/all/all/latest/all'),
+    ('get_data_consumers', '/dataconsumerscheme/all/all/latest/all'),
+    ('get_organisation_unit_schemes', '/organisationunitscheme/all/all/latest/all'),
+    ('get_transformation_schemes', '/transformationscheme/all/all/latest/all'),
+    ('get_ruleset_schemes', '/rulesetscheme/all/all/latest/all'),
+    ('get_user_defined_operator_schemes', '/userdefinedoperatorscheme/all/all/latest/all'),
+    ('get_custom_type_schemes', '/customtypescheme/all/all/latest/all'),
+    ('get_name_personalisation_schemes', '/namepersonalisationscheme/all/all/latest/all'),
+    ('get_name_alias_schemes', '/namealiasscheme/all/all/latest/all')
+]
+
+params_data_queries_SdmxWs2p0 = [
+    ('get_data_datastructures', '/data/datastructure/all/all/latest/all'),
+    ('get_data_dataflows', '/data/dataflow/all/all/latest/all'),
+    ('get_data_provision_agreements', '/data/provisionagreement/all/all/latest/all'),
+    ('get_data_all_contexts', '/data/all/all/all/latest/all')
+]
+
+params_data_constraints_queries_SdmxWs2p0 = [
+    ('get_constraint_datastructures', '/availability/datastructure/all/all/latest/all/all'),
+    ('get_constraint_dataflows', '/availability/dataflow/all/all/latest/all/all'),
+    ('get_constraint_provision_agreements', '/availability/provisionagreement/all/all/latest/all/all'),
+    ('get_constraint_all_contexts', '/availability/all/all/all/latest/all/all')
+]
 
 
-def test_get_data(query_builder):
+params_structure_and_metadata_and_schema_queries_SdmxWs2p0 = [
+    ('get_dsds', '/structure/datastructure/all/all/latest'),
+    ('get_mdsds', '/structure/metadatastructure/all/all/latest'),
+    ('get_data_flows', '/structure/dataflow/all/all/latest'),
+    ('get_meta_data_flows', '/structure/metadataflow/all/all/latest'),
+    ('get_provision_agreements', '/structure/provisionagreement/all/all/latest'),
+    ('get_structure_sets', '/structure/structureset/all/all/latest'),
+    ('get_process', '/structure/process/all/all/latest'),
+    ('get_categorisation', '/structure/categorisation/all/all/latest'),
+    ('get_data_constraint', '/structure/dataconstraint/all/all/latest'),
+    ('get_metadata_constraint', '/structure/metadataconstraint/all/all/latest'),
+    ('get_concept_scheme', '/structure/conceptscheme/all/all/latest'),
+    ('get_code_list', '/structure/codelist/all/all/latest'),
+    ('get_category_scheme', '/structure/categoryscheme/all/all/latest'),
+    ('get_hierarchy', '/structure/hierarchy/all/all/latest'),
+    ('get_hierarchy_association', '/structure/hierarchyassociation/all/all/latest'),
+    ('get_agency_scheme', '/structure/agencyscheme/all/all/latest'),
+    ('get_data_provider_scheme', '/structure/dataproviderscheme/all/all/latest'),
+    ('get_data_consumer_scheme', '/structure/dataconsumerscheme/all/all/latest'),
+    ('get_organisation_unit_scheme', '/structure/organisationunitscheme/all/all/latest'),
+    ('get_transformation_scheme', '/structure/transformationscheme/all/all/latest'),
+    ('get_ruleset_scheme', '/structure/rulesetscheme/all/all/latest'),
+    ('get_user_defined_operator_scheme', '/structure/userdefinedoperatorscheme/all/all/latest'),
+    ('get_custom_type_scheme', '/structure/customtypescheme/all/all/latest'),
+    ('get_name_personalisation_scheme', '/structure/namepersonalisationscheme/all/all/latest'),
+    ('get_vtl_mapping_scheme', '/structure/vtlmappingscheme/all/all/latest'),
+    ('get_value_list', '/structure/valuelist/all/all/latest'),
+    ('get_structure_map', '/structure/structuremap/all/all/latest'),
+    ('get_representation_map', '/structure/representationmap/all/all/latest'),
+    ('get_concept_scheme_map', '/structure/conceptschememap/all/all/latest'),
+    ('get_category_scheme_map', '/structure/categoryschememap/all/all/latest'),
+    ('get_organisation_scheme_map', '/structure/organisationschememap/all/all/latest'),
+    ('get_reporting_taxonomy_map', '/structure/reportingtaxonomymap/all/all/latest'),
+    ('get_metadata_dsds', '/metadata/structure/datastructure/all/all/latest'),
+    ('get_metadata_mdsds', '/metadata/structure/metadatastructure/all/all/latest'),
+    ('get_metadata_dataflows', '/metadata/structure/dataflow/all/all/latest'),
+    ('get_metadata_metadata_flows', '/metadata/structure/metadataflow/all/all/latest'),
+    ('get_metadata_provision_agreements', '/metadata/structure/provisionagreement/all/all/latest'),
+    ('get_metadata_structure_sets', '/metadata/structure/structureset/all/all/latest'),
+    ('get_metadata_processes', '/metadata/structure/process/all/all/latest'),
+    ('get_metadata_categorisations', '/metadata/structure/categorisation/all/all/latest'),
+    ('get_metadata_data_constraints', '/metadata/structure/dataconstraint/all/all/latest'),
+    ('get_metadata_metadata_constraints', '/metadata/structure/metadataconstraint/all/all/latest'),
+    ('get_metadata_concept_schemes', '/metadata/structure/conceptscheme/all/all/latest'),
+    ('get_metadata_code_lists', '/metadata/structure/codelist/all/all/latest'),
+    ('get_metadata_category_schemes', '/metadata/structure/categoryscheme/all/all/latest'),
+    ('get_metadata_hierarchies', '/metadata/structure/hierarchy/all/all/latest'),
+    ('get_metadata_hierarchy_associations', '/metadata/structure/hierarchyassociation/all/all/latest'),
+    ('get_metadata_agency_schemes', '/metadata/structure/agencyscheme/all/all/latest'),
+    ('get_metadata_data_provider_schemes', '/metadata/structure/dataproviderscheme/all/all/latest'),
+    ('get_metadata_data_consumer_schemes', '/metadata/structure/dataconsumerscheme/all/all/latest'),
+    ('get_metadata_organisation_unit_schemes', '/metadata/structure/organisationunitscheme/all/all/latest'),
+    ('get_metadata_transformation_schemes', '/metadata/structure/transformationscheme/all/all/latest'),
+    ('get_metadata_ruleset_schemes', '/metadata/structure/rulesetscheme/all/all/latest'),
+    ('get_metadata_user_defined_operator_schemes', '/metadata/structure/userdefinedoperatorscheme/all/all/latest'),
+    ('get_metadata_custom_type_schemes', '/metadata/structure/customtypescheme/all/all/latest'),
+    ('get_metadata_name_personalisation_schemes', '/metadata/structure/namepersonalisationscheme/all/all/latest'),
+    ('get_metadata_vtl_mapping_schemes', '/metadata/structure/vtlmappingscheme/all/all/latest'),
+    ('get_metadata_value_lists', '/metadata/structure/valuelist/all/all/latest'),
+    ('get_metadata_structure_maps', '/metadata/structure/structuremap/all/all/latest'),
+    ('get_metadata_representation_maps', '/metadata/structure/representationmap/all/all/latest'),
+    ('get_metadata_concept_scheme_maps', '/metadata/structure/conceptschememap/all/all/latest'),
+    ('get_metadata_category_scheme_maps', '/metadata/structure/categoryschememap/all/all/latest'),
+    ('get_metadata_organisation_scheme_maps', '/metadata/structure/organisationschememap/all/all/latest'),
+    ('get_metadata_reporting_taxonomy_maps', '/metadata/structure/reportingtaxonomymap/all/all/latest'),
+    ('get_schema_datastructures', '/schema/datastructure/all/all/latest'),
+    ('get_schema_meta_datastructures', '/schema/metadatastructure/all/all/latest'),
+    ('get_schema_dataflows', '/schema/dataflow/all/all/latest'),
+    ('get_schema_meta_dataflows', '/schema/metadataflow/all/all/latest'),
+    ('get_schema_provision_agreements', '/schema/provisionagreement/all/all/latest')
+]
+
+params_item_queries_SdmxWs2p0 = [
+    ('get_concept_scheme_item', '/structure/conceptscheme/all/all/latest/all'),
+    ('get_codelist_item', '/structure/codelist/all/all/latest/all'),
+    ('get_category_scheme_item', '/structure/categoryscheme/all/all/latest/all'),
+    ('get_agency_scheme_item', '/structure/agencyscheme/all/all/latest/all'),
+    ('get_data_provider_scheme_item', '/structure/dataproviderscheme/all/all/latest/all'),
+    ('get_data_consumer_scheme_item', '/structure/dataconsumerscheme/all/all/latest/all'),
+    ('get_organisation_unit_scheme_item', '/structure/organisationunitscheme/all/all/latest/all'),
+    ('get_transformation_scheme_item', '/structure/transformationscheme/all/all/latest/all'),
+    ('get_ruleset_scheme_item', '/structure/rulesetscheme/all/all/latest/all'),
+    ('get_user_defined_operator_scheme_item', '/structure/userdefinedoperatorscheme/all/all/latest/all'),
+    ('get_custom_type_scheme_item', '/structure/customtypescheme/all/all/latest/all'),
+    ('get_name_personalisation_scheme_item', '/structure/namepersonalisationscheme/all/all/latest/all'),
+    ('get_vtl_mapping_scheme_item', '/structure/vtlmappingscheme/all/all/latest/all'),
+    ('get_value_list_item', '/structure/valuelist/all/all/latest/all')
+]
+
+
+def test_get_data_SdmxWs1(query_builder):
     query = query_builder.get_data(flow="example_flow", key="all", provider="all")
     assert query == "/data/example_flow/all/all"
 
 
-def test_get_dsds(query_builder):
-    query = query_builder.get_dsds(agency_id="all", resources="all", version="latest")
-    assert query == "/datastructure/all/all/latest"
-
-
-def test_get_constraints(query_builder):
-    query = query_builder.get_constraints(flow="example_flow", key="all", provider="all", component_id="all")
+def test_get_constraints_SdmxWs1(query_builder):
+    query = query_builder.get_constraints(flow="example_flow", key="all",
+                                          provider="all", component_id="all")
     assert query == "/availableconstraint/example_flow/all/all/all"
 
 
-def test_get_mdsds(query_builder):
-    query = query_builder.get_mdsds(agency_id="all", resources="all", version="latest")
-    assert query == "/metadatastructure/all/all/latest"
+@mark.parametrize("method,expected", params_structure_queries_SdmxWs1)
+def test_query_builder_structure_and_schema_queries(method, expected, query_builder):
+    query = getattr(query_builder, method)(agency_id="all", resources="all",
+                                           version="latest")
+    assert query == expected
 
 
-def test_get_meta_data_flows(query_builder):
-    query = query_builder.get_meta_data_flows(agency_id="all", resources="all", version="latest")
-    assert query == "/metadataflow/all/all/latest"
+@mark.parametrize("method,expected", params_item_queries_SdmxWs1)
+def test_query_builder_item_queries_SdmxWs1(method, expected, query_builder):
+    query = getattr(query_builder, method)(agency_id="all", resources="all",
+                                           version="latest", item_id="all")
+    assert query == expected
 
 
-def test_get_provision_agreements(query_builder):
-    query = query_builder.get_provision_agreements(agency_id="all", resources="all", version="latest")
-    assert query == "/provisionagreement/all/all/latest"
+@mark.parametrize("method,expected", params_data_queries_SdmxWs2p0)
+def test_query_builder_data_queries(method, expected, query_builder_ws2):
+    query = getattr(query_builder_ws2, method)(agency_id="all", resources="all",
+                                               version="latest", key="all")
+    assert query == expected
 
 
-def test_get_structure_sets(query_builder):
-    query = query_builder.get_structure_sets(agency_id="all", resources="all", version="latest")
-    assert query == "/structureset/all/all/latest"
+@mark.parametrize("method,expected", params_data_constraints_queries_SdmxWs2p0)
+def test_query_builder_constraints_queries(method, expected, query_builder_ws2):
+    query = getattr(query_builder_ws2, method)(agency_id="all", resources="all",
+                                               version="latest", key="all",
+                                               component_id="all")
+    assert query == expected
 
 
-def test_get_process(query_builder):
-    query = query_builder.get_process(agency_id="all", resources="all", version="latest")
-    assert query == "/process/all/all/latest"
+@mark.parametrize("method,expected", params_structure_and_metadata_and_schema_queries_SdmxWs2p0)
+def test_query_builder_structure_and_metadata_and_schema_queries(method, expected, query_builder_ws2):
+    query = getattr(query_builder_ws2, method)(agency_id="all", resources="all",
+                                               version="latest")
+    assert query == expected
 
 
-def test_get_categorisation(query_builder):
-    query = query_builder.get_categorisation(agency_id="all", resources="all", version="latest")
-    assert query == "/categorisation/all/all/latest"
+@mark.parametrize("method,expected", params_item_queries_SdmxWs2p0)
+def test_query_builder_item_queries_SdmxWs2p0(method, expected, query_builder_ws2):
+    query = getattr(query_builder_ws2, method)(agency_id="all", resources="all",
+                                               version="latest", item_id="all")
+    assert query == expected
 
 
-def test_get_content_constraint(query_builder):
-    query = query_builder.get_content_constraint(agency_id="all", resources="all", version="latest")
-    assert query == "/contentconstraint/all/all/latest"
+def test_get_metadata_metadataflow_query(query_builder_ws2):
+    query = query_builder_ws2.get_metadata_metadataflow_query(agency_id="all", resources="all",
+                                                              version="latest", provider_id="all")
+    assert query == "/metadata/metadataflow/all/all/latest/all"
 
 
-def test_get_actual_constraint(query_builder):
-    query = query_builder.get_actual_constraint(agency_id="all", resources="all", version="latest")
-    assert query == "/actualconstraint/all/all/latest"
-
-
-def test_get_allowed_constraint(query_builder):
-    query = query_builder.get_allowed_constraint(agency_id="all", resources="all", version="latest")
-    assert query == "/allowedconstraint/all/all/latest"
-
-
-def test_get_attachment_constraint(query_builder):
-    query = query_builder.get_attachment_constraint(agency_id="all", resources="all", version="latest")
-    assert query == "/attachmentconstraint/all/all/latest"
-
-
-def test_get_structure(query_builder):
-    query = query_builder.get_structure(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/all/all/latest"
-
-
-def test_get_concept_scheme(query_builder):
-    query = query_builder.get_concept_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/conceptscheme/all/all/latest"
-
-
-def test_get_code_list(query_builder):
-    query = query_builder.get_code_list(agency_id="all", resources="all", version="latest")
-    assert query == "/codelist/all/all/latest"
-
-
-def test_get_category_scheme(query_builder):
-    query = query_builder.get_category_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/categoryscheme/all/all/latest"
-
-
-def test_get_hierarchical_codelist(query_builder):
-    query = query_builder.get_hierarchical_codelist(agency_id="all", resources="all", version="latest")
-    assert query == "/hierarchicalcodelist/all/all/latest"
-
-
-def test_get_organisation_scheme(query_builder):
-    query = query_builder.get_organisation_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/organisationscheme/all/all/latest"
-
-
-def test_get_agency_scheme(query_builder):
-    query = query_builder.get_agency_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/agencyscheme/all/all/latest"
-
-
-def test_get_data_provider_scheme(query_builder):
-    query = query_builder.get_data_provider_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/dataproviderscheme/all/all/latest"
-
-
-def test_get_data_consumer_scheme(query_builder):
-    query = query_builder.get_data_consumer_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/dataconsumerscheme/all/all/latest"
-
-
-def test_get_organisation_unit_scheme(query_builder):
-    query = query_builder.get_organisation_unit_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/organisationunitscheme/all/all/latest"
-
-
-def test_get_transformation_scheme(query_builder):
-    query = query_builder.get_transformation_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/transformationscheme/all/all/latest"
-
-
-def test_get_ruleset_scheme(query_builder):
-    query = query_builder.get_ruleset_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/rulesetscheme/all/all/latest"
-
-
-def test_get_user_defined_operator_scheme(query_builder):
-    query = query_builder.get_user_defined_operator_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/userdefinedoperatorscheme/all/all/latest"
-
-
-def test_get_custom_type_scheme(query_builder):
-    query = query_builder.get_custom_type_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/customtypescheme/all/all/latest"
-
-
-def test_get_name_personalisation_scheme(query_builder):
-    query = query_builder.get_name_personalisation_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/namepersonalisationscheme/all/all/latest"
-
-
-def test_get_name_alias_scheme(query_builder):
-    query = query_builder.get_name_alias_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/namealiasscheme/all/all/latest"
-
-
-def test_get_concepts(query_builder):
-    query = query_builder.get_concepts(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/conceptscheme/all/all/latest/all"
-
-
-def test_get_codes(query_builder):
-    query = query_builder.get_codes(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/codelist/all/all/latest/all"
-
-
-def test_get_categories(query_builder):
-    query = query_builder.get_categories(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/categoryscheme/all/all/latest/all"
-
-
-def test_get_hierarchies(query_builder):
-    query = query_builder.get_hierarchies(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/hierarchicalcodelist/all/all/latest/all"
-
-
-def test_get_organisations(query_builder):
-    query = query_builder.get_organisations(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/organisationscheme/all/all/latest/all"
-
-
-def test_get_agencies(query_builder):
-    query = query_builder.get_agencies(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/agencyscheme/all/all/latest/all"
-
-
-def test_get_data_providers(query_builder):
-    query = query_builder.get_data_providers(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/dataproviderscheme/all/all/latest/all"
-
-
-def test_get_data_consumers(query_builder):
-    query = query_builder.get_data_consumers(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/dataconsumerscheme/all/all/latest/all"
-
-
-def test_get_organisation_unit_schemes(query_builder):
-    query = query_builder.get_organisation_unit_schemes(agency_id="all", resources="all", version="latest",
-                                                        item_id="all")
-    assert query == "/organisationunitscheme/all/all/latest/all"
-
-
-def test_get_transformation_schemes(query_builder):
-    query = query_builder.get_transformation_schemes(agency_id="all", resources="all", version="latest",
-                                                     item_id="all")
-    assert query == "/transformationscheme/all/all/latest/all"
-
-
-def test_get_get_ruleset_schemes(query_builder):
-    query = query_builder.get_ruleset_schemes(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/rulesetscheme/all/all/latest/all"
-
-
-def test_get_user_defined_operator_schemes(query_builder):
-    query = query_builder.get_user_defined_operator_schemes(agency_id="all", resources="all", version="latest",
-                                                            item_id="all")
-    assert query == "/userdefinedoperatorscheme/all/all/latest/all"
-
-
-def test_get_custom_type_schemes(query_builder):
-    query = query_builder.get_custom_type_schemes(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/customtypescheme/all/all/latest/all"
-
-
-def test_get_name_personalisation_schemes(query_builder):
-    query = query_builder.get_name_personalisation_schemes(agency_id="all", resources="all", version="latest",
-                                                           item_id="all")
-    assert query == "/namepersonalisationscheme/all/all/latest/all"
-
-
-def test_get_name_alias_schemes(query_builder):
-    query = query_builder.get_name_alias_schemes(agency_id="all", resources="all", version="latest", item_id="all")
-    assert query == "/namealiasscheme/all/all/latest/all"
-
-
-def test_get_data_flows_with_multiple_params(query_builder):
-    query = query_builder.get_data_flows(agency_id="all", resources="all", version="latest", references="descendants",
-                                         detail="referencecompletestubs")
-    assert query == "/dataflow/all/all/latest?references=descendants&detail=referencecompletestubs"
-
-
-def test_get_concepts_with_multiple_params(query_builder):
-    query = query_builder.get_concepts(agency_id="all", resources="all", version="latest", item_id="all",
-                                       references="parents", detail="allstubs")
-    assert query == "/conceptscheme/all/all/latest/all?references=parents&detail=allstubs"
-
-
-def test_get_data_with_multiple_parameters(query_builder):
-    query = query_builder.get_data(flow="example_flow", key="all", provider="all",
-                                   start_period="2022-01-01", end_period="2022-12-31", updated_after="2022-01-01",
-                                   first_n_observations=10, dimension_at_observation="TIME_PERIOD",
-                                   detail="serieskeysonly", include_history="true")
-    assert query == ("/data/example_flow/all/all?startPeriod=2022-01-01&endPeriod=2022-12-31"
-                     "&updatedAfter=2022-01-01&firstNObservations=10&dimensionAtObservation=TIME_PERIOD&"
-                     "detail=serieskeysonly&includeHistory=true")
-
-
-def test_get_constraints_with_multiple_params(query_builder):
-    query = query_builder.get_constraints(flow="example_flow", mode="available", references="dataproviderscheme",
-                                          start_period="2020-01-01", end_period="2020-12-31",
-                                          updated_after="2020-01-01")
-    assert query == ("/availableconstraint/example_flow/all/all/all?mode=available&references=dataproviderscheme&"
-                     "startPeriod=2020-01-01&endPeriod=2020-12-31&updatedAfter=2020-01-01")
-
-
-def test_get_data_flows_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_flows(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/dataflow/all/all/latest"
-
-
-def test_get_dsds_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_dsds(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/datastructure/all/all/latest"
-
-
-def test_get_mdsds_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_mdsds(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/metadatastructure/all/all/latest"
-
-
-def test_get_meta_data_flows_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_meta_data_flows(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/metadataflow/all/all/latest"
-
-
-def test_get_provision_agreements_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_provision_agreements(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/provisionagreement/all/all/latest"
-
-
-def test_get_structure_sets_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_structure_sets(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/structureset/all/all/latest"
-
-
-def test_get_process_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_process(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/process/all/all/latest"
-
-
-def test_get_categorisation_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_categorisation(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/categorisation/all/all/latest"
-
-
-def test_get_data_constraint_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_constraint(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/dataconstraint/all/all/latest"
-
-
-def test_get_metadata_constraint_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_metadata_constraint(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/metadataconstraint/all/all/latest"
-
-
-def test_get_concept_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_concept_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/conceptscheme/all/all/latest"
-
-
-def test_get_code_list_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_code_list(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/codelist/all/all/latest"
-
-
-def test_get_category_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_category_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/categoryscheme/all/all/latest"
-
-
-def test_get_hierarchy_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_hierarchy(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/hierarchy/all/all/latest"
-
-
-def test_get_hierarchy_association_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_hierarchy_association(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/hierarchyassociation/all/all/latest"
-
-
-def test_get_agency_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_agency_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/agencyscheme/all/all/latest"
-
-
-def test_get_data_provider_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_provider_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/dataproviderscheme/all/all/latest"
-
-
-def test_get_data_consumer_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_consumer_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/dataconsumerscheme/all/all/latest"
-
-
-def test_get_organisation_unit_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_organisation_unit_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/organisationunitscheme/all/all/latest"
-
-
-def test_get_transformation_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_transformation_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/transformationscheme/all/all/latest"
-
-
-def test_get_ruleset_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_ruleset_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/rulesetscheme/all/all/latest"
-
-
-def test_get_user_defined_operator_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_user_defined_operator_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/userdefinedoperatorscheme/all/all/latest"
-
-
-def test_get_custom_type_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_custom_type_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/customtypescheme/all/all/latest"
-
-
-def test_get_name_personalisation_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_name_personalisation_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/namepersonalisationscheme/all/all/latest"
-
-
-def test_get_vtl_mapping_scheme_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_vtl_mapping_scheme(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/vtlmappingscheme/all/all/latest"
-
-
-def test_get_value_list_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_value_list(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/valuelist/all/all/latest"
-
-
-def test_get_structure_map_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_structure_map(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/structuremap/all/all/latest"
-
-
-def test_get_representation_map_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_representation_map(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/representationmap/all/all/latest"
-
-
-def test_get_concept_scheme_map_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_concept_scheme_map(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/conceptschememap/all/all/latest"
-
-
-def test_get_category_scheme_map_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_category_scheme_map(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/categoryschememap/all/all/latest"
-
-
-def test_get_organisation_scheme_map_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_organisation_scheme_map(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/organisationschememap/all/all/latest"
-
-
-def test_get_reporting_taxonomy_map_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_reporting_taxonomy_map(agency_id="all", resources="all", version="latest")
-    assert query == "/structure/reportingtaxonomymap/all/all/latest"
-
-
-def test_get_data_flows_with_multiple_params_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_flows(agency_id="all", resources="all", version="latest",
-                                             references="descendants",
-                                             detail="referencecompletestubs")
-    assert query == "/structure/dataflow/all/all/latest?references=descendants&detail=referencecompletestubs"
-
-
-def test_get_concept_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_concept_scheme_item(agency_id="all", resources="all",
-                                                      version="latest", item_id="all")
-    assert query == "/structure/conceptscheme/all/all/latest/all"
-
-
-def test_get_codelist_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_codelist_item(agency_id="all", resources="all",
-                                                version="latest", item_id="all")
-    assert query == "/structure/codelist/all/all/latest/all"
-
-
-def test_get_category_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_category_scheme_item(agency_id="all", resources="all",
-                                                       version="latest", item_id="all")
-    assert query == "/structure/categoryscheme/all/all/latest/all"
-
-
-def test_get_agency_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_agency_scheme_item(agency_id="all", resources="all",
-                                                     version="latest", item_id="all")
-    assert query == "/structure/agencyscheme/all/all/latest/all"
-
-
-def test_get_data_provider_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_provider_scheme_item(agency_id="all", resources="all",
-                                                            version="latest", item_id="all")
-    assert query == "/structure/dataproviderscheme/all/all/latest/all"
-
-
-def test_get_data_consumer_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_data_consumer_scheme_item(agency_id="all", resources="all",
-                                                            version="latest", item_id="all")
-    assert query == "/structure/dataconsumerscheme/all/all/latest/all"
-
-
-def test_get_organisation_unit_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_organisation_unit_scheme_item(agency_id="all", resources="all",
-                                                                version="latest", item_id="all")
-    assert query == "/structure/organisationunitscheme/all/all/latest/all"
-
-
-def test_get_transformation_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_transformation_scheme_item(agency_id="all", resources="all",
-                                                             version="latest", item_id="all")
-    assert query == "/structure/transformationscheme/all/all/latest/all"
-
-
-def test_get_ruleset_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_ruleset_scheme_item(agency_id="all", resources="all",
-                                                      version="latest", item_id="all")
-    assert query == "/structure/rulesetscheme/all/all/latest/all"
-
-
-def test_get_user_defined_operator_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_user_defined_operator_scheme_item(agency_id="all", resources="all",
-                                                                    version="latest", item_id="all")
-    assert query == "/structure/userdefinedoperatorscheme/all/all/latest/all"
-
-
-def test_get_custom_type_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_custom_type_scheme_item(agency_id="all", resources="all",
-                                                          version="latest", item_id="all")
-    assert query == "/structure/customtypescheme/all/all/latest/all"
-
-
-def test_get_name_personalisation_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_name_personalisation_scheme_item(agency_id="all", resources="all",
-                                                                   version="latest", item_id="all")
-    assert query == "/structure/namepersonalisationscheme/all/all/latest/all"
-
-
-def test_get_vtl_mapping_scheme_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_vtl_mapping_scheme_item(agency_id="all", resources="all",
-                                                          version="latest", item_id="all")
-    assert query == "/structure/vtlmappingscheme/all/all/latest/all"
-
-
-def test_get_value_list_item_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_value_list_item(agency_id="all", resources="all",
-                                                  version="latest", item_id="all")
-    assert query == "/structure/valuelist/all/all/latest/all"
-
-
-def test_get_concept_scheme_item_multiple_params_ws2(query_builder_ws2):
-    query = query_builder_ws2.get_concept_scheme_item(agency_id="all", resources="all", version="latest",
-                                                      item_id="all", references="ancestors",
-                                                      detail="referencepartial")
-    assert query == "/structure/conceptscheme/all/all/latest/all?references=ancestors&detail=referencepartial"
+def test_get_metadata_metadataset_query(query_builder_ws2):
+    query = query_builder_ws2.get_metadata_metadataset_query(provider_id="all", resources="all",
+                                                             version="latest", )
+    assert query == "/metadata/metadataset/all/all/latest"
 
 
 if __name__ == '__main__':
