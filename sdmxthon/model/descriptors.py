@@ -174,5 +174,3 @@ class MeasureDescriptor(ComponentList, object):
             return super(MeasureDescriptor, self).__eq__(other)
 
         return False
-
-

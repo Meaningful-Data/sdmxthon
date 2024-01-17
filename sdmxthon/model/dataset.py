@@ -349,7 +349,7 @@ class Dataset:
             element['attached_attributes'] = self.attached_attributes
 
         result = self.data.to_json(orient="records")
-        element['data'] = json.loads(result).copy()
+        element['data'] = copy(json.loads(result))
         if path_to_json is None:
             return element
         with open(path_to_json, 'w') as f:
@@ -423,7 +423,15 @@ class Dataset:
             df.insert(0, 'DATAFLOW', self._unique_id)
 
         elif version == 2:
-            action = ACTION_SDMX_CSV_MAPPER[self.dataset_attributes['action']]
+            da_action = self.dataset_attributes['action']
+            if isinstance(da_action, str):
+                if da_action not in ActionEnum.__members__:
+                    raise Exception(f'Invalid dataset action value: '
+                                    f'{da_action}.')
+                action = ACTION_SDMX_CSV_MAPPER[ActionEnum(da_action)]
+            else:
+                action = ACTION_SDMX_CSV_MAPPER[
+                    self.dataset_attributes['action']]
             # Insert two columns at the beginning of the data set
             df.insert(0, 'STRUCTURE', self._structure_type)
             df.insert(1, 'STRUCTURE_ID', self._unique_id)

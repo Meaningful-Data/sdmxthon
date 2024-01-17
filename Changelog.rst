@@ -2,6 +2,17 @@
 Changelog
 #########
 
+2.6 (2024-01-17)
+------------------
+**Added**
+  - Added compatibility for Group on attributes related to a GroupDimensionDescriptor
+  - Added compatibility for SDMX-CSV on get_pandas_df and get_datasets #54
+  - Added reading and writing methods for Group in SDMX-ML StructureSpecific data messages
+**Changes**
+
+**Bugfixes**
+  - Fixed a bug on ActionEnum in DatasetAttributes
+
 2.5.3 (2023-12-22)
 ------------------
 **Added**

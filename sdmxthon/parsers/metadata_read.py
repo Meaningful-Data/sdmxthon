@@ -5,8 +5,9 @@ from sdmxthon.model.component import Attribute, Component, Dimension, \
     GroupDimensionDescriptor, PrimaryMeasure, TimeDimension
 from sdmxthon.model.definitions import ContentConstraint, CubeRegion, \
     DataFlowDefinition, DataKeySet, DataStructureDefinition, MemberSelection
-from sdmxthon.model.descriptors import AttributeDescriptor, DimensionDescriptor, \
-    MeasureDescriptor
+from sdmxthon.model.descriptors import (AttributeDescriptor,
+                                        DimensionDescriptor,
+                                        MeasureDescriptor)
 from sdmxthon.model.header import Contact
 from sdmxthon.model.itemScheme import Agency, AgencyScheme, Code, Codelist, \
     Concept, ConceptScheme, Item
@@ -14,20 +15,36 @@ from sdmxthon.model.representation import Facet, Representation
 from sdmxthon.model.utils import FacetType
 from sdmxthon.utils.handlers import add_list, unique_id
 from sdmxthon.utils.mappings import Locale_Codes
-from sdmxthon.utils.parsing_words import AGENCIES, AGENCY, AGENCY_ID, \
-    ANNOTATION, ANNOTATION_TEXT, ANNOTATION_TITLE, ANNOTATION_TYPE, \
-    ANNOTATION_URL, ANNOTATIONS, ATT, ATT_LIST, ATT_LIST_LOW, ATT_REL, CL, CODE, \
-    CODELISTS, COMPS, CON, CON_CONS, CON_ID, CON_ID_LOW, CON_ROLE, CON_ROLE_LOW, \
-    CONCEPTS, CONS_ATT, CONSTRAINTS, CONTACT, CONTENT_REGION, CORE_REP, \
-    CORE_REP_LOW, CS, CS_LOW, CUBE_REGION, DATA_KEY_SET, DATA_KEY_SET_LOW, \
-    DATAFLOWS, DEPARTMENT, DESC, DF, DIM, DIM_LIST, DIM_LIST_LOW, DIM_REF, DSD, \
-    DSD_COMPS, DSDS, EMAIL, ENUM, ENUM_FORMAT, FACETS, FAX, GROUP, GROUP_DIM, \
-    GROUP_DIM_LOW, ID, INCLUDE, INCLUDED, KEY, KEY_VALUE, LANG, LOCAL_REP, \
-    LOCAL_REP_LOW, MAINTAINER, ME_LIST, ME_LIST_LOW, NAME, ORGS, PAR_ID, \
-    PAR_VER, PARENT, PRIM_MEASURE, REF, REL_TO, ROLE, SER_URL, SER_URL_LOW, \
-    STR_URL, STR_URL_LOW, STRUCTURE, TELEPHONE, TEXT, TEXT_FORMAT, TEXT_TYPE, \
-    TEXT_TYPE_LOW, TIME_DIM, TITLE, TYPE, TYPE_, URI, URL, VALUE, VERSION, \
-    XML_TEXT, XMLNS
+from sdmxthon.utils.parsing_words import (AGENCIES, AGENCY, AGENCY_ID,
+                                          ANNOTATION, ANNOTATION_TEXT,
+                                          ANNOTATION_TITLE, ANNOTATION_TYPE,
+                                          ANNOTATION_URL, ANNOTATIONS, ATT,
+                                          ATT_LIST, ATT_LIST_LOW, ATT_REL, CL,
+                                          CODE,
+                                          CODELISTS, COMPS, CON, CON_CONS,
+                                          CON_ID, CON_ID_LOW, CON_ROLE,
+                                          CON_ROLE_LOW,
+                                          CONCEPTS, CONS_ATT, CONSTRAINTS,
+                                          CONTACT, CONTENT_REGION, CORE_REP,
+                                          CORE_REP_LOW, CS, CS_LOW, CUBE_REGION,
+                                          DATA_KEY_SET, DATA_KEY_SET_LOW,
+                                          DATAFLOWS, DEPARTMENT, DESC, DF, DIM,
+                                          DIM_LIST, DIM_LIST_LOW, DIM_REF, DSD,
+                                          DSD_COMPS, DSDS, EMAIL, ENUM,
+                                          ENUM_FORMAT, FACETS, FAX, GROUP,
+                                          GROUP_DIM,
+                                          GROUP_DIM_LOW, ID, INCLUDE, INCLUDED,
+                                          KEY, KEY_VALUE, LANG, LOCAL_REP,
+                                          LOCAL_REP_LOW, MAINTAINER, ME_LIST,
+                                          ME_LIST_LOW, NAME, ORGS, PAR_ID,
+                                          PAR_VER, PARENT, PRIM_MEASURE, REF,
+                                          REL_TO, ROLE, SER_URL, SER_URL_LOW,
+                                          STR_URL, STR_URL_LOW, STRUCTURE,
+                                          TELEPHONE, TEXT, TEXT_FORMAT,
+                                          TEXT_TYPE,
+                                          TEXT_TYPE_LOW, TIME_DIM, TITLE, TYPE,
+                                          TYPE_, URI, URL, VALUE, VERSION,
+                                          XML_TEXT, XMLNS)
 
 schemes_classes = {CL: Codelist, AGENCIES: AgencyScheme, CS: ConceptScheme}
 items_classes = {AGENCY: Agency, CODE: Code, CON: Concept}
