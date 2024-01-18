@@ -58,6 +58,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+
 html_theme = "sphinx_rtd_theme"
 html_theme_options = {
     'analytics_id': '',
@@ -72,4 +73,13 @@ html_theme_options = {
     'navigation_depth': 4,
     'includehidden': False,
     'titles_only': False
+}
+github_url = "https://github.com/Meaningful-Data/sdmxthon"
+html_context = {
+    'display_github': True,
+    'github_user': 'Meaningful-Data',
+    'github_repo': 'sdmxthon',
+    'github_version': 'master',
+    'conf_py_path': '/sdmxthon/docs/',
+    'suffix': '.rst'
 }

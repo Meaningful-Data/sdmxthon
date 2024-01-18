@@ -2,269 +2,101 @@ from datetime import datetime
 
 import pandas as pd
 
-from sdmxthon.model.component import PrimaryMeasure
-from sdmxthon.model.header import Header, Sender, Party
+from sdmxthon.model.component import GroupDimensionDescriptor, PrimaryMeasure
+from sdmxthon.model.header import Header, Party, Sender
 from sdmxthon.parsers.data_validations import get_mandatory_attributes
+from sdmxthon.parsers.writer_aux import create_namespaces, get_end_message, \
+    parse_metadata, write_from_header
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.handlers import add_indent
-from sdmxthon.utils.mappings import messageAbbr, commonAbbr, genericAbbr, \
-    structureSpecificAbbr, structureAbbr
-from sdmxthon.utils.parsing_words import ORGS, DATAFLOWS, CODELISTS, \
-    CONCEPTS, DSDS, CONSTRAINTS
+from sdmxthon.utils.mappings import genericAbbr, messageAbbr
 
 chunksize = 100000
 
 
-#
-#      --------------------------------------------
-#     |                                            |
-#     |                   Common                   |
-#     |                                            |
-#      --------------------------------------------
-#
+def remove_null_values_on_dataset(dataset):
+    """
+    This function removes null values from a dataset
 
-
-def addStructure(dataset, prettyprint, type_):
-    outfile = ''
-
-    if prettyprint:
-        child2 = '\t\t'
-        child3 = '\t\t\t'
-        child4 = '\t\t\t\t'
-        nl = '\n'
-    else:
-        child2 = child3 = child4 = nl = ''
-
-    outfile += f'{nl}{child2}<{messageAbbr}:Structure ' \
-               f'structureID="{dataset.structure.id}" '
-    if type_ != MessageTypeEnum.GenericDataSet:
-        outfile += f'namespace="urn:sdmx:org.sdmx.infomodel.' \
-                   f'datastructure.DataStructure=' \
-                   f'{dataset.structure.agencyID}:{dataset.structure.id}' \
-                   f'({dataset.structure.version})" '
-
-    outfile += f'dimensionAtObservation="{dataset.dim_at_obs}">{nl}'
-    outfile += f'{child3}<{commonAbbr}:Structure>{nl}{child4}' \
-               f'<Ref agencyID="{dataset.structure.agencyID}" ' \
-               f'id="{dataset.structure.id}" ' \
-               f'version="{dataset.structure.version}" ' \
-               f'class="DataStructure"/>' \
-               f'{nl}{child3}</{commonAbbr}:Structure>' \
-               f'{nl}{child2}</{messageAbbr}:Structure>'
-
-    return outfile
-
-
-def create_namespaces(data_type, payload, type_, prettyprint):
-    if prettyprint:
-        nl = '\n'
-    else:
-        nl = ''
-    outfile = f'<?xml version="1.0" encoding="UTF-8"?>{nl}'
-    outfile += f'<{messageAbbr}:{data_type} ' \
-               f'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' \
-               f'xmlns:{messageAbbr}="http://www.sdmx.org/resources/sdmxml' \
-               f'/schemas/v2_1/message" '
-    if type_ == MessageTypeEnum.GenericDataSet:
-        outfile += f'xmlns:{genericAbbr}="http://www.sdmx.org/resources' \
-                   f'/sdmxml/schemas/v2_1/data/generic" '
-    elif type_ == MessageTypeEnum.StructureSpecificDataSet:
-        outfile += f'xmlns:{structureSpecificAbbr}="http://www.sdmx.org' \
-                   f'/resources/sdmxml/schemas/v2_1/data/structurespecific" '
-        if isinstance(payload, dict):
-            count = 0
-            for key, record in payload.items():
-                count += 1
-                if record.structure is None:
-                    raise Exception(f'Dataset {key} has no structure defined')
-                outfile += f'xmlns:ns{count}="urn:sdmx:org.sdmx.infomodel' \
-                           f'.datastructure.DataStructure=' \
-                           f'{record.structure.agencyID}:' \
-                           f'{record.structure.id}' \
-                           f'({record.structure.version})' \
-                           f':ObsLevelDim:{record.dim_at_obs}" '
-        else:
-            if payload.structure is None:
-                raise Exception('Dataset has no structure defined')
-            outfile += f'xmlns:ns1="urn:sdmx:org.sdmx.infomodel' \
-                       f'.datastructure.DataStructure=' \
-                       f'{payload.structure.agencyID}:{payload.structure.id}' \
-                       f'({payload.structure.version})' \
-                       f':ObsLevelDim:{payload.dim_at_obs}" '
-    else:
-        outfile += f'xmlns:{structureAbbr}="http://www.sdmx.org/resources' \
-                   f'/sdmxml/schemas/v2_1/structure" '
-    outfile += f'xmlns:{commonAbbr}="http://www.sdmx.org/resources/sdmxml' \
-               f'/schemas/v2_1/common" ' \
-               f'xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml' \
-               f'/schemas/v2_1/message ' \
-               f'https://registry.sdmx.org/schemas/v2_1/SDMXMessage.xsd">{nl}'
-
-    return outfile
-
-
-def write_from_header(header, prettyprint):
-    if prettyprint:
-        child1 = '\t'
-        child2 = '\t\t'
-        nl = '\n'
-    else:
-        child1 = child2 = nl = ''
-
-    outfile = f'{child1}<{messageAbbr}:Header>{nl}'
-    if header.id_ is not None:
-        outfile += f'{child2}<{messageAbbr}:ID>{header.id_}</{messageAbbr}:ID>'
-    else:
-        outfile += f'{child2}<{messageAbbr}:ID>test</{messageAbbr}:ID>'
-    outfile += f'{nl}{child2}<{messageAbbr}:Test>'
-    if header.test is not None:
-        outfile += f'{str(header.test).lower()}'
-    else:
-        outfile += 'true'
-    outfile += f'</{messageAbbr}:Test>'
-    outfile += f'{nl}{child2}<{messageAbbr}:Prepared>'
-    if header.prepared is not None:
-        outfile += f'{header.prepared.strftime("%Y-%m-%dT%H:%M:%S")}'
-    else:
-        outfile += f'{datetime.now().strftime("%Y-%m-%dT%H:%M:%S")}'
-    outfile += f'</{messageAbbr}:Prepared>'
-
-    outfile += f'{nl}{child2}<{messageAbbr}:Sender '
-    if header.sender is not None:
-        outfile += f'id="{header.sender.id_}"/>'
-    else:
-        outfile += 'id="Unknown"/>'
-
-    if header.receiver is not None and len(header.receiver) > 0:
-        for receiver in header.receiver:
-            outfile += f'{nl}{child2}<{messageAbbr}:Receiver '
-            outfile += f'id="{receiver.id_}"/>'
-    else:
-        outfile += f'{nl}{child2}<{messageAbbr}:Receiver '
-        outfile += 'id="Not_supplied"/>'
-
-    return outfile
-
-
-def process_dataset(dataset):
+    :param dataset: The dataset is to be cleaned
+    :return: The same dataset without null values
+    """
     dataset.data = dataset.data.fillna(value='')
     return dataset
 
 
-def _write_metadata_element(payload, dict_word, pkg_word,
-                            item_word, newline, indent):
-    outfile = ""
-    if dict_word in payload:
-        indent_child = newline + add_indent(indent)
-        outfile += f'{indent_child}<{structureAbbr}:{pkg_word}>'
-        for e in payload[dict_word].values():
-            outfile += e._parse_XML(indent_child,
-                                    f'{structureAbbr}:{item_word}')
-        outfile += f'{indent_child}</{structureAbbr}:{pkg_word}>'
-
-    return outfile
-
-
-def parse_metadata(payload, prettyprint):
-    if prettyprint:
-        indent = '\t'
-        newline = '\n'
-    else:
-        indent = newline = ''
-
-    outfile = f'{indent}<{messageAbbr}:Structures>'
-    outfile += _write_metadata_element(payload, ORGS, 'OrganisationSchemes',
-                                       'AgencyScheme', newline, indent)
-    outfile += _write_metadata_element(payload, DATAFLOWS, 'Dataflows',
-                                       'Dataflow', newline, indent)
-    outfile += _write_metadata_element(payload, CODELISTS, 'Codelists',
-                                       'Codelist', newline, indent)
-    outfile += _write_metadata_element(payload, CONCEPTS, 'Concepts',
-                                       'ConceptScheme', newline, indent)
-    outfile += _write_metadata_element(payload, DSDS, 'DataStructures',
-                                       'DataStructure', newline, indent)
-    outfile += _write_metadata_element(payload, CONSTRAINTS, 'Constraints',
-                                       'ContentConstraint', newline, indent)
-
-    outfile += f'{newline}{indent}</{messageAbbr}:Structures>{newline}'
-
-    return outfile
-
-
-def writer(path, payload, type_, prettyprint=True, id_='test',
+def writer(path, payload, type_,
+           prettyprint=True,
+           id_='test',
            test='true',
            prepared=datetime.now(),
            sender='Unknown',
            receiver='Not_supplied',
            header: Header = None):
-    if prettyprint:
-        child1 = '\t'
-        child2 = '\t\t'
-        nl = '\n'
-    else:
-        child1 = child2 = nl = ''
+    """
+    This function writes a SDMX-ML file from a payload
 
-    if type_ == MessageTypeEnum.GenericDataSet:
-        data_type_string = 'GenericData'
-    elif type_ == MessageTypeEnum.StructureSpecificDataSet:
-        data_type_string = 'StructureSpecificData'
-    else:
-        data_type_string = 'Structure'
+    :param path: Output path (if empty, returns the string)
 
+    :param payload: Payload to be written
+
+    :param type_: Message type
+
+    :param prettyprint: Prettyprint option
+
+    :param id_: ID of the message
+
+    :param test: Flag to indicate if it is a test
+
+    :param prepared: Datetime of the message preparation
+
+    :param sender: Agency that sends the message
+
+    :param receiver: Receiver of the message
+
+    :param header: Header of the message
+
+    :return: XML as string, if path is empty
+    """
     # Header
-    outfile = create_namespaces(data_type_string, payload, type_, prettyprint)
+    outfile = create_namespaces(type_, payload, prettyprint)
 
     if header is None:
-        header = Header(id_, test, prepared, Sender(sender), [Party(receiver)])
+        header = Header(ID=id_,
+                        Test=test,
+                        Prepared=prepared,
+                        sender=Sender(sender),
+                        Receiver=[Party(receiver)])
 
-    outfile += write_from_header(header, prettyprint)
-
-    if isinstance(payload, dict) and type_ is not MessageTypeEnum.Metadata:
-        for record in payload.values():
-            outfile += addStructure(record, prettyprint, type_)
-    elif type_ is not MessageTypeEnum.Metadata:
-        outfile += addStructure(payload, prettyprint, type_)
-
-    if type_ is not MessageTypeEnum.Metadata and header is not None:
-        if header.dataset_action is not None:
-            outfile += f'{nl}{child2}<{messageAbbr}:DataSetAction>' \
-                       f'{header.dataset_action}</{messageAbbr}:DataSetAction>'
-    if header is not None:
-        if header.source is not None:
-            list_names = header.source._to_XML(name=f'{messageAbbr}:Source',
-                                               prettyprint=True)
-            for elem in list_names:
-                outfile += f'{nl}{child1}' + elem
-        else:
-            outfile += f'{nl}{child2}<{messageAbbr}:Source xml:lang="en">' \
-                       f'SDMXthon</{messageAbbr}:Source>'
-
-    outfile += f'{nl}{child1}</{messageAbbr}:Header>{nl}'
+    outfile += write_from_header(header=header, prettyprint=prettyprint,
+                                 type_=type_, payload=payload)
 
     # Dataset
     if type_ == MessageTypeEnum.GenericDataSet:
         if isinstance(payload, dict):
             for record in payload.values():
-                record = process_dataset(record)
-                outfile += genWriting(record, prettyprint, record.dim_at_obs)
+                record = remove_null_values_on_dataset(record)
+                outfile += generic_writing(record, prettyprint,
+                                           record.dim_at_obs)
         else:
-            payload = process_dataset(payload)
-            outfile += genWriting(payload, prettyprint, dim=payload.dim_at_obs)
+            payload = remove_null_values_on_dataset(payload)
+            outfile += generic_writing(payload, prettyprint,
+                                       dim=payload.dim_at_obs)
     elif type_ == MessageTypeEnum.StructureSpecificDataSet:
         if isinstance(payload, dict):
             count = 0
             for record in payload.values():
                 count += 1
-                record = process_dataset(record)
+                record = remove_null_values_on_dataset(record)
                 outfile += strWriting(record, prettyprint, count,
                                       record.dim_at_obs)
         else:
-            payload = process_dataset(payload)
+            payload = remove_null_values_on_dataset(payload)
             outfile += strWriting(payload, prettyprint, dim=payload.dim_at_obs)
     elif type_ == MessageTypeEnum.Metadata:
         if len(payload) > 0:
             outfile += parse_metadata(payload, prettyprint)
-    outfile += f'</{messageAbbr}:{data_type_string}>'
+
+    outfile += get_end_message(type_)
 
     if path != '':
         with open(path, "w", encoding="UTF-8", errors='replace') as f:
@@ -290,27 +122,32 @@ def series_process(parser, data, data_dict, series_codes, obs_codes):
 
 def get_codes(dim, dataset):
     series_codes = []
+    group_codes = []
+    group_obj = None
     obs_codes = [dim, dataset.structure.measure_code]
     for e in dataset.structure.attribute_descriptor.components.values():
         if e.id in dataset.data.keys() and isinstance(e.related_to,
                                                       PrimaryMeasure):
             obs_codes.append(e.id)
+        elif (e.id in dataset.data.keys() and
+              isinstance(e.related_to, GroupDimensionDescriptor)):
+            group_codes.append(e.id)
+            if group_obj is None:
+                group_obj = e.related_to
+            elif group_obj != e.related_to:
+                raise Exception("Group Dimension Descriptor "
+                                "is not unique on DSD")
     for e in dataset.data.keys():
-        if ((e in dataset.structure.dimension_codes and e != dim)
-                or (e in dataset.structure.attribute_codes and
-                    e not in obs_codes)):
+        if ((e in dataset.structure.dimension_codes and e != dim) or
+                (e in dataset.structure.attribute_codes and
+                 e not in obs_codes and e not in group_codes)):
             series_codes.append(e)
 
-    return series_codes, obs_codes
+    if len(group_codes) > 0:
+        group_codes += list(group_obj.components.keys())
 
+    return series_codes, obs_codes, group_codes, group_obj
 
-#
-#      --------------------------------------------
-#     |                                            |
-#     |              Structure Specific            |
-#     |                                            |
-#      --------------------------------------------
-#
 
 def memory_optimization_str(dataset, opt_att_codes, prettyprint):
     outfile = ""
@@ -332,6 +169,15 @@ def memory_optimization_str(dataset, opt_att_codes, prettyprint):
         outfile += obs_str(dataset.data, opt_att_codes, prettyprint)
 
     return outfile
+
+
+#
+#      --------------------------------------------
+#     |                                            |
+#     |             Structure Specific             |
+#     |                                            |
+#      --------------------------------------------
+#
 
 
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
@@ -360,9 +206,19 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
     if dim == "AllDimensions":
         outfile += memory_optimization_str(dataset, opt_att_codes, prettyprint)
     else:
-        series_codes, obs_codes = get_codes(dim, dataset)
-        outfile += ser_str(dataset.data, opt_att_codes, series_codes,
-                           obs_codes, prettyprint)
+        series_codes, obs_codes, group_codes, gr_obj = get_codes(dim, dataset)
+
+        if len(group_codes) > 0:
+            outfile += group_str(data=dataset.data,
+                                 group_codes=group_codes,
+                                 group_obj=gr_obj,
+                                 prettyprint=prettyprint)
+
+        outfile += ser_str(data=dataset.data,
+                           opt_att_codes=opt_att_codes,
+                           series_codes=series_codes,
+                           obs_codes=obs_codes,
+                           prettyprint=prettyprint)
 
     outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
@@ -429,6 +285,36 @@ def format_ser_str(data: dict, prettyprint: bool) -> str:
     return out
 
 
+def format_group_str(out: list,
+                     data: dict,
+                     group_obj: GroupDimensionDescriptor,
+                     prettyprint: bool):
+    if prettyprint:
+        child2 = '\t\t'
+        nl = '\n'
+    else:
+        child2 = nl = ''
+    result = f"{child2}<Group "
+    result += f'xsi:type="ns1:{group_obj.id}Type" '
+    for k, v in data.items():
+        result += f'{k}="{v}" '
+
+    result += f"/>{nl}"
+    out.append(result)
+
+
+def group_str(data, group_codes, group_obj, prettyprint):
+    # Getting each datapoint from data and creating dict
+    group_data = data[group_codes]
+    group_data = group_data.drop_duplicates().reset_index(drop=True)
+
+    out = []
+    group_data.apply(lambda x: format_group_str(out, dict(x), group_obj,
+                                                prettyprint), axis=1)
+
+    return ''.join(out)
+
+
 def ser_str(data: pd.DataFrame,
             opt_att_codes: list,
             series_codes: list,
@@ -459,8 +345,8 @@ def ser_str(data: pd.DataFrame,
 #      --------------------------------------------
 #
 
-def memory_optimization_gen(dataset, dim_codes, att_codes, measure_code,
-                            prettyprint):
+def memory_optimization_generic(dataset, dim_codes, att_codes, measure_code,
+                                prettyprint):
     outfile = ""
     length_ = len(dataset.data)
     if len(dataset.data) > chunksize:
@@ -492,7 +378,15 @@ def memory_optimization_gen(dataset, dim_codes, att_codes, measure_code,
     return outfile
 
 
-def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
+def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
+    """
+    This function writes a generic SDMX-ML data file from a dataset
+
+    :param dataset: Dataset to be written
+    :param prettyprint: Prettyprint option
+    :param dim: Dimension at observation
+    :return:
+    """
     outfile = ''
 
     if prettyprint:
@@ -519,18 +413,21 @@ def genWriting(dataset, prettyprint=True, dim="AllDimensions"):
     measure_code = dataset.structure.measure_code
 
     if dim == "AllDimensions":
-        outfile += memory_optimization_gen(dataset, dim_codes, att_codes,
-                                           measure_code, prettyprint)
+        outfile += memory_optimization_generic(dataset, dim_codes, att_codes,
+                                               measure_code, prettyprint)
     else:
-        series_codes, obs_codes = get_codes(dim, dataset)
+        series_codes, obs_codes, group_codes, _ = get_codes(dim, dataset)
+        for x in group_codes:
+            if x not in series_codes:
+                series_codes.append(x)
 
-        outfile += ser_gen(dataset.data,
-                           dim_codes=dim_codes,
-                           att_codes=att_codes,
-                           measure_code=measure_code,
-                           prettyprint=prettyprint,
-                           series_codes=series_codes,
-                           obs_codes=obs_codes)
+        outfile += creating_series_generic(dataset.data,
+                                           dim_codes=dim_codes,
+                                           att_codes=att_codes,
+                                           measure_code=measure_code,
+                                           prettyprint=prettyprint,
+                                           series_codes=series_codes,
+                                           obs_codes=obs_codes)
 
     outfile += f'{child1}</{messageAbbr}:DataSet>{nl}'
 
@@ -559,11 +456,11 @@ def format_measure_att(data, measure_code, att_codes, child3, child4, nl):
     return out
 
 
-def format_obs(data: dict,
-               dim_codes: list,
-               att_codes: list,
-               measure_code: str,
-               prettyprint=True):
+def format_gen_obs(data: dict,
+                   dim_codes: list,
+                   att_codes: list,
+                   measure_code: str,
+                   prettyprint=True):
     if prettyprint:
         child2 = '\t\t'
         child3 = '\t\t\t'
@@ -594,8 +491,8 @@ def obs_gen(data: pd.DataFrame,
             att_codes: list,
             measure_code: str,
             prettyprint=True):
-    parser = lambda x: format_obs(x, dim_codes, att_codes,  # noqa: E731
-                                  measure_code, prettyprint)
+    parser = lambda x: format_gen_obs(x, dim_codes, att_codes,  # noqa: E731
+                                      measure_code, prettyprint)
 
     iterator = map(parser, data.to_dict(orient='records'))
     out = ''.join(iterator)
@@ -603,13 +500,13 @@ def obs_gen(data: pd.DataFrame,
     return out
 
 
-def format_ser(data: dict,
-               measure_code: str,
-               series_key: list,
-               series_attr: list,
-               obs_attr: list,
-               dim: str,
-               prettyprint=True):
+def format_generic_series(data: dict,
+                          measure_code: str,
+                          series_key: list,
+                          series_attr: list,
+                          obs_attr: list,
+                          dim: str,
+                          prettyprint=True):
     if prettyprint:
         child2 = '\t\t'
         child3 = '\t\t\t'
@@ -662,13 +559,13 @@ def format_ser(data: dict,
     return out
 
 
-def ser_gen(data: pd.DataFrame,
-            dim_codes: list,
-            att_codes: list,
-            measure_code: str,
-            obs_codes: list,
-            series_codes: list,
-            prettyprint=True):
+def creating_series_generic(data: pd.DataFrame,
+                            dim_codes: list,
+                            att_codes: list,
+                            measure_code: str,
+                            obs_codes: list,
+                            series_codes: list,
+                            prettyprint=True):
     # Getting each datapoint from data and creating dict
 
     series_key = [v for v in series_codes if v in dim_codes]
@@ -679,18 +576,16 @@ def ser_gen(data: pd.DataFrame,
     else:
         obs_att = obs_codes[2:]
 
-    data = data.sort_values(series_codes, axis=0)
-
     data_dict = {'Series': data[series_codes].drop_duplicates().reset_index(
         drop=True).to_dict(orient="records")}
 
-    parser = lambda x: format_ser(data=x,  # noqa: E731
-                                  measure_code=measure_code,
-                                  series_key=series_key,
-                                  series_attr=series_att,
-                                  obs_attr=obs_att,
-                                  dim=dim,
-                                  prettyprint=prettyprint)
+    parser = lambda x: format_generic_series(data=x,  # noqa: E731
+                                             measure_code=measure_code,
+                                             series_key=series_key,
+                                             series_attr=series_att,
+                                             obs_attr=obs_att,
+                                             dim=dim,
+                                             prettyprint=prettyprint)
 
     out = series_process(parser=parser, data=data, data_dict=data_dict,
                          series_codes=series_codes, obs_codes=obs_codes)

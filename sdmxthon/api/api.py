@@ -4,31 +4,46 @@ Pandas Dataframes or CSV files. It also contains the function to get the
 supported agencies by the API.
 """
 import os
+from pathlib import Path
 from zipfile import ZipFile
 
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
 from sdmxthon.model.submission import SubmissionResult
-from sdmxthon.parsers.read import read_xml
+from sdmxthon.parsers.read import read_sdmx_csv, read_xml
+from sdmxthon.parsers.reader_input_processor import process_string_to_read
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.handlers import first_element_dict, drop_na_all
-from sdmxthon.utils.xml_base import process_string_to_read
+from sdmxthon.utils.handlers import drop_na_all, first_element_dict
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
-def read_sdmx(sdmx_file, validate=True) -> Message:
+def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
     """
     Read SDMX performs the operation of reading a SDMX Data and SDMX
-    metadata files. URLs could be used.
+    metadata files in XML or CSV format. URLs could be used.
 
     :param sdmx_file: Path, URL or SDMX file as string
-    :param validate: Validation of the XML file against the XSD (default: True)
+    :param validate: Validation of the XML file against the XSD (default: False)
+    :param use_dataset_id: Use the dataset id as key in output (default: True)
 
     :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
+    if isinstance(sdmx_file, Path):
+        sdmx_file = str(sdmx_file)
 
-    payload = read_xml(sdmx_file, None, validate=validate)
+    # Process the SDMX file and check the file type
+    infile, filetype = process_string_to_read(sdmx_file)
+    if filetype == "xml":
+        payload = read_xml(infile, None, validate=validate,
+                           use_dataset_id=use_dataset_id)
+    elif filetype == "json":
+        raise Exception('Json is not supported')
+    elif filetype == "csv":
+        payload = read_sdmx_csv(infile)
+
+    else:
+        raise Exception("File type is not recognised")
 
     if isinstance(payload, dict):
         if isinstance(first_element_dict(payload), Dataset):
@@ -44,13 +59,13 @@ def read_sdmx(sdmx_file, validate=True) -> Message:
     return Message(message_type=type_, payload=payload)
 
 
-def get_datasets(data, path_to_metadata, validate=True,
+def get_datasets(path_to_data, path_to_metadata, validate=True,
                  remove_empty_columns=True):
     """
     GetDatasets performs the operation of reading a SDMX Data and SDMX
     metadata files. URLs could be used.
 
-    :param data: Path, URL or SDMX data file as string
+    :param path_to_data: Path, URL or SDMX data file as string
 
     :param path_to_metadata: Path or URL to the SDMX metadata file
 
@@ -62,7 +77,12 @@ def get_datasets(data, path_to_metadata, validate=True,
     dict of :obj:`Datasets <sdmxthon.model.dataset.DataSet>`
     """
 
-    datasets = read_xml(data, mode="Data", validate=validate)
+    message_datasets = read_sdmx(path_to_data, validate=validate)
+
+    if message_datasets.type != MessageTypeEnum.StructureSpecificDataSet:
+        raise ValueError('The message is not a StructureSpecificDataSet')
+
+    datasets = message_datasets.payload
 
     metadata = read_xml(path_to_metadata,
                         mode="Metadata",
@@ -85,11 +105,11 @@ def get_datasets(data, path_to_metadata, validate=True,
     return datasets
 
 
-def get_pandas_df(data, validate=True, remove_empty_columns=True):
+def get_pandas_df(path_to_data, validate=True, remove_empty_columns=True):
     """
     GetPandasDF reads all observations in a SDMX file as Pandas Dataframe(s)
 
-    :param data: Path, URL or SDMX data file as string
+    :param path_to_data: Path, URL or SDMX data file as string
 
     :param validate: Validation of the XML file against the XSD (default: True)
     :param remove_empty_columns: Removes empty columns on output pd.Dataframe
@@ -97,8 +117,12 @@ def get_pandas_df(data, validate=True, remove_empty_columns=True):
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    datasets = read_xml(data, "Data", validate=validate,
-                        use_dataset_id=True)
+    message_datasets = read_sdmx(path_to_data, validate=validate)
+
+    if message_datasets.type != MessageTypeEnum.StructureSpecificDataSet:
+        raise ValueError('Only SDMX data messages are allowed in get_pandas_df')
+
+    datasets = message_datasets.payload
     if not remove_empty_columns:
         return {ds: datasets[ds].data for ds in datasets}
     else:
@@ -199,7 +223,10 @@ def upload_metadata_to_fmr(data: (str, os.PathLike),
     """
 
     # Process the input data to obtain SDMX text
-    sdmx_text = process_string_to_read(data)
+    sdmx_text, extension = process_string_to_read(data)
+
+    if extension != 'xml':
+        raise ValueError('Only SDMX-ML is supported')
 
     # Submit the SDMX structures to FMR for processing
     submit_structures_to_fmr(

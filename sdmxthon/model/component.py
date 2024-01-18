@@ -2,8 +2,8 @@ from sdmxthon.model.base import IdentifiableArtefact
 from sdmxthon.model.itemScheme import Concept
 from sdmxthon.model.representation import Representation
 from sdmxthon.model.utils import generic_setter, int_setter
-from sdmxthon.utils.handlers import add_indent, export_intern_data, \
-    split_unique_id
+from sdmxthon.parsers.writer_aux import add_indent, export_intern_data
+from sdmxthon.utils.handlers import split_unique_id
 from sdmxthon.utils.mappings import structureAbbr
 
 
@@ -173,7 +173,6 @@ class Component(IdentifiableArtefact):
 
             if isinstance(self.related_to, dict):
                 if 'id' in self.related_to.keys():
-
                     if isinstance(self.related_to['id'], list):
                         for k in self.related_to['id']:
                             outfile += f'{indent_enum}<{structureAbbr}:' \
@@ -199,6 +198,10 @@ class Component(IdentifiableArtefact):
                 outfile += f'{indent_enum}<{structureAbbr}:Dimension>'
                 outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
                 outfile += f'{indent_enum}</{structureAbbr}:Dimension>'
+            elif isinstance(self.related_to, GroupDimensionDescriptor):
+                outfile += f'{indent_enum}<{structureAbbr}:Group>'
+                outfile += f'{indent_ref}<Ref id="{self.related_to.id}"/>'
+                outfile += f'{indent_enum}</{structureAbbr}:Group>'
             elif isinstance(self.related_to, PrimaryMeasure):
                 outfile += f'{indent_enum}<{structureAbbr}' \
                            f':PrimaryMeasure>'
@@ -374,3 +377,31 @@ class PrimaryMeasure(Component):
             return super(PrimaryMeasure, self).__eq__(other)
 
         return False
+
+
+class GroupDimensionDescriptor(IdentifiableArtefact):
+    """A set metadata concepts that define a partial key derived from the
+    Dimension Descriptor in a Data Structure Definition.
+    """
+
+    _componentType = "Dimension"
+
+    def __init__(self, id_: str = None, uri: str = None, urn: str = None,
+                 annotations=None, components=None):
+        if components is None:
+            components = {}
+        self.components = components
+        super(GroupDimensionDescriptor, self). \
+            __init__(id_=id_, uri=uri, urn=urn,
+                     annotations=annotations)
+
+    def __eq__(self, other):
+        if isinstance(other, GroupDimensionDescriptor):
+            return super(GroupDimensionDescriptor, self).__eq__(other)
+
+        return False
+
+    def __str__(self):
+        return f"<GroupDimensionDescriptor - {self.id}>"
+
+    __repr__ = __str__

@@ -31,33 +31,6 @@ def split_from_urn(obj_: str, split_id=True):
     return full_id
 
 
-def get_outfile(obj_: dict, key='', indent=''):
-    element = obj_.get(key) or []
-
-    outfile = ''
-
-    for i in element:
-        outfile += indent + i
-
-    return outfile
-
-
-def export_intern_data(data: dict, indent: str):
-    outfile = get_outfile(data, 'Annotations', indent)
-    outfile += get_outfile(data, 'Name', indent)
-    outfile += get_outfile(data, 'Description', indent)
-
-    return outfile
-
-
-def add_indent(indent: str):
-    if indent == '':
-        return ''
-    else:
-        indent += '\t'
-        return indent
-
-
 def add_list(element: any):
     if not isinstance(element, list):
         element = [element]

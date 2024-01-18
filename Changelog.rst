@@ -2,6 +2,44 @@
 Changelog
 #########
 
+2.6 (2024-01-17)
+------------------
+**Added**
+  - Added compatibility for Group on attributes related to a GroupDimensionDescriptor
+  - Added compatibility for SDMX-CSV on get_pandas_df and get_datasets #54
+  - Added reading and writing methods for Group in SDMX-ML StructureSpecific data messages
+**Changes**
+
+**Bugfixes**
+  - Fixed a bug on ActionEnum in DatasetAttributes
+
+2.5.3 (2023-12-22)
+------------------
+**Added**
+  - Added internal enumeration for Action (ActionEnum)
+
+**Changes**
+  - Changed description of dataset attributes and added docs for structure_type and unique_id in Dataset.
+  - Fixed reading and writing of SDMX-CSV v2 to handle ACTION column. #53
+  - Changed link to Changelog in docs.
+
+**Bugfixes**
+  - Fixed bug when adding dataset attributes to raise an unhandled exception if not present on keys. #53
+
+2.5.1 (2023-12-21)
+------------------
+**Added**
+  - Added changelog on docs and github link #52
+  - Structure submission to FMR from Dataflow and DataStructureDefinition #47
+  - Read SDMX to support SDMX-CSV v1 and v2 #45
+  - Handling on error messages on SOAP APIs requests
+  - Added MessageTypeEnum documentation.
+
+**Changes**
+  - Changed description of features in docs.
+
+**Bugfixes**
+
 2.5 (2023-11-10)
 ----------------
 **Added**
@@ -30,7 +68,7 @@ Changelog
 **Bugfixes**
 
 2.3.2 (2023-09-26)
-----------------
+------------------
 **Added**
   - Webservices and Data Discovery for OECD (v1 and v2) and UNICEF
 
@@ -41,7 +79,7 @@ Changelog
 
 
 2.3.1 (2023-09-15)
-----------------
+------------------
 **Added**
 
 **Changes**
@@ -116,6 +154,7 @@ Changelog
  - Model changes:
     - Deleted 'dataset' on data retrieval
     - Changed keys of message.content on Metadata Type.
+
 **Bugfixes**
 
 1.1 (2021-01-12)
@@ -132,8 +171,7 @@ Development version (Yanked Release), changes are implemented in 1.2.
 **Changes**
 
 **Bugfixes**
-
-- Fixed bug on Dataflow with constraints parsing.
+ - Fixed bug on Dataflow with constraints parsing.
 
 1.0.2 (2021-07-06)
 ------------------
@@ -143,8 +181,7 @@ Development version (Yanked Release), changes are implemented in 1.2.
 **Changes**
 
 **Bugfixes**
-
-- Fixed bug on Generic writing with only one dimension or attribute.
+ - Fixed bug on Generic writing with only one dimension or attribute.
 
 1.0.1 (2021-06-23)
 ------------------
@@ -152,15 +189,13 @@ Development version (Yanked Release), changes are implemented in 1.2.
 **Added**
 
 **Changes**
-
-- Added support for strings in all API methods. Restricted path to os.Pathlike
+ - Added support for strings in all API methods. Restricted path to os.Pathlike
 
 
 **Bugfixes**
-
-- Fixed bug on Series Constraints duplicated rows.
+ - Fixed bug on Series Constraints duplicated rows.
 
 1.0 (2021-05-28)
-________________
+----------------
 
 Initial release.

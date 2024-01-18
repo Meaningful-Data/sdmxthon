@@ -17,7 +17,10 @@ Pipfile.lock
 /SDMXthon.egg-info/
 /testApi.py
 /xml_parsers_test.py
+data.csv
+data.xlsx
 /sdmxthon/testSuite/.coverage
 /intro_book/
 /about_sdmthon_book/
 /docs_material/
+/sdmxthon/testSuite/.xml
