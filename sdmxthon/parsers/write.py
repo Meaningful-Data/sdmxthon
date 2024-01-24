@@ -181,6 +181,7 @@ def memory_optimization_str(dataset, opt_att_codes, prettyprint):
 
 
 def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
+    check_structure(dataset)
     outfile = ''
 
     if prettyprint:
@@ -204,6 +205,9 @@ def strWriting(dataset, prettyprint=True, count=1, dim="AllDimensions"):
                      if att not in man_att]
 
     if dim == "AllDimensions":
+        if check_dataset_for_groups(dataset):
+            raise Exception("Structure Specific All Dimensions writing "
+                            "with groups is not supported")
         outfile += memory_optimization_str(dataset, opt_att_codes, prettyprint)
     else:
         series_codes, obs_codes, group_codes, gr_obj = get_codes(dim, dataset)
@@ -378,6 +382,26 @@ def memory_optimization_generic(dataset, dim_codes, att_codes, measure_code,
     return outfile
 
 
+def check_dataset_for_groups(dataset):
+    if dataset.structure is None:
+        return False
+    group_obj = None
+    for e in dataset.structure.attribute_descriptor.components.values():
+        if (e.id in dataset.data.keys() and
+                isinstance(e.related_to, GroupDimensionDescriptor)):
+            if group_obj is None:
+                group_obj = e.related_to
+            elif group_obj != e.related_to:
+                raise Exception("Group Dimension Descriptor "
+                                "is not unique on DSD")
+    return group_obj is not None
+
+
+def check_structure(dataset):
+    if dataset.structure is None:
+        raise Exception("Dataset Structure is not defined")
+
+
 def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
     """
     This function writes a generic SDMX-ML data file from a dataset
@@ -387,6 +411,7 @@ def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
     :param dim: Dimension at observation
     :return:
     """
+    check_structure(dataset)
     outfile = ''
 
     if prettyprint:
@@ -412,14 +437,15 @@ def generic_writing(dataset, prettyprint=True, dim="AllDimensions"):
                  v in dataset.data.columns]
     measure_code = dataset.structure.measure_code
 
+    has_groups = check_dataset_for_groups(dataset)
+
+    if has_groups:
+        raise Exception("Generic writing with groups is not supported")
     if dim == "AllDimensions":
         outfile += memory_optimization_generic(dataset, dim_codes, att_codes,
                                                measure_code, prettyprint)
     else:
-        series_codes, obs_codes, group_codes, _ = get_codes(dim, dataset)
-        for x in group_codes:
-            if x not in series_codes:
-                series_codes.append(x)
+        series_codes, obs_codes, group_codes, gr_obj = get_codes(dim, dataset)
 
         outfile += creating_series_generic(dataset.data,
                                            dim_codes=dim_codes,

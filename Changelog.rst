@@ -8,6 +8,7 @@ Changelog
   - Added compatibility for Group on attributes related to a GroupDimensionDescriptor
   - Added compatibility for SDMX-CSV on get_pandas_df and get_datasets #54
   - Added reading and writing methods for Group in SDMX-ML StructureSpecific data messages
+
 **Changes**
 
 **Bugfixes**
