@@ -42,7 +42,7 @@ MeasureDescriptor
 GroupDimensionDescriptor
 ************************
 
-.. autoclass:: sdmxthon.model.descriptors.GroupDimensionDescriptor()
+.. autoclass:: sdmxthon.model.component.GroupDimensionDescriptor()
     :members:
     :show-inheritance:
     :exclude-members: parse_XML, build_attributes, build_children, factory

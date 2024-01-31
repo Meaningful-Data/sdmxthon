@@ -11124,9 +11124,48 @@
                                                        maxLength="1"/>
                             </str:LocalRepresentation>
                             <str:AttributeRelationship>
-                                <str:Group>
-                                    <Ref id="Sibling"/>
-                                </str:Group>
+                                <str:Dimension>
+                                    <Ref id="FREQ"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_TYPE"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_INSTR"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_RISK"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_REP_CTY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_SECTOR_CPY"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_CPC"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_SECTOR_UDL"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_CURR_LEG1"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_CURR_LEG2"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_ISSUE_MAT"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_RATING"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_EX_METHOD"/>
+                                </str:Dimension>
+                                <str:Dimension>
+                                    <Ref id="DER_BASIS"/>
+                                </str:Dimension>
                             </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute
