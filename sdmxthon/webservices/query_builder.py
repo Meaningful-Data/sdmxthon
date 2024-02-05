@@ -15,14 +15,15 @@ class SdmxWebservice(ABC):
     :param STRUCTURE_DETAIL_OPTIONS: The allowed values for the detail parameter
     :type STRUCTURE_DETAIL_OPTIONS: list[str]
 
-    :param DATA_DETAIL_OPTIONS: The allowed values for the detail parameter
+    :param DATA_DETAIL_OPTIONS: The allowed values for the detail parameter (data query)
     :type DATA_DETAIL_OPTIONS: list[str]
 
-    :param CONSTRAINTS_MODE_OPTIONS: The allowed values for the mode parameter
+    :param CONSTRAINTS_MODE_OPTIONS: The allowed values for the constraints mode parameter
+                                      (constraints query)
     :type CONSTRAINTS_MODE_OPTIONS: list[str]
 
     :param CONSTRAINTS_REFERENCES_OPTIONS: The allowed values for the constraints
-                                            references parameter
+                                            references parameter (constraints query)
     :type CONSTRAINTS_REFERENCES_OPTIONS: list[str]
 
     :param METADATA_STRUCTURE_DETAIL_OPTIONS: The allowed values for the metadata
@@ -30,6 +31,7 @@ class SdmxWebservice(ABC):
     :type METADATA_STRUCTURE_DETAIL_OPTIONS: list[str]
 
     :param SCHEMA_EXPLICIT_MEASURE: The allowed values for the schema explicitMeasure parameter
+                                     (schema queries)
     :type SCHEMA_EXPLICIT_MEASURE: list[str]
     """
 
