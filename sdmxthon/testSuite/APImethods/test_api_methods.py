@@ -10,8 +10,8 @@ import pytest
 from pytest import mark
 from requests.exceptions import ConnectionError
 
-from sdmxthon.api.api import read_sdmx, get_pandas_df, xml_to_csv, \
-    upload_metadata_to_fmr
+from sdmxthon.api.api import get_pandas_df, read_sdmx, upload_metadata_to_fmr, \
+    xml_to_csv
 
 pytestmark = pytest.mark.input_path(Path(__file__).parent / "data")
 
@@ -43,9 +43,21 @@ def test_read_sdmx(filename, data_path, reference_path):
 def test_get_pandas_df(filename, data_path, reference_path):
     dict_dataframe = get_pandas_df(os.path.join(data_path, filename))
     key = 'BIS:BIS_DER(1.0)'
+    if key not in dict_dataframe:
+        raise AssertionError(f"Key {key} not found in result")
     dataframe: pd.DataFrame = dict_dataframe[key].astype('str')
     assert_with_reference(dataframe, reference_path)
 
+
+@mark.parametrize("filename", filenames)
+def test_use_dataset_id(filename, data_path, reference_path):
+    dict_dataframe = get_pandas_df(os.path.join(data_path, filename),
+                                   use_dataset_id=True)
+    key = 'TEST_KEY'
+    assert key in dict_dataframe
+    dict_dataframe = read_sdmx(os.path.join(data_path, filename),
+                               use_dataset_id=True)
+    assert key in dict_dataframe.content
 
 # Test: xml to csv
 @mark.parametrize("filename", filenames)

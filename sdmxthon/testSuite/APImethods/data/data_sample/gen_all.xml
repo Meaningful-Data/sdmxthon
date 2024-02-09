@@ -17,6 +17,7 @@
                      class="DataStructure"/>
             </common:Structure>
         </message:Structure>
+        <message:DataSetID>TEST_KEY</message:DataSetID>
     </message:Header>
     <message:DataSet structureRef="BIS_DER" action="Replace">
         <generic:Attributes>

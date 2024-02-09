@@ -2,6 +2,16 @@
 Changelog
 #########
 
+2.6.1 (2024-01-17)
+------------------
+**Added**
+  - Added flag for use_dataset_id on get_pandas_df
+
+**Changes**
+
+**Bugfixes**
+
+
 2.6 (2024-01-17)
 ------------------
 **Added**

@@ -25,7 +25,7 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
 
     :param sdmx_file: Path, URL or SDMX file as string
     :param validate: Validation of the XML file against the XSD (default: False)
-    :param use_dataset_id: Use the dataset id as key in output (default: True)
+    :param use_dataset_id: Use the DataSetID as key in output (default: True)
 
     :return: A :obj:`Message <sdmxthon.model.message.Message>` object
     """
@@ -105,7 +105,8 @@ def get_datasets(path_to_data, path_to_metadata, validate=True,
     return datasets
 
 
-def get_pandas_df(path_to_data, validate=True, remove_empty_columns=True):
+def get_pandas_df(path_to_data, validate=True, remove_empty_columns=True,
+                  use_dataset_id=False):
     """
     GetPandasDF reads all observations in a SDMX file as Pandas Dataframe(s)
 
@@ -113,11 +114,13 @@ def get_pandas_df(path_to_data, validate=True, remove_empty_columns=True):
 
     :param validate: Validation of the XML file against the XSD (default: True)
     :param remove_empty_columns: Removes empty columns on output pd.Dataframe
+    :param use_dataset_id: Use the DataSetID as key in output (default: False)
 
     :return: A dict of `Pandas Dataframe \
     <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html>`_
     """
-    message_datasets = read_sdmx(path_to_data, validate=validate)
+    message_datasets = read_sdmx(path_to_data, validate=validate,
+                                 use_dataset_id=use_dataset_id)
 
     if message_datasets.type != MessageTypeEnum.StructureSpecificDataSet:
         raise ValueError('Only SDMX data messages are allowed in get_pandas_df')
