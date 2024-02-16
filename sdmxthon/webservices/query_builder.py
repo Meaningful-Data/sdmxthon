@@ -59,13 +59,46 @@ class SdmxWebservice(ABC):
         :param version: The version of the dataflows
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (full, referencestubs,
-                       referencepartial, allstubs, allcompletestubs,
-                       referencecompletestubs)
+                        referencepartial, allstubs, allcompletestubs,
+                        referencecompletestubs)
         :type detail: str
         """
 
@@ -337,8 +370,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the data structure definitions
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (full, referencestubs,
@@ -370,7 +436,9 @@ class SdmxWebservice(ABC):
         :param mode: The mode parameter (exact, available)
         :type mode: str
 
-        :param references: The references parameter (all, children, descendants)
+        :param references: The references parameter (none, all,
+                            datastructure, conceptscheme, codelist,
+                            dataproviderscheme, dataflow)
         :type references: str
 
         :param start_period: The start period of the constraints
@@ -412,8 +480,9 @@ class SdmxWebservice(ABC):
         :param mode: The mode parameter (exact, available)
         :type mode: str
 
-        :param references: The references parameter (none, all, datastructure,conceptscheme,
-                                                     codelist, dataproviderscheme, dataflow)
+        :param references: The references parameter (none, all, datastructure,
+                                                     conceptscheme, codelist,
+                                                     dataproviderscheme, dataflow)
         :type references: str
 
         :param updated_after: Data filtered by the last update date
@@ -449,8 +518,9 @@ class SdmxWebservice(ABC):
         :param mode: The mode parameter (exact, available)
         :type mode: str
 
-        :param references: The references parameter (none, all, datastructure,conceptscheme,
-                                                     codelist, dataproviderscheme, dataflow)
+        :param references: The references parameter (none, all, datastructure,
+                                                     conceptscheme, codelist,
+                                                     dataproviderscheme, dataflow)
         :type references: str
 
         :param updated_after: Data filtered by the last update date
@@ -486,8 +556,9 @@ class SdmxWebservice(ABC):
         :param mode: The mode parameter (exact, available)
         :type mode: str
 
-        :param references: The references parameter (none, all, datastructure,conceptscheme,
-                                                     codelist, dataproviderscheme, dataflow)
+        :param references: The references parameter (none, all, datastructure,
+                                                     conceptscheme, codelist,
+                                                     dataproviderscheme, dataflow)
         :type references: str
 
         :param updated_after: Data filtered by the last update date
@@ -523,8 +594,9 @@ class SdmxWebservice(ABC):
         :param mode: The mode parameter (exact, available)
         :type mode: str
 
-        :param references: The references parameter (none, all, datastructure,conceptscheme,
-                                                     codelist, dataproviderscheme, dataflow)
+        :param references: The references parameter (none, all, datastructure,
+                                                     conceptscheme, codelist,
+                                                     dataproviderscheme, dataflow)
         :type references: str
 
         :param updated_after: Data filtered by the last update date
@@ -661,8 +733,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the metadata structures
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -686,8 +791,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the metadata flows
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -711,8 +849,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the provision agreements
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -736,8 +907,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the structure sets
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -761,8 +965,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the processes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -786,8 +1023,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the categorisations
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -811,22 +1081,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the data constraint
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -845,22 +1122,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the metadata constraint
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -879,8 +1163,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the content constraints
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -904,8 +1201,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the actual constraints
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -929,8 +1239,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the allowed constraints
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -954,8 +1277,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the attachment constraints
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -979,8 +1315,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the structures
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1004,8 +1353,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the concept schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1029,8 +1411,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the code lists
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1054,8 +1469,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the category schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1079,22 +1527,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the hierarchy
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1113,22 +1568,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the hierarchy association
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1147,8 +1609,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the hierarchical code lists
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1172,8 +1647,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the organisation schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1197,8 +1685,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the agency schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1222,8 +1743,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the data provider schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1247,8 +1801,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the data consumer schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1272,8 +1859,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the organisation unit schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1297,8 +1917,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the transformation schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1322,8 +1975,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the ruleset schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1347,8 +2033,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the user defined operator schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1372,8 +2091,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the custom type schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1397,8 +2149,41 @@ class SdmxWebservice(ABC):
         :param version: The version of the name personalisation schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1411,7 +2196,7 @@ class SdmxWebservice(ABC):
     def get_vtl_mapping_scheme(self, agency_id, resources,
                                version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the vtl mapping schemes
+        Returns URL and params to get the vtl mapping schemes (V2.0.0)
 
         :param agency_id: The agency id of the vtl mapping schemes
         :type agency_id: str
@@ -1422,22 +2207,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the vtl mapping schemes
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1445,7 +2237,7 @@ class SdmxWebservice(ABC):
     def get_value_list(self, agency_id, resources,
                        version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the value lists
+        Returns URL and params to get the value lists (V2.0.0)
 
         :param agency_id: The agency id of the value lists
         :type agency_id: str
@@ -1456,22 +2248,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the value lists
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1479,7 +2278,7 @@ class SdmxWebservice(ABC):
     def get_structure_map(self, agency_id, resources,
                           version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the structure maps
+        Returns URL and params to get the structure maps (V2.0.0)
 
         :param agency_id: The agency id of the structure maps
         :type agency_id: str
@@ -1490,22 +2289,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the structuremap
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1513,7 +2319,7 @@ class SdmxWebservice(ABC):
     def get_representation_map(self, agency_id, resources,
                                version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the representation maps
+        Returns URL and params to get the representation maps (V2.0.0)
 
         :param agency_id: The agency id of the representation maps
         :type agency_id: str
@@ -1524,22 +2330,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the representation maps
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1547,7 +2360,7 @@ class SdmxWebservice(ABC):
     def get_concept_scheme_map(self, agency_id, resources,
                                version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the concept scheme maps
+        Returns URL and params to get the concept scheme maps (V2.0.0)
 
         :param agency_id: The agency id of the concept scheme maps
         :type agency_id: str
@@ -1558,22 +2371,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the concept scheme maps
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1581,7 +2401,7 @@ class SdmxWebservice(ABC):
     def get_category_scheme_map(self, agency_id, resources,
                                 version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the category scheme maps
+        Returns URL and params to get the category scheme maps (V2.0.0)
 
         :param agency_id: The agency id of the category scheme maps
         :type agency_id: str
@@ -1592,22 +2412,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the category scheme maps
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1615,7 +2442,7 @@ class SdmxWebservice(ABC):
     def get_organisation_scheme_map(self, agency_id, resources,
                                     version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the organisation scheme maps
+        Returns URL and params to get the organisation scheme maps (V2.0.0)
 
         :param agency_id: The agency id of the organisation scheme maps
         :type agency_id: str
@@ -1626,22 +2453,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the organisation scheme maps
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1649,9 +2483,9 @@ class SdmxWebservice(ABC):
     def get_reporting_taxonomy_map(self, agency_id, resources,
                                    version, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the reporting taxonomy maps
+        Returns URL and params to get the reporting taxonomy maps (V2.0.0)
 
-        :param agency_id: The agency id of the reportingtaxonomymap
+        :param agency_id: The agency id of the reporting taxonomy maps
         :type agency_id: str
 
         :param resources: The resources to query
@@ -1660,22 +2494,29 @@ class SdmxWebservice(ABC):
         :param version: The version of the reporting taxonomy maps
         :type version: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -1694,8 +2535,21 @@ class SdmxWebservice(ABC):
         :param version: The version of the name alias schemes
         :type version: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1724,6 +2578,7 @@ class SdmxWebservice(ABC):
         :type dimension_at_observation: str
 
         :param explicit_measure: Indicates whether observations are strongly typed
+                                  (true, false)
         :type explicit_measure: str
         """
 
@@ -1747,6 +2602,7 @@ class SdmxWebservice(ABC):
         :type dimension_at_observation: str
 
         :param explicit_measure: Indicates whether observations are strongly typed
+                                  (true, false)
         :type explicit_measure: str
         """
 
@@ -1770,6 +2626,7 @@ class SdmxWebservice(ABC):
         :type dimension_at_observation: str
 
         :param explicit_measure: Indicates whether observations are strongly typed
+                                  (true, false)
         :type explicit_measure: str
         """
 
@@ -1793,6 +2650,7 @@ class SdmxWebservice(ABC):
         :type dimension_at_observation: str
 
         :param explicit_measure: Indicates whether observations are strongly typed
+                                  (true, false)
         :type explicit_measure: str
         """
 
@@ -1816,6 +2674,7 @@ class SdmxWebservice(ABC):
         :type dimension_at_observation: str
 
         :param explicit_measure: Indicates whether observations are strongly typed
+                                  (true, false)
         :type explicit_measure: str
         """
 
@@ -1837,13 +2696,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the concepts
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -1865,13 +2737,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the codes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -1893,13 +2778,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the categories
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -1921,8 +2819,21 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the hierarchies
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1949,8 +2860,21 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the organisations
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
@@ -1977,13 +2901,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the agencies
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -2005,13 +2942,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the data providers
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -2033,19 +2983,33 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the data consumers
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
     def get_organisation_unit_schemes(self, agency_id, resources,
-                                      version, item_id, references=None, detail=None) -> str:
+                                      version, item_id, references=None,
+                                      detail=None) -> str:
         """
         Returns URL and params to get the organisation unit schemes
 
@@ -2061,19 +3025,33 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the organisation unit schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
     def get_transformation_schemes(self, agency_id, resources,
-                                   version, item_id, references=None, detail=None) -> str:
+                                   version, item_id, references=None,
+                                   detail=None) -> str:
         """
         Returns URL and params to get the transformation schemes
 
@@ -2089,13 +3067,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the transformation schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -2117,19 +3108,33 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the ruleset schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
     def get_user_defined_operator_schemes(self, agency_id, resources,
-                                          version, item_id, references=None, detail=None) -> str:
+                                          version, item_id, references=None,
+                                          detail=None) -> str:
         """
         Returns URL and params to get the user defined operator schemes
 
@@ -2145,13 +3150,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the user defined operator schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -2173,19 +3191,33 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the custom type schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
     def get_name_personalisation_schemes(self, agency_id, resources,
-                                         version, item_id, references=None, detail=None) -> str:
+                                         version, item_id, references=None,
+                                         detail=None) -> str:
         """
         Returns URL and params to get the name personalisation schemes
 
@@ -2201,19 +3233,33 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the name personalisation schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
     def get_name_alias_schemes(self, agency_id, resources,
-                               version, item_id, references=None, detail=None) -> str:
+                               version, item_id, references=None,
+                               detail=None) -> str:
         """
         Returns URL and params to get the name alias schemes
 
@@ -2229,13 +3275,26 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the name alias schemes
         :type item_id: str
 
-        :param references: The references parameter (none, parents,
-                            parentsandsiblings, children, descendants, all)
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
@@ -2243,7 +3302,8 @@ class SdmxWebservice(ABC):
     def get_concept_scheme_item(self, agency_id, resources, version,
                                 item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the concept schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the concept schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the concept schemes
         :type agency_id: str
@@ -2257,22 +3317,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the concept schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2280,7 +3347,8 @@ class SdmxWebservice(ABC):
     def get_codelist_item(self, agency_id, resources, version,
                           item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the code lists in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the code lists in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the code lists
         :type agency_id: str
@@ -2294,22 +3362,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the code lists
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2317,7 +3392,8 @@ class SdmxWebservice(ABC):
     def get_category_scheme_item(self, agency_id, resources, version,
                                  item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the category schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the category schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the category schemes
         :type agency_id: str
@@ -2331,22 +3407,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the category schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2354,7 +3437,8 @@ class SdmxWebservice(ABC):
     def get_agency_scheme_item(self, agency_id, resources, version,
                                item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the agency schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the agency schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the agency schemes
         :type agency_id: str
@@ -2368,22 +3452,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the agency schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2391,7 +3482,8 @@ class SdmxWebservice(ABC):
     def get_data_provider_scheme_item(self, agency_id, resources, version,
                                       item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the data provider schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the data provider schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the data provider schemes
         :type agency_id: str
@@ -2405,22 +3497,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the data provider schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2428,7 +3527,8 @@ class SdmxWebservice(ABC):
     def get_data_consumer_scheme_item(self, agency_id, resources, version,
                                       item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the data consumer schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the data consumer schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the data consumer schemes
         :type agency_id: str
@@ -2442,22 +3542,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the data consumer schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2465,7 +3572,8 @@ class SdmxWebservice(ABC):
     def get_organisation_unit_scheme_item(self, agency_id, resources, version,
                                           item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the organisation unit schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the organisation unit schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the organisation unit schemes
         :type agency_id: str
@@ -2479,22 +3587,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the organisation unit schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2502,7 +3617,8 @@ class SdmxWebservice(ABC):
     def get_transformation_scheme_item(self, agency_id, resources, version,
                                        item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the transformation schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the transformation schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the transformation schemes
         :type agency_id: str
@@ -2516,22 +3632,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the transformation schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2539,7 +3662,8 @@ class SdmxWebservice(ABC):
     def get_ruleset_scheme_item(self, agency_id, resources, version,
                                 item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the ruleset schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the ruleset schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the ruleset schemes
         :type agency_id: str
@@ -2553,22 +3677,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the ruleset schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2576,7 +3707,8 @@ class SdmxWebservice(ABC):
     def get_user_defined_operator_scheme_item(self, agency_id, resources, version,
                                               item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the user defined operator schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the user defined operator schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the user defined operator schemes
         :type agency_id: str
@@ -2590,22 +3722,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the user defined operator schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2613,7 +3752,8 @@ class SdmxWebservice(ABC):
     def get_custom_type_scheme_item(self, agency_id, resources, version,
                                     item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the custom type schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the custom type schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the custom type schemes
         :type agency_id: str
@@ -2627,22 +3767,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the custom type schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2650,7 +3797,8 @@ class SdmxWebservice(ABC):
     def get_name_personalisation_scheme_item(self, agency_id, resources, version,
                                              item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the name personalisation schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the name personalisation schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the name personalisation schemes
         :type agency_id: str
@@ -2664,22 +3812,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the name personalisation schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2687,7 +3842,8 @@ class SdmxWebservice(ABC):
     def get_vtl_mapping_scheme_item(self, agency_id, resources, version,
                                     item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the vtl mapping schemes in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the vtl mapping schemes in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the vtl mapping schemes
         :type agency_id: str
@@ -2701,22 +3857,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the vtl mapping schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2724,7 +3887,8 @@ class SdmxWebservice(ABC):
     def get_value_list_item(self, agency_id, resources, version,
                             item_id, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the value lists in Item Scheme Queries (V2.0.0)
+        Returns URL and params to get the value lists in
+        Item Scheme Queries (V2.0.0)
 
         :param agency_id: The agency id of the value lists
         :type agency_id: str
@@ -2738,22 +3902,29 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the value lists
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents', 'parentsandsiblings',
-                            'ancestors', 'children', 'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchy', 'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy', 'provisionagreement',
-                            'structureset', 'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme', 'rulesetscheme',
-                            'userdefinedoperatorscheme', 'customtypescheme',
-                            'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
-                            'structuremap', 'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap', 'reportingtaxonomymap')
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
         :type references: str
 
-        :param detail: The detail parameter (full, allstubs, referencestubs, allcompletestubs,
-                        referencecompletestubs, referencepartial, raw)
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
         :type detail: str
         """
 
@@ -2761,8 +3932,8 @@ class SdmxWebservice(ABC):
     def get_metadata_dsds(self, agency_id, resources, version,
                           detail=None) -> str:
         """
-        Returns URL and params to get data structures in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get data structures in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the data structures
         :type agency_id: str
@@ -2781,8 +3952,8 @@ class SdmxWebservice(ABC):
     def get_metadata_mdsds(self, agency_id, resources, version,
                            detail=None) -> str:
         """
-        Returns URL and params to get metadata structures in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get metadata structures in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the metadata structures
         :type agency_id: str
@@ -2801,8 +3972,8 @@ class SdmxWebservice(ABC):
     def get_metadata_dataflows(self, agency_id, resources, version,
                                detail=None) -> str:
         """
-        Returns URL and params to get dataflows in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get dataflows in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the dataflows
         :type agency_id: str
@@ -2821,8 +3992,8 @@ class SdmxWebservice(ABC):
     def get_metadata_metadata_flows(self, agency_id, resources, version,
                                     detail=None) -> str:
         """
-        Returns URL and params to get metadata flows in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get metadata flows in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the metadata flows
         :type agency_id: str
@@ -2841,8 +4012,8 @@ class SdmxWebservice(ABC):
     def get_metadata_provision_agreements(self, agency_id, resources, version,
                                           detail=None) -> str:
         """
-        Returns URL and params to get provision agreements in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get provision agreements in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the provision agreements
         :type agency_id: str
@@ -2861,8 +4032,8 @@ class SdmxWebservice(ABC):
     def get_metadata_structure_sets(self, agency_id, resources, version,
                                     detail=None) -> str:
         """
-        Returns URL and params to get structure sets in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get structure sets in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the structure sets
         :type agency_id: str
@@ -2881,8 +4052,8 @@ class SdmxWebservice(ABC):
     def get_metadata_processes(self, agency_id, resources, version,
                                detail=None) -> str:
         """
-        Returns URL and params to get processes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get processes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the processes
         :type agency_id: str
@@ -2901,8 +4072,8 @@ class SdmxWebservice(ABC):
     def get_metadata_categorisations(self, agency_id, resources, version,
                                      detail=None) -> str:
         """
-        Returns URL and params to get categorisations in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get categorisations in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the categorisations
         :type agency_id: str
@@ -2921,8 +4092,8 @@ class SdmxWebservice(ABC):
     def get_metadata_data_constraints(self, agency_id, resources, version,
                                       detail=None) -> str:
         """
-        Returns URL and params to get data constraints in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get data constraints in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the data constraints
         :type agency_id: str
@@ -2941,8 +4112,8 @@ class SdmxWebservice(ABC):
     def get_metadata_metadata_constraints(self, agency_id, resources, version,
                                           detail=None) -> str:
         """
-        Returns URL and params to get metadata constraints in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get metadata constraints in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the metadata constraints
         :type agency_id: str
@@ -2961,8 +4132,8 @@ class SdmxWebservice(ABC):
     def get_metadata_concept_schemes(self, agency_id, resources, version,
                                      detail=None) -> str:
         """
-        Returns URL and params to get concept schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get concept schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the concept schemes
         :type agency_id: str
@@ -2981,10 +4152,10 @@ class SdmxWebservice(ABC):
     def get_metadata_code_lists(self, agency_id, resources, version,
                                 detail=None) -> str:
         """
-        Returns URL and params to get code lists in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get codelists in
+        Metadata queries (by structure) (V2.0.0)
 
-        :param agency_id: The agency id of the code lists
+        :param agency_id: The agency id of the codelists
         :type agency_id: str
 
         :param resources: The resources to query
@@ -3001,8 +4172,8 @@ class SdmxWebservice(ABC):
     def get_metadata_category_schemes(self, agency_id, resources, version,
                                       detail=None) -> str:
         """
-        Returns URL and params to get category schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get category schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the category schemes
         :type agency_id: str
@@ -3021,8 +4192,8 @@ class SdmxWebservice(ABC):
     def get_metadata_hierarchies(self, agency_id, resources, version,
                                  detail=None) -> str:
         """
-        Returns URL and params to get hierarchies in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get hierarchies in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the hierarchies
         :type agency_id: str
@@ -3041,8 +4212,8 @@ class SdmxWebservice(ABC):
     def get_metadata_hierarchy_associations(self, agency_id, resources, version,
                                             detail=None) -> str:
         """
-        Returns URL and params to get hierarchy associations in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get hierarchy associations in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the hierarchy associations
         :type agency_id: str
@@ -3061,8 +4232,8 @@ class SdmxWebservice(ABC):
     def get_metadata_agency_schemes(self, agency_id, resources, version,
                                     detail=None) -> str:
         """
-        Returns URL and params to get agency schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get agency schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the agency schemes
         :type agency_id: str
@@ -3081,8 +4252,8 @@ class SdmxWebservice(ABC):
     def get_metadata_data_provider_schemes(self, agency_id, resources, version,
                                            detail=None) -> str:
         """
-        Returns URL and params to get data provider schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get data provider schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the data provider schemes
         :type agency_id: str
@@ -3101,8 +4272,8 @@ class SdmxWebservice(ABC):
     def get_metadata_data_consumer_schemes(self, agency_id, resources, version,
                                            detail=None) -> str:
         """
-        Returns URL and params to get data consumer schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get data consumer schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the data consumer schemes
         :type agency_id: str
@@ -3121,8 +4292,8 @@ class SdmxWebservice(ABC):
     def get_metadata_organisation_unit_schemes(self, agency_id, resources, version,
                                                detail=None) -> str:
         """
-        Returns URL and params to get organisation unit schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get organisation unit schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the organisation unit schemes
         :type agency_id: str
@@ -3141,8 +4312,8 @@ class SdmxWebservice(ABC):
     def get_metadata_transformation_schemes(self, agency_id, resources, version,
                                             detail=None) -> str:
         """
-        Returns URL and params to get transformation schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get transformation schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the transformation schemes
         :type agency_id: str
@@ -3161,8 +4332,8 @@ class SdmxWebservice(ABC):
     def get_metadata_ruleset_schemes(self, agency_id, resources, version,
                                      detail=None) -> str:
         """
-        Returns URL and params to get ruleset schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get ruleset schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the ruleset schemes
         :type agency_id: str
@@ -3181,8 +4352,8 @@ class SdmxWebservice(ABC):
     def get_metadata_user_defined_operator_schemes(self, agency_id, resources, version,
                                                    detail=None) -> str:
         """
-        Returns URL and params to get user defined operator schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get user defined operator schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the user defined operator schemes
         :type agency_id: str
@@ -3201,8 +4372,8 @@ class SdmxWebservice(ABC):
     def get_metadata_custom_type_schemes(self, agency_id, resources, version,
                                          detail=None) -> str:
         """
-        Returns URL and params to get custom type schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get custom type schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the custom type schemes
         :type agency_id: str
@@ -3221,8 +4392,8 @@ class SdmxWebservice(ABC):
     def get_metadata_name_personalisation_schemes(self, agency_id, resources, version,
                                                   detail=None) -> str:
         """
-        Returns URL and params to get name personalisation scheme in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get name personalisation scheme in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the name personalisation scheme
         :type agency_id: str
@@ -3241,8 +4412,8 @@ class SdmxWebservice(ABC):
     def get_metadata_vtl_mapping_schemes(self, agency_id, resources, version,
                                          detail=None) -> str:
         """
-        Returns URL and params to get vtl mapping schemes in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get vtl mapping schemes in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the vtl mapping schemes
         :type agency_id: str
@@ -3261,8 +4432,8 @@ class SdmxWebservice(ABC):
     def get_metadata_value_lists(self, agency_id, resources, version,
                                  detail=None) -> str:
         """
-        Returns URL and params to get value lists in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get value lists in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the value lists
         :type agency_id: str
@@ -3281,8 +4452,8 @@ class SdmxWebservice(ABC):
     def get_metadata_structure_maps(self, agency_id, resources, version,
                                     detail=None) -> str:
         """
-        Returns URL and params to get structure maps in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get structure maps in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the structure maps
         :type agency_id: str
@@ -3301,8 +4472,8 @@ class SdmxWebservice(ABC):
     def get_metadata_representation_maps(self, agency_id, resources, version,
                                          detail=None) -> str:
         """
-        Returns URL and params to get representation maps in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get representation maps in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the representation maps
         :type agency_id: str
@@ -3321,8 +4492,8 @@ class SdmxWebservice(ABC):
     def get_metadata_concept_scheme_maps(self, agency_id, resources, version,
                                          detail=None) -> str:
         """
-        Returns URL and params to get concept scheme maps in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get concept scheme maps in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the concept scheme maps
         :type agency_id: str
@@ -3341,8 +4512,8 @@ class SdmxWebservice(ABC):
     def get_metadata_category_scheme_maps(self, agency_id, resources, version,
                                           detail=None) -> str:
         """
-        Returns URL and params to get category scheme maps in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get category scheme maps in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the category scheme maps
         :type agency_id: str
@@ -3361,8 +4532,8 @@ class SdmxWebservice(ABC):
     def get_metadata_organisation_scheme_maps(self, agency_id, resources, version,
                                               detail=None) -> str:
         """
-        Returns URL and params to get organisation scheme maps in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get organisation scheme maps in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the organisation scheme maps
         :type agency_id: str
@@ -3381,8 +4552,8 @@ class SdmxWebservice(ABC):
     def get_metadata_reporting_taxonomy_maps(self, agency_id, resources, version,
                                              detail=None) -> str:
         """
-        Returns URL and params to get reporting taxonomy maps in Metadata queries
-        (by structure) (V2.0.0)
+        Returns URL and params to get reporting taxonomy maps in
+        Metadata queries (by structure) (V2.0.0)
 
         :param agency_id: The agency id of the reporting taxonomy maps
         :type agency_id: str
@@ -3401,8 +4572,8 @@ class SdmxWebservice(ABC):
     def get_metadata_metadataflow_query(self, agency_id, resources, version,
                                         provider_id, detail=None) -> str:
         """
-        Returns URL and params to get metadata flows in Metadata queries
-        (by metadataflow) (V2.0.0)
+        Returns URL and params to get metadata flows in
+        Metadata queries (by metadataflow) (V2.0.0)
 
         :param agency_id: The agency id of the metadata flows
         :type agency_id: str
@@ -3424,8 +4595,8 @@ class SdmxWebservice(ABC):
     def get_metadata_metadataset_query(self, provider_id=None, resources=None,
                                        version=None, detail=None) -> str:
         """
-        Returns URL and params to get metadata sets in Metadata queries
-        (by metadatasets) (V2.0.0)
+        Returns URL and params to get metadata sets in
+        Metadata queries (by metadatasets) (V2.0.0)
 
         :param provider_id: The provider of metadata
         :type provider_id: str
@@ -3511,38 +4682,41 @@ class SdmxWs2p0(SdmxWebservice):
     SDMX Web Service 2.0 specification
 
     :param REFERENCES_OPTIONS: The allowed values for the references parameter
-                            (none, parents, parentsandsiblings, ancestors,
-                            children, descendants, all, datastructure,
-                            metadatastructure, categoryscheme, conceptscheme, codelist,
-                            hierarchy, hierarchyassociation, agencyscheme, dataproviderscheme,
-                            dataconsumerscheme, organisationunitscheme, dataflow, metadataflow,
-                            reportingtaxonomy, provisionagreement, structureset, process,
-                            categorisation, dataconstraint, metadataconstraint, transformationscheme,
-                            rulesetscheme, userdefinedoperatorscheme, customtypescheme,
-                            namepersonalisationscheme, namealiasscheme, valuelist, structuremap,
-                            representationmap, conceptscheme, categoryschememap, organisationschememap,
-                            reportingtaxonomymap)
+                                (none, parents, parentsandsiblings, ancestors,
+                                children, descendants, all, datastructure,
+                                metadatastructure, categoryscheme, conceptscheme,
+                                codelist, hierarchy, hierarchyassociation,
+                                agencyscheme, dataproviderscheme, dataconsumerscheme,
+                                organisationunitscheme, dataflow, metadataflow,
+                                reportingtaxonomy, provisionagreement, structureset,
+                                process, categorisation, dataconstraint, metadataconstraint,
+                                transformationscheme, rulesetscheme, userdefinedoperatorscheme,
+                                customtypescheme, namepersonalisationscheme, namealiasscheme,
+                                valuelist, structuremap, representationmap, conceptscheme,
+                                categoryschememap, organisationschememap, reportingtaxonomymap)
     :type REFERENCES_OPTIONS: list[str]
 
     :param STRUCTURE_DETAIL_OPTIONS: The allowed values for the detail parameter
-                            (full, allstubs, referencestubs, allcompletestubs,
-                             referencecompletestubs, referencepartial, raw)
+                                      (full, allstubs, referencestubs, allcompletestubs,
+                                      referencecompletestubs, referencepartial, raw)
     :type STRUCTURE_DETAIL_OPTIONS: list[str]
 
     :param DATA_DETAIL_OPTIONS: The allowed values for the detail parameter
     :type DATA_DETAIL_OPTIONS: list[str]
     """
 
-    REFERENCES_OPTIONS = ['none', 'parents', 'parentsandsiblings', 'ancestors',
-                          'children', 'descendants', 'all', 'datastructure',
-                          'metadatastructure', 'categoryscheme', 'conceptscheme', 'codelist',
-                          'hierarchy', 'hierarchyassociation', 'agencyscheme', 'dataproviderscheme',
-                          'dataconsumerscheme', 'organisationunitscheme', 'dataflow', 'metadataflow',
-                          'reportingtaxonomy', 'provisionagreement', 'structureset', 'process',
-                          'categorisation', 'dataconstraint', 'metadataconstraint', 'transformationscheme',
-                          'rulesetscheme', 'userdefinedoperatorscheme', 'customtypescheme',
-                          'namepersonalisationscheme', 'namealiasscheme', 'valuelist', 'structuremap',
-                          'representationmap', 'conceptscheme', 'categoryschememap', 'organisationschememap',
+    REFERENCES_OPTIONS = ['none', 'parents', 'parentsandsiblings', 'ancestors', 'children',
+                          'descendants', 'all', 'datastructure', 'metadatastructure',
+                          'categoryscheme', 'conceptscheme', 'codelist', 'hierarchy',
+                          'hierarchyassociation', 'agencyscheme', 'dataproviderscheme',
+                          'dataconsumerscheme', 'organisationunitscheme', 'dataflow',
+                          'metadataflow', 'reportingtaxonomy', 'provisionagreement',
+                          'structureset', 'process', 'categorisation', 'dataconstraint',
+                          'metadataconstraint', 'transformationscheme', 'rulesetscheme',
+                          'userdefinedoperatorscheme', 'customtypescheme',
+                          'namepersonalisationscheme', 'namealiasscheme', 'valuelist',
+                          'structuremap', 'representationmap', 'conceptscheme',
+                          'categoryschememap', 'organisationschememap',
                           'reportingtaxonomymap']
 
     STRUCTURE_DETAIL_OPTIONS = ['full', 'allstubs', 'referencestubs',
@@ -4379,11 +5553,11 @@ class SdmxWs2p0(SdmxWebservice):
     def get_code_list(self, agency_id=None, resources=None,
                       version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get code lists
+        Returns URL and params to get codelists
 
-        :param agency_id: The agency id of code lists
+        :param agency_id: The agency id of codelists
         :param resources: The resources to query
-        :param version: The version of the code lists
+        :param version: The version of the codelists
 
         :param references: The references parameter (none, parents, parentsandsiblings,
                             ancestors, children, descendants, all, datastructure,
@@ -5113,12 +6287,12 @@ class SdmxWs2p0(SdmxWebservice):
     def get_codelist_item(self, agency_id=None, resources=None,
                           version=None, item_id=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get code lists in item scheme queries
+        Returns URL and params to get codelists in item scheme queries
 
-        :param agency_id: The agency id of code lists
+        :param agency_id: The agency id of codelists
         :param resources: The resources to query
-        :param version: The version of the code lists
-        :param item_id: The id of the item of the code lists
+        :param version: The version of the codelists
+        :param item_id: The id of the item of the codelists
 
         :param references: The references parameter (none, parents, parentsandsiblings,
                             ancestors, children, descendants, all, datastructure,
@@ -5714,13 +6888,13 @@ class SdmxWs2p0(SdmxWebservice):
     def get_metadata_code_lists(self, agency_id=None, resources=None,
                                 version=None, detail=None) -> str:
         """
-        Returns URL and params to get code lists
+        Returns URL and params to get codelists
         in metadata queries (by structure)
 
-        :param agency_id: The agency id of the code lists
+        :param agency_id: The agency id of the codelists
                            in metadata queries (by structure)
         :param resources: The resources to query
-        :param version: The version of the code lists
+        :param version: The version of the codelists
                          in metadata queries (by structure)
         :param detail: The detail parameter (full, allstubs)
 
@@ -6174,12 +7348,25 @@ class SdmxWs1(SdmxWebservice):
     """
 
     REFERENCES_OPTIONS = ['none', 'parents', 'parentsandsiblings',
-                          'children', 'descendants', 'all']
+                          'children', 'descendants', 'all',
+                          'datastructure', 'metadatastructure',
+                          'categoryscheme', 'conceptscheme',
+                          'codelist', 'hierarchicalcodelist',
+                          'organisationscheme', 'agencyscheme',
+                          'dataproviderscheme', 'dataconsumerscheme',
+                          'organisationunitscheme', 'dataflow',
+                          'metadataflow', 'reportingtaxonomy',
+                          'provisionagreement', 'structureset',
+                          'process', 'categorisation', 'contentconstraint',
+                          'actualconstraint', 'allowedconstraint',
+                          'attachmentconstraint', 'transformationscheme',
+                          'rulesetscheme', 'userdefinedoperatorscheme',
+                          'customtypescheme', 'namepersonalisationscheme',
+                          'namealiassccheme']
 
-    STRUCTURE_DETAIL_OPTIONS = ['allstubs', 'referencestubs',
-                                'referencepartial',
-                                'allcompletestubs', 'referencecompletestubs',
-                                'full']
+    STRUCTURE_DETAIL_OPTIONS = ['full', 'allstubs', 'referencestubs',
+                                'referencepartial', 'allcompletestubs',
+                                'referencecompletestubs']
 
     DATA_DETAIL_OPTIONS = ['full', 'dataonly', 'serieskeysonly', 'nodata']
 
@@ -6253,7 +7440,20 @@ class SdmxWs1(SdmxWebservice):
         :param resources: The resources to query
         :param version: The version of the dataflows
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                                 'referencepartial', 'allcompletestubs',
@@ -6277,7 +7477,7 @@ class SdmxWs1(SdmxWebservice):
                     dimension filtered values.
         :param provider: The provider of the data
         :param start_period: Start period of the data
-        :param end_period: End period of the data
+        :param end_period: End period of the data query
         :param updated_after: Data filtered by the last update date
         :param first_n_observations: Number of first observations to be returned
                                         per key (int)
@@ -6364,7 +7564,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the data structures
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                                 'referencepartial', 'allcompletestubs',
@@ -6483,9 +7696,25 @@ class SdmxWs1(SdmxWebservice):
         :param references: The references parameter ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants', 'all')
 
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+
         :param detail: The detail parameter ('allstubs', 'referencestubs',
-                                'referencepartial', 'allcompletestubs',
-                                'referencecompletestubs', 'full')
+                        'referencepartial', 'allcompletestubs',
+                        'referencecompletestubs', 'full')
 
         :return: The URL and params formatted
         """
@@ -6504,9 +7733,25 @@ class SdmxWs1(SdmxWebservice):
         :param references: The references parameter ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants', 'all')
 
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+
         :param detail: The detail parameter ('allstubs', 'referencestubs',
-                                'referencepartial', 'allcompletestubs',
-                                'referencecompletestubs', 'full')
+                        'referencepartial', 'allcompletestubs',
+                        'referencecompletestubs', 'full')
 
         :return: The URL and params formatted
         """
@@ -6523,7 +7768,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the provision agreements
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6544,7 +7802,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the structure sets
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6565,7 +7836,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the processes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6586,7 +7870,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the categorisations
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6615,7 +7912,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the content constraints
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6636,7 +7946,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the actual constraints
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6657,7 +7980,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the allowed constraints
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6678,7 +8014,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the attachment constraints
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6699,7 +8048,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the structures
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6720,7 +8082,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the concept schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6734,14 +8109,27 @@ class SdmxWs1(SdmxWebservice):
     def get_code_list(self, agency_id=None, resources=None,
                       version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get code lists
+        Returns URL and params to get codelists
 
-        :param agency_id: The agency id of the code lists
+        :param agency_id: The agency id of the codelists
         :param resources: The resources to query
-        :param version: The version of the code lists
+        :param version: The version of the codelists
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6762,7 +8150,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the category schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6784,14 +8185,27 @@ class SdmxWs1(SdmxWebservice):
     def get_hierarchical_codelist(self, agency_id=None, resources=None,
                                   version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get hierarchical code lists
+        Returns URL and params to get hierarchical codelists
 
-        :param agency_id: The agency id of the hierarchical code lists
+        :param agency_id: The agency id of the hierarchical codelists
         :param resources: The resources to query
-        :param version: The version of the hierarchical code lists
+        :param version: The version of the hierarchical codelists
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6812,7 +8226,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the organisation schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6833,7 +8260,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the agency schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6854,7 +8294,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the data provider schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6875,7 +8328,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the data consumer schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6896,7 +8362,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the organisation unit schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6917,7 +8396,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the transformation schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6938,7 +8430,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the ruleset schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6959,7 +8464,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the user defined operator schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -6980,7 +8498,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the custom type schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7001,7 +8532,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the name personalisation schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7054,7 +8598,20 @@ class SdmxWs1(SdmxWebservice):
         :param version: The version of the name alias schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7076,7 +8633,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the concepts
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7098,7 +8668,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the codes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7112,7 +8695,7 @@ class SdmxWs1(SdmxWebservice):
     def get_categories(self, agency_id=None, resources=None, version=None,
                        item_id=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get codes
+        Returns URL and params to get categories
 
         :param agency_id: The agency id of the categories
         :param resources: The resources to query
@@ -7120,7 +8703,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the categories
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7142,7 +8738,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the hierarchies
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7164,7 +8773,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the organisations
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7186,7 +8808,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the agencies
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7208,7 +8843,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the data providers
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7230,7 +8878,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the data consumers
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7252,7 +8913,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the organisation unit schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7274,7 +8948,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the transformation schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7296,7 +8983,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the ruleset schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7319,7 +9019,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the user defined operator schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7341,7 +9054,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the custom type schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7364,7 +9090,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the name personalisation schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7386,7 +9125,20 @@ class SdmxWs1(SdmxWebservice):
         :param item_id: The id of the item of the name alias schemes
 
         :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants', 'all')
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
         :param detail: The detail parameter ('allstubs', 'referencestubs',
                         'referencepartial', 'allcompletestubs',
@@ -7477,8 +9229,8 @@ class SdmxWs1(SdmxWebservice):
         :param resources: The resources to query
         :param version: The version of the schema (provision agreement)
         :param dimension_at_observation: The dimension at observation
-        :param explicit_measure: Indicates whether observations are strongly typed
-                                  (true, false)
+        :param explicit_measure: Indicates whether observations are
+                                  strongly typed (true, false)
         """
         return self.common_schemas_queries("provisionagreement", agency_id, resources, version,
                                            dimension_at_observation, explicit_measure)
@@ -8088,7 +9840,7 @@ class QueryBuilder:
 
     def get_code_list(self, agency_id=None, resources=None,
                       version=None, references=None, detail=None) -> str:
-        """Returns the get code lists query for the WS Implementation"""
+        """Returns the get codelists query for the WS Implementation"""
         return self.query_builder_common(self._ws_implementation.get_code_list,
                                          agency_id, resources, version, references, detail)
 
@@ -8112,7 +9864,7 @@ class QueryBuilder:
 
     def get_hierarchical_codelist(self, agency_id=None, resources=None,
                                   version=None, references=None, detail=None) -> str:
-        """Returns the get hierarchical code lists query for the WS Implementation"""
+        """Returns the get hierarchical codelists query for the WS Implementation"""
         return self.query_builder_common(self._ws_implementation.get_hierarchical_codelist,
                                          agency_id, resources, version, references, detail)
 
@@ -8427,7 +10179,7 @@ class QueryBuilder:
     def get_codelist_item(self, agency_id=None, resources=None,
                           version=None, item_id=None, references=None,
                           detail=None) -> str:
-        """Returns the get code lists in Item Scheme query for the WS Implementation"""
+        """Returns the get codelists in Item Scheme query for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_codelist_item,
                                                    agency_id, resources, version,
@@ -8500,7 +10252,7 @@ class QueryBuilder:
                                               version=None, item_id=None, references=None,
                                               detail=None) -> str:
         """Returns the get user defined operator schemes
-        in Item Scheme query for the WS Implementation"""
+        in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_user_defined_operator_scheme_item,
                                                    agency_id, resources, version,
@@ -8510,7 +10262,7 @@ class QueryBuilder:
                                     version=None, item_id=None, references=None,
                                     detail=None) -> str:
         """Returns the get custom type schemes
-        in Item Scheme query for the WS Implementation"""
+        in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_custom_type_scheme_item,
                                                    agency_id, resources, version,
@@ -8520,7 +10272,7 @@ class QueryBuilder:
                                              version=None, item_id=None, references=None,
                                              detail=None) -> str:
         """Returns the get name personalisation schemes
-        in Item Scheme query for the WS Implementation"""
+        in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_name_personalisation_scheme_item,
                                                    agency_id, resources, version, item_id,
@@ -8529,7 +10281,7 @@ class QueryBuilder:
     def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
                                     version=None, item_id=None, references=None, detail=None) -> str:
         """Returns the get vtl mapping schemes
-        in Item Scheme query for the WS Implementation"""
+        in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_vtl_mapping_scheme_item,
                                                    agency_id, resources, version,
@@ -8539,7 +10291,7 @@ class QueryBuilder:
                             version=None, item_id=None, references=None,
                             detail=None) -> str:
         """Returns the get value list schemes
-        in Item Scheme query for the WS Implementation"""
+        in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_value_list_item,
                                                    agency_id, resources, version,
@@ -8681,7 +10433,7 @@ class QueryBuilder:
 
     def get_metadata_code_lists(self, agency_id=None, resources=None,
                                 version=None, detail=None) -> str:
-        """Returns the code lists query in metadata
+        """Returns the codelists query in metadata
         queries (by structure) for the WS Implementation"""
         resources = self.id_builder(resources)
         agency_id = agency_id if agency_id else "all"
