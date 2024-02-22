@@ -280,7 +280,7 @@ class WitsWs(SdmxWebServiceConnection):
     """Implements the connection to the WITS SDMX web service"""
     AGENCY_ID = "WITS"
     ENTRY_POINT = 'http://wits.worldbank.org/API/V1/SDMX/V21/rest'
-    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4)
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4())
 
 
 class UnsdWs(SdmxWebServiceConnection):
