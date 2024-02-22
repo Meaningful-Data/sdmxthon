@@ -1,7 +1,7 @@
 import pytest
 from pytest import mark
 
-from query_builder import QueryBuilder, SdmxWs1, SdmxWs2p0
+from sdmxthon.webservices.query_builder import QueryBuilder, SdmxWs1, SdmxWs2p0
 
 
 @pytest.fixture
