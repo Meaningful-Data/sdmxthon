@@ -125,18 +125,19 @@ def get_codes(dim, dataset):
     group_codes = []
     group_obj = None
     obs_codes = [dim, dataset.structure.measure_code]
-    for e in dataset.structure.attribute_descriptor.components.values():
-        if e.id in dataset.data.keys() and isinstance(e.related_to,
-                                                      PrimaryMeasure):
-            obs_codes.append(e.id)
-        elif (e.id in dataset.data.keys() and
-              isinstance(e.related_to, GroupDimensionDescriptor)):
-            group_codes.append(e.id)
-            if group_obj is None:
-                group_obj = e.related_to
-            elif group_obj != e.related_to:
-                raise Exception("Group Dimension Descriptor "
-                                "is not unique on DSD")
+    if dataset.structure.attribute_descriptor is not None:
+        for e in dataset.structure.attribute_descriptor.components.values():
+            if e.id in dataset.data.keys() and isinstance(e.related_to,
+                                                          PrimaryMeasure):
+                obs_codes.append(e.id)
+            elif (e.id in dataset.data.keys() and
+                  isinstance(e.related_to, GroupDimensionDescriptor)):
+                group_codes.append(e.id)
+                if group_obj is None:
+                    group_obj = e.related_to
+                elif group_obj != e.related_to:
+                    raise Exception("Group Dimension Descriptor "
+                                    "is not unique on DSD")
     for e in dataset.data.keys():
         if ((e in dataset.structure.dimension_codes and e != dim) or
                 (e in dataset.structure.attribute_codes and
