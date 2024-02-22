@@ -2,6 +2,16 @@
 Changelog
 #########
 
+2.6.2 (2024-02-22)
+------------------
+**Added**
+  - Added tons of webservices queries and query builders.
+
+**Changes**
+
+**Bugfixes**
+  - Fixed bug on Series writing if Attribute Descriptor is not present (#56)
+
 2.6.1 (2024-01-17)
 ------------------
 **Added**
