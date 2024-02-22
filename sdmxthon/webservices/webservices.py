@@ -252,14 +252,14 @@ class IloWs(SdmxWebServiceConnection):
 
 
 class OecdWs(SdmxWebServiceConnection):
-    """Implements the connection to the ILO SDMX web service"""
+    """Implements the connection to the OECD SDMX web service"""
     AGENCY_ID = 'OECD'
     ENTRY_POINT = 'https://sdmx.oecd.org/public/rest'
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
 
 
 class OecdWs2(SdmxWebServiceConnection):
-    """Implements the connection to the ILO SDMX web service"""
+    """Implements the connection to the OECD SDMX web service"""
     AGENCY_ID = 'OECD'
     ENTRY_POINT = 'https://sdmx.oecd.org/public/rest/v2'
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs2p0())
@@ -270,7 +270,42 @@ class OecdWs2(SdmxWebServiceConnection):
 
 
 class UnicefWs(SdmxWebServiceConnection):
-    """Implements the connection to the ILO SDMX web service"""
+    """Implements the connection to the UNICEF SDMX web service"""
     AGENCY_ID = 'UNICEF'
     ENTRY_POINT = 'https://sdmx.data.unicef.org/ws/public/sdmxapi/rest'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+
+
+class WitsWs(SdmxWebServiceConnection):
+    """Implements the connection to the WITS SDMX web service"""
+    AGENCY_ID = "WITS"
+    ENTRY_POINT = 'http://wits.worldbank.org/API/V1/SDMX/V21/rest'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p4)
+
+
+class UnsdWs(SdmxWebServiceConnection):
+    """Implements the connection to the UNSD SDMX web service"""
+    AGENCY_ID = "UNSD"
+    ENTRY_POINT = 'http://data.un.org/WS/rest'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+
+
+class InseeWs(SdmxWebServiceConnection):
+    """Implements the connection to the INSEE SDMX web service"""
+    AGENCY_ID = "INSEE"
+    ENTRY_POINT = 'https://bdm.insee.fr/series/sdmx'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+
+
+class IstatWs(SdmxWebServiceConnection):
+    """Implements the connection to the ISTAT SDMX web service"""
+    AGENCY_ID = "ISTAT"
+    ENTRY_POINT = 'https://esploradati.istat.it/SDMXWS/rest'
+    WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
+
+
+class AbsWs(SdmxWebServiceConnection):
+    """Implements the connection to the ISTAT SDMX web service"""
+    AGENCY_ID = "ABS"
+    ENTRY_POINT = 'https://api.data.abs.gov.au'
     WS_IMPLEMENTATION = query_builder.QueryBuilder(query_builder.SdmxWs1p5())
