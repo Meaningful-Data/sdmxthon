@@ -82,7 +82,8 @@ def reading_generic_all(dataset) -> pd.DataFrame:
             obs[data[OBSVALUE][ID]] = data[OBSVALUE][VALUE.lower()]
         else:
             obs[OBSVALUE.upper()] = data[OBSVALUE][VALUE.lower()]
-        obs = {**obs, **get_element_to_list(data, mode=ATTRIBUTES)}
+        if ATTRIBUTES in data:
+            obs = {**obs, **get_element_to_list(data, mode=ATTRIBUTES)}
         test_list.append({**obs})
         if len(test_list) > chunksize:
             test_list, df = process_df(test_list, df)
@@ -159,6 +160,7 @@ def create_dataset(dataset, metadata, global_mode):
                     set(df_group.columns)))
                 df = pd.merge(df, df_group, on=common_columns, how='left')
         elif OBS in dataset:
+            dataset[OBS] = add_list(dataset[OBS])
             # Structure Specific All dimensions
             df = pd.DataFrame(dataset[OBS]).replace(np.nan, '')
         else:

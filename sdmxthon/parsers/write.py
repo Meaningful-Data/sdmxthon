@@ -387,14 +387,15 @@ def check_dataset_for_groups(dataset):
     if dataset.structure is None:
         return False
     group_obj = None
-    for e in dataset.structure.attribute_descriptor.components.values():
-        if (e.id in dataset.data.keys() and
-                isinstance(e.related_to, GroupDimensionDescriptor)):
-            if group_obj is None:
-                group_obj = e.related_to
-            elif group_obj != e.related_to:
-                raise Exception("Group Dimension Descriptor "
-                                "is not unique on DSD")
+    if dataset.structure.attribute_descriptor is not None:
+        for e in dataset.structure.attribute_descriptor.components.values():
+            if (e.id in dataset.data.keys() and
+                    isinstance(e.related_to, GroupDimensionDescriptor)):
+                if group_obj is None:
+                    group_obj = e.related_to
+                elif group_obj != e.related_to:
+                    raise Exception("Group Dimension Descriptor "
+                                    "is not unique on DSD")
     return group_obj is not None
 
 

@@ -2,6 +2,17 @@
 Changelog
 #########
 
+2.6.3 (2024-02-23)
+------------------
+**Added**
+
+**Changes**
+
+**Bugfixes**
+  - Fixed bug on writing if Attribute Descriptor is not present
+  - Fixed bug on reading Structure Specific datasets with only one record
+  - Fixed bug on reading Generic with no Attributes at OBS level
+
 2.6.2 (2024-02-22)
 ------------------
 **Added**
