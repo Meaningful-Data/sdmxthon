@@ -30,7 +30,7 @@ class Message:
 
     def __init__(self, message_type: MessageTypeEnum,
                  payload: (Dict[str, dict], Dict[str, Dataset], Dataset,
-                           SDMXError, Dict[str, SubmissionResult]),
+                           SDMXError, Dict[str, SubmissionResult]) = None,
                  header: Header = None):
         self._type = message_type
         self._payload = payload

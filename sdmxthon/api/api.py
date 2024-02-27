@@ -46,17 +46,33 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
         raise Exception("File type is not recognised")
 
     if isinstance(payload, dict):
-        if isinstance(first_element_dict(payload), Dataset):
+        first_element = first_element_dict(payload)
+
+        if isinstance(first_element, Dataset) and len(payload) == 1:
+            #If a DataSet is present and it is only one, return the Dataset object
+            payload = first_element
             type_ = MessageTypeEnum.StructureSpecificDataSet
+        elif len(payload) > 1:
+            if all(isinstance(item, type(first_element)) for item in payload.values()):
+                #If more than one is present, but of the same kind, return a list
+                payload = list(payload.values())
+                type_ = MessageTypeEnum.StructureSpecificDataSet
+            else:
+                #If more than one is present from different kinds, return same type as content
+                type_ = MessageTypeEnum.GenericDataSet
+                return Message(message_type=type_)
+
         elif isinstance(first_element_dict(payload), SubmissionResult):
             type_ = MessageTypeEnum.Submission
         else:
+            # If any ItemScheme or ##Definition is present, return the sole object
             type_ = MessageTypeEnum.Metadata
     elif isinstance(payload, SDMXError):
         type_ = MessageTypeEnum.Error
     else:
         raise Exception("Unable to set Message Type")
     return Message(message_type=type_, payload=payload)
+
 
 
 def get_datasets(path_to_data, path_to_metadata, validate=True,
