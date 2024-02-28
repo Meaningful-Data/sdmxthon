@@ -11,7 +11,7 @@ from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
     validate_doc
 from sdmxthon.utils.enums import ActionEnum
-from sdmxthon.utils.handlers import split_from_urn
+from sdmxthon.utils.handlers import split_from_urn, first_element_dict
 from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
     FAULTCODE, FAULTSTRING, GENERIC, \
@@ -219,7 +219,13 @@ def read_xml(infile: str, mode: str = None,
             raise ValueError("Wrong mode")
 
     result = parse_sdmx(dict_info, use_dataset_id)
-    return result
+    if isinstance(first_element_dict(result), Dataset):
+        data_type = "Data"
+    else:
+        data_type = "Metadata"
+
+    print(result)
+    return result, data_type
 
 
 def get_ids_from_structure(element: dict):

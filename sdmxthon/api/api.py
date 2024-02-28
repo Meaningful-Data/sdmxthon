@@ -35,12 +35,13 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
     # Process the SDMX file and check the file type
     infile, filetype = process_string_to_read(sdmx_file)
     if filetype == "xml":
-        payload = read_xml(infile, None, validate=validate,
+        payload, data_type = read_xml(infile, None, validate=validate,
                            use_dataset_id=use_dataset_id)
     elif filetype == "json":
         raise Exception('Json is not supported')
     elif filetype == "csv":
-        payload = read_sdmx_csv(infile)
+        payload = read_sdmx_csv(infile) #csv nunca va a ser metadata?
+        data_type = "Data"
 
     else:
         raise Exception("File type is not recognised")
@@ -48,31 +49,41 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
     if isinstance(payload, dict):
         first_element = first_element_dict(payload)
 
-        if isinstance(first_element, Dataset) and len(payload) == 1:
-            #If a DataSet is present and it is only one, return the Dataset object
-            payload = first_element
-            type_ = MessageTypeEnum.StructureSpecificDataSet
-        elif len(payload) > 1:
-            if all(isinstance(item, type(first_element)) for item in payload.values()):
-                #If more than one is present, but of the same kind, return a list
+        if data_type == "Data":
+
+            if len(payload) > 1:
+
+                # If more than one is present, but of the same kind, return a list
                 payload = list(payload.values())
                 type_ = MessageTypeEnum.StructureSpecificDataSet
             else:
-                #If more than one is present from different kinds, return same type as content
-                type_ = MessageTypeEnum.GenericDataSet
-                return Message(message_type=type_)
+                # If a DataSet is present and it is only one, return the Dataset object
+                payload = first_element
+                type_ = MessageTypeEnum.StructureSpecificDataSet
 
         elif isinstance(first_element_dict(payload), SubmissionResult):
             type_ = MessageTypeEnum.Submission
         else:
             # If any ItemScheme or ##Definition is present, return the sole object
+            if len(payload["DataStructures"]) == 1:
+                payload["DataStructures"] = first_element_dict(payload["DataStructures"]) #con codelists concepts y orgsc tambien?
+            else:
+                payload["DataStructures"] = list(payload["DataStructures"].values()) #lista o diccionario
+            if len(payload["Dataflows"]) == 1:
+                payload["Dataflows"] = first_element_dict(payload["Dataflows"])
+            if len(payload["OrganisationSchemes"]) == 1:
+                payload["OrganisationSchemes"] = first_element_dict(payload["OrganisationSchemes"])
+            if len(payload["Codelists"]) == 1:
+                payload["Codelists"] = first_element_dict(payload["Codelists"])
+            if len(payload["Concepts"]) == 1:
+                payload["Concepts"] = first_element_dict(payload["Concepts"])
+
             type_ = MessageTypeEnum.Metadata
     elif isinstance(payload, SDMXError):
         type_ = MessageTypeEnum.Error
     else:
         raise Exception("Unable to set Message Type")
     return Message(message_type=type_, payload=payload)
-
 
 
 def get_datasets(path_to_data, path_to_metadata, validate=True,
