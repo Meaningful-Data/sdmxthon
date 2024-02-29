@@ -7,7 +7,6 @@ import os
 from pathlib import Path
 from zipfile import ZipFile
 
-from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
 from sdmxthon.model.submission import SubmissionResult
@@ -36,11 +35,11 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
     infile, filetype = process_string_to_read(sdmx_file)
     if filetype == "xml":
         payload, data_type = read_xml(infile, None, validate=validate,
-                           use_dataset_id=use_dataset_id)
+                                      use_dataset_id=use_dataset_id)
     elif filetype == "json":
         raise Exception('Json is not supported')
     elif filetype == "csv":
-        payload = read_sdmx_csv(infile) #csv nunca va a ser metadata?
+        payload = read_sdmx_csv(infile)  # csv nunca va a ser metadata?
         data_type = "Data"
 
     else:
@@ -50,35 +49,24 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
         first_element = first_element_dict(payload)
 
         if data_type == "Data":
+            type_ = MessageTypeEnum.StructureSpecificDataSet
 
             if len(payload) > 1:
-
-                # If more than one is present, but of the same kind, return a list
                 payload = list(payload.values())
-                type_ = MessageTypeEnum.StructureSpecificDataSet
             else:
-                # If a DataSet is present and it is only one, return the Dataset object
                 payload = first_element
-                type_ = MessageTypeEnum.StructureSpecificDataSet
 
-        elif isinstance(first_element_dict(payload), SubmissionResult):
+        elif isinstance(first_element, SubmissionResult):
             type_ = MessageTypeEnum.Submission
         else:
-            # If any ItemScheme or ##Definition is present, return the sole object
-            if len(payload["DataStructures"]) == 1:
-                payload["DataStructures"] = first_element_dict(payload["DataStructures"]) #con codelists concepts y orgsc tambien?
-            else:
-                payload["DataStructures"] = list(payload["DataStructures"].values()) #lista o diccionario
-            if len(payload["Dataflows"]) == 1:
-                payload["Dataflows"] = first_element_dict(payload["Dataflows"])
-            if len(payload["OrganisationSchemes"]) == 1:
-                payload["OrganisationSchemes"] = first_element_dict(payload["OrganisationSchemes"])
-            if len(payload["Codelists"]) == 1:
-                payload["Codelists"] = first_element_dict(payload["Codelists"])
-            if len(payload["Concepts"]) == 1:
-                payload["Concepts"] = first_element_dict(payload["Concepts"])
-
             type_ = MessageTypeEnum.Metadata
+            keys = ["DataStructures", "Dataflows", "OrganisationSchemes", "Codelists", "Concepts"]
+            for key in keys:
+                if len(payload[key]) == 1:
+                    payload[key] = first_element_dict(payload[key])
+                else:
+                    payload[key] = list(payload[key].values())  # lista o diccionario??
+
     elif isinstance(payload, SDMXError):
         type_ = MessageTypeEnum.Error
     else:

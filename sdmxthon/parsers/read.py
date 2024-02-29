@@ -224,7 +224,6 @@ def read_xml(infile: str, mode: str = None,
     else:
         data_type = "Metadata"
 
-    print(result)
     return result, data_type
 
 
