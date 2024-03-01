@@ -34,13 +34,13 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
     # Process the SDMX file and check the file type
     infile, filetype = process_string_to_read(sdmx_file)
     if filetype == "xml":
-        payload, data_type = read_xml(infile, None, validate=validate,
-                                      use_dataset_id=use_dataset_id)
+        payload, type_ = read_xml(infile, None, validate=validate,
+                                  use_dataset_id=use_dataset_id)
     elif filetype == "json":
         raise Exception('Json is not supported')
     elif filetype == "csv":
-        payload = read_sdmx_csv(infile)  # csv nunca va a ser metadata?
-        data_type = "Data"
+        payload = read_sdmx_csv(infile)
+        type_ = MessageTypeEnum.StructureSpecificDataSet
 
     else:
         raise Exception("File type is not recognised")
@@ -48,24 +48,15 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
     if isinstance(payload, dict):
         first_element = first_element_dict(payload)
 
-        if data_type == "Data":
-            type_ = MessageTypeEnum.StructureSpecificDataSet
+        if type_ == MessageTypeEnum.StructureSpecificDataSet:
 
             if len(payload) > 1:
-                payload = list(payload.values())
+                payload = dict(payload.values())
             else:
                 payload = first_element
 
         elif isinstance(first_element, SubmissionResult):
             type_ = MessageTypeEnum.Submission
-        else:
-            type_ = MessageTypeEnum.Metadata
-            keys = ["DataStructures", "Dataflows", "OrganisationSchemes", "Codelists", "Concepts"]
-            for key in keys:
-                if len(payload[key]) == 1:
-                    payload[key] = first_element_dict(payload[key])
-                else:
-                    payload[key] = list(payload[key].values())  # lista o diccionario??
 
     elif isinstance(payload, SDMXError):
         type_ = MessageTypeEnum.Error
