@@ -10,6 +10,7 @@ from sdmxthon.model.header import Header
 from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
+from sdmxthon.utils.handlers import first_element_dict
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
@@ -75,6 +76,51 @@ class Message:
             raise TypeError('Payload must be a DataSet, '
                             'a dict of DataSet or Metadata')
         self._payload = value
+
+    def get_organisationschemes(self):
+        """Returns the Organisation Schemes from the payload"""
+        organisationSchemes = self.payload['OrganisationSchemes']
+
+        if isinstance(organisationSchemes, dict) and len(organisationSchemes) > 1:
+            return organisationSchemes
+        elif isinstance(organisationSchemes, dict) and len(organisationSchemes) == 1:
+            return first_element_dict(organisationSchemes)
+
+    def get_codelists(self):
+        """Returns the Codelists from the payload"""
+        codelists = self.payload['Codelists']
+
+        if isinstance(codelists, dict) and len(codelists) > 1:
+            return codelists
+        elif isinstance(codelists, dict) and len(codelists) == 1:
+            return first_element_dict(codelists)
+
+    def get_concepts(self):
+        """Returns the Concepts from the payload"""
+        concepts = self.payload['Concepts']
+
+        if isinstance(concepts, dict) and len(concepts) > 1:
+            return concepts
+        elif isinstance(concepts, dict) and len(concepts) == 1:
+            return first_element_dict(concepts)
+
+    def get_datastructures(self):
+        """Returns the Data Structures from the payload"""
+        data_structures = self.payload['DataStructures']
+
+        if isinstance(data_structures, dict) and len(data_structures) > 1:
+            return data_structures
+        elif isinstance(data_structures, dict) and len(data_structures) == 1:
+            return first_element_dict(data_structures)
+
+    def get_dataflows(self):
+        """Returns the Dataflows from the payload"""
+        dataflows = self.payload['Dataflows']
+
+        if isinstance(dataflows, dict) and len(dataflows) > 1:
+            return dataflows
+        elif isinstance(dataflows, dict) and len(dataflows) == 1:
+            return first_element_dict(dataflows)
 
     @property
     def content(self):
