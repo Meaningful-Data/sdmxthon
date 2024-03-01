@@ -46,68 +46,9 @@ class SdmxWebservice(ABC):
     SCHEMA_EXPLICIT_MEASURE = []
 
     @abstractmethod
-    def get_data_flows(self, agency_id, resources,
-                       version, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get dataflows
-
-        :param agency_id: The agency id of the dataflows
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the dataflows
-        :type version: str
-
-        :param references: The references parameter of SdmxWs1 ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants',
-                            'all', 'datastructure', 'metadatastructure',
-                            'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchicalcodelist', 'organisationscheme',
-                            'agencyscheme', 'dataproviderscheme',
-                            'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset', 'process',
-                            'categorisation', 'contentconstraint',
-                            'actualconstraint', 'allowedconstraint',
-                            'attachmentconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiassccheme')
-        :type references: str
-
-        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, referencestubs,
-                        referencepartial, allstubs, allcompletestubs,
-                        referencecompletestubs)
-        :type detail: str
-        """
-
-    @abstractmethod
     def get_data(self, flow, key=None, provider=None, start_period=None,
-                 end_period=None, updated_after=None,
-                 first_n_observations=None, last_n_observations=None,
-                 dimension_at_observation=None,
+                 end_period=None, updated_after=None, first_n_observations=None,
+                 last_n_observations=None, dimension_at_observation=None,
                  detail=None, include_history=None):
         """
         Returns URL and params to get data
@@ -154,10 +95,8 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_data_datastructures(self, agency_id=None, resources=None,
-                                version=None, key=None, c=None,
-                                updated_after=None,
-                                first_n_observations=None,
-                                last_n_observations=None,
+                                version=None, key=None, c=None, updated_after=None,
+                                first_n_observations=None, last_n_observations=None,
                                 dimension_at_observation=None, attributes=None,
                                 measures=None, include_history=None):
         """
@@ -258,12 +197,9 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_data_provision_agreements(self, agency_id=None, resources=None,
-                                      version=None, key=None, c=None,
-                                      updated_after=None,
-                                      first_n_observations=None,
-                                      last_n_observations=None,
-                                      dimension_at_observation=None,
-                                      attributes=None,
+                                      version=None, key=None, c=None, updated_after=None,
+                                      first_n_observations=None, last_n_observations=None,
+                                      dimension_at_observation=None, attributes=None,
                                       measures=None, include_history=None):
         """
         Returns URL and params to get data (provision agreement)
@@ -312,10 +248,8 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_data_all_contexts(self, agency_id=None, resources=None,
-                              version=None, key=None, c=None,
-                              updated_after=None,
-                              first_n_observations=None,
-                              last_n_observations=None,
+                              version=None, key=None, c=None, updated_after=None,
+                              first_n_observations=None, last_n_observations=None,
                               dimension_at_observation=None, attributes=None,
                               measures=None, include_history=None):
         """
@@ -364,64 +298,6 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_dsds(self, agency_id, resources, version,
-                 references=None, detail=None):
-        """
-        Returns URL and params to get the data structure definitions
-
-        :param agency_id: The agency id of the data structure definitions
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the data structure definitions
-        :type version: str
-
-        :param references: The references parameter of SdmxWs1 ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants',
-                            'all', 'datastructure', 'metadatastructure',
-                            'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchicalcodelist', 'organisationscheme',
-                            'agencyscheme', 'dataproviderscheme',
-                            'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset', 'process',
-                            'categorisation', 'contentconstraint',
-                            'actualconstraint', 'allowedconstraint',
-                            'attachmentconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiassccheme')
-        :type references: str
-
-        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, referencestubs,
-                       referencepartial, allstubs, allcompletestubs,
-                       referencecompletestubs)
-        :type detail: str
-        """
-
-    @abstractmethod
     def get_constraints(self, flow, key=None, provider=None, component_id=None,
                         mode=None, references=None, start_period=None,
                         end_period=None, updated_after=None):
@@ -462,8 +338,7 @@ class SdmxWebservice(ABC):
     @abstractmethod
     def get_constraint_datastructures(self, agency_id=None, resources=None,
                                       version=None, key=None, component_id=None,
-                                      c=None,
-                                      mode=None, references=None,
+                                      c=None, mode=None, references=None,
                                       updated_after=None):
         """
         Returns URL and params to get the constraints (datastructure)
@@ -502,8 +377,7 @@ class SdmxWebservice(ABC):
     @abstractmethod
     def get_constraint_dataflows(self, agency_id=None, resources=None,
                                  version=None, key=None, component_id=None,
-                                 c=None,
-                                 mode=None, references=None,
+                                 c=None, mode=None, references=None,
                                  updated_after=None):
         """
         Returns URL and params to get the constraints (dataflow)
@@ -540,11 +414,9 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_constraint_provision_agreements(self, agency_id=None,
-                                            resources=None,
-                                            version=None, key=None,
-                                            component_id=None, c=None,
-                                            mode=None, references=None,
+    def get_constraint_provision_agreements(self, agency_id=None, resources=None,
+                                            version=None, key=None, component_id=None,
+                                            c=None, mode=None, references=None,
                                             updated_after=None):
         """
         Returns URL and params to get the constraints (provision agreement)
@@ -645,8 +517,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_schema_meta_datastructures(self, agency_id=None, resources=None,
-                                       version=None,
-                                       dimension_at_observation=None,
+                                       version=None, dimension_at_observation=None,
                                        explicit_measure=None):
         """
         Returns URL and params to get the schema (metadatastructure)
@@ -715,8 +586,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_schema_provision_agreements(self, agency_id=None, resources=None,
-                                        version=None,
-                                        dimension_at_observation=None,
+                                        version=None, dimension_at_observation=None,
                                         explicit_measure=None):
         """
         Returns URL and params to get the schema (provision agreement)
@@ -735,6 +605,64 @@ class SdmxWebservice(ABC):
 
         :param explicit_measure: Indicates whether observations are strongly typed
         :type explicit_measure: str
+        """
+
+    @abstractmethod
+    def get_dsds(self, agency_id, resources, version,
+                 references=None, detail=None):
+        """
+        Returns URL and params to get the data structure definitions
+
+        :param agency_id: The agency id of the data structure definitions
+        :type agency_id: str
+
+        :param resources: The resources to query
+        :type resources: str
+
+        :param version: The version of the data structure definitions
+        :type version: str
+
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
+        :param detail: The detail parameter (allstubs,  referencestubs,
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
+        :type detail: str
         """
 
     @abstractmethod
@@ -787,17 +715,74 @@ class SdmxWebservice(ABC):
                             'representationmap', 'conceptscheme',
                             'categoryschememap', 'organisationschememap',
                             'reportingtaxonomymap')
-        :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_meta_data_flows(self, agency_id, resources,
-                            version, references=None, detail=None) -> str:
+    def get_data_flows(self, agency_id, resources, version,
+                       references=None, detail=None) -> str:
+        """
+        Returns URL and params to get dataflows
+
+        :param agency_id: The agency id of the dataflows
+        :type agency_id: str
+
+        :param resources: The resources to query
+        :type resources: str
+
+        :param version: The version of the dataflows
+        :type version: str
+
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+        :type references: str
+
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
+        :param detail: The detail parameter (allstubs,  referencestubs,
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
+        :type detail: str
+        """
+
+    @abstractmethod
+    def get_meta_data_flows(self, agency_id, resources, version,
+                            references=None, detail=None) -> str:
         """
         Returns URL and params to get the metadata flows
 
@@ -845,17 +830,16 @@ class SdmxWebservice(ABC):
                             'representationmap', 'conceptscheme',
                             'categoryschememap', 'organisationschememap',
                             'reportingtaxonomymap')
-        :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_provision_agreements(self, agency_id, resources,
-                                 version, references=None, detail=None) -> str:
+    def get_provision_agreements(self, agency_id, resources, version,
+                                 references=None, detail=None) -> str:
         """
         Returns URL and params to get the provision agreements
 
@@ -906,14 +890,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_structure_sets(self, agency_id, resources,
-                           version, references=None, detail=None) -> str:
+    def get_structure_sets(self, agency_id, resources, version,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get the structure sets
 
@@ -964,14 +948,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_process(self, agency_id, resources,
-                    version, references=None, detail=None) -> str:
+    def get_process(self, agency_id, resources, version,
+                    references=None, detail=None) -> str:
         """
         Returns URL and params to get the processes
 
@@ -1022,14 +1006,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_categorisation(self, agency_id, resources,
-                           version, references=None, detail=None) -> str:
+    def get_categorisation(self, agency_id, resources, version,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get the categorisations
 
@@ -1080,14 +1064,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_data_constraint(self, agency_id, resources,
-                            version, references=None, detail=None) -> str:
+    def get_data_constraint(self, agency_id, resources, version,
+                            references=None, detail=None) -> str:
         """
         Returns URL and params to get the data constraint (V2.0.0)
 
@@ -1127,8 +1111,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_constraint(self, agency_id, resources,
-                                version, references=None, detail=None) -> str:
+    def get_metadata_constraint(self, agency_id, resources, version,
+                                references=None, detail=None) -> str:
         """
         Returns URL and params to get the metadata constraint (V2.0.0)
 
@@ -1141,7 +1125,7 @@ class SdmxWebservice(ABC):
         :param version: The version of the metadata constraint
         :type version: str
 
-        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+        :param references: The references parameter ('none', 'parents',
                             'parentsandsiblings', 'ancestors', 'children',
                             'descendants', 'all', 'datastructure',
                             'metadatastructure', 'categoryscheme',
@@ -1168,8 +1152,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_content_constraint(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
+    def get_content_constraint(self, agency_id, resources, version,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the content constraints
 
@@ -1206,8 +1190,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_actual_constraint(self, agency_id, resources,
-                              version, references=None, detail=None) -> str:
+    def get_actual_constraint(self, agency_id, resources, version,
+                              references=None, detail=None) -> str:
         """
         Returns URL and params to get the actual constraints
 
@@ -1244,8 +1228,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_allowed_constraint(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
+    def get_allowed_constraint(self, agency_id, resources, version,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the allowed constraints
 
@@ -1282,8 +1266,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_attachment_constraint(self, agency_id, resources,
-                                  version, references=None, detail=None) -> str:
+    def get_attachment_constraint(self, agency_id, resources, version,
+                                  references=None, detail=None) -> str:
         """
         Returns URL and params to get the attachment constraints
 
@@ -1320,8 +1304,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_structure(self, agency_id, resources,
-                      version, references=None, detail=None) -> str:
+    def get_structure(self, agency_id, resources, version,
+                      references=None, detail=None) -> str:
         """
         Returns URL and params to get the structures
 
@@ -1358,8 +1342,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_concept_scheme(self, agency_id, resources,
-                           version, references=None, detail=None) -> str:
+    def get_concept_scheme(self, agency_id, resources, version,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get the concept schemes
 
@@ -1410,14 +1394,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_code_list(self, agency_id, resources,
-                      version, references=None, detail=None) -> str:
+    def get_code_list(self, agency_id, resources, version,
+                      references=None, detail=None) -> str:
         """
         Returns URL and params to get the code lists
 
@@ -1468,14 +1452,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_category_scheme(self, agency_id, resources,
-                            version, references=None, detail=None) -> str:
+    def get_category_scheme(self, agency_id, resources, version,
+                            references=None, detail=None) -> str:
         """
         Returns URL and params to get the category schemes
 
@@ -1526,14 +1510,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_hierarchy(self, agency_id, resources,
-                      version, references=None, detail=None) -> str:
+    def get_hierarchy(self, agency_id, resources, version,
+                      references=None, detail=None) -> str:
         """
         Returns URL and params to get the hierarchy (V2.0.0)
 
@@ -1573,8 +1557,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_hierarchy_association(self, agency_id, resources,
-                                  version, references=None, detail=None) -> str:
+    def get_hierarchy_association(self, agency_id, resources, version,
+                                  references=None, detail=None) -> str:
         """
         Returns URL and params to get the hierarchy association (V2.0.0)
 
@@ -1614,8 +1598,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_hierarchical_codelist(self, agency_id, resources,
-                                  version, references=None, detail=None) -> str:
+    def get_hierarchical_codelist(self, agency_id, resources, version,
+                                  references=None, detail=None) -> str:
         """
         Returns URL and params to get the hierarchical code lists
 
@@ -1652,8 +1636,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_organisation_scheme(self, agency_id, resources,
-                                version, references=None, detail=None) -> str:
+    def get_organisation_scheme(self, agency_id, resources, version,
+                                references=None, detail=None) -> str:
         """
         Returns URL and params to get the organisation schemes
 
@@ -1690,8 +1674,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_agency_scheme(self, agency_id, resources,
-                          version, references=None, detail=None) -> str:
+    def get_agency_scheme(self, agency_id, resources, version,
+                          references=None, detail=None) -> str:
         """
         Returns URL and params to get the agency schemes
 
@@ -1742,14 +1726,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_data_provider_scheme(self, agency_id, resources,
-                                 version, references=None, detail=None) -> str:
+    def get_data_provider_scheme(self, agency_id, resources, version,
+                                 references=None, detail=None) -> str:
         """
         Returns URL and params to get the data provider schemes
 
@@ -1800,14 +1784,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_data_consumer_scheme(self, agency_id, resources,
-                                 version, references=None, detail=None) -> str:
+    def get_data_consumer_scheme(self, agency_id, resources, version,
+                                 references=None, detail=None) -> str:
         """
         Returns URL and params to get the data consumer schemes
 
@@ -1858,15 +1842,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_organisation_unit_scheme(self, agency_id, resources,
-                                     version, references=None,
-                                     detail=None) -> str:
+    def get_organisation_unit_scheme(self, agency_id, resources, version,
+                                     references=None, detail=None) -> str:
         """
         Returns URL and params to get the organisation unit schemes
 
@@ -1917,14 +1900,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_transformation_scheme(self, agency_id, resources,
-                                  version, references=None, detail=None) -> str:
+    def get_transformation_scheme(self, agency_id, resources, version,
+                                  references=None, detail=None) -> str:
         """
         Returns URL and params to get the transformation schemes
 
@@ -1975,14 +1958,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_ruleset_scheme(self, agency_id, resources,
-                           version, references=None, detail=None) -> str:
+    def get_ruleset_scheme(self, agency_id, resources, version,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get the ruleset schemes
 
@@ -2033,15 +2016,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_user_defined_operator_scheme(self, agency_id, resources,
-                                         version, references=None,
-                                         detail=None) -> str:
+    def get_user_defined_operator_scheme(self, agency_id, resources, version,
+                                         references=None, detail=None) -> str:
         """
         Returns URL and params to get the user defined operator schemes
 
@@ -2092,14 +2074,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_custom_type_scheme(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
+    def get_custom_type_scheme(self, agency_id, resources, version,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the custom type schemes
 
@@ -2150,15 +2132,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_name_personalisation_scheme(self, agency_id, resources,
-                                        version, references=None,
-                                        detail=None) -> str:
+    def get_name_personalisation_scheme(self, agency_id, resources, version,
+                                        references=None, detail=None) -> str:
         """
         Returns URL and params to get the name personalisation schemes
 
@@ -2209,14 +2190,14 @@ class SdmxWebservice(ABC):
         :type references: str
 
         :param detail: The detail parameter (allstubs,  referencestubs,
-                       referencepartial, allcompletestubs,
-                       referencecompletestubs, full)
+                        referencepartial, allcompletestubs,
+                        referencecompletestubs, full)
         :type detail: str
         """
 
     @abstractmethod
-    def get_vtl_mapping_scheme(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
+    def get_vtl_mapping_scheme(self, agency_id, resources, version,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the vtl mapping schemes (V2.0.0)
 
@@ -2256,8 +2237,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_value_list(self, agency_id, resources,
-                       version, references=None, detail=None) -> str:
+    def get_value_list(self, agency_id, resources, version,
+                       references=None, detail=None) -> str:
         """
         Returns URL and params to get the value lists (V2.0.0)
 
@@ -2270,7 +2251,7 @@ class SdmxWebservice(ABC):
         :param version: The version of the value lists
         :type version: str
 
-        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+        :param references: The references parameter ('none', 'parents',
                             'parentsandsiblings', 'ancestors', 'children',
                             'descendants', 'all', 'datastructure',
                             'metadatastructure', 'categoryscheme',
@@ -2297,8 +2278,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_structure_map(self, agency_id, resources,
-                          version, references=None, detail=None) -> str:
+    def get_structure_map(self, agency_id, resources, version,
+                          references=None, detail=None) -> str:
         """
         Returns URL and params to get the structure maps (V2.0.0)
 
@@ -2338,8 +2319,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_representation_map(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
+    def get_representation_map(self, agency_id, resources, version,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the representation maps (V2.0.0)
 
@@ -2379,8 +2360,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_concept_scheme_map(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
+    def get_concept_scheme_map(self, agency_id, resources, version,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the concept scheme maps (V2.0.0)
 
@@ -2420,8 +2401,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_category_scheme_map(self, agency_id, resources,
-                                version, references=None, detail=None) -> str:
+    def get_category_scheme_map(self, agency_id, resources, version,
+                                references=None, detail=None) -> str:
         """
         Returns URL and params to get the category scheme maps (V2.0.0)
 
@@ -2461,9 +2442,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_organisation_scheme_map(self, agency_id, resources,
-                                    version, references=None,
-                                    detail=None) -> str:
+    def get_organisation_scheme_map(self, agency_id, resources, version,
+                                    references=None, detail=None) -> str:
         """
         Returns URL and params to get the organisation scheme maps (V2.0.0)
 
@@ -2503,9 +2483,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_reporting_taxonomy_map(self, agency_id, resources,
-                                   version, references=None,
-                                   detail=None) -> str:
+    def get_reporting_taxonomy_map(self, agency_id, resources, version,
+                                   references=None, detail=None) -> str:
         """
         Returns URL and params to get the reporting taxonomy maps (V2.0.0)
 
@@ -2545,8 +2524,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_name_alias_scheme(self, agency_id, resources,
-                              version, references=None, detail=None) -> str:
+    def get_name_alias_scheme(self, agency_id, resources, version,
+                              references=None, detail=None) -> str:
         """
         Returns URL and params to get the name alias schemes
 
@@ -2583,130 +2562,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_schemas_datastructure(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        """
-        Returns URL and params to get the schema (datastructure)
-
-        :param agency_id: The agency id of the schema (datastructure)
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the schema (datastructure)
-        :type version: str
-
-        :param dimension_at_observation: The dimension at observation
-        :type dimension_at_observation: str
-
-        :param explicit_measure: Indicates whether observations are strongly typed
-                                  (true, false)
-        :type explicit_measure: str
-        """
-
-    @abstractmethod
-    def get_schemas_meta_datastructure(self, agency_id=None, resources=None,
-                                       version=None,
-                                       dimension_at_observation=None,
-                                       explicit_measure=None):
-        """
-        Returns URL and params to get the schema (metadatastructure)
-
-        :param agency_id: The agency id of the schema (metadatastructure)
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the schema (metadatastructure)
-        :type version: str
-
-        :param dimension_at_observation: The dimension at observation
-        :type dimension_at_observation: str
-
-        :param explicit_measure: Indicates whether observations are strongly typed
-                                  (true, false)
-        :type explicit_measure: str
-        """
-
-    @abstractmethod
-    def get_schemas_dataflow(self, agency_id=None, resources=None,
-                             version=None, dimension_at_observation=None,
-                             explicit_measure=None):
-        """
-        Returns URL and params to get the schema (dataflow)
-
-        :param agency_id: The agency id of the schema (dataflow)
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the schema (dataflow)
-        :type version: str
-
-        :param dimension_at_observation: The dimension at observation
-        :type dimension_at_observation: str
-
-        :param explicit_measure: Indicates whether observations are strongly typed
-                                  (true, false)
-        :type explicit_measure: str
-        """
-
-    @abstractmethod
-    def get_schemas_meta_dataflow(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        """
-        Returns URL and params to get the schema (metadataflow)
-
-        :param agency_id: The agency id of the schema (metadataflow)
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the schema (metadataflow)
-        :type version: str
-
-        :param dimension_at_observation: The dimension at observation
-        :type dimension_at_observation: str
-
-        :param explicit_measure: Indicates whether observations are strongly typed
-                                  (true, false)
-        :type explicit_measure: str
-        """
-
-    @abstractmethod
-    def get_schemas_provision_agreement(self, agency_id=None, resources=None,
-                                        version=None,
-                                        dimension_at_observation=None,
-                                        explicit_measure=None):
-        """
-        Returns URL and params to get the schema (provision agreement)
-
-        :param agency_id: The agency id of the schema (provision agreement)
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the schema (provision agreement)
-        :type version: str
-
-        :param dimension_at_observation: The dimension at observation
-        :type dimension_at_observation: str
-
-        :param explicit_measure: Indicates whether observations are strongly typed
-                                  (true, false)
-        :type explicit_measure: str
-        """
-
-    @abstractmethod
-    def get_concepts(self, agency_id, resources,
-                     version, item_id, references=None, detail=None) -> str:
+    def get_concepts(self, agency_id, resources, version, item_id,
+                     references=None, detail=None) -> str:
         """
         Returns URL and params to get the concepts
 
@@ -2722,7 +2579,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the concepts
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -2739,6 +2596,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -2746,8 +2623,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_codes(self, agency_id, resources,
-                  version, item_id, references=None, detail=None) -> str:
+    def get_codes(self, agency_id, resources, version, item_id,
+                  references=None, detail=None) -> str:
         """
         Returns URL and params to get the codes
 
@@ -2763,7 +2640,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the codes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -2780,6 +2657,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -2787,8 +2684,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_categories(self, agency_id, resources,
-                       version, item_id, references=None, detail=None) -> str:
+    def get_categories(self, agency_id, resources, version, item_id,
+                       references=None, detail=None) -> str:
         """
         Returns URL and params to get the categories
 
@@ -2804,7 +2701,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the categories
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -2821,6 +2718,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -2828,8 +2745,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_hierarchies(self, agency_id, resources,
-                        version, item_id, references=None, detail=None) -> str:
+    def get_hierarchies(self, agency_id, resources, version, item_id,
+                        references=None, detail=None) -> str:
         """
         Returns URL and params to get the hierarchies
 
@@ -2869,9 +2786,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_organisations(self, agency_id, resources,
-                          version, item_id, references=None,
-                          detail=None) -> str:
+    def get_organisations(self, agency_id, resources, version, item_id,
+                          references=None, detail=None) -> str:
         """
         Returns URL and params to get the organisations
 
@@ -2911,8 +2827,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_agencies(self, agency_id, resources,
-                     version, item_id, references=None, detail=None) -> str:
+    def get_agencies(self, agency_id, resources, version, item_id,
+                     references=None, detail=None) -> str:
         """
         Returns URL and params to get the agencies
 
@@ -2928,7 +2844,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the agencies
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -2945,6 +2861,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -2952,9 +2888,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_data_providers(self, agency_id, resources,
-                           version, item_id, references=None,
-                           detail=None) -> str:
+    def get_data_providers(self, agency_id, resources, version, item_id,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get the data providers
 
@@ -2970,7 +2905,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the data providers
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -2987,6 +2922,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -2994,9 +2949,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_data_consumers(self, agency_id, resources,
-                           version, item_id, references=None,
-                           detail=None) -> str:
+    def get_data_consumers(self, agency_id, resources, version, item_id,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get the data consumers
 
@@ -3012,7 +2966,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the data consumers
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3029,6 +2983,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3036,9 +3010,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_organisation_unit_schemes(self, agency_id, resources,
-                                      version, item_id, references=None,
-                                      detail=None) -> str:
+    def get_organisation_unit_schemes(self, agency_id, resources, version, item_id,
+                                      references=None, detail=None) -> str:
         """
         Returns URL and params to get the organisation unit schemes
 
@@ -3054,7 +3027,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the organisation unit schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3071,6 +3044,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3078,9 +3071,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_transformation_schemes(self, agency_id, resources,
-                                   version, item_id, references=None,
-                                   detail=None) -> str:
+    def get_transformation_schemes(self, agency_id, resources, version, item_id,
+                                   references=None, detail=None) -> str:
         """
         Returns URL and params to get the transformation schemes
 
@@ -3096,7 +3088,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the transformation schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3113,6 +3105,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3120,9 +3132,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_ruleset_schemes(self, agency_id, resources,
-                            version, item_id, references=None,
-                            detail=None) -> str:
+    def get_ruleset_schemes(self, agency_id, resources, version, item_id,
+                            references=None, detail=None) -> str:
         """
         Returns URL and params to get the ruleset schemes
 
@@ -3138,7 +3149,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the ruleset schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3155,6 +3166,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3162,8 +3193,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_user_defined_operator_schemes(self, agency_id, resources,
-                                          version, item_id, references=None,
+    def get_user_defined_operator_schemes(self, agency_id, resources, version,
+                                          item_id, references=None,
                                           detail=None) -> str:
         """
         Returns URL and params to get the user defined operator schemes
@@ -3180,7 +3211,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the user defined operator schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3197,6 +3228,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3204,9 +3255,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_custom_type_schemes(self, agency_id, resources,
-                                version, item_id, references=None,
-                                detail=None) -> str:
+    def get_custom_type_schemes(self, agency_id, resources, version, item_id,
+                                references=None, detail=None) -> str:
         """
         Returns URL and params to get the custom type schemes
 
@@ -3222,7 +3272,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the custom type schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3239,6 +3289,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3246,9 +3316,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_name_personalisation_schemes(self, agency_id, resources,
-                                         version, item_id, references=None,
-                                         detail=None) -> str:
+    def get_name_personalisation_schemes(self, agency_id, resources, version, item_id,
+                                         references=None, detail=None) -> str:
         """
         Returns URL and params to get the name personalisation schemes
 
@@ -3264,7 +3333,7 @@ class SdmxWebservice(ABC):
         :param item_id: The id of the item of the name personalisation schemes
         :type item_id: str
 
-        :param references: The references parameter ('none', 'parents',
+        :param references: The references parameter of SdmxWs1 ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants',
                             'all', 'datastructure', 'metadatastructure',
                             'categoryscheme', 'conceptscheme', 'codelist',
@@ -3281,6 +3350,26 @@ class SdmxWebservice(ABC):
                             'namealiassccheme')
         :type references: str
 
+        :param references: The references parameter of SdmxWs2p0 ('none', 'parents',
+                            'parentsandsiblings', 'ancestors', 'children',
+                            'descendants', 'all', 'datastructure',
+                            'metadatastructure', 'categoryscheme',
+                            'conceptscheme', 'codelist', 'hierarchy',
+                            'hierarchyassociation', 'agencyscheme',
+                            'dataproviderscheme', 'dataconsumerscheme',
+                            'organisationunitscheme', 'dataflow',
+                            'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset',
+                            'process', 'categorisation', 'dataconstraint',
+                            'metadataconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiasscheme', 'valuelist', 'structuremap',
+                            'representationmap', 'conceptscheme',
+                            'categoryschememap', 'organisationschememap',
+                            'reportingtaxonomymap')
+        :type references: str
+
         :param detail: The detail parameter (allstubs,  referencestubs,
                         referencepartial, allcompletestubs,
                         referencecompletestubs, full)
@@ -3288,9 +3377,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_name_alias_schemes(self, agency_id, resources,
-                               version, item_id, references=None,
-                               detail=None) -> str:
+    def get_name_alias_schemes(self, agency_id, resources, version, item_id,
+                               references=None, detail=None) -> str:
         """
         Returns URL and params to get the name alias schemes
 
@@ -3330,558 +3418,9 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_concept_scheme_item(self, agency_id, resources, version,
-                                item_id, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get the concept schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the concept schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the concept schemes
-        :type version: str
-
-        :param item_id: The id of the item of the concept schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_codelist_item(self, agency_id, resources, version,
-                          item_id, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get the code lists in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the code lists
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the code lists
-        :type version: str
-
-        :param item_id: The id of the item of the code lists
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_category_scheme_item(self, agency_id, resources, version,
-                                 item_id, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get the category schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the category schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the category schemes
-        :type version: str
-
-        :param item_id: The id of the item of the category schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_agency_scheme_item(self, agency_id, resources, version,
-                               item_id, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get the agency schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the agency schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the agency schemes
-        :type version: str
-
-        :param item_id: The id of the item of the agency schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_data_provider_scheme_item(self, agency_id, resources, version,
-                                      item_id, references=None,
-                                      detail=None) -> str:
-        """
-        Returns URL and params to get the data provider schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the data provider schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the data provider schemes
-        :type version: str
-
-        :param item_id: The id of the item of the data provider schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_data_consumer_scheme_item(self, agency_id, resources, version,
-                                      item_id, references=None,
-                                      detail=None) -> str:
-        """
-        Returns URL and params to get the data consumer schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the data consumer schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the data consumer schemes
-        :type version: str
-
-        :param item_id: The id of the item of the data consumer schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_organisation_unit_scheme_item(self, agency_id, resources, version,
-                                          item_id, references=None,
-                                          detail=None) -> str:
-        """
-        Returns URL and params to get the organisation unit schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the organisation unit schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the organisation unit schemes
-        :type version: str
-
-        :param item_id: The id of the item of the organisation unit schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_transformation_scheme_item(self, agency_id, resources, version,
-                                       item_id, references=None,
-                                       detail=None) -> str:
-        """
-        Returns URL and params to get the transformation schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the transformation schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the transformation schemes
-        :type version: str
-
-        :param item_id: The id of the item of the transformation schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_ruleset_scheme_item(self, agency_id, resources, version,
-                                item_id, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get the ruleset schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the ruleset schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the ruleset schemes
-        :type version: str
-
-        :param item_id: The id of the item of the ruleset schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_user_defined_operator_scheme_item(self, agency_id, resources,
-                                              version,
-                                              item_id, references=None,
-                                              detail=None) -> str:
-        """
-        Returns URL and params to get the user defined operator schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the user defined operator schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the user defined operator schemes
-        :type version: str
-
-        :param item_id: The id of the item of the user defined operator schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_custom_type_scheme_item(self, agency_id, resources, version,
-                                    item_id, references=None,
-                                    detail=None) -> str:
-        """
-        Returns URL and params to get the custom type schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the custom type schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the custom type schemes
-        :type version: str
-
-        :param item_id: The id of the item of the custom type schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_name_personalisation_scheme_item(self, agency_id, resources,
-                                             version,
-                                             item_id, references=None,
-                                             detail=None) -> str:
-        """
-        Returns URL and params to get the name personalisation schemes in
-        Item Scheme Queries (V2.0.0)
-
-        :param agency_id: The agency id of the name personalisation schemes
-        :type agency_id: str
-
-        :param resources: The resources to query
-        :type resources: str
-
-        :param version: The version of the name personalisation schemes
-        :type version: str
-
-        :param item_id: The id of the item of the name personalisation schemes
-        :type item_id: str
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'ancestors', 'children',
-                            'descendants', 'all', 'datastructure',
-                            'metadatastructure', 'categoryscheme',
-                            'conceptscheme', 'codelist', 'hierarchy',
-                            'hierarchyassociation', 'agencyscheme',
-                            'dataproviderscheme', 'dataconsumerscheme',
-                            'organisationunitscheme', 'dataflow',
-                            'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset',
-                            'process', 'categorisation', 'dataconstraint',
-                            'metadataconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiasscheme', 'valuelist', 'structuremap',
-                            'representationmap', 'conceptscheme',
-                            'categoryschememap', 'organisationschememap',
-                            'reportingtaxonomymap')
-        :type references: str
-
-        :param detail: The detail parameter (full, allstubs, referencestubs,
-                        allcompletestubs, referencecompletestubs,
-                        referencepartial, raw)
-        :type detail: str
-        """
-
-    @abstractmethod
-    def get_vtl_mapping_scheme_item(self, agency_id, resources, version,
-                                    item_id, references=None,
-                                    detail=None) -> str:
+    def get_vtl_mapping_schemes(self, agency_id, resources, version,
+                                item_id, references=None,
+                                detail=None) -> str:
         """
         Returns URL and params to get the vtl mapping schemes in
         Item Scheme Queries (V2.0.0)
@@ -3925,8 +3464,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_value_list_item(self, agency_id, resources, version,
-                            item_id, references=None, detail=None) -> str:
+    def get_value_lists(self, agency_id, resources, version,
+                        item_id, references=None, detail=None) -> str:
         """
         Returns URL and params to get the value lists in
         Item Scheme Queries (V2.0.0)
@@ -3970,8 +3509,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_dsds(self, agency_id, resources, version,
-                          detail=None) -> str:
+    def get_metadata_dsds(self, agency_id, resources,
+                          version, detail=None) -> str:
         """
         Returns URL and params to get data structures in
         Metadata queries (by structure) (V2.0.0)
@@ -3990,8 +3529,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_mdsds(self, agency_id, resources, version,
-                           detail=None) -> str:
+    def get_metadata_mdsds(self, agency_id, resources,
+                           version, detail=None) -> str:
         """
         Returns URL and params to get metadata structures in
         Metadata queries (by structure) (V2.0.0)
@@ -4010,8 +3549,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_dataflows(self, agency_id, resources, version,
-                               detail=None) -> str:
+    def get_metadata_dataflows(self, agency_id, resources,
+                               version, detail=None) -> str:
         """
         Returns URL and params to get dataflows in
         Metadata queries (by structure) (V2.0.0)
@@ -4030,8 +3569,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_metadata_flows(self, agency_id, resources, version,
-                                    detail=None) -> str:
+    def get_metadata_metadata_flows(self, agency_id, resources,
+                                    version, detail=None) -> str:
         """
         Returns URL and params to get metadata flows in
         Metadata queries (by structure) (V2.0.0)
@@ -4050,8 +3589,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_provision_agreements(self, agency_id, resources, version,
-                                          detail=None) -> str:
+    def get_metadata_provision_agreements(self, agency_id, resources,
+                                          version, detail=None) -> str:
         """
         Returns URL and params to get provision agreements in
         Metadata queries (by structure) (V2.0.0)
@@ -4070,8 +3609,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_structure_sets(self, agency_id, resources, version,
-                                    detail=None) -> str:
+    def get_metadata_structure_sets(self, agency_id, resources,
+                                    version, detail=None) -> str:
         """
         Returns URL and params to get structure sets in
         Metadata queries (by structure) (V2.0.0)
@@ -4090,8 +3629,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_processes(self, agency_id, resources, version,
-                               detail=None) -> str:
+    def get_metadata_processes(self, agency_id, resources,
+                               version, detail=None) -> str:
         """
         Returns URL and params to get processes in
         Metadata queries (by structure) (V2.0.0)
@@ -4110,8 +3649,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_categorisations(self, agency_id, resources, version,
-                                     detail=None) -> str:
+    def get_metadata_categorisations(self, agency_id, resources,
+                                     version, detail=None) -> str:
         """
         Returns URL and params to get categorisations in
         Metadata queries (by structure) (V2.0.0)
@@ -4130,8 +3669,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_data_constraints(self, agency_id, resources, version,
-                                      detail=None) -> str:
+    def get_metadata_data_constraints(self, agency_id, resources,
+                                      version, detail=None) -> str:
         """
         Returns URL and params to get data constraints in
         Metadata queries (by structure) (V2.0.0)
@@ -4150,8 +3689,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_metadata_constraints(self, agency_id, resources, version,
-                                          detail=None) -> str:
+    def get_metadata_metadata_constraints(self, agency_id, resources,
+                                          version, detail=None) -> str:
         """
         Returns URL and params to get metadata constraints in
         Metadata queries (by structure) (V2.0.0)
@@ -4170,8 +3709,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_concept_schemes(self, agency_id, resources, version,
-                                     detail=None) -> str:
+    def get_metadata_concept_schemes(self, agency_id, resources,
+                                     version, detail=None) -> str:
         """
         Returns URL and params to get concept schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4190,8 +3729,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_code_lists(self, agency_id, resources, version,
-                                detail=None) -> str:
+    def get_metadata_code_lists(self, agency_id, resources,
+                                version, detail=None) -> str:
         """
         Returns URL and params to get codelists in
         Metadata queries (by structure) (V2.0.0)
@@ -4210,8 +3749,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_category_schemes(self, agency_id, resources, version,
-                                      detail=None) -> str:
+    def get_metadata_category_schemes(self, agency_id, resources,
+                                      version, detail=None) -> str:
         """
         Returns URL and params to get category schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4230,8 +3769,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_hierarchies(self, agency_id, resources, version,
-                                 detail=None) -> str:
+    def get_metadata_hierarchies(self, agency_id, resources,
+                                 version, detail=None) -> str:
         """
         Returns URL and params to get hierarchies in
         Metadata queries (by structure) (V2.0.0)
@@ -4250,8 +3789,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_hierarchy_associations(self, agency_id, resources, version,
-                                            detail=None) -> str:
+    def get_metadata_hierarchy_associations(self, agency_id, resources,
+                                            version, detail=None) -> str:
         """
         Returns URL and params to get hierarchy associations in
         Metadata queries (by structure) (V2.0.0)
@@ -4270,8 +3809,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_agency_schemes(self, agency_id, resources, version,
-                                    detail=None) -> str:
+    def get_metadata_agency_schemes(self, agency_id, resources,
+                                    version, detail=None) -> str:
         """
         Returns URL and params to get agency schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4290,8 +3829,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_data_provider_schemes(self, agency_id, resources, version,
-                                           detail=None) -> str:
+    def get_metadata_data_provider_schemes(self, agency_id, resources,
+                                           version, detail=None) -> str:
         """
         Returns URL and params to get data provider schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4310,8 +3849,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_data_consumer_schemes(self, agency_id, resources, version,
-                                           detail=None) -> str:
+    def get_metadata_data_consumer_schemes(self, agency_id, resources,
+                                           version, detail=None) -> str:
         """
         Returns URL and params to get data consumer schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4331,8 +3870,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_metadata_organisation_unit_schemes(self, agency_id, resources,
-                                               version,
-                                               detail=None) -> str:
+                                               version, detail=None) -> str:
         """
         Returns URL and params to get organisation unit schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4351,8 +3889,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_transformation_schemes(self, agency_id, resources, version,
-                                            detail=None) -> str:
+    def get_metadata_transformation_schemes(self, agency_id, resources,
+                                            version, detail=None) -> str:
         """
         Returns URL and params to get transformation schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4371,8 +3909,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_ruleset_schemes(self, agency_id, resources, version,
-                                     detail=None) -> str:
+    def get_metadata_ruleset_schemes(self, agency_id, resources,
+                                     version, detail=None) -> str:
         """
         Returns URL and params to get ruleset schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4392,8 +3930,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_metadata_user_defined_operator_schemes(self, agency_id, resources,
-                                                   version,
-                                                   detail=None) -> str:
+                                                   version, detail=None) -> str:
         """
         Returns URL and params to get user defined operator schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4412,8 +3949,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_custom_type_schemes(self, agency_id, resources, version,
-                                         detail=None) -> str:
+    def get_metadata_custom_type_schemes(self, agency_id, resources,
+                                         version, detail=None) -> str:
         """
         Returns URL and params to get custom type schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4433,8 +3970,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_metadata_name_personalisation_schemes(self, agency_id, resources,
-                                                  version,
-                                                  detail=None) -> str:
+                                                  version, detail=None) -> str:
         """
         Returns URL and params to get name personalisation scheme in
         Metadata queries (by structure) (V2.0.0)
@@ -4453,8 +3989,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_vtl_mapping_schemes(self, agency_id, resources, version,
-                                         detail=None) -> str:
+    def get_metadata_vtl_mapping_schemes(self, agency_id, resources,
+                                         version, detail=None) -> str:
         """
         Returns URL and params to get vtl mapping schemes in
         Metadata queries (by structure) (V2.0.0)
@@ -4473,8 +4009,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_value_lists(self, agency_id, resources, version,
-                                 detail=None) -> str:
+    def get_metadata_value_lists(self, agency_id, resources,
+                                 version, detail=None) -> str:
         """
         Returns URL and params to get value lists in
         Metadata queries (by structure) (V2.0.0)
@@ -4493,8 +4029,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_structure_maps(self, agency_id, resources, version,
-                                    detail=None) -> str:
+    def get_metadata_structure_maps(self, agency_id, resources,
+                                    version, detail=None) -> str:
         """
         Returns URL and params to get structure maps in
         Metadata queries (by structure) (V2.0.0)
@@ -4513,8 +4049,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_representation_maps(self, agency_id, resources, version,
-                                         detail=None) -> str:
+    def get_metadata_representation_maps(self, agency_id, resources,
+                                         version, detail=None) -> str:
         """
         Returns URL and params to get representation maps in
         Metadata queries (by structure) (V2.0.0)
@@ -4533,8 +4069,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_concept_scheme_maps(self, agency_id, resources, version,
-                                         detail=None) -> str:
+    def get_metadata_concept_scheme_maps(self, agency_id, resources,
+                                         version, detail=None) -> str:
         """
         Returns URL and params to get concept scheme maps in
         Metadata queries (by structure) (V2.0.0)
@@ -4553,8 +4089,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_category_scheme_maps(self, agency_id, resources, version,
-                                          detail=None) -> str:
+    def get_metadata_category_scheme_maps(self, agency_id, resources,
+                                          version, detail=None) -> str:
         """
         Returns URL and params to get category scheme maps in
         Metadata queries (by structure) (V2.0.0)
@@ -4574,8 +4110,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_metadata_organisation_scheme_maps(self, agency_id, resources,
-                                              version,
-                                              detail=None) -> str:
+                                              version, detail=None) -> str:
         """
         Returns URL and params to get organisation scheme maps in
         Metadata queries (by structure) (V2.0.0)
@@ -4595,8 +4130,7 @@ class SdmxWebservice(ABC):
 
     @abstractmethod
     def get_metadata_reporting_taxonomy_maps(self, agency_id, resources,
-                                             version,
-                                             detail=None) -> str:
+                                             version, detail=None) -> str:
         """
         Returns URL and params to get reporting taxonomy maps in
         Metadata queries (by structure) (V2.0.0)
@@ -4615,8 +4149,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_metadataflow_query(self, agency_id, resources, version,
-                                        provider_id, detail=None) -> str:
+    def get_metadata_metadataflows(self, agency_id, resources, version,
+                                   provider_id, detail=None) -> str:
         """
         Returns URL and params to get metadata flows in
         Metadata queries (by metadataflow) (V2.0.0)
@@ -4638,8 +4172,8 @@ class SdmxWebservice(ABC):
         """
 
     @abstractmethod
-    def get_metadata_metadataset_query(self, provider_id=None, resources=None,
-                                       version=None, detail=None) -> str:
+    def get_metadata_metadatasets(self, provider_id=None, resources=None,
+                                  version=None, detail=None) -> str:
         """
         Returns URL and params to get metadata sets in
         Metadata queries (by metadatasets) (V2.0.0)
@@ -4979,8 +4513,10 @@ class SdmxWs2p0(SdmxWebservice):
                                         include_history)
 
     def get_data_dataflows(self, agency_id=None, resources=None,
-                           version=None, key=None, c=None, updated_after=None,
-                           first_n_observations=None, last_n_observations=None,
+                           version=None, key=None, c=None,
+                           updated_after=None,
+                           first_n_observations=None,
+                           last_n_observations=None,
                            dimension_at_observation=None, attributes=None,
                            measures=None, include_history=None):
         """
@@ -5405,7 +4941,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_structure_queries("dataflow", agency_id, resources,
+        return self.common_structure_queries("dataflow", agency_id,
+                                             resources,
                                              version, references, detail)
 
     def get_meta_data_flows(self, agency_id=None, resources=None,
@@ -5529,7 +5066,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_structure_queries("process", agency_id, resources,
+        return self.common_structure_queries("process", agency_id,
+                                             resources,
                                              version, references, detail)
 
     def get_categorisation(self, agency_id=None, resources=None,
@@ -5708,7 +5246,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_structure_queries("codelist", agency_id, resources,
+        return self.common_structure_queries("codelist", agency_id,
+                                             resources,
                                              version, references, detail)
 
     def get_category_scheme(self, agency_id=None, resources=None,
@@ -5774,7 +5313,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_structure_queries("hierarchy", agency_id, resources,
+        return self.common_structure_queries("hierarchy", agency_id,
+                                             resources,
                                              version, references, detail)
 
     def get_hierarchy_association(self, agency_id=None, resources=None,
@@ -6160,7 +5700,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_structure_queries("valuelist", agency_id, resources,
+        return self.common_structure_queries("valuelist", agency_id,
+                                             resources,
                                              version, references, detail)
 
     def get_structure_map(self, agency_id=None, resources=None,
@@ -6251,6 +5792,10 @@ class SdmxWs2p0(SdmxWebservice):
 
         :param detail: The detail parameter (full, allstubs, referencestubs,
                         allcompletestubs, referencecompletestubs, referencepartial, raw)
+
+        :param detail: The detail parameter (full, allstubs, referencestubs,
+                        allcompletestubs, referencecompletestubs,
+                        referencepartial, raw)
 
         :return: The URL and params formatted
         """
@@ -6359,88 +5904,13 @@ class SdmxWs2p0(SdmxWebservice):
                               detail=None) -> str:
         pass
 
-    def get_concepts(self, agency_id=None, resources=None,
-                     version=None, item_id=None, references=None,
-                     detail=None) -> str:
-        pass
-
-    def get_codes(self, agency_id=None, resources=None,
-                  version=None, item_id=None, references=None,
-                  detail=None) -> str:
-        pass
-
-    def get_categories(self, agency_id=None, resources=None,
-                       version=None, item_id=None, references=None,
-                       detail=None) -> str:
-        pass
-
-    def get_hierarchies(self, agency_id=None, resources=None,
-                        version=None, item_id=None, references=None,
-                        detail=None) -> str:
-        pass
-
-    def get_organisations(self, agency_id=None, resources=None,
-                          version=None, item_id=None, references=None,
-                          detail=None) -> str:
-        pass
-
-    def get_agencies(self, agency_id=None, resources=None,
-                     version=None, item_id=None, references=None,
-                     detail=None) -> str:
-        pass
-
-    def get_data_providers(self, agency_id=None, resources=None,
-                           version=None, item_id=None, references=None,
-                           detail=None) -> str:
-        pass
-
-    def get_data_consumers(self, agency_id=None, resources=None,
-                           version=None, item_id=None, references=None,
-                           detail=None) -> str:
-        pass
-
-    def get_organisation_unit_schemes(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None, detail=None) -> str:
-        pass
-
-    def get_transformation_schemes(self, agency_id=None, resources=None,
-                                   version=None, item_id=None, references=None,
-                                   detail=None) -> str:
-        pass
-
-    def get_ruleset_schemes(self, agency_id=None, resources=None,
-                            version=None, item_id=None, references=None,
-                            detail=None) -> str:
-        pass
-
-    def get_user_defined_operator_schemes(self, agency_id=None, resources=None,
-                                          version=None, item_id=None,
-                                          references=None, detail=None) -> str:
-        pass
-
-    def get_custom_type_schemes(self, agency_id=None, resources=None,
-                                version=None, item_id=None, references=None,
-                                detail=None) -> str:
-        pass
-
-    def get_name_personalisation_schemes(self, agency_id=None, resources=None,
-                                         version=None, item_id=None,
-                                         references=None, detail=None) -> str:
-        pass
-
-    def get_name_alias_schemes(self, agency_id=None, resources=None,
-                               version=None, item_id=None, references=None,
-                               detail=None) -> str:
-        pass
-
-    def get_concept_scheme_item(self, agency_id=None, resources=None,
-                                version=None, item_id=None, references=None,
-                                detail=None) -> str:
+    def get_concepts(self, agency_id=None, resources=None, version=None,
+                     item_id=None, references=None, detail=None) -> str:
         """
         Returns URL and params to get concept schemes
 
-        :param agency_id: The agency id of concept schemes in item scheme queries
+        :param agency_id: The agency id of concept schemes
+                           in item scheme queries
         :param resources: The resources to query
         :param version: The version of the concept schemes
         :param item_id: The id of the item of the concept schemes
@@ -6465,19 +5935,19 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("conceptscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_codelist_item(self, agency_id=None, resources=None,
-                          version=None, item_id=None, references=None,
-                          detail=None) -> str:
+    def get_codes(self, agency_id=None, resources=None, version=None,
+                  item_id=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get codelists in item scheme queries
+        Returns URL and params to get codes
 
-        :param agency_id: The agency id of codelists
+        :param agency_id: The agency id of codes
+                           in item scheme queries
         :param resources: The resources to query
-        :param version: The version of the codelists
-        :param item_id: The id of the item of the codelists
+        :param version: The version of the codes
+        :param item_id: The id of the item of the codes
 
         :param references: The references parameter (none, parents, parentsandsiblings,
                             ancestors, children, descendants, all, datastructure,
@@ -6497,13 +5967,14 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_item_scheme_queries("codelist", agency_id, resources,
-                                               version, item_id, references,
-                                               detail)
+        return self.common_item_scheme_queries("codelist", agency_id,
+                                               resources,
+                                               version, item_id,
+                                               references, detail)
 
-    def get_category_scheme_item(self, agency_id=None, resources=None,
-                                 version=None, item_id=None, references=None,
-                                 detail=None) -> str:
+    def get_categories(self, agency_id=None, resources=None,
+                       version=None, item_id=None, references=None,
+                       detail=None) -> str:
         """
         Returns URL and params to get category schemes in item scheme queries
 
@@ -6532,12 +6003,22 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("categoryscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_agency_scheme_item(self, agency_id=None, resources=None,
-                               version=None, item_id=None, references=None,
-                               detail=None) -> str:
+    def get_hierarchies(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None,
+                        detail=None) -> str:
+        pass
+
+    def get_organisations(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None,
+                          detail=None) -> str:
+        pass
+
+    def get_agencies(self, agency_id=None, resources=None,
+                     version=None, item_id=None, references=None,
+                     detail=None) -> str:
         """
         Returns URL and params to get agency schemes in item scheme queries
 
@@ -6566,12 +6047,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("agencyscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_data_provider_scheme_item(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None, detail=None) -> str:
+    def get_data_providers(self, agency_id=None, resources=None,
+                           version=None, item_id=None,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get data provider schemes in item scheme queries
 
@@ -6600,12 +6081,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("dataproviderscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_data_consumer_scheme_item(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None, detail=None) -> str:
+    def get_data_consumers(self, agency_id=None, resources=None,
+                           version=None, item_id=None,
+                           references=None, detail=None) -> str:
         """
         Returns URL and params to get data consumer schemes in item scheme queries
 
@@ -6634,12 +6115,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("dataconsumerscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_organisation_unit_scheme_item(self, agency_id=None, resources=None,
-                                          version=None, item_id=None,
-                                          references=None, detail=None) -> str:
+    def get_organisation_unit_schemes(self, agency_id=None, resources=None,
+                                      version=None, item_id=None,
+                                      references=None, detail=None) -> str:
         """
         Returns URL and params to get organisation unit schemes in item scheme queries
 
@@ -6668,12 +6149,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("organisationunitscheme",
                                                agency_id, resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_transformation_scheme_item(self, agency_id=None, resources=None,
-                                       version=None, item_id=None,
-                                       references=None, detail=None) -> str:
+    def get_transformation_schemes(self, agency_id=None, resources=None,
+                                   version=None, item_id=None,
+                                   references=None, detail=None) -> str:
         """
         Returns URL and params to get transformation schemes in item scheme queries
 
@@ -6705,9 +6186,9 @@ class SdmxWs2p0(SdmxWebservice):
                                                version, item_id, references,
                                                detail)
 
-    def get_ruleset_scheme_item(self, agency_id=None, resources=None,
-                                version=None, item_id=None, references=None,
-                                detail=None) -> str:
+    def get_ruleset_schemes(self, agency_id=None, resources=None,
+                            version=None, item_id=None, references=None,
+                            detail=None) -> str:
         """
         Returns URL and params to get ruleset schemes in item scheme queries
 
@@ -6736,14 +6217,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("rulesetscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_user_defined_operator_scheme_item(self, agency_id=None,
-                                              resources=None,
-                                              version=None, item_id=None,
-                                              references=None,
-                                              detail=None) -> str:
+    def get_user_defined_operator_schemes(self, agency_id=None, resources=None,
+                                          version=None, item_id=None,
+                                          references=None, detail=None) -> str:
         """
         Returns URL and params to get user defined operator schemes in item scheme queries
 
@@ -6772,12 +6251,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("userdefinedoperatorscheme",
                                                agency_id, resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_custom_type_scheme_item(self, agency_id=None, resources=None,
-                                    version=None, item_id=None, references=None,
-                                    detail=None) -> str:
+    def get_custom_type_schemes(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None,
+                                detail=None) -> str:
         """
         Returns URL and params to get custom type schemes in item scheme queries
 
@@ -6806,14 +6285,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("customtypescheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_name_personalisation_scheme_item(self, agency_id=None,
-                                             resources=None,
-                                             version=None, item_id=None,
-                                             references=None,
-                                             detail=None) -> str:
+    def get_name_personalisation_schemes(self, agency_id=None, resources=None,
+                                         version=None, item_id=None,
+                                         references=None, detail=None) -> str:
         """
         Returns URL and params to get name personalisation schemes in item scheme queries
 
@@ -6822,7 +6299,7 @@ class SdmxWs2p0(SdmxWebservice):
         :param version: The version of the name personalisation schemes
         :param item_id: The id of the item of the name personalisation schemes
 
-        :param references: The references parameter (none, parents, parentsandsiblings,
+       :param references: The references parameter (none, parents, parentsandsiblings,
                             ancestors, children, descendants, all, datastructure,
                             metadatastructure, categoryscheme, conceptscheme,
                             codelist, hierarchy, hierarchyassociation, agencyscheme,
@@ -6842,12 +6319,17 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("namepersonalisationscheme",
                                                agency_id, resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
-                                    version=None, item_id=None, references=None,
-                                    detail=None) -> str:
+    def get_name_alias_schemes(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None,
+                               detail=None) -> str:
+        pass
+
+    def get_vtl_mapping_schemes(self, agency_id=None, resources=None,
+                                version=None, item_id=None, references=None,
+                                detail=None) -> str:
         """
         Returns URL and params to get vtl mapping schemes in item scheme queries
 
@@ -6876,12 +6358,12 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("vtlmappingscheme", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
-    def get_value_list_item(self, agency_id=None, resources=None,
-                            version=None, item_id=None, references=None,
-                            detail=None) -> str:
+    def get_value_lists(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None,
+                        detail=None) -> str:
         """
         Returns URL and params to get value lists in item scheme queries
 
@@ -6910,8 +6392,8 @@ class SdmxWs2p0(SdmxWebservice):
         """
         return self.common_item_scheme_queries("valuelist", agency_id,
                                                resources,
-                                               version, item_id, references,
-                                               detail)
+                                               version, item_id,
+                                               references, detail)
 
     def get_metadata_dsds(self, agency_id=None, resources=None,
                           version=None, detail=None) -> str:
@@ -6969,8 +6451,8 @@ class SdmxWs2p0(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.common_metadata_structure_queries("dataflow", agency_id,
-                                                      resources, version,
-                                                      detail)
+                                                      resources,
+                                                      version, detail)
 
     def get_metadata_metadata_flows(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
@@ -6987,7 +6469,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_metadata_structure_queries("metadataflow", agency_id,
+        return self.common_metadata_structure_queries("metadataflow",
+                                                      agency_id,
                                                       resources, version,
                                                       detail)
 
@@ -7027,8 +6510,8 @@ class SdmxWs2p0(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.common_metadata_structure_queries("structureset", agency_id,
-                                                      resources, version,
-                                                      detail)
+                                                      resources,
+                                                      version, detail)
 
     def get_metadata_processes(self, agency_id=None, resources=None,
                                version=None, detail=None) -> str:
@@ -7046,8 +6529,8 @@ class SdmxWs2p0(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.common_metadata_structure_queries("process", agency_id,
-                                                      resources, version,
-                                                      detail)
+                                                      resources,
+                                                      version, detail)
 
     def get_metadata_categorisations(self, agency_id=None, resources=None,
                                      version=None, detail=None) -> str:
@@ -7145,8 +6628,8 @@ class SdmxWs2p0(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.common_metadata_structure_queries("codelist", agency_id,
-                                                      resources, version,
-                                                      detail)
+                                                      resources,
+                                                      version, detail)
 
     def get_metadata_category_schemes(self, agency_id=None, resources=None,
                                       version=None, detail=None) -> str:
@@ -7184,8 +6667,8 @@ class SdmxWs2p0(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.common_metadata_structure_queries("hierarchy", agency_id,
-                                                      resources, version,
-                                                      detail)
+                                                      resources,
+                                                      version, detail)
 
     def get_metadata_hierarchy_associations(self, agency_id=None,
                                             resources=None,
@@ -7223,7 +6706,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_metadata_structure_queries("agencyscheme", agency_id,
+        return self.common_metadata_structure_queries("agencyscheme",
+                                                      agency_id,
                                                       resources, version,
                                                       detail)
 
@@ -7268,8 +6752,7 @@ class SdmxWs2p0(SdmxWebservice):
                                                       detail)
 
     def get_metadata_organisation_unit_schemes(self, agency_id=None,
-                                               resources=None,
-                                               version=None,
+                                               resources=None, version=None,
                                                detail=None) -> str:
         """
         Returns URL and params to get organisation unit schemes
@@ -7290,8 +6773,8 @@ class SdmxWs2p0(SdmxWebservice):
                                                       detail)
 
     def get_metadata_transformation_schemes(self, agency_id=None,
-                                            resources=None,
-                                            version=None, detail=None) -> str:
+                                            resources=None, version=None,
+                                            detail=None) -> str:
         """
         Returns URL and params to get transformation schemes
         in metadata queries (by structure)
@@ -7331,8 +6814,7 @@ class SdmxWs2p0(SdmxWebservice):
                                                       detail)
 
     def get_metadata_user_defined_operator_schemes(self, agency_id=None,
-                                                   resources=None,
-                                                   version=None,
+                                                   resources=None, version=None,
                                                    detail=None) -> str:
         """
         Returns URL and params to get user defined operator schemes
@@ -7428,8 +6910,8 @@ class SdmxWs2p0(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.common_metadata_structure_queries("valuelist", agency_id,
-                                                      resources, version,
-                                                      detail)
+                                                      resources,
+                                                      version, detail)
 
     def get_metadata_structure_maps(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
@@ -7446,7 +6928,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         :return: The URL and params formatted
         """
-        return self.common_metadata_structure_queries("structuremap", agency_id,
+        return self.common_metadata_structure_queries("structuremap",
+                                                      agency_id,
                                                       resources, version,
                                                       detail)
 
@@ -7510,8 +6993,7 @@ class SdmxWs2p0(SdmxWebservice):
                                                       resources, version,
                                                       detail)
 
-    def get_metadata_organisation_scheme_maps(self, agency_id=None,
-                                              resources=None,
+    def get_metadata_organisation_scheme_maps(self, agency_id=None, resources=None,
                                               version=None, detail=None) -> str:
         """
         Returns URL and params to get organisation scheme maps
@@ -7531,8 +7013,7 @@ class SdmxWs2p0(SdmxWebservice):
                                                       resources, version,
                                                       detail)
 
-    def get_metadata_reporting_taxonomy_maps(self, agency_id=None,
-                                             resources=None,
+    def get_metadata_reporting_taxonomy_maps(self, agency_id=None, resources=None,
                                              version=None, detail=None) -> str:
         """
         Returns URL and params to get reporting taxonomy maps
@@ -7552,9 +7033,9 @@ class SdmxWs2p0(SdmxWebservice):
                                                       resources, version,
                                                       detail)
 
-    def get_metadata_metadataflow_query(self, agency_id=None, resources=None,
-                                        version=None, provider_id=None,
-                                        detail=None) -> str:
+    def get_metadata_metadataflows(self, agency_id=None, resources=None,
+                                   version=None, provider_id=None,
+                                   detail=None) -> str:
         """
         Returns URL and params to get metadata (by metadataflow)
 
@@ -7580,8 +7061,8 @@ class SdmxWs2p0(SdmxWebservice):
 
         return base_query + params
 
-    def get_metadata_metadataset_query(self, provider_id=None, resources=None,
-                                       version=None, detail=None) -> str:
+    def get_metadata_metadatasets(self, provider_id=None, resources=None,
+                                  version=None, detail=None) -> str:
         """
         Returns URL and params to get metadata (by metadatasets)
 
@@ -7605,33 +7086,6 @@ class SdmxWs2p0(SdmxWebservice):
             params += f"{initial}detail={detail}"
 
         return base_query + params
-
-    def get_schemas_datastructure(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        pass
-
-    def get_schemas_meta_datastructure(self, agency_id=None, resources=None,
-                                       version=None,
-                                       dimension_at_observation=None,
-                                       explicit_measure=None):
-        pass
-
-    def get_schemas_dataflow(self, agency_id=None, resources=None,
-                             version=None, dimension_at_observation=None,
-                             explicit_measure=None):
-        pass
-
-    def get_schemas_meta_dataflow(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        pass
-
-    def get_schemas_provision_agreement(self, agency_id=None, resources=None,
-                                        version=None,
-                                        dimension_at_observation=None,
-                                        explicit_measure=None):
-        pass
 
 
 class SdmxWs1(SdmxWebservice):
@@ -7724,39 +7178,6 @@ class SdmxWs1(SdmxWebservice):
             params += f"{initial}explicit_measure={explicit_measure}"
 
         return base_query + params
-
-    def get_data_flows(self, agency_id=None, resources=None,
-                       version=None, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get dataflows
-
-        :param agency_id: The agency id of the dataflows
-        :param resources: The resources to query
-        :param version: The version of the dataflows
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants',
-                            'all', 'datastructure', 'metadatastructure',
-                            'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchicalcodelist', 'organisationscheme',
-                            'agencyscheme', 'dataproviderscheme',
-                            'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset', 'process',
-                            'categorisation', 'contentconstraint',
-                            'actualconstraint', 'allowedconstraint',
-                            'attachmentconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiassccheme')
-
-        :param detail: The detail parameter ('allstubs', 'referencestubs',
-                                'referencepartial', 'allcompletestubs',
-                                'referencecompletestubs', 'full')
-
-        :return: The URL and params formatted
-        """
-        return self.build_query("dataflow", agency_id, resources,
-                                version, references, detail)
 
     def get_data(self, flow, key=None, provider=None, start_period=None,
                  end_period=None, updated_after=None,
@@ -7855,40 +7276,6 @@ class SdmxWs1(SdmxWebservice):
                               measures=None, include_history=None):
         pass
 
-    def get_dsds(self, agency_id=None, resources=None,
-                 version=None, references=None, detail=None) -> str:
-        """
-        Returns URL and params to get the data structures definitions
-
-        :param agency_id: The agency id of the data structures
-        :param resources: The resources to query
-        :param version: The version of the data structures
-
-        :param references: The references parameter ('none', 'parents',
-                            'parentsandsiblings', 'children', 'descendants',
-                            'all', 'datastructure', 'metadatastructure',
-                            'categoryscheme', 'conceptscheme', 'codelist',
-                            'hierarchicalcodelist', 'organisationscheme',
-                            'agencyscheme', 'dataproviderscheme',
-                            'dataconsumerscheme', 'organisationunitscheme',
-                            'dataflow', 'metadataflow', 'reportingtaxonomy',
-                            'provisionagreement', 'structureset', 'process',
-                            'categorisation', 'contentconstraint',
-                            'actualconstraint', 'allowedconstraint',
-                            'attachmentconstraint', 'transformationscheme',
-                            'rulesetscheme', 'userdefinedoperatorscheme',
-                            'customtypescheme', 'namepersonalisationscheme',
-                            'namealiassccheme')
-
-        :param detail: The detail parameter ('allstubs', 'referencestubs',
-                                'referencepartial', 'allcompletestubs',
-                                'referencecompletestubs', 'full')
-
-        :return: The URL and params formatted
-        """
-        return self.build_query("datastructure", agency_id, resources,
-                                version, references, detail)
-
     def get_constraints(self, flow, key=None, provider=None, component_id=None,
                         mode=None, references=None, start_period=None,
                         end_period=None, updated_after=None):
@@ -7969,32 +7356,39 @@ class SdmxWs1(SdmxWebservice):
                                     updated_after=None):
         pass
 
-    def get_schema_datastructures(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        pass
+    def get_dsds(self, agency_id=None, resources=None,
+                 version=None, references=None, detail=None) -> str:
+        """
+        Returns URL and params to get the data structures definitions
 
-    def get_schema_meta_datastructures(self, agency_id=None, resources=None,
-                                       version=None,
-                                       dimension_at_observation=None,
-                                       explicit_measure=None):
-        pass
+        :param agency_id: The agency id of the data structures
+        :param resources: The resources to query
+        :param version: The version of the data structures
 
-    def get_schema_dataflows(self, agency_id=None, resources=None,
-                             version=None, dimension_at_observation=None,
-                             explicit_measure=None):
-        pass
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
 
-    def get_schema_meta_dataflows(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        pass
+        :param detail: The detail parameter ('allstubs', 'referencestubs',
+                                'referencepartial', 'allcompletestubs',
+                                'referencecompletestubs', 'full')
 
-    def get_schema_provision_agreements(self, agency_id=None, resources=None,
-                                        version=None,
-                                        dimension_at_observation=None,
-                                        explicit_measure=None):
-        pass
+        :return: The URL and params formatted
+        """
+        return self.build_query("datastructure", agency_id, resources,
+                                version, references, detail)
 
     def get_mdsds(self, agency_id=None, resources=None,
                   version=None, references=None, detail=None) -> str:
@@ -8031,6 +7425,39 @@ class SdmxWs1(SdmxWebservice):
         :return: The URL and params formatted
         """
         return self.build_query("metadatastructure", agency_id, resources,
+                                version, references, detail)
+
+    def get_data_flows(self, agency_id=None, resources=None,
+                       version=None, references=None, detail=None) -> str:
+        """
+        Returns URL and params to get dataflows
+
+        :param agency_id: The agency id of the dataflows
+        :param resources: The resources to query
+        :param version: The version of the dataflows
+        :param references: The references parameter ('none', 'parents',
+                            'parentsandsiblings', 'children', 'descendants',
+                            'all', 'datastructure', 'metadatastructure',
+                            'categoryscheme', 'conceptscheme', 'codelist',
+                            'hierarchicalcodelist', 'organisationscheme',
+                            'agencyscheme', 'dataproviderscheme',
+                            'dataconsumerscheme', 'organisationunitscheme',
+                            'dataflow', 'metadataflow', 'reportingtaxonomy',
+                            'provisionagreement', 'structureset', 'process',
+                            'categorisation', 'contentconstraint',
+                            'actualconstraint', 'allowedconstraint',
+                            'attachmentconstraint', 'transformationscheme',
+                            'rulesetscheme', 'userdefinedoperatorscheme',
+                            'customtypescheme', 'namepersonalisationscheme',
+                            'namealiassccheme')
+
+        :param detail: The detail parameter ('allstubs', 'referencestubs',
+                                'referencepartial', 'allcompletestubs',
+                                'referencecompletestubs', 'full')
+
+        :return: The URL and params formatted
+        """
+        return self.build_query("dataflow", agency_id, resources,
                                 version, references, detail)
 
     def get_meta_data_flows(self, agency_id=None, resources=None,
@@ -9505,9 +8932,10 @@ class SdmxWs1(SdmxWebservice):
                                           resources,
                                           version, references, detail)
 
-    def get_schemas_datastructure(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
+    def get_schema_datastructures(self, agency_id=None, resources=None,
+                                  version=None,
+                                  dimension_at_observation=None,
+                                  explicit_measure=None) -> str:
         """
         Returns URL and params to get schema (datastructure)
 
@@ -9525,10 +8953,10 @@ class SdmxWs1(SdmxWebservice):
                                            dimension_at_observation,
                                            explicit_measure)
 
-    def get_schemas_meta_datastructure(self, agency_id=None, resources=None,
+    def get_schema_meta_datastructures(self, agency_id=None, resources=None,
                                        version=None,
                                        dimension_at_observation=None,
-                                       explicit_measure=None):
+                                       explicit_measure=None) -> str:
         """
         Returns URL and params to get schema (metadatastructure)
 
@@ -9546,9 +8974,9 @@ class SdmxWs1(SdmxWebservice):
                                            dimension_at_observation,
                                            explicit_measure)
 
-    def get_schemas_dataflow(self, agency_id=None, resources=None,
+    def get_schema_dataflows(self, agency_id=None, resources=None,
                              version=None, dimension_at_observation=None,
-                             explicit_measure=None):
+                             explicit_measure=None) -> str:
         """
         Returns URL and params to get schema (dataflow)
 
@@ -9566,9 +8994,9 @@ class SdmxWs1(SdmxWebservice):
                                            dimension_at_observation,
                                            explicit_measure)
 
-    def get_schemas_meta_dataflow(self, agency_id=None, resources=None,
+    def get_schema_meta_dataflows(self, agency_id=None, resources=None,
                                   version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
+                                  explicit_measure=None) -> str:
         """
         Returns URL and params to get schema (metadataflow)
 
@@ -9584,10 +9012,10 @@ class SdmxWs1(SdmxWebservice):
                                            dimension_at_observation,
                                            explicit_measure)
 
-    def get_schemas_provision_agreement(self, agency_id=None, resources=None,
+    def get_schema_provision_agreements(self, agency_id=None, resources=None,
                                         version=None,
                                         dimension_at_observation=None,
-                                        explicit_measure=None):
+                                        explicit_measure=None) -> str:
         """
         Returns URL and params to get schema (provision agreement)
 
@@ -9603,83 +9031,14 @@ class SdmxWs1(SdmxWebservice):
                                            dimension_at_observation,
                                            explicit_measure)
 
-    def get_concept_scheme_item(self, agency_id=None, resources=None,
-                                version=None,
-                                item_id=None, references=None,
-                                detail=None) -> str:
-        pass
-
-    def get_codelist_item(self, agency_id=None, resources=None,
-                          version=None, item_id=None, references=None,
-                          detail=None) -> str:
-        pass
-
-    def get_category_scheme_item(self, agency_id=None, resources=None,
-                                 version=None, item_id=None, references=None,
-                                 detail=None) -> str:
-        pass
-
-    def get_agency_scheme_item(self, agency_id=None, resources=None,
-                               version=None, item_id=None, references=None,
-                               detail=None) -> str:
-        pass
-
-    def get_data_provider_scheme_item(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None,
-                                      detail=None) -> str:
-        pass
-
-    def get_data_consumer_scheme_item(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None,
-                                      detail=None) -> str:
-        pass
-
-    def get_organisation_unit_scheme_item(self, agency_id=None, resources=None,
-                                          version=None, item_id=None,
-                                          references=None,
-                                          detail=None) -> str:
-        pass
-
-    def get_transformation_scheme_item(self, agency_id=None, resources=None,
-                                       version=None, item_id=None,
-                                       references=None,
-                                       detail=None) -> str:
-        pass
-
-    def get_ruleset_scheme_item(self, agency_id=None, resources=None,
+    def get_vtl_mapping_schemes(self, agency_id=None, resources=None,
                                 version=None, item_id=None, references=None,
                                 detail=None) -> str:
         pass
 
-    def get_user_defined_operator_scheme_item(self, agency_id=None,
-                                              resources=None,
-                                              version=None, item_id=None,
-                                              references=None,
-                                              detail=None) -> str:
-        pass
-
-    def get_custom_type_scheme_item(self, agency_id=None, resources=None,
-                                    version=None, item_id=None, references=None,
-                                    detail=None) -> str:
-        pass
-
-    def get_name_personalisation_scheme_item(self, agency_id=None,
-                                             resources=None,
-                                             version=None, item_id=None,
-                                             references=None,
-                                             detail=None) -> str:
-        pass
-
-    def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
-                                    version=None, item_id=None, references=None,
-                                    detail=None) -> str:
-        pass
-
-    def get_value_list_item(self, agency_id=None, resources=None,
-                            version=None, item_id=None, references=None,
-                            detail=None) -> str:
+    def get_value_lists(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None,
+                        detail=None) -> str:
         pass
 
     def get_metadata_dsds(self, agency_id=None, resources=None,
@@ -9820,14 +9179,14 @@ class SdmxWs1(SdmxWebservice):
                                              version=None, detail=None) -> str:
         pass
 
-    def get_metadata_metadataflow_query(self, agency_id=None, resources=None,
-                                        version=None, provider_id=None,
-                                        detail=None) -> str:
+    def get_metadata_metadataflows(self, agency_id=None, resources=None,
+                                   version=None, provider_id=None,
+                                   detail=None) -> str:
         pass
 
-    def get_metadata_metadataset_query(self, agency_id=None, resources=None,
-                                       version=None, provider_id=None,
-                                       detail=None) -> str:
+    def get_metadata_metadatasets(self, agency_id=None, resources=None,
+                                  version=None, provider_id=None,
+                                  detail=None) -> str:
         pass
 
 
@@ -10637,232 +9996,24 @@ class QueryBuilder:
                                                    version, item_id,
                                                    references, detail)
 
-    def get_schemas_datastructure(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        """Returns the schema (datastructure) query for the WS Implementation"""
-
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schemas_datastructure(agency_id, resources, version,
-                                          dimension_at_observation,
-                                          explicit_measure))
-
-    def get_schemas_meta_datastructure(self, agency_id=None, resources=None,
-                                       version=None,
-                                       dimension_at_observation=None,
-                                       explicit_measure=None):
-        """Returns the schema (metadatastructure) query for the WS Implementation"""
-
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schemas_meta_datastructure(agency_id, resources, version,
-                                               dimension_at_observation,
-                                               explicit_measure))
-
-    def get_schemas_dataflow(self, agency_id=None, resources=None,
-                             version=None, dimension_at_observation=None,
-                             explicit_measure=None):
-        """Returns the schema (dataflow) query for the WS Implementation"""
-
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schemas_dataflow(agency_id, resources, version,
-                                     dimension_at_observation,
-                                     explicit_measure))
-
-    def get_schemas_meta_dataflow(self, agency_id=None, resources=None,
-                                  version=None, dimension_at_observation=None,
-                                  explicit_measure=None):
-        """Returns the schema (metadataflow) query for the WS Implementation"""
-
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schemas_meta_dataflow(agency_id, resources, version,
-                                          dimension_at_observation,
-                                          explicit_measure))
-
-    def get_schemas_provision_agreement(self, agency_id=None, resources=None,
-                                        version=None,
-                                        dimension_at_observation=None,
-                                        explicit_measure=None):
-        """Returns the schema (provision agreement) query for the WS Implementation"""
-
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schemas_provision_agreement(agency_id, resources, version,
-                                                dimension_at_observation,
-                                                explicit_measure))
-
-    def get_concept_scheme_item(self, agency_id=None, resources=None,
+    def get_vtl_mapping_schemes(self, agency_id=None, resources=None,
                                 version=None, item_id=None, references=None,
                                 detail=None) -> str:
-        """Returns the get concept schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_concept_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_codelist_item(self, agency_id=None, resources=None,
-                          version=None, item_id=None, references=None,
-                          detail=None) -> str:
-        """Returns the get codelists in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_codelist_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_category_scheme_item(self, agency_id=None, resources=None,
-                                 version=None, item_id=None, references=None,
-                                 detail=None) -> str:
-        """Returns the get category schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_category_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_agency_scheme_item(self, agency_id=None, resources=None,
-                               version=None, item_id=None, references=None,
-                               detail=None) -> str:
-        """Returns the get agency schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_agency_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_data_provider_scheme_item(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None,
-                                      detail=None) -> str:
-        """Returns the get data provider schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_data_provider_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_data_consumer_scheme_item(self, agency_id=None, resources=None,
-                                      version=None, item_id=None,
-                                      references=None,
-                                      detail=None) -> str:
-        """Returns the get data consumer schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_data_consumer_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_organisation_unit_scheme_item(self, agency_id=None, resources=None,
-                                          version=None, item_id=None,
-                                          references=None,
-                                          detail=None) -> str:
-        """Returns the get organisation unit schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_organisation_unit_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_transformation_scheme_item(self, agency_id=None, resources=None,
-                                       version=None, item_id=None,
-                                       references=None,
-                                       detail=None) -> str:
-        """Returns the get transformation schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_transformation_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_ruleset_scheme_item(self, agency_id=None, resources=None,
-                                version=None, item_id=None, references=None,
-                                detail=None) -> str:
-        """Returns the get ruleset schemes in Item Scheme query for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_ruleset_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_user_defined_operator_scheme_item(self, agency_id=None,
-                                              resources=None,
-                                              version=None, item_id=None,
-                                              references=None,
-                                              detail=None) -> str:
-        """Returns the get user defined operator schemes
-        in Item Scheme queries for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_user_defined_operator_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_custom_type_scheme_item(self, agency_id=None, resources=None,
-                                    version=None, item_id=None, references=None,
-                                    detail=None) -> str:
-        """Returns the get custom type schemes
-        in Item Scheme queries for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_custom_type_scheme_item,
-                                                   agency_id, resources,
-                                                   version,
-                                                   item_id, references, detail)
-
-    def get_name_personalisation_scheme_item(self, agency_id=None,
-                                             resources=None,
-                                             version=None, item_id=None,
-                                             references=None,
-                                             detail=None) -> str:
-        """Returns the get name personalisation schemes
-        in Item Scheme queries for the WS Implementation"""
-        return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_name_personalisation_scheme_item,
-                                                   agency_id, resources,
-                                                   version, item_id,
-                                                   references, detail)
-
-    def get_vtl_mapping_scheme_item(self, agency_id=None, resources=None,
-                                    version=None, item_id=None, references=None,
-                                    detail=None) -> str:
         """Returns the get vtl mapping schemes
         in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_vtl_mapping_scheme_item,
+                                                   get_vtl_mapping_schemes,
                                                    agency_id, resources,
                                                    version,
                                                    item_id, references, detail)
 
-    def get_value_list_item(self, agency_id=None, resources=None,
-                            version=None, item_id=None, references=None,
-                            detail=None) -> str:
+    def get_value_lists(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None,
+                        detail=None) -> str:
         """Returns the get value list schemes
         in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
-                                                   get_value_list_item,
+                                                   get_value_lists,
                                                    agency_id, resources,
                                                    version,
                                                    item_id, references, detail)
@@ -11296,9 +10447,9 @@ class QueryBuilder:
                 get_metadata_reporting_taxonomy_maps(agency_id, resources,
                                                      version, detail))
 
-    def get_metadata_metadataflow_query(self, agency_id=None, resources=None,
-                                        version=None, provider_id=None,
-                                        detail=None) -> str:
+    def get_metadata_metadataflows(self, agency_id=None, resources=None,
+                                   version=None, provider_id=None,
+                                   detail=None) -> str:
         """Returns the metadata query in metadata
         queries (by metadataflow) for the WS Implementation"""
         resources = self.id_builder(resources)
@@ -11307,11 +10458,11 @@ class QueryBuilder:
             self._ws_implementation.validate_structural_detail(detail)
 
         return (self._ws_implementation.
-                get_metadata_metadataflow_query(agency_id, resources,
-                                                version, provider_id, detail))
+                get_metadata_metadataflows(agency_id, resources,
+                                           version, provider_id, detail))
 
-    def get_metadata_metadataset_query(self, provider_id=None, resources=None,
-                                       version=None, detail=None) -> str:
+    def get_metadata_metadatasets(self, provider_id=None, resources=None,
+                                  version=None, detail=None) -> str:
         """Returns the metadata query in metadata
         queries (by metadataset) for the WS Implementation"""
         resources = self.id_builder(resources)
@@ -11320,5 +10471,5 @@ class QueryBuilder:
             self._ws_implementation.validate_structural_detail(detail)
 
         return (self._ws_implementation.
-                get_metadata_metadataset_query(provider_id, resources,
-                                               version, detail))
+                get_metadata_metadatasets(provider_id, resources,
+                                          version, detail))
