@@ -68,6 +68,8 @@ class Message:
         """
         if self._payload is None:
             raise ValueError('No Payload found')
+        if isinstance(self._payload, Dataset):
+            return self._payload
         return self._payload
 
     @payload.setter
