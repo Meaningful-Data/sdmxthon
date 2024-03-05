@@ -1,7 +1,7 @@
 import json
-from time import time, sleep
+from time import sleep, time
 
-from requests import post, get
+from requests import get, post
 from requests.exceptions import ConnectionError
 
 from sdmxthon.model.error import SDMXError
@@ -179,7 +179,8 @@ def validate_sdmx_csv_fmr(csv_text: str,
     :param host: The FMR instance host (default is 'localhost')
     :type host: str
 
-    :param port: The FMR instance port (default is 8080)
+    :param port: The FMR instance port (default is 8080 for HTTP and
+                 443 for HTTPS)
     :type port: int
 
     :param use_https: A boolean indicating whether to use HTTPS
@@ -200,6 +201,9 @@ def validate_sdmx_csv_fmr(csv_text: str,
 
     :exception: Exception with error details if validation fails
     """
+
+    if use_https and port == 8080:
+        port = 443
 
     # Constructing the base URL based on the provided parameters
     base_url = f'http{"s" if use_https else ""}://{host}:{port}'

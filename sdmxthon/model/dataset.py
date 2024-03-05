@@ -206,7 +206,7 @@ class Dataset:
                 self._data = self._data.rename(
                     {'OBS_VALUE': value.measure_code})
             self.dataset_attributes['setId'] = value.id
-            self._structure_type = "structure"
+            self._structure_type = "datastructure"
             self._unique_id = value.unique_id
         self._structure = value
 
