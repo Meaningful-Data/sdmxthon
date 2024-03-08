@@ -227,11 +227,14 @@ class Message:
         :class: `Dict`
 
         """
+        # TODO: Siempre diccionario
         if isinstance(self.payload, (dict, Dataset)):
             return self.payload
         if isinstance(self.payload, SDMXError):
             return {'Errors': self.payload}
         return self.payload
+
+
 
     @property
     def header(self):
