@@ -7,7 +7,6 @@ from abc import ABC
 
 import pandas as pd
 
-from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.definitions import DataFlowDefinition
 from sdmxthon.parsers.read import read_xml
 from sdmxthon.webservices import query_builder
@@ -99,6 +98,7 @@ class SdmxWebServiceConnection(ABC):
                 f"{self.WS_IMPLEMENTATION.get_constraints(flow, **kwargs)}")
 
     def get_data(self, flow, **kwargs):
+        from sdmxthon.api.api import read_sdmx
         """Returns a message with the data"""
         url = self.get_data_url(flow, **kwargs)
         print(url)
@@ -106,18 +106,21 @@ class SdmxWebServiceConnection(ABC):
         return message
 
     def get_dsd(self, **kwargs):
+        from sdmxthon.api.api import read_sdmx
         """Returns a message with the dsd"""
         url = self.get_dsd_url(**kwargs)
         message = read_sdmx(url, validate=False)
         return message
 
     def get_data_flow(self, flow, **kwargs):
+        from sdmxthon.api.api import read_sdmx
         """Returns a message with the dataflow"""
         url = self.get_data_flow_url(flow, **kwargs)
         message = read_sdmx(url, validate=False)
         return message
 
     def get_constraints(self, **kwargs):
+        from sdmxthon.api.api import read_sdmx
         """Returns a message with the constraints"""
         url = self.get_constraints_url(kwargs)
         message = read_sdmx(url, validate=False)

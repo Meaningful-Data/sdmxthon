@@ -16,6 +16,10 @@ from sdmxthon.parsers.reader_input_processor import process_string_to_read
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import drop_na_all, first_element_dict
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
+from sdmxthon.webservices.webservices import BisWs, EcbWs, EuroStatWs, IloWs, \
+    OecdWs, \
+    OecdWs2, \
+    UnicefWs
 
 
 def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
@@ -180,15 +184,14 @@ def xml_to_csv(data, output_path=None, validate=True,
 
 def get_supported_agencies():
     """Returns the agencies supported by the API"""
-    from sdmxthon.webservices import webservices
     return {
-        'BIS': webservices.BisWs,
-        'ECB': webservices.EcbWs,
-        'ESTAT': webservices.EuroStatWs,
-        'ILO': webservices.IloWs,
-        'OECD': webservices.OecdWs,
-        'OECDv2': webservices.OecdWs2,
-        'UNICEF': webservices.UnicefWs,
+        'BIS': BisWs,
+        'ECB': EcbWs,
+        'ESTAT': EuroStatWs,
+        'ILO': IloWs,
+        'OECD': OecdWs,
+        'OECDv2': OecdWs2,
+        'UNICEF': UnicefWs,
     }
 
 
