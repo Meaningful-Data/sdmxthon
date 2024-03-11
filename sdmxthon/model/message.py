@@ -11,6 +11,8 @@ from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
+from sdmxthon.utils.parsing_words import CODELISTS_CM, DATAFLOWS_CM, DATASTRUCTURES_CM, \
+    ORGANISATIONSCHEMES_CM, CONCEPTS_CM
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
@@ -78,9 +80,9 @@ class Message:
         self._payload = value
 
     def get_organisationschemes(self):
-        """Returns the Organisation Schemes from content"""
-        if isinstance(self.content, dict) and 'OrganisationSchemes' in self.content:
-            organisationSchemes = self.content['OrganisationSchemes']
+        """Returns the Organisation Schemes from payload"""
+        if isinstance(self.payload, dict) and 'OrganisationSchemes' in self.payload:
+            organisationSchemes = self.payload['OrganisationSchemes']
             if len(organisationSchemes) > 1:
                 return organisationSchemes
             elif len(organisationSchemes) == 1:
@@ -89,10 +91,10 @@ class Message:
             raise ValueError('No OrganisationScheme found')
 
     def get_organisationscheme_by_uid(self, unique_id):
-        """Returns a specific Organisation Scheme from content"""
+        """Returns a specific Organisation Scheme from payload"""
 
-        if isinstance(self.content, dict) and 'OrganisationSchemes' in self.content:
-            for os in self.content['OrganisationSchemes'].values():
+        if isinstance(self.payload, dict) and 'OrganisationSchemes' in self.payload:
+            for os in self.payload['OrganisationSchemes'].values():
                 if os.unique_id == unique_id:
                     return os
             raise ValueError('That OrganisationScheme does not exist')
@@ -100,9 +102,9 @@ class Message:
             raise ValueError('No OrganisationScheme found')
 
     def get_codelists(self):
-        """Returns the Codelists from content"""
-        if isinstance(self.content, dict) and 'Codelists' in self.content:
-            codelists = self.content['Codelists']
+        """Returns the Codelists from payload"""
+        if isinstance(self.payload, dict) and 'Codelists' in self.payload:
+            codelists = self.payload['Codelists']
             if len(codelists) > 1:
                 return codelists
             elif len(codelists) == 1:
@@ -111,10 +113,10 @@ class Message:
             raise ValueError('No Codelist found')
 
     def get_codelist_by_uid(self, unique_id):
-        """Returns a specific Codelist from content"""
+        """Returns a specific Codelist from payload"""
 
-        if isinstance(self.content, dict) and 'Codelists' in self.content:
-            for codelist in self.content['Codelists'].values():
+        if isinstance(self.payload, dict) and 'Codelists' in self.payload:
+            for codelist in self.payload['Codelists'].values():
                 if codelist.unique_id == unique_id:
                     return codelist
             raise ValueError('That Codelist does not exist')
@@ -122,9 +124,9 @@ class Message:
             raise ValueError('No Codelist found')
 
     def get_concepts(self):
-        """Returns the Concepts from content"""
-        if isinstance(self.content, dict) and 'Concepts' in self.content:
-            concepts = self.content['Concepts']
+        """Returns the Concepts from payload"""
+        if isinstance(self.payload, dict) and 'Concepts' in self.payload:
+            concepts = self.payload['Concepts']
             if len(concepts) > 1:
                 return concepts
             elif len(concepts) == 1:
@@ -133,10 +135,10 @@ class Message:
             raise ValueError('No Concept found')
 
     def get_concept_by_uid(self, unique_id):
-        """Returns a specific Concept from content"""
+        """Returns a specific Concept from payload"""
 
-        if isinstance(self.content, dict) and 'Concepts' in self.content:
-            for concept in self.content['Concepts'].values():
+        if isinstance(self.payload, dict) and 'Concepts' in self.payload:
+            for concept in self.payload['Concepts'].values():
                 if concept.unique_id == unique_id:
                     return concept
             raise ValueError('That Concept does not exist')
@@ -144,10 +146,10 @@ class Message:
             raise ValueError('No Concept found')
 
     def get_datastructures(self):
-        """Returns the Data Structures from content"""
+        """Returns the Data Structures from payload"""
 
-        if isinstance(self.content, dict) and 'DataStructures' in self.content:
-            data_structures = self.content['DataStructures']
+        if isinstance(self.payload, dict) and 'DataStructures' in self.payload:
+            data_structures = self.payload['DataStructures']
             if len(data_structures) > 1:
                 return data_structures
             elif len(data_structures) == 1:
@@ -156,10 +158,10 @@ class Message:
             raise ValueError('No DataStructure found')
 
     def get_datastructure_by_uid(self, unique_id):
-        """Returns a specific Data Structure from content"""
+        """Returns a specific Data Structure from payload"""
 
-        if isinstance(self.content, dict) and 'DataStructures' in self.content:
-            for data_structure in self.content['DataStructures'].values():
+        if isinstance(self.payload, dict) and 'DataStructures' in self.payload:
+            for data_structure in self.payload['DataStructures'].values():
                 if data_structure.unique_id == unique_id:
                     return data_structure
             raise ValueError('That DataStructure does not exist')
@@ -167,10 +169,10 @@ class Message:
             raise ValueError('No DataStructure found')
 
     def get_dataflows(self):
-        """Returns the Dataflows from content"""
+        """Returns the Dataflows from payload"""
 
-        if isinstance(self.content, dict) and 'Dataflows' in self.content:
-            dataflows = self.content['Dataflows']
+        if isinstance(self.payload, dict) and 'Dataflows' in self.payload:
+            dataflows = self.payload['Dataflows']
             if len(dataflows) > 1:
                 return dataflows
             elif len(dataflows) == 1:
@@ -179,10 +181,10 @@ class Message:
             raise ValueError('No Dataflow found')
 
     def get_dataflow_by_uid(self, unique_id):
-        """Returns a specific Dataflow from content"""
+        """Returns a specific Dataflow from payload"""
 
-        if isinstance(self.content, dict) and 'Dataflows' in self.content:
-            for dataflow in self.content['Dataflows'].values():
+        if isinstance(self.payload, dict) and 'Dataflows' in self.payload:
+            for dataflow in self.payload['Dataflows'].values():
                 if dataflow.unique_id == unique_id:
                     return dataflow
             raise ValueError('That Dataflow does not exist')
@@ -190,29 +192,29 @@ class Message:
             raise ValueError('No Dataflow found')
 
     def get_datasets(self):
-        """Returns the Datasets from content"""
+        """Returns the Datasets from payload"""
 
-        if isinstance(self.content, Dataset):
-            return self.content
-        elif isinstance(self.content, dict):
-            first_element = first_element_dict(self.content)
+        if isinstance(self.payload, Dataset):
+            return self.payload
+        elif isinstance(self.payload, dict):
+            first_element = first_element_dict(self.payload)
             if isinstance(first_element, Dataset):
-                return self.content
+                return self.payload
             else:
                 raise ValueError('No Dataset found')
         else:
             raise ValueError('Content must be a Dataset or dict')
 
     def get_dataset_by_uid(self, unique_id):
-        """Returns a specific Dataset from content"""
+        """Returns a specific Dataset from payload"""
 
-        if isinstance(self.content, Dataset):
-            if self.content.unique_id == unique_id:
-                return self.content
+        if isinstance(self.payload, Dataset):
+            if self.payload.unique_id == unique_id:
+                return self.payload
             else:
                 raise ValueError('That Dataset does not exist')
-        elif isinstance(self.content, dict):
-            for dataset in self.content.values():
+        elif isinstance(self.payload, dict):
+            for dataset in self.payload.values():
                 if dataset.unique_id == unique_id:
                     return dataset
             raise ValueError('That Dataset does not exist')
@@ -227,11 +229,28 @@ class Message:
         :class: `Dict`
 
         """
+        # TODO: Siempre diccionario - funcion - constantes parsing_words
         if isinstance(self.payload, (dict, Dataset)):
-            return self.payload
+            return self.get_payload_dicts()
         if isinstance(self.payload, SDMXError):
             return {'Errors': self.payload}
         return self.payload
+
+    def get_payload_dicts(self):
+        type_list = [ORGANISATIONSCHEMES_CM, DATASTRUCTURES_CM, DATAFLOWS_CM, CODELISTS_CM, CONCEPTS_CM]
+        content = {}
+        if isinstance(self.payload, Dataset):
+            datasets = {'datasets': {self.payload.unique_id, self.payload}}
+            return datasets
+        elif isinstance(self.payload, dict):
+            first_element = first_element_dict(self.payload)
+            if isinstance(first_element, Dataset):
+                return self.payload
+            else:
+                for type in type_list:
+                    if type in self.payload:
+                        content[type] = self.payload[type]
+                return content
 
     @property
     def header(self):
