@@ -2,6 +2,17 @@
 Changelog
 #########
 
+2.6.4 (2024-03-12)
+------------------
+**Added**
+
+**Changes**
+  - Changed VTL Mapping on ObservationalTimePeriod and StandardTimePeriod to TimePeriod
+  - Improved sdmxthon comprehensive example notebook
+
+**Bugfixes**
+  - Fixed circular import on webservices and API
+
 2.6.3 (2024-02-23)
 ------------------
 **Added**
