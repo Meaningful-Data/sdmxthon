@@ -784,15 +784,15 @@ class SdmxWebservice(ABC):
     def get_meta_data_flows(self, agency_id, resources, version,
                             references=None, detail=None) -> str:
         """
-        Returns URL and params to get the metadata flows
+        Returns URL and params to get the metadataflows
 
-        :param agency_id: The agency id of the metadata flows
+        :param agency_id: The agency id of the metadataflows
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the metadata flows
+        :param version: The version of the metadataflows
         :type version: str
 
         :param references: The references parameter of SdmxWs1 ('none', 'parents',
@@ -1403,15 +1403,15 @@ class SdmxWebservice(ABC):
     def get_code_list(self, agency_id, resources, version,
                       references=None, detail=None) -> str:
         """
-        Returns URL and params to get the code lists
+        Returns URL and params to get the codelists
 
-        :param agency_id: The agency id of the code lists
+        :param agency_id: The agency id of the codelists
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the code lists
+        :param version: The version of the codelists
         :type version: str
 
         :param references: The references parameter of SdmxWs1 ('none', 'parents',
@@ -1601,15 +1601,15 @@ class SdmxWebservice(ABC):
     def get_hierarchical_codelist(self, agency_id, resources, version,
                                   references=None, detail=None) -> str:
         """
-        Returns URL and params to get the hierarchical code lists
+        Returns URL and params to get the hierarchical codelists
 
-        :param agency_id: The agency id of the hierarchical code lists
+        :param agency_id: The agency id of the hierarchical codelists
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the hierarchical code lists
+        :param version: The version of the hierarchical codelists
         :type version: str
 
         :param references: The references parameter ('none', 'parents',
@@ -3572,16 +3572,16 @@ class SdmxWebservice(ABC):
     def get_metadata_metadata_flows(self, agency_id, resources,
                                     version, detail=None) -> str:
         """
-        Returns URL and params to get metadata flows in
+        Returns URL and params to get metadataflows in
         Metadata queries (by structure) (V2.0.0)
 
-        :param agency_id: The agency id of the metadata flows
+        :param agency_id: The agency id of the metadataflows
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the metadata flows
+        :param version: The version of the metadataflows
         :type version: str
 
         :param detail: The detail parameter (allstubs, full)
@@ -3741,7 +3741,7 @@ class SdmxWebservice(ABC):
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the code lists
+        :param version: The version of the codelists
         :type version: str
 
         :param detail: The detail parameter (allstubs, full)
@@ -4152,16 +4152,16 @@ class SdmxWebservice(ABC):
     def get_metadata_metadataflows(self, agency_id, resources, version,
                                    provider_id, detail=None) -> str:
         """
-        Returns URL and params to get metadata flows in
+        Returns URL and params to get metadataflows in
         Metadata queries (by metadataflow) (V2.0.0)
 
-        :param agency_id: The agency id of the metadata flows
+        :param agency_id: The agency id of the metadataflows
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the metadata flows
+        :param version: The version of the metadataflows
         :type version: str
 
         :param provider_id: The provider of metadata
@@ -4469,13 +4469,6 @@ class SdmxWs2p0(SdmxWebservice):
 
         return base_query + params
 
-    def get_data(self, flow, key=None, provider=None, start_period=None,
-                 end_period=None, updated_after=None,
-                 first_n_observations=None, last_n_observations=None,
-                 dimension_at_observation=None,
-                 detail=None, include_history=None) -> str:
-        pass
-
     def get_data_datastructures(self, agency_id=None, resources=None,
                                 version=None, key=None, c=None,
                                 updated_after=None,
@@ -4621,9 +4614,11 @@ class SdmxWs2p0(SdmxWebservice):
                                         measures,
                                         include_history)
 
-    def get_constraints(self, flow, key=None, provider=None, component_id=None,
-                        mode=None, references=None, start_period=None,
-                        end_period=None, updated_after=None):
+    def get_data(self, flow, key=None, provider=None, start_period=None,
+                 end_period=None, updated_after=None,
+                 first_n_observations=None, last_n_observations=None,
+                 dimension_at_observation=None,
+                 detail=None, include_history=None) -> str:
         pass
 
     def get_constraint_datastructures(self, agency_id=None, resources=None,
@@ -4744,6 +4739,11 @@ class SdmxWs2p0(SdmxWebservice):
                                                version, key,
                                                component_id, c, mode,
                                                references, updated_after)
+
+    def get_constraints(self, flow, key=None, provider=None, component_id=None,
+                        mode=None, references=None, start_period=None,
+                        end_period=None, updated_after=None):
+        pass
 
     def get_schema_datastructures(self, agency_id=None, resources=None,
                                   version=None, dimension_at_observation=None,
@@ -4886,11 +4886,11 @@ class SdmxWs2p0(SdmxWebservice):
     def get_mdsds(self, agency_id=None, resources=None,
                   version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get metadata structure definitions
+        Returns URL and params to get metadata structures
 
-        :param agency_id: The agency id of metadata structure definitions
+        :param agency_id: The agency id of metadata structures
         :param resources: The resources to query
-        :param version: The version of the metadata structure definitions
+        :param version: The version of the metadata structures
 
         :param references: The references parameter (none, parents, parentsandsiblings,
                             ancestors, children, descendants, all, datastructure,
@@ -4948,11 +4948,11 @@ class SdmxWs2p0(SdmxWebservice):
     def get_meta_data_flows(self, agency_id=None, resources=None,
                             version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get metadata flows
+        Returns URL and params to get metadataflows
 
-        :param agency_id: The agency id of metadata flows
+        :param agency_id: The agency id of metadataflows
         :param resources: The resources to query
-        :param version: The version of the metadata flows
+        :param version: The version of the metadataflows
 
         :param references: The references parameter (none, parents, parentsandsiblings,
                             ancestors, children, descendants, all, datastructure,
@@ -5101,26 +5101,6 @@ class SdmxWs2p0(SdmxWebservice):
                                              resources,
                                              version, references, detail)
 
-    def get_content_constraint(self, agency_id=None, resources=None,
-                               version=None, references=None,
-                               detail=None) -> str:
-        pass
-
-    def get_actual_constraint(self, agency_id=None, resources=None,
-                              version=None, references=None,
-                              detail=None) -> str:
-        pass
-
-    def get_allowed_constraint(self, agency_id=None, resources=None,
-                               version=None, references=None,
-                               detail=None) -> str:
-        pass
-
-    def get_attachment_constraint(self, agency_id=None, resources=None,
-                                  version=None, references=None,
-                                  detail=None) -> str:
-        pass
-
     def get_data_constraint(self, agency_id=None, resources=None,
                             version=None, references=None, detail=None) -> str:
         """
@@ -5183,10 +5163,6 @@ class SdmxWs2p0(SdmxWebservice):
         return self.common_structure_queries("metadataconstraint", agency_id,
                                              resources,
                                              version, references, detail)
-
-    def get_structure(self, agency_id=None, resources=None,
-                      version=None, references=None, detail=None) -> str:
-        pass
 
     def get_concept_scheme(self, agency_id=None, resources=None,
                            version=None, references=None, detail=None) -> str:
@@ -5281,11 +5257,6 @@ class SdmxWs2p0(SdmxWebservice):
                                              resources,
                                              version, references, detail)
 
-    def get_hierarchical_codelist(self, agency_id=None, resources=None,
-                                  version=None, references=None,
-                                  detail=None) -> str:
-        pass
-
     def get_hierarchy(self, agency_id=None, resources=None,
                       version=None, references=None, detail=None) -> str:
         """
@@ -5348,11 +5319,6 @@ class SdmxWs2p0(SdmxWebservice):
         return self.common_structure_queries("hierarchyassociation", agency_id,
                                              resources,
                                              version, references, detail)
-
-    def get_organisation_scheme(self, agency_id=None, resources=None,
-                                version=None, references=None,
-                                detail=None) -> str:
-        pass
 
     def get_agency_scheme(self, agency_id=None, resources=None,
                           version=None, references=None, detail=None) -> str:
@@ -5899,6 +5865,40 @@ class SdmxWs2p0(SdmxWebservice):
                                              resources,
                                              version, references, detail)
 
+    def get_content_constraint(self, agency_id=None, resources=None,
+                               version=None, references=None,
+                               detail=None) -> str:
+        pass
+
+    def get_actual_constraint(self, agency_id=None, resources=None,
+                              version=None, references=None,
+                              detail=None) -> str:
+        pass
+
+    def get_allowed_constraint(self, agency_id=None, resources=None,
+                               version=None, references=None,
+                               detail=None) -> str:
+        pass
+
+    def get_attachment_constraint(self, agency_id=None, resources=None,
+                                  version=None, references=None,
+                                  detail=None) -> str:
+        pass
+
+    def get_structure(self, agency_id=None, resources=None,
+                      version=None, references=None, detail=None) -> str:
+        pass
+
+    def get_hierarchical_codelist(self, agency_id=None, resources=None,
+                                  version=None, references=None,
+                                  detail=None) -> str:
+        pass
+
+    def get_organisation_scheme(self, agency_id=None, resources=None,
+                                version=None, references=None,
+                                detail=None) -> str:
+        pass
+
     def get_name_alias_scheme(self, agency_id=None, resources=None,
                               version=None, references=None,
                               detail=None) -> str:
@@ -6005,16 +6005,6 @@ class SdmxWs2p0(SdmxWebservice):
                                                resources,
                                                version, item_id,
                                                references, detail)
-
-    def get_hierarchies(self, agency_id=None, resources=None,
-                        version=None, item_id=None, references=None,
-                        detail=None) -> str:
-        pass
-
-    def get_organisations(self, agency_id=None, resources=None,
-                          version=None, item_id=None, references=None,
-                          detail=None) -> str:
-        pass
 
     def get_agencies(self, agency_id=None, resources=None,
                      version=None, item_id=None, references=None,
@@ -6322,11 +6312,6 @@ class SdmxWs2p0(SdmxWebservice):
                                                version, item_id,
                                                references, detail)
 
-    def get_name_alias_schemes(self, agency_id=None, resources=None,
-                               version=None, item_id=None, references=None,
-                               detail=None) -> str:
-        pass
-
     def get_vtl_mapping_schemes(self, agency_id=None, resources=None,
                                 version=None, item_id=None, references=None,
                                 detail=None) -> str:
@@ -6395,6 +6380,21 @@ class SdmxWs2p0(SdmxWebservice):
                                                version, item_id,
                                                references, detail)
 
+    def get_hierarchies(self, agency_id=None, resources=None,
+                        version=None, item_id=None, references=None,
+                        detail=None) -> str:
+        pass
+
+    def get_organisations(self, agency_id=None, resources=None,
+                          version=None, item_id=None, references=None,
+                          detail=None) -> str:
+        pass
+
+    def get_name_alias_schemes(self, agency_id=None, resources=None,
+                               version=None, item_id=None, references=None,
+                               detail=None) -> str:
+        pass
+
     def get_metadata_dsds(self, agency_id=None, resources=None,
                           version=None, detail=None) -> str:
         """
@@ -6418,13 +6418,13 @@ class SdmxWs2p0(SdmxWebservice):
     def get_metadata_mdsds(self, agency_id=None, resources=None,
                            version=None, detail=None) -> str:
         """
-        Returns URL and params to get metadata structure definitions
+        Returns URL and params to get metadata structures
         in metadata queries (by structure)
 
-        :param agency_id: The agency id of the metadata structure definitions
+        :param agency_id: The agency id of the metadata structures
                            in metadata queries (by structure)
         :param resources: The resources to query
-        :param version: The version of the metadata structure definitions
+        :param version: The version of the metadata structures
                          in metadata queries (by structure)
         :param detail: The detail parameter (full, allstubs)
 
@@ -6457,13 +6457,13 @@ class SdmxWs2p0(SdmxWebservice):
     def get_metadata_metadata_flows(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
         """
-        Returns URL and params to get metadata flows
+        Returns URL and params to get metadataflows
         in metadata queries (by structure)
 
-        :param agency_id: The agency id of the metadata flows
+        :param agency_id: The agency id of the metadataflows
                            in metadata queries (by structure)
         :param resources: The resources to query
-        :param version: The version of the metadata flows
+        :param version: The version of the metadataflows
                          in metadata queries (by structure)
         :param detail: The detail parameter (full, allstubs)
 
@@ -7393,7 +7393,7 @@ class SdmxWs1(SdmxWebservice):
     def get_mdsds(self, agency_id=None, resources=None,
                   version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the metadata structures definitions
+        Returns URL and params to get the metadata structures
 
         :param agency_id: The agency id of the metadata structures
         :param resources: The resources to query
@@ -7463,11 +7463,11 @@ class SdmxWs1(SdmxWebservice):
     def get_meta_data_flows(self, agency_id=None, resources=None,
                             version=None, references=None, detail=None) -> str:
         """
-        Returns URL and params to get the metadata flows
+        Returns URL and params to get the metadataflows
 
-        :param agency_id: The agency id of the metadata flows
+        :param agency_id: The agency id of the metadataflows
         :param resources: The resources to query
-        :param version: The version of the metadata flows
+        :param version: The version of the metadataflows
 
         :param references: The references parameter ('none', 'parents',
                             'parentsandsiblings', 'children', 'descendants', 'all')
@@ -7633,14 +7633,6 @@ class SdmxWs1(SdmxWebservice):
         """
         return self.build_query("categorisation", agency_id, resources, version,
                                 references, detail)
-
-    def get_data_constraint(self, agency_id, resources,
-                            version, references=None, detail=None) -> str:
-        pass
-
-    def get_metadata_constraint(self, agency_id, resources,
-                                version, references=None, detail=None) -> str:
-        pass
 
     def get_content_constraint(self, agency_id=None, resources=None,
                                version=None, references=None,
@@ -7921,14 +7913,6 @@ class SdmxWs1(SdmxWebservice):
         """
         return self.build_query("categoryscheme", agency_id, resources, version,
                                 references, detail)
-
-    def get_hierarchy(self, agency_id, resources,
-                      version, references=None, detail=None) -> str:
-        pass
-
-    def get_hierarchy_association(self, agency_id, resources,
-                                  version, references=None, detail=None) -> str:
-        pass
 
     def get_hierarchical_codelist(self, agency_id=None, resources=None,
                                   version=None, references=None,
@@ -8315,40 +8299,6 @@ class SdmxWs1(SdmxWebservice):
                                 resources,
                                 version, references, detail)
 
-    def get_vtl_mapping_scheme(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
-        pass
-
-    def get_value_list(self, agency_id, resources,
-                       version, references=None, detail=None) -> str:
-        pass
-
-    def get_structure_map(self, agency_id, resources,
-                          version, references=None, detail=None) -> str:
-        pass
-
-    def get_representation_map(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
-        pass
-
-    def get_concept_scheme_map(self, agency_id, resources,
-                               version, references=None, detail=None) -> str:
-        pass
-
-    def get_category_scheme_map(self, agency_id, resources,
-                                version, references=None, detail=None) -> str:
-        pass
-
-    def get_organisation_scheme_map(self, agency_id, resources,
-                                    version, references=None,
-                                    detail=None) -> str:
-        pass
-
-    def get_reporting_taxonomy_map(self, agency_id, resources,
-                                   version, references=None,
-                                   detail=None) -> str:
-        pass
-
     def get_name_alias_scheme(self, agency_id=None, resources=None,
                               version=None, references=None,
                               detail=None) -> str:
@@ -8383,6 +8333,56 @@ class SdmxWs1(SdmxWebservice):
         """
         return self.build_query("namealiasscheme", agency_id, resources,
                                 version, references, detail)
+
+    def get_data_constraint(self, agency_id, resources,
+                            version, references=None, detail=None) -> str:
+        pass
+
+    def get_metadata_constraint(self, agency_id, resources,
+                                version, references=None, detail=None) -> str:
+        pass
+
+    def get_hierarchy(self, agency_id, resources,
+                      version, references=None, detail=None) -> str:
+        pass
+
+    def get_hierarchy_association(self, agency_id, resources,
+                                  version, references=None, detail=None) -> str:
+        pass
+
+    def get_vtl_mapping_scheme(self, agency_id, resources,
+                               version, references=None, detail=None) -> str:
+        pass
+
+    def get_value_list(self, agency_id, resources,
+                       version, references=None, detail=None) -> str:
+        pass
+
+    def get_structure_map(self, agency_id, resources,
+                          version, references=None, detail=None) -> str:
+        pass
+
+    def get_representation_map(self, agency_id, resources,
+                               version, references=None, detail=None) -> str:
+        pass
+
+    def get_concept_scheme_map(self, agency_id, resources,
+                               version, references=None, detail=None) -> str:
+        pass
+
+    def get_category_scheme_map(self, agency_id, resources,
+                                version, references=None, detail=None) -> str:
+        pass
+
+    def get_organisation_scheme_map(self, agency_id, resources,
+                                    version, references=None,
+                                    detail=None) -> str:
+        pass
+
+    def get_reporting_taxonomy_map(self, agency_id, resources,
+                                   version, references=None,
+                                   detail=None) -> str:
+        pass
 
     def get_concepts(self, agency_id=None, resources=None, version=None,
                      item_id=None, references=None, detail=None) -> str:
@@ -9256,20 +9256,6 @@ class QueryBuilder:
         return self._query_builder(get_method, agency_id, resources, version,
                                    item_id, references, detail)
 
-    def get_data_flows(self, agency_id=None, resources=None,
-                       version=None, references=None, detail=None) -> str:
-        """Returns the get dataflows query for the WS Implementation"""
-        return self.query_builder_common(self._ws_implementation.get_data_flows,
-                                         agency_id, resources, version,
-                                         references, detail)
-
-    def get_dsds(self, agency_id=None, resources=None,
-                 version=None, references=None, detail=None) -> str:
-        """Returns the get data structures query for the WS Implementation"""
-        return self.query_builder_common(self._ws_implementation.get_dsds,
-                                         agency_id, resources, version,
-                                         references, detail)
-
     def get_data(self, flow, provider=None, detail=None, include_history=None,
                  **kwargs):
         """Returns the data query for the WS Implementation"""
@@ -9562,6 +9548,13 @@ class QueryBuilder:
                                                 dimension_at_observation,
                                                 explicit_measure))
 
+    def get_dsds(self, agency_id=None, resources=None,
+                 version=None, references=None, detail=None) -> str:
+        """Returns the get data structures query for the WS Implementation"""
+        return self.query_builder_common(self._ws_implementation.get_dsds,
+                                         agency_id, resources, version,
+                                         references, detail)
+
     def get_mdsds(self, agency_id=None, resources=None,
                   version=None, references=None, detail=None) -> str:
         """Returns the get metadata structures query for the WS Implementation"""
@@ -9569,9 +9562,16 @@ class QueryBuilder:
                                          agency_id, resources, version,
                                          references, detail)
 
+    def get_data_flows(self, agency_id=None, resources=None,
+                       version=None, references=None, detail=None) -> str:
+        """Returns the get dataflows query for the WS Implementation"""
+        return self.query_builder_common(self._ws_implementation.get_data_flows,
+                                         agency_id, resources, version,
+                                         references, detail)
+
     def get_meta_data_flows(self, agency_id=None, resources=None,
                             version=None, references=None, detail=None) -> str:
-        """Returns the get metadata flows query for the WS Implementation"""
+        """Returns the get metadataflows query for the WS Implementation"""
         return self.query_builder_common(
             self._ws_implementation.get_meta_data_flows,
             agency_id, resources, version, references, detail)
@@ -9680,6 +9680,14 @@ class QueryBuilder:
             self._ws_implementation.get_category_scheme,
             agency_id, resources, version, references, detail)
 
+    def get_hierarchical_codelist(self, agency_id=None, resources=None,
+                                  version=None, references=None,
+                                  detail=None) -> str:
+        """Returns the get hierarchical codelists query for the WS Implementation"""
+        return self.query_builder_common(
+            self._ws_implementation.get_hierarchical_codelist,
+            agency_id, resources, version, references, detail)
+
     def get_hierarchy(self, agency_id=None, resources=None,
                       version=None, references=None, detail=None) -> str:
         """Returns the get hierarchies query for the WS Implementation"""
@@ -9693,14 +9701,6 @@ class QueryBuilder:
         """Returns the get hierarchy associations query for the WS Implementation"""
         return self.query_builder_common(
             self._ws_implementation.get_hierarchy_association,
-            agency_id, resources, version, references, detail)
-
-    def get_hierarchical_codelist(self, agency_id=None, resources=None,
-                                  version=None, references=None,
-                                  detail=None) -> str:
-        """Returns the get hierarchical codelists query for the WS Implementation"""
-        return self.query_builder_common(
-            self._ws_implementation.get_hierarchical_codelist,
             agency_id, resources, version, references, detail)
 
     def get_organisation_scheme(self, agency_id=None, resources=None,
@@ -9781,6 +9781,14 @@ class QueryBuilder:
             self._ws_implementation.get_name_personalisation_scheme,
             agency_id, resources, version, references, detail)
 
+    def get_name_alias_scheme(self, agency_id=None, resources=None,
+                              version=None, references=None,
+                              detail=None) -> str:
+        """Returns the get name alias schemes query for the WS Implementation"""
+        return self.query_builder_common(
+            self._ws_implementation.get_name_alias_scheme,
+            agency_id, resources, version, references, detail)
+
     def get_vtl_mapping_scheme(self, agency_id=None, resources=None,
                                version=None, references=None,
                                detail=None) -> str:
@@ -9841,14 +9849,6 @@ class QueryBuilder:
         """Returns the get reporting taxonomy maps query for the WS Implementation"""
         return self.query_builder_common(
             self._ws_implementation.get_reporting_taxonomy_map,
-            agency_id, resources, version, references, detail)
-
-    def get_name_alias_scheme(self, agency_id=None, resources=None,
-                              version=None, references=None,
-                              detail=None) -> str:
-        """Returns the get name alias schemes query for the WS Implementation"""
-        return self.query_builder_common(
-            self._ws_implementation.get_name_alias_scheme,
             agency_id, resources, version, references, detail)
 
     def get_concepts(self, agency_id=None, resources=None,
@@ -10057,7 +10057,7 @@ class QueryBuilder:
 
     def get_metadata_metadata_flows(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
-        """Returns the metadata flows query in metadata
+        """Returns the metadataflows query in metadata
         queries (by structure) for the WS Implementation"""
         resources = self.id_builder(resources)
         agency_id = agency_id if agency_id else "all"
