@@ -1,0 +1,3766 @@
+<?xml version="1.0" encoding="UTF-8"?><message:GenericData xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message http://data-api.ecb.europa.eu:80/vocabulary/sdmx/2_1/SDMXMessage.xsd http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common http://data-api.ecb.europa.eu:80/vocabulary/sdmx/2_1/SDMXCommon.xsd http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic http://data-api.ecb.europa.eu:80/vocabulary/sdmx/2_1/SDMXDataGeneric.xsd">
+<message:Header>
+<message:ID>b7d1b874-db67-4990-92a1-eaa5f7ecb495</message:ID>
+<message:Test>false</message:Test>
+<message:Prepared>2024-03-15T12:56:34.981+01:00</message:Prepared>
+<message:Sender id="ECB"/>
+<message:Structure structureID="ECB_AME1" dimensionAtObservation="TIME_PERIOD">
+<common:Structure>
+<URN>urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ECB:ECB_AME1(1.0)</URN>
+</common:Structure>
+</message:Structure>
+</message:Header>
+<message:DataSet action="Replace" validFromDate="2024-03-15T12:56:34.981+01:00" structureRef="ECB_AME1">
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="AUT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-ATS"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Austria - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Austria - Gross domestic product at 2015 reference levels - Mrd EURO-ATS - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="382.2752"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="387.3252"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="AUT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Austria - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Austria - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.3"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="AUT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Austria - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Austria - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.3797272"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.2050801"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="AUT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Austria - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Austria - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="75.5559426"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="74.8493192"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BEL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Belgium - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-BEF"/>
+<generic:Value id="TITLE_COMPL" value="Belgium - Gross domestic product at 2015 reference levels - Mrd EURO-BEF - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="478.5282"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="485.6871"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BEL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Belgium - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Belgium - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BEL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Belgium - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Belgium - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-4.8956782"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-4.963946"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BEL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TITLE_COMPL" value="Belgium - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Belgium - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="106.4342775"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="107.2722471"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BGR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Bulgaria - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Bulgaria - Gross domestic product at 2015 reference levels - Mrd BGN - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd BGN"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="112.9401"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="115.8321"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BGR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Bulgaria - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TITLE_COMPL" value="Bulgaria - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="4.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="4.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BGR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Bulgaria - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Bulgaria - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-3.0109673"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.2194877"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="BGR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Bulgaria - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Bulgaria - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="24.2807216"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="26.0934596"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CYP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Cyprus - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-CYP"/>
+<generic:Value id="TITLE_COMPL" value="Cyprus - Gross domestic product at 2015 reference levels - Mrd EURO-CYP - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="26.38398"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="27.16017"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CYP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Cyprus - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Cyprus - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.1"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CYP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Cyprus - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Cyprus - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2.0874061"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2.4618378"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CYP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TITLE_COMPL" value="Cyprus - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Cyprus - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="71.473877"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="66.2842957"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CZE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Czech Republic - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Czech Republic - Gross domestic product at 2015 reference levels - Mrd CZK - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd CZK"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5365.581"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5529.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CZE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Czech Republic - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_TITLE" value="Czech Republic - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CZE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Czech Republic - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Czech Republic - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.3808335"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-1.8122165"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="CZE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Czech Republic - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Czech Republic - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="45.4869101"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="45.4788666"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DEU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="FR. Germany - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="FR. Germany - Gross domestic product at 2015 reference levels - Mrd EURO-DEM - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-DEM"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="3292.255"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="3333.392"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DEU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="FR. Germany - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="FR. Germany - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="3.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="3.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DEU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="EXT_TITLE" value="FR. Germany - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="FR. Germany - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-1.6006777"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-1.2979716"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DEU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="FR. Germany - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="FR. Germany - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="63.5970165"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="62.6863849"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DNK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Denmark - Gross domestic product at 2015 reference levels - Mrd DKK - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Denmark - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd DKK"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2457.644"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2498.084"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DNK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Denmark - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Denmark - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DNK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Denmark - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Denmark - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="1.7761299"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="1.1534973"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="DNK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Denmark - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Denmark - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="28.4427553"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="27.221699"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EA20"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="NPTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Euro area (20 countries) - Total population"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="1000 persons"/>
+<generic:Value id="TITLE_COMPL" value="Euro area (20 countries) - Total population - 1000 persons - AMECO data class: Data in 1000 persons"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="350817.627"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="351720.337"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EA20"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Mrd ECU/EUR, Standard aggregation"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Euro area (20 countries) - Gross domestic product at 2015 reference levels - Mrd ECU/EUR, Standard aggregation - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Euro area (20 countries) - Gross domestic product at 2015 reference levels"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="11968.259"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="12154.489"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EA20"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Euro area (20 countries) - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Euro area (20 countries) - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="6.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EA20"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="EXT_TITLE" value="Euro area (20 countries) - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Euro area (20 countries) - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.841301"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.7416856"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EA20"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Euro area (20 countries) - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Euro area (20 countries) - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="89.7406645"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="89.5165847"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ESP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Spain - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-ESP"/>
+<generic:Value id="TITLE_COMPL" value="Spain - Gross domestic product at 2015 reference levels - Mrd EURO-ESP - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="1241.445"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="1266.845"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ESP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Spain - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_TITLE" value="Spain - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="11.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="11.1"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ESP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Spain - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Spain - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-3.1557666"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.3510371"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ESP"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Spain - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Spain - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="106.4946427"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="106.4709802"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EST"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Estonia - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Estonia - Gross domestic product at 2015 reference levels - Mrd EURO-EEK - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-EEK"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="25.50353"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="26.18855"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EST"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TITLE_COMPL" value="Estonia - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Estonia - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="6.8"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EST"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Estonia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Estonia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.4190845"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.5685289"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EST"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Estonia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Estonia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="20.529021"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="23.1572264"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EU27"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Mrd ECU/EUR, Standard aggregation"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="European Union (27 countries) - Gross domestic product at 2015 reference levels - Mrd ECU/EUR, Standard aggregation - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="European Union (27 countries) - Gross domestic product at 2015 reference levels"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="14028.041"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="14265.227"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EU27"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="European Union (27 countries) - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TITLE_COMPL" value="European Union (27 countries) - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EU27"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="European Union (27 countries) - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="European Union (27 countries) - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.8145809"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.6910451"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="EU27"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="European Union (27 countries) - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="European Union (27 countries) - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="82.6809962"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="82.4919861"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FIN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Finland - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-FIM"/>
+<generic:Value id="TITLE_COMPL" value="Finland - Gross domestic product at 2015 reference levels - Mrd EURO-FIM - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="237.2729"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="240.7735"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FIN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Finland - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Finland - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="7.3"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FIN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Finland - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Finland - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-3.2497312"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.3583802"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FIN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Finland - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Finland - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="76.9153216"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="79.1278792"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FRA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="France - Gross domestic product at 2015 reference levels - Mrd EURO-FRF - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="France - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-FRF"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2431.774"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2465.078"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FRA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="France - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="France - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="7.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="7.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FRA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="France - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="France - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-4.4224125"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-4.3284948"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="FRA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="France - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="France - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="109.4734165"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="110.0354698"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GBR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Mrd GBP"/>
+<generic:Value id="EXT_TITLE" value="United Kingdom - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="United Kingdom - Gross domestic product at 2015 reference levels - Mrd GBP - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2124.422"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2152.022"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GBR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TITLE_COMPL" value="United Kingdom - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="United Kingdom - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="4.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="4.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GBR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TITLE_COMPL" value="United Kingdom - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="United Kingdom - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.9327548"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.8774173"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GBR"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="United Kingdom - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="United Kingdom - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="96.5078754"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="96.521353"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GRC"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Greece - Gross domestic product at 2015 reference levels - Mrd EURO-GRD - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Greece - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-GRD"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="199.62"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="204.0732"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GRC"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TITLE_COMPL" value="Greece - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Greece - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="10.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="9.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GRC"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Greece - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Greece - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-0.865334"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-0.7839167"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="GRC"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Greece - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Greece - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="151.9257951"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="147.871892"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HRV"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Croatia - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Croatia - Gross domestic product at 2015 reference levels - Mrd EURO-HRK - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-HRK"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="60.67578"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="62.3901"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HRV"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Croatia - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Croatia - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.8"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HRV"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Croatia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Croatia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-1.8471711"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-1.7618959"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HRV"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Croatia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Croatia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="58.832299"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="58.2198245"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HUN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TITLE_COMPL" value="Hungary - Gross domestic product at 2015 reference levels - Mrd HUF - AMECO data class: Data at constant prices"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Hungary - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd HUF"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="44771.384"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="46367.198"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HUN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Hungary - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Hungary - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="4.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="4.1"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HUN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Hungary - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Hungary - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-4.314572"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.7763393"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="HUN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Hungary - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Hungary - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="71.7334003"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="70.3027182"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="IRL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Ireland - Gross domestic product at 2015 reference levels - Mrd EURO-IEP - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-IEP"/>
+<generic:Value id="EXT_TITLE" value="Ireland - Gross domestic product at 2015 reference levels"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="459.0679"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="474.8586"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="IRL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Ireland - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_TITLE" value="Ireland - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="4.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="4.3"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="IRL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="EXT_TITLE" value="Ireland - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Ireland - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="0.6185917"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="1.01523"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="IRL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Ireland - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Ireland - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="41.4159463"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="40.2372824"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ITA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Italy - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Italy - Gross domestic product at 2015 reference levels - Mrd EURO-ITL - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-ITL"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="1795.396"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="1816.935"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ITA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Italy - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Italy - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="7.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="7.3"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ITA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Italy - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Italy - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-4.3580773"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-4.2752343"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ITA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Italy - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Italy - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="140.5639731"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="140.8940795"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LTU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Lithuania - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-LTL"/>
+<generic:Value id="TITLE_COMPL" value="Lithuania - Gross domestic product at 2015 reference levels - Mrd EURO-LTL - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="48.29598"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="49.92148"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LTU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Lithuania - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TITLE_COMPL" value="Lithuania - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="6.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LTU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Lithuania - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Lithuania - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.3041964"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.0753293"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LTU"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Lithuania - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Lithuania - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="38.3091956"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="38.9876005"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LUX"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Luxembourg - Gross domestic product at 2015 reference levels - Mrd EURO-LUF - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Luxembourg - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-LUF"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="65.0918"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="66.37053"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LUX"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Luxembourg - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Luxembourg - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LUX"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Luxembourg - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Luxembourg - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-2.1488699"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-0.9850881"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LUX"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Luxembourg - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Luxembourg - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="28.6754145"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="29.264235"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LVA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Latvia - Gross domestic product at 2015 reference levels - Mrd EURO-LVL - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-LVL"/>
+<generic:Value id="EXT_TITLE" value="Latvia - Gross domestic product at 2015 reference levels"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="29.56323"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="30.43655"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LVA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Latvia - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Latvia - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="6.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LVA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Latvia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Latvia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-3.0511405"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.0653185"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="LVA"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Latvia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Latvia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="42.3084148"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="43.1951997"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="MLT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Malta - Gross domestic product at 2015 reference levels - Mrd EURO-MTL - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Malta - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-MTL"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="15.72608"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="16.38168"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="MLT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Malta - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_TITLE" value="Malta - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="MLT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Malta - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Malta - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-4.617752"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-4.1351469"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="MLT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Malta - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Malta - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="55.8365269"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="57.1655965"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="NLD"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-NLG"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Netherlands - Gross domestic product at 2015 reference levels - Mrd EURO-NLG - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Netherlands - Gross domestic product at 2015 reference levels"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="819.9404"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="834.1786"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="NLD"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Netherlands - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TITLE_COMPL" value="Netherlands - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="3.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="3.9"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="NLD"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Netherlands - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Netherlands - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-1.7567536"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.0235053"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="NLD"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Netherlands - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Netherlands - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="46.5861493"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="46.7809745"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="POL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Poland - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Poland - Gross domestic product at 2015 reference levels - Mrd PLN - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_UNIT" value="Mrd PLN"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2450.457"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2528.694"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="POL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Poland - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TITLE_COMPL" value="Poland - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="2.8"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="2.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="POL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Poland - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Poland - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-4.6407775"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-3.8813094"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="POL"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Poland - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Poland - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="54.3967221"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="56.1647835"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="PRT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-PTE"/>
+<generic:Value id="EXT_TITLE" value="Portugal - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Portugal - Gross domestic product at 2015 reference levels - Mrd EURO-PTE - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="215.0005"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="218.873"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="PRT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Portugal - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Portugal - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="6.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="6.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="PRT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="EXT_TITLE" value="Portugal - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Portugal - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="0.138531"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="0.0047951"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="PRT"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Portugal - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Portugal - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="100.3273049"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="97.2175801"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ROM"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Romania - Gross domestic product at 2015 reference levels - Mrd RON - AMECO data class: Data at constant prices"/>
+<generic:Value id="EXT_TITLE" value="Romania - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd RON"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="979.806"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="1013.199"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ROM"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Romania - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="TITLE_COMPL" value="Romania - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.3"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ROM"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Romania - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Romania - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-5.3062117"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-5.0925471"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="ROM"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Romania - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Romania - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="48.8939347"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="50.5426052"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Slovakia - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Slovakia - Gross domestic product at 2015 reference levels - Mrd EURO-SKK - AMECO data class: Data at constant prices"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-SKK"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="95.21993"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="97.09128"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TITLE_COMPL" value="Slovakia - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Slovakia - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="5.4"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="5.2"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_TITLE" value="Slovakia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Slovakia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-6.4664313"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-6.8260078"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVK"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Slovakia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Slovakia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="59.9326546"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="62.8982607"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Slovenia - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="EXT_UNIT" value="Mrd EURO-SIT"/>
+<generic:Value id="TITLE_COMPL" value="Slovenia - Gross domestic product at 2015 reference levels - Mrd EURO-SIT - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="49.85572"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="51.17904"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="TITLE_COMPL" value="Slovenia - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_TITLE" value="Slovenia - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="3.7"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="3.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Slovenia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+<generic:Value id="TITLE_COMPL" value="Slovenia - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-3.3042603"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-2.9403765"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SVN"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Slovenia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Slovenia - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="68.4415341"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="67.8949477"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SWE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="OVGD"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_UNIT" value="Mrd SEK"/>
+<generic:Value id="EXT_TITLE" value="Sweden - Gross domestic product at 2015 reference levels"/>
+<generic:Value id="TITLE_COMPL" value="Sweden - Gross domestic product at 2015 reference levels - Mrd SEK - AMECO data class: Data at constant prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="4913.875"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="4976.532"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SWE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="0"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="ZUTN"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Sweden - Unemployment rate: total :- Member States: definition EUROSTAT - Percentage of active population - AMECO data class: Other data"/>
+<generic:Value id="EXT_UNIT" value="Percentage of active population"/>
+<generic:Value id="EXT_TITLE" value="Sweden - Unemployment rate: total :- Member States: definition EUROSTAT"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="8.5"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="8.6"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SWE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UBLGE"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="TITLE_COMPL" value="Sweden - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS)) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+<generic:Value id="EXT_TITLE" value="Sweden - Net lending (+) or net borrowing (-): general government :- Excessive deficit procedure (Including one-off proceeds relative to the allocation of mobile phone licences (UMTS))"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="-0.6544612"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="-0.5876543"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="FREQ" value="A"/>
+<generic:Value id="AME_REF_AREA" value="SWE"/>
+<generic:Value id="AME_TRANSFORMATION" value="1"/>
+<generic:Value id="AME_AGG_METHOD" value="0"/>
+<generic:Value id="AME_UNIT" value="319"/>
+<generic:Value id="AME_REFERENCE" value="0"/>
+<generic:Value id="AME_ITEM" value="UDGGL"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="EXT_UNIT" value="Percentage of GDP at current prices (excessive deficit procedure)"/>
+<generic:Value id="TIME_FORMAT" value="P1Y"/>
+<generic:Value id="EXT_TITLE" value="Sweden - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series)"/>
+<generic:Value id="TITLE_COMPL" value="Sweden - General government consolidated gross debt :- Excessive deficit procedure (based on ESA 2010) and former definitions (linked series) - Percentage of GDP at current prices (excessive deficit procedure) - AMECO data class: Data at current prices"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension value="2024"/>
+<generic:ObsValue value="30.1259543"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension value="2025"/>
+<generic:ObsValue value="29.6329912"/>
+<generic:Attributes>
+<generic:Value id="OBS_STATUS" value="A"/>
+</generic:Attributes>
+</generic:Obs>
+</generic:Series>
+</message:DataSet>
+</message:GenericData>
