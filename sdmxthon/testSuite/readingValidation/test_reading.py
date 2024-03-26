@@ -5,6 +5,7 @@ from pytest import mark
 
 from sdmxthon.api.api import read_sdmx
 from sdmxthon.model.message import Message
+from sdmxthon.utils.handlers import first_element_dict
 
 pytestmark = mark.input_path(Path(__file__).parent / "data")
 
@@ -47,3 +48,14 @@ def test_dataflow(data_path):
     assert 'BIS:WEBSTATS_DER_DATAFLOW(1.0)' in result.content
     assert 'AVAILABILITY' in data_dataflow.columns
     assert 'DER_CURR_LEG1' in data_dataflow.columns
+
+filename= [ "all.xml", "str_ser.xml", "gen_ser.xml", "gen_all.xml"]
+
+@mark.parametrize("data_filename", filename)
+def test_metadata_from_ws(data_filename, data_path):
+    message = read_sdmx(os.path.join(data_path , data_filename))
+    structure = first_element_dict(message.payload).structure
+    dataflow = first_element_dict(message.payload).dataflow
+    assert structure is not None or dataflow is not None
+
+
