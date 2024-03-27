@@ -2289,7 +2289,7 @@ class SdmxWebservice(ABC):
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the structuremap
+        :param version: The version of the structure maps
         :type version: str
 
         :param references: The references parameter ('none', 'parents',
@@ -9256,8 +9256,64 @@ class QueryBuilder:
         return self._query_builder(get_method, agency_id, resources, version,
                                    item_id, references, detail)
 
-    def get_data(self, flow, provider=None, detail=None, include_history=None,
-                 **kwargs):
+    def _schema_query_builder(self, method, agency_id=None,
+                              resources=None, version=None,
+                              dimension_at_observation=None,
+                              explicit_measure=None) -> str:
+        """Common method for building schema queries"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if explicit_measure:
+            self._ws_implementation.validate_explicit_measure(explicit_measure)
+
+        return method(agency_id, resources, version,
+                      dimension_at_observation,
+                      explicit_measure)
+
+    def _data_query_builder(self, method, agency_id=None, resources=None,
+                            version=None, key=None, c=None,
+                            updated_after=None, first_n_observations=None,
+                            last_n_observations=None,
+                            dimension_at_observation=None, attributes=None,
+                            measures=None, include_history=None) -> str:
+        """Common method for building data queries"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if include_history:
+            self._ws_implementation.validate_data_history(include_history)
+
+        return method(agency_id, resources, version, key, c,
+                      updated_after, first_n_observations,
+                      last_n_observations, dimension_at_observation,
+                      attributes, measures, include_history)
+
+    def _constraint_query_builder(self, method, agency_id=None, resources=None,
+                                  version=None, key=None, component_id=None,
+                                  c=None, mode=None, references=None,
+                                  updated_after=None) -> str:
+        """Common method for building constraint queries"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if mode:
+            self._ws_implementation.validate_constraints_mode(mode)
+        if references:
+            self._ws_implementation.validate_constraints_references(references)
+
+        return method(agency_id, resources, version, key, component_id,
+                      c, mode, references, updated_after)
+
+    def _metadata_query_builder(self, method, agency_id=None, resources=None,
+                                version=None, detail=None) -> str:
+        """Common method for building metadata queries (by structure)"""
+        resources = self.id_builder(resources)
+        agency_id = agency_id if agency_id else "all"
+        if detail:
+            self._ws_implementation.validate_structural_detail(detail)
+
+        return method(agency_id, resources, version, detail)
+
+    def get_data(self, flow, provider=None, detail=None,
+                 include_history=None, **kwargs):
         """Returns the data query for the WS Implementation"""
 
         provider = self.id_builder(provider)
@@ -9280,22 +9336,17 @@ class QueryBuilder:
                                 measures=None, include_history=None):
         """Returns the data (datastructure) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if include_history:
-            self._ws_implementation.validate_data_history(include_history)
-
-        return self._ws_implementation.get_data_datastructures(agency_id,
-                                                               resources,
-                                                               version,
-                                                               key, c,
-                                                               updated_after,
-                                                               first_n_observations,
-                                                               last_n_observations,
-                                                               dimension_at_observation,
-                                                               attributes,
-                                                               measures,
-                                                               include_history)
+        return (self._data_query_builder(self._ws_implementation.
+                                         get_data_datastructures,
+                                         agency_id, resources,
+                                         version,
+                                         key, c, updated_after,
+                                         first_n_observations,
+                                         last_n_observations,
+                                         dimension_at_observation,
+                                         attributes,
+                                         measures,
+                                         include_history))
 
     def get_data_dataflows(self, agency_id=None, resources=None,
                            version=None, key=None, c=None, updated_after=None,
@@ -9304,20 +9355,17 @@ class QueryBuilder:
                            measures=None, include_history=None):
         """Returns the data (dataflow) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if include_history:
-            self._ws_implementation.validate_data_history(include_history)
-
-        return self._ws_implementation.get_data_dataflows(agency_id, resources,
-                                                          version,
-                                                          key, c, updated_after,
-                                                          first_n_observations,
-                                                          last_n_observations,
-                                                          dimension_at_observation,
-                                                          attributes,
-                                                          measures,
-                                                          include_history)
+        return (self._data_query_builder(self._ws_implementation.
+                                         get_data_dataflows,
+                                         agency_id, resources,
+                                         version,
+                                         key, c, updated_after,
+                                         first_n_observations,
+                                         last_n_observations,
+                                         dimension_at_observation,
+                                         attributes,
+                                         measures,
+                                         include_history))
 
     def get_data_provision_agreements(self, agency_id=None, resources=None,
                                       version=None, key=None, c=None,
@@ -9329,19 +9377,17 @@ class QueryBuilder:
                                       measures=None, include_history=None):
         """Returns the data (provision agreement) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if include_history:
-            self._ws_implementation.validate_data_history(include_history)
-
-        return (self._ws_implementation.
-                get_data_provision_agreements(agency_id, resources, version,
-                                              key, c, updated_after,
-                                              first_n_observations,
-                                              last_n_observations,
-                                              dimension_at_observation,
-                                              attributes,
-                                              measures, include_history))
+        return (self._data_query_builder(self._ws_implementation.
+                                         get_data_provision_agreements,
+                                         agency_id, resources,
+                                         version,
+                                         key, c, updated_after,
+                                         first_n_observations,
+                                         last_n_observations,
+                                         dimension_at_observation,
+                                         attributes,
+                                         measures,
+                                         include_history))
 
     def get_data_all_contexts(self, agency_id=None, resources=None,
                               version=None, key=None, c=None,
@@ -9352,21 +9398,17 @@ class QueryBuilder:
                               measures=None, include_history=None):
         """Returns the data (all possible contexts) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if include_history:
-            self._ws_implementation.validate_data_history(include_history)
-
-        return (
-            self._ws_implementation.get_data_all_contexts(agency_id, resources,
-                                                          version,
-                                                          key, c, updated_after,
-                                                          first_n_observations,
-                                                          last_n_observations,
-                                                          dimension_at_observation,
-                                                          attributes,
-                                                          measures,
-                                                          include_history))
+        return (self._data_query_builder(self._ws_implementation.
+                                         get_data_all_contexts,
+                                         agency_id, resources,
+                                         version,
+                                         key, c, updated_after,
+                                         first_n_observations,
+                                         last_n_observations,
+                                         dimension_at_observation,
+                                         attributes,
+                                         measures,
+                                         include_history))
 
     def get_constraints(self, flow, key=None, provider=None, component_id=None,
                         mode=None, references=None, start_period=None,
@@ -9392,21 +9434,14 @@ class QueryBuilder:
                                       updated_after=None):
         """Returns the constraints (datastructure) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if mode:
-            self._ws_implementation.validate_constraints_mode(mode)
-        if references:
-            self._ws_implementation.validate_constraints_references(references)
-
-        return (self._ws_implementation.get_constraint_datastructures(agency_id,
-                                                                      resources,
-                                                                      version,
-                                                                      key,
-                                                                      component_id,
-                                                                      c, mode,
-                                                                      references,
-                                                                      updated_after))
+        return (self._constraint_query_builder(self._ws_implementation.
+                                               get_constraint_datastructures,
+                                               agency_id, resources,
+                                               version, key,
+                                               component_id,
+                                               c, mode,
+                                               references,
+                                               updated_after))
 
     def get_constraint_dataflows(self, agency_id=None, resources=None,
                                  version=None, key=None, component_id=None,
@@ -9415,21 +9450,14 @@ class QueryBuilder:
                                  updated_after=None):
         """Returns the constraints (dataflow) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if mode:
-            self._ws_implementation.validate_constraints_mode(mode)
-        if references:
-            self._ws_implementation.validate_constraints_references(references)
-
-        return (self._ws_implementation.get_constraint_dataflows(agency_id,
-                                                                 resources,
-                                                                 version,
-                                                                 key,
-                                                                 component_id,
-                                                                 c, mode,
-                                                                 references,
-                                                                 updated_after))
+        return (self._constraint_query_builder(self._ws_implementation.
+                                               get_constraint_dataflows,
+                                               agency_id, resources,
+                                               version, key,
+                                               component_id,
+                                               c, mode,
+                                               references,
+                                               updated_after))
 
     def get_constraint_provision_agreements(self, agency_id=None,
                                             resources=None,
@@ -9439,18 +9467,14 @@ class QueryBuilder:
                                             updated_after=None):
         """Returns the constraints (provision agreement) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if mode:
-            self._ws_implementation.validate_constraints_mode(mode)
-        if references:
-            self._ws_implementation.validate_constraints_references(references)
-
-        return (self._ws_implementation.
-                get_constraint_provision_agreements(agency_id, resources,
-                                                    version,
-                                                    key, component_id, c, mode,
-                                                    references, updated_after))
+        return (self._constraint_query_builder(self._ws_implementation.
+                                               get_constraint_provision_agreements,
+                                               agency_id, resources,
+                                               version, key,
+                                               component_id,
+                                               c, mode,
+                                               references,
+                                               updated_after))
 
     def get_constraint_all_contexts(self, agency_id=None, resources=None,
                                     version=None, key=None, component_id=None,
@@ -9459,32 +9483,25 @@ class QueryBuilder:
                                     updated_after=None):
         """Returns the constraints (all possible contexts) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if mode:
-            self._ws_implementation.validate_constraints_mode(mode)
-        if references:
-            self._ws_implementation.validate_constraints_references(references)
-
-        return (self._ws_implementation.
-                get_constraint_all_contexts(agency_id, resources, version,
-                                            key, component_id, c, mode,
-                                            references, updated_after))
+        return (self._constraint_query_builder(self._ws_implementation.
+                                               get_constraint_all_contexts,
+                                               agency_id, resources,
+                                               version, key,
+                                               component_id,
+                                               c, mode,
+                                               references,
+                                               updated_after))
 
     def get_schema_datastructures(self, agency_id=None, resources=None,
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
         """Returns the schema (datastructure) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schema_datastructures(agency_id, resources, version,
-                                          dimension_at_observation,
-                                          explicit_measure))
+        return (self._schema_query_builder(self._ws_implementation.
+                                           get_schema_datastructures,
+                                           agency_id, resources, version,
+                                           dimension_at_observation,
+                                           explicit_measure))
 
     def get_schema_meta_datastructures(self, agency_id=None, resources=None,
                                        version=None,
@@ -9492,45 +9509,33 @@ class QueryBuilder:
                                        explicit_measure=None):
         """Returns the schema (metadatastructure) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schema_meta_datastructures(agency_id, resources, version,
-                                               dimension_at_observation,
-                                               explicit_measure))
+        return (self._schema_query_builder(self._ws_implementation.
+                                           get_schema_meta_datastructures,
+                                           agency_id, resources, version,
+                                           dimension_at_observation,
+                                           explicit_measure))
 
     def get_schema_dataflows(self, agency_id=None, resources=None,
                              version=None, dimension_at_observation=None,
                              explicit_measure=None):
         """Returns the schema (dataflow) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schema_dataflows(agency_id, resources, version,
-                                     dimension_at_observation,
-                                     explicit_measure))
+        return (self._schema_query_builder(self._ws_implementation.
+                                           get_schema_dataflows,
+                                           agency_id, resources, version,
+                                           dimension_at_observation,
+                                           explicit_measure))
 
     def get_schema_meta_dataflows(self, agency_id=None, resources=None,
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
         """Returns the schema (metadataflow) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schema_meta_dataflows(agency_id, resources, version,
-                                          dimension_at_observation,
-                                          explicit_measure))
+        return (self._schema_query_builder(self._ws_implementation.
+                                           get_schema_meta_dataflows,
+                                           agency_id, resources, version,
+                                           dimension_at_observation,
+                                           explicit_measure))
 
     def get_schema_provision_agreements(self, agency_id=None, resources=None,
                                         version=None,
@@ -9538,15 +9543,11 @@ class QueryBuilder:
                                         explicit_measure=None):
         """Returns the schema (provision agreement) query for the WS Implementation"""
 
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if explicit_measure:
-            self._ws_implementation.validate_explicit_measure(explicit_measure)
-
-        return (self._ws_implementation.
-                get_schema_provision_agreements(agency_id, resources, version,
-                                                dimension_at_observation,
-                                                explicit_measure))
+        return (self._schema_query_builder(self._ws_implementation.
+                                           get_schema_provision_agreements,
+                                           agency_id, resources, version,
+                                           dimension_at_observation,
+                                           explicit_measure))
 
     def get_dsds(self, agency_id=None, resources=None,
                  version=None, references=None, detail=None) -> str:
@@ -10022,239 +10023,165 @@ class QueryBuilder:
                           version=None, detail=None) -> str:
         """Returns the data structure definitions query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
 
-        return self._ws_implementation.get_metadata_dsds(agency_id, resources,
-                                                         version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_dsds,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_mdsds(self, agency_id=None, resources=None,
                            version=None, detail=None) -> str:
         """Returns the metadata structure definitions query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_mdsds(agency_id, resources,
-                                                          version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_mdsds,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_dataflows(self, agency_id=None, resources=None,
                                version=None, detail=None) -> str:
         """Returns the dataflows query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_dataflows(agency_id,
-                                                              resources,
-                                                              version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_dataflows,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_metadata_flows(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
         """Returns the metadataflows query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_metadata_flows(agency_id,
-                                                                   resources,
-                                                                   version,
-                                                                   detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_metadata_flows,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_provision_agreements(self, agency_id=None, resources=None,
                                           version=None, detail=None) -> str:
         """Returns the provision agreements query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_provision_agreements(
-            agency_id, resources,
-            version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_provision_agreements,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_structure_sets(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
         """Returns the structure sets query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_structure_sets(agency_id,
-                                                                   resources,
-                                                                   version,
-                                                                   detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_structure_sets,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_processes(self, agency_id=None, resources=None,
                                version=None, detail=None) -> str:
         """Returns the processes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_processes(agency_id,
-                                                              resources,
-                                                              version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_processes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_categorisations(self, agency_id=None, resources=None,
                                      version=None, detail=None) -> str:
         """Returns the categorisations query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_categorisations(agency_id,
-                                                                    resources,
-                                                                    version,
-                                                                    detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_categorisations,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_data_constraints(self, agency_id=None, resources=None,
                                       version=None, detail=None) -> str:
         """Returns the data constraints query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_data_constraints(agency_id,
-                                                                     resources,
-                                                                     version,
-                                                                     detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_data_constraints,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_metadata_constraints(self, agency_id=None, resources=None,
                                           version=None, detail=None) -> str:
         """Returns the metadata constraints query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_metadata_constraints(agency_id, resources,
-                                                  version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_metadata_constraints,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_concept_schemes(self, agency_id=None, resources=None,
                                      version=None, detail=None) -> str:
         """Returns the concept schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_concept_schemes(agency_id, resources,
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_concept_schemes,
+                                             agency_id, resources,
                                              version, detail))
 
     def get_metadata_code_lists(self, agency_id=None, resources=None,
                                 version=None, detail=None) -> str:
         """Returns the codelists query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_code_lists(agency_id,
-                                                               resources,
-                                                               version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_code_lists,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_category_schemes(self, agency_id=None, resources=None,
                                       version=None, detail=None) -> str:
         """Returns the category schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_category_schemes(agency_id,
-                                                                     resources,
-                                                                     version,
-                                                                     detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_category_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_hierarchies(self, agency_id=None, resources=None,
                                  version=None, detail=None) -> str:
         """Returns the hierarchies query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return self._ws_implementation.get_metadata_hierarchies(agency_id,
-                                                                resources,
-                                                                version, detail)
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_hierarchies,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_hierarchy_associations(self, agency_id=None,
                                             resources=None,
                                             version=None, detail=None) -> str:
         """Returns the hierarchy associations query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_hierarchy_associations(agency_id, resources,
-                                                    version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_hierarchy_associations,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_agency_schemes(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
         """Returns the agency schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_agency_schemes(agency_id, resources,
-                                            version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_agency_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_data_provider_schemes(self, agency_id=None, resources=None,
                                            version=None, detail=None) -> str:
         """Returns the data provider schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_data_provider_schemes(agency_id, resources,
-                                                   version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_data_provider_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_data_consumer_schemes(self, agency_id=None, resources=None,
                                            version=None, detail=None) -> str:
         """Returns the data consumer schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_data_consumer_schemes(agency_id, resources,
-                                                   version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_data_consumer_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_organisation_unit_schemes(self, agency_id=None,
                                                resources=None,
@@ -10262,40 +10189,28 @@ class QueryBuilder:
                                                detail=None) -> str:
         """Returns the organisation unit schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_organisation_unit_schemes(agency_id, resources,
-                                                       version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_organisation_unit_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_transformation_schemes(self, agency_id=None,
                                             resources=None,
                                             version=None, detail=None) -> str:
         """Returns the transformation schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_transformation_schemes(agency_id, resources,
-                                                    version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_transformation_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_ruleset_schemes(self, agency_id=None, resources=None,
                                      version=None, detail=None) -> str:
         """Returns the ruleset schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_ruleset_schemes(agency_id, resources,
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_ruleset_schemes,
+                                             agency_id, resources,
                                              version, detail))
 
     def get_metadata_user_defined_operator_schemes(self, agency_id=None,
@@ -10304,27 +10219,19 @@ class QueryBuilder:
                                                    detail=None) -> str:
         """Returns the user defined operator schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_user_defined_operator_schemes(agency_id, resources,
-                                                           version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                get_metadata_user_defined_operator_schemes,
+                agency_id, resources,
+                version, detail))
 
     def get_metadata_custom_type_schemes(self, agency_id=None, resources=None,
                                          version=None, detail=None) -> str:
         """Returns the custom type schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_custom_type_schemes(agency_id, resources,
-                                                 version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_custom_type_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_name_personalisation_schemes(self, agency_id=None,
                                                   resources=None,
@@ -10332,120 +10239,84 @@ class QueryBuilder:
                                                   detail=None) -> str:
         """Returns the name personalisation schemes query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_name_personalisation_schemes(agency_id, resources,
-                                                          version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                get_metadata_name_personalisation_schemes,
+                agency_id, resources,
+                version, detail))
 
     def get_metadata_vtl_mapping_schemes(self, agency_id=None, resources=None,
                                          version=None, detail=None) -> str:
         """Returns the vtl mapping schemes query in metadata
-        queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_vtl_mapping_schemes(agency_id, resources,
-                                                 version, detail))
+        queries (by structure) for the WS Implementation ***"""
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_vtl_mapping_schemes,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_value_lists(self, agency_id=None, resources=None,
                                  version=None, detail=None) -> str:
         """Returns the value lists query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_value_lists(agency_id, resources,
-                                         version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_value_lists,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_structure_maps(self, agency_id=None, resources=None,
                                     version=None, detail=None) -> str:
         """Returns the structure maps query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_structure_maps(agency_id, resources,
-                                            version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_structure_maps,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_representation_maps(self, agency_id=None, resources=None,
                                          version=None, detail=None) -> str:
         """Returns the representation maps query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_representation_maps(agency_id, resources,
-                                                 version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_representation_maps,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_concept_scheme_maps(self, agency_id=None, resources=None,
                                          version=None, detail=None) -> str:
         """Returns the concept scheme maps query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_concept_scheme_maps(agency_id, resources,
-                                                 version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_concept_scheme_maps,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_category_scheme_maps(self, agency_id=None, resources=None,
                                           version=None, detail=None) -> str:
         """Returns the category scheme maps query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_category_scheme_maps(agency_id, resources,
-                                                  version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_category_scheme_maps,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_organisation_scheme_maps(self, agency_id=None,
                                               resources=None,
                                               version=None, detail=None) -> str:
         """Returns the organisation scheme maps query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_organisation_scheme_maps(agency_id, resources,
-                                                      version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_organisation_scheme_maps,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_reporting_taxonomy_maps(self, agency_id=None,
                                              resources=None,
                                              version=None, detail=None) -> str:
         """Returns the reporting taxonomy maps query in metadata
         queries (by structure) for the WS Implementation"""
-        resources = self.id_builder(resources)
-        agency_id = agency_id if agency_id else "all"
-        if detail:
-            self._ws_implementation.validate_structural_detail(detail)
-
-        return (self._ws_implementation.
-                get_metadata_reporting_taxonomy_maps(agency_id, resources,
-                                                     version, detail))
+        return (self._metadata_query_builder(self._ws_implementation.
+                                             get_metadata_reporting_taxonomy_maps,
+                                             agency_id, resources,
+                                             version, detail))
 
     def get_metadata_metadataflows(self, agency_id=None, resources=None,
                                    version=None, provider_id=None,
