@@ -53,9 +53,8 @@ def test_dataflow(data_path):
     assert 'DER_CURR_LEG1' in data_dataflow.columns
 
 
-def test_msg_get_organisationSchemes(data_path):
+def test_msg_get_organisationSchemes(metadata_path):
     metadata_filename = 'metadata.xml'
-    metadata_path = Path(data_path).parent / "metadata"
     message = read_sdmx(os.path.join(metadata_path, metadata_filename))
     assert message is not None
     organisationSchemes = message.get_organisationschemes()
@@ -65,12 +64,11 @@ def test_msg_get_organisationSchemes(data_path):
     else:
         uid = organisationSchemes.unique_id
     organisationScheme = message.get_organisationscheme_by_uid(uid)
-    assert organisationScheme is not None
+    assert isinstance(organisationScheme, AgencyScheme)
 
 
-def test_msg_get_codelists(data_path):
+def test_msg_get_codelists(metadata_path):
     metadata_filename = 'metadata.xml'
-    metadata_path = Path(data_path).parent / "metadata"
     message = read_sdmx(os.path.join(metadata_path, metadata_filename))
     assert message is not None
     codelists = message.get_codelists()
@@ -80,12 +78,11 @@ def test_msg_get_codelists(data_path):
     else:
         uid = codelists.unique_id
     codelist = message.get_codelist_by_uid(uid)
-    assert codelist is not None
+    assert isinstance(codelist, Codelist)
 
 
-def test_msg_get_concepts(data_path):
+def test_msg_get_concepts(metadata_path):
     metadata_filename = 'metadata.xml'
-    metadata_path = Path(data_path).parent / "metadata"
     message = read_sdmx(os.path.join(metadata_path, metadata_filename))
     assert message is not None
     concepts = message.get_concepts()
@@ -95,12 +92,11 @@ def test_msg_get_concepts(data_path):
     else:
         uid = concepts.unique_id
     concept = message.get_concept_by_uid(uid)
-    assert concept is not None
+    assert isinstance(concept, ConceptScheme)
 
 
-def test_msg_get_datastructures(data_path):
+def test_msg_get_datastructures(metadata_path):
     metadata_filename = 'metadata.xml'
-    metadata_path = Path(data_path).parent / "metadata"
     message = read_sdmx(os.path.join(metadata_path, metadata_filename))
     assert message is not None
     datastructures = message.get_datastructures()
@@ -110,12 +106,11 @@ def test_msg_get_datastructures(data_path):
     else:
         uid = datastructures.unique_id
     datastructure = message.get_datastructure_by_uid(uid)
-    assert datastructure is not None
+    assert isinstance(datastructure, DataStructureDefinition)
 
 
-def test_msg_get_dataflows(data_path):
+def test_msg_get_dataflows(metadata_path):
     metadata_filename = 'metadata.xml'
-    metadata_path = Path(data_path).parent / "metadata"
     message = read_sdmx(os.path.join(metadata_path, metadata_filename))
     assert message is not None
     dataflows = message.get_dataflows()
@@ -125,7 +120,7 @@ def test_msg_get_dataflows(data_path):
     else:
         uid = dataflows.unique_id
     dataflow = message.get_dataflow_by_uid(uid)
-    assert dataflow is not None
+    assert isinstance(dataflow, DataFlowDefinition)
 
 def test_msg_get_datasets(data_path):
     data_filename = 'dataflow.xml'
@@ -138,5 +133,5 @@ def test_msg_get_datasets(data_path):
     else:
         uid = datasets.unique_id
     dataset = message.get_dataset_by_uid(uid)
-    assert dataset is not None
+    assert isinstance(dataset, Dataset)
 
