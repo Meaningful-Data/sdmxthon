@@ -49,7 +49,7 @@ def test_dataflow(data_path):
     assert 'AVAILABILITY' in data_dataflow.columns
     assert 'DER_CURR_LEG1' in data_dataflow.columns
 
-filename= [ "all.xml", "str_ser.xml", "gen_ser.xml", "gen_all.xml"]
+filename= [ "all.xml", "str_ser.xml", "gen_ser.xml", "gen_all.xml", "ecb.xml"]
 
 @mark.parametrize("data_filename", filename)
 def test_metadata_from_ws(data_filename, data_path):
