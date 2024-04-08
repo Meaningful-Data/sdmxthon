@@ -100,15 +100,15 @@ class SdmxWebservice(ABC):
                                 dimension_at_observation=None, attributes=None,
                                 measures=None, include_history=None):
         """
-        Returns URL and params to get data (datastructure)
+        Returns URL and params to get data (datastructures)
 
-        :param agency_id: The agency id of the data (datastructure)
+        :param agency_id: The agency id of the data (datastructures)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the data (datastructure)
+        :param version: The version of the data (datastructures)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
@@ -130,16 +130,16 @@ class SdmxWebservice(ABC):
         :type last_n_observations: int
 
         :param dimension_at_observation: The dimension at observation
-                                         of the data (datastructure)
+                                         of the data (datastructures)
         :type dimension_at_observation: str
 
-        :param attributes: Attributes of the data (datastructure)
+        :param attributes: Attributes of the data (datastructures)
         :type attributes: str
 
-        :param measures: The measures of the data (datastructure)
+        :param measures: The measures of the data (datastructures)
         :type measures: str
 
-        :param include_history: The include history of the data (by datastructure)
+        :param include_history: The include history of the data (by datastructures)
                                 (true, false)
         :type include_history: str
         """
@@ -151,15 +151,15 @@ class SdmxWebservice(ABC):
                            dimension_at_observation=None, attributes=None,
                            measures=None, include_history=None):
         """
-        Returns URL and params to get data (dataflow)
+        Returns URL and params to get data (dataflows)
 
-        :param agency_id: The agency id of the data (dataflow)
+        :param agency_id: The agency id of the data (dataflows)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the data (dataflow)
+        :param version: The version of the data (dataflows)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
@@ -181,7 +181,7 @@ class SdmxWebservice(ABC):
         :type last_n_observations: int
 
         :param dimension_at_observation: The dimension at observation
-                                         of the data (dataflow)
+                                         of the data (dataflows)
         :type dimension_at_observation: str
 
         :param attributes: Attributes of the dataflow
@@ -190,7 +190,7 @@ class SdmxWebservice(ABC):
         :param measures: The measures of the dataflow
         :type measures: str
 
-        :param include_history: The include history of the data (by dataflow)
+        :param include_history: The include history of the data (by dataflows)
                                 (true, false)
         :type include_history: str
         """
@@ -202,15 +202,15 @@ class SdmxWebservice(ABC):
                                       dimension_at_observation=None, attributes=None,
                                       measures=None, include_history=None):
         """
-        Returns URL and params to get data (provision agreement)
+        Returns URL and params to get data (provision agreements)
 
-        :param agency_id: The agency id of the data (provision agreement)
+        :param agency_id: The agency id of the data (provision agreements)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the data (provision agreement)
+        :param version: The version of the data (provision agreements)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
@@ -232,13 +232,13 @@ class SdmxWebservice(ABC):
         :type last_n_observations: int
 
         :param dimension_at_observation: The dimension at observation
-                                         of the data (provision agreement)
+                                         of the data (provision agreements)
         :type dimension_at_observation: str
 
-        :param attributes: Attributes of the data (provision agreement)
+        :param attributes: Attributes of the data (provision agreements)
         :type attributes: str
 
-        :param measures: The measures of the data (provision agreement)
+        :param measures: The measures of the data (provision agreements)
         :type measures: str
 
         :param include_history: The include history of the data
@@ -341,22 +341,22 @@ class SdmxWebservice(ABC):
                                       c=None, mode=None, references=None,
                                       updated_after=None):
         """
-        Returns URL and params to get the constraints (datastructure)
+        Returns URL and params to get the constraint (datastructures)
 
-        :param agency_id: The agency id of the constraints (datastructure)
+        :param agency_id: The agency id of the constraint (datastructures)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the constraints (datastructure)
+        :param version: The version of the constraint (datastructures)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
                     separated list of dimension filtered values.
         :type key: str
 
-        :param component_id: The component id of the constraints (datastructure)
+        :param component_id: The component id of the constraint (datastructures)
         :type component_id: str
 
         :param c: Filter data by component value
@@ -380,22 +380,22 @@ class SdmxWebservice(ABC):
                                  c=None, mode=None, references=None,
                                  updated_after=None):
         """
-        Returns URL and params to get the constraints (dataflow)
+        Returns URL and params to get the constraint (dataflows)
 
-        :param agency_id: The agency id of the constraints (dataflow)
+        :param agency_id: The agency id of the constraint (dataflows)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the constraints (dataflow)
+        :param version: The version of the constraint (dataflows)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
                     separated list of dimension filtered values.
         :type key: str
 
-        :param component_id: The component id of the constraints (dataflow)
+        :param component_id: The component id of the constraint (dataflows)
         :type component_id: str
 
         :param c: Filter data by component value
@@ -419,22 +419,22 @@ class SdmxWebservice(ABC):
                                             c=None, mode=None, references=None,
                                             updated_after=None):
         """
-        Returns URL and params to get the constraints (provision agreement)
+        Returns URL and params to get the constraint (provision agreements)
 
-        :param agency_id: The agency id of the constraints (provision agreement)
+        :param agency_id: The agency id of the constraint (provision agreements)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the constraints (provision agreement)
+        :param version: The version of the constraint (provision agreements)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
                     separated list of dimension filtered values.
         :type key: str
 
-        :param component_id: The component id of the constraints (provision agreement)
+        :param component_id: The component id of the constraint (provision agreements)
         :type component_id: str
 
         :param c: Filter data by component value
@@ -461,20 +461,20 @@ class SdmxWebservice(ABC):
         """
         Returns URL and params to get the constraints
 
-        :param agency_id: The agency id of the constraints (all possible contexts)
+        :param agency_id: The agency id of the constraint (all possible contexts)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the constraints (all possible contexts)
+        :param version: The version of the constraint (all possible contexts)
         :type version: str
 
         :param key: The key is constructed as a dot ('.')
                     separated list of dimension filtered values.
         :type key: str
 
-        :param component_id: The component id of the constraints (all possible contexts)
+        :param component_id: The component id of the constraint (all possible contexts)
         :type component_id: str
 
         :param c: Filter data by component value
@@ -497,15 +497,15 @@ class SdmxWebservice(ABC):
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
         """
-        Returns URL and params to get the schema (datastructure)
+        Returns URL and params to get the schema (datastructures)
 
-        :param agency_id: The agency id of the schema (datastructure)
+        :param agency_id: The agency id of the schema (datastructures)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the schema (datastructure)
+        :param version: The version of the schema (datastructures)
         :type version: str
 
         :param dimension_at_observation: The dimension at observation
@@ -520,15 +520,15 @@ class SdmxWebservice(ABC):
                                        version=None, dimension_at_observation=None,
                                        explicit_measure=None):
         """
-        Returns URL and params to get the schema (metadatastructure)
+        Returns URL and params to get the schema (metadatastructures)
 
-        :param agency_id: The agency id of the schema (metadatastructure)
+        :param agency_id: The agency id of the schema (metadatastructures)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the schema (metadatastructure)
+        :param version: The version of the schema (metadatastructures)
         :type version: str
 
         :param dimension_at_observation: The dimension at observation
@@ -543,15 +543,15 @@ class SdmxWebservice(ABC):
                              version=None, dimension_at_observation=None,
                              explicit_measure=None):
         """
-        Returns URL and params to get the schema (dataflow)
+        Returns URL and params to get the schema (dataflows)
 
-        :param agency_id: The agency id of the schema (dataflow)
+        :param agency_id: The agency id of the schema (dataflows)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the schema (dataflow)
+        :param version: The version of the schema (dataflows)
         :type version: str
 
         :param dimension_at_observation: The dimension at observation
@@ -566,15 +566,15 @@ class SdmxWebservice(ABC):
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
         """
-        Returns URL and params to get the schema (metadataflow)
+        Returns URL and params to get the schema (metadataflows)
 
-        :param agency_id: The agency id of the schema (metadataflow)
+        :param agency_id: The agency id of the schema (metadataflows)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the schema (metadataflow)
+        :param version: The version of the schema (metadataflows)
         :type version: str
 
         :param dimension_at_observation: The dimension at observation
@@ -589,15 +589,15 @@ class SdmxWebservice(ABC):
                                         version=None, dimension_at_observation=None,
                                         explicit_measure=None):
         """
-        Returns URL and params to get the schema (provision agreement)
+        Returns URL and params to get the schema (provision agreements)
 
-        :param agency_id: The agency id of the schema (provision agreement)
+        :param agency_id: The agency id of the schema (provision agreements)
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the schema (provision agreement)
+        :param version: The version of the schema (provision agreements)
         :type version: str
 
         :param dimension_at_observation: The dimension at observation
@@ -1073,15 +1073,15 @@ class SdmxWebservice(ABC):
     def get_data_constraint(self, agency_id, resources, version,
                             references=None, detail=None) -> str:
         """
-        Returns URL and params to get the data constraint (V2.0.0)
+        Returns URL and params to get the data constraints (V2.0.0)
 
-        :param agency_id: The agency id of the data constraint
+        :param agency_id: The agency id of the data constraints
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the data constraint
+        :param version: The version of the data constraints
         :type version: str
 
         :param references: The references parameter ('none', 'parents',
@@ -1114,15 +1114,15 @@ class SdmxWebservice(ABC):
     def get_metadata_constraint(self, agency_id, resources, version,
                                 references=None, detail=None) -> str:
         """
-        Returns URL and params to get the metadata constraint (V2.0.0)
+        Returns URL and params to get the metadata constraints (V2.0.0)
 
-        :param agency_id: The agency id of the metadata constraint
+        :param agency_id: The agency id of the metadata constraints
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the metadata constraint
+        :param version: The version of the metadata constraints
         :type version: str
 
         :param references: The references parameter ('none', 'parents',
@@ -1519,15 +1519,15 @@ class SdmxWebservice(ABC):
     def get_hierarchy(self, agency_id, resources, version,
                       references=None, detail=None) -> str:
         """
-        Returns URL and params to get the hierarchy (V2.0.0)
+        Returns URL and params to get the hierarchies (V2.0.0)
 
-        :param agency_id: The agency id of the hierarchy
+        :param agency_id: The agency id of the hierarchies
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the hierarchy
+        :param version: The version of the hierarchies
         :type version: str
 
         :param references: The references parameter ('none', 'parents',
@@ -1560,15 +1560,15 @@ class SdmxWebservice(ABC):
     def get_hierarchy_association(self, agency_id, resources, version,
                                   references=None, detail=None) -> str:
         """
-        Returns URL and params to get the hierarchy association (V2.0.0)
+        Returns URL and params to get the hierarchy associations (V2.0.0)
 
-        :param agency_id: The agency id of the hierarchy association
+        :param agency_id: The agency id of the hierarchy associations
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the hierarchy association
+        :param version: The version of the hierarchy associations
         :type version: str
 
         :param references: The references parameter ('none', 'parents',
@@ -3972,16 +3972,16 @@ class SdmxWebservice(ABC):
     def get_metadata_name_personalisation_schemes(self, agency_id, resources,
                                                   version, detail=None) -> str:
         """
-        Returns URL and params to get name personalisation scheme in
+        Returns URL and params to get name personalisation schemes in
         Metadata queries (by structure) (V2.0.0)
 
-        :param agency_id: The agency id of the name personalisation scheme
+        :param agency_id: The agency id of the name personalisation schemes
         :type agency_id: str
 
         :param resources: The resources to query
         :type resources: str
 
-        :param version: The version of the name personalisation scheme
+        :param version: The version of the name personalisation schemes
         :type version: str
 
         :param detail: The detail parameter (allstubs, full)
@@ -4479,9 +4479,9 @@ class SdmxWs2p0(SdmxWebservice):
         """
         Returns URL and params to get data
 
-        :param agency_id: The id of the data (datastructure)
+        :param agency_id: The id of the data (datastructures)
         :param resources: The resources to query
-        :param version: The version of the data (datastructure)
+        :param version: The version of the data (datastructures)
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
         :param c: Filter data by component value
@@ -4491,8 +4491,8 @@ class SdmxWs2p0(SdmxWebservice):
         :param last_n_observations: Number of last observations to be returned
                                     per key
         :param dimension_at_observation: The dimension at observation
-        :param attributes: Attributes of the data (datastructure)
-        :param measures: Measures of the data (datastructure)
+        :param attributes: Attributes of the data (datastructures)
+        :param measures: Measures of the data (datastructures)
         :param include_history: Value to include history (true, false)
 
         :return: The URL and params formatted
@@ -4515,9 +4515,9 @@ class SdmxWs2p0(SdmxWebservice):
         """
         Returns URL and params to get data
 
-        :param agency_id: The id of the data (dataflow)
+        :param agency_id: The id of the data (dataflows)
         :param resources: The resources to query
-        :param version: The version of the data (dataflow)
+        :param version: The version of the data (dataflows)
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
         :param c: Filter data by component value
@@ -4527,8 +4527,8 @@ class SdmxWs2p0(SdmxWebservice):
         :param last_n_observations: Number of last observations to be returned
                                     per key
         :param dimension_at_observation: The dimension at observation
-        :param attributes: Attributes of the data (dataflow)
-        :param measures: Measures of the data (dataflow)
+        :param attributes: Attributes of the data (dataflows)
+        :param measures: Measures of the data (dataflows)
         :param include_history: Value to include history (true, false)
 
         :return: The URL and params formatted
@@ -4552,9 +4552,9 @@ class SdmxWs2p0(SdmxWebservice):
         """
         Returns URL and params to get data
 
-        :param agency_id: The id of the data (provision agreement)
+        :param agency_id: The id of the data (provision agreements)
         :param resources: The resources to query
-        :param version: The version of the data (provision agreement)
+        :param version: The version of the data (provision agreements)
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
         :param c: Filter data by component value
@@ -4564,8 +4564,8 @@ class SdmxWs2p0(SdmxWebservice):
         :param last_n_observations: Number of last observations to be returned
                                     per key
         :param dimension_at_observation: The dimension at observation
-        :param attributes: Attributes of the data (provision agreement)
-        :param measures: Measures of the data (provision agreement)
+        :param attributes: Attributes of the data (provision agreements)
+        :param measures: Measures of the data (provision agreements)
         :param include_history: Value to include history (true, false)
 
         :return: The URL and params formatted
@@ -4629,14 +4629,14 @@ class SdmxWs2p0(SdmxWebservice):
         """
         Returns URL and params to get constraints
 
-        :param agency_id: The id of the constraint (datastructure)
+        :param agency_id: The id of the constraint (datastructures)
         :param resources: The resources to query
         :param version: The version of the constraint (datastructure)
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
-        :param component_id: The id of the dimension of constraint (datastructure)
+        :param component_id: The id of the dimension of constraint (datastructures)
         :param c: Filter data by component value
-        :param version: The version of the constraint (datastructure)
+        :param version: The version of the constraint (datastructures)
         :param mode: The mode parameter (exact, available)
 
         :param references: The references parameter (none, all, datastructure,conceptscheme,
@@ -4659,14 +4659,14 @@ class SdmxWs2p0(SdmxWebservice):
         """
         Returns URL and params to get constraints
 
-        :param agency_id: The id of the constraint (dataflow)
+        :param agency_id: The id of the constraint (dataflows)
         :param resources: The resources to query
-        :param version: The version of the constraint (dataflow)
+        :param version: The version of the constraint (dataflows)
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
-        :param component_id: The id of the dimension of constraint (dataflow)
+        :param component_id: The id of the dimension of constraint (dataflows)
         :param c: Filter data by component value
-        :param version: The version of the constraint (dataflow)
+        :param version: The version of the constraint (dataflows)
         :param mode: The mode parameter (exact, available)
 
         :param references: The references parameter (none, all, datastructure,conceptscheme,
@@ -4690,14 +4690,14 @@ class SdmxWs2p0(SdmxWebservice):
         """
         Returns URL and params to get constraints
 
-        :param agency_id: The id of the constraint (provision agreement)
+        :param agency_id: The id of the constraint (provision agreements)
         :param resources: The resources to query
-        :param version: The version of the constraint (provision agreement)
+        :param version: The version of the constraint (provision agreements)
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
-        :param component_id: The id of the dimension of constraint (provision agreement)
+        :param component_id: The id of the dimension of constraint (provision agreements)
         :param c: Filter data by component value
-        :param version: The version of the constraint (provision agreement)
+        :param version: The version of the constraint (provision agreements)
         :param mode: The mode parameter (exact, available)
 
         :param references: The references parameter (none, all, datastructure,conceptscheme,
@@ -4749,11 +4749,11 @@ class SdmxWs2p0(SdmxWebservice):
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
         """
-        Returns URL and params to get schema (datastructure)
+        Returns URL and params to get schema (datastructures)
 
-        :param agency_id: The id of the schema (datastructure)
+        :param agency_id: The id of the schema (datastructures)
         :param resources: The resources to query
-        :param version: The version of the schema (datastructure)
+        :param version: The version of the schema (datastructures)
         :param dimension_at_observation: The dimension at observation
 
         :param explicit_measure: Indicates whether observations are strongly typed
@@ -4771,11 +4771,11 @@ class SdmxWs2p0(SdmxWebservice):
                                        dimension_at_observation=None,
                                        explicit_measure=None):
         """
-        Returns URL and params to get schema (metadatastructure)
+        Returns URL and params to get schema (metadatastructures)
 
-        :param agency_id: The id of the schema (metadatastructure)
+        :param agency_id: The id of the schema (metadatastructures)
         :param resources: The resources to query
-        :param version: The version of the schema (metadatastructure)
+        :param version: The version of the schema (metadatastructures)
         :param dimension_at_observation: The dimension at observation
 
         :param explicit_measure: Indicates whether observations are strongly typed
@@ -4792,11 +4792,11 @@ class SdmxWs2p0(SdmxWebservice):
                              version=None, dimension_at_observation=None,
                              explicit_measure=None):
         """
-        Returns URL and params to get schema (dataflow)
+        Returns URL and params to get schema (dataflows)
 
-        :param agency_id: The id of the schema (dataflow)
+        :param agency_id: The id of the schema (dataflows)
         :param resources: The resources to query
-        :param version: The version of the schema (dataflow)
+        :param version: The version of the schema (dataflows)
         :param dimension_at_observation: The dimension at observation
 
         :param explicit_measure: Indicates whether observations are strongly typed
@@ -4813,11 +4813,11 @@ class SdmxWs2p0(SdmxWebservice):
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
         """
-        Returns URL and params to get schema (metadataflow)
+        Returns URL and params to get schema (metadataflows)
 
-        :param agency_id: The id of the schema (metadataflow)
+        :param agency_id: The id of the schema (metadataflows)
         :param resources: The resources to query
-        :param version: The version of the schema (metadataflow)
+        :param version: The version of the schema (metadataflows)
         :param dimension_at_observation: The dimension at observation
 
         :param explicit_measure: Indicates whether observations are strongly typed
@@ -4835,11 +4835,11 @@ class SdmxWs2p0(SdmxWebservice):
                                         dimension_at_observation=None,
                                         explicit_measure=None):
         """
-        Returns URL and params to get schema (provision agreement)
+        Returns URL and params to get schema (provision agreements)
 
-        :param agency_id: The id of the schema (provision agreement)
+        :param agency_id: The id of the schema (provision agreements)
         :param resources: The resources to query
-        :param version: The version of the schema (provision agreement)
+        :param version: The version of the schema (provision agreements)
         :param dimension_at_observation: The dimension at observation
 
         :param explicit_measure: Indicates whether observations are strongly typed
@@ -7285,8 +7285,8 @@ class SdmxWs1(SdmxWebservice):
         :param flow: The id of the dataflow
         :param key: The key is constructed as a dot ('.') separated list of
                     dimension filtered values.
-        :param provider: The provider of the data
-        :param component_id: The component id of the data
+        :param provider: The provider of the constraints
+        :param component_id: The component id of the constraints
 
         :param mode: The mode parameter (exact, available)
 
@@ -7294,8 +7294,8 @@ class SdmxWs1(SdmxWebservice):
                             'datastructure', 'conceptscheme', 'codelist',
                             'dataproviderscheme', 'dataflow')
 
-        :param start_period: The start period of the dataflow
-        :param end_period: The end period of the dataflow
+        :param start_period: The start period of the constraints
+        :param end_period: The end period of the constraints
         :param updated_after: Data filtered by the last update date
 
         :return: The URL and params formatted
@@ -8937,11 +8937,11 @@ class SdmxWs1(SdmxWebservice):
                                   dimension_at_observation=None,
                                   explicit_measure=None) -> str:
         """
-        Returns URL and params to get schema (datastructure)
+        Returns URL and params to get schema (datastructures)
 
-        :param agency_id: The id of the schema (datastructure)
+        :param agency_id: The id of the schema (datastructures)
         :param resources: The resources to query
-        :param version: The version of the schema (datastructure)
+        :param version: The version of the schema (datastructures)
         :param dimension_at_observation: The dimension at observation
         :param explicit_measure: Indicates whether observations are
                                   strongly typed (true, false)
@@ -8958,11 +8958,11 @@ class SdmxWs1(SdmxWebservice):
                                        dimension_at_observation=None,
                                        explicit_measure=None) -> str:
         """
-        Returns URL and params to get schema (metadatastructure)
+        Returns URL and params to get schema (metadatastructures)
 
-        :param agency_id: The id of the schema (metadatastructure)
+        :param agency_id: The id of the schema (metadatastructures)
         :param resources: The resources to query
-        :param version: The version of the schema (metadatastructure)
+        :param version: The version of the schema (metadatastructures)
         :param dimension_at_observation: The dimension at observation
         :param explicit_measure: Indicates whether observations are
                                   strongly typed (true, false)
@@ -8978,11 +8978,11 @@ class SdmxWs1(SdmxWebservice):
                              version=None, dimension_at_observation=None,
                              explicit_measure=None) -> str:
         """
-        Returns URL and params to get schema (dataflow)
+        Returns URL and params to get schema (dataflows)
 
-        :param agency_id: The id of the schema (dataflow)
+        :param agency_id: The id of the schema (dataflows)
         :param resources: The resources to query
-        :param version: The version of the schema (dataflow)
+        :param version: The version of the schema (dataflows)
         :param dimension_at_observation: The dimension at observation
         :param explicit_measure: Indicates whether observations are
                                   strongly typed (true, false)
@@ -8998,11 +8998,11 @@ class SdmxWs1(SdmxWebservice):
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None) -> str:
         """
-        Returns URL and params to get schema (metadataflow)
+        Returns URL and params to get schema (metadataflows)
 
-        :param agency_id: The id of the schema (metadataflow)
+        :param agency_id: The id of the schema (metadataflows)
         :param resources: The resources to query
-        :param version: The version of the schema (metadataflow)
+        :param version: The version of the schema (metadataflows)
         :param dimension_at_observation: The dimension at observation
         :param explicit_measure: Indicates whether observations are
                                   strongly typed (true, false)
@@ -9017,11 +9017,11 @@ class SdmxWs1(SdmxWebservice):
                                         dimension_at_observation=None,
                                         explicit_measure=None) -> str:
         """
-        Returns URL and params to get schema (provision agreement)
+        Returns URL and params to get schema (provision agreements)
 
-        :param agency_id: The id of the schema (provision agreement)
+        :param agency_id: The id of the schema (provision agreements)
         :param resources: The resources to query
-        :param version: The version of the schema (provision agreement)
+        :param version: The version of the schema (provision agreements)
         :param dimension_at_observation: The dimension at observation
         :param explicit_measure: Indicates whether observations are
                                   strongly typed (true, false)
@@ -9334,7 +9334,7 @@ class QueryBuilder:
                                 last_n_observations=None,
                                 dimension_at_observation=None, attributes=None,
                                 measures=None, include_history=None):
-        """Returns the data (datastructure) query for the WS Implementation"""
+        """Returns the data (datastructures) query for the WS Implementation"""
 
         return (self._data_query_builder(self._ws_implementation.
                                          get_data_datastructures,
@@ -9353,7 +9353,7 @@ class QueryBuilder:
                            first_n_observations=None, last_n_observations=None,
                            dimension_at_observation=None, attributes=None,
                            measures=None, include_history=None):
-        """Returns the data (dataflow) query for the WS Implementation"""
+        """Returns the data (dataflows) query for the WS Implementation"""
 
         return (self._data_query_builder(self._ws_implementation.
                                          get_data_dataflows,
@@ -9375,7 +9375,7 @@ class QueryBuilder:
                                       dimension_at_observation=None,
                                       attributes=None,
                                       measures=None, include_history=None):
-        """Returns the data (provision agreement) query for the WS Implementation"""
+        """Returns the data (provision agreements) query for the WS Implementation"""
 
         return (self._data_query_builder(self._ws_implementation.
                                          get_data_provision_agreements,
@@ -9414,6 +9414,7 @@ class QueryBuilder:
                         mode=None, references=None, start_period=None,
                         end_period=None, updated_after=None):
         """Returns the constraints query for the WS Implementation"""
+
         provider = self.id_builder(provider)
         if mode:
             self._ws_implementation.validate_constraints_mode(mode)
@@ -9432,7 +9433,7 @@ class QueryBuilder:
                                       c=None,
                                       mode=None, references=None,
                                       updated_after=None):
-        """Returns the constraints (datastructure) query for the WS Implementation"""
+        """Returns the constraint (datastructures) query for the WS Implementation"""
 
         return (self._constraint_query_builder(self._ws_implementation.
                                                get_constraint_datastructures,
@@ -9448,7 +9449,7 @@ class QueryBuilder:
                                  c=None,
                                  mode=None, references=None,
                                  updated_after=None):
-        """Returns the constraints (dataflow) query for the WS Implementation"""
+        """Returns the constraint (dataflows) query for the WS Implementation"""
 
         return (self._constraint_query_builder(self._ws_implementation.
                                                get_constraint_dataflows,
@@ -9465,7 +9466,7 @@ class QueryBuilder:
                                             component_id=None, c=None,
                                             mode=None, references=None,
                                             updated_after=None):
-        """Returns the constraints (provision agreement) query for the WS Implementation"""
+        """Returns the constraint (provision agreements) query for the WS Implementation"""
 
         return (self._constraint_query_builder(self._ws_implementation.
                                                get_constraint_provision_agreements,
@@ -9481,7 +9482,7 @@ class QueryBuilder:
                                     c=None,
                                     mode=None, references=None,
                                     updated_after=None):
-        """Returns the constraints (all possible contexts) query for the WS Implementation"""
+        """Returns the constraint (all possible contexts) query for the WS Implementation"""
 
         return (self._constraint_query_builder(self._ws_implementation.
                                                get_constraint_all_contexts,
@@ -9495,7 +9496,7 @@ class QueryBuilder:
     def get_schema_datastructures(self, agency_id=None, resources=None,
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
-        """Returns the schema (datastructure) query for the WS Implementation"""
+        """Returns the schema (datastructures) query for the WS Implementation"""
 
         return (self._schema_query_builder(self._ws_implementation.
                                            get_schema_datastructures,
@@ -9507,7 +9508,7 @@ class QueryBuilder:
                                        version=None,
                                        dimension_at_observation=None,
                                        explicit_measure=None):
-        """Returns the schema (metadatastructure) query for the WS Implementation"""
+        """Returns the schema (metadatastructures) query for the WS Implementation"""
 
         return (self._schema_query_builder(self._ws_implementation.
                                            get_schema_meta_datastructures,
@@ -9518,7 +9519,7 @@ class QueryBuilder:
     def get_schema_dataflows(self, agency_id=None, resources=None,
                              version=None, dimension_at_observation=None,
                              explicit_measure=None):
-        """Returns the schema (dataflow) query for the WS Implementation"""
+        """Returns the schema (dataflows) query for the WS Implementation"""
 
         return (self._schema_query_builder(self._ws_implementation.
                                            get_schema_dataflows,
@@ -9529,7 +9530,7 @@ class QueryBuilder:
     def get_schema_meta_dataflows(self, agency_id=None, resources=None,
                                   version=None, dimension_at_observation=None,
                                   explicit_measure=None):
-        """Returns the schema (metadataflow) query for the WS Implementation"""
+        """Returns the schema (metadataflows) query for the WS Implementation"""
 
         return (self._schema_query_builder(self._ws_implementation.
                                            get_schema_meta_dataflows,
@@ -9541,7 +9542,7 @@ class QueryBuilder:
                                         version=None,
                                         dimension_at_observation=None,
                                         explicit_measure=None):
-        """Returns the schema (provision agreement) query for the WS Implementation"""
+        """Returns the schema (provision agreements) query for the WS Implementation"""
 
         return (self._schema_query_builder(self._ws_implementation.
                                            get_schema_provision_agreements,
@@ -10011,7 +10012,7 @@ class QueryBuilder:
     def get_value_lists(self, agency_id=None, resources=None,
                         version=None, item_id=None, references=None,
                         detail=None) -> str:
-        """Returns the get value list schemes
+        """Returns the get value lists
         in Item Scheme queries for the WS Implementation"""
         return self.query_builder_common_with_item(self._ws_implementation.
                                                    get_value_lists,
