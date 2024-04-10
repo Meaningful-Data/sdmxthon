@@ -49,13 +49,16 @@ def test_dataflow(data_path):
     assert 'AVAILABILITY' in data_dataflow.columns
     assert 'DER_CURR_LEG1' in data_dataflow.columns
 
-filename= [ "all.xml", "str_ser.xml", "gen_ser.xml", "gen_all.xml", "ecb.xml"]
+
+filename = [
+    "gen_ser.xml", "ecb.xml", "ilo.xml",
+    "oecd.xml",
+]
+
 
 @mark.parametrize("data_filename", filename)
 def test_metadata_from_ws(data_filename, data_path):
-    message = read_sdmx(os.path.join(data_path , data_filename))
+    message = read_sdmx(os.path.join(data_path, data_filename))
     structure = first_element_dict(message.payload).structure
     dataflow = first_element_dict(message.payload).dataflow
     assert structure is not None or dataflow is not None
-
-
