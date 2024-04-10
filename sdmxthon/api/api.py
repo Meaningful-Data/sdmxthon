@@ -3,6 +3,7 @@ API module contains the functions to read SDMX files and transform them into
 Pandas Dataframes or CSV files. It also contains the function to get the
 supported agencies by the API.
 """
+import copy
 import os
 from pathlib import Path
 from zipfile import ZipFile
@@ -69,15 +70,24 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
 def get_structure_from_ws(dataset: Dataset):
     supported_agencies = get_supported_agencies()
 
+    aux_agency = None
+
     agency_id, id_, version = split_unique_id(dataset.unique_id)
+
+    if 'OECD' in agency_id:
+        aux_agency = copy.deepcopy(agency_id)
+        agency_id = 'OECD'
 
     if agency_id not in supported_agencies:
         return
 
     ws = supported_agencies[agency_id]()
 
+    if aux_agency:
+        agency_id = aux_agency
+
     if dataset.structure_type == "dataflow":
-        dataflow = ws.get_data_flow(id_, version=version, detail='full', references='children')
+        dataflow = ws.get_data_flow(id_, agency_id=agency_id, version=version, detail='full', references='children')
         if isinstance(dataflow.payload, SDMXError):
             return
         else:
