@@ -53,6 +53,8 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
             if len(payload) > 1:
                 payload = dict(payload.values())
             else:
+                if use_dataset_id:
+                    first_element._unique_id = list(payload.keys())[0]
                 payload = first_element
 
         elif isinstance(first_element, SubmissionResult):
@@ -88,11 +90,11 @@ def get_datasets(path_to_data, path_to_metadata, validate=True,
     if message_datasets.type != MessageTypeEnum.StructureSpecificDataSet:
         raise ValueError('The message is not a StructureSpecificDataSet')
 
-    datasets = message_datasets.payload
+    datasets = message_datasets.content['datasets']
 
-    metadata = read_xml(path_to_metadata,
-                        mode="Metadata",
-                        validate=validate)
+    metadata, message_type = read_xml(path_to_metadata,
+                                      mode="Metadata",
+                                      validate=validate)
 
     for v in datasets:
         if 'DataStructures' in metadata:
@@ -131,7 +133,7 @@ def get_pandas_df(path_to_data, validate=True, remove_empty_columns=True,
     if message_datasets.type != MessageTypeEnum.StructureSpecificDataSet:
         raise ValueError('Only SDMX data messages are allowed in get_pandas_df')
 
-    datasets = message_datasets.payload
+    datasets = message_datasets.content['datasets']
     if not remove_empty_columns:
         return {ds: datasets[ds].data for ds in datasets}
     else:
@@ -154,8 +156,8 @@ def xml_to_csv(data, output_path=None, validate=True,
 
     :return: A StringIO object if output_path is ''
     """
-    datasets = read_xml(data, mode="Data", validate=validate,
-                        use_dataset_id=True)
+    datasets, message_type = read_xml(data, mode="Data", validate=validate,
+                                      use_dataset_id=True)
 
     if remove_empty_columns:
         for ds in datasets:

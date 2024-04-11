@@ -11,8 +11,8 @@ from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.write import writer
 from sdmxthon.utils.enums import MessageTypeEnum
 from sdmxthon.utils.handlers import first_element_dict
-from sdmxthon.utils.parsing_words import CODELISTS_CM, DATAFLOWS_CM, DATASTRUCTURES_CM, \
-    ORGANISATIONSCHEMES_CM, CONCEPTS_CM
+from sdmxthon.utils.parsing_words import CODELISTS_CM, CONCEPTS_CM, \
+    DATAFLOWS_CM, DATASTRUCTURES_CM, ORGANISATIONSCHEMES_CM
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 
 
@@ -240,7 +240,7 @@ class Message:
         type_list = [ORGANISATIONSCHEMES_CM, DATASTRUCTURES_CM, DATAFLOWS_CM, CODELISTS_CM, CONCEPTS_CM]
         content = {}
         if isinstance(self.payload, Dataset):
-            datasets = {'datasets': {self.payload.unique_id, self.payload}}
+            datasets = {'datasets': {self.payload.unique_id: self.payload}}
             return datasets
         elif isinstance(self.payload, dict):
             first_element = first_element_dict(self.payload)

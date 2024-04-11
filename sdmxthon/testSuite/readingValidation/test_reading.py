@@ -5,7 +5,8 @@ from pytest import mark
 
 from sdmxthon import Dataset
 from sdmxthon.api.api import read_sdmx
-from sdmxthon.model.definitions import DataStructureDefinition, DataFlowDefinition
+from sdmxthon.model.definitions import DataFlowDefinition, \
+    DataStructureDefinition
 from sdmxthon.model.itemScheme import AgencyScheme, Codelist, ConceptScheme
 from sdmxthon.model.message import Message
 from sdmxthon.utils.handlers import first_element_dict
@@ -22,7 +23,7 @@ def test_reading_validation(data_path, filename):
     file_path = os.path.join(data_path, filename)
     result = read_sdmx(file_path, validate=True)
     assert result is not None
-    data = result.content['BIS:BIS_DER(1.0)'].data
+    data = result.content['datasets']['BIS:BIS_DER(1.0)'].data
     num_rows = len(data)
     num_columns = data.shape[1]
     assert num_rows > 0
@@ -38,7 +39,8 @@ def test_dataflow(data_path):
     filename = 'dataflow.xml'
     file_path = os.path.join(data_path, filename)
     result = read_sdmx(file_path, validate=True)
-    data_dataflow = result.content['BIS:WEBSTATS_DER_DATAFLOW(1.0)'].data
+    data_dataflow = result.content['datasets'][
+        'BIS:WEBSTATS_DER_DATAFLOW(1.0)'].data
     num_rows = len(data_dataflow)
     num_columns = data_dataflow.shape[1]
     assert isinstance(result, Message)
@@ -48,7 +50,7 @@ def test_dataflow(data_path):
     expected_num_columns = 20
     assert num_rows == expected_num_rows
     assert num_columns == expected_num_columns
-    assert 'BIS:WEBSTATS_DER_DATAFLOW(1.0)' in result.content
+    assert 'BIS:WEBSTATS_DER_DATAFLOW(1.0)' in result.content['datasets']
     assert 'AVAILABILITY' in data_dataflow.columns
     assert 'DER_CURR_LEG1' in data_dataflow.columns
 

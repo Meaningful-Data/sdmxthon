@@ -61,7 +61,7 @@ def test_to_sdmx_csv_writing(data_path, metadata_path, sdmx_version):
     dataset.data = dataset.data.astype('str')
     result_sdmx_csv = dataset.to_sdmx_csv(sdmx_version)
     message_sdmx_csv = read_sdmx(result_sdmx_csv)
-    dataset_sdmx_csv = first_element_dict(message_sdmx_csv.payload)
+    dataset_sdmx_csv = message_sdmx_csv.payload
     pd.testing.assert_frame_equal(
         dataset_sdmx_csv.data.fillna('').replace('nan', ''),
         dataset.data.replace('nan', ''),
