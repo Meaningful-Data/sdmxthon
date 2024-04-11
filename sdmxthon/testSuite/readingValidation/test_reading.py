@@ -51,8 +51,7 @@ def test_dataflow(data_path):
 
 
 filename = [
-    "gen_ser.xml", "ecb.xml", "ilo.xml",
-    "oecd.xml",
+    "gen_ser.xml", "ecb.xml", "ilo.xml", "oecd.xml",
 ]
 
 
