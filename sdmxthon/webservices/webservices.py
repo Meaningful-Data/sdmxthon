@@ -101,7 +101,6 @@ class SdmxWebServiceConnection(ABC):
         from sdmxthon.api.api import read_sdmx
         """Returns a message with the data"""
         url = self.get_data_url(flow, **kwargs)
-        print(url)
         message = read_sdmx(url, validate=False)
         return message
 

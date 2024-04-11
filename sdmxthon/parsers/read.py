@@ -10,8 +10,8 @@ from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
     validate_doc
-from sdmxthon.utils.enums import ActionEnum
-from sdmxthon.utils.handlers import split_from_urn
+from sdmxthon.utils.enums import ActionEnum, MessageTypeEnum
+from sdmxthon.utils.handlers import first_element_dict, split_from_urn
 from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
     FAULTCODE, FAULTSTRING, GENERIC, \
@@ -219,7 +219,16 @@ def read_xml(infile: str, mode: str = None,
             raise ValueError("Wrong mode")
 
     result = parse_sdmx(dict_info, use_dataset_id)
-    return result
+
+    if isinstance(result, SDMXError):
+        return result, MessageTypeEnum.Error
+
+    if isinstance(first_element_dict(result), Dataset):
+        type_ = MessageTypeEnum.StructureSpecificDataSet
+    else:
+        type_ = MessageTypeEnum.Metadata
+
+    return result, type_
 
 
 def get_ids_from_structure(element: dict):

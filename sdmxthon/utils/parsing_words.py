@@ -187,3 +187,10 @@ namespaces = {
 
 # To exclude from attached_attributes
 exc_attributes = [STRREF, 'action', 'dataScope', 'xsi:type', SERIES, OBS]
+
+# Content types
+DATASTRUCTURES_CM = 'DataStructures'
+DATAFLOWS_CM = 'Dataflows'
+CODELISTS_CM = 'Codelists'
+CONCEPTS_CM = 'Concepts'
+ORGANISATIONSCHEMES_CM = 'OrganisationSchemes'

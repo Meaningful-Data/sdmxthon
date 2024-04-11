@@ -3,7 +3,7 @@ from pathlib import Path
 
 from pytest import mark
 
-from sdmxthon.api.api import read_sdmx, get_datasets
+from sdmxthon.api.api import get_datasets, read_sdmx
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.utils.handlers import first_element_dict
 
@@ -41,7 +41,7 @@ def test_metadata_errors(data_path, metadata_path):
 # Test: Checking for specific error codes (using custom structure)
 def test_metadata_valid(data_path, metadata_path):
     content = read_sdmx(os.path.join(data_path, 'data.xml')).content
-    dataset = first_element_dict(content)
+    dataset = first_element_dict(content['datasets'])
     metadata = read_sdmx(os.path.join(metadata_path, 'metadata_valid.xml'))
     dataset.structure = metadata.content['DataStructures']['MD:DS1(1.0)']
 
@@ -65,7 +65,7 @@ def test_metadata_valid(data_path, metadata_path):
 def test_nodsd(data_path, metadata_path):
     file_path_test_nodsd = os.path.join(metadata_path, 'test_nodsd.xml')
     result_test_nodsd = read_sdmx(file_path_test_nodsd, validate=False)
-    validation_errors = result_test_nodsd.content['errors']
+    validation_errors = result_test_nodsd.payload['errors']
     expected_errors = [
         {'Code': 'MS01',
          'ErrorLevel': 'CRITICAL',
