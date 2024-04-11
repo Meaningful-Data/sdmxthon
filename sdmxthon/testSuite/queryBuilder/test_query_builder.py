@@ -55,12 +55,12 @@ params_structure_queries_SdmxWs1 = [
     ('get_name_personalisation_scheme',
      '/namepersonalisationscheme/all/all/latest'),
     ('get_name_alias_scheme', '/namealiasscheme/all/all/latest'),
-    ('get_schemas_datastructure', '/schema/datastructure/all/all/latest'),
-    ('get_schemas_meta_datastructure',
+    ('get_schema_datastructures', '/schema/datastructure/all/all/latest'),
+    ('get_schema_meta_datastructures',
      '/schema/metadatastructure/all/all/latest'),
-    ('get_schemas_dataflow', '/schema/dataflow/all/all/latest'),
-    ('get_schemas_meta_dataflow', '/schema/metadataflow/all/all/latest'),
-    ('get_schemas_provision_agreement',
+    ('get_schema_dataflows', '/schema/dataflow/all/all/latest'),
+    ('get_schema_meta_dataflows', '/schema/metadataflow/all/all/latest'),
+    ('get_schema_provision_agreements',
      '/schema/provisionagreement/all/all/latest')
 ]
 
@@ -221,30 +221,30 @@ params_structure_schema_queries_SdmxWs2p0 = [
 ]
 
 params_item_queries_SdmxWs2p0 = [
-    ('get_concept_scheme_item', '/structure/conceptscheme/all/all/latest/all'),
-    ('get_codelist_item', '/structure/codelist/all/all/latest/all'),
+    ('get_concepts', '/structure/conceptscheme/all/all/latest/all'),
+    ('get_codes', '/structure/codelist/all/all/latest/all'),
     (
-        'get_category_scheme_item',
+        'get_categories',
         '/structure/categoryscheme/all/all/latest/all'),
-    ('get_agency_scheme_item', '/structure/agencyscheme/all/all/latest/all'),
-    ('get_data_provider_scheme_item',
+    ('get_agencies', '/structure/agencyscheme/all/all/latest/all'),
+    ('get_data_providers',
      '/structure/dataproviderscheme/all/all/latest/all'),
-    ('get_data_consumer_scheme_item',
+    ('get_data_consumers',
      '/structure/dataconsumerscheme/all/all/latest/all'),
-    ('get_organisation_unit_scheme_item',
+    ('get_organisation_unit_schemes',
      '/structure/organisationunitscheme/all/all/latest/all'),
-    ('get_transformation_scheme_item',
+    ('get_transformation_schemes',
      '/structure/transformationscheme/all/all/latest/all'),
-    ('get_ruleset_scheme_item', '/structure/rulesetscheme/all/all/latest/all'),
-    ('get_user_defined_operator_scheme_item',
+    ('get_ruleset_schemes', '/structure/rulesetscheme/all/all/latest/all'),
+    ('get_user_defined_operator_schemes',
      '/structure/userdefinedoperatorscheme/all/all/latest/all'),
-    ('get_custom_type_scheme_item',
+    ('get_custom_type_schemes',
      '/structure/customtypescheme/all/all/latest/all'),
-    ('get_name_personalisation_scheme_item',
+    ('get_name_personalisation_schemes',
      '/structure/namepersonalisationscheme/all/all/latest/all'),
-    ('get_vtl_mapping_scheme_item',
+    ('get_vtl_mapping_schemes',
      '/structure/vtlmappingscheme/all/all/latest/all'),
-    ('get_value_list_item', '/structure/valuelist/all/all/latest/all')
+    ('get_value_lists', '/structure/valuelist/all/all/latest/all')
 ]
 
 
@@ -308,18 +308,18 @@ def test_query_builder_item_queries_SdmxWs2p0(method, expected,
     assert query == expected
 
 
-def test_get_metadata_metadataflow_query(query_builder_ws2):
-    query = query_builder_ws2.get_metadata_metadataflow_query(agency_id="all",
-                                                              resources="all",
-                                                              version="latest",
-                                                              provider_id="all")
+def test_get_metadata_metadataflows(query_builder_ws2):
+    query = query_builder_ws2.get_metadata_metadataflows(agency_id="all",
+                                                         resources="all",
+                                                         version="latest",
+                                                         provider_id="all")
     assert query == "/metadata/metadataflow/all/all/latest/all"
 
 
-def test_get_metadata_metadataset_query(query_builder_ws2):
-    query = query_builder_ws2.get_metadata_metadataset_query(provider_id="all",
-                                                             resources="all",
-                                                             version="latest", )
+def test_get_metadata_metadatasets(query_builder_ws2):
+    query = query_builder_ws2.get_metadata_metadatasets(provider_id="all",
+                                                        resources="all",
+                                                        version="latest", )
     assert query == "/metadata/metadataset/all/all/latest"
 
 
