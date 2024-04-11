@@ -21,7 +21,7 @@
         </mes:Structure>
         <mes:Source xml:lang="en">SDMXthon</mes:Source>
     </mes:Header>
-    <mes:DataSet ss:structureRef="BIS_DER" xsi:type="ns1:DataSetType"
+    <mes:DataSet DECIMALS="3" UNIT_MULT="6" UNIT_MEASURE="USD" ss:structureRef="BIS_DER" xsi:type="ns1:DataSetType"
                  ss:dataScope="DataStructure" action="Replace">
         <Group xsi:type="ns1:SiblingType" AVAILABILITY="K" DER_TYPE="U"
                DER_INSTR="A" DER_RISK="B" DER_REP_CTY="5J" DER_SECTOR_CPY="A"
