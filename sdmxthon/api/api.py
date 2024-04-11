@@ -3,22 +3,24 @@ API module contains the functions to read SDMX files and transform them into
 Pandas Dataframes or CSV files. It also contains the function to get the
 supported agencies by the API.
 """
+import copy
 import os
 from pathlib import Path
 from zipfile import ZipFile
 
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
+from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.read import read_sdmx_csv, read_xml
 from sdmxthon.parsers.reader_input_processor import process_string_to_read
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.handlers import drop_na_all, first_element_dict
+from sdmxthon.utils.handlers import drop_na_all, first_element_dict, split_unique_id
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
 from sdmxthon.webservices.webservices import BisWs, EcbWs, EuroStatWs, IloWs, \
     OecdWs, \
     OecdWs2, \
-    UnicefWs
+    UnicefWs, WitsWs, UnsdWs, InseeWs, IstatWs, AbsWs, SdmxWebServiceConnection
 
 
 def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
@@ -51,24 +53,55 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
 
     if isinstance(payload, dict):
         first_element = first_element_dict(payload)
-
         if type_ == MessageTypeEnum.StructureSpecificDataSet:
 
             if len(payload) > 1:
                 payload = dict(payload.values())
+                for dataset in payload.values():
+                    get_structure_from_ws(dataset)
             else:
                 if use_dataset_id:
                     first_element._unique_id = list(payload.keys())[0]
                 payload = first_element
-
-        elif isinstance(first_element, SubmissionResult):
-            type_ = MessageTypeEnum.Submission
-
     elif isinstance(payload, SDMXError):
         type_ = MessageTypeEnum.Error
     else:
         raise Exception("Unable to set Message Type")
+
     return Message(message_type=type_, payload=payload)
+
+
+def get_structure_from_ws(dataset: Dataset):
+    supported_agencies = get_supported_agencies()
+
+    aux_agency = None
+
+    agency_id, id_, version = split_unique_id(dataset.unique_id)
+
+    if 'OECD' in agency_id:
+        aux_agency = copy.deepcopy(agency_id)
+        agency_id = 'OECD'
+
+    if agency_id not in supported_agencies:
+        return
+
+    ws = supported_agencies[agency_id]()
+
+    if aux_agency:
+        agency_id = aux_agency
+
+    if dataset.structure_type == "dataflow":
+        dataflow = ws.get_data_flow(id_, agency_id=agency_id, version=version, detail='full', references='children')
+        if isinstance(dataflow.payload, SDMXError):
+            return
+        else:
+            dataset.dataflow = first_element_dict(dataflow.payload['Dataflows'])
+    elif dataset.structure_type == "datastructure":
+        datastructure = ws.get_dsd(resources=[id_], version=version, detail='full', references='children')
+        if isinstance(datastructure.payload, SDMXError):
+            return
+        else:
+            dataset.structure = first_element_dict(datastructure.payload['DataStructures'])
 
 
 def get_datasets(path_to_data, path_to_metadata, validate=True,
@@ -200,6 +233,11 @@ def get_supported_agencies():
         'OECD': OecdWs,
         'OECDv2': OecdWs2,
         'UNICEF': UnicefWs,
+        'WITS': WitsWs,
+        'UNSD': UnsdWs,
+        'INSEE': InseeWs,
+        'ISTAT': IstatWs,
+        'ABS': AbsWs,
     }
 
 

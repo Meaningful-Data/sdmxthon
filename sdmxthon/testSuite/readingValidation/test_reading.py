@@ -124,6 +124,7 @@ def test_msg_get_dataflows(metadata_path):
     dataflow = message.get_dataflow_by_uid(uid)
     assert isinstance(dataflow, DataFlowDefinition)
 
+
 def test_msg_get_datasets(data_path):
     data_filename = 'dataflow.xml'
     message = read_sdmx(os.path.join(data_path, data_filename))
@@ -137,3 +138,15 @@ def test_msg_get_datasets(data_path):
     dataset = message.get_dataset_by_uid(uid)
     assert isinstance(dataset, Dataset)
 
+
+filename = [
+    "gen_ser.xml", "ecb.xml", "ilo.xml", "oecd.xml",
+]
+
+
+@mark.parametrize("data_filename", filename)
+def test_metadata_from_ws(data_filename, data_path):
+    message = read_sdmx(os.path.join(data_path, data_filename))
+    structure = first_element_dict(message.payload).structure
+    dataflow = first_element_dict(message.payload).dataflow
+    assert structure is not None or dataflow is not None
