@@ -147,6 +147,6 @@ filename = [
 @mark.parametrize("data_filename", filename)
 def test_metadata_from_ws(data_filename, data_path):
     message = read_sdmx(os.path.join(data_path, data_filename))
-    structure = first_element_dict(message.payload).structure
-    dataflow = first_element_dict(message.payload).dataflow
+    structure = message.payload.structure
+    dataflow = message.payload.dataflow
     assert structure is not None or dataflow is not None

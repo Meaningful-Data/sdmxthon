@@ -8,19 +8,17 @@ import os
 from pathlib import Path
 from zipfile import ZipFile
 
+from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.message import Message
-from sdmxthon.model.dataset import Dataset
-from sdmxthon.model.submission import SubmissionResult
 from sdmxthon.parsers.read import read_sdmx_csv, read_xml
 from sdmxthon.parsers.reader_input_processor import process_string_to_read
 from sdmxthon.utils.enums import MessageTypeEnum
-from sdmxthon.utils.handlers import drop_na_all, first_element_dict, split_unique_id
+from sdmxthon.utils.handlers import drop_na_all, first_element_dict, \
+    split_unique_id
 from sdmxthon.webservices.fmr import submit_structures_to_fmr
-from sdmxthon.webservices.webservices import BisWs, EcbWs, EuroStatWs, IloWs, \
-    OecdWs, \
-    OecdWs2, \
-    UnicefWs, WitsWs, UnsdWs, InseeWs, IstatWs, AbsWs, SdmxWebServiceConnection
+from sdmxthon.webservices.webservices import AbsWs, BisWs, EcbWs, EuroStatWs, \
+    IloWs, InseeWs, IstatWs, OecdWs, OecdWs2, UnicefWs, UnsdWs, WitsWs
 
 
 def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
@@ -60,6 +58,7 @@ def read_sdmx(sdmx_file, validate=False, use_dataset_id=False) -> Message:
                 for dataset in payload.values():
                     get_structure_from_ws(dataset)
             else:
+                get_structure_from_ws(first_element)
                 if use_dataset_id:
                     first_element._unique_id = list(payload.keys())[0]
                 payload = first_element
