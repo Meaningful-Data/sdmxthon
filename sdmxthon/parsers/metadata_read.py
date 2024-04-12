@@ -520,7 +520,9 @@ def format_key_set(json_key_set):
     json_key_set[KEY_VALUE] = add_list(json_key_set[KEY_VALUE])
     key_set = {}
     for e in json_key_set[KEY_VALUE]:
-        key_set[e[ID]] = e[VALUE]
+        if VALUE in e:
+            key_set[e[ID]] = e[VALUE]
+        # TODO: Add here the TimeRange constraint data
 
     return key_set
 
