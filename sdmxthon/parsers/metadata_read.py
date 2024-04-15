@@ -533,20 +533,24 @@ def format_restrictions(json_cons) -> dict:
         json_cons[DATA_KEY_SET_LOW] = []
         for element in json_cons[DATA_KEY_SET]:
             list_keys = []
-            element[KEY] = add_list(element[KEY])
-            for e in element[KEY]:
-                list_keys.append(format_key_set(e))
-
+            if KEY in element:
+                element[KEY] = add_list(element[KEY])
+                for e in element[KEY]:
+                    list_keys.append(format_key_set(e))
+            included = False
+            if INCLUDED in element:
+                included = element[INCLUDED]
             json_cons[DATA_KEY_SET_LOW].append(DataKeySet(keys=list_keys,
-                                                          isIncluded=element[
-                                                              INCLUDED]))
+                                                          isIncluded=included))
         del json_cons[DATA_KEY_SET]
     if CUBE_REGION in json_cons:
         json_cons[CUBE_REGION] = add_list(json_cons[CUBE_REGION])
         cubes = []
         for element in json_cons[CUBE_REGION]:
-
-            is_included = element[INCLUDE]
+            if INCLUDE in element:
+                is_included = element[INCLUDE]
+            else:
+                is_included = False
             keys = format_key_set(element)
             members = []
             for e in keys:
@@ -583,7 +587,9 @@ def create_constraints(json_cons):
             element = format_id(element)
 
             if CONS_ATT in element:
-                if DSD in element[CONS_ATT]:
+                if (DSD in element[CONS_ATT] and
+                        REF in element[CONS_ATT][DSD] and
+                        AGENCY_ID in element[CONS_ATT][DSD][REF]):
                     agency_id = element[CONS_ATT][DSD][REF][AGENCY_ID]
                     id_ = element[CONS_ATT][DSD][REF][ID]
                     version = element[CONS_ATT][DSD][REF][VERSION]
@@ -595,7 +601,9 @@ def create_constraints(json_cons):
                     if str_id in datastructures:
                         attachment = datastructures[str_id]
 
-                elif DF in element[CONS_ATT]:
+                elif (DF in element[CONS_ATT] and
+                      REF in element[CONS_ATT][DF] and
+                      AGENCY_ID in element[CONS_ATT][DF][REF]):
                     agency_id = element[CONS_ATT][DF][REF][AGENCY_ID]
                     id_ = element[CONS_ATT][DF][REF][ID]
                     version = element[CONS_ATT][DF][REF][VERSION]
@@ -616,8 +624,6 @@ def create_constraints(json_cons):
             # Creation of Constraint
             if full_id not in elements:
                 elements[full_id] = ContentConstraint(**element)
-            else:
-                raise Exception
 
             if attachment is not None:
                 attachment.add_constraint(elements[full_id])

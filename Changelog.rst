@@ -2,6 +2,15 @@
 Changelog
 #########
 
+2.6.5 (2024-04-15)
+------------------
+**Added**
+
+**Changes**
+
+**Bugfixes**
+  - Fixed possible unhanlded exceptions in reading ContentConstraints
+
 2.6.4 (2024-03-12)
 ------------------
 **Added**
