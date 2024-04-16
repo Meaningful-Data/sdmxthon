@@ -2,6 +2,16 @@
 Changelog
 #########
 
+2.6.6 (2024-04-16)
+------------------
+**Added**
+
+**Changes**
+  - Updated VTL mapping from TimePeriod to Time_Period
+
+**Bugfixes**
+
+
 2.6.5 (2024-04-15)
 ------------------
 **Added**
@@ -9,7 +19,7 @@ Changelog
 **Changes**
 
 **Bugfixes**
-  - Fixed possible unhanlded exceptions in reading ContentConstraints
+  - Fixed possible unhandled exceptions in reading ContentConstraints
 
 2.6.4 (2024-03-12)
 ------------------
