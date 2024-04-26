@@ -47,3 +47,47 @@ def test_dataflow(data_path):
     assert 'BIS:WEBSTATS_DER_DATAFLOW(1.0)' in result.content
     assert 'AVAILABILITY' in data_dataflow.columns
     assert 'DER_CURR_LEG1' in data_dataflow.columns
+
+
+# Test reading of dataflow SDMX file from URL (KeyError: 'Obs')
+
+def test_reading_missing_obs_key():
+    # SDMX file URL
+    url = 'https://stats.bis.org/api/v1/data/WS_CPMI_PARTICIPANTS/all/all'
+    result = read_sdmx(url, validate=True)
+    data = result.content['BIS:WS_CPMI_PARTICIPANTS(1.0)'].data
+    num_rows = len(data)
+    num_columns = data.shape[1]
+    assert isinstance(result, Message)
+    assert num_rows > 0
+    assert num_columns > 0
+
+
+# Test reading of dataflow SDMX file from URL
+def test_reading_with_dataflow():
+    # SDMX file URL
+    url = 'https://stats.bis.org/api/v1/data/WS_CBPOL_D/all/all'
+    result = read_sdmx(url, validate=True)
+    data = result.content['BIS:WS_CBPOL_D(1.0)'].data
+    structure_type = result.content['BIS:WS_CBPOL_D(1.0)'].structure_type
+    num_rows = len(data)
+    num_columns = data.shape[1]
+    assert isinstance(result, Message)
+    assert num_rows > 0
+    assert num_columns > 0
+    assert structure_type == 'dataflow'
+
+
+# Test reading of dataflow SDMX file from URL (structure_type: 'datastructure')
+def test_reading_structure_type_datastructure():
+    # SDMX file URL
+    url = 'https://data-api.ecb.europa.eu/service/data/AME/all/all'
+    result = read_sdmx(url, validate=True)
+    data = result.content['ECB:ECB_AME1(1.0)'].data
+    structure_type = result.content['ECB:ECB_AME1(1.0)'].structure_type
+    num_rows = len(data)
+    num_columns = data.shape[1]
+    assert isinstance(result, Message)
+    assert num_rows > 0
+    assert num_columns > 0
+    assert structure_type == 'datastructure'
