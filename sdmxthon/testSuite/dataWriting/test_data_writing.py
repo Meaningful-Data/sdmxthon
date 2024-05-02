@@ -9,6 +9,7 @@ from pathlib import Path
 import pandas as pd
 from pytest import mark
 
+from sdmxthon import Message
 from sdmxthon.api.api import get_pandas_df, read_sdmx
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.utils.enums import MessageTypeEnum
@@ -65,4 +66,64 @@ def test_to_sdmx_csv_writing(data_path, metadata_path, sdmx_version):
     pd.testing.assert_frame_equal(
         dataset_sdmx_csv.data.fillna('').replace('nan', ''),
         dataset.data.replace('nan', ''),
+        check_like=True)
+
+
+def test_data_writing_more_than_one_dataset(data_path, metadata_path):
+    message_1 = read_sdmx(os.path.join(metadata_path, 'metadata.xml'))
+    message_2 = read_sdmx(os.path.join(metadata_path, 'metadata_2.xml'))
+    data_path_1 = os.path.join(data_path, "df.json")
+    data_path_2 = os.path.join(data_path, "df_2.json")
+
+    dataset_1 = Dataset(data=pd.read_json(data_path_1, orient='records'),
+                        structure=message_1.payload['DataStructures']
+                        ['BIS:BIS_DER(1.0)'])
+
+    dataset_2 = Dataset(data=pd.read_json(data_path_2, orient='records'),
+                        dataflow=message_2.payload['Dataflows']
+                        ['ECB:AME(1.0)'])
+
+    message_with_two_datasets = Message(message_type=MessageTypeEnum.
+                                        StructureSpecificDataSet,
+                                        payload={dataset_1.unique_id: dataset_1,
+                                                 dataset_2.unique_id: dataset_2})
+    result = message_with_two_datasets.to_xml()
+    data_dict = get_pandas_df(BytesIO(bytes(result, encoding='UTF-8')))
+    pd.testing.assert_frame_equal(
+        data_dict['BIS:BIS_DER(1.0)'].fillna('').replace('nan', '').astype(str),
+        dataset_1.data.replace('nan', '').astype(str),
+        check_like=True)
+    pd.testing.assert_frame_equal(
+        data_dict['ECB:ECB_AME1(1.0)'].fillna('').replace('nan', '').astype(str),
+        dataset_2.data.replace('nan', '').astype(str),
+        check_like=True)
+
+
+def test_data_writing_with_more_than_one_dataset(data_path, metadata_path):
+    message_1 = read_sdmx(os.path.join(metadata_path, 'metadata.xml'))
+    message_2 = read_sdmx(os.path.join(metadata_path, 'metadata_2.xml'))
+    data_path_1 = os.path.join(data_path, "df.json")
+    data_path_2 = os.path.join(data_path, "df_2.json")
+
+    dataset_1 = Dataset(data=pd.read_json(data_path_1, orient='records'),
+                        structure=message_1.payload['DataStructures']
+                        ['BIS:BIS_DER(1.0)'])
+
+    dataset_2 = Dataset(data=pd.read_json(data_path_2, orient='records'),
+                        structure=message_2.payload['DataStructures']
+                        ['ECB:ECB_AME1(1.0)'])
+
+    message_with_two_datasets = Message(message_type=MessageTypeEnum.
+                                        StructureSpecificDataSet,
+                                        payload={dataset_1.unique_id: dataset_1,
+                                                 dataset_2.unique_id: dataset_2})
+    result = message_with_two_datasets.to_xml()
+    data_dict = get_pandas_df(BytesIO(bytes(result, encoding='UTF-8')))
+    pd.testing.assert_frame_equal(
+        data_dict['BIS:BIS_DER(1.0)'].fillna('').replace('nan', '').astype(str),
+        dataset_1.data.replace('nan', '').astype(str),
+        check_like=True)
+    pd.testing.assert_frame_equal(
+        data_dict['ECB:ECB_AME1(1.0)'].fillna('').replace('nan', '').astype(str),
+        dataset_2.data.replace('nan', '').astype(str),
         check_like=True)
