@@ -99,5 +99,19 @@ def test_get_pandas_df_with_sdmx_csv(data_path, csv_filename):
     key = 'BIS:BIS_DER(1.0)'
     assert key in dict_dataframe, f"Key {key} not found in result"
     dataframe = dict_dataframe[key].astype('str')
-    assert dataframe.shape == (1000, 20), ('The Dataframe does not have '
+    assert dataframe.shape == (1000, 20), ('The DataFrame does not have '
                                            'the expected shape')
+
+
+# Test: Get datasets with SDMX-CSV
+@mark.parametrize("csv_filename", csv_filenames)
+def test_get_datasets_with_sdmx_csv(data_path, csv_filename, metadata_path):
+    datasets = get_datasets(os.path.join(data_path, csv_filename),
+                            os.path.join(metadata_path, "metadata.xml"))
+    data = datasets.data
+    structure_type = datasets.structure_type
+    unique_id = datasets.unique_id
+    assert data.shape == (1000, 20), ('The DataFrame does not have '
+                                      'the expected shape')
+    assert structure_type == 'datastructure'
+    assert unique_id == 'BIS:BIS_DER(1.0)'

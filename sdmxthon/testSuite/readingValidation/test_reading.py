@@ -52,10 +52,9 @@ def test_dataflow(data_path):
 # Test reading of dataflow SDMX file from URL (KeyError: 'Obs')
 
 def test_reading_missing_obs_key():
-    # SDMX file URL
-    url = 'https://stats.bis.org/api/v1/data/WS_CPMI_PARTICIPANTS/all/all'
+    url = 'https://stats.bis.org/api/v1/data/WS_CPMI_PARTICIP/all/all'
     result = read_sdmx(url, validate=True)
-    data = result.content['BIS:WS_CPMI_PARTICIPANTS(1.0)'].data
+    data = result.content['BIS:WS_CPMI_PARTICIP(1.0)'].data
     num_rows = len(data)
     num_columns = data.shape[1]
     assert isinstance(result, Message)
@@ -65,11 +64,10 @@ def test_reading_missing_obs_key():
 
 # Test reading of dataflow SDMX file from URL
 def test_reading_with_dataflow():
-    # SDMX file URL
-    url = 'https://stats.bis.org/api/v1/data/WS_CBPOL_D/all/all'
+    url = 'https://stats.bis.org/api/v1/data/WS_CBPOL/all/all'
     result = read_sdmx(url, validate=True)
-    data = result.content['BIS:WS_CBPOL_D(1.0)'].data
-    structure_type = result.content['BIS:WS_CBPOL_D(1.0)'].structure_type
+    data = result.content['BIS:WS_CBPOL(1.0)'].data
+    structure_type = result.content['BIS:WS_CBPOL(1.0)'].structure_type
     num_rows = len(data)
     num_columns = data.shape[1]
     assert isinstance(result, Message)
@@ -80,7 +78,6 @@ def test_reading_with_dataflow():
 
 # Test reading of dataflow SDMX file from URL (structure_type: 'datastructure')
 def test_reading_structure_type_datastructure():
-    # SDMX file URL
     url = 'https://data-api.ecb.europa.eu/service/data/AME/all/all'
     result = read_sdmx(url, validate=True)
     data = result.content['ECB:ECB_AME1(1.0)'].data
