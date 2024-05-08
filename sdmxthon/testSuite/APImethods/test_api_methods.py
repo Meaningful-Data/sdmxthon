@@ -11,7 +11,7 @@ from pytest import mark
 from requests.exceptions import ConnectionError
 
 from sdmxthon.api.api import get_pandas_df, read_sdmx, upload_metadata_to_fmr, \
-    xml_to_csv
+    xml_to_csv, get_datasets
 
 pytestmark = pytest.mark.input_path(Path(__file__).parent / "data")
 
@@ -59,6 +59,7 @@ def test_use_dataset_id(filename, data_path, reference_path):
                                use_dataset_id=True)
     assert key in dict_dataframe.content
 
+
 # Test: xml to csv
 @mark.parametrize("filename", filenames)
 def test_xml_to_csv(filename, data_path, reference_path):
@@ -86,3 +87,17 @@ def test_upload_metadata_to_fmr(filename, metadata_path):
                              'or the submitted structures contain '
                              'no changes from the ones currently '
                              'stored in the system')
+
+
+csv_filenames = ["data_v1.csv", "data_v2.csv"]
+
+
+# Test: Get pandas df with SDMX-CSV
+@mark.parametrize("csv_filename", csv_filenames)
+def test_get_pandas_df_with_sdmx_csv(data_path, csv_filename):
+    dict_dataframe = get_pandas_df(os.path.join(data_path, csv_filename))
+    key = 'BIS:BIS_DER(1.0)'
+    assert key in dict_dataframe, f"Key {key} not found in result"
+    dataframe = dict_dataframe[key].astype('str')
+    assert dataframe.shape == (1000, 20), ('The Dataframe does not have '
+                                           'the expected shape')
