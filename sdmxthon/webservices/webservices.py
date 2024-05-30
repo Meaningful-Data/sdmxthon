@@ -229,14 +229,16 @@ class EuroStatWs(SdmxWebServiceConnection):
         return f"{self.ENTRY_POINT}/data/{flow}/" + params
 
     def get_data_flow_url(self, flow=None, agency_id=None,
-                          version=None, references=None) -> str:
+                          version=None, references=None,
+                          detail=None) -> str:
         version = version if version else "latest"
         agency_id = agency_id if agency_id else "all"
 
         references_query = f"?references={references}" if references else ""
+        detail_query = f"&detail={detail}" if detail else ""
 
         return (f"{self.ENTRY_POINT}/dataflow/{agency_id}/{flow}/{version}" +
-                references_query)
+                references_query + detail_query)
 
 
 class EcbWs(SdmxWebServiceConnection):
