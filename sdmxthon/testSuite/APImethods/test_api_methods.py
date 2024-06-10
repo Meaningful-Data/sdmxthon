@@ -89,40 +89,40 @@ def test_upload_metadata_to_fmr(filename, metadata_path):
 
 urls = [
          ("https://data-api.ecb.europa.eu/service/data/AME/all/all",
-          "https://data-api.ecb.europa.eu/service/dataflow/all/AME/latest"),
+          "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_AME1/latest"),
          ("https://data-api.ecb.europa.eu/service/data/PDD/all/all",
-          "https://data-api.ecb.europa.eu/service/dataflow/all/PDD/latest"),
+          "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_PAY3/latest"),
          ("https://data-api.ecb.europa.eu/service/data/JDF_PSS_PAYMENTS_N_NEA/all/all",
-          "https://data-api.ecb.europa.eu/service/dataflow/all/JDF_PSS_PAYMENTS_N_NEA/latest"),
-         # data urls from European Central Bank (ECB)
+          "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_PSS1/latest"),
+         # data and metadata (DataStructures) urls from European Central Bank (ECB)
          ("https://stats.bis.org/api/v1/data/WS_CPMI_PARTICIP/all/all",
           "https://stats.bis.org/api/v1/dataflow/all/WS_CPMI_PARTICIP/latest"),
          ("https://stats.bis.org/api/v1/data/WS_CPP/all/all",
           "https://stats.bis.org/api/v1/dataflow/all/WS_CPP/latest"),
          ("https://stats.bis.org/api/v1/data/WS_LONG_CPI/all/all",
           "https://stats.bis.org/api/v1/dataflow/all/WS_LONG_CPI/latest"),
-         # data urls from Bank for International Settlements (BIS)
+         # data and metadata(Dataflows) urls from Bank for International Settlements (BIS)
          ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_PS422/",
           "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_PS422/latest"),
          ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/HSW_AW_NNASV/",
           "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/HSW_AW_NNASV/latest"),
          ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/GBV_DV_OCC/",
           "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/GBV_DV_OCC/latest"),
-         # metadata urls from Eurostat (ESTAT)
+         # data and metadata(Dataflows) urls from Eurostat (ESTAT)
          ("https://sdmx.oecd.org/public/rest/data/DSD_FUA_ECO@DF_ECONOMY/all/all",
           "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_FUA_ECO@DF_ECONOMY/latest"),
          ("https://sdmx.oecd.org/public/rest/data/DSD_KIIBIH@DF_B12/all/all",
           "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_KIIBIH@DF_B12/latest"),
          ("https://sdmx.oecd.org/public/rest/data/DSD_PRICES@DF_PRICES_N_CP045_0722/all/all",
           "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_PRICES@DF_PRICES_N_CP045_0722/latest"),
-         # metadata urls from Organisation for Economic Co-operation and Development (OECD)
+         # data and metadata(Dataflows) urls from Organisation for Economic Co-operation and Development (OECD)
          ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/CAUSE_OF_DEATH/all/all",
           "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/CAUSE_OF_DEATH/latest"),
          ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/WASH_SCHOOLS/all/all",
           "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/WASH_SCHOOLS/latest"),
          ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/CME_TEST_COUNTRY_PROFILES_DATA/all/all",
           "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/CME_TEST_COUNTRY_PROFILES_DATA/latest")
-         # metadata urls from United Nations Children's Fund (UNICEF)
+         # data and metadata(Dataflows) urls from United Nations Children's Fund (UNICEF)
        ]
 
 
@@ -132,11 +132,21 @@ def test_metadata_download_from_data(data_url, metadata_url):
     metadata_message = read_sdmx(metadata_url, validate=True)
     assert data_message is not None, "Failed to download data message"
     assert metadata_message is not None, "Failed to download metadata message"
+
     structure = data_message.payload.structure
     dataflow = data_message.payload.dataflow
     structure_type = data_message.payload.structure_type
-    Dataflows = metadata_message.get_dataflows()
-    assert structure_type == 'datastructure' or 'dataflow'
-    assert structure is not None or dataflow is not None, (
-        "Both structure and dataflow are None")
-    assert Dataflows is not None, "Dataflows not found in the metadata message"
+    Dataflows = metadata_message.payload.get('Dataflows')
+    DataStructures = metadata_message.payload.get('DataStructures')
+
+    assert structure_type in ['datastructure', 'dataflow'], "Invalid structure type"
+    assert structure is not None or dataflow is not None, \
+        "Both structure and dataflow are None"
+
+    if DataStructures is not None:
+        assert isinstance(DataStructures, dict), "DataStructures should be a dictionary"
+        assert len(DataStructures) > 0, "DataStructures is empty"
+
+    if Dataflows is not None:
+        assert isinstance(Dataflows, dict), "Dataflows should be a dictionary"
+        assert len(Dataflows) > 0, "Dataflows is empty"
