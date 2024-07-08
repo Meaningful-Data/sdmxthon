@@ -160,6 +160,14 @@ def format_annotations(item_elem: any):
     return item_elem
 
 
+def format_bool_param(element: any, param: str):
+    if element[param].lower() == 'true':
+        element[param] = True
+    else:
+        element[param] = False
+    return element
+
+
 def format_facets(json_fac) -> dict:
     fac = {FACETS: []}
     if json_fac is None:
@@ -244,6 +252,9 @@ def create_scheme(json_elem, scheme, item):
             element = format_urls(element)
             element = format_maintainer(element)
             element = format_id(element)
+            for param in ['isPartial', 'isExternalReference']:
+                if param in element:
+                    element = format_bool_param(element, param)
             if item in element:
                 element[item] = add_list(element[item])
                 items = []
