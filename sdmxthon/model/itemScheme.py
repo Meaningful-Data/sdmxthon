@@ -5,12 +5,12 @@ import warnings
 from datetime import datetime
 from typing import List
 
-from sdmxthon.model.base import MaintainableArtefact, NameableArtefact, \
-    InternationalString
+from sdmxthon.model.base import InternationalString, MaintainableArtefact, \
+    NameableArtefact
 from sdmxthon.model.header import Contact
 from sdmxthon.model.representation import Representation
-from sdmxthon.model.utils import generic_setter, bool_setter
-from sdmxthon.parsers.writer_aux import export_intern_data, add_indent
+from sdmxthon.model.utils import bool_setter, generic_setter
+from sdmxthon.parsers.writer_aux import add_indent, export_intern_data
 from sdmxthon.utils.handlers import split_unique_id
 from sdmxthon.utils.mappings import structureAbbr
 
@@ -304,6 +304,7 @@ class AgencyScheme(OrganisationScheme):
                  version: str = None, validFrom: datetime = None,
                  validTo: datetime = None,
                  isFinal: bool = None, isExternalReference: bool = None,
+                 isPartial: bool = None,
                  serviceUrl: str = None,
                  structureUrl: str = None, maintainer=None,
                  items=None):
@@ -316,6 +317,7 @@ class AgencyScheme(OrganisationScheme):
                      validFrom=validFrom,
                      validTo=validTo,
                      isFinal=isFinal,
+                     isPartial=isPartial,
                      isExternalReference=isExternalReference,
                      serviceUrl=serviceUrl,
                      structureUrl=structureUrl,

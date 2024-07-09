@@ -11,7 +11,7 @@ from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
     validate_doc
 from sdmxthon.utils.enums import ActionEnum, MessageTypeEnum
-from sdmxthon.utils.handlers import first_element_dict, split_from_urn
+from sdmxthon.utils.handlers import add_list, split_from_urn, first_element_dict
 from sdmxthon.utils.parsing_words import ACTION, AGENCY_ID, ALL_DIM, DATASET, \
     DATASET_ID, DIM_OBS, ERROR, ERROR_CODE, ERROR_MESSAGE, ERROR_TEXT, FAULT, \
     FAULTCODE, FAULTSTRING, GENERIC, \
@@ -63,6 +63,7 @@ def parse_sdmx(result, use_dataset_id=False):
 
         if isinstance(message[dataset_key], list):
             structures = {}
+            message[HEADER][STRUCTURE] = add_list(message[HEADER][STRUCTURE])
             # Relationship between structures and structure id
             for structure in message[HEADER][STRUCTURE]:
                 structures[structure[STRID]] = structure
