@@ -13,6 +13,7 @@ from requests.exceptions import ConnectionError
 from sdmxthon.api.api import get_pandas_df, read_sdmx, upload_metadata_to_fmr, \
     xml_to_csv
 from sdmxthon.utils.handlers import first_element_dict
+from sdmxthon.model.message import Message
 
 pytestmark = pytest.mark.input_path(Path(__file__).parent / "data")
 
@@ -53,8 +54,9 @@ def test_use_dataset_id(filename, data_path, reference_path):
     key = 'TEST_KEY'
     assert key in dict_dataframe
     message = read_sdmx(os.path.join(data_path, filename),
-                               use_dataset_id=True)
+                        use_dataset_id=True)
     assert key in message.content['datasets']
+
 
 # Test: xml to csv
 @mark.parametrize("filename", filenames)
@@ -83,3 +85,119 @@ def test_upload_metadata_to_fmr(filename, metadata_path):
                              'or the submitted structures contain '
                              'no changes from the ones currently '
                              'stored in the system')
+
+
+urls = [
+    # data and metadata (Dataflows) urls from Bank for International Settlements (BIS)
+    ("https://stats.bis.org/api/v1/data/WS_CPMI_PARTICIP/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_CPMI_PARTICIP/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_CPP/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_CPP/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_LONG_CPI/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_LONG_CPI/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_TC/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_TC/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_CPMI_CASHLESS/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_CPMI_CASHLESS/latest"),
+    # data and metadata (DataStructures) urls from European Central Bank (ECB)
+    ("https://data-api.ecb.europa.eu/service/data/AME/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_AME1/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/CPP/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_CPP3/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/PDD/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_PAY3/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/JDF_PSS_PAYMENTS_N_NEA/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_PSS1/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/JDF_BSI_MFI_DOMESTIC_CROSS_BORDER/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_BSI1/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/MMSR/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_MMSR1/latest"),
+    # data and metadata (Dataflows) urls from Eurostat (ESTAT)
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_EN2/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_EN2/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_PS422/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_PS422/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/HSW_AW_NNASV/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/HSW_AW_NNASV/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/GBV_DV_OCC/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/GBV_DV_OCC/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_EG30/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_EG30/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/LFSO_12PENSION/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/LFSO_12PENSION/latest"),
+    # data and metadata (Dataflows) urls from Organisation for Economic Co-operation and Development (OECD)
+    ("https://sdmx.oecd.org/public/rest/data/DSD_FUA_ECO@DF_ECONOMY/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_FUA_ECO@DF_ECONOMY/latest"),
+    ("https://sdmx.oecd.org/public/rest/data/DSD_KIIBIH@DF_B12/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_KIIBIH@DF_B12/latest"),
+    ("https://sdmx.oecd.org/public/rest/data/DSD_PRICES@DF_PRICES_N_CP045_0722/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_PRICES@DF_PRICES_N_CP045_0722/latest"),
+    ("https://sdmx.oecd.org/public/rest/data/DSD_FUA_DEMO@DF_ORIGIN/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_FUA_DEMO@DF_ORIGIN/latest"),
+    ("https://sdmx.oecd.org/public/rest/data/DSD_REF_LAC@DF_REFSERIES_LAC/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_REF_LAC@DF_REFSERIES_LAC/latest"),
+    # data and metadata (Dataflows) urls from United Nations Children's Fund (UNICEF)
+    ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/CAUSE_OF_DEATH/all/all",
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/CAUSE_OF_DEATH/latest"),
+    ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/WASH_SCHOOLS/all/all",
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/WASH_SCHOOLS/latest"),
+    ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/PT/all/all",
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/PT/latest"),
+    ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/IMMUNISATION/all/all",
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/IMMUNISATION/latest"),
+    ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/ZIMBABWE_CO/all/all",
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/ZIMBABWE_CO/latest")
+]
+
+
+@mark.parametrize("data_url, metadata_url", urls)
+def test_metadata_download_from_data(data_url, metadata_url):
+    data_message = read_sdmx(data_url, validate=True)
+    metadata_message = read_sdmx(metadata_url, validate=True)
+
+    structure = data_message.payload.structure
+    dataflow = data_message.payload.dataflow
+    structure_type = data_message.payload.structure_type
+
+    Dataflows = metadata_message.payload.get('Dataflows')
+    DataStructures = metadata_message.payload.get('DataStructures')
+
+    assert structure_type in ['datastructure', 'dataflow'], \
+        "Invalid structure type"
+    assert structure is not None or dataflow is not None, \
+        "Both structure and dataflow are None"
+
+    unique_id = data_message.payload.unique_id
+
+    # Helper function to compare attributes
+    def compare_attributes(obj1, obj2, attributes):
+        for attr in attributes:
+            assert getattr(obj1, attr) == getattr(obj2, attr), \
+                f"Attribute {attr} does not match"
+
+    attributes_to_compare = ['agencyID', 'id', 'version']
+
+    if structure_type == 'datastructure':
+        assert DataStructures is not None, "DataStructures is None"
+        assert unique_id in DataStructures, (f"Unique ID {unique_id} "
+                                             f"not found in DataStructures")
+        compare_attributes(data_message.payload.structure,
+                           DataStructures[unique_id], attributes_to_compare)
+    elif structure_type == 'dataflow':
+        assert Dataflows is not None, "Dataflows is None"
+        assert unique_id in Dataflows, (f"Unique ID {unique_id} "
+                                        f"not found in Dataflows")
+        compare_attributes(data_message.payload.dataflow,
+                           Dataflows[unique_id], attributes_to_compare)
+    else:
+        pytest.fail("Unknown structure type")
+
+    if DataStructures is not None:
+        assert isinstance(DataStructures, dict), ("DataStructures "
+                                                  "should be a dictionary")
+        assert len(DataStructures) > 0, "DataStructures is empty"
+
+    if Dataflows is not None:
+        assert isinstance(Dataflows, dict), ("Dataflows "
+                                             "should be a dictionary")
+        assert len(Dataflows) > 0, "Dataflows is empty"

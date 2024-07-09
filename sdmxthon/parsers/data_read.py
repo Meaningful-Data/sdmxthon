@@ -100,10 +100,13 @@ def reading_str_series(dataset) -> pd.DataFrame:
     dataset[SERIES] = add_list(dataset[SERIES])
     for data in dataset[SERIES]:
         keys = dict(itertools.islice(data.items(), len(data) - 1))
-        if not isinstance(data[OBS], list):
-            data[OBS] = [data[OBS]]
-        for j in data[OBS]:
-            test_list.append({**keys, **j})
+        if OBS in data:
+            if not isinstance(data[OBS], list):
+                data[OBS] = [data[OBS]]
+            for j in data[OBS]:
+                test_list.append({**keys, **j})
+        else:
+            test_list.append({})
         if len(test_list) > chunksize:
             test_list, df = process_df(test_list, df)
 
