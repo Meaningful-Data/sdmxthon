@@ -95,8 +95,10 @@ urls = [
      "https://stats.bis.org/api/v1/dataflow/all/WS_CPP/latest"),
     ("https://stats.bis.org/api/v1/data/WS_LONG_CPI/all/all",
      "https://stats.bis.org/api/v1/dataflow/all/WS_LONG_CPI/latest"),
-    ("https://stats.bis.org/api/v1/data/WS_LONG_CPI/all/all",
-     "https://stats.bis.org/api/v1/dataflow/all/WS_LONG_CPI/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_TC/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_TC/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_CPMI_CASHLESS/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_CPMI_CASHLESS/latest"),
     # data and metadata (DataStructures) urls from European Central Bank (ECB)
     ("https://data-api.ecb.europa.eu/service/data/AME/all/all",
      "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_AME1/latest"),
@@ -106,6 +108,10 @@ urls = [
      "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_PAY3/latest"),
     ("https://data-api.ecb.europa.eu/service/data/JDF_PSS_PAYMENTS_N_NEA/all/all",
      "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_PSS1/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/JDF_BSI_MFI_DOMESTIC_CROSS_BORDER/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_BSI1/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/MMSR/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_MMSR1/latest"),
     # data and metadata (Dataflows) urls from Eurostat (ESTAT)
     ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_EN2/",
      "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_EN2/latest"),
@@ -115,6 +121,10 @@ urls = [
      "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/HSW_AW_NNASV/latest"),
     ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/GBV_DV_OCC/",
      "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/GBV_DV_OCC/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_EG30/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_EG30/latest"),
+    ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/LFSO_12PENSION/",
+     "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/LFSO_12PENSION/latest"),
     # data and metadata (Dataflows) urls from Organisation for Economic Co-operation and Development (OECD)
     ("https://sdmx.oecd.org/public/rest/data/DSD_FUA_ECO@DF_ECONOMY/all/all",
      "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_FUA_ECO@DF_ECONOMY/latest"),
@@ -124,6 +134,8 @@ urls = [
      "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_PRICES@DF_PRICES_N_CP045_0722/latest"),
     ("https://sdmx.oecd.org/public/rest/data/DSD_FUA_DEMO@DF_ORIGIN/all/all",
      "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_FUA_DEMO@DF_ORIGIN/latest"),
+    ("https://sdmx.oecd.org/public/rest/data/DSD_REF_LAC@DF_REFSERIES_LAC/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_REF_LAC@DF_REFSERIES_LAC/latest"),
     # data and metadata (Dataflows) urls from United Nations Children's Fund (UNICEF)
     ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/CAUSE_OF_DEATH/all/all",
      "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/CAUSE_OF_DEATH/latest"),
@@ -132,7 +144,9 @@ urls = [
     ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/PT/all/all",
      "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/PT/latest"),
     ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/IMMUNISATION/all/all",
-     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/IMMUNISATION/latest")
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/IMMUNISATION/latest"),
+    ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/ZIMBABWE_CO/all/all",
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/ZIMBABWE_CO/latest")
 ]
 
 
