@@ -25,3 +25,4 @@ data.xlsx
 /docs_material/
 /sdmxthon/testSuite/.xml
 /*.pclprof
+/build

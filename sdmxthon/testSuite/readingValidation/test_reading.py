@@ -47,3 +47,14 @@ def test_dataflow(data_path):
     assert 'BIS:WEBSTATS_DER_DATAFLOW(1.0)' in result.content
     assert 'AVAILABILITY' in data_dataflow.columns
     assert 'DER_CURR_LEG1' in data_dataflow.columns
+
+
+@mark.parametrize("filename", ['two_actions_delete_first.xml',
+                               'two_actions_delete_after.xml',
+                               'two_actions_delete_first.csv',
+                               'two_actions_delete_after.csv', ])
+def test_two_actions(data_path, filename):
+    file_path = os.path.join(data_path, filename)
+    result = read_sdmx(file_path, validate=True)
+    data = result.content['MD_TEST:TEST(1.0)'].data
+    assert len(data) == 1

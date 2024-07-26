@@ -6,6 +6,7 @@ import xmltodict
 from sdmxthon.model.dataset import Dataset
 from sdmxthon.model.error import SDMXError
 from sdmxthon.model.submission import SubmissionResult
+from sdmxthon.model.utils import ACTION_SDMX_CSV_MAPPER_READING
 from sdmxthon.parsers.data_read import create_dataset
 from sdmxthon.parsers.metadata_read import create_metadata
 from sdmxthon.parsers.reader_input_processor import process_string_to_read, \
@@ -79,6 +80,11 @@ def parse_sdmx(result, use_dataset_id=False):
                                                     mode=OBS)
                 ds = create_dataset(single_dataset, metadata,
                                     global_mode)
+
+                if metadata[STRID] in datasets:
+                    if len(ds.data) == 0:
+                        continue
+                # Adding the dataset even if STRID is already present
                 datasets[metadata[STRID]] = ds
         else:
 
@@ -121,7 +127,18 @@ def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
         df_csv = data.drop(['DATAFLOW'], axis=1)
     else:
         if 'ACTION' in data.columns:
-            action = data['ACTION'].iloc[0]
+            unique_values = list(data['ACTION'].unique())
+            if len(unique_values) > 1:
+                if 'D' in unique_values:
+                    unique_values.remove('D')
+                    data = data[data['ACTION'] != 'D']
+            if len(unique_values) > 1:
+                action = None
+            else:
+                action_value = unique_values[0]
+                if action_value not in ACTION_SDMX_CSV_MAPPER_READING:
+                    raise ValueError(f"Invalid action value: {action_value}")
+                action = ACTION_SDMX_CSV_MAPPER_READING[action_value]
             # Drop 'ACTION' column from DataFrame
             data = data.drop(['ACTION'], axis=1)
         # For SDMX-CSV version 2, use 'STRUCTURE_ID'
@@ -138,7 +155,7 @@ def generate_dataset_from_sdmx_csv(data: pd.DataFrame, sdmx_csv_version):
 
 def read_sdmx_csv(infile: str):
     # Get Dataframe from CSV file
-    df_csv = pd.read_csv(infile)
+    df_csv = pd.read_csv(infile, na_values=[""])
     # Drop empty columns
     df_csv = df_csv.dropna(axis=1, how='all')
 
@@ -176,6 +193,7 @@ def read_sdmx_csv(infile: str):
             del df_csv[x]
 
     # Separate SDMX-CSV in different datasets per Structure ID
+
     list_df = [data for _, data in df_csv.groupby(id_column)]
 
     # Create a payload dictionary to store datasets with the

@@ -2,6 +2,19 @@
 Changelog
 #########
 
+2.6.7 (2024-07-26)
+------------------
+**Added**
+
+**Changes**
+  - Accepting .Stat Suite exported data with two datasets with same structure
+and different action (Replace and Delete), to keep only the Replace data.
+
+**Bugfixes**
+  - Fixed bug on OBSVALUE on Generic All Dimensions Reader when OBSVALUE is not present. #62
+  - Fixed bug on Organisation Scheme when isPartial is present.
+
+
 2.6.6 (2024-04-16)
 ------------------
 **Added**

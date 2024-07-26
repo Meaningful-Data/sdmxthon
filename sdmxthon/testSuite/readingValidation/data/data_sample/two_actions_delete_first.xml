@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--NSI Web Service v8.18.7.0-->
+<message:GenericData
+        xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic"
+        xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+        xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+>
+    <message:Header>
+        <message:ID>IREF629190</message:ID>
+        <message:Test>true</message:Test>
+        <message:Prepared>2024-07-08T06:38:04</message:Prepared>
+        <message:Sender id="staging_-_DotStat_v8"/>
+        <message:Structure structureID="TEST_1_0"
+                           dimensionAtObservation="AllDimensions">
+            <common:StructureUsage>
+                <Ref agencyID="MD_TEST" id="TEST" version="1.0"/>
+            </common:StructureUsage>
+        </message:Structure>
+        <message:DataSetAction>Information</message:DataSetAction>
+        <message:DataSetID>DSD_EXR</message:DataSetID>
+    </message:Header>
+    <message:DataSet action="Delete" structureRef="TEST_1_0"/>
+    <message:DataSet action="Replace" structureRef="TEST_1_0">
+        <generic:Obs>
+            <generic:ObsKey>
+                <generic:Value id="TIME_PERIOD" value="3000-01"/>
+                <generic:Value id="FREQ" value="M"/>
+                <generic:Value id="EXR_CURRENCY" value="CNY"/>
+            </generic:ObsKey>
+            <generic:ObsValue value="1"/>
+            <generic:Attributes>
+                <generic:Value id="OBS_STATUS" value="A"/>
+            </generic:Attributes>
+        </generic:Obs>
+    </message:DataSet>
+</message:GenericData>

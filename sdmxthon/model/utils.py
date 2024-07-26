@@ -197,6 +197,13 @@ ACTION_SDMX_CSV_MAPPER = {
     ActionEnum.Information: 'I'
 }
 
+ACTION_SDMX_CSV_MAPPER_READING = {
+    'A': ActionEnum.Append,
+    'R': ActionEnum.Replace,
+    'D': ActionEnum.Delete,
+    'I': ActionEnum.Information
+}
+
 UsageStatus = ['UsageStatus', 'mandatory conditional']
 FacetValueType = ['string', 'bigInteger', 'integer', 'long', 'short',
                   'decimal', 'float', 'double', 'boolean', 'uri',
