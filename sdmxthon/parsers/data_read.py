@@ -78,10 +78,11 @@ def reading_generic_all(dataset) -> pd.DataFrame:
     for data in dataset[OBS]:
         obs = dict()
         obs = {**obs, **get_element_to_list(data, mode=OBSKEY)}
-        if ID in data[OBSVALUE]:
-            obs[data[OBSVALUE][ID]] = data[OBSVALUE][VALUE.lower()]
-        else:
-            obs[OBSVALUE.upper()] = data[OBSVALUE][VALUE.lower()]
+        if OBSVALUE in data:
+            if ID in data[OBSVALUE]:
+                obs[data[OBSVALUE][ID]] = data[OBSVALUE][VALUE.lower()]
+            else:
+                obs[OBSVALUE.upper()] = data[OBSVALUE][VALUE.lower()]
         if ATTRIBUTES in data:
             obs = {**obs, **get_element_to_list(data, mode=ATTRIBUTES)}
         test_list.append({**obs})
