@@ -7,8 +7,7 @@ Changelog
 **Added**
 
 **Changes**
-  - Accepting .Stat Suite exported data with two datasets with same structure
-and different action (Replace and Delete), to keep only the Replace data.
+  - Accepting .Stat Suite exported data with two datasets with same structure and different action (Replace and Delete), to keep only the Replace data.
 
 **Bugfixes**
   - Fixed bug on OBSVALUE on Generic All Dimensions Reader when OBSVALUE is not present. #62
