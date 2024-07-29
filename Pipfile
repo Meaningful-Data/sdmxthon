@@ -24,7 +24,7 @@ validators = "==0.19.0"
 requests = "==2.32.0"
 xmltodict = "==0.13.0"
 flask = "==2.2.5"
-flask-cors = "==3.0.10"
+flask-cors = "==4.0.1"
 pytest = "*"
 
 [requires]
