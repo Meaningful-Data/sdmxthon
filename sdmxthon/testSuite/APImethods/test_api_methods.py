@@ -99,6 +99,10 @@ urls = [
      "https://stats.bis.org/api/v1/dataflow/all/WS_TC/latest"),
     ("https://stats.bis.org/api/v1/data/WS_CPMI_CASHLESS/all/all",
      "https://stats.bis.org/api/v1/dataflow/all/WS_CPMI_CASHLESS/latest"),
+    ("https://stats.bis.org/api/v1/data/BIS_REL_CAL/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/BIS_REL_CAL/latest"),
+    ("https://stats.bis.org/api/v1/data/WS_DSR/all/all",
+     "https://stats.bis.org/api/v1/dataflow/all/WS_DSR/latest"),
     # data and metadata (DataStructures) urls from European Central Bank (ECB)
     ("https://data-api.ecb.europa.eu/service/data/AME/all/all",
      "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_AME1/latest"),
@@ -112,6 +116,10 @@ urls = [
      "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_BSI1/latest"),
     ("https://data-api.ecb.europa.eu/service/data/MMSR/all/all",
      "https://data-api.ecb.europa.eu/service/datastructure/all/ECB_MMSR1/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/EDP_PUB/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/NA_SEC/latest"),
+    ("https://data-api.ecb.europa.eu/service/data/JDF_RA6_RESERVE_ASSETS/all/all",
+     "https://data-api.ecb.europa.eu/service/datastructure/all/BOP/latest"),
     # data and metadata (Dataflows) urls from Eurostat (ESTAT)
     ("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/MED_EN2/",
      "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/dataflow/all/MED_EN2/latest"),
@@ -136,6 +144,8 @@ urls = [
      "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_FUA_DEMO@DF_ORIGIN/latest"),
     ("https://sdmx.oecd.org/public/rest/data/DSD_REF_LAC@DF_REFSERIES_LAC/all/all",
      "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_REF_LAC@DF_REFSERIES_LAC/latest"),
+    ("https://sdmx.oecd.org/public/rest/data/DSD_EAG_SAL_STA@DF_EAG_SAL_STA_TCH/all/all",
+     "https://sdmx.oecd.org/public/rest/dataflow/all/DSD_EAG_SAL_STA@DF_EAG_SAL_STA_TCH/latest"),
     # data and metadata (Dataflows) urls from United Nations Children's Fund (UNICEF)
     ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/CAUSE_OF_DEATH/all/all",
      "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/CAUSE_OF_DEATH/latest"),
@@ -146,14 +156,23 @@ urls = [
     ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/IMMUNISATION/all/all",
      "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/IMMUNISATION/latest"),
     ("https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/ZIMBABWE_CO/all/all",
-     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/ZIMBABWE_CO/latest")
+     "https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/dataflow/all/ZIMBABWE_CO/latest"),
 ]
 
 
 @mark.parametrize("data_url, metadata_url", urls)
 def test_metadata_download_from_data(data_url, metadata_url):
-    data_message = read_sdmx(data_url, validate=True)
-    metadata_message = read_sdmx(metadata_url, validate=True)
+    try:
+        data_message = read_sdmx(data_url, validate=True)
+    except Exception as e:
+        pytest.fail(f"Failed to read SDMX data from data URL "
+                    f"'{data_url}': {e}")
+
+    try:
+        metadata_message = read_sdmx(metadata_url, validate=True)
+    except Exception as e:
+        pytest.fail(f"Failed to read SDMX metadata from metadata URL "
+                    f"'{metadata_url}': {e}")
 
     structure = data_message.payload.structure
     dataflow = data_message.payload.dataflow
