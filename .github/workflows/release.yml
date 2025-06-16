@@ -15,12 +15,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install setuptools
-        run: python3 -m pip install setuptools twine --user
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Install setuptools
+        run: python3 -m pip install setuptools twine --user
       - name: Build package
         run: python3 setup.py sdist bdist_wheel
       - name: Publish to PyPI
