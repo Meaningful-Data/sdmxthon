@@ -14,13 +14,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
+      - name: Install setuptools
+        run: pip install setuptools twine
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
       - name: Build package
-        run: poetry build
+        run: python setup.py sdist bdist_wheel
       - name: Publish to PyPI
-        run: poetry publish --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
+        run: twine upload dist/* --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
