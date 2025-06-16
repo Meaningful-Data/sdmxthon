@@ -1,4 +1,5 @@
 import re
+from copy import copy
 from datetime import datetime
 
 import numpy as np
@@ -562,10 +563,10 @@ def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
     is_numeric = False
 
     data_column = data[k].unique().astype('str')
-
+    float_column = copy(data_column)
     if 'TimePeriod' not in types[k]:
         try:
-            data_column = data_column.astype('float64')
+            float_column = data_column.astype('float64')
             is_numeric = True
         except (TypeError, ValueError):
             pass
@@ -581,7 +582,7 @@ def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
     if k in man_codes:
         control = False
         if is_numeric:
-            if np.isnan(np.sum(data_column)):
+            if np.isnan(np.sum(float_column)):
                 control = True
         else:
             if 'nan' in data_column:
@@ -602,7 +603,7 @@ def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
     if k in faceted:
         facets = faceted[k]
         if is_numeric:
-            errors += check_num_facets(facets, data_column, k, role)
+            errors += check_num_facets(facets, float_column, k, role)
         else:
             errors += check_str_facets(facets, data_column, k, role)
 
