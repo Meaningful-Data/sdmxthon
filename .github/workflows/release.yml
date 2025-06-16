@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install setuptools
-        run: pip install setuptools twine
+        run: pipx install setuptools twine
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
