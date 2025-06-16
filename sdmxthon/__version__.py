@@ -11,7 +11,7 @@ project = 'sdmxthon'
 description = ('Library with SDMX to Pandas, Pandas to SDMX, '
                'SDMX validation and SDMX metadata validation')
 url = 'https://github.com/Meaningful-Data/sdmxthon'
-version = '2.6.7'
+version = '2.6.8'
 author = 'Francisco Javier Hernandez del Cano'
 author_email = 'javier.hernandez@meaningfuldata.eu'
 copyright = '2024 MeaningfulData. All Rights Reserved'
