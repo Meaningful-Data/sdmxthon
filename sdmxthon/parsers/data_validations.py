@@ -617,23 +617,24 @@ def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
         values = data_column[
             np.isin(data_column, list(cubes[k]), invert=True)]
         if len(values) > 0:
-            create_error_SS10_SS04(values, code, role, k, errors)
+            create_error_SS10_SS04(data, values, code, role, k, errors)
 
     elif k in codelist_values.keys():
         code = 'SS04'
         values = data_column[
             np.isin(data_column, codelist_values[k], invert=True)]
         if len(values) > 0:
-            create_error_SS10_SS04(values, code, role, k, errors)
+            create_error_SS10_SS04(data, values, code, role, k, errors)
 
 
-def create_error_SS10_SS04(values, code, role, k, errors):
+def create_error_SS10_SS04(data, values, code, role, k, errors):
     values = values[
         np.isin(values, ['nan', 'None', np.nan], invert=True)]
     for v in values:
+        matching = data[data[k].astype(str) == str(v)].to_dict('records')
         errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
                        'Component': f'{k}', 'Type': f'{role}',
-                       'Rows': None,
+                       'Rows': matching.copy() if matching else None,
                        'Message': f'Wrong value {v} for '
                                   f'{role.lower()} {k}'})
 

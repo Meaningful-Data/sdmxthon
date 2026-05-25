@@ -2,6 +2,15 @@
 Changelog
 #########
 
+2.6.9 (2026-05-25)
+------------------
+**Added**
+  - SS04 (codelist mismatch) and SS10 (cube constraint) errors now populate the ``Rows`` field with the dataframe records holding each offending value, matching the behaviour already provided by SS02/SS05/SS06/SS07/SS11. This enables consumers to surface the exact rows that triggered the validation error.
+
+**Changes**
+  - ``create_error_SS10_SS04`` now takes an additional ``data`` (DataFrame) parameter as its first argument. Callers in ``process_errors_by_column`` updated accordingly. External callers passing positional args need to insert ``data`` before ``values``.
+
+
 2.6.7 (2024-07-26)
 ------------------
 **Added**
