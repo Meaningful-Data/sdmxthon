@@ -366,7 +366,25 @@ def trunc_dec(x):
     return x.rstrip('0').rstrip('.') if '.' in x else x
 
 
-def check_sequence(data_column, errors, key, type_, start, interval, end):
+def rows_for_value(data, key, v):
+    """Records in `data` whose `key` column equals the offending value `v`.
+
+    Matches on the stored string form first, then falls back to a numeric
+    comparison so float-derived values (e.g. 4.0) still match zero-padded or
+    plain string cells (e.g. '04.0', '4'). Returns None when nothing matches,
+    mirroring the other row-level error codes.
+    """
+    matching = data[data[key].astype(str) == str(v)]
+    if len(matching) == 0:
+        try:
+            numeric = pd.to_numeric(data[key], errors='coerce')
+            matching = data[numeric == float(v)]
+        except (TypeError, ValueError):
+            matching = data.iloc[0:0]
+    return matching.to_dict('records') if len(matching) else None
+
+
+def check_sequence(data, data_column, errors, key, type_, start, interval, end):
     data_column = np.sort(data_column)
     control = True
     if int(data_column[0]) < start:
@@ -377,7 +395,7 @@ def check_sequence(data_column, errors, key, type_, start, interval, end):
                 errors.append(
                     {'Code': 'SS08', 'ErrorLevel': error_level_facets,
                      'Component': f'{key}', 'Type': f'{type_}',
-                     'Rows': None,
+                     'Rows': rows_for_value(data, key, v),
                      'Message': f'Value {v} not compliant '
                                 f'with startValue : {start}'})
 
@@ -389,7 +407,7 @@ def check_sequence(data_column, errors, key, type_, start, interval, end):
                 errors.append(
                     {'Code': 'SS08', 'ErrorLevel': error_level_facets,
                      'Component': f'{key}', 'Type': f'{type_}',
-                     'Rows': None,
+                     'Rows': rows_for_value(data, key, v),
                      'Message': f'Value {v} not compliant '
                                 f'with endValue : {end}'})
 
@@ -402,7 +420,7 @@ def check_sequence(data_column, errors, key, type_, start, interval, end):
                         {'Code': 'SS08', 'ErrorLevel': error_level_facets,
                          'Component': f'{key}',
                          'Type': f'{type_}',
-                         'Rows': None,
+                         'Rows': rows_for_value(data, key, v),
                          'Message': f'Value {v} in {key} not compliant '
                                     f'with sequence : {start}-{end} '
                                     f'(interval: {interval})'})
@@ -411,14 +429,14 @@ def check_sequence(data_column, errors, key, type_, start, interval, end):
                         {'Code': 'SS08', 'ErrorLevel': error_level_facets,
                          'Component': f'{key}',
                          'Type': f'{type_}',
-                         'Rows': None,
+                         'Rows': rows_for_value(data, key, v),
                          'Message': f'Value {v} in {key} '
                                     f'not compliant with sequence : '
                                     f'{start}-infinite '
                                     f'(interval: {interval})'})
 
 
-def check_num_facets(facets, data_column, key, type_):
+def check_num_facets(data, facets, data_column, key, type_):
     errors = []
     is_sequence = None
     start = None
@@ -462,17 +480,18 @@ def check_num_facets(facets, data_column, key, type_):
                 errors.append(
                     {'Code': 'SS08', 'ErrorLevel': error_level_facets,
                      'Component': f'{key}', 'Type': f'{type_}',
-                     'Rows': None,
+                     'Rows': rows_for_value(data, key, v),
                      'Message': f'Value {v} not compliant with '
                                 f'{f.facet_type} : {f.facet_value}'})
 
     if is_sequence is not None and start is not None and interval is not None:
-        check_sequence(data_column, errors, key, type_, start, interval, end)
+        check_sequence(data, data_column, errors, key, type_, start,
+                       interval, end)
 
     return errors
 
 
-def check_str_facets(facets, data_column, key, type_):
+def check_str_facets(data, facets, data_column, key, type_):
     data_column = data_column[
         np.isin(data_column, ['nan', 'None'], invert=True)].astype('str')
 
@@ -508,7 +527,7 @@ def check_str_facets(facets, data_column, key, type_):
             for v in values:
                 errors.append({'Code': 'SS08', 'ErrorLevel': error_level,
                                'Component': f'{key}', 'Type': f'{type_}',
-                               'Rows': None,
+                               'Rows': rows_for_value(data, key, v),
                                'Message': f'Value {v} not compliant with '
                                           f'{f.facet_type} : {f.facet_value}'})
     return errors
@@ -550,10 +569,10 @@ def process_measure_errors(dsd, data, errors, faceted, types):
         facets = faceted[mc]
         try:
             data_column = data[mc].astype('float64')
-            errors += check_num_facets(facets, data_column, mc, type_)
+            errors += check_num_facets(data, facets, data_column, mc, type_)
         except (TypeError, ValueError):
             data_column = data[mc].astype('str')
-            errors += check_str_facets(facets, data_column, mc, type_)
+            errors += check_str_facets(data, facets, data_column, mc, type_)
 
         del data_column
 
@@ -603,9 +622,9 @@ def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
     if k in faceted:
         facets = faceted[k]
         if is_numeric:
-            errors += check_num_facets(facets, float_column, k, role)
+            errors += check_num_facets(data, facets, float_column, k, role)
         else:
-            errors += check_str_facets(facets, data_column, k, role)
+            errors += check_str_facets(data, facets, data_column, k, role)
 
     if is_numeric:
         data_column = data_column.astype('str')
@@ -631,10 +650,9 @@ def create_error_SS10_SS04(data, values, code, role, k, errors):
     values = values[
         np.isin(values, ['nan', 'None', np.nan], invert=True)]
     for v in values:
-        matching = data[data[k].astype(str) == str(v)].to_dict('records')
         errors.append({'Code': code, 'ErrorLevel': 'CRITICAL',
                        'Component': f'{k}', 'Type': f'{role}',
-                       'Rows': matching.copy() if matching else None,
+                       'Rows': rows_for_value(data, k, v),
                        'Message': f'Wrong value {v} for '
                                   f'{role.lower()} {k}'})
 
