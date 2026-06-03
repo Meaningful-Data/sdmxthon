@@ -306,20 +306,20 @@ def time_period_valid(dt_str: str, type_: str):
     return process_special_time_format(dt_str)
 
 
-def error_SS09(k, time_types, data_column, errors, role):
+def error_SS09(data, k, time_types, data_column, errors, role):
     if time_types[k] in time_periods:
-        create_error_SS09(data_column, time_types[k], time_types[k], k,
+        create_error_SS09(data, data_column, time_types[k], time_types[k], k,
                           role, errors, time_period_valid)
     elif time_types[k] in gregorian_periods:
         format_ = gregorian_periods[time_types[k]]
-        create_error_SS09(data_column, format_, time_types[k], k,
+        create_error_SS09(data, data_column, format_, time_types[k], k,
                           role, errors, check_date)
 
     elif time_types[k] in reporting_periods:
 
         format_ = r'(19|[2-9][0-9])\d{2}-' + reporting_periods[time_types[k]]
 
-        create_error_SS09(data_column, format_, time_types[k], k,
+        create_error_SS09(data, data_column, format_, time_types[k], k,
                           role, errors, time_period_valid)
 
     elif time_types[k].lower() == "datetime" or time_types[k] == "TimeRange":
@@ -354,7 +354,7 @@ def error_SS09(k, time_types, data_column, errors, role):
                     {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
                      'Component': f'{k}',
                      'Type': f'{role}',
-                     'Rows': None,
+                     'Rows': rows_for_value(data, k, e + duration),
                      'Message': f'Value {e + duration} not compliant '
                                 f'with type : {time_types[k]}'})
             if control_changed:
@@ -617,7 +617,7 @@ def process_errors_by_column(data, dsd, errors, k, man_codes, grouping_keys,
                                       f'{role.lower()} {k}'})
 
     if k in types:
-        error_SS09(k, types, data_column, errors, role)
+        error_SS09(data, k, types, data_column, errors, role)
 
     if k in faceted:
         facets = faceted[k]
@@ -677,15 +677,15 @@ def create_error_SS07(x, rows, errors, grouping_keys):
                    })
 
 
-def create_error_SS09(data_column, format_, time_type, comp, role, errors,
-                      func):
+def create_error_SS09(data, data_column, format_, time_type, comp, role,
+                      errors, func):
     for e in data_column:
         if not func(e, format_):
             errors.append(
                 {'Code': 'SS09', 'ErrorLevel': "CRITICAL",
                  'Component': f'{comp}',
                  'Type': f'{role}',
-                 'Rows': None,
+                 'Rows': rows_for_value(data, comp, e),
                  'Message': f'Value {e} not compliant with '
                             f'type : {time_type}'})
 

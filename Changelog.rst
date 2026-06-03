@@ -2,6 +2,15 @@
 Changelog
 #########
 
+2.6.11 (2026-06-03)
+-------------------
+**Added**
+  - SS09 (invalid date / time-format value) errors now populate the ``Rows`` field with the dataframe records holding each offending value, matching SS02/SS04/SS05/SS06/SS07/SS08/SS10/SS11. Previously SS09 always returned ``Rows: null``. SS09 was the last row-tied validation code still missing its rows.
+
+**Changes**
+  - ``error_SS09`` and ``create_error_SS09`` now take the ``data`` (DataFrame) as their first argument so offending time/date values can be traced back to their rows (reusing the ``rows_for_value`` helper). All callers are internal to ``data_validations.py``.
+
+
 2.6.10 (2026-06-03)
 -------------------
 **Added**
