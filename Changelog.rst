@@ -2,6 +2,16 @@
 Changelog
 #########
 
+2.6.10 (2026-06-03)
+-------------------
+**Added**
+  - SS08 (facet / value-domain violation) errors now populate the ``Rows`` field with the dataframe records holding each offending value, matching SS02/SS04/SS05/SS06/SS07/SS10/SS11. Previously SS08 always returned ``Rows: null``, leaving consumers without the rows that triggered a facet violation.
+
+**Changes**
+  - ``check_num_facets``, ``check_str_facets`` and ``check_sequence`` now take the ``data`` (DataFrame) as their first argument so offending facet values can be traced back to their rows. All callers are internal to ``data_validations.py``.
+  - Introduced a shared ``rows_for_value`` helper (used by the SS08 sites and ``create_error_SS10_SS04``) which matches on the stored string form first and falls back to a numeric comparison, so float-derived offending values still match zero-padded or plain string cells (e.g. ``4.0`` matches ``'04.0'``).
+
+
 2.6.9 (2026-05-25)
 ------------------
 **Added**
