@@ -2,7 +2,12 @@ name: Slack Notification
 
 on:
   push:
+    branches: [ "master" ]
   pull_request:
+    branches: [ "master" ]
+    # Notify on PRs to master (open / reopen / merge-or-close) but NOT on
+    # 'synchronize' so pushing new commits to a PR branch is not announced.
+    types: [ opened, reopened, closed ]
   issues:
     types: [opened, closed, reopened, edited, deleted, pinned, unpinned, assigned, unassigned, labeled, unlabeled, milestoned, demilestoned]
   issue_comment:
